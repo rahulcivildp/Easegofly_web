@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Shopme Admin User page', 'none')"></head>
+<body>
+
+
+	<div class="container-fluid">
+	
+		<div th:replace="navigation :: nav_menu"></div>
+		
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+		<div th:if="${alert != null}" class="alert alert-danger text-center">
+			[[${alert}]]
+		</div>
+		<div th:if="${warning != null}" class="alert alert-warning text-center">
+			[[${warning}]]
+		</div>
+		
+		<div>
+			<h1 class="text-center m-2">Manage Categories</h1>
+			<div class="row" style="margin: 8px 0;">
+				<div class="col-12 col-sm-1 col-md-1 ">
+					<a th:href="@{/categories/new}" class="fa fa-solid fa-folder-plus fa-2x styleLink styleLinkButton "  title="Create new category"></a>
+				</div>
+				<div class="col-1 col-sm-3 col-md-5">
+					
+				</div>
+				<div class="col-12 col-sm-6 col-md-6 ">
+					<div th:replace="fragments :: search('/categories/page/1')" ></div>
+				</div>
+			
+			</div>
+		</div>
+		<div class="full-details">
+			<table class="table table-bordered table-hover tabel-responsive table-striped">
+				<thead class="table-dark">
+					<tr>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('categories', 'id','No.', 'tag')" />
+						</th>
+						<th>Photos</th>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('categories', 'name','Name', 'tag')" />
+						</th>
+						<th th:replace="fragments :: column_link('categories', 'alias','Alias', 'none')" />
+						<th th:replace="fragments :: column_link('categories', 'enabled','Enabled', 'none')"></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="category : ${listCategories}">
+						<td class="hideable-column">[[${category.id}]]</td>
+						<td >
+							<div th:replace="fragments :: photos(${category.image}, ${category.photosImagePath}, 135, 150)"></div>
+						</td>
+						
+						<td class="hideable-column">[[${category.name}]]</td>
+						<td>[[${category.alias}]]</td>
+						<td>
+							<div th:replace="fragments :: enabled(${category.enabled}, ${category.id}, 'categories')"></div>
+						</td>
+						<td>
+							<div th:replace="fragments :: edit('categories', ${category.id})"></div>
+							&nbsp;
+							<div th:replace="fragments :: delete('categories', ${category.id})"></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="less-details">
+			<div th:each="category : ${listCategories}" class="row m-1">
+				
+				<div class="col-7 mt-2">
+					<div>[[${category.name}]]</div>
+					<div>[[${category.alias}]]</div>
+					<div th:replace="fragments :: enabled(${category.enabled}, ${category.id}, 'categories')"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div th:replace="fragments :: pagination('categories', 'Categories')"></div>
+		
+
+		<div class="modal fade text-center" id="deleteConfirmModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+						<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<span id="modalBody" style="color: black;"></span>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-success" id="confirmDelete" href="">Confirm</a>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+		<div th:replace="fragments :: footer"></div>
+	</div>
+	
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".link-delete").click(function(e){
+			e.preventDefault();
+			link = $(this);
+			userId = link.attr("userId");
+			$("#confirmDelete").attr("href", link.attr("href"));
+			$("#modalBody").text("Are you sure you want to delete this user ID: " + userId);
+			$("#deleteConfirmModal").modal();
+		});
+	});
+	
+	function clearFilter() {
+		window.location = "[[@{/categories}]]";
+	};
+	
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0- 
+beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384- 
+ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" 
+crossorigin="anonymous"></script> 
+</body>
+</html>

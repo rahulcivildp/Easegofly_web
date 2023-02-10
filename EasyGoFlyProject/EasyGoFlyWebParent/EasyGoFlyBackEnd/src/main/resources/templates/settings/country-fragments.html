@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div>
+			<p>Use this page to manage countries which will be displayed in the customer registration page. <br> <b>Click on Load Country List first</b></p>
+		</div>
+		<div>
+			<input type="button" value="Load Country List" id="buttonLoadCountries" class="btn btn-primary">
+		</div>
+		<br>
+		<div>
+			<select class="form-control m-2" style="height: 300px;" size="3" id="dropdownCountries"></select>
+		</div>
+		<br>
+		<div class="form-control row">
+			<div class="row">
+				<label class="col-md-2 mt-2" id="labelCountryName">Country Name: </label>
+				<div class="col-md">
+					<input type="text" class="form-control" id="fieldCountryName">
+				</div>
+				<label class="col-md-1 mt-2" id="labelCountryCode">Code: </label>
+				<div class="col-md">
+					<input type="text" class="form-control" id="fieldCountryCode">
+				</div>
+				<div class="col-lg-3">
+					<input type="button" id="buttonAddCountry" value="New" class="btn btn-secondary mr-3">
+					<input type="button" id="buttonUpdateCountry" value="Update" class="btn btn-secondary mr-3" disabled="disabled">
+					<input type="button" id="buttonDeleteCountry" value="Delete" class="btn btn-secondary" disabled="disabled">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

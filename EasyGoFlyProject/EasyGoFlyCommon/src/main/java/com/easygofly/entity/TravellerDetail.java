@@ -1,0 +1,119 @@
+package com.easygofly.entity;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name = "traveller_details")
+public class TravellerDetail {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	@Column(name = "salutation")
+	private String salutation;
+	
+	@Column(name = "first_name", length = 45)
+	private String firstName;
+	
+	@Column(name = "last_name", length = 45)
+	private String lastName;
+	
+	@Column()
+	@Temporal(TemporalType.DATE)
+	private Date dob;
+	
+	@ManyToOne
+	@JoinColumn(name = "product_detail_id")
+	private ProductDetail productDetail;
+
+	@ManyToOne
+	@JoinColumn(name = "cart_item_id")
+	private CartItem cartItem;
+	
+	
+	
+	public TravellerDetail() {}
+
+	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem) {
+		this.salutation = salutation;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dob = dob;
+		this.productDetail = productDetail;
+		this.cartItem = cartItem;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getSalutation() {
+		return salutation;
+	}
+
+	public void setSalutation(String salutation) {
+		this.salutation = salutation;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+	public ProductDetail getProductDetail() {
+		return productDetail;
+	}
+
+	public void setProductDetail(ProductDetail productDetail) {
+		this.productDetail = productDetail;
+	}
+
+	public CartItem getCartItem() {
+		return cartItem;
+	}
+
+	public void setCartItem(CartItem cartItem) {
+		this.cartItem = cartItem;
+	}
+
+	@Override
+	public String toString() {
+		return "TravellerDetail [id=" + id + ", salutation=" + salutation + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", dob=" + dob + ", productDetail=" + productDetail + "]";
+	}
+	
+}

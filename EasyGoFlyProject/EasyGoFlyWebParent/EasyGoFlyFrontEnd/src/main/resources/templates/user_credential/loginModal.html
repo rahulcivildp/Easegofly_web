@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<li th:fragment="login(remove)" th:remove="${remove}" >	
+	<ul class="no-search" id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background: #c6ecff;"> 
+		<li class="horiz"><a type="button"
+			class="btn btn-primary btn_style_menu a_center"
+			th:href="@{/login}"
+			id="login_b"> <i class="fas fa-user-cog"
+				style="padding-right: 13px;"></i> <p style="font-size: 22px; margin: 0;">Log in</p>
+		</a></li>
+
+		<li class="horiz"><a type="button"
+			class="btn btn-info btn_style_menu hover a_center"
+			th:href="@{/registration}"><p style="font-size: 22px; margin: 0;">Sign up</p></a></li>
+
+
+		<li class="horiz"><a type="button"
+			class="btn btn-info btn_style_menu hover a_center"
+			href="https://fiction-world.com/travels/signup"><p style="font-size: 22px; margin: 0;">Agent Signup</p></a></li>
+
+
+	</ul>
+	
+	</li>
+	
+	<li th:fragment="loggedin(remove)" th:remove="${remove}">
+		<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		<ul class="nav no-search " id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background: #c6ecff;">
+			<li class="nav-item horiz">
+				<p class="text_modify" sec:authentication="principal.fullName"><i class="fas fa-user" style="padding-right: 13px;" ></i></p>
+			</li>
+	
+			<li class="nav-item horiz"><a type="button"
+				class="btn btn-info hover a_center"
+				href="https://fiction-world.com/travels/profile"><p style="font-size: 22px; margin: 0;">Flight Activity</p></a>
+			</li>
+			<li class="nav-item horiz"><a type="button"
+				class="btn btn-info btn_style_menu hover a_center"
+				th:href="@{/manage_booking#flightCart}">
+				<p style="font-size: 22px; margin: 0;">Manage Booking</p></a>
+			</li>
+				 	
+			<li class="nav-item horiz"><a type="button"
+				class="btn btn-info hover a_center" data-bs-toggle="popover"
+				title="Popover title" th:href="@{/account}"><p style="font-size: 22px; margin: 0;">Manage
+					Account</p></a>
+			</li>
+			<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+				<input type="submit">
+			</form>
+			<li class="nav-item horiz btn btn-info hover">
+				<a id="logoutLink" class=" a_center" href="" style="font-size: 22px; margin: 0; padding: 0;">Logout!</a>
+			</li>
+	
+		</ul>
+		</th:block>
+	</li>
+</li>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>
+
+

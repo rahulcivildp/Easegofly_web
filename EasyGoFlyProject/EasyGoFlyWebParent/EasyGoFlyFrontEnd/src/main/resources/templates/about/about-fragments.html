@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+	
+<style type="text/css">
+body {
+  background-image: url('http://localhost:8080/air2fly/img/1971537-Recovered.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+}
+@import
+	url("https://fonts.googleapis.com/css2?family=Grandstander&display=swap")
+	;
+
+body {
+	font-family: "Grandstander", cursive;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.side-nav, .nav-menu {
+	height: 100%;
+}
+
+.side-nav .nav-menu {
+	list-style: none;
+	padding: 40px 0;
+	width: 100%;
+	background-color: #3498db;
+}
+
+.side-nav .nav-item {
+	position: relative;
+	padding: 10px 20px;
+}
+
+.nav-item.active {
+	background-color: #fff;
+	box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
+}
+
+.nav-item.active a {
+	color: #2980b9;
+}
+
+.nav-item a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.menu-text {
+	padding: 0 20px;
+}
+
+.side-nav .nav-item.active::before {
+	content: "";
+	position: absolute;
+	background-color: transparent;
+	bottom: 100%;
+	right: 0;
+	height: 150%;
+	width: 20px;
+	border-bottom-right-radius: 25px;
+	box-shadow: 0 20px 0 0 #fff;
+}
+
+.side-nav .nav-item.active::after {
+	content: "";
+	position: absolute;
+	background-color: transparent;
+	top: 100%;
+	right: 0;
+	height: 150%;
+	width: 20px;
+	border-top-right-radius: 25px;
+	box-shadow: 0 -20px 0 0 #fff;
+}
+
+.side-nav .nav-item:hover {
+	background-color: grey;
+	box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
+}
+
+.side-nav .nav-item.active:hover {
+	background-color: #fff;
+	box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
+}
+
+.side-nav {
+	float: left;
+}
+
+.inner_conetnt {
+	text-align: center;
+	padding-top: 30px;
+}
+
+.content {
+	display: none;
+	height: auto !important;
+}
+
+.content p {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: justify;
+	padding: 0 24px;
+	margin-left: 20px;
+	font-size: 16px;
+}
+
+.activate {
+	display: block !important;
+}
+
+.nav-item {
+	cursor: pointer;
+}
+
+#para span {
+	font-size: 20px;
+	margin: 5px 0;
+	color: cornflowerblue;
+}
+
+@media only screen and (max-width: 600px) {
+	*.background_media {
+	background: #c6ecff !important;
+}
+}
+</style>
+<script>
+		$(document).ready(function() {
+			
+			baseURL = "https://easegofly.com/";
+			
+            if (window.location.href == baseURL + "about#no-1") {
+              $("#no-1").addClass("activate");
+              $("#1m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-2") {
+                $("#no-2").addClass("activate");
+                $("#2m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-3") {
+              $("#no-3").addClass("activate");
+              $("#3m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-4") {
+              $("#no-4").addClass("activate");
+              $("#4m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-5") {
+              $("#no-5").addClass("activate");
+              $("#5m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-6") {
+                $("#no-6").addClass("activate");
+                $("#6m").addClass("active");
+            }
+		
+            if (window.location.href == baseURL + "about#no-7") {
+                $("#no-7").addClass("activate");
+                $("#7m").addClass("active");
+              }
+            
+            if (window.location.href == baseURL + "about#no-8") {
+              $("#no-8").addClass("activate");
+              $("#8m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-9") {
+                $("#no-9").addClass("activate");
+                $("#9m").addClass("active");
+            }
+            
+            $("li").click(function(e) {
+				$("li").removeClass("active");
+				$(this).addClass("active");
+
+			});
+			
+			$("#1").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-1").addClass("activate");
+			});
+			$("#2").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-2").addClass("activate");
+			});
+			$("#3").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-3").addClass("activate");
+			});
+			$("#4").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-4").addClass("activate");
+			});
+			$("#5").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-5").addClass("activate");
+			});
+			$("#6").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-6").addClass("activate");
+			});
+			$("#7").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-7").addClass("activate");
+			});
+			$("#8").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-8").addClass("activate");
+			});
+			$("#9").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-9").addClass("activate");
+			});
+
+			//mobile view
+			$("#1m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-1").addClass("activate");
+			});
+			$("#2m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-2").addClass("activate");
+			});
+			$("#3m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-3").addClass("activate");
+			});
+			$("#4m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-4").addClass("activate");
+			});
+			$("#5m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-5").addClass("activate");
+			});
+			$("#6m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-6").addClass("activate");
+			});
+			$("#7m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-7").addClass("activate");
+			});
+			$("#8m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-8").addClass("activate");
+			});
+			$("#9m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-9").addClass("activate");
+			});
+		});
+	
+</script>
+<div class="media_status" style="display: none;">
+	<!-- Large button groups (default and split) -->
+	<div class="btn-group">
+	  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+	    <i class="fa fa-regular fa-bars"></i>
+	  </button>
+	  <ul class="dropdown-menu" style="padding: 4px;">
+	    	<li class="nav-item specialButton" id="1" style="width: 260px;"><i class="fa fa-quora"></i><span
+				class="menu-text">FAQ</span></li>
+			<li class="nav-item specialButton" id="2" style="width: 260px;"><i class="fa fa-book"></i><span
+				class="menu-text">About us</span></li>
+			<li class="nav-item specialButton" id="3" style="width: 260px;"><i class="fa fa-address-card"></i><span
+				class="menu-text">Contact us</span></li>
+			<li class="nav-item specialButton" id="4" style="width: 260px;"><i class="fa fa-play "></i><span
+				class="menu-text">Terms &amp; conditions</span></li>
+			<li class="nav-item specialButton" id="5" style="width: 260px;"><i class="fa fa-user-secret"></i><span
+				class="menu-text">Privacy Policy</span></li>
+			<li class="nav-item specialButton" id="6" style="width: 260px;"><i class="fa fa-paperclip"></i><span
+				class="menu-text">User Agreement</span></li>
+			<li class="nav-item specialButton" id="7" style="width: 260px;"><i class="fa fa-cc-diners-club"></i><span
+				class="menu-text">Payment Security</span></li>
+			<li class="nav-item specialButton" id="8" style="width: 260px;"><i class="fa fa-code-fork"></i><span
+				class="menu-text">Service</span></li>
+			<li class="nav-item specialButton" id="9" style="width: 260px;"><i class="fa fa-reply-all"></i><span
+				class="menu-text">Customer Support</span></li>
+	  </ul>
+	</div>
+</div>
+
+<div style="margin: 0 auto; width: 80%;">
+	<div class="row">
+		<nav class="side-nav col-md-3 media-hide">
+			<ul class="nav-menu" style="margin: 0; padding: 0;">
+				<li class="nav-item" id="1m"><i class="fa fa-quora"></i><span
+					class="menu-text">FAQ</span></li>
+				<li class="nav-item" id="2m"><i class="fa fa-book"></i><span
+					class="menu-text">About us</span></li>
+				<li class="nav-item" id="3m"><i class="fa fa-address-card"></i><span
+					class="menu-text">Contact us</span></li>
+				<li class="nav-item" id="4m"><i class="fa fa-play "></i><span
+					class="menu-text">Terms &amp; conditions</span></li>
+				<li class="nav-item" id="5m"><i class="fa fa-user-secret"></i><span
+					class="menu-text">Privacy Policy</span></li>
+				<li class="nav-item" id="6m"><i class="fa fa-paperclip"></i><span
+					class="menu-text">User Agreement</span></li>
+				<li class="nav-item" id="7m"><i class="fa fa-cc-diners-club"></i><span
+					class="menu-text">Payment Security</span></li>
+				<li class="nav-item" id="8m"><i class="fa fa-code-fork"></i><span
+					class="menu-text">Service</span></li>
+				<li class="nav-item" id="9m"><i class="fa fa-reply-all"></i><span
+					class="menu-text">Customer Support</span></li>
+			</ul>
+		</nav>
+		<div class="inner_conetnt col-md-9 col-12">
+			<div class="content col" id="no-1">
+				<div th:utext="${FAQ}"></div>
+			</div>
+			<div class="content col " id="no-2">
+				<div th:utext="${ABOUT_US}"></div>
+			</div>
+			<div class="content col" id="no-3">
+				<div th:utext="${CONTACT_US}"></div>
+				<div style="margin-bottom: 15px;"></div>
+			</div>
+			<div class="content col" id="no-4">
+				<div th:utext="${TERMS}"></div>
+			</div>
+			<div class="content col" id="no-5">
+				<div th:utext="${PRIVACY}"></div>
+			</div>
+			<div class="content col" id="no-6">
+				<div th:utext="${AGREEMENT}"></div>
+				<div style="margin-bottom: 180px;"></div>
+			</div>
+			<div class="content col" id="no-7">
+				<div th:utext="${SECURITY}"></div>
+				<div style="margin-bottom: 180px;"></div>
+			</div>
+			<div class="content col" id="no-8">
+				<div th:utext="${SERVICE}"></div>
+				<div style="margin-bottom: 60px;"></div>
+			</div>
+			<div class="content col" id="no-9">
+				<div th:utext="${CONTACT_US}"></div>
+				<div style="margin-bottom: 15px;"></div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+	</div>
+	
+</body>
+
+</html>

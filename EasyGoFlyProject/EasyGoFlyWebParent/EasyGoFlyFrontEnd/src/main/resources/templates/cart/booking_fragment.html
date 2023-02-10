@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+<!-- Booking page link for passenger list. -->
+<div th:fragment="passengerList"> 
+	<div class="dropdown">
+	  <button class="specialButton specialButton2 dropdown-toggle width_full" data-bs-toggle="dropdown" aria-expanded="false">
+	    View Passengers
+	  </button>
+	  <div class="dropdown-menu dropdown-menu-end auto_width" aria-labelledby="dropdownMenuButton1" style="width: 700%;">
+    	<div class="col" style="padding: 30px 5px 5px 5px;">
+    		<th:block th:each="traveler : ${item.travellerDetails}">
+    		<div class="row" >
+   				<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
+					<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+		            <input type="hidden" name="traveler_id" id="traveler_id" th:value="${traveler.id}">
+                   <p style="margin: 0; color: green;">Adult:</p>
+                   <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
+               </div>
+               <div class="col-md-2 col-12">
+                   <div class="form-floating">
+                       <input type="text" class="form-control " style="margin-bottom: 16px;" name="saveSalutation" th:value="${traveler.salutation}" disabled>
+                       <label for="floatingSelect" >Title</label>
+                   </div>
+               </div>
+               <div class="col-md-3 col-12">
+                   <div class="form-floating mb-3">
+                       <input type="text" class="form-control " name="saveFirstName" th:value="${traveler.firstName}" disabled>
+                       <label for="floatingInput">First Name</label>
+                   </div>
+               </div>
+               <div class="col-md-3 col-12">
+                   <div class="form-floating mb-3">
+                       <input type="text" class="form-control " id="saveLastName" name="saveLastName" th:value="${traveler.lastName}" disabled>
+                       <label for="floatingInput">Last Name</label>
+                   </div>
+               </div>
+               <div class="col-md-2 col-12">
+                   <div class="form-floating mb-4 d-flex">
+                       <input type="date" class="form-control " id="dob" name="savedob" th:value="${traveler.dob}" disabled>
+                       <label for="datepicker">Date of Birth</label>
+                   </div>
+               </div>
+               </div>
+               </th:block>
+           </div>     	
+      </div>
+	</div>
+</div>
+
+<!-- Booking page link for pagination. -->
+<div th:fragment="pagination(property, entityNames, totalPages, totalItems, startCount, endCount)" th:remove="tag"> 
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+			<span>Showing [[${entityNames}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No [[${entityNames}]] found</span>
+		</div>
+		
+		<div th:if="${totalItems > 1}">
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center flex-wrap">
+			  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="cart/booking_fragment :: page_Link(${property}, 1, 'First')">First</a></li>
+			    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="cart/booking_fragment :: page_Link(${property}, ${currentPage - 1}, 'Previous')">Previous</a></li>
+			    
+			    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="cart/booking_fragment :: page_Link(${property}, ${i}, ${i})"></a></li>
+			    
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="cart/booking_fragment :: page_Link(${property}, ${currentPage + 1}, 'Next')" ></a></li>
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="cart/booking_fragment :: page_Link(${property}, ${totalPages}, 'Last')"></a></li>
+			  </ul>
+			</nav>
+		</div>
+	</div>
+	<a th:fragment="page_Link(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>
+	
+</body>
+</html>

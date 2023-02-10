@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+	<link rel="icon" th:href="@{${SITE_LOGO}}" type="image/png">
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+	<title>[[${title}]]</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}">
+	<script type="text/javascript" th:src="@{/webjars/jquery/3.6.1/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
+	<script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+	
+</head>
+<body>
+	<!-- Column header with sort method -->
+	<th th:fragment="column_link(property, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+		<a class="styleLink text-white" th:href="@{'/' + ${property} + '/page/' + ${currentPage} + '?sortField='+ ${fieldName} +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSort} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${columnLabel}]]</a>
+	 	<span th:if="${sortField == fieldName}" th:class="${sortDir == 'asc' ? 'fa fa-duotone fa-sort-up' : 'fa fa-duotone fa-sort-down'} "></span>
+	</th>
+	
+	<!-- Search option in List page -->
+	<div th:fragment="search(propertyLink)">
+		<form th:action="@{${propertyLink}}" class="form-inline" style="width: auto;">
+			<div class="row" style="padding-right: 10px;">
+				<div class="col-12 col-sm-8 col-md-7 col-lg-10 margin-padding-none">
+					<input type="hidden" name="sortField" th:value="${sortField}"> 
+					<input type="hidden" name="sortDir" th:value="${sortDir}"> 
+						<input type="search" th:value="${keyword}" class="form-control width-auto float-right" name="keyword" required="required">
+						<h4 class="hideable-column media-hide width-auto float-right">Search: &nbsp;</h4>
+					&nbsp;&nbsp;
+				</div>
+				<div class="col-12 col-sm-4 col-md-5 col-lg-2 margin-padding-none">
+					<button type="button" class="btn btn-secondary width-auto float-right margin-both_side" onclick="clearFilter()" title="Clear field!">
+						<i class="fa fa-regular fa-delete-left"></i>
+					</button>
+					<button type="submit" class="btn btn-primary width-auto float-right margin-both_side" title="Search">
+						<i class="fa fa-duotone fa-magnifying-glass"></i>
+					</button>
+				</div>
+			</div>
+		</form>	
+	</div>
+					
+	<!-- setting page link for pagination. -->
+	<div th:fragment="pagination(property, entityNames)" th:remove="tag"> 
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+			<span>Showing [[${entityNames}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No [[${property}]] found</span>
+		</div>
+		
+		<div th:if="${totalItems > 1}">
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center flex-wrap">
+			  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="fragments :: page_Link(${property}, 1, 'First')">First</a></li>
+			    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="fragments :: page_Link(${property}, ${currentPage - 1}, 'Previous')">Previous</a></li>
+			    
+			    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="fragments :: page_Link(${property}, ${i}, ${i})"></a></li>
+			    
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="fragments :: page_Link(${property}, ${currentPage + 1}, 'Next')" ></a></li>
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="fragments :: page_Link(${property}, ${totalPages}, 'Last')"></a></li>
+			  </ul>
+			</nav>
+		</div>
+	</div>
+	<a th:fragment="page_Link(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/page/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>
+	
+	<!-- setting page link for pagination for products. -->
+	<div th:fragment="pagination_product(property, entityNames, totalItems, endCount, startCount, totalPages)" th:remove="tag"> 
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+			<span>Showing [[${entityNames}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No [[${property}]] found</span>
+		</div>
+		
+		<div th:if="${totalItems > 1}">
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center flex-wrap">
+			  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="fragments :: page_Link(${property}, 1, 'First')">First</a></li>
+			    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="fragments :: page_Link(${property}, ${currentPage - 1}, 'Previous')">Previous</a></li>
+			    
+			    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="fragments :: page_Link(${property}, ${i}, ${i})"></a></li>
+			    
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="fragments :: page_Link(${property}, ${currentPage + 1}, 'Next')" ></a></li>
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="fragments :: page_Link(${property}, ${totalPages}, 'Last')"></a></li>
+			  </ul>
+			</nav>
+		</div>
+	</div>
+	<a th:fragment="page_Link(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/page/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>
+	
+	
+	<!-- Photo tag -->
+	<div th:fragment="photos(property, imagePath, width, height)" th:remove="tag">
+		<i th:if="${property == null}" class="fa fa-image-portrait fa-3x icon-silver"></i>
+		<img th:if="${property != null}" alt="User thumbnail" th:src="@{${imagePath}}" th:width="${width}" th:height="${height}"/>
+	</div>
+	
+	<!-- Property enable / disable -->
+	<div th:fragment="enabled(propertyEnabled, propertyId, property)" th:remove="tag">
+		<a th:if="${propertyEnabled == true}" class="fa-solid fa-circle-check fa-2x icon-green styleLink" title="Deactivate" th:href="@{'/' + ${property} + '/' + ${propertyId} + '/enabled/false'}"></a>
+		<a th:if="${propertyEnabled == false}" class="fa-solid fa-circle fa-2x icon-dark styleLink" title="Activate" th:href="@{'/' + ${property} + '/' + ${propertyId} + '/enabled/true'}"></a>
+	</div>
+	
+	<!-- edit button -->
+	<div th:fragment="edit(property, propertyId)" th:remove="tag">
+		<a class="fa-solid fa-pen-to-square fa-2x icon-green styleLink" title="Edit" th:href="@{'/' + ${property} + '/edit/' + ${propertyId}}"></a>
+	</div>
+	
+	<!-- delete button -->
+	<div th:fragment="delete(property, propertyId)" th:remove="tag">
+		<a class="fa-solid fa-trash fa-2x icon-dark styleLink link-delete" title="Delete" th:userId="${propertyId}" th:href="@{'/' + ${property} + '/delete/' + ${propertyId}}" 
+		data-bs-target="#deleteConfirmModal" data-bs-toggle="modal" ></a>
+	</div>
+	
+	<!-- View details button -->
+	<div th:fragment="viewDetails(property, propertyId)" th:remove="tag">
+		<a class="fa-solid fa-file-alt fa-2x icon-green styleLink link-detail" title="View details" th:href="@{'/' + ${property} + '/detail/' + ${propertyId}}" ></a>
+	</div>
+	
+							
+	<!-- Footer section -->
+	<div th:fragment="footer" class="text-center">
+			<p>Email: <a href="mailto:support@easegofly.com"> support@easegofly.com</a>, Ph: 8001012134  </p>
+			<p>EaseGoFly Control Panel - Copyright © easegofly</p>
+			<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" th:fragment="content" th:remove="tag">
+<head></head>
+<body>
+	<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
+		<h4 >Private Fare Detail [[${productDetails.name}]]</h4>
+		<hr>
+		<h5 >Flight Detail</h5>
+		<hr>
+		<div class="row">
+			<div class="col-sm-3">
+				<p><b>Origin : </b>[[${productDetails.cityOne}]]</p>
+			</div>
+			<div class="col-sm-3">
+				<p><b>Destination : </b>[[${productDetails.cityTwo}]]</p>
+			</div>
+			<div class="col-sm-3">
+				<p><b>Airline Name : </b>[[${productDetails.brands.name}]]</p>
+			</div>
+			<div class="col-sm-3">
+				<p><b>Airline Code : </b>[[${productDetails.airlineCode}]]</p>
+			</div>
+			<div class="col-sm-3">
+				<p><b>Class : </b>[[${productDetails.journeyClass}]]</p>
+			</div>
+			<div class="col-sm-3">
+				<p><b>No of Stops : </b>[[${productDetails.stops}]]</p>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="shadow" style="background-color: #71c5a6; margin-right: 26px; padding: 10px;">
+		<form th:action="@{/products/flights/save}" method="post" th:object="${productDetails}" onsubmit="return(checkNameUnique(this))">
+			<input type="hidden" th:field="*{id}">
+			<div class="row" >
+				<div class="col-sm-12">
+					<div class="row" >
+						<input type="hidden" >
+						<div class="col-1" style="margin-right: 2px;">
+							<p>Date: </p><input type="date" name="date" placeholder="Date" style=" width: 100%;" required pattern="\d{4}-\d{2}-\d{2}">
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>PNR: </p><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>Total Seats: </p><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>Upload Seats: </p><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>Flight No: </p><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="width: 5%;">
+							<p>Stops: </p><input type="number" name="stops" placeholder="stops" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>Dep Time: </p><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>Arr Time: </p><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>ADT Price: </p><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>INF Price: </p><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>ADT Markup: </p><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" >
+						</div>
+						<div class="col-1" style="margin-right: 2px;">
+							<p>INF Markup: </p><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" >
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2" style="margin-top: 15px;">
+					<input type="submit" value="Add">
+				</div>
+			</div>
+		</form>
+	</div>
+	<br>
+	<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
+		<div class="full-details">
+				<table class="table table-bordered table-hover tabel-responsive table-striped">
+					<thead class="table-dark">
+						<tr>
+							<th>ID</th>
+							<th>Date</th>
+							<th>PNR</th>
+							<th>Total Seats</th>
+							<th>Booked Seats</th>
+							<th>Available Seats</th>
+							<th>Flight Number</th>
+							<th>Stops</th>
+							<th>Depart Time</th>
+							<th>Arrival Time</th>
+							<th>Adult Price</th>
+							<th>Infant Price</th>
+							<th>Adult Markup</th>
+							<th>Infant Markup</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="flight : ${productDetails.details}">
+							<td>[[${flight.id}]]</td>
+							<td>[[${flight.date}]]</td>
+							<td>[[${flight.pnr}]]</td>
+							<td>[[${flight.totalSeats}]]</td>
+							<td class="bookedSeats"></td>
+							<td>[[${flight.uploadSeats}]]</td>
+							<td>[[${flight.flightNum}]]</td>
+							<td>
+								<p class="text-center" th:if="${flight.stopNum} == 0" style="margin: 0;">0 </p>
+								<button th:if="${flight.stopNum} != 0" type="button" class="btn btn-danger" th:id="'modal-button' + ${flight.id}" data-bs-toggle="modal" data-bs-target="" style="margin: 0;">
+									<p th:if="${flight.stops.size} == 0" style="margin: 0;" title="Add Stop/s to flight">Add: [[${flight.stopNum}]]</p>
+									<p th:if="${flight.stops.size} != 0" style="margin: 0;" title="Edit Stop/s of flight">Edit Stops </p>
+								</button>
+							</td>
+							<td>[[${flight.depTime}]]</td>
+							<td>[[${flight.arrTime}]]</td>
+							<td>[[${flight.priceADT}]]</td>
+							<td>[[${flight.priceINF}]]</td>
+							<td>[[${flight.markupADT}]]</td>
+							<td>[[${flight.markupINF}]]</td>
+							<td th:if="${flight.order} != null" style="background: #edefaf; text-align: center; font-weight: 600;">Ordered</td>
+							<td th:if="${flight.order} == null" style="background: #a7cea7; text-align: center; font-weight: 600;">Active</td>
+							<td>
+								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')" >
+									<div th:replace="fragments :: edit('products', ${product.id})"></div>
+								</th:block>
+								&nbsp;
+								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
+									<a class="fa-solid fa-trash fa-2x icon-dark styleLink link-delete2" title="Delete" th:userId="${flight.id}" th:href="@{'/product_details/delete/' + ${flight.id}}" 
+		data-bs-target="#deleteConfirmModal2" data-bs-toggle="modal" ></a>
+								</th:block>
+							</td>
+								<!-- Modal -->
+								<div class="modal fade" th:id="'stopsModal' + ${flight.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								  <div class="modal-dialog modal-dialog-centered modal-lg">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <h5 class="modal-title" id="exampleModalLabel">Add Stops</h5>
+								        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								      </div>
+								      <form th:if="${flight.stops.size} == 0" th:action="@{/products/flights_details}" method="post">
+								      <div class="modal-body">
+								     	  <input type="hidden" name="product_id" th:value="${flight.product.id}">
+									      <input type="hidden" name="flight_id" th:value="${flight.id}">
+									      
+									      <th:block th:each="i : ${#numbers.sequence( 1, flight.stopNum, 1)}">
+									      	<div class="row" style="padding: 15px; border-bottom: 1px solid grey; border-top: 1px solid grey;">
+									      		<div class="col" style="margin-right: 2px;">
+													<p>City Name: [[${stopSize}]]</p><input type="text" name="stopCityName" placeholder="City Name" style=" width: 100%;">
+												</div>
+												<div class="col" style="margin-right: 2px;">
+													<p>Arr Time: </p><input type="text" name="stopArrTime" placeholder="Arr Time" style=" width: 100%;" >
+												</div>
+										        <div class="col" style="margin-right: 2px;">
+													<p>Dep Time: </p><input type="text" name="stopDepTime" placeholder="Dep Time" style=" width: 100%;" >
+												</div>
+												<div class="col" style="margin-right: 2px;">
+													<p>Duration: </p><input type="text" name="stopTotalTime" placeholder="Duration" style=" width: 100%;" >
+												</div>
+									      	</div>
+									      </th:block>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								        <button type="submit" class="btn btn-primary">Save</button>
+								      </div>
+								      </form>
+								      <form th:if="${flight.stops.size} != 0" th:action="@{/products/flights_details_edit}" method="post">
+								      <div class="modal-body">
+								     	  <input type="hidden" name="product_id" th:value="${flight.product.id}">
+									      <input type="hidden" name="flight_id" th:value="${flight.id}">
+									      
+									      <th:block th:each="stop : ${flight.stops}">
+									      	<div class="row" style="padding: 15px; border-bottom: 1px solid grey; border-top: 1px solid grey;">
+									      		<input type="hidden" name="stop_id" th:value="${stop.id}">
+									      		<div class="col" style="margin-right: 2px;">
+													<p>City Name: </p><input type="text" name="stopCityNameEdit" placeholder="City Name" style=" width: 100%;" th:value="${stop.cityName}">
+												</div>
+												<div class="col" style="margin-right: 2px;">
+													<p>Arr Time: </p><input type="text" name="stopArrTimeEdit" placeholder="Arr Time" style=" width: 100%;" th:value="${stop.arrTime}">
+												</div>
+										        <div class="col" style="margin-right: 2px;">
+													<p>Dep Time: </p><input type="text" name="stopDepTimeEdit" placeholder="Dep Time" style=" width: 100%;" th:value="${stop.depTime}">
+												</div>
+												<div class="col" style="margin-right: 2px;">
+													<p>Duration: </p><input type="text" name="stopTotalTimeEdit" placeholder="Duration" style=" width: 100%;" th:value="${stop.totalTime}">
+												</div>
+									      	</div>
+									      </th:block>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								        <button type="submit" class="btn btn-primary">Save changes</button>
+								      </div>
+								      </form>
+								    </div>
+								  </div>
+								</div>
+							<script type="text/javascript">
+								totalSeats = [[${flight.totalSeats}]];
+								uploadSeats = [[${flight.uploadSeats}]];
+								
+								bookedSeats = totalSeats - uploadSeats;
+								
+								$(".bookedSeats").text(bookedSeats);
+									
+								flightId = "#stopsModal" + [[${flight.id}]];
+								
+								value = $("#modal-button" + [[${flight.id}]]).attr("data-bs-target", flightId);
+								
+							</script>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+		<br>
+		
+		<div class="modal fade text-center" id="deleteConfirmModal2">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+						<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<span id="modalBody2" style="color: black;"></span>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-success" id="confirmDelete2" href="">Confirm</a>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>	
+		</div>
+</body>
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		$(".link-delete2").click(function(e){
+			link = $(this).attr("href");
+			flightId = $(this).attr("userId");
+			$("#confirmDelete2").attr("href", link);
+			$("#modalBody2").text("Are you sure you want to delete this flight ID: " + flightId);
+			$("#deleteConfirmModal2").modal();
+		});
+	});
+	function clearFilter() {
+		window.location = "[[@{/products}]]";
+	};
+	
+</script>
+</html>

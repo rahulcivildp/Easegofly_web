@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+		th:fragment="flight_booking(remove)" th:remove="${remove}">
+
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({ 
+                    autoclose: true,
+                    todayHighlight: true,
+                    changeMonth: true,
+                    changeYear: true
+            }).datepicker('update', new Date());
+        });
+    </script>
+    <script src="http://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="text/javascript">
+    	var xhttp = new XMLHttpRequest();
+    	var RazorpayOrderId;
+    	function CreateOrderID(){
+    		xhttp.open("GET", "", false);
+    		xhttp.send();
+    		RazorpayOrderId = xhttp.responseText;
+    		OpenCheckout();
+    	}
+    </script>
+    <script type="text/javascript">
+    function OpenCheckout(){
+    	var siteLogo = [[${SITE_LOGO}]];
+    	var api_key = [[${razorpayKey}]];
+    	var option = {
+    			"key" : api_key, //ENter the KEY ID generated from Dashboard.
+    			"amount" : "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise = 500 rupees. 
+    			"currency" : "INR",
+    			"Name" : "EasyGoFly",
+    			"description" : "Test Transaction",
+    			"image" : siteLogo, // website logo
+    			"order_id" : RazorpayOrderId ,  // This is a simple order id. Pass the `id` obtained in the response of step 1.
+    			/* "handler" : function (response){
+    				alert(response.razorpay_payment_id);
+    				alert(response.rezorpay_order_id);
+    				alert(response.rezorpay_signature);
+    			}, */
+    			"callback_url" : "",
+    			"prefill" : {
+    				"name" : "Tanmay Sarkar",
+    				"email" : "rahulcivildp@gmail.com",
+    				"contact" : "9800626311"
+    			},
+    			"notes" : {
+    				"address" : "EasyGoFly Office"
+    			},
+    			"theme" : {
+    				"color" : "#3399cc"
+    			}
+    	};
+    	var rzp1 = new Razorpay(option);
+    	rzp1.on('payment.failed', function (response) {
+			alert(response.error.code);
+			alert(response.error.description);
+			alert(response.error.source);
+			alert(response.error.step);
+			alert(response.error.reason);
+			alert(response.error.metadata.order_id);
+			alert(response.error.metadata.payment_id);
+    	});
+    	rzp1.open();
+    	e.preventDefault();
+    }
+    </script>
+    <style>
+        .tile-align {
+            float: left;
+        }
+        .reviews {
+            padding: 10px 0;
+        }
+        .reviews p {
+            margin: 0;
+        }
+        .choosen_request {
+            background-color: #969393;
+        }
+        #time-limit {
+            margin: 0px;
+            padding: 0px;
+            background: #f8f4a2;
+        }
+        .circles {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            background-color: #344755;
+            margin: 0 auto;
+            z-index: 1;
+        }
+        .progress_border {
+            border: 1px solid green;
+            position: relative;
+            bottom: 65px;
+            margin: 0 auto;
+            width: 68%;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        .buttn_stly {
+            float: right;
+            width: 60%;
+            vertical-align: middle;
+            border-radius: 0 !important;
+            padding: 8px !important;
+            background-color: #ecf5fd;
+        }
+        .buttn_stly:hover {
+            background-color: #dcdcdc;
+        }
+        .accordion-header {
+            margin-bottom: 0;
+            background-color: #ecf5fd;
+        }
+        .buttn_stly_eff {
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important;
+        }
+        .onward {
+            margin: 15px 0;
+            background-color: #1369f5;
+            color: white;
+            padding: 6px 11px;
+            width: 10%;
+            border-radius: 0 20px 20px 0;
+        }
+        .non_stop {
+            text-align: center;
+            margin: 0;
+            font-size: 12px;
+            color: red;
+        }
+        .form-floating > .bi-calendar-date + .datepicker_input + label {
+            padding-left: 3.5rem;
+            z-index: 3;
+        }
+        .dest_box {
+            margin: 5px;
+            text-align: center;
+            background-color: #22a9bf;
+            color: white;
+        }
+        .summary_btn_stl {
+            float: left;
+            background-color: white;
+            width: 100%;
+        }
+        .booking_tiles {
+            border: 1px solid #a7a7a794; 
+            margin-bottom: 15px;
+        }
+        .booking_footer_btn {
+            background-color: #d32f2f;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+        .booking_footer_btn p {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            margin: 0;
+        }
+        .booking_page_off {
+            display: none;
+        }
+        .booking_page_on {
+            display: block;
+        }
+        .circles_active {
+            background-color: #2abd2a !important;
+        }
+        .travelerActive {
+   		    width: 970px;
+   			overflow-x: hidden;
+   			overflow-y: hidden;
+        }
+        .activeSLider:hover{
+        	position: relative;
+    		left: -141px;
+        }
+        
+        .steady{
+        	background-color: greean;
+        	position: relative !important;
+    		left: -141px !important;
+        }
+        
+        .activeSLider{
+        	width: 1160px;
+        	position: relative;
+        	left: 0px;
+       		transition: left 0.5s;
+       		transition-timing-function: ease-out;
+  	    }
+        .buttonSTyle {
+        	    display: flex;
+			    justify-content: center;
+			    align-items: center;
+			    height: 100%;
+			    width: 65%;
+        }
+    </style>
+
+    <body>
+		<div style="background-color:#061123; padding-top: 120px;"></div>
+        <div class="choosen_request">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 reviews">
+                        <p style="color: red;">Your Selection <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+                    </div>
+                    <div class="col-md-8 reviews">
+                        <div class="row">
+                            <div style="color: white;">
+                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityOne}]]</b></p>
+                                <p class="tile-align">&nbsp; - &nbsp;</p>
+                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityTwo}]]</b></p>
+                                <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
+                                <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
+                                <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="styleLinkButton styleLink" th:href="@{'/flight_search_' + ${search.id}}" style="background-color: white; float: right; margin: 6px 0;"> Change Flight</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="time-limit">
+	        <div class="container">
+	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
+	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
+	                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
+	            </div>
+	        </div>
+	    </div>
+        <div id="booking_page">
+            <div class="container">
+                <div class="media-hide">
+                    <div class="row" style="padding: 15px 0;">
+                        <div class="col-md-4">
+                            <div class="circles " id="c1"></div>
+                            <P style="text-align: center; color: #959eac;">Traveller Details</P>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="circles " id="c2"></div>
+                            <P style="text-align: center; color: #959eac;">Review</P>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="circles circles_active" id="c3"></div>
+                            <P style="text-align: center; color: #959eac;">Payment</P>
+                        </div>
+                    </div>
+                    <div class="progress_border"></div>
+                </div>
+                <div id="payment_tab" class="" style="margin-bottom: 15px;">
+                    <div class="row">
+                        <div class="col-md-9" style="padding: 0;">
+                            <div id="make_payment" class="booking_tiles back_white shadow">
+                                <div style="background-color: #ecf5fd;">
+                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Make Payment</p>
+                                </div>
+                                <div>
+                                    <div class="row" style="padding-top: 20px;">
+                                        
+                                    </div>
+
+                                </div>
+                                <div>
+                                    <div class="form-floating" style="margin: 0 25px;">
+                                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                        <label for="floatingTextarea2">Additional Requests /Comments</label>
+                                    </div>
+                                    <div class="form-check" style="margin: 10px 25px;">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            i have reviewed and agreed on the Terms and Condition. [[${razorpayKey}]]
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div id="selection_summary" class="booking_tiles">
+                                    <div style="background-color: #ecf5fd;">
+                                        <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Selection Summary</p>
+                                    </div>
+                                    <div>
+                                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="flush-headingOne1" style="background-color: white !important;">
+                                                    <div aria-expanded="true">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
+                                                            </div>
+                                                            <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${item.totalPrice}]]</p></div>
+                                                        </div>
+                                                    </div>
+                                                </h2>
+                                                <div id="flush-collapseOne1" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="flush-headingOne2" style="background-color: white !important;">
+                                                    <div aria-expanded="true">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
+                                                            </div>
+                                                            <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"></p></div>
+                                                        </div>
+                                                    </div>
+                                                </h2>
+                                                <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample">
+                                                    <div class="accordion-body">
+														<p>Service Charge: </p>
+                                               			<p>GST: <i class="fa fa-inr" aria-hidden="true"></i>[[${checkoutInfo.flightGSTCost}]]</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="border:1px solid grey; height: 40px; background-color: #07162d;">
+                                        <h2 style=" float: left; font-size: 18px; margin: 10px 20px; color:white;">Total</h2>
+                                        <div style="float: right;">
+                                            <p style="margin: 0;font-size: 16px;padding: 8px 20px; color:white;"><i class="fa fa-inr" aria-hidden="true"></i>[[${checkoutInfo.paymentTotal}]]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-9" style="border: 1px solid #a7a7a794; padding: 0;">
+                            <a th:href="@{'/flight_traveler_details' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
+                            
+                            <button class="col-md-2 col-3 booking_footer_btn" id="payButton" onclick="CreateOrderID()"style="float: right; border: none; color: white;">Book Now</button>
+                           
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                </div>
+                
+                
+                
+                
+            </div>
+        </div>
+     
+    </body>
+    
+ 
+    <script>
+    	feesCharges = [[${checkoutInfo.flightGSTCost}]] + [[${checkoutInfo.flightServiceCost}]];
+    	
+    	insertHtml = `<i class="fa fa-inr" aria-hidden="true"></i> ${feesCharges}`;
+    
+    	$("#feesAndCharges").html(insertHtml);
+    
+        $("#button_collapse").click(function(){
+            $(this).toggleClass("buttn_stly_eff");
+        })
+    </script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+		  $(".editTraveler").click(function(){
+  			$("#test").removeAttr("style");
+  			$("#test").removeAttr("disabled");
+		  });
+		});
+    </script>
+    <script>
+	$(".connectedButton").click(function(){
+		$(this).parent(".buttonSTyle").parent(".styleHHH").parent(".row").parent(".activeSLider").toggleClass("steady");
+	});
+     
+    </script>
+</html>

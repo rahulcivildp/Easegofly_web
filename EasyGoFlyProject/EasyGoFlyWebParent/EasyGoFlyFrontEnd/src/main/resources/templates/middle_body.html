@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+th:fragment="middle_body(remove)" th:remove="${remove}">
+<style>
+body {
+  background-attachment: fixed;
+  background-size: cover;
+}
+    html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+    @import url(https://fonts.googleapis.com/css?family=Raleway);
+
+    *, *:before, *:after{
+      margin: 0;
+      padding: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing:border-box;
+      box-sizing: border-box;
+    }
+
+    @media screen and (max-width: 640px){
+      .card{
+        display: block;
+        width: 100%;
+      }
+    }
+
+    @media screen and (min-width: 900px){
+      .card{
+        width: 33.33333%;
+      }
+    }
+    @media screen and (max-width: 800px){
+      .cards_margin {
+        margin: 10px 0;
+      }
+    }
+    .set_offers .card .title{
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    .content {
+      position: relative;
+      width: 90%;
+      margin: auto;
+      overflow: hidden;
+    }
+    .style_container {
+    	    max-width: 100% !important;
+		    padding: 10px !important;
+		    background: white;
+		    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
+		    border-radius: 0 10px 10px 10px;
+    }
+    .content .content-overlay {
+      background: rgba(0,0,0,0.7);
+      position: absolute;
+      height: 99%;
+      width: 100%;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+      -webkit-transition: all 0.4s ease-in-out 0s;
+      -moz-transition: all 0.4s ease-in-out 0s;
+      transition: all 0.4s ease-in-out 0s;
+    }
+    .content:hover .content-overlay{
+      opacity: 1;
+    }
+    .content-details {
+      position: absolute;
+      text-align: center;
+      padding-left: 1em;
+      padding-right: 1em;
+      width: 100%;
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      -webkit-transition: all 0.3s ease-in-out 0s;
+      -moz-transition: all 0.3s ease-in-out 0s;
+      transition: all 0.3s ease-in-out 0s;
+    }
+
+    .content:hover .content-details{
+      top: 50%;
+      left: 50%;
+      opacity: 1;
+    }
+    .fadeIn-bottom{
+      top: 80%;
+    }
+    
+    .container {
+        width: 80%;
+        padding: 0;
+    }
+    .set_offers .card { 
+      background: url('https://pyxis.nymag.com/v1/imgs/cd8/804/e0f612fa12d17e68e3d68ccf55f93cac4f-06-rick-morty.rsquare.w700.jpg') no-repeat center; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    .set_offers .card {
+        width: 100%;
+        float: left;
+        height: 216px;
+    }
+    .btn {
+        width: 68%;
+    }
+    
+    .card_bottom h4 {
+        font-size: 20px;
+        color: red;
+        text-decoration: none;
+    }
+    .city_name {
+        font-size: 24px;
+        font-weight: 600;
+        color: #23527C;
+        text-decoration: none;
+    }
+    .city_loca {
+        text-decoration: none;
+    }
+    .card_wrp {
+        background-color: azure;
+        width: 100%;
+    	padding: 10px 0;
+        border-radius: 10px;
+    }
+    .ad_Offers .card {
+        float: left;
+    }
+    .cards-img {
+        background: url("https://images.unsplash.com/photo-1637081182843-f89af4fbe51e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=387&amp;q=80") no-repeat center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        margin: 10px;
+        width: 126px;
+        height: 293px;
+        border-radius: 10px;
+        position: relative;
+        z-index: 2;
+    }
+    .cards-dialogue {
+        background: white;
+        width: 289px;
+        height: 300px;
+        bottom: 285px;
+        position: relative;
+        left: 46px;
+        z-index: 1;
+        border-radius: 8px;
+        border: 1px solid gray;
+        margin-right: 58px;
+    }
+    .cards-text h3 {
+        position: relative;
+        top: 45px;
+        right: -8px;
+        margin: 0;
+        width: 217px;
+    }
+    .cards-dialogue span {
+        position: relative;
+        top: 30px;
+        right: -10px;
+    }
+    .cards-text p {
+        width: 185px;
+        margin: 0;
+    }
+    .cards-dialogue a {
+        position: relative;
+        top: 4px;
+        right: -118px;
+        width: 139px;
+    }
+    .contained {
+        height: 375px;
+    }
+    .carousel_inners {
+        width: 80%;
+        margin: 0 auto;
+    }
+    .cards-text {
+        width: 220px;
+        height: 210px;
+        float: right;
+    }
+    .arrow-icons {
+        background-image: none !important; 
+        color: black; 
+        font-size: 24px; 
+    }
+    
+    .ad_Offers h2{
+        margin-left: 10px !important;
+        padding-top: 15px;
+        margin: 0;
+    }
+    .choose_your h2 {
+        padding: 7px 0;  
+    }
+    .small_container {
+        position: relative;
+        overflow-x: scroll;
+        height: 676px;
+        border-radius: 10px;
+        padding: 12px;
+        overflow-x: hidden;
+        float: left;
+    }
+    .small_cards_image {
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 75px;
+        width: 80px;
+        border-radius: 10px;
+        transition-duration: 0.5s;
+    } 
+    .small_cards_image.hovered {
+        border-radius: 50%;
+    }
+    .small_cards_img {
+        float: left;
+    }
+    .small_cards_text {
+        margin-left: 104px;
+    }
+    .small_cards_text h3 {
+        font-size: 20px;
+        padding-top: 10px;
+    }
+    .small_box {
+        margin-bottom: 23px;
+    }
+    .small_container2 {
+        padding: 0 7px;
+        float: left;
+    }
+    .small_cards2_text {
+        height: 273px;
+        width: 95%;
+        margin: 0 5px;
+        border-radius: 10px;
+    }
+    #small_cards2_text1 {
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    .small_cards2_text h3 {
+        color: white;
+        position: relative;
+        padding-left: 20px;
+        top: 169px;
+    }
+    .small_cards2_text p {
+        color: white;
+        position: relative;
+        padding-left: 20px;
+        top: 143px;
+    }
+    .small_cards2 {
+        float: left;
+    }
+    .svg-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .svg-icon path,
+    .svg-icon polygon,
+    .svg-icon rect {
+        fill: black;
+    }
+
+    .svg-icon circle {
+        stroke: black;
+        stroke-width: 1;
+    }
+    .shadow-lg {
+        -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+        filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+        /* Similar syntax to box-shadow */
+    }
+    .circle {
+        border-radius:50%;
+    }
+    .next_trip h3 {
+        color: white;
+    }
+    .content-btns {
+        width: 100px !important;
+    }
+    .content-overlay {
+        height: auto !important;
+    }
+    .text-box {
+    }
+
+    .text-box .btn:link,
+    .text-box .btn:visited {
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 40px;
+        display: inline-block;
+        border-radius: 100px;
+        transition: all .2s;
+        width: 100%;
+        margin-left: 5px;
+        border: 2px solid green;
+    }
+
+    .text-box .btn:hover {
+        background: #5999d1;
+        color: white;
+        border: none;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-box .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-box .btn-white {
+        background-color: #fff;
+        color: #777;
+    }
+
+    .text-box .btn::after {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        border-radius: 100px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        transition: all .4s;
+    }
+
+    .text-box .btn-white::after {
+        background-color: #fff;
+    }
+
+    .text-box .btn:hover::after {
+        transform: scaleX(1.4) scaleY(1.6);
+        opacity: 0;
+    }
+
+    .text-box .btn-animated {
+        animation: moveInBottom 5s ease-out;
+        animation-fill-mode: backwards;
+    }
+
+    @keyframes moveInBottom {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+    .whhy_rezofy {
+        height: 40px;
+        background: #07162D;
+    }
+    .choose_yours p {
+        color: white;
+        padding-top: 3px;
+    }
+    .whhy_rezofy_heading_sec h3 {
+        font-size: 20px;   
+        padding-top: 30px;
+    }
+    
+   .fare_finder {
+            height: auto !important;
+            margin-bottom: 20px;
+        } 
+    @media screen and (max-width: 700px) {
+    .container {
+        width: 100% !important;
+            }
+    .set_offers {
+           height: auto !important; 
+        }
+   
+    #more {
+        display: none;
+        }
+    }
+    .tiles {
+        margin: 0;
+    }
+    .tab:after {
+	content: "";
+	position: absolute;
+
+	height: 20px;
+	width: 35px;
+
+	bottom: 0;
+}
+
+.tab:after {
+	left: 305px;
+	bottom: 5px;
+
+	border-radius: 0 0 0 20px;
+	-moz-border-radius: 0 0 0 20px;
+	-webkit-border-radius: 0 0 0 20px;
+}
+    .img_card_boxs {
+    	    display: flex;
+		    justify-content: center;
+		    flex-wrap: wrap;
+		    align-content: center;
+    }
+    .folder_style {
+	    background: white;
+	    padding-bottom: 15px;
+	    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
+	    -webkit-border-top-left-radius: 10px;
+		-webkit-border-top-right-radius: 10px;
+		-moz-border-radius-topleft: 10px;
+		-moz-border-radius-topright: 10px;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+    }
+    .headerStyle {
+    	margin-left: 10px !important;
+	    padding-top: 15px;
+	    margin: 0;
+    }
+    /* Brightness-zoom Container */
+	.img-hover-zoom--brightness img {
+	  transition: transform 2s, filter 1.5s ease-in-out;
+	  transform-origin: center center;
+	  filter: brightness(50%);
+	}
+	
+	/* The Transformation */
+	.img-hover-zoom--brightness:hover img {
+	  filter: brightness(100%);
+	  transform: scale(1.3);
+	}
+	/* The Image container */
+	.img-hover-zoom {
+	  overflow: hidden; /* Removing this will break the effects */
+	  border-radius: 8px;
+	}
+	.specialoffer_next {
+		    margin-top: -102px;
+		    position: relative;
+		    z-index: 2;
+		    margin-left: 20px;
+		    color: white;
+	}
+</style>
+
+<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'">
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Easy Steps -->
+<div class="Esaysteps" style="background-color:lavender;" >
+ 	<div class="container media-hide" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+	    <div class="row" style="margin:0 auto; padding:14px;">
+	       <div class="col-4 text-center">
+	          <h3 style="font-size:16px; position: relative; top:18px;">☑ <b>Lowest budget airlines</b></h3><p style=" position: relative; top:10px;"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fare Guarantee</b></p>
+	       </div>
+			<div class=" col-4 text-center">
+	          <h3 style="font-size:16px;  position: relative; top:18px;">☑ <b>Easy Booking</b></h3><p style=" position: relative; top:10px;"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Just 3 Steps</b></p>
+	        </div>
+			<div class=" col-4 text-center">
+	          <h3 style="font-size:16px; position: relative; top:18px;">☑ <b>24X7</b></h3><p style=" position: relative; top:10px;"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free Phone Assistance</b></p>
+	        </div>
+	    </div>
+	</div>
+	
+	<th:block  sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+	<div class="container">
+		<h3 class="text-center" style="font-size:20px; padding-top: 15px; text-decoration: underline;">Recent Search</h3>
+			 <div class="row" style="margin:0 auto; padding:14px;">
+			 	
+			       <div class="col-4 text-center">
+			          <a th:if="${lastValue1} != null" th:href="@{'/flight_search_' + ${lastValue1.id}}">
+			          	<p style=" position: relative; top:10px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
+			          </a>
+			       </div>
+			       <div class="col-4 text-center">
+			          <a th:if="${lastValue2} != null" th:href="@{'/flight_search_' + ${lastValue2.id}}">
+			          	<p style=" position: relative; top:10px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
+			          </a>
+			       </div>
+			       <div class="col-4 text-center">
+			          <a th:if="${lastValue3} != null" th:href="@{'/flight_search_' + ${lastValue3.id}}">
+			          	<p style=" position: relative; top:10px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
+			          </a>
+			       </div>
+		        
+		    </div>
+	    </div>
+	</th:block>
+</div>
+
+<!-- Set Offers -->
+<div class="text-center" style="padding-top: 40px; margin-bottom: 20px;">  
+    <div class="container style_container">
+    <h2>Get Today's Top Deals</h2>
+    <p>Save your money with our best offers</p>
+    <div class="deal_custom">
+        <div class="row deal_custom_row">
+    
+        
+    <div class="col-3 tiles">
+        <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/first-class.png'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
+        <div class="content-overlay"></div>
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+      </div>
+    </div>
+        </div>
+        <div class="col-3 tiles">
+        <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/flight_reflection.png'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
+        <div class="content-overlay"></div>
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+      </div>
+    </div>
+        </div>
+        <div class="col-3 tiles">
+        <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/flight_seat.png'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
+        <div class="content-overlay"></div>
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+      </div>
+    </div>
+        </div>
+        <div class="col-3 tiles">
+        <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/ST_20180920_KAHUB_4290944.jpg'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
+        <div class="content-overlay"></div>
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+      </div>
+    </div>
+        </div>
+            </div>
+            </div>
+        </div>
+</div>
+
+<!-- Fare Finder -->
+<div class="fare_finder">
+		<div style="width: 80%; margin: 0 auto;">
+	    	<div class="tab folder_style col-sm-3" ><h2 class="headerStyle">Lowest Fare Finder</h2></div>
+		</div>
+        <div class="lowest_fare">
+        <div class="container style_container deal_custom" style="padding: 20px !important;">
+            <div class="row deal_custom_row" >
+              <div class="row ">	
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a href="#" style="text-decoration: none;">
+                             <div class="card_wrp shadow">
+                                 <div class="card_top_side">
+                                     <span class="city_name">Bangalore</span><br><span class="city_loca">BLR</span>
+                                 </div>
+                                 <div class="img_card_boxs">
+                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                 	</div>
+                                 </div>
+
+                                 <div class="card_center">
+                                        <span class="city_loca">DEL</span><br><span class="city_name">Delhi</span>
+                                 </div>
+
+                                 <div class="card_bottom">
+                                      <h4>&#x20B9; 3,500</h4>
+                                 </div>
+                            </div>
+                       </a>
+                   </div>
+
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a href="#" style="text-decoration: none;">
+                             <div class="card_wrp shadow">
+                                 <div class="card_top_side">
+                                     <span class="city_name">Kolkata</span><br><span class="city_loca">CCU</span>
+                                 </div>
+                                 <div class="img_card_boxs" >
+                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                 	</div>
+                                 </div>
+
+                                 <div class="card_center">
+                                        <span class="city_loca">BLR</span><br><span class="city_name">Bangalore</span>
+                                 </div>
+
+                                 <div class="card_bottom">
+                                      <h4>&#x20B9; 3,598</h4>
+                                 </div>
+                            </div>
+                       </a>
+                   </div>
+
+
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a href="#" style="text-decoration: none;">
+                             <div class="card_wrp shadow">
+                                 <div class="card_top_side">
+                                     <span class="city_name">Delhi</span><br><span class="city_loca">DEL</span>
+                                 </div>
+                                 <div class="img_card_boxs">
+                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                 	</div>
+                                 </div>
+
+                                 <div class="card_center">
+                                        <span class="city_loca">CCU</span><br><span class="city_name">Kolkata</span>
+                                 </div>
+
+                                 <div class="card_bottom">
+                                      <h4>&#x20B9; 2,595</h4>
+                                 </div>
+                            </div>
+                       </a>
+                   </div>
+
+                  <div class="col-md-2 col-2 text-center cards_margin">
+                         <a href="#" style="text-decoration: none;">
+                             <div class="card_wrp shadow">
+                                 <div class="card_top_side">
+                                     <span class="city_name">Kolkata</span><br><span class="city_loca">CCU</span>
+                                 </div>
+                                 <div class="img_card_boxs">
+                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                 	</div>
+                                 </div>
+
+                                 <div class="card_center">
+                                        <span class="city_loca">MAA</span><br><span class="city_name">Chennai</span>
+                                 </div>
+
+                                 <div class="card_bottom">
+                                      <h4>&#x20B9; 4,554</h4>
+                                 </div>
+                            </div>
+                       </a>
+                   </div>
+                  
+                  <div class="col-md-2 col-2 text-center cards_margin">
+                         <a href="#" style="text-decoration: none;">
+                             <div class="card_wrp shadow">
+                                 <div class="card_top_side">
+                                     <span class="city_name">Bangalore</span><br><span class="city_loca">BLR</span>
+                                 </div>
+                                 <div class="img_card_boxs">
+                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                 	</div>
+                                 </div>
+
+                                 <div class="card_center">
+                                        <span class="city_loca">BOM</span><br><span class="city_name">Mumbai</span>
+                                 </div>
+
+                                 <div class="card_bottom">
+                                      <h4>&#x20B9; 2,749</h4>
+                                 </div>
+                            </div>
+                       </a>
+                   </div>
+
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a href="#" style="text-decoration: none;">
+                             <div class="card_wrp shadow">
+                                 <div class="card_top_side">
+                                     <span class="city_name">Mumbai</span><br><span class="city_loca">BOM</span>
+                                 </div>
+                                 <div class="img_card_boxs">
+                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                 	</div>
+                                 </div>
+
+                                 <div class="card_center">
+                                        <span class="city_loca">CCU</span><br><span class="city_name">Kolkata</span>
+                                 </div>
+
+                                 <div class="card_bottom">
+                                      <h4>&#x20B9; 3,842</h4>
+                                 </div>
+                            </div>
+                       </a>
+                   </div>
+            </div>
+        </div>
+     </div></div></div>
+
+<!-- Ad Offers -->
+<div class="ad_Offers" style="height: 500px;">
+	<div style="width: 80%; margin: 0 auto;">
+    	<div class="tab folder_style col-sm-3"><h2 style="box-shadow: none !important;">Exclusive Deals</h2></div>
+	</div>
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner carousel_inners style_container" style="padding: 0 10px 10px !important;">
+    <div class="carousel-item active contained" data-interval="4000" style="padding: 15px 15px;">
+        
+        <div class="row">
+	    	<div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+            <div class="cards">
+                <div class="cards-box">
+                    <div class="cards-img shadow"></div>
+                    <div class="cards-dialogue shadow">
+                        <div class="cards-text">
+                            <h3>Stop At Nothing</h3><br>
+                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+                        </div>
+                        <a class="btn btn-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+        
+    </div>
+      
+    <div class="carousel-item contained" data-interval="4000" style="padding: 15px 15px;">
+      <div class="row">
+	    	<div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+            <div class="cards">
+                <div class="cards-box">
+                    <div class="cards-img shadow"></div>
+                    <div class="cards-dialogue shadow">
+                        <div class="cards-text">
+                            <h3>Stop At Nothing</h3><br>
+                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+                        </div>
+                        <a class="btn btn-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+    </div>
+    <div class="carousel-item contained" data-interval="4000" style="padding: 15px 15px;">
+    	<div class="row">
+	    	<div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+            <div class="cards">
+                <div class="cards-box">
+                    <div class="cards-img shadow"></div>
+                    <div class="cards-dialogue shadow">
+                        <div class="cards-text">
+                            <h3>Stop At Nothing</h3><br>
+                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+                        </div>
+                        <a class="btn btn-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <div class="col" style="float: left;">
+	            <div class="cards">
+	                <div class="cards-box">
+	                    <div class="cards-img shadow"></div>
+	                    <div class="cards-dialogue shadow">
+	                        <div class="cards-text">
+	                            <h3>Stop At Nothing</h3><br>
+	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                        </div>
+	                        <a class="btn btn-primary">Book Now</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+      
+        
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon arrow-icons" aria-hidden="true">
+        <svg class="svg-icon shadow-lg circle" viewBox="0 0 20 20">
+            <path fill="none" d="M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z">
+            </path>
+        </svg>
+</span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon arrow-icons" aria-hidden="true">
+        <svg class="svg-icon shadow-lg circle" viewBox="0 0 20 20">
+            <path fill="none" d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z">
+            </path>
+        </svg>
+</span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+</div>
+
+<!-- Super Offers -->
+<div class="popular_destinations" style="margin-bottom: 30px;">
+	<div style="width: 80%; margin: 0 auto;">
+	    <div class="tab folder_style col-sm-3" ><h2 class="headerStyle">Popular <span>Destinations</span></h2></div>
+	</div>
+    <div class="container style_container">
+        <div class="row">
+	        <span class="choose_your">
+	             
+	        </span>
+	        <div class="media_status">
+		        <p>
+				  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style=" width: 100%; background: #edebeb;  color: black;">
+				    Tap to open Offer Places
+				  </button>
+				</p>
+				<div class="collapse" id="collapseExample" style="padding-bottom: 10px;">
+				  <div class="card card-body" style="height: 500px; overflow: scroll; overflow-x: hidden;">
+				    <div th:replace="popular_destinaiton :: popular_destination('tag')"></div>
+				  </div>
+				</div>
+	        </div>
+	        
+	        <div class="col-sm-6 shadow-sm small_container media-hide">
+	            <div th:replace="popular_destinaiton :: popular_destination('tag')"></div>
+	        </div>
+	        <div class="col-sm-6">
+	        	<div class="row">
+	        		<div class="col-6" style="margin-bottom: 10px;">
+	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
+						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
+	                                      <img th:src="@{/images/deals/india-best-places-to-visit-rajasthan.jpg}" style="width: 100%;">
+						    </div>
+						    <div class="specialoffer_next">
+	                                   <h3>Rajasthan</h3>
+	                                   <p>Thor desert</p>
+	                           </div>  
+						 </div>
+		        		
+                  </div>
+	        		<div class="col-6" style="margin-bottom: 10px;">
+	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
+						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
+                                    <img th:src="@{/images/deals/kasdal.jpg}" style="width: 100%;">
+						    </div>
+						    <div class="specialoffer_next">
+                                 <h3>Jammu &amp; Kashmir</h3>
+                                 <p>Dal Lake</p>
+                         </div> 
+						  </div>
+	        			
+	        		</div>
+	        	</div>
+	        	<div class="row">
+	        		<div class="col-6" style="margin: 10px 0;">
+	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
+						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
+						      <img th:src="@{/images/deals/kannya.jpg}" style="width: 100%;">
+						    </div>
+						    <div class="specialoffer_next">
+		                       <h3>Kanyakumari</h3>
+		                       <p>Thiruvalluvar Statue</p>
+		               		</div> 
+						  </div>
+	        		</div>
+	        		<div class="col-6" style="margin: 10px 0;">
+	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
+						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
+                                    <img th:src="@{/images/deals/vishal-bhutani-ugyfweYokVA-unsplash.jpg}" style="width: 100%;" class="padding_in_popullar">
+						    </div>
+						    <div class="specialoffer_next">
+                                 <h3>Himachal Pradesh</h3>
+                                 <p>Manali</p>
+                         </div>  
+						 </div>
+	        		</div>
+	        	</div>
+               
+                 
+                
+                  
+                   
+             </div>
+             </div>
+   		</div>
+	</div>
+</div>
+
+<!-- Get Inspiration -->
+<div class="get_inspiratio" style="margin-bottom: 35px;">
+	<div style="width: 80%; margin: 0 auto;">
+	    <div class="tab folder_style col-sm-4 "><h2 class="headerStyle font_resizerer">Get inspiration <span>for your next trip</span></h2></div>
+	</div>
+      <div class="container style_container" style="padding: 20px 10px !important;">
+        <span class="choose_your">
+             </span>
+          <div class="deal_custom">
+           <div class="row deal_custom_row2">
+                    <div class="col-sm-4 col-4">
+                        <div class="next_trip">
+                            <div class="content" style="border-radius: 10px;">
+                                <div class="content-overlay"></div>
+                                <img class="content-image" th:src="@{/images/deals/J&K.jpg}" style="width: 100%;">
+
+                                <div class="content-details fadeIn-bottom">
+                                    <h3 class="content-title">Jammu & Kashmir, India</h3>
+                                    <a class="btn btn-primary content-btns" >Book Now</a>
+                                </div>
+                    
+                            </div>
+                        </div>
+                    </div>
+                 <div class="col-sm-4 col-4">
+                        <div class="next_trip">
+                            <div class="content" style="border-radius: 10px;">
+                                <div class="content-overlay"></div>
+                                <img class="content-image" th:src="@{/images/deals/kannyakumari-temple.jpg}" style="width: 100%;">
+
+                                <div class="content-details fadeIn-bottom">
+                                    <h3 class="content-title">Kanyakumari, India</h3>
+                                    <a class="btn btn-primary content-btns" >Book Now</a>
+                                </div>
+                    
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-sm-4 col-4">
+                        <div class="next_trip">
+                            <div class="content" style="border-radius: 10px;">
+                                <div class="content-overlay"></div>
+                                <img class="content-image" th:src="@{/images/deals/1-35r.jpg}" style="width: 100%;">
+
+                                <div class="content-details fadeIn-bottom">
+                                    <h3 class="content-title">Goa, India</h3>
+                                    <a class="btn btn-primary content-btns" >Book Now</a>
+                                </div>
+                    
+                            </div>
+                        </div>
+                    </div>
+          </div></div>
+        </div>
+   </div>
+       
+   
+
+   
+<!-- left to right scroll -->
+<script>
+    function myFunction() {
+      var dots = document.getElementById("dots");
+      var moreText = document.getElementById("more");
+      var btnText = document.getElementById("myBtn");
+    
+      if (dots.style.display == "none") {
+        dots.style.display = "inline";
+        btnText.innerHTML = "Read more"; 
+        moreText.style.display = "none";
+      } else {
+        dots.style.display = "none";
+        btnText.innerHTML = "Read less"; 
+        moreText.style.display = "inline";
+      }
+    }
+</script>
+
+<script>
+    
+    $('.small_container').scroll();
+    
+    $(function() {
+        $("#small_card1").hover(function(){
+            $("#small_card_image1").addClass('hovered');
+        },
+        function(){
+            $("#small_card_image1").removeClass('hovered');
+        });
+    });
+    $(function() {
+        $("#small_card1").hover(function(){
+            $("#small_card_image1").addClass('hovered');
+        },
+        function(){
+            $("#small_card_image1").removeClass('hovered');
+        });
+    });
+    $(function() {
+        $("#small_card2").hover(function(){
+            $("#small_card_image2").addClass('hovered');
+        },
+        function(){
+            $("#small_card_image2").removeClass('hovered');
+        });
+    });
+    $(function() {
+        $("#small_card3").hover(function(){
+            $("#small_card_image3").addClass('hovered');
+        },
+        function(){
+            $("#small_card_image3").removeClass('hovered');
+        });
+    });
+    $(function() {
+        $("#small_card4").hover(function(){
+            $("#small_card_image4").addClass('hovered');
+        },
+        function(){
+            $("#small_card_image4").removeClass('hovered');
+        });
+    });
+    $(function() {
+        $("#small_card1").hover(function(){
+            $("#small_card_image1").addClass('hovered');
+        },
+        function(){
+            $("#small_card_image1").removeClass('hovered');
+        });
+    });
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Error Page', 'none')"></head>
+<body>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-TNN6EKSPHR');
+	</script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<div class="container-fluid">
+		<div class="m-3 text-center">
+			<div class="alert alert-danger" role="alert">
+			  <h2><i class="fa fa-duotone fa-circle-exclamation"></i>&nbsp; Sorry, wrong data type. &nbsp;<i class="fa fa-duotone fa-circle-exclamation"></i></h2>
+			</div>
+		</div>
+		<div th:replace="fragments :: footer"></div>
+	</div>
+</body>
+</html>

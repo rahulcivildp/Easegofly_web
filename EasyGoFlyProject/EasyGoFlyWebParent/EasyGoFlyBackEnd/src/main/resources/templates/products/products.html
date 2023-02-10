@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<head th:replace="fragments :: page_head(${pageTitle}, 'tag')"></head>
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+      
+  <script type="text/javascript">
+     
+  $( function() {
+    $( "#accordion" ).accordion({
+        header: "h3",
+        collapsible: true,
+        active: false,
+        heightStyle: "content",
+    });
+  } );
+
+  </script>
+<style type="text/css">
+    .main_win {
+        background: #eae8ef;
+        border: 3px solid green;
+        width: 100%;
+        position: fixed;
+        z-index: 2;
+    }
+    .icons {
+        float: right;
+        color: black;
+        font-size: 35px;
+        padding: 44px 5px 0;
+    }
+    .set_margin {
+        padding: 0 !important;
+        margin: 0 !important;
+        height: auto;
+    }
+    .set_margin ul {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        list-style-type: none;
+    }
+    .set_margin li p {
+        margin: 0px;
+    }
+    .set_margin li {
+        padding: 10px;
+    }
+    .set_margin li:hover {
+        background: #7ab6e8 !important;
+        cursor: pointer;
+    }
+    .set_margin li:active {
+        background: #4482b5 !important;
+    }
+    #accordion h3 span {
+        margin-left: 6px;
+    }
+    .set_margin li.active {
+        cursor: auto !important;
+        background: #4482b5 !important;
+    }
+    .activa {
+        background: #F85C52 !important;
+    }
+    </style>
+</head>
+<body>
+
+
+	<div class="container-fluid">
+	
+		<div th:replace="navigation :: nav_menu"></div>
+		
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+		<div th:if="${alert != null}" class="alert alert-danger text-center">
+			[[${alert}]]
+		</div>
+		<div th:if="${warning != null}" class="alert alert-warning text-center">
+			[[${warning}]]
+		</div>
+		<div class="body_content" style=" padding-top: 10px; border: 1px solid grey; border-radius: 5px; background-color: gainsboro;">
+    <div class="row">
+        <div class="col-md-2">
+            <div id="accordion">
+                <h3 class="sections"><img th:src="@{/images/gif-icons/icons8-edit.gif}" style="width: 23px;"/><span>B2C Markup</span></h3>
+                <div class="set_margin">
+                    <ul>
+                        <li class="li_1 border" id="create_markup">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Create markup</p>
+                        </li>
+                        <li class="li_1 border" id="view_markups">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>View markups</p>
+                        </li>
+                    </ul>
+                </div>
+                <h3 class="sections"><img th:src="@{/images/gif-icons/icons8-bookmark-1.gif}" style="width: 23px;"/><span>Online Booking</span></h3>
+                <div class="set_margin" style="height: auto !important;">
+                    <ul>
+                        <li class="li_2 border" id="ticketed">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Ticketed</p>
+                        </li>
+                        <li class="li_2 border" id="ticketed_pending">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Ticketed pending</p>
+                        </li>
+                        <li class="li_2 border" id="modification_pending">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Modification pending</p>
+                        </li>
+                        <li class="li_2 border" id="cancel_pending">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Cancel pending</p>
+                        </li>
+                        <li class="li_2 border" id="refund_pending">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Refund pending</p>
+                        </li>
+                        <li class="li_2 border" id="refunded">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Refunded</p>
+                        </li>
+                    </ul>
+                </div>
+                <h3 class="sections"><img th:src="@{/images/gif-icons/take-off-6.gif}" style="width: 23px;"/><span>Flight Private Fare  </span></h3>
+                <div class="set_margin">
+                    <ul>
+                        <li class="li_4 border" id="add_fare_rule">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Add Fare Rule</p>
+                        </li>
+                        <li class="li_4 border" id="fare_rule_list">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Fare Rule List</p>
+                        </li>
+                        <li class="li_4 border" id="add_private_fare">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Add Private Fare</p>
+                        </li>
+                        <li class="li_4 border" id="private_fare_list">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Private Fare List</p>
+                        </li>
+                        <li class="li_4 border" id="flight_booking">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Flight Booking</p>
+                        </li>
+                    </ul>
+                </div>
+                <h3 class="sections"><img th:src="@{/images/gif-icons/charter-flight.gif}" style="width: 23px;"/><span>Charter Flight</span></h3>
+                <div class="set_margin">
+                    <ul>
+                        <li class="li_5 border">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Create markup</p>
+                        </li>
+                        <li class="li_5 border">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>View markups</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10 hidden-groups" id="new_content1" style="padding: 0; display: none;">
+			<div th:replace="products/flightFare/create_markup :: content"></div>
+        </div>
+        <div class="col-md-10 hidden-groups" id="new_content2" style="padding: 0; display: none;">
+			<div th:replace="products/flightFare/private_fare_form :: content"></div>
+        </div>
+        <div class="col-md-10 hidden-groups" id="new_content3" style="padding: 0; display: none;">
+			<div th:replace="products/flightFare/view_private_fare :: content"></div>
+        </div>
+
+    </div>
+</div>
+		<div class="modal fade text-center" id="deleteConfirmModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+						<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<span id="modalBody" style="color: black;"></span>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-success" id="confirmDelete" href="">Confirm</a>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+		<div th:replace="fragments :: footer"></div>
+	</div>
+	
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$(".link-delete").click(function(e){
+			e.preventDefault();
+			link = $(this);
+			userId = link.attr("userId");
+			$("#confirmDelete").attr("href", link.attr("href"));
+			$("#modalBody").text("Are you sure you want to delete this user ID: " + userId);
+			$("#deleteConfirmModal").modal();
+		});
+	});
+	
+	function clearFilter() {
+		window.location = "[[@{/categories}]]";
+	};
+	
+</script>
+	
+<script>
+    
+   	productLocation = "https://easegofly.com:8443/EasyGoFlyAdmin";
+    
+    $('.set_margin li').click(function(event){
+        $('.set_margin li').not(event.target).removeClass("active");
+        $(this).addClass("active");
+    });
+
+    
+    $("#create_markup").click(function() {
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content1").css("display", "block");
+    });
+    $("#add_private_fare").click(function() {
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content2").css("display", "block");
+    });
+    $("#private_fare_list").click(function() {
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content3").css("display", "block");
+    });
+    
+    if(window.location.href == productLocation + "/products/page") {
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content3").css("display", "block");
+    }
+
+</script>
+
+	<script type="text/javascript">
+	
+	moduleURL = "[[@{/products}]]";
+	
+	brandModuleURL = "[[@{/brands}]]";
+	
+	checkedURL = "[[@{/products/check_name}]]";
+	
+	
+	</script>
+	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
+	<script type="text/javascript" th:src="@{/js/product_form.js}"></script>
+	<script type="text/javascript" th:src="@{/js/product_form_images.js}"></script>
+	<script type="text/javascript" th:src="@{/js/product_form_details.js}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".link-delete").click(function(e){
+			e.preventDefault();
+			link = $(this);
+			userId = link.attr("userId");
+			$("#confirmDelete").attr("href", link.attr("href"));
+			$("#modalBody").text("Are you sure you want to delete this user ID: " + userId);
+			$("#deleteConfirmModal").modal();
+		});
+		
+		$(".link-detail").click(function(e){
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});
+		
+		$("#dropdownCategory").change(function(){
+			$("#searchFormByCategory").submit();
+		});
+	});
+	
+	
+	
+	
+	function clearFilter() {
+		window.location = "[[@{/products}]]";
+	};
+	
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0- 
+beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384- 
+ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" 
+crossorigin="anonymous"></script> 
+</body>
+</html>

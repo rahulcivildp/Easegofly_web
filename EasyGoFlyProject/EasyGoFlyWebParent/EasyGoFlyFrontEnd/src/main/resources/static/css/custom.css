@@ -1,0 +1,30 @@
+@media (min-width: 576px){
+	.container {
+		max-width: 80% !important;
+	}
+	.shadow-lg {
+		box-shadow: none !important;
+	}
+	.margin-bottom-account {
+		margin: 0 0 2px 0 !important;
+	}
+	.margin-bottom-update-account {
+		margin: 0 0 4px 0 !important;
+	}
+}
+*.margin-bottom-update-account {
+		margin: 0 0 4px 0 !important;
+	}
+*.margin-bottom-account {
+		margin: 0 0 1px 0 !important;
+	}
+*.margin-bottom-mobile-account {
+		margin: 0 0 6px 0 !important;
+		cursor: pointer !important;
+	}
+*.modify_link_navigation {
+	justify-content: unset !important;
+}
+*.shadow-lg {
+	box-shadow: none !important;
+}

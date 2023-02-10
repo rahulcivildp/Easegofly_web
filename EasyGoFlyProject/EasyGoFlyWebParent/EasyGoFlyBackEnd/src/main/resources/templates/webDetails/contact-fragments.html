@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<form th:action="@{/web_settings/save_contact}" method="post">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Contact us:</label>
+				<div class="col-sm-10" >
+					<div class="row">
+						<div class="col-sm-10">
+							<textarea rows="5" class="form-control mt-1" name="CONTACT_US" th:value="${CONTACT_US}" maxlength="10240">
+								[[${CONTACT_US}]]
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-9"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Admin Address: </label>
+				<div class="col-sm-10" >
+					<div class="col-sm-10" >
+						<textarea rows="5" class="form-control mt-1" name="ADMIN_ADDRESS" th:value="${ADMIN_ADDRESS}" maxlength="10240">[[${ADMIN_ADDRESS}]]</textarea>
+					</div>
+				</div>
+				<div class="col-sm-1">
+					Word Count: 
+					<span id="no-9"></span>
+					<p style="color: red;">**Maximum length permissible is 10240.</p>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Whatsapp Number: </label>
+				<div class="col-sm-10" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="WHATSAPP" th:value="${WHATSAPP}" maxlength="10240"/>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Facebook Link:</label>
+				<div class="col-sm-10" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="FACEBOOK" th:value="${FACEBOOK}" maxlength="10240" />
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Instagram Link:</label>
+				<div class="col-sm-10" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="INSTAGRAM" th:value="${INSTAGRAM}" maxlength="10240" />
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Twitter Link:</label>
+				<div class="col-sm-10" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="TWITTER" th:value="${TWITTER}" maxlength="10240" />
+					</div>
+				</div>
+			</div>
+			<br>
+			
+			<div class="text-center">
+					<input type="submit" value="Save" class="btn btn-primary m-3 buttonds" >
+			</div>
+			
+		</form>
+	</div>
+
+</body>
+</html>

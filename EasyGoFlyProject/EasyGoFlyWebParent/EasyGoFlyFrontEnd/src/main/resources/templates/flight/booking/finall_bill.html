@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<body>
+<div th:fragment="final_bill(remove)" th:remove="${remove}">
+	<div id="selection_summary" class="booking_tiles">
+       <div style="background-color: #ecf5fd;">
+           <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Selection Summary</p>
+       </div>
+       <div>
+           <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item">
+                   <h2 class="accordion-header" id="flush-headingOne1" style="background-color: white !important;">
+                       <div aria-expanded="true">
+                           <div class="row">
+                               <div class="col-md-7">
+                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
+                               </div>
+                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${item.totalPrice}]]</p></div>
+                           </div>
+                       </div>
+                   </h2>
+                   <div id="flush-collapseOne1" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
+                       
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div>
+           <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item">
+                   <h2 class="accordion-header" id="flush-headingOne2" style="background-color: white !important;">
+                       <div aria-expanded="true">
+                           <div class="row">
+                               <div class="col-md-7">
+                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
+                               </div>
+                               <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"></p></div>
+                                          </div>
+                                      </div>
+                                  </h2>
+                                  <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample">
+                                      <div class="accordion-body">
+											<p>Service Charge: </p>
+                                 			<p>GST: <i class="fa fa-inr" aria-hidden="true"></i>[[${checkoutInfo.flightGSTCost}]]</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div style="border:1px solid grey; height: 40px; background-color: #07162d;">
+       	<div style="float: left; ">
+       		<h2 style=" font-size: 22px; margin: 6px 20px; color:white;">Total</h2>
+       	</div>
+           
+           <div style="float: right;">
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; "><i class="fa fa-inr" aria-hidden="true"></i><b>[[${checkoutInfo.paymentTotal}]]</b></p>
+           </div>
+       </div>
+   </div>
+
+</div>
+</body>
+</html>

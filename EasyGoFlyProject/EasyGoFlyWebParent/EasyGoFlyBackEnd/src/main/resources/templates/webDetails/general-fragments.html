@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<form th:action="@{/web_settings/save_general}" method="post" enctype="multipart/form-data">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">FAQ:</label>
+				<div class="col-sm-10" >
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="FAQ" th:value="${FAQ}" maxlength="10240">
+								<div th:utext="${FAQ}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-1"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">About us:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="ABOUT_US" th:value="${ABOUT_US}" >
+								<div th:utext="${ABOUT_US}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-2"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Terms & conditions:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="TERMS" th:value="${TERMS}" >
+								<div th:utext="${TERMS}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-3"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Privacy Policy:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="PRIVACY" th:value="${PRIVACY}" >
+								<div th:utext="${PRIVACY}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-4"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">User Agreement:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="AGREEMENT" th:value="${AGREEMENT}" >
+								<div th:utext="${AGREEMENT}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-5"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Paymeny Security:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="SECURITY" th:value="${SECURITY}" >
+								<div th:utext="${SECURITY}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-6"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Advertisement Image:</label>
+				<div class="col-sm-10">
+					<img class="img-thumbnail img-fluid" id="thumbnail" th:src="@{${AD_IMAGE}}" alt="Site Logo thumbnail" style="width: 150px; height: 70px;"/>
+					<input type="file" name="fileImage" id="fileImage" accept="image/png, image/jpeg"/>
+				</div> 
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Service:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="SERVICE" th:value="${SERVICE}" >
+								<div th:utext="${SERVICE}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-7"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Bank Details:</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="BANK" th:value="${BANK}" >
+								<div th:utext="${BANK}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-8"></span>
+							**Maximum length permisible is 10240.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="text-center">
+					<input type="submit" value="Save" class="btn btn-primary m-3" >
+			</div>
+		</form>
+	</div>
+	
+</body>
+</html>

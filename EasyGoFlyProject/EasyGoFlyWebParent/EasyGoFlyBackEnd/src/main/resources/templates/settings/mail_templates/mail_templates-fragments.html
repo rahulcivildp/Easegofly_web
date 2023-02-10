@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		
+		<form th:action="@{/settings/save_mail_templates}" method="post">
+			<ul class="nav nav-tabs" id="settingTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" data-bs-toggle="tab" href="#customerVerification" role="tab">Customer Verification</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#orderConfirmation" role="tab">Order Confirmation</a>
+				</li>
+			</ul>
+			
+			<div class="tab-content">
+				<div class="tab-pane active p-3" id="customerVerification" role="tabpanel">
+					<div th:replace="settings/mail_templates/customer_verification-fragments :: content"></div>
+				</div>
+				<div class="tab-pane p-3" id="orderConfirmation" role="tabpanel">
+					<div th:replace="settings/mail_templates/order_confirmation_fragment :: content"></div>
+				</div>
+			</div>
+		
+			<div class="text-center">
+					<input type="submit" value="Save" class="btn btn-primary m-3" >
+			</div>	
+		</form>
+	</div>
+	
+</body>
+</html>

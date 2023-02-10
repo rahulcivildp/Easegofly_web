@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Welcome to Shopeme Admin home page', 'none')"></head>
+<body >
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<div class="container-fluid">
+		<div th:replace="navigation :: nav_menu"></div>
+		<div style=" height: 80vh;">
+			<h2>Welcome to Shopping admin page</h2>
+			Welcome &nbsp; 
+			<a class="styleLink" th:href="@{/account}" sec:authentication="principal.fullName"></a>
+			&nbsp; 
+			<span sec:authentication="principal.authorities"></span>
+			
+			<th:block sec:authorize="hasAuthority('Editor')">
+				<div class="row">
+					<div class="col-2"></div>
+					<div class="col-8">
+						<marquee style="font-weight: 600; color: red; font-size: 28px;">5% charge will be deducted for all the flight tickets. Contact Admin for more information. &nbsp;&nbsp;
+						5% charge will be deducted for all the flight tickets. Contact Admin for more information. &nbsp;&nbsp;
+						5% charge will be deducted for all the flight tickets. Contact Admin for more information. &nbsp;&nbsp;
+						5% charge will be deducted for all the flight tickets. Contact Admin for more information. </marquee>
+					</div>
+					<div class="col-2"></div>
+				</div>
+			</th:block>
+		</div>
+		<div th:replace="fragments :: footer"></div>
+	</div>
+</body>
+</html>

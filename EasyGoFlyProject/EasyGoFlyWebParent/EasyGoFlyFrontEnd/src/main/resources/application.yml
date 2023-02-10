@@ -1,0 +1,40 @@
+server:
+  port: 443
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    password: tanmay@311
+    url: jdbc:mysql://127.0.0.1:3306/easygofly
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        globally_quoted_identifiers: true
+    show-sql: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  main:
+    allow-circular-references: true
+ 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 640385530645-tm9e2fcnn119k38pr7ovuibab4fndbnq.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
+          facebook:
+            client-id: 1358441018223902
+            client-secret: ae5d990c2b10642abb57bf238ce53ebe
+            scope:
+            - email
+            - public_profile

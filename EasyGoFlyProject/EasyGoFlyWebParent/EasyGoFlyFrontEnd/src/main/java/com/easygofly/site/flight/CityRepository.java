@@ -1,0 +1,12 @@
+package com.easygofly.site.flight;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import com.easygofly.entity.City;
+
+public interface CityRepository extends CrudRepository<City, Integer> {
+
+	@Query("SELECT c FROM City c WHERE c.cityName = ?1")
+	public City getCityByName(String cityName); 
+}

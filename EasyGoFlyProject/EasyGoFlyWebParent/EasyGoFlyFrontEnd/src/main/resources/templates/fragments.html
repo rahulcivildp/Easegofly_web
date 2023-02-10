@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+	<link rel="icon" th:href="@{${SITE_LOGO}}" type="image/png">
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
+	
+	<title>[[${title}]] - [[${SITE_NAME}]]</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}">
+	<script type="text/javascript" th:src="@{/webjars/jquery/3.6.1/jquery.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/css/front_style.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/css/NewFile.css}" >
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script type="text/javascript" th:src="@{/js/login.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}" >
+	<script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+	  <!-- Google Fonts -->
+	  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	
+	  <!-- Vendor CSS Files -->
+	  <link th:href="@{assets/vendor/animate.css/animate.min.css}" rel="stylesheet">
+	  <link th:href="@{assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+	  <link th:href="@{assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+	  <link th:href="@{assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+	  <link th:href="@{assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+	
+	  <!-- Template Main CSS File -->
+	  <link th:href="@{assets/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+<!-- ======= Header ======= -->
+<div th:fragment="page_header(remove)" th:remove="${remove}">
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-TNN6EKSPHR');
+	</script>
+	<!-- Google Analytics -->
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	
+	ga('create', 'UA-XXXXX-Y', 'auto');
+	ga('send', 'pageview');
+	</script>
+	<!-- End Google Analytics -->
+	
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <div class="col">
+      	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; float: left;"></a>
+      </div>
+      
+      
+
+      <nav id="navbar" class="navbar" >
+        <ul class="ul_modify">
+          <li class="media-hide"></li>
+          <li class="media-hide"></li>
+          <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
+          	<i class="fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
+          </li>
+          <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-8}" >
+          	<i class="fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
+          </li>
+          <li class="inbox_login_button"><a  id="li3" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-2}" style="background: none;">
+          	<i class="fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
+          </li>
+          <li class="inbox_login_button"><a  id="li4" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-3}">
+          	<i class="fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
+          </li>
+          <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
+	          <a href="#">
+		          <span style="display: flex !important;  justify-content: start;">
+		          	<i class="fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+		          </span> 
+		          <i class="bi bi-chevron-down"></i>
+	          </a>
+              <li th:replace="user_credential/loginModal :: login('tag')"></li>
+          </li>
+          
+          	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
+	          	<a href="#">
+	          		<span style="display: flex !important;  justify-content: start;">
+		          		<i class="fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+		          	</span> 
+		          	<i class="bi bi-chevron-down"></i>
+	          	</a>
+	          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
+          	</li>
+          
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle" style="margin-right: 10px;"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+    <script>
+	$(document).ready(function() {
+		
+		baseLink = "https://easegofly.com/";
+		
+		if(window.location.href == baseLink + "registration" || window.location.href == baseLink + "login" || window.location.href == baseLink + "login?error" || window.location.href == baseLink + "login?logout") {
+			$("#loginModalLi").css("display", "none");
+		}
+	})
+	</script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+  </div>
+  <!-- End Header -->
+  
+ <!-- ======= Footer ======= -->
+  <footer th:fragment="page_footer" id="footer" style=" background: #07162d !important;">
+    <div class="footer-top" style=" background: #07162d !important;">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-3">
+            <div class="footer-info">
+              <h3>[[${SITE_NAME}]]</h3>
+              <div th:utext="${ADMIN_ADDRESS}"></div>
+              <div class="social-links mt-3">
+                <a th:href="@{${TWITTER}}" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a th:href="@{${FACEBOOK}}" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a th:href="@{${INSTAGRAM}}" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a th:href="@{${LINKEDIN}}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/}">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-2}">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-9}">Customer Support</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-3}">Contact us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-6}">User Agreement</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-3 col-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-8}">Service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-4 col-12 footer-newsletter">
+            <h4>Our Newsletter</h4>
+            <p>Subscribe to get latest flight updates and deals.</p>
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+			<div class="row" style="padding-top: 25px;">
+            	<div class="col" style="display: flex; justify-content: center; align-items: center;">
+            		<p>Member of </p>
+            	</div>
+            	<div class="col">
+            		<img alt="IATA" th:src="@{/images/iata1.png}">
+            	</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container row">
+      <div class="copyright col-12 col-md-6">
+        <a class="float-left styleLinkHover" th:href="@{/about#no-1}" style="margin-right: 5px;">FAQ</a> 
+        <a class="float-left styleLinkHover" th:href="@{/about#no-7}" style="margin-right: 5px;">Payment Security</a> 
+        <a class="float-left styleLinkHover" th:href="@{/about#no-4}" style="margin-right: 5px;">Terms of Use</a> 
+        <a class="float-left styleLinkHover" th:href="@{/about#no-5}" style="margin-right: 5px;">Privacy & Policy</a> 
+        
+      </div>
+      <div class="credits col-12 col-md-6">
+      	[[${COPYRIGHT}]]
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/groovin-free-bootstrap-theme/ -->
+        <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+</body>
+
+</html>

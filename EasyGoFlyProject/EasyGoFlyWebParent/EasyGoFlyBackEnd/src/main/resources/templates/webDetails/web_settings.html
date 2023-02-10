@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<head th:replace="fragments :: page_head('Site Settings Page', 'tag')"></head>
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div th:replace="navigation :: nav_menu"></div>
+		
+		<div>
+			<h1 class="text-center m-3">General Details Settings</h1>
+		</div>
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+		<div>
+			<ul class="nav nav-tabs" id="settingTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" data-bs-toggle="tab" href="#general" role="tab">General</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#advertisement" role="tab">Advertisement</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#images" role="tab">Images</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#offers" role="tab">Offers</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#contacts" role="tab">Contacts</a>
+				</li>
+			</ul>
+			
+			<div class="tab-content">
+				<div class="tab-pane active p-3" id="general" role="tabpanel">
+					<div th:replace="webDetails/general-fragments :: content"></div>
+				</div>
+				<div class="tab-pane p-3" id="advertisement" role="tabpanel">
+				</div>
+				<div class="tab-pane p-3" id="images" role="tabpanel">
+				</div>
+				<div class="tab-pane p-3" id="offers" role="tabpanel">
+					<h2>Mail Server</h2>
+				</div>
+				<div class="tab-pane p-3" id="contacts" role="tabpanel">
+					<div th:replace="webDetails/contact-fragments :: content"></div>
+				</div>
+			</div>
+		</div>
+		<div class="toast justify-content-center" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="4000">
+		  	<div role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="toast-body">
+					<span id="toastMessage"></span>
+				</div>
+			</div>
+		</div>
+		
+		<div th:replace="fragments :: footer"></div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/states_setting.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
+	<script type="text/javascript" th:src="@{/js/countries_setting.js}"></script>
+	<script type="text/javascript">
+	imageSize = 300;
+	sizeScale = "MB";
+	
+	contextPath = "[[@{/}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+	
+	</script>
+	
+	<script type="text/javascript">
+	var text = "[[${CONTACT_US}]]";
+	
+	$(document).ready(function() {
+		
+		$("textarea[name='CONTACT_US']").text("something");
+		
+	})
+	
+	</script>
+</body>
+
+</html>

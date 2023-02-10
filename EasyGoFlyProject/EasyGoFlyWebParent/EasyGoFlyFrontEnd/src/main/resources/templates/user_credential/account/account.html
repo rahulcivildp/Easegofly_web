@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<head th:replace="fragments :: page_head(${pageTitle}, 'tag')"></head>
+
+
+<style>
+	*.active{
+	background: rgb(184, 205, 254);
+	display: block;
+	}
+
+</style>
+</head>
+
+
+<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'">
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  
+  <div th:replace="whatsapp :: content"></div>
+  
+  <div style="background-color:#061123; padding-top: 120px; margin-bottom: 20px;"></div>
+  
+    <div th:if="${message != null}" class="alert alert-success text-center">
+		[[${message}]]
+	</div>
+	<div th:if="${alert != null}" class="alert alert-danger text-center">
+		[[${alert}]]
+	</div>
+	<div th:if="${warning != null}" class="alert alert-warning text-center">
+		[[${warning}]]
+	</div>
+		
+	<div class="container contents shadow" style="margin-bottom: 20px; padding: 15px; border-radius: 9px; background: white; border: 1px solid #8080806b;">
+		<div class="row">
+		        <div class="col-md-3 media-hide">
+		            <div id="accordion" >
+		                <h4 class="sections specialButton margin-bottom-account mild_color" id="account" ><i class="fa fa-solid fa-address-card"></i>&nbsp;&nbsp;<span>Account</span></h4>
+		                <h4 class="sections specialButton margin-bottom-account mild_color" id="enquiry_board" ><i class="fa fa-solid fa-comment"></i>&nbsp;&nbsp;<span>Enquiry Board</span></h4>
+		                <h4 class="sections specialButton margin-bottom-account mild_color" id="flightCart" ><i class="fa fa-duotone fa-cart-shopping"></i>&nbsp;&nbsp;<span>Manage Booking</span></h4>
+		                <h4 class="sections specialButton margin-bottom-account mild_color" id="orderList" ><i class="fa fa-regular fa-boxes-stacked"></i>&nbsp;&nbsp;<span>Manage Order</span></h4>
+		            </div>
+		        </div>
+		        <div class="col media_status" style="display: none;">
+					<!-- Large button groups (default and split) -->
+					<div class="btn-group">
+					  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					    <i class="fa fa-regular fa-bars"></i>
+					  </button>
+					  <ul class="dropdown-menu" style="padding: 4px;">
+					    	<li class="nav-item sections specialButton margin-bottom-mobile-account" id="account_mobile" style="width: 260px;"><i class="fa fa-solid fa-address-card"></i>&nbsp;&nbsp;<span
+								class="menu-text">Account</span></li>
+							<li class="nav-item sections specialButton margin-bottom-mobile-account" id="enquiry_board_mobile" style="width: 260px;"><i class="fa fa-solid fa-comment"></i>&nbsp;&nbsp;<span
+								class="menu-text">Enquiry Board</span></li>
+							<li class="nav-item sections specialButton margin-bottom-mobile-account" id="flightCart_mobile" style="width: 260px;"><i class="fa fa-duotone fa-cart-shopping"></i>&nbsp;&nbsp;<span
+								class="menu-text">Manage Booking</span></li>
+							<li class="nav-item sections specialButton margin-bottom-mobile-account" id="orderList_mobile" style="width: 260px;"><i class="fa fa-regular fa-boxes-stacked"></i>&nbsp;&nbsp;<span
+								class="menu-text">Manage Order</span></li>
+					  </ul>
+					</div>
+		        </div>
+		        <div class="col-md-9 hidden-groups" id="new_content1" style="padding: 10px 5px 0 0;">
+					<div th:replace="user_credential/account/account_form :: account_fragment('tag')"></div>
+		        </div>
+		        <div class="col-md-9 hidden-groups" id="new_content2" style="padding: 10px 5px 0 0; display: none;">
+					<div th:replace="user_credential/account/request/request_fragment :: request_fragment('tag')"></div>
+		        </div>
+		        <div class="col-md-9 hidden-groups" id="new_content3" style="padding: 10px 5px 0 0; display: none;">
+		        	<div th:replace="cart/manage_cart_fragment :: manageBooking('tag')"></div>
+		        </div>
+		        <div class="col-md-9 hidden-groups" id="new_content4" style="padding: 10px 5px 0 0; display: none;">
+		        	<div th:replace="cart/manage_order_fragment :: manageOrder('tag')"></div>
+		        </div>
+		    </div>
+	
+	</div>
+  
+  
+ <footer th:replace="fragments :: page_footer"></footer>
+ <script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+<script>
+
+baseLink = "https://easegofly.com/";
+
+if(window.location.href == baseLink + "account#account") {
+	$(".sections").removeClass("active");
+	$("#account").addClass("active");
+	$(".hidden-groups").css("display", "none");
+    $("#new_content1").css("display", "block");
+}
+
+if(window.location.href == baseLink + "account") {
+	$(".sections").removeClass("active");
+	$("#account").addClass("active");
+	$(".hidden-groups").css("display", "none");
+    $("#new_content1").css("display", "block");
+}
+
+if(window.location.href == baseLink + "account#new_content2") {
+	$(".sections").removeClass("active");
+	$("#enquiry_board").addClass("active");
+	$(".hidden-groups").css("display", "none");
+    $("#new_content2").css("display", "block");
+}
+
+
+	$("#account").click(function() {
+		$(".sections").removeClass("active");
+		$("#account").addClass("active");
+		$(".hidden-groups").css("display", "none");
+	    $("#new_content1").css("display", "block");
+	});
+	$("#enquiry_board").click(function() {
+		$(".sections").removeClass("active");
+		$("#enquiry_board").addClass("active");
+		$(".hidden-groups").css("display", "none");
+	    $("#new_content2").css("display", "block");
+	});
+    $("#flightCart").click(function() {
+    	$(".sections").removeClass("active");
+    	$("#flightCart").addClass("active");
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content3").css("display", "block");
+    });
+    $("#orderList").click(function() {
+    	$(".sections").removeClass("active");
+    	$("#orderList").addClass("active");
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content4").css("display", "block");
+    });
+    
+    $("#account_mobile").click(function() {
+		$(".hidden-groups").css("display", "none");
+	    $("#new_content1").css("display", "block");
+	});
+    $("#enquiry_board_mobile").click(function() {
+		$(".hidden-groups").css("display", "none");
+	    $("#new_content2").css("display", "block");
+	});
+    $("#flightCart_mobile").click(function() {
+		$(".hidden-groups").css("display", "none");
+	    $("#new_content3").css("display", "block");
+	});
+    $("#orderList_mobile").click(function() {
+		$(".hidden-groups").css("display", "none");
+	    $("#new_content4").css("display", "block");
+	});
+    
+</script>
+<link th:href="@{css/custom.css}" rel="stylesheet">
+</html>	
+ 
+
+

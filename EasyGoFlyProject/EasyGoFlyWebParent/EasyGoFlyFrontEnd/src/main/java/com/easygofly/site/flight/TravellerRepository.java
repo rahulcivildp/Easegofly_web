@@ -1,0 +1,23 @@
+package com.easygofly.site.flight;
+
+import java.util.Date;
+import java.util.List;
+
+
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import com.easygofly.entity.CartItem;
+import com.easygofly.entity.ProductDetail;
+import com.easygofly.entity.TravellerDetail;
+
+public interface TravellerRepository extends CrudRepository<TravellerDetail, Integer> {
+
+	@Query("SELECT t FROM TravellerDetail t WHERE t.firstName = :firstName AND t.lastName = :lastName AND t.dob = :dob")
+	public List<TravellerDetail> findTravellerByNameAndDate(String firstName, String lastName, Date dob, Sort ascending);
+	
+	@Query("SELECT t FROM TravellerDetail t WHERE t.productDetail = :productDetail AND t.cartItem = :cartItem")
+	public List<TravellerDetail> findTravellerByCustomerAndProductDetail(ProductDetail productDetail, CartItem cartItem);
+	
+}
