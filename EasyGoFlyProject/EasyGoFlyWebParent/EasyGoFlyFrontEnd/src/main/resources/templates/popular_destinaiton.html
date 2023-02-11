@@ -3,14 +3,27 @@
 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <div th:fragment="popular_destination(remove)" th:remove="${remove}">
-<div class="small_box">
-	                <div class="small_cards" id="small_card1">
-	                    <div class="small_cards_img" id="small_cards_img1"><img class="small_cards_image" id="small_card_image1" th:src="@{assets/img/main-page/Evening_view_of_Har-ki-Pauri,_Haridwar.jpg}"></div>
-	                    <div class="small_cards_text">
-	                       <h3>Haridwar</h3>
-	                       <p>Hilltop temples & Ganges ceremonies</p>
-	                    </div>
-	                </div>
+<style type="text/css">
+	.small_card_hover:hover {
+	border-radius: 8px;
+	border: 1px solid green;
+	background: #dbdddf;
+	padding: 0;
+	color: #5c9f24;
+}
+
+</style>
+
+				<div class="small_box">
+					<a style="cursor: pointer; color: black;" th:href="@{/darjeeling_view}">
+		                <div class="small_cards small_card_hover" id="small_card1">
+		                    <div class="small_cards_img" id="small_cards_img1"><img class="small_cards_image" id="small_card_image1" th:src="@{assets/img/main-page/Evening_view_of_Har-ki-Pauri,_Haridwar.jpg}"></div>
+		                    <div class="small_cards_text">
+		                       <h3>Darjeeling</h3>
+		                       <p>Darjeeling Himalayan Railway & Mt. Kanchenjunga view</p>
+		                    </div>
+		                </div>
+	                </a>
 	            </div>
 	            <div class="small_box">
 	                <div class="small_cards" id="small_card2">

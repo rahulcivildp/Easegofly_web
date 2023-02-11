@@ -487,7 +487,7 @@ body {
 	}
 </style>
 
-<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'">
+<body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Easy Steps -->
@@ -1025,25 +1025,29 @@ body {
 	        	<div class="row">
 	        		<div class="col-6" style="margin-bottom: 10px;">
 	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
-	                                      <img th:src="@{/images/deals/india-best-places-to-visit-rajasthan.jpg}" style="width: 100%;">
-						    </div>
-						    <div class="specialoffer_next">
-	                                   <h3>Rajasthan</h3>
-	                                   <p>Thor desert</p>
-	                           </div>  
+	        				<a style="cursor: pointer;" th:href="@{/jaipur_view}">
+							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
+		                                      <img th:src="@{/images/deals/india-best-places-to-visit-rajasthan.jpg}" style="width: 100%;">
+							    </div>
+							    <div class="specialoffer_next">
+		                                   <h3>Rajasthan</h3>
+		                                   <p>Jaipur & Udaipur</p>
+		                           </div>  
+	                         </a>
 						 </div>
 		        		
                   </div>
 	        		<div class="col-6" style="margin-bottom: 10px;">
 	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
-                                    <img th:src="@{/images/deals/kasdal.jpg}" style="width: 100%;">
-						    </div>
-						    <div class="specialoffer_next">
-                                 <h3>Jammu &amp; Kashmir</h3>
-                                 <p>Dal Lake</p>
-                         </div> 
+	        				<a style="cursor: pointer;" th:href="@{/rishikesh_view}">
+							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
+	                                    <img th:src="@{/images/deals/kasdal.jpg}" style="width: 100%;">
+							    </div>
+							    <div class="specialoffer_next">
+	                                 <h3>Uttarakhand</h3>
+	                                 <p>Rishikesh</p>
+	                         </div> 
+                         </a>
 						  </div>
 	        			
 	        		</div>
@@ -1051,24 +1055,28 @@ body {
 	        	<div class="row">
 	        		<div class="col-6" style="margin: 10px 0;">
 	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
-						      <img th:src="@{/images/deals/kannya.jpg}" style="width: 100%;">
-						    </div>
-						    <div class="specialoffer_next">
-		                       <h3>Kanyakumari</h3>
-		                       <p>Thiruvalluvar Statue</p>
-		               		</div> 
+	        				<a style="cursor: pointer;" th:href="@{/shimla_view}">
+							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0; height: 330px;">
+							      <img th:src="@{/images/deals/lakshay-saini-5lpFn4a3qaQ.jpg}" style="width: 100%;">
+							    </div>
+							    <div class="specialoffer_next">
+			                       <h3>Himachal Pradesh</h3>
+			                       <p>Shimla</p>
+			               		</div> 
+			               	</a>
 						  </div>
 	        		</div>
 	        		<div class="col-6" style="margin: 10px 0;">
 	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-						    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
-                                    <img th:src="@{/images/deals/vishal-bhutani-ugyfweYokVA-unsplash.jpg}" style="width: 100%;" class="padding_in_popullar">
-						    </div>
-						    <div class="specialoffer_next">
-                                 <h3>Himachal Pradesh</h3>
-                                 <p>Manali</p>
-                         </div>  
+	        				<a style="cursor: pointer;" th:href="@{/kolkata_view}">
+							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0; height: 330px;">
+	                                    <img th:src="@{/images/deals/1883866ssd.jpg}" style="width: 100%;" class="padding_in_popullar">
+							    </div>
+							    <div class="specialoffer_next">
+	                                 <h3>West Bengal</h3>
+	                                 <p>Kolkata</p>
+	                         </div>  
+	                        </a>
 						 </div>
 	        		</div>
 	        	</div>

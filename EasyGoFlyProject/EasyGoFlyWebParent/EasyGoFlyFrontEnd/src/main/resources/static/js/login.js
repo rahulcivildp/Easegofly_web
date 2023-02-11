@@ -12,3 +12,5 @@ $('.btn-connexion').click(function() {
   $('.btn-enregistrer').addClass('active');
   $('.btn-connexion').removeClass('active');
 });
+
+

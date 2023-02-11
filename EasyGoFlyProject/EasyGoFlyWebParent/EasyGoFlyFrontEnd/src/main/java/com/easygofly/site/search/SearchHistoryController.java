@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -133,7 +132,13 @@ public class SearchHistoryController {
 		
 	}
 	
-	@PostMapping("/flight_search_save")
+	@GetMapping("/get_value")
+	public String somevalue(@RequestParam("cityOne") String cityOne) {
+		System.out.println("City one: " + cityOne);
+		return "redirect:/";
+	}
+	
+	@GetMapping("/flight_search_save")
 	public String searchHistorySave(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
@@ -145,8 +150,7 @@ public class SearchHistoryController {
 			@RequestParam(name = "adultNum", required = false) Integer adultNum,
 			@RequestParam(name = "childNum", required = false) Integer childNum,
 			@RequestParam(name = "infantNum", required = false) Integer infantNum,
-			Model model, 
-			RedirectAttributes redirectAttributes) throws ProductNotFoundException {
+			Model model) throws ProductNotFoundException {
 		
 			String email; 
 			Customer customer;
@@ -173,8 +177,6 @@ public class SearchHistoryController {
 			}
 			
 	}
-	
-	//+"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum
 
 	private Integer saveHistoryPart(String cityOne, String cityTwo, Date date, String journeyClass, String tripType,
 			Integer adultNum, Integer childNum, Integer infantNum, Customer customer) {

@@ -41,7 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
 			.antMatchers("/", "/site-logo/**", "/customers/**", "/login", "/registration/**", "/hotel", "/about/**", 
 					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml",
-					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search-noUser**", "/brand-logos/**").permitAll()
+					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save",
+					"/flight_search-noUser**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", "/get_value", "/rishikesh_view", 
+					"/shimla_view", "/kolkata_view", "/darjeeling_view" ).permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.formLogin()
@@ -67,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "../brand-logos/**");
+        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "../brand-logos/**", "../site-logo/**");
     }
 	
 	@Bean

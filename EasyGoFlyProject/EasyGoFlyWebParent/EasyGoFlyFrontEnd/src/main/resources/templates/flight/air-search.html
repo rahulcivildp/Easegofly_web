@@ -217,7 +217,7 @@ th:fragment="air-search">
 
                 </div>
                 <div class="empty1">
-                    <form th:action="@{/flight_search_save}" method="post" th:object="${searchHistory}">
+                    <form th:action="@{/flight_search_save}" method="get">
                         <div class="radio_search col-12" id="radio_search_1">
 							<input type="hidden" name="tripType" value="oneWay">
                             <div class="col-md-5 col-12" style=" float: left; ">
@@ -332,7 +332,7 @@ th:fragment="air-search">
                             </div>
                         </div>
                     </form>
-                    <form th:action="@{/flight_search_save}" method="post" th:object="${searchHistory}">
+                    <form  method="post">
                     	
                         <div class="radio_search col-12" id="radio_search_2">
 							<input type="hidden" name="tripType" value="twoWays">
