@@ -177,78 +177,81 @@
 }
 /* Responsive */
 @media only screen and (max-width: 600px) {
-  *.onwars_responsive { padding: 6px 81px !important;}
-  *.mobile_account_view { padding: 0 13px;}
-  *.extra_height { height: 176px;}
-  *.insert_padding { padding-top: 8px !important;}
-  *.auto_width { width: 280px !important;}
-  *.width_full { width: 100% !important;}
-  *.padding_zero { padding: 0 !important;}
-  *.media_status { display: block !important;}
-  *.media-hide { display: none !important;}
-  *.media-display { display: block !important;}
-  *.float-state {float: left !important;}
-  *.dropDown_toggle_md { display: none !important;}
-  *.dropDown_toggle_col { display: block !important;}
-  *.media_status_flex { 
-	  display: flex !important;
-	  justify-content: center;
-	  align-items: center;
-  }
-  *.ul_modify {
-  	border-radius: 7px;
-  	box-shadow: 0 0 5px 6px;
-    background: #ffffff2b !important;
-    backdrop-filter: blur(10px);
-  }
-  *.inbox_login_button {
-	cursor: pointer;
-	margin: 3px 5px;
-	background: white;
-	width: auto;
-	color: #2c2c2ceb;
-    padding: 3px 9px;
-    border-radius: 5px;
-    border: 1px solid green;
-    font-weight: 600;
-    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
-	  -webkit-transition: background-color 2s ease-out;
-	  -moz-transition: background-color 2s ease-out;
-	  -o-transition: background-color 2s ease-out;
-	  transition: background-color 2s ease-out;
-	  -webkit-transition: color 0.5s ease-out;
-	  -moz-transition: color 0.5s ease-out;
-	  -o-transition: color 0.5s ease-out;
-	  transition: color 0.5s ease-out;
-}
-*.deal_custom {
-	overflow: scroll;  
-	overflow-y: hidden;
-}
-*.deal_custom_row {
-	width: 1092px;
-}
-*.deal_custom_row2 {
-	width: 816px;
-}
-*.carousel_inners {
-	width: auto !important;
-}
-*.padding_in_popullar {
-	padding-bottom: 10px;
-}
-*.font_resizerer {
-	font-size: 20px;
-}
-*.div_resizer {
-	width: 97% !important;
-}
-*.background_media {
-	background: #c6ecff !important;
-}
-*.seacrh_margin {
-	margin-top: 0px !important;
-}
+	  *.onwars_responsive { padding: 6px 81px !important;}
+	  *.mobile_account_view { padding: 0 13px;}
+	  *.extra_height { height: 176px;}
+	  *.insert_padding { padding-top: 8px !important;}
+	  *.auto_width { width: 280px !important;}
+	  *.width_full { width: 100% !important;}
+	  *.padding_zero { padding: 0 !important;}
+	  *.media_status { display: block !important;}
+	  *.media-hide { display: none !important;}
+	  *.media-display { display: block !important;}
+	  *.float-state {float: left !important;}
+	  *.dropDown_toggle_md { display: none !important;}
+	  *.dropDown_toggle_col { display: block !important;}
+	  *.media_status_flex { 
+		  display: flex !important;
+		  justify-content: center;
+		  align-items: center;
+	  }
+	  *.ul_modify {
+	  	border-radius: 7px;
+	  	box-shadow: 0 0 5px 6px;
+	    background: #ffffff2b !important;
+	    backdrop-filter: blur(10px);
+	  }
+	  *.inbox_login_button {
+		cursor: pointer;
+		margin: 3px 5px;
+		background: white;
+		width: auto;
+		color: #2c2c2ceb;
+	    padding: 3px 9px;
+	    border-radius: 5px;
+	    border: 1px solid green;
+	    font-weight: 600;
+	    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+		  -webkit-transition: background-color 2s ease-out;
+		  -moz-transition: background-color 2s ease-out;
+		  -o-transition: background-color 2s ease-out;
+		  transition: background-color 2s ease-out;
+		  -webkit-transition: color 0.5s ease-out;
+		  -moz-transition: color 0.5s ease-out;
+		  -o-transition: color 0.5s ease-out;
+		  transition: color 0.5s ease-out;
+	}
+	*.deal_custom {
+		overflow: scroll;  
+		overflow-y: hidden;
+	}
+	*.deal_custom_row {
+		width: 1092px;
+	}
+	*.deal_custom_row2 {
+		width: 816px;
+	}
+	*.carousel_inners {
+		width: auto !important;
+	}
+	*.padding_in_popullar {
+		padding-bottom: 10px;
+	}
+	*.font_resizerer {
+		font-size: 20px;
+	}
+	*.div_resizer {
+		width: 97% !important;
+	}
+	*.background_media {
+		background: #c6ecff !important;
+	}
+	*.seacrh_margin {
+		margin-top: 0px !important;
+	}
+	.img-hover-zoom {
+		height: 154px;
+	}
 }
 *.modify_link_navigation {
 	justify-content: unset !important;

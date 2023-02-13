@@ -30,4 +30,14 @@ public class MiddleBodyController {
 	public String darjeelingView() {
 		return "middle-body/darjeeling_view";
 	}
+
+	@GetMapping("/bangalore_view")
+	public String bangaloreView() {
+		return "middle-body/bangalore_view";
+	}
+	
+	@GetMapping("/kerala_view")
+	public String keralaView() {
+		return "middle-body/kerala_view";
+	}
 }
