@@ -596,44 +596,58 @@ body {
             <div class="row deal_custom_row" >
               <div class="row ">	
                    <div class="col-md-2 col-2 text-center cards_margin">
-                         <a href="#" style="text-decoration: none;">
+                         <a th:href="${PRICE_1_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
                                  <div class="card_top_side">
-                                     <span class="city_name">Bangalore</span><br><span class="city_loca">BLR</span>
+                                 	<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYONE}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                 	<span class="city_loca">[[${PRICE_1_CITYONE}]]</span>
                                  </div>
                                  <div class="img_card_boxs">
                                  	<div style="border-bottom: 4px solid grey; width: 30px;">
                                  	</div>
                                  </div>
-
                                  <div class="card_center">
-                                        <span class="city_loca">DEL</span><br><span class="city_name">Delhi</span>
+									<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYTWO}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                     <span class="city_loca">[[${PRICE_1_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; 3,500</h4>
+                                      <h4>&#x20B9; [[${PRICE_1}]]</h4>
                                  </div>
                             </div>
                        </a>
                    </div>
 
                    <div class="col-md-2 col-2 text-center cards_margin">
-                         <a href="#" style="text-decoration: none;">
+                         <a th:href="${PRICE_2_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
                                  <div class="card_top_side">
-                                     <span class="city_name">Kolkata</span><br><span class="city_loca">CCU</span>
+                                 	<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYONE}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                 	<span class="city_loca">[[${PRICE_2_CITYONE}]]</span>
                                  </div>
-                                 <div class="img_card_boxs" >
+                                 <div class="img_card_boxs">
                                  	<div style="border-bottom: 4px solid grey; width: 30px;">
                                  	</div>
                                  </div>
-
                                  <div class="card_center">
-                                        <span class="city_loca">BLR</span><br><span class="city_name">Bangalore</span>
+									<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYTWO}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                     <span class="city_loca">[[${PRICE_2_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; 3,598</h4>
+                                      <h4>&#x20B9; [[${PRICE_2}]]</h4>
                                  </div>
                             </div>
                        </a>
@@ -641,88 +655,116 @@ body {
 
 
                    <div class="col-md-2 col-2 text-center cards_margin">
-                         <a href="#" style="text-decoration: none;">
+                         <a th:href="${PRICE_3_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
                                  <div class="card_top_side">
-                                     <span class="city_name">Delhi</span><br><span class="city_loca">DEL</span>
+                                 	<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYONE}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                 	<span class="city_loca">[[${PRICE_3_CITYONE}]]</span>
                                  </div>
                                  <div class="img_card_boxs">
                                  	<div style="border-bottom: 4px solid grey; width: 30px;">
                                  	</div>
                                  </div>
-
                                  <div class="card_center">
-                                        <span class="city_loca">CCU</span><br><span class="city_name">Kolkata</span>
+									<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYTWO}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                     <span class="city_loca">[[${PRICE_3_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; 2,595</h4>
+                                      <h4>&#x20B9; [[${PRICE_3}]]</h4>
                                  </div>
                             </div>
                        </a>
                    </div>
 
                   <div class="col-md-2 col-2 text-center cards_margin">
-                         <a href="#" style="text-decoration: none;">
+                         <a th:href="${PRICE_4_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
                                  <div class="card_top_side">
-                                     <span class="city_name">Kolkata</span><br><span class="city_loca">CCU</span>
+                                 	<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYONE}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                 	<span class="city_loca">[[${PRICE_4_CITYONE}]]</span>
                                  </div>
                                  <div class="img_card_boxs">
                                  	<div style="border-bottom: 4px solid grey; width: 30px;">
                                  	</div>
                                  </div>
-
                                  <div class="card_center">
-                                        <span class="city_loca">MAA</span><br><span class="city_name">Chennai</span>
+									<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYTWO}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                     <span class="city_loca">[[${PRICE_4_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; 4,554</h4>
+                                      <h4>&#x20B9; [[${PRICE_4}]]</h4>
                                  </div>
                             </div>
                        </a>
                    </div>
                   
                   <div class="col-md-2 col-2 text-center cards_margin">
-                         <a href="#" style="text-decoration: none;">
+                         <a th:href="${PRICE_5_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
                                  <div class="card_top_side">
-                                     <span class="city_name">Bangalore</span><br><span class="city_loca">BLR</span>
+                                 	<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYONE}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                 	<span class="city_loca">[[${PRICE_5_CITYONE}]]</span>
                                  </div>
                                  <div class="img_card_boxs">
                                  	<div style="border-bottom: 4px solid grey; width: 30px;">
                                  	</div>
                                  </div>
-
                                  <div class="card_center">
-                                        <span class="city_loca">BOM</span><br><span class="city_name">Mumbai</span>
+									<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYTWO}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                     <span class="city_loca">[[${PRICE_5_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; 2,749</h4>
+                                      <h4>&#x20B9; [[${PRICE_5}]]</h4>
                                  </div>
                             </div>
                        </a>
                    </div>
 
                    <div class="col-md-2 col-2 text-center cards_margin">
-                         <a href="#" style="text-decoration: none;">
+                         <a th:href="${PRICE_6_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
                                  <div class="card_top_side">
-                                     <span class="city_name">Mumbai</span><br><span class="city_loca">BOM</span>
+                                 	<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYONE}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                 	<span class="city_loca">[[${PRICE_6_CITYONE}]]</span>
                                  </div>
                                  <div class="img_card_boxs">
                                  	<div style="border-bottom: 4px solid grey; width: 30px;">
                                  	</div>
                                  </div>
-
                                  <div class="card_center">
-                                        <span class="city_loca">CCU</span><br><span class="city_name">Kolkata</span>
+									<th:block th:each="city : ${cities}">
+                                 	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYTWO}">[[${city.cityName}]]</span>
+                                 	</th:block>
+                                 	<br>
+                                     <span class="city_loca">[[${PRICE_6_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; 3,842</h4>
+                                      <h4>&#x20B9; [[${PRICE_6}]]</h4>
                                  </div>
                             </div>
                        </a>
@@ -1109,7 +1151,7 @@ body {
 
                                 <div class="content-details fadeIn-bottom">
                                     <h3 class="content-title">Jammu & Kashmir, India</h3>
-                                    <a class="btn btn-primary content-btns" >Book Now</a>
+                                    <a class="btn btn-primary" th:href="@{/jammu_view}">Book Now</a>
                                 </div>
                     
                             </div>
@@ -1123,7 +1165,7 @@ body {
 
                                 <div class="content-details fadeIn-bottom">
                                     <h3 class="content-title">Kanyakumari, India</h3>
-                                    <a class="btn btn-primary content-btns" >Book Now</a>
+                                    <a class="btn btn-primary" >Book Now</a>
                                 </div>
                     
                             </div>
@@ -1137,7 +1179,7 @@ body {
 
                                 <div class="content-details fadeIn-bottom">
                                     <h3 class="content-title">Goa, India</h3>
-                                    <a class="btn btn-primary content-btns" >Book Now</a>
+                                    <a class="btn btn-primary" >Book Now</a>
                                 </div>
                     
                             </div>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<form th:action="@{/web_settings/save_lowest_price}" method="post">
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">Price 1: </label>
+				<div class="col-sm-1" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="PRICE_1" th:value="${PRICE_1}" maxlength="10"/>
+					</div>
+				</div>
+				<label class="col-sm-1 col-form-label">Dep Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityOne" name="PRICE_1_CITYONE" th:value="${PRICE_1_CITYONE}" list="cityOneList" oninput="checkCityCodeMatch(document.getElementById('cityTwo', 'cityOne'))">
+					<datalist id="cityOneList">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Arr Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityTwo" name="PRICE_1_CITYTWO" th:value="${PRICE_1_CITYTWO}" list="cityTwoList" oninput="checkCityCodeMatch(this)">
+					<datalist id="cityTwoList">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Link 1 <i class="fa-solid fa-circle-info" title="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}" style="cursor: pointer;"></i>:</label>
+				<div class="col-sm-5" >
+					<div class="col-sm-12" >
+						<input type="text" class="form-control mt-1" name="PRICE_1_LINK" th:value="${PRICE_1_LINK}" placeholder="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}"/>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">Price 2: </label>
+				<div class="col-sm-1" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="PRICE_2" th:value="${PRICE_2}" maxlength="10" />
+					</div>
+				</div>
+				<label class="col-sm-1 col-form-label">Dep Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityOne1" name="PRICE_2_CITYONE" th:value="${PRICE_2_CITYONE}" list="cityOneList1" oninput="checkCityCodeMatch(document.getElementById('cityTwo1', 'cityOne1'))">
+					<datalist id="cityOneList1">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Arr Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityTwo1" name="PRICE_2_CITYTWO" th:value="${PRICE_2_CITYTWO}" list="cityTwoList1" oninput="checkCityCodeMatch(this)">
+					<datalist id="cityTwoList1">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Link 2 <i class="fa-solid fa-circle-info" title="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}" style="cursor: pointer;"></i>: </label>
+				<div class="col-sm-5" >
+					<div class="col-sm-12" >
+						<input type="text" class="form-control mt-1" name="PRICE_2_LINK" th:value="${PRICE_2_LINK}"/>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">Price 3: </label>
+				<div class="col-sm-1" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="PRICE_3" th:value="${PRICE_3}" maxlength="10" />
+					</div>
+				</div>
+				<label class="col-sm-1 col-form-label">Dep Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityOne2" name="PRICE_3_CITYONE" th:value="${PRICE_3_CITYONE}" list="cityOneList2" oninput="checkCityCodeMatch(document.getElementById('cityTwo2', 'cityOne2'))">
+					<datalist id="cityOneList2">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Arr Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityTwo2" name="PRICE_3_CITYTWO" th:value="${PRICE_3_CITYTWO}" list="cityTwoList2" oninput="checkCityCodeMatch(this)">
+					<datalist id="cityTwoList2">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Link 3 <i class="fa-solid fa-circle-info" title="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}" style="cursor: pointer;"></i>: </label>
+				<div class="col-sm-5" >
+					<div class="col-sm-12" >
+						<input type="text" class="form-control mt-1" name="PRICE_3_LINK" th:value="${PRICE_3_LINK}"/>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">Price 4: </label>
+				<div class="col-sm-1" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="PRICE_4" th:value="${PRICE_4}" maxlength="10" />
+					</div>
+				</div>
+				<label class="col-sm-1 col-form-label">Dep Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityOne3" name="PRICE_4_CITYONE" th:value="${PRICE_4_CITYONE}" list="cityOneList3" oninput="checkCityCodeMatch(document.getElementById('cityTwo3', 'cityOne3'))">
+					<datalist id="cityOneList3">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Arr Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityTwo3" name="PRICE_4_CITYTWO" th:value="${PRICE_4_CITYTWO}" list="cityTwoList3" oninput="checkCityCodeMatch(this)">
+					<datalist id="cityTwoList3">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Link 4 <i class="fa-solid fa-circle-info" title="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}" style="cursor: pointer;"></i>: </label>
+				<div class="col-sm-5" >
+					<div class="col-sm-12" >
+						<input type="text" class="form-control mt-1" name="PRICE_4_LINK" th:value="${PRICE_4_LINK}"/>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">Price 5: </label>
+				<div class="col-sm-1" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="PRICE_5" th:value="${PRICE_5}" maxlength="10" />
+					</div>
+				</div>
+				<label class="col-sm-1 col-form-label">Dep Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityOne4" name="PRICE_5_CITYONE" th:value="${PRICE_5_CITYONE}" list="cityOneList4" oninput="checkCityCodeMatch(document.getElementById('cityTwo4', 'cityOne4'))">
+					<datalist id="cityOneList4">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Arr Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityTwo4" name="PRICE_5_CITYTWO" th:value="${PRICE_5_CITYTWO}" list="cityTwoList4" oninput="checkCityCodeMatch(this)">
+					<datalist id="cityTwoList4">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Link 5 <i class="fa-solid fa-circle-info" title="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}" style="cursor: pointer;"></i>: </label>
+				<div class="col-sm-5" >
+					<div class="col-sm-12" >
+						<input type="text" class="form-control mt-1" name="PRICE_5_LINK" th:value="${PRICE_5_LINK}" />
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-1 col-form-label">Price 6: </label>
+				<div class="col-sm-1" >
+					<div class="col-sm-10" >
+						<input type="text" class="form-control mt-1" name="PRICE_6" th:value="${PRICE_6}" maxlength="10" />
+					</div>
+				</div>
+				<label class="col-sm-1 col-form-label">Dep Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityOne5" name="PRICE_6_CITYONE" th:value="${PRICE_6_CITYONE}" list="cityOneList5" oninput="checkCityCodeMatch(document.getElementById('cityTwo5', 'cityOne5'))">
+					<datalist id="cityOneList5">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Arr Code:</label>
+				<div class="col-sm-1" >
+					<input type="text" class="form-control" id="cityTwo5" name="PRICE_6_CITYTWO" th:value="${PRICE_6_CITYTWO}" list="cityTwoList5" oninput="checkCityCodeMatch(this)">
+					<datalist id="cityTwoList5">
+						<th:block th:each="city : ${cities}">
+							<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+						</th:block>
+					</datalist>
+				</div>
+				<label class="col-sm-1 col-form-label">Link 6 <i class="fa-solid fa-circle-info" title="/search_flight_Lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}" style="cursor: pointer;"></i>: </label>
+				<div class="col-sm-5" >
+					<div class="col-sm-12" >
+						<input type="text" class="form-control mt-1" name="PRICE_6_LINK" th:value="${PRICE_6_LINK}" />
+					</div>
+				</div>
+			</div>
+			<br>
+			
+			<div class="text-center">
+					<input type="submit" value="Save" class="btn btn-primary m-3 buttonds" >
+			</div>
+			
+		</form>
+		
+		<script>
+		function checkCityCodeMatch3(confirmCityCode, firstCity) {
+			if(confirmCityCode.value == firstCity.val()) {
+				confirmCityCode.setCustomValidity("Two City code should not match!");
+			} else {
+				confirmCityCode.setCustomValidity("");
+			}
+		}
+		</script>
+	</div>
+
+</body>
+</html>

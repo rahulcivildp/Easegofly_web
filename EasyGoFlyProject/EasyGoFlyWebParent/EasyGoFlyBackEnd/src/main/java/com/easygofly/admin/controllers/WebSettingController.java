@@ -16,23 +16,27 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.admin.FileUploadUtil;
+import com.easygofly.admin.setting.city.CityRepository;
 import com.easygofly.admin.setting.web.PolicyDetailBag;
 import com.easygofly.admin.setting.web.WebSettingService;
+import com.easygofly.entity.City;
 import com.easygofly.entity.WebDetails;
 
 @Controller
 public class WebSettingController {
 	
-	@Autowired
-	private WebSettingService service; 
+	@Autowired private WebSettingService service; 
+	@Autowired private CityRepository cityRepo;
 	
 	@GetMapping("/web_settings")
 	public String listAll(Model model) {
 		List<WebDetails> listAllSettings = service.listAllSettings();
+		List<City> cities = cityRepo.findAllByOrderByNameAsc();
 		
 		for (WebDetails details : listAllSettings) {
 			model.addAttribute(details.getKey(), details.getValue());
 		}
+		model.addAttribute("cities", cities);
 		
 		return "webDetails/web_settings";
 	}
@@ -51,6 +55,17 @@ public class WebSettingController {
 	
 	@PostMapping("/web_settings/save_contact")
 	public String saveContactSettings(HttpServletRequest request, RedirectAttributes ra) throws IOException {
+		PolicyDetailBag generalSetting = service.getGeneralSettingBag();
+		
+		updateSettingValueInForm(request, generalSetting.list());
+		
+		ra.addFlashAttribute("message", "Contact settings have been updated.");
+		
+		return "redirect:/web_settings";
+	}
+	
+	@PostMapping("/web_settings/save_lowest_price")
+	public String saveLowestPriceSettings(HttpServletRequest request, RedirectAttributes ra) throws IOException {
 		PolicyDetailBag generalSetting = service.getGeneralSettingBag();
 		
 		updateSettingValueInForm(request, generalSetting.list());

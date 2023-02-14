@@ -32,7 +32,7 @@ public class WebSettingService  {
 	}
 	
 	public List<WebDetails> getGeneralSetting() {
-		return repo.findByAllCategories(WebSettingCategory.POLICY, WebSettingCategory.CONTACT, WebSettingCategory.IMAGE);
+		return repo.findByAllCategories(WebSettingCategory.POLICY, WebSettingCategory.CONTACT, WebSettingCategory.IMAGE, WebSettingCategory.LOWEST_FARE_FINDER);
 	}
 	
 	public void saveAll(Iterable<WebDetails> settings) {

@@ -40,4 +40,34 @@ public class MiddleBodyController {
 	public String keralaView() {
 		return "middle-body/kerala_view";
 	}
+	
+	@GetMapping("/mumbai_view")
+	public String mumbaiView() {
+		return "middle-body/mumbai_view";
+	}
+	
+	@GetMapping("/visakhaptnam_view")
+	public String visakhaptnamView() {
+		return "middle-body/visakhaptnam_view";
+	}
+	
+	@GetMapping("/goa_view")
+	public String goaView() {
+		return "middle-body/goa_view";
+	}
+	
+	@GetMapping("/haridwar_view")
+	public String haridwarView() {
+		return "middle-body/haridwar_view";
+	}
+	
+	@GetMapping("/kathmandu_view")
+	public String kathmanduView() {
+		return "middle-body/kathmandu_view";
+	}
+	
+	@GetMapping("/jammu_view")
+	public String jammuView() {
+		return "middle-body/jammu_view";
+	}
 }

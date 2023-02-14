@@ -24,17 +24,19 @@ public class WebSettingService  {
 		List<WebDetails> detailsPolicy = repo.findByCategory(WebSettingCategory.POLICY);
 		List<WebDetails> detailsContact = repo.findByCategory(WebSettingCategory.CONTACT);
 		List<WebDetails> detailsImage = repo.findByCategory(WebSettingCategory.IMAGE);
+		List<WebDetails> detailsLowestFare = repo.findByCategory(WebSettingCategory.LOWEST_FARE_FINDER);
 		
 		webDetails.addAll(detailsPolicy);
 		webDetails.addAll(detailsContact);
 		webDetails.addAll(detailsImage);
+		webDetails.addAll(detailsLowestFare);
 		
 		return new PolicyDetailBag(webDetails);
 		
 	}
 	
 	public List<WebDetails> getGeneralSetting() {
-		return repo.findByAllCategories(WebSettingCategory.POLICY, WebSettingCategory.CONTACT, WebSettingCategory.IMAGE);
+		return repo.findByAllCategories(WebSettingCategory.POLICY, WebSettingCategory.CONTACT, WebSettingCategory.IMAGE, WebSettingCategory.LOWEST_FARE_FINDER);
 	}
 	
 	public void saveAll(Iterable<WebDetails> settings) {

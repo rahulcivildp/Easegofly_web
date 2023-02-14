@@ -9,4 +9,7 @@ public interface CityRepository extends CrudRepository<City, Integer> {
 
 	@Query("SELECT c FROM City c WHERE c.cityName = ?1")
 	public City getCityByName(String cityName); 
+	
+	@Query("SELECT c FROM City c WHERE c.code = ?1")
+	public City getCityByCode(String code); 
 }
