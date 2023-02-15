@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.easygofly.entity.City;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.exception.ProductNotFoundException;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.ProductSaveHelper;
@@ -32,20 +34,12 @@ import com.easygofly.site.security.oauth.CustomerOAuth2User;
 @Controller
 public class SearchHistoryController {
 
-	@Autowired
-	private SearchHistoryService searchService;
-	
-	@Autowired
-	private CustomerService customerService;
-	
-	@Autowired
-	private ProductDetailService productService;
-	
-	@Autowired
-	private SearchHistoryRepository searchRepo;
-	
-	@Autowired
-	private ProductDetailsRepository productRepo;
+	@Autowired private SearchHistoryService searchService;
+	@Autowired private CustomerService customerService;
+	@Autowired private ProductDetailService productService;
+	@Autowired private SearchHistoryRepository searchRepo;
+	@Autowired private ProductDetailsRepository productRepo;
+	@Autowired private CityRepository cityRepo;
 	
 	@GetMapping("/search_result")
 	public String viewSearchResult(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
@@ -108,7 +102,7 @@ public class SearchHistoryController {
 			Model model, RedirectAttributes redirectAttributes) throws ParseException {
 		 
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-
+	    
 		System.out.println("no User Date: " + date);
 		
 		List<ProductDetail> listProductDetails = productService.listAllFlights(cityOne, cityTwo, date);
@@ -154,11 +148,14 @@ public class SearchHistoryController {
 		
 			String email; 
 			Customer customer;
+			City city1 = cityRepo.getCityByName(cityOne);
+		    City city2 = cityRepo.getCityByName(cityTwo);
+		    
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
-				Integer searchId = saveHistoryPart(cityOne, cityTwo, date, journeyClass, tripType, adultNum, childNum,
+				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				System.out.println("Last Value of Search: " + searchId);
 				return "redirect:/flight_search_" + searchId;
@@ -166,14 +163,14 @@ public class SearchHistoryController {
 				email = googleLogin.getEmail();
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
-				Integer searchId = saveHistoryPart(cityOne, cityTwo, date, journeyClass, tripType, adultNum, childNum,
+				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				System.out.println("Last Value of Search: " + searchId);
 				return "redirect:/flight_search_" + searchId;
 			}else {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
 			    String strDate = dateFormat.format(date);
-				return "redirect:/flight_search-noUser_"+ cityOne +"_"+ cityTwo +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum +"_"+ strDate;
+				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum +"_"+ strDate;
 			}
 			
 	}

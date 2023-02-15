@@ -485,6 +485,9 @@ body {
 		    margin-left: 20px;
 		    color: white;
 	}
+	.displ {
+		display: none;
+	}
 </style>
 
 <body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
@@ -610,20 +613,28 @@ body {
                                  	</div>
                                  </div>
                                  <div class="card_center">
-									<th:block th:each="city : ${cities}">
+                                     <span class="city_loca">[[${PRICE_1_CITYTWO}]]</span>
+                                     <br>
+                                     <th:block th:each="city : ${cities}">
                                  	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYTWO}">[[${city.cityName}]]</span>
                                  	</th:block>
-                                 	<br>
-                                     <span class="city_loca">[[${PRICE_1_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
-                                      <h4>&#x20B9; [[${PRICE_1}]]</h4>
+                                      <h4 id="PRICE_1">&#x20B9; [[${PRICE_1}]]</h4>
                                  </div>
                             </div>
                        </a>
                    </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($("#PRICE_1").value == null) {
+		alert()
+	}
+	
+})
 
+</script>
                    <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_2_LINK}" style="text-decoration: none;">
                              <div class="card_wrp shadow">
@@ -639,11 +650,11 @@ body {
                                  	</div>
                                  </div>
                                  <div class="card_center">
+                                     <span class="city_loca">[[${PRICE_2_CITYTWO}]]</span>
+                                 	<br>
 									<th:block th:each="city : ${cities}">
                                  	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYTWO}">[[${city.cityName}]]</span>
                                  	</th:block>
-                                 	<br>
-                                     <span class="city_loca">[[${PRICE_2_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
@@ -669,11 +680,11 @@ body {
                                  	</div>
                                  </div>
                                  <div class="card_center">
+                                     <span class="city_loca">[[${PRICE_3_CITYTWO}]]</span>
+                                 	<br>
 									<th:block th:each="city : ${cities}">
                                  	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYTWO}">[[${city.cityName}]]</span>
                                  	</th:block>
-                                 	<br>
-                                     <span class="city_loca">[[${PRICE_3_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
@@ -698,11 +709,11 @@ body {
                                  	</div>
                                  </div>
                                  <div class="card_center">
+                                     <span class="city_loca">[[${PRICE_4_CITYTWO}]]</span>
+                                 	<br>
 									<th:block th:each="city : ${cities}">
                                  	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYTWO}">[[${city.cityName}]]</span>
                                  	</th:block>
-                                 	<br>
-                                     <span class="city_loca">[[${PRICE_4_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
@@ -727,11 +738,11 @@ body {
                                  	</div>
                                  </div>
                                  <div class="card_center">
+                                     <span class="city_loca">[[${PRICE_5_CITYTWO}]]</span>
+                                 	<br>
 									<th:block th:each="city : ${cities}">
                                  	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYTWO}">[[${city.cityName}]]</span>
                                  	</th:block>
-                                 	<br>
-                                     <span class="city_loca">[[${PRICE_5_CITYTWO}]]</span>
                                  </div>
 
                                  <div class="card_bottom">
@@ -742,31 +753,31 @@ body {
                    </div>
 
                    <div class="col-md-2 col-2 text-center cards_margin">
-                         <a th:href="${PRICE_6_LINK}" style="text-decoration: none;">
-                             <div class="card_wrp shadow">
-                                 <div class="card_top_side">
-                                 	<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYONE}">[[${city.cityName}]]</span>
-                                 	</th:block>
-                                 	<br>
-                                 	<span class="city_loca">[[${PRICE_6_CITYONE}]]</span>
-                                 </div>
-                                 <div class="img_card_boxs">
-                                 	<div style="border-bottom: 4px solid grey; width: 30px;">
-                                 	</div>
-                                 </div>
-                                 <div class="card_center">
-									<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYTWO}">[[${city.cityName}]]</span>
-                                 	</th:block>
-                                 	<br>
-                                     <span class="city_loca">[[${PRICE_6_CITYTWO}]]</span>
-                                 </div>
+                       <a th:href="${PRICE_6_LINK}" style="text-decoration: none;">
+                            <div class="card_wrp shadow">
+                                <div class="card_top_side">
+                                	<th:block th:each="city : ${cities}">
+                                	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYONE}">[[${city.cityName}]]</span>
+                                	</th:block>
+                                	<br>
+                                	<span class="city_loca">[[${PRICE_6_CITYONE}]]</span>
+                                </div>
+                                <div class="img_card_boxs">
+                                	<div style="border-bottom: 4px solid grey; width: 30px;">
+                                	</div>
+                                </div>
+                                <div class="card_center">
+                                    <span class="city_loca">[[${PRICE_6_CITYTWO}]]</span>
+                                	<br>
+								<th:block th:each="city : ${cities}">
+                                	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYTWO}">[[${city.cityName}]]</span>
+                                	</th:block>
+                                </div>
 
-                                 <div class="card_bottom">
-                                      <h4>&#x20B9; [[${PRICE_6}]]</h4>
-                                 </div>
-                            </div>
+                                <div class="card_bottom">
+                                     <h4>&#x20B9; [[${PRICE_6}]]</h4>
+                                </div>
+                           </div>
                        </a>
                    </div>
             </div>

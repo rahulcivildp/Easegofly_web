@@ -23,4 +23,12 @@ public class GeneralSettingBag extends SettingBag {
 	public String getSiteLogo() {
 		return super.getValue("SITE_LOGO");
 	}
+	
+	public void updateFavicon(String value) {
+		super.update("FAVICON", value);
+	}
+	
+	public String getFavicon() {
+		return super.getValue("FAVICON");
+	}
 }

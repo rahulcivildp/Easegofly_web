@@ -48,10 +48,11 @@ public class SettingController {
 	}
 	
 	@PostMapping("/settings/save_general")
-	public String saveGeneralSettings(@RequestParam("fileImage") MultipartFile multipartFile, HttpServletRequest request, RedirectAttributes ra) throws IOException {
+	public String saveGeneralSettings(@RequestParam("fileImage") MultipartFile multipartFile, @RequestParam("favicon") MultipartFile multipartFileFavicon, HttpServletRequest request, RedirectAttributes ra) throws IOException {
 		GeneralSettingBag generalSetting = service.getGeneralSettingBag();
 		
 		saveSiteLogo(multipartFile, generalSetting);
+		saveFavicon(multipartFileFavicon, generalSetting);
 		saveCurrencySymbol(request, generalSetting);
 		updateSettingValueInForm(request, generalSetting.list());
 		
@@ -100,6 +101,18 @@ public class SettingController {
 			generalSetting.updateSiteLogo(value);
 			
 			String uploadDir = "../site-logo/";
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		}
+	}
+	
+	private void saveFavicon(MultipartFile multipartFile, GeneralSettingBag generalSetting) throws IOException {
+		if (!multipartFile.isEmpty()) {
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			String value = "/favicon/" + fileName;
+			generalSetting.updateFavicon(value);
+			
+			String uploadDir = "../favicon/";
 			FileUploadUtil.cleanDir(uploadDir);
 			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 		}

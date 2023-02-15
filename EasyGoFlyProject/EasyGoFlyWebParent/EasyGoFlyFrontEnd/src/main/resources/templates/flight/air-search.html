@@ -193,6 +193,23 @@ th:fragment="air-search">
         .deactive {
         	display: none;
         }
+        .input_styles {
+        	width: 95%;
+		    padding: 44px 12px 30px !important;
+		    font-size: 24px;
+		    font-weight: 600;
+		    font-family: 'Open Sans';
+        }
+        .input_calender {
+       	    width: 95%;
+		    padding: 7px 8px;
+		    font-size: 24px;
+		    font-weight: 600;
+		    color: #747474;
+        }
+        .input_calender:focus {
+			color: black;
+		}
         </style>
     </head>
     <body>
@@ -223,19 +240,19 @@ th:fragment="air-search">
                             <div class="col-md-5 col-12" style=" float: left; ">
                                 
                                 <div class="col-md-6 col-6 aligner form-floating" id="aligner3">
-                                    <input type="search" class="form-control hill1" name="cityOne" id="cityOne" placeholder="Depurture City" list="cityOneList" style="width: 95%;padding: 30px 0;" oninput="checkCityCodeMatch(document.getElementById('cityTwo'))">
+                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" placeholder="Depurture City" list="cityOneList" oninput="checkCityCodeMatch(document.getElementById('cityTwo'))">
                                     <datalist id="cityOneList">
 										<th:block th:each="city : ${cities}">
-											<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 										</th:block>
 									</datalist>
                                     <label class="labelStyle" for="cityOne"><i class="fa fa-circle-o-notch fa-spin"></i> From</label>
                                 </div>
                                 <div class="col-md-6 col-6 aligner form-floating" id="aligner4">
-                                    <input type="search" class="form-control hill2" name="cityTwo" id="cityTwo" placeholder="Arrival City" list="cityTwoList" style="width: 95%;padding: 30px 0;" oninput="checkCityCodeMatch(this)">
+                                    <input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)">
                                     <datalist id="cityTwoList">
 										<th:block th:each="city : ${cities}">
-											<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 										</th:block>
 									</datalist>
                                     <label class="labelStyle" for="cityTwo"><i class="fa fa-circle-o-notch fa-spin"></i> To</label>
@@ -246,15 +263,15 @@ th:fragment="air-search">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
-                                    <input type="date" class="form-control" name="date" id="floatingInput" style="width: 95%;">
+                                    <input type="date" class="form-control input_calender" name="date" id="floatingInput" >
                                     
                                 </div>
                                 <div class="col-md-4 col-6 aligner" id="input_roundtrip">
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-                                    <input type="date" class="form-control" id="floatingInput"style="width: 95%;" disabled>
+                                    <input type="date" class="form-control input_calender" id="floatingInput" disabled>
                                     
                                 </div>
-                                <div class="col-md-4 col-12 aligner" style=" border: none;">
+                                <div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
                                     <div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
                                         <div class="dropdown">
                                         <div class="" type="button" id="drop_button" style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;" onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
@@ -339,19 +356,19 @@ th:fragment="air-search">
                             <div class="col-md-5 col-12" style=" float: left;">
                                 
                                 <div class="col-md-6 col-6 aligner form-floating" id="aligner1">
-                                    <input type="search" class="form-control hill1" name="cityOne" id="cityOne2" placeholder="Depurture City" list="cityOneList2" style="width: 95%;padding: 30px 0;" oninput="checkCityCodeMatch2(document.getElementById('cityTwo2'))">
+                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne2" placeholder="Depurture City" list="cityOneList2" oninput="checkCityCodeMatch2(document.getElementById('cityTwo2'))">
                                     <datalist id="cityOneList2">
 										<th:block th:each="city : ${cities}">
-											<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 										</th:block>
 									</datalist>
                                     <label class="labelStyle" for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> From</label>
                                 </div>
                                 <div class="col-md-6 col-6 aligner form-floating" id="aligner2">
-                                    <input type="search" class="form-control hill2" name="cityTwo" id="cityTwo2" placeholder="Arrival City" list="cityTwoList2" style="width: 95%;padding: 30px 0;" oninput="checkCityCodeMatch2(this)">
+                                    <input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo2" placeholder="Arrival City" list="cityTwoList2" oninput="checkCityCodeMatch2(this)">
                                     <datalist id="cityTwoList2">
 										<th:block th:each="city : ${cities}">
-											<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 										</th:block>
 									</datalist>
                                     <label class="labelStyle" for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> To</label>
@@ -361,15 +378,15 @@ th:fragment="air-search">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
-                                    <input type="date" class="form-control" name="date" id="floatingInput" style="width: 95%;">
+                                    <input type="date" class="form-control input_calender" name="date" id="floatingInput">
                                     
                                 </div>
                                 <div class="col-md-4 col-6 aligner">
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-                                    <input type="date" class="form-control" name="return_date" id="floatingInput"style="width: 95%;">
+                                    <input type="date" class="form-control input_calender" name="return_date" id="floatingInput">
                                     
                                 </div>
-                                <div class="col-md-4 col-12 aligner" style=" border: none;">
+                                <div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
                                     <div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
                                         <div class="dropdown">
                                         <div class="" type="button" id="drop_button2" style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"  onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">

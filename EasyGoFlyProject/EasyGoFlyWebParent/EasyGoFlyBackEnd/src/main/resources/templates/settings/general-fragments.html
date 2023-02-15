@@ -27,6 +27,14 @@
 			</div>
 			<br>
 			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Favicon Logo:</label>
+				<div class="col-sm-10">
+					<img class="img-thumbnail img-fluid" id="faviconThumbnail" th:src="@{${FAVICON}}" alt="Site Logo thumbnail" style="width: 150px; height: 70px;"/>
+					<input type="file" name="favicon" id="favicon" accept="image/png, image/jpeg"/>
+				</div> 
+			</div>
+			<br>
+			<div class="form-group row">
 				<label class="col-sm-2 col-form-label">Currency Type:</label>
 				<div class="col-sm-10">
 					<select name="CURRENCY_ID" class="form-control">
