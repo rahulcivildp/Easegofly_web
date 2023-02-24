@@ -68,6 +68,10 @@ public class ProductDetail {
 	@Column(nullable = false, length = 5, name = "city_two")
 	private String cityTwo;
 	
+	private Integer duration;
+	
+	private String brand;
+	
 	private int stopNum;
 	
 	private boolean enabled;
@@ -101,7 +105,7 @@ public class ProductDetail {
 
 	public ProductDetail(int id, String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
-			String cityTwo, boolean inStock, boolean enabled, int stopNum, Product product) {
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, Product product) {
 		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
@@ -120,11 +124,13 @@ public class ProductDetail {
 		this.inStock = inStock;
 		this.product = product;
 		this.stopNum = stopNum;
+		this.duration = duration;
+		this.brand = brand;
 	}
 	
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
-			String cityTwo, boolean inStock, boolean enabled, int stopNum, Product product) {
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, Product product) {
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
 		this.uploadSeats = uploadSeats;
@@ -142,6 +148,8 @@ public class ProductDetail {
 		this.inStock = inStock;
 		this.product = product;
 		this.stopNum = stopNum;
+		this.duration = duration;
+		this.brand = brand;
 	}
 
 	public int getId() {
@@ -172,6 +180,14 @@ public class ProductDetail {
 		return uploadSeats;
 	}
 
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
 	public void setUploadSeats(String uploadSeats) {
 		this.uploadSeats = uploadSeats;
 	}
@@ -186,6 +202,14 @@ public class ProductDetail {
 
 	public int getStopNum() {
 		return stopNum;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
 
 	public void setStopNum(int stopNum) {

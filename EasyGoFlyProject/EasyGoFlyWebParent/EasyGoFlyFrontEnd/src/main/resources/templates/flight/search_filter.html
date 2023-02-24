@@ -5,157 +5,184 @@
 <head>
 </head>	
 <body>
-	<div th:fragment="search_filter(remove)" th:remove="${remove}">
+<div th:fragment="search_filter(remove)" th:remove="${remove}">
 	<div>
-            	<form method="POST" action="flight_action.php">
-                <div class="rounded" style="margin-right: 30px; box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; background-color: white;">
-                    <div style="padding: 20px;">
-                        <div class="row">
-                            <div>
-                                <button style="float: right; margin: 6px;">click me</button>
-                            </div>
-                        </div>
-                    <div>
-                        <div style="margin-bottom: 16px;">
-                            <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Airlines</h2>
-                            <input type="checkbox" id="indigo" name="indigo" value="indigo">
-                            <label for="indigo"> Indigo Only</label><br>
-                            <input type="checkbox" id="air_asia" name="air_asia" value="air_asia">
-                            <label for="air_asia"> Air India Only</label><br>
-                            <input type="checkbox" id="go_first" name="go_first" value="go_first">
-                            <label for="go_first"> Go First Only</label><br>
-                            <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                            <label for="air_asia_india"> Air Asia India Only</label><br>
-                        </div>
-                        <div style="margin-bottom: 16px;">
-                            <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Flight Fare Type</h2>
-                            <input type="checkbox" id="regular_fare" name="regular_fare" value="regular_fare">
-                            <label for="regular_fare"> Regular Fare</label><br>
-                            <input type="checkbox" id="corporate_fare" name="corporate_fare" value="corporate_fare">
-                            <label for="corporate_fare"> Corporate Fare</label><br>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h2 style="font-size: 18px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Time</h2>
-                            <div>
-                                <P>Departure TIme</P>
-                                <div class="row">
-                                        <div class="col-md-3" style="padding: 0 2px;">
-                                            <div class="time_tiles">
-                                                <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
-                                                <div><p style=" margin-bottom: 8px;">00 - 08am</p></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3" style="padding: 0 2px;">
-                                        <div class="time_tiles">
-                                                <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
-                                                <div><p style=" margin-bottom: 8px;">00 - 08am</p></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3" style="padding: 0 2px;">
-                                        <div class="time_tiles">
-                                                <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
-                                                <div><p style=" margin-bottom: 8px;">00 - 08am</p></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3" style="padding: 0 2px;">
-                                        <div class="time_tiles">
-                                                <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
-                                                <div><p style=" margin-bottom: 8px;">00 - 08am</p></div>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h2 style="font-size: 18px;"><i class="fa fa-map-marker" aria-hidden="true"></i> Stops</h2>
-                            <ul style="padding: 0; height: 106px; overflow: auto; width: 60%;">
-                                <li class="li_styles">0 Stop</li>
-                                <li class="li_styles" style="border-top: none;">1 Stop</li>
-                                <li class="li_styles" style="border-top: none;">2 Stops</li>
-                                <li class="li_styles" style="border-top: none;">3 Stops</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h2 style="font-size: 18px;"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Layover Airport</h2>
-                            <ul class="layover_airport">
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Biju Patnaik Airport (BBI)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Chhatrapati Shivaji Intl Airport (BOM)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Cuddapah Airport (CDP)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india">
-                                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h2 style="font-size: 18px;"><i class="fa fa-inr" aria-hidden="true"></i> Price</h2>
-                            <ul style="list-style-type: none; padding: 0;">
-                                <li>
-                                    <div class="slidecontainer">
-                                        <p style="float: left;"> 40000 INR</p>
-                                        <p style="float: right;"> 100000 INR</p>
-                                        <input type="range" min="40000" max="100000" value="70000" class="slider" id="myRange">
-                                        <p style="float: right;">Value: <span id="demo"></span></p>
-                                    </div>
-                                    <div style="margin: 15px 0;">
-                                        <input type="number" id="searchboes" value="" placeholder="10000" style=" width: 30%;">
-                                        <input id="searchbutton" type="button" value="Set">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h2 style="font-size: 18px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Duration</h2></div>
-                            <ul style="list-style-type: none; padding: 0;">
-                                <li>
-                                    <div class="slidecontainer">
-                                        <p style="float: left;"> 2 Hrs</p>
-                                        <p style="float: right;"> 29 Hrs</p>
-                                        <input type="range" min="2" max="29" value="15" class="slider" id="myduration">
-                                        <p style="float: right;">Value: <span id="demo2"></span></p>
-                                    </div>
-                                    <div style="margin: 15px 0;">
-                                        <input type="number" id="searchboxess" value="" placeholder="00 Hrs" style=" width: 30%;" maxlength="2">
-                                        <input id="searchbuttonss" type="button" value="Set">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+       <form method="POST" th:action="@{/noUser_search_filter}">
+       		<input type="hidden" name="cityOne" th:value="${cityOne}">
+       		<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+       		<input type="hidden" name="date" th:value="${strDate}">
+       		<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+       		<input type="hidden" name="tripType" th:value="${tripType}">
+       		<input type="hidden" name="adultNum" th:value="${adultNum}">
+       		<input type="hidden" name="childNum" th:value="${childNum}">
+       		<input type="hidden" name="infantNum" th:value="${infantNum}">
+       		<input type="hidden" name="brand" value="brand">
+       		<input type="hidden" name="stop" value="9">
+           <div class="rounded" style="margin-right: 30px; box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; background-color: white;">
+               <div style="padding: 20px;">
+                   <div class="row">
+                       <div>
+                           <input type="submit" style="float: right; margin: 6px;" value="Filter">
+                       </div>
+                   </div>
+               <div>
+                   <div style="margin-bottom: 16px;">
+		           <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Airlines</h2>
+				<div class="form-check">
+				  <input class="form-check-input" type="checkbox" name="brand" id="brand2" value="air india">
+				  <label class="form-check-label" for="brand2">
+				    Air India Only
+				  </label>
+				</div>
+		           <div class="form-check">
+				  <input class="form-check-input" type="checkbox" name="brand" id="brand1" value="indigo">
+				  <label class="form-check-label" for="brand1">
+				    Indigo Only
+				  </label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="checkbox" name="brand" id="brand3" value="brand">
+				  <label class="form-check-label" for="brand3">
+				    Go First Only
+				  </label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="checkbox" name="brand" id="brand4" value="brand">
+				  <label class="form-check-label" for="brand4">
+				    Air Asia India Only
+				  </label>
+				</div>
+				  
+                   </div>
+                   <div style="margin-bottom: 16px; background: #e0e0e0;">
+                       <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Flight Fare Type</h2>
+                       <input type="checkbox" id="regular_fare" name="regular_fare" value="regular_fare" disabled>
+                       <label for="regular_fare"> Regular Fare</label><br>
+                       <input type="checkbox" id="corporate_fare" name="corporate_fare" value="corporate_fare" disabled>
+                       <label for="corporate_fare"> Corporate Fare</label><br>
+                   </div>
+                   <div style="margin-bottom: 20px;">
+                       <h2 style="font-size: 18px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Time</h2>
+                       <div>
+                           <P>Departure TIme</P>
+                           <div class="row">
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                       <div class="time_tiles">
+                                           <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
+                                           <div><p style=" margin-bottom: 8px;">00:00 - 06:00</p></div>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                   <div class="time_tiles">
+                                           <div style=" margin-top: 8px;"><i class="fa fa-sun-o" aria-hidden="true"></i></div>
+                                           <div><p style=" margin-bottom: 8px;">06:00 - 12:00</p></div>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                   <div class="time_tiles">
+                                           <div style=" margin-top: 8px;"><i class="fa fa-sun-o" aria-hidden="true"></i></div>
+                                           <div><p style=" margin-bottom: 8px;">12:00 - 18:00</p></div>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                   <div class="time_tiles">
+                                           <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
+                                           <div><p style=" margin-bottom: 8px;">18:00 - 00:00</p></div>
+                                       </div>
+                                   </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div style="padding-bottom: 12px;">
+                       <h2 style="font-size: 18px;"><i class="fa fa-map-marker" aria-hidden="true"></i> Stops</h2>
+                       <div style="padding: 0; height: 77px; overflow: auto; width: 60%;">
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" name="stop" id="stop1" value="0">
+			  <label class="form-check-label" for="stop1">
+			    0 Stop
+			  </label>
+			</div>
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" name="stop" id="stop2" value="1">
+			  <label class="form-check-label" for="stop2">
+			    1 Stop
+			  </label>
+			</div>
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" name="stop" id="stop3" value="2">
+			  <label class="form-check-label" for="stop3">
+			    2 Stops
+			  </label>
+			</div>
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" name="stop" id="stop4" value="3">
+			  <label class="form-check-label" for="stop4">
+			    3 Stops
+			  </label>
+			</div>
+		</div>
+        </div>
+        <div style="margin-bottom: 16px; background: #e0e0e0;">
+            <h2 style="font-size: 18px;"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Layover Airport</h2>
+            <ul class="layover_airport">
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
+                </li>
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Biju Patnaik Airport (BBI)</label><br>
+                </li>
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Chhatrapati Shivaji Intl Airport (BOM)</label><br>
+                </li>
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Cuddapah Airport (CDP)</label><br>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <h2 style="font-size: 18px;"><i class="fa fa-inr" aria-hidden="true"></i> Price</h2>
+            <ul style="list-style-type: none; padding: 0;">
+                <li>
+                    <div class="slidecontainer">
+                        <p style="float: left;"> 3000 INR</p>
+                        <p style="float: right;"> 30000 INR</p>
+                        <input type="range" min="3000" max="30000" value="12000" class="slider" id="myRange">
+                        <p style="float: right;">Value: <span id="demo"></span></p>
                     </div>
-                </div>
-                </form>
-            </div>
-	
-	</div>
+                    <div style="margin: 15px 0;">
+                        <input type="number" id="searchboes" value="" placeholder="12000" style=" width: 90%;">
+                        <input id="searchbutton" type="button" value="Set">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <h2 style="font-size: 18px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Duration</h2></div>
+            <ul style="list-style-type: none; padding: 0;">
+                <li>
+                    <div class="slidecontainer">
+                        <p style="float: left;"> 2 Hrs</p>
+                        <p style="float: right;"> 29 Hrs</p>
+                        <input type="range" min="2" max="29" value="15" class="slider" id="myduration">
+                        <p style="float: right;">Value: <span id="demo2"></span></p>
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <input type="number" id="searchboxess" value="" placeholder="00 Hrs" style=" width: 30%;" maxlength="2">
+                                  <input id="searchbuttonss" type="button" value="Set">
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+        </form>
+     </div>
+
+</div>
 
 </body>	
 </html>

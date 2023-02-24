@@ -79,7 +79,7 @@ public class SearchHistoryController {
 
 		System.out.println("Date: " + search.getDate());
 		
-		List<ProductDetail> listProductDetails = productService.listAllFlights(search.getCityOne(), search.getCityTwo(), search.getDate());
+		List<ProductDetail> listProductDetails = productService.listAllFlights(search.getCityOne(), search.getCityTwo(), search.getDate(), Sort.by("pnr").ascending());
 		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
 		
 		model.addAttribute("listProducts", listProductDetails);
@@ -89,7 +89,7 @@ public class SearchHistoryController {
 		return "flight/search-result";
 	}
 	
-	@GetMapping("/flight_search-noUser_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}")
+	@GetMapping("/flight_search-noUser_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{sortName}_{brand}_{stop}")
 	public String searchFlightDetailsSinglesNoUser(
 			@PathVariable(name = "cityOne") String cityOne,
 			@PathVariable(name = "cityTwo") String cityTwo,
@@ -99,22 +99,28 @@ public class SearchHistoryController {
 			@PathVariable(name = "childNum") Integer childNum,
 			@PathVariable(name = "infantNum") Integer infantNum,
 			@PathVariable(name = "strDate") String strDate,
+			@PathVariable(name = "sortName") String sortName,
+			@PathVariable(name = "brand") String[] brands,
+			@PathVariable(name = "stop") Integer[] stops,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException {
 		 
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 	    
-		System.out.println("no User Date: " + date);
+		System.out.println("no User Date: " + date + "- "+ sortName);
+
+		searchSort(cityOne, cityTwo, sortName, model, date);
 		
-		List<ProductDetail> listProductDetails = productService.listAllFlights(cityOne, cityTwo, date);
+		searchFilter(cityOne, cityTwo, brands, model, date, stops);
+
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
 		Integer passengerNum = adultNum + childNum + infantNum;
 		
-		model.addAttribute("listProducts", listProductDetails);
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("cityTwo", cityTwo);
 		model.addAttribute("date", date);
+		model.addAttribute("strDate", strDate);
 		model.addAttribute("journeyClass", journeyClass);
 		model.addAttribute("tripType", tripType);
 		model.addAttribute("adultNum", adultNum);
@@ -124,6 +130,88 @@ public class SearchHistoryController {
 		
 		return "flight/search-result-noUser";
 		
+	}
+
+	private void searchFilter(String cityOne, String cityTwo, String[] brands, Model model, Date date, Integer[] stops) {
+		String brand1 = "";
+		String brand2 = "";
+		Integer stop0 = null;
+		Integer stop1 = null;
+		Integer stop2 = null;
+		Integer stop3 = null;
+		
+		if (brands.length == 2 && stops.length == 1) {
+			brand1 = brands[1];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(1000000);
+		} else if (brands.length == 3 && stops.length == 1) {
+			brand1 = brands[1];
+			brand2 = brands[2];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(2000000);
+		} else if (stops.length == 2 && brands.length == 1) {
+			stop0 = stops[1];
+			brand1 = "";
+			brand2 = "";
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(3000000 + " " + listProductDetailsBrand);
+		} else if (stops.length == 3 && brands.length == 1) {
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = "";
+			brand2 = "";
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(3000000 + " " + listProductDetailsBrand);
+		} else if (stops.length == 2 && brands.length == 2) {
+			stop0 = stops[1];
+			brand1 = brands[1];
+			brand2 = "";
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(4000000 + " " + listProductDetailsBrand);
+		} else if (stops.length == 3 && brands.length == 2) {
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			brand2 = "";
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(4000000 + " " + listProductDetailsBrand);
+		} else if (stops.length == 3 && brands.length == 3) {
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			brand2 = brands[2];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+			System.out.println(4000000 + " " + listProductDetailsBrand);
+		}
+	}
+
+	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
+		if (sortName.equals("pnr")) {
+			List<ProductDetail> listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetails);
+		} else if (sortName.equals("price")) {
+			List<ProductDetail> listProductDetailsPrice = productService.listAllFlightsByPrice(cityOne, cityTwo, date);
+			model.addAttribute("listProducts", listProductDetailsPrice);
+		} else if (sortName.equals("duration")) {
+			List<ProductDetail> listProductDetailsDuration = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetailsDuration);
+		} else if (sortName.equals("arrTime")) {
+			List<ProductDetail> listProductDetailsArrival = productService.listAllFlightsByArrival(cityOne, cityTwo, date);
+			model.addAttribute("listProducts", listProductDetailsArrival);
+		} else if (sortName.equals("depTime")) {
+			List<ProductDetail> listProductDetailsDeparture = productService.listAllFlightsByDeparture(cityOne, cityTwo, date);
+			model.addAttribute("listProducts", listProductDetailsDeparture);
+		} else if (sortName.equals("brand")) {
+			List<ProductDetail> listProductDetailsAirline = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetailsAirline);
+		}
 	}
 	
 	@GetMapping("/get_value")
@@ -170,7 +258,10 @@ public class SearchHistoryController {
 			}else {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
 			    String strDate = dateFormat.format(date);
-				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum +"_"+ strDate;
+			    String sort = "pnr";
+			    String brand = "";
+			    Integer stop = 0;
+				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop;
 			}
 			
 	}

@@ -182,6 +182,17 @@
 #modal_body_button .rounded {
 	box-shadow: none !important;
 }
+
+.submit_btn_stl {
+	float: right; 
+	background-color: #ef5a5a; 
+	border: 1px solid #ef5a5a;
+}
+
+.submit_btn_stl:hover {
+	background-color: #2dce03; 
+	border: 1px solid #2dce03;
+}
 </style>
 
 
@@ -345,64 +356,29 @@
                     <div>
                         <div class="row media-hide" style="list-style-type: none;">
                             <div class="col-md-2 col">
-                                <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Airlines
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_brand_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                    Air Line
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                </li>
                             </div>
                             <div class="col-md-2 col">
-                                <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Depurture
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_depTime_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                    Departure
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                </li>
                             </div>
                             <div class="col-md-2 col">
-                                <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_arrTime_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Arrival
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                </li>
                             </div>
                             <div class="col-md-2 col">
-                                <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_duration_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Duration
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                </li>
                             </div>
                             <div class="col-md-2 col">
-                                <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_price_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Price
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                </li>
                             </div>
                             <div class="col-md-2 col" style="padding: 7px 20px;">
                                 <div style="float:right;">
@@ -437,50 +413,45 @@
 		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
 		                    <div class="row">
 		                    	<div class="col-md-10 col">
-		                    		<div class="row seacrh_margin" style="margin-top: 28px;">
-		                    			<div class="col-3">
-				                    		<div style="float: left; padding: 15px 20px 10px;">
-				                                    
-		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45">
+		                    		<div class="row seacrh_margin">
+		                    			<div class="col-3" style="padding: 0;">
+				                    		<div style="float: left; padding: 0px">
+				                                <p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px;">Non-refundable</p>
+		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45" style="margin-left: 28px;">
 		                                    </div>
-		                                    <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+		                                    <div  style="float: left; font-size: 15px; padding: 10px 25px;">
 		                                        <b> [[${flight.product.brands.name}]] </b>
 		                                        <p id="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p> 
 		                                    </div>
 				                    	</div>
-				                    	<div class="col-7">
+				                    	<div class="col-7" style="padding-top: 48px;">
 				                            <div class="row">
 				                                <div class="col"> 
 				                                    <div class="row">
 					                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-			                                            <h2 style="font-size: 24px; margin: 0;">[[${flight.depTime}]]</h2>
-			                                            <p style="margin: 0;">[[${flight.cityOne}]]</p>
-			                                        </div>
-			                                        <div class="col">
-			                                            <div>
-			                                                <p  class="non_stop">Non-Stop</p>
-			                                            </div>
-			                                            <div>
-			                                            	<img src="[[@{/images/pngwingcomffe.png}]]" width="100%" height="25">
-			                                            </div>
-			                                            <div class="row">
-			                                                <div class="col"></div>
-			                                                <div class="col" style="font-size: 12px; padding: 0; text-align: center;">
-			                                                    <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>  mm</span>
-			                                                </div>
-			                                                <div class="col" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
-			                                                    <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> </span>
-			                                                </div>
-			                                                <div class="col"></div>
-			                                            </div>
-			                                        </div>
-			                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-			                                            <h2 style="font-size: 24px; margin: 0;">[[${flight.arrTime}]]</h2>
-			                                            <p style="margin: 0;">[[${flight.cityTwo}]]</p>
-			                                        </div>
-				                                </div>
-				                             </div>
-			                          	</div>
+				                                            <h2 style="font-size: 24px; margin: 0;">[[${flight.depTime}]]</h2>
+				                                            <p style="margin: 0;">[[${flight.cityOne}]]</p>
+				                                        </div>
+				                                        <div class="col">
+				                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0;">
+				                                                <b class="non_stop" id="non_stop-[[${flight.id}]]"></b>
+				                                            </div>
+				                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0;">
+				                                            	<img src="[[@{/images/pngwingcomffe.png}]]" width="100%" height="25">
+				                                            </div>
+				                                        </div>
+				                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+				                                            <h2 style="font-size: 24px; margin: 0;">[[${flight.arrTime}]]</h2>
+				                                            <p style="margin: 0;">[[${flight.cityTwo}]]</p>
+				                                        </div>
+				                                	</div>
+				                             	</div>
+				                             	<div class="row">
+	                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; margin-top: -15px;">
+	                                                    <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><b id="duration-[[${flight.id}]]"></b>
+	                                                </div>
+                                            	</div>
+			                          		</div>
 			                          </div>
 		                    			<div class="col-2 media-hide"></div>
 		                    			<div class="col-2 media_status" >
@@ -499,7 +470,7 @@
 				                                	<small>(For [[${passengerNum}]] Passenger/s)</small>
 				                                </div>
 						                    	<div class="col">
-					                                 <button type="submit" class="btn btn-primary" style="float: right; font-size: 26px;" id="book_now" name="book_now">Book Now</button>
+					                                 <button type="submit" class="btn btn-primary submit_btn_stl" style="float: right; font-size: 26px;" id="book_now" name="book_now">Book Now</button>
 					                            </div>
 				                            </div>
 				                    	</div>
@@ -541,7 +512,7 @@
 	                                	<small>(For [[${passengerNum}]] Passenger/s)</small>
 	                                </div>
 		                            <div style="display: flex; justify-content: center;">
-		                                 <a type="submit" class="btn btn-primary" style="float: right;" id="book_now" name="book_now" href="https://easegofly.com/login">Book Now</a>
+		                                 <a type="submit" class="btn btn-primary submit_btn_stl" style="" id="book_now" name="book_now" href="https://easegofly.com/login">Book Now</a>
 		                            </div>
 		                    	
 		                    	</div>
@@ -558,6 +529,18 @@
           		$(".flightSearchResult" + [[${flight.id}]]).html(htmlCodeBlock);
           	}
     		
+          	if ([[${flight.stopNum}]] == 0) {
+          		$("#non_stop-" + [[${flight.id}]]).text("Non-Stop");
+          	} else {
+          		$("#non_stop-" + [[${flight.id}]]).text("Stop " + [[${flight.stopNum}]]);
+          	}
+          	
+          	timeDuration = [[${flight.duration}]];
+          	timeInHour = Math.floor(timeDuration / 60);
+          	timeRemaining = timeDuration - (timeInHour * 60);
+          	
+          	$("#duration-" + [[${flight.id}]]).text(timeInHour + "h-" + timeRemaining + "m");
+          	
           	</script>
             <script type="text/javascript">
           		totalAdultPrice = ([[${flight.priceADT}]] + [[${flight.markupADT}]]) * ([[${adultNum}]] + [[${childNum}]]);

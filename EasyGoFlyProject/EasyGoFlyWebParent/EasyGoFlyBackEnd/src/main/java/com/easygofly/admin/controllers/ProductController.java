@@ -181,16 +181,20 @@ public class ProductController {
 			@RequestParam(name = "priceINF", required = false) float priceINF,
 			@RequestParam(name = "markupADT", required = false) float markupADT, 
 			@RequestParam(name = "markupINF", required = false) float markupINF, 
-			@RequestParam(name = "stops", required = false) int stops, 
+			@RequestParam(name = "stops", required = false) int stops,  
+			@RequestParam(name = "duration", required = false) Integer duration, 
 			@AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) throws IOException, ProductNotFoundException {
+		
+		System.out.println("arrTime" + arrTime);
 		
 		Product product = productService.getProductDetails(products.getId());
 		String cityOne = product.getCityOne();
 		String cityTwo = product.getCityTwo();
 		boolean setEnable = true;
 		boolean setInStock = true;
+		Brand brand = product.getBrands();
 		
-		ProductSaveHelper.setProductDetails(products, pnr, totalSeats, uploadSeats, flightNum, date, depTime, arrTime, priceADT, priceINF, markupADT, markupINF, cityOne, cityTwo, setInStock, setEnable, stops);
+		ProductSaveHelper.setProductDetails(products, pnr, totalSeats, uploadSeats, flightNum, date, depTime, arrTime, priceADT, priceINF, markupADT, markupINF, cityOne, cityTwo, setInStock, setEnable, stops, duration, brand.getName());
 		
 		productService.saveProductDetails(products);
 		

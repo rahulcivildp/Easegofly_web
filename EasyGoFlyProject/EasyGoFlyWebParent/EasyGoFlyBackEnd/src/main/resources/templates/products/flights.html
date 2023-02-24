@@ -174,7 +174,7 @@
         <div class="col-md-10 hidden-groups" id="new_content3" style="padding: 0; display: none;">
 			<div th:replace="products/flightFare/view_private_fare :: content"></div>
         </div>
-        <div class="col-md-10 hidden-groups" id="new_content4" style="padding: 0; display: none;">
+        <div class="col-md-10 hidden-groups" id="new_content4" style="padding: 0; display: block;">
         	
 			<div th:replace="products/flightFare/flightList :: content"></div>
         </div>
@@ -189,33 +189,27 @@
     productLocation = "[[@{'/products/flights/' + ${productDetails.id}}]]";
     
     $(document).ready(function(){
-    })
-    
-   	
-    
-    $('.set_margin li').click(function(event){
-        $('.set_margin li').not(event.target).removeClass("active");
-        $(this).addClass("active");
-    });
 
+	    $('.set_margin li').click(function(event){
+	        $('.set_margin li').not(event.target).removeClass("active");
+	        $(this).addClass("active");
+	    });
+	
+	    
+	    $("#create_markup").click(function() {
+	    	$(".hidden-groups").css("display", "none");
+	        $("#new_content1").css("display", "block");
+	    });
+	    $("#add_private_fare").click(function() {
+	    	$(".hidden-groups").css("display", "none");
+	        $("#new_content2").css("display", "block");
+	    });
+	    $("#private_fare_list").click(function() {
+	    	$(".hidden-groups").css("display", "none");
+	        $("#new_content3").css("display", "block");
+	    });
     
-    $("#create_markup").click(function() {
-    	$(".hidden-groups").css("display", "none");
-        $("#new_content1").css("display", "block");
     });
-    $("#add_private_fare").click(function() {
-    	$(".hidden-groups").css("display", "none");
-        $("#new_content2").css("display", "block");
-    });
-    $("#private_fare_list").click(function() {
-    	$(".hidden-groups").css("display", "none");
-        $("#new_content3").css("display", "block");
-    });
-    
-    if(window.location.href == ("https://easegofly.com:8443" + productLocation)) {
-    	$(".hidden-groups").css("display", "none");
-        $("#new_content4").css("display", "block");
-    }
 
 </script>
 

@@ -52,12 +52,47 @@ public class ProductDetailService {
 		
 	}
 	
-	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date) {
+	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date, Sort sort) {
 		
-		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCity(date, cityOne, cityTwo, Sort.by("pnr").ascending());
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCity(date, cityOne, cityTwo, sort);
 		return productDetails;
 	}
 	
+	public List<ProductDetail> listAllFlightsByPrice(String cityOne, String cityTwo, Date date) {
+		
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityPrice(date, cityOne, cityTwo);
+		return productDetails;
+	}
+	
+	public List<ProductDetail> listAllFlightsByArrival(String cityOne, String cityTwo, Date date) {
+		
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityArrival(date, cityOne, cityTwo);
+		return productDetails;
+	}
+	
+	public List<ProductDetail> listAllFlightsByDeparture(String cityOne, String cityTwo, Date date) {
+		
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityDeparture(date, cityOne, cityTwo);
+		return productDetails;
+	}
+	
+	public List<ProductDetail> findAllFlightsByBrand(String cityOne, String cityTwo, Date date, String brand1, String brand2) {
+		
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityBrand(date, cityOne, cityTwo, brand1, brand2, Sort.by("pnr").ascending());
+		return productDetails;
+	}
+	
+	public List<ProductDetail> findAllFlightsByBrandSort(String cityOne, String cityTwo, Date date, String brand1, String brand2, Integer stop0, Integer stop1,  Integer stop2,  Integer stop3) {
+		
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityBrandSort(date, cityOne, cityTwo, brand1, brand2, stop0, stop1, stop2, stop3, Sort.by("pnr").ascending());
+		return productDetails;
+	}
+	
+	public List<ProductDetail> findAllFlightsByStop(String cityOne, String cityTwo, Date date, Integer stop0, Integer stop1,  Integer stop2,  Integer stop3) {
+		
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityStopNumber(date, cityOne, cityTwo, stop0, stop1, stop2, stop3, Sort.by("pnr").ascending());
+		return productDetails;
+	}
 	public Page<Product> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		

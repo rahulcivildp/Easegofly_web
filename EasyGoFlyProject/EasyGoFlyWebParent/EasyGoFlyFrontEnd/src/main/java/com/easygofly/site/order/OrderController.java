@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
@@ -38,7 +37,6 @@ import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
 import com.razorpay.RazorpayClient;
-import com.razorpay.Utils;
 
 @Controller
 public class OrderController {
@@ -173,32 +171,5 @@ public class OrderController {
 		return "order/flight_order";
 	}
 	
-	@PostMapping("/order_creation")
-	public String newOrder(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-		@SuppressWarnings("unused")
-		RazorpayClient client = null;
-		String orderId = null;
-		PaymentSettingBag paymentSettings = settingService.getPaymentSettings();
-		
-		try {
-			client = new RazorpayClient(paymentSettings.getKeyId(), paymentSettings.getSecretKey());
-			
-			JSONObject options = new JSONObject();
-			options.put("razorpay_payment_id", request.getParameter("razorpay_payment_id"));
-			options.put("rezorpay_order_id", request.getParameter("rezorpay_order_id"));
-			options.put("rezorpay_signature", request.getParameter("rezorpay_signature"));
-			boolean sigRes = Utils.verifyPaymentSignature(options, paymentSettings.getSecretKey());
-			if(sigRes) {
-				redirectAttributes.addFlashAttribute("success", "Payment successfull and signature verified.");
-			}else {
-				redirectAttributes.addFlashAttribute("failure", "Payment failed and signature is not verified.");
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		System.out.println("Order ID: " + orderId);
-		return "payment/razorpay";
-	}
+	
 }

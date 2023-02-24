@@ -275,8 +275,8 @@ th:fragment="air-search">
                                     <div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
                                         <div class="dropdown">
                                         <div class="" type="button" id="drop_button" style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;" onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-                                        <span id="result3"></span>
-                                        <span id="result"></span> 
+                                        <h5 id="result3"></h5>
+                                        <h5 id="result"></h5> 
                                         <input type="hidden" name="something" id="passengerNum1" value="">
                                         <h1 class="n-text" >Travelers</h1>
                                         </div>
@@ -554,7 +554,7 @@ th:fragment="air-search">
         
         if (sum < 10 ) {
             event.stopPropagation();
-            $("#result").html(Math.round(sum)); 
+            $("#result").html("No: " + Math.round(sum)); 
             $("#result3").html(d); 
         } 
         else {
@@ -577,7 +577,7 @@ th:fragment="air-search">
 
         if (sum < 10 ) {
             event.stopPropagation();
-            $("#result1").html(Math.round(sum));  
+            $("#result1").html("No: " + Math.round(sum));  
             $("#result4").html(d); 
         } 
         else {

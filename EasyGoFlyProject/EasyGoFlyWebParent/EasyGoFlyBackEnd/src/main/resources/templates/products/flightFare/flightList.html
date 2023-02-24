@@ -37,41 +37,44 @@
 				<div class="col-sm-12">
 					<div class="row" >
 						<input type="hidden" >
-						<div class="col-1" style="margin-right: 2px;">
-							<p>Date: </p><input type="date" name="date" placeholder="Date" style=" width: 100%;" required pattern="\d{4}-\d{2}-\d{2}">
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Date: </p><input type="date" name="date" placeholder="Date" style=" width: 100%;" required pattern="\d{4}-\d{2}-\d{2}">
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>PNR: </p><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">PNR: </p><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>Total Seats: </p><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Total Seats: </p><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>Upload Seats: </p><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Upload Seats: </p><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>Flight No: </p><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Flight No: </p><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="width: 5%;">
-							<p>Stops: </p><input type="number" name="stops" placeholder="stops" style=" width: 100%;" >
+						<div class="col" style="width: 5%;">
+							<p style="white-space: nowrap;">Stops: </p><input type="number" name="stops" placeholder="stops" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>Dep Time: </p><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Dep Time: </p><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>Arr Time: </p><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Arr Time: </p><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>ADT Price: </p><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">Duration (in MIN): </p><input type="text" name="duration" placeholder="Duration" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>INF Price: </p><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">ADT Price: </p><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>ADT Markup: </p><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">INF Price: </p><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" >
 						</div>
-						<div class="col-1" style="margin-right: 2px;">
-							<p>INF Markup: </p><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" >
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">ADT Markup: </p><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" >
+						</div>
+						<div class="col" style="margin-right: 2px;">
+							<p style="white-space: nowrap;">INF Markup: </p><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" >
 						</div>
 					</div>
 				</div>
@@ -97,6 +100,7 @@
 							<th>Stops</th>
 							<th>Depart Time</th>
 							<th>Arrival Time</th>
+							<th>Duration(min)</th>
 							<th>Adult Price</th>
 							<th>Infant Price</th>
 							<th>Adult Markup</th>
@@ -123,6 +127,7 @@
 							</td>
 							<td>[[${flight.depTime}]]</td>
 							<td>[[${flight.arrTime}]]</td>
+							<td>[[${flight.duration}]]</td>
 							<td>[[${flight.priceADT}]]</td>
 							<td>[[${flight.priceINF}]]</td>
 							<td>[[${flight.markupADT}]]</td>

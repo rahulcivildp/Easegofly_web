@@ -42,6 +42,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.cashfree</groupId>
+            <artifactId>cashfreelibjava</artifactId>
+            <version>0.0.6</version>
+        </dependency>
 	</dependencies>
 
 	<build>

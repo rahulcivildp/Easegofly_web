@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save",
 					"/flight_search-noUser**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", "/get_value", "/rishikesh_view", 
 					"/shimla_view", "/kolkata_view", "/darjeeling_view", "/bangalore_view", "/kerala_view", "/mumbai_view", 
-					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view").permitAll()
+					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/noUser_search_filter").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.formLogin()
