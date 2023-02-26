@@ -5,7 +5,7 @@
 <head>
 </head>	
 <body>
-<div th:fragment="search_filter(remove)" th:remove="${remove}">
+<div th:fragment="search_filter_user(remove)" th:remove="${remove}">
 	<style type="text/css">
 		.activeTime {
 			background-color: blue;
@@ -15,7 +15,8 @@
 	
 	</style>
 	<div>
-       <form method="POST" th:action="@{/noUser_search_filter}">
+       <form method="POST" th:action="@{/user_search_filter}">
+       		<input type="hidden" name="searchId" th:value="${search.id}">
        		<input type="hidden" name="cityOne" th:value="${cityOne}">
        		<input type="hidden" name="cityTwo" th:value="${cityTwo}">
        		<input type="hidden" name="date" th:value="${strDate}">

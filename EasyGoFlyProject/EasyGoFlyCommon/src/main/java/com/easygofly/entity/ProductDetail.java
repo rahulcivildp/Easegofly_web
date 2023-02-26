@@ -50,6 +50,12 @@ public class ProductDetail {
 	@Column(nullable = false)
 	private String arrTime;
 	
+	@Column(nullable = false)
+	private float depTimeInteger;
+	
+	@Column(nullable = false)
+	private float arrTimeInteger;
+	
 	@Column(nullable = false, length = 20)
 	private float priceADT;
 	
@@ -105,7 +111,7 @@ public class ProductDetail {
 
 	public ProductDetail(int id, String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
-			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, Product product) {
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, float arrTimeInteger, Product product) {
 		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
@@ -126,11 +132,13 @@ public class ProductDetail {
 		this.stopNum = stopNum;
 		this.duration = duration;
 		this.brand = brand;
+		this.arrTimeInteger = arrTimeInteger;
+		this.depTimeInteger = depTimeInteger;
 	}
 	
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
-			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, Product product) {
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, float arrTimeInteger, Product product) {
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
 		this.uploadSeats = uploadSeats;
@@ -150,6 +158,8 @@ public class ProductDetail {
 		this.stopNum = stopNum;
 		this.duration = duration;
 		this.brand = brand;
+		this.arrTimeInteger = arrTimeInteger;
+		this.depTimeInteger = depTimeInteger;
 	}
 
 	public int getId() {
@@ -198,6 +208,22 @@ public class ProductDetail {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public float getDepTimeInteger() {
+		return depTimeInteger;
+	}
+
+	public void setDepTimeInteger(Integer depTimeInteger) {
+		this.depTimeInteger = depTimeInteger;
+	}
+
+	public float getArrTimeInteger() {
+		return arrTimeInteger;
+	}
+
+	public void setArrTimeInteger(Integer arrTimeInteger) {
+		this.arrTimeInteger = arrTimeInteger;
 	}
 
 	public int getStopNum() {

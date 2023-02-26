@@ -194,7 +194,8 @@ public class ProductController {
 		boolean setInStock = true;
 		Brand brand = product.getBrands();
 		
-		ProductSaveHelper.setProductDetails(products, pnr, totalSeats, uploadSeats, flightNum, date, depTime, arrTime, priceADT, priceINF, markupADT, markupINF, cityOne, cityTwo, setInStock, setEnable, stops, duration, brand.getName());
+		ProductSaveHelper.setProductDetails(products, pnr, totalSeats, uploadSeats, flightNum, date, depTime, arrTime, priceADT, 
+				priceINF, markupADT, markupINF, cityOne, cityTwo, setInStock, setEnable, stops, duration, brand.getName());
 		
 		productService.saveProductDetails(products);
 		

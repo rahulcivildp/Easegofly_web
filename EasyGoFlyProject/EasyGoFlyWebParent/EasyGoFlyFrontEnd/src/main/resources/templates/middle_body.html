@@ -515,17 +515,17 @@ body {
 			 <div class="row" style="margin:0 auto; padding:14px;">
 			 	
 			       <div class="col-4 text-center">
-			          <a th:if="${lastValue1} != null" th:href="@{'/flight_search_' + ${lastValue1.id}}">
+			          <a th:if="${lastValue1} != null" th:href="@{'/flight_search_' + ${lastValue1.id} + '_pnr__0_0_'}">
 			          	<p style=" position: relative; top:10px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
 			          </a>
 			       </div>
 			       <div class="col-4 text-center">
-			          <a th:if="${lastValue2} != null" th:href="@{'/flight_search_' + ${lastValue2.id}}">
+			          <a th:if="${lastValue2} != null" th:href="@{'/flight_search_' + ${lastValue2.id} + '_pnr__0_0_'}">
 			          	<p style=" position: relative; top:10px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
 			          </a>
 			       </div>
 			       <div class="col-4 text-center">
-			          <a th:if="${lastValue3} != null" th:href="@{'/flight_search_' + ${lastValue3.id}}">
+			          <a th:if="${lastValue3} != null" th:href="@{'/flight_search_' + ${lastValue3.id} + '_pnr__0_0_'}">
 			          	<p style=" position: relative; top:10px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
 			          </a>
 			       </div>

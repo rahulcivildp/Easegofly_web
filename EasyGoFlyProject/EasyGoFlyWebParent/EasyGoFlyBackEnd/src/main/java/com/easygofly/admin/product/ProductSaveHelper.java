@@ -9,7 +9,8 @@ import com.easygofly.entity.ProductDetail;
 public class ProductSaveHelper {
 
 	public static void setProductDetails(Product products, String pnr, String totalSeats, String uploadSeats, String flightNum, Date date,
-			String depTime, String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne, String cityTwo, boolean inStock, boolean enabled,  int stopNum, Integer duration, String brand) {
+			String depTime, String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne, String cityTwo, 
+			boolean inStock, boolean enabled,  int stopNum, Integer duration, String brand) {
 		if(pnr == null || flightNum == null) return;
 		
 			String pnr1 = pnr;
@@ -28,9 +29,11 @@ public class ProductSaveHelper {
 			boolean inStock1 = inStock; 
 			boolean enabled1 = enabled;
 			
-			System.out.println("arrTime1:  " + arrTime1);
+			String replaceArr = arrTime1.replace(":", ".");
+			String replaceDep = depTime1.replace(":", ".");
 		
-			products.addDetail(pnr1, totalSeats1, uploadSeats1, flightNum1, date1, depTime1, arrTime1, priceADT1, priceINF1, markupADT1, markupINF1, cityOne1, cityTwo1, inStock1, enabled1, stopNum, duration, brand);
+			products.addDetail(pnr1, totalSeats1, uploadSeats1, flightNum1, date1, depTime1, arrTime1, priceADT1, priceINF1, 
+					markupADT1, markupINF1, cityOne1, cityTwo1, inStock1, enabled1, stopNum, duration, brand, Float.parseFloat(replaceDep), Float.parseFloat(replaceArr));
 			
 	}
 	

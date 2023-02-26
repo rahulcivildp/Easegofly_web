@@ -356,27 +356,27 @@
                     <div>
                         <div class="row media-hide" style="list-style-type: none;">
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_brand_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_brand_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Air Line
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_depTime_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_depTime_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Departure
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_arrTime_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_arrTime_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Arrival
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_duration_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_duration_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Duration
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_price_brand_9'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_price_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Price
                                 </a>
                             </div>
@@ -389,9 +389,11 @@
                         </div>
                 </div>
             </div>
-            <div class="col-md-12" style="margin-bottom: 10px;">
+            <div class="col-md-12" style="margin-bottom: 10px; padding: 0;">
                 <div class="shadow rounded"> 
-                    <img th:src="@{/images/Image20221206005857.jpg}" style="width: 100%;" class="shadow rounded"> 
+                	<a href="https://www.webkoro.com/" title="https://www.webkoro.com/">
+                    	<img th:src="@{/images/advertisement/webkoro add easegofly.png}" style="width: 100%;" class="shadow rounded" > 
+                    </a>
                 </div>
             </div>
           	<th:block th:each="flight : ${listProducts}">
@@ -419,7 +421,7 @@
 				                                <p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px;">Non-refundable</p>
 		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45" style="margin-left: 28px;">
 		                                    </div>
-		                                    <div  style="float: left; font-size: 15px; padding: 10px 25px;">
+		                                    <div style="float: left; font-size: 15px; padding: 10px 25px;">
 		                                        <b> [[${flight.product.brands.name}]] </b>
 		                                        <p id="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p> 
 		                                    </div>

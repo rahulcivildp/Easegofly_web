@@ -58,10 +58,15 @@ public class SearchHistoryController {
 		return "flight/search";
 	}
 	
-	@GetMapping("/flight_search_{id}")
+	@GetMapping("/flight_search_{id}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSingles(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@PathVariable(name = "sortName") String sortName,
+			@PathVariable(name = "activeTime") String[] activeTime,
+			@PathVariable(name = "brand") String[] brands,
+			@PathVariable(name = "stop") Integer[] stops,
+			@PathVariable(name = "totalPrice") Integer[] totalPrice, 
 			Model model, RedirectAttributes redirectAttributes) {
 		String email; 
 		Customer customer;
@@ -79,17 +84,20 @@ public class SearchHistoryController {
 
 		System.out.println("Date: " + search.getDate());
 		
-		List<ProductDetail> listProductDetails = productService.listAllFlights(search.getCityOne(), search.getCityTwo(), search.getDate(), Sort.by("pnr").ascending());
+		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
+		
+		searchFilter(search.getCityOne(), search.getCityTwo(), brands, model, search.getDate(), stops, totalPrice, search.getInfantNum(), activeTime);
+
 		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
 		
-		model.addAttribute("listProducts", listProductDetails);
+		
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("search", search);
 		
 		return "flight/search-result";
 	}
 	
-	@GetMapping("/flight_search-noUser_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{sortName}_{brand}_{stop}")
+	@GetMapping("/flight_search-noUser_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSinglesNoUser(
 			@PathVariable(name = "cityOne") String cityOne,
 			@PathVariable(name = "cityTwo") String cityTwo,
@@ -100,17 +108,19 @@ public class SearchHistoryController {
 			@PathVariable(name = "infantNum") Integer infantNum,
 			@PathVariable(name = "strDate") String strDate,
 			@PathVariable(name = "sortName") String sortName,
+			@PathVariable(name = "activeTime") String[] activeTime,
 			@PathVariable(name = "brand") String[] brands,
 			@PathVariable(name = "stop") Integer[] stops,
+			@PathVariable(name = "totalPrice") Integer[] totalPrice,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException {
 		 
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 	    
-		System.out.println("no User Date: " + date + "- "+ sortName);
+		System.out.println("no User Date: " + date + " - "+ sortName);
 
 		searchSort(cityOne, cityTwo, sortName, model, date);
 		
-		searchFilter(cityOne, cityTwo, brands, model, date, stops);
+		searchFilter(cityOne, cityTwo, brands, model, date, stops, totalPrice, infantNum, activeTime);
 
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
@@ -127,68 +137,350 @@ public class SearchHistoryController {
 		model.addAttribute("childNum", childNum);
 		model.addAttribute("infantNum", infantNum);
 		model.addAttribute("passengerNum", passengerNum);
+		model.addAttribute("brands", brands);
+		model.addAttribute("stops", stops);
+		model.addAttribute("totalPrice", totalPrice);
 		
 		return "flight/search-result-noUser";
 		
 	}
 
-	private void searchFilter(String cityOne, String cityTwo, String[] brands, Model model, Date date, Integer[] stops) {
+	private void searchFilter(String cityOne, String cityTwo, String[] brands, Model model, Date date, Integer[] stops, Integer[] totalPrice, Integer infantNum, String[] activeTime) {
 		String brand1 = "";
 		String brand2 = "";
 		Integer stop0 = null;
 		Integer stop1 = null;
 		Integer stop2 = null;
 		Integer stop3 = null;
-		
-		if (brands.length == 2 && stops.length == 1) {
+		Integer priceTotal = null;
+		String[] combainedTime = null;
+
+		if (brands.length == 2 && stops.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			brand1 = brands[1];
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(1000000);
-		} else if (brands.length == 3 && stops.length == 1) {
+		} else if (brands.length == 3 && stops.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			brand1 = brands[1];
-			brand2 = brands[2];
+			brand2 = brands[2];  
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(2000000);
-		} else if (stops.length == 2 && brands.length == 1) {
+		} else if (stops.length == 2 && brands.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			brand1 = "";
 			brand2 = "";
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(3000000 + " " + listProductDetailsBrand);
-		} else if (stops.length == 3 && brands.length == 1) {
+		} else if (stops.length == 3 && brands.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = stops[2];
 			brand1 = "";
 			brand2 = "";
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(3000000 + " " + listProductDetailsBrand);
-		} else if (stops.length == 2 && brands.length == 2) {
+		} else if (stops.length == 2 && brands.length == 2 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			brand1 = brands[1];
 			brand2 = "";
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(4000000 + " " + listProductDetailsBrand);
-		} else if (stops.length == 3 && brands.length == 2) {
+		} else if (stops.length == 3 && brands.length == 2 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = stops[2];
 			brand1 = brands[1];
 			brand2 = "";
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(4000000 + " " + listProductDetailsBrand);
-		} else if (stops.length == 3 && brands.length == 3) {
+		} else if (stops.length == 3 && brands.length == 3 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = stops[2];
 			brand1 = brands[1];
 			brand2 = brands[2];
 			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
 			model.addAttribute("listProducts", listProductDetailsBrand);
-			System.out.println(4000000 + " " + listProductDetailsBrand);
+		} else if (stops.length == 2 && brands.length == 3 && totalPrice[1] == null && activeTime.length == 1) {
+			stop0 = stops[1];
+			stop1 = null;
+			brand1 = brands[1];
+			brand2 = brands[2];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 1 && brands.length == 1 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTotalPriceADT(cityOne, cityTwo, date, priceTotal);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 1 && brands.length == 2 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				brand1 = brands[1];
+				brand2 = "";
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandTotalPriceADT(cityOne,
+						cityTwo, date, brand1, brand2, priceTotal);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 2 && brands.length == 1 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				stop0 = stops[1];
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStopNumTotalPriceADT(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 2 && brands.length == 2 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				stop0 = stops[1];
+				brand1 = brands[1];
+				brand2 = "";
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 3 && brands.length == 2 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				stop0 = stops[1];
+				stop1 = stops[2];
+				brand1 = brands[1];
+				brand2 = "";
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 2 && brands.length == 3 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				stop0 = stops[1];
+				brand1 = brands[1];
+				brand2 = brands[2];
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 3 && brands.length == 3 && activeTime.length == 1) {
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				stop0 = stops[1];
+				stop1 = stops[2];
+				brand1 = brands[1];
+				brand2 = brands[2];
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] == null && brands.length == 1) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTime(cityOne, cityTwo, date, convertedArrTime1, convertedArrTime2);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] == null && brands.length == 1) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeStopNum(cityOne, cityTwo, date, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] == null && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrand(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADT(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePrice(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] == null && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			stop0 = stops[1];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] == null  && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			stop0 = stops[1];
+			stop1 = stops[2];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] == null && brands.length == 3) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			brand2 = brands[2];
+			stop0 = stops[1];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+		} else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] == null && brands.length == 3) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			brand2 = brands[2];
+			stop0 = stops[1];
+			stop1 = stops[2];
+			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetailsBrand);
+
+			
+		}	 else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrand(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrand(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 1 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeStopNumPriceADT(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 1) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeStopNumPrice(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+				
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			brand2 = brands[2];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		}  else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 2) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 3 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			brand1 = brands[1];
+			brand2 = brands[2];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 3) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			brand1 = brands[1];
+			brand2 = brands[2];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		}  else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 3 && infantNum == 0) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			brand2 = brands[2];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
+		}  else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 3) {
+			combainedTime = activeTime[1].split(":", 2);
+			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
+			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
+			stop0 = stops[1];
+			stop1 = stops[2];
+			brand1 = brands[1];
+			brand2 = brands[2];
+			priceTotal = totalPrice[1];
+			if (priceTotal != null) {
+				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetailsBrand);
+			}
 		}
 	}
 
@@ -239,6 +531,14 @@ public class SearchHistoryController {
 			City city1 = cityRepo.getCityByName(cityOne);
 		    City city2 = cityRepo.getCityByName(cityTwo);
 		    
+		    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+		    String strDate = dateFormat.format(date);
+		    String sort = "pnr";
+		    String brand = "";
+		    Integer stop = 0;
+		    String activeTime = "active";
+		    String arrayPrice = "0,0";
+		    
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
 				customer = customerService.getByEmail(email);
@@ -246,7 +546,7 @@ public class SearchHistoryController {
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				System.out.println("Last Value of Search: " + searchId);
-				return "redirect:/flight_search_" + searchId;
+				return "redirect:/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
 				customer = customerService.getByEmail(email);
@@ -254,14 +554,11 @@ public class SearchHistoryController {
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				System.out.println("Last Value of Search: " + searchId);
-				return "redirect:/flight_search_" + searchId;
+				return "redirect:/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 			}else {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-			    String strDate = dateFormat.format(date);
-			    String sort = "pnr";
-			    String brand = "";
-			    Integer stop = 0;
-				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop;
+			    Integer totalPrice = 0;
+				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ totalPrice +"_"+ activeTime;
 			}
 			
 	}
