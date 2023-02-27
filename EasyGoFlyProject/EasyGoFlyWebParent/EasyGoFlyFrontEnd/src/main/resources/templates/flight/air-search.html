@@ -240,7 +240,7 @@ th:fragment="air-search">
                             <div class="col-md-5 col-12" style=" float: left; ">
                                 
                                 <div class="col-md-6 col-6 aligner form-floating" id="aligner3">
-                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" placeholder="Depurture City" list="cityOneList" oninput="checkCityCodeMatch(document.getElementById('cityTwo'))">
+                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" placeholder="Depurture City" list="cityOneList" oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
                                     <datalist id="cityOneList">
 										<th:block th:each="city : ${cities}">
 											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
@@ -249,7 +249,7 @@ th:fragment="air-search">
                                     <label class="labelStyle" for="cityOne"><i class="fa fa-circle-o-notch fa-spin"></i> From</label>
                                 </div>
                                 <div class="col-md-6 col-6 aligner form-floating" id="aligner4">
-                                    <input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)">
+                                    <input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" required>
                                     <datalist id="cityTwoList">
 										<th:block th:each="city : ${cities}">
 											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
@@ -263,10 +263,10 @@ th:fragment="air-search">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
-                                    <input type="date" class="form-control input_calender" name="date" id="floatingInput" >
+                                    <input type="date" class="form-control input_calender" name="date" id="floatingInput" required>
                                     
                                 </div>
-                                <div class="col-md-4 col-6 aligner" id="input_roundtrip">
+                                <div class="col-md-4 col-6 aligner" ><!-- id="input_roundtrip" -->
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
                                     <input type="date" class="form-control input_calender" id="floatingInput" disabled>
                                     
