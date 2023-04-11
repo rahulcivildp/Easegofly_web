@@ -22,7 +22,7 @@ import com.easygofly.entity.exception.UserNotFoundException;
 @Transactional
 public class UserService {
 	
-	public static final int USER_PER_PAGE = 6;
+	public static final int USER_PER_PAGE = 10;
 	
 	@Autowired
 	private UserRepository userRepo;

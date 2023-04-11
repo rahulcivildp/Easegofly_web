@@ -346,17 +346,13 @@ input:checked+br+label {
 				<div id="tabs" class="col-12">
 					<ul class="text-center" id="adjusted">
 						<li class="tabss shadow activated" id="flight"><a
-							href="${pageContext.request.contextPath}"><i
-								class="fa fa-bath" aria-hidden="true"></i><br>Flight</a></li>
+							href="${pageContext.request.contextPath}"><i class="fa fa-solid fa-plane"></i><br>Flight</a></li>
 						<li class="tabss shadow" id="train"><a
-							th:href="@{/hotel}"><i
-								class="fa fa-id-card" aria-hidden="true"></i><br>Hotel</a></li>
+							th:href="@{/hotel}"><i class="fa fa-solid fa-bed"></i><br>Hotel</a></li>
 						<li class="tabss shadow" id="hotel"><a
-							href="${pageContext.request.contextPath}/hotel"><i
-								class="fa fa-snowflake-o" aria-hidden="true"></i><br>Bus</a></li>
+							href="${pageContext.request.contextPath}/hotel"><i class="fa fa-solid fa-bus"></i><br>Bus</a></li>
 						<li class="tabss shadow" id="holidays"><a
-							href="${pageContext.request.contextPath}"><i
-								class="fa fa-handshake-o" aria-hidden="true"></i><br>Holidays</a></li>
+							href="${pageContext.request.contextPath}"><i class="fa fa-solid fa-champagne-glasses"></i><br>Holidays</a></li>
 					</ul>
 				</div>
 				<div th:replace="flight/air-search :: air-search"></div>

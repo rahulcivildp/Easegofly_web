@@ -92,8 +92,8 @@ public class ProductDetailService {
 		
 		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityStopNumber(date, cityOne, cityTwo, stop0, stop1, stop2, stop3);
 		return productDetails;
-	} 
-	
+	}  
+	 
 	public List<ProductDetail> findAllFlightsByTotalPrice(String cityOne, String cityTwo, Date date, Integer totalPrice) {
 		float priceTotal = (float) totalPrice;
 		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCitySelectedPrice(date, cityOne, cityTwo, priceTotal);

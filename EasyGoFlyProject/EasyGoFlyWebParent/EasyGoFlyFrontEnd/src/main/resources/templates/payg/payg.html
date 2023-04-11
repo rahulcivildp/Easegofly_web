@@ -1,0 +1,191 @@
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+  <head>
+	<meta charset="utf-8">
+    <meta name="Payg" content="Payg">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/payg.css}" >
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+  <section class="hero is-white">
+	  <nav class="navbar is-transparent">
+		<div class="navbar-brand">
+		  <a class="navbar-item" href="javascript:void(0)">			
+			<h4 href="javascript:void(0);" class="subtitle"><strong>PayG</strong></h4>
+		  </a>
+		  <div id="navbar-burger-id" class="navbar-burger burger" data-target="navbar-menu-id">
+			<span></span>
+			<span></span>
+			<span></span>
+		  </div>
+		</div>
+	  </nav>
+	</section>
+	<section class="hero is-primary is-bold is-large">
+	<div class="main_form">	
+      <div class="container">
+      <div class="row"  id="response"></div>
+      <div class="row"  >
+          <form method="post" id="form">
+            <div class="row">
+              <div style="clear:both" class="col-md-12 col-sm-12">
+                <p> Order Details <span class="required">*</span> </p>
+                <div class="col-md-6 col-sm-6">
+                  <div class="address"><input type="text" name="OrderAmount" placeholder="OrderAmount*" required /> </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                  <div class="address"><input type="text" name="OrderType" placeholder="OrderType"> </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div style="clear:both" class="col-md-12 col-sm-12">
+                <p> Order Amount data value equal to order amount </p>
+                <div class="col-md-6 col-sm-6">
+                  <div class="address"><input type="text" name="OrderAmountData[AmountTypeDesc]" placeholder="AmountTypeDesc"> </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                  <div class="address"><input type="text" name="OrderAmountData[Amount]" placeholder="Amount"> </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div style="clear:both" class="col-md-12 col-sm-12">
+                <p> Customer Details </p>
+                <input type="hidden" name="test" value="1">
+                <input type="hidden" name="CustomerData[CustomerId]" value="152433">
+                <div class="col-md-12 col-sm-12">
+                  <div class="order_date"><input class="customer" type="text" name="CustomerData[CustomerNotes]" placeholder="CustomerNotes"></div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="order_date"><input class="name" type="text" name="CustomerData[FirstName]" placeholder="FirstName * " required></div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="order_date"><input class="name" type="text" name="CustomerData[LastName]" placeholder="LastName *" required></div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="order_date"><input class="name" type="text" name="CustomerData[MobileNo]" placeholder="MobileNo * " required></div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="order_date"><input class="name" type="email" name="CustomerData[Email]" placeholder="Email *" required></div>
+                </div>
+                <div class="col-md-12 col-sm-12"><select name="CustomerData[EmailReceipt]">
+                    <option value="">EmailReceipt</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                  </select>
+				</div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[BillingAddress]" placeholder="BillingAddress"></div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[BillingCity]" placeholder="BillingCity"></div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[BillingState]" placeholder="BillingState"></div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[BillingCountry]" placeholder="BillingCountry"></div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[BillingZipCode]" placeholder="BillingZipCode"></div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingFirstName]" placeholder="ShippingFirstName"></div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingLastName]" placeholder="ShippingLastName"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingAddress]" placeholder="ShippingAddress"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingCity]" placeholder="ShippingCity"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingState]" placeholder="ShippingState"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingCountry]" placeholder="ShippingCountry"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingZipCode]" placeholder="ShippingZipCode"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="CustomerData[ShippingMobileNo]" placeholder="ShippingMobileNo"> </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div style="clear:both" class="col-md-12 col-sm-12">
+                <p> Integration Data </p>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="IntegrationData[UserName]" placeholder="UserName"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="IntegrationData[Source]" placeholder="Source"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="IntegrationData[IntegrationType]" placeholder="IntegrationType"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="IntegrationData[HashData]" placeholder="HashData"> </div>
+                </div>
+                <div class="col-md-2 col-sm-6">
+                  <div class="address"><input type="text" name="IntegrationData[PlatformId]" placeholder="PlatformId"></div>
+                </div>
+             
+              </div>
+            </div>    
+			<div class="row">&nbsp;</div>
+			<div style="clear:both;padding:0px;" class="col-md-12 col-sm-12">
+				<div class="col-md-4">
+					<button onclick="save()" class="btn btn-info btn-lg" type="button" name="submit" style="display: block;color:#00d1b2;background-color:#FFF;">Submit</button>
+				</div>
+				
+			</div>
+			<div class="row">&nbsp;</div>
+			<div class="row">&nbsp;</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script>
+function save(){
+	$("#response").empty();
+	$(".help-block").empty();
+	var url = "./payg";
+	$.ajax({
+		url: url,
+		type: "POST",
+		data: $('#form').serialize(),
+		dataType: "JSON",
+		beforeSend:function(){
+			$("button").prop("disabled",true);
+		},
+		success: function (data)
+		{
+			$("button").prop("disabled",false);
+			if(data){
+				var html="";;
+				$.each(data, function (key, val) {
+				    html += key+":"+val+", ";
+				});
+				
+				$("#response").html(html);
+				$('#form')[0].reset();
+			}else{
+				alert("Ooops! Something went wrong.");
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+			
+		}
+	});
+}
+</script>
+</html>

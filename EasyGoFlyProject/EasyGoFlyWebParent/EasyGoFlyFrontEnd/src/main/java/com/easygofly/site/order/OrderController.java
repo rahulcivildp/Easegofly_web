@@ -1,13 +1,23 @@
 package com.easygofly.site.order;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ccavenue.security.AesCryptUtil;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
@@ -32,11 +43,12 @@ import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
-import com.easygofly.site.setting.PaymentSettingBag;
-import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
-import com.razorpay.RazorpayClient;
+import com.easygofly.site.zaakpay.ChecksumGenerator;
+import com.easygofly.site.zaakpay.Config;
+import com.easygofly.site.zaakpay.Transaction;
+import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
 @Controller
 public class OrderController {
@@ -50,7 +62,6 @@ public class OrderController {
 	@Autowired private OrderRepository orderRepo;
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailService productService;
-	@Autowired private SettingService settingService;
 	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
@@ -115,7 +126,7 @@ public class OrderController {
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			Model model) {
+			Model model, HttpServletRequest request) throws UnsupportedEncodingException {
 		
 		String email; 
 		Customer customer; 
@@ -137,31 +148,52 @@ public class OrderController {
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
-		PaymentSettingBag paymentSettings = settingService.getPaymentSettings();
-		String razorpayKey = paymentSettings.getKeyId();
-		//Payment Razorpay section.
-		RazorpayClient client = null;
-		String orderId = null;
+		Order order = orderRepo.findByCartItemOrder(item_id);
+		
+		/* ------ ZAAKPAY -------- */ /**/
+		Date date = Calendar.getInstance().getTime();  
+	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+	    DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+	    String strDate1 = dateFormat1.format(date);
+	    String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
+		Integer intAmount = (int) (checkoutInfo.getPaymentTotal() * 100);
+		String amount = "" + intAmount;
+		//String amount = "100";
+
+		Transaction transaction = new Transaction();
 		
 		try {
-			client = new RazorpayClient(paymentSettings.getKeyId(), paymentSettings.getSecretKey());
+			ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
 			
-			JSONObject options = new JSONObject();
-			options.put("amount", "100");
-			options.put("currency", "INR");
-			options.put("receipt", "zxr456");
-			options.put("payment_capture", true);
-			com.razorpay.Order order = client.orders.create(options);
-			orderId = order.get("id");
+			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
+			model.addAttribute("requestUrl", processPayment.getRequestUrl());
+			model.addAttribute("checksum", processPayment.getChecksum());
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		System.out.println("Order ID: " + orderId);
-		///..........
 		
-		model.addAttribute("razorpayKey", razorpayKey);
+		/* ------ CCAVENUE -------- */ /*
+		String accessCode= "AVJC30KC30BM66CJMB";		//Put in the Access Code in quotes provided by CCAVENUES.
+		String workingKey = "E99274310106A9AF3DB4AF4D3073863E";    //Put in the 32 Bit Working Key provided by CCAVENUES.  
+		Enumeration enumeration=request.getParameterNames();
+		String ccaRequest="", pname="", pvalue="";
+		while(enumeration.hasMoreElements()) {
+		     pname = ""+enumeration.nextElement();
+		     pvalue = request.getParameter(pname);
+		     ccaRequest = ccaRequest + pname + "=" + URLEncoder.encode(pvalue,"UTF-8") + "&";
+		}
+		AesCryptUtil aesUtil=new AesCryptUtil(workingKey);
+		String encRequest = aesUtil.encrypt(ccaRequest);
+		model.addAttribute("encRequest", encRequest);
+		model.addAttribute("accessCode", accessCode);
+		*/
+		
+		model.addAttribute("order_id", order.getId());
 		model.addAttribute("checkoutInfo", checkoutInfo);
 		model.addAttribute("travelers", travelers);
 		model.addAttribute("item", item);
@@ -171,5 +203,53 @@ public class OrderController {
 		return "order/flight_order";
 	}
 	
+	/**/
 	
+	@GetMapping("/zaakpay/response")
+	public String zaakpayResponse (HttpServletRequest request, Model model) throws Exception {
+		Transaction transaction = new Transaction();
+	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
+	    String checksumString = "" ;
+	    for (String param: transaction.getResponseParameters()) {
+			model.addAttribute("parameter", request.getParameter(param));
+			model.addAttribute("checksum", request.getParameter("checksum"));
+			
+	        checksumString=checksumString+param+"="+request.getParameter(param);
+	        checksumString=checksumString+"&";
+	        //This will create the checksum string against every parameter.
+	    }
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    
+		model.addAttribute("verifyChecksum", verifyChecksum);
+		model.addAttribute("responseParameters", transaction.getResponseParameters());
+		
+		return "zaakpay/response";
+	}
+
+	/*
+	@PostMapping("/payg")
+	public void payg(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		com.easygofly.site.payg.Order ordr = new com.easygofly.site.payg.Order();
+		Process process = ordr.create(request);
+		
+		InputStream is = process.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        String line,output="";
+        while ((line = br.readLine()) != null) {
+        	output += line;
+        }
+      
+        System.out.println(request.toString());
+        
+		response.getWriter().write(output);
+	}*/
+	
+	/*
+	@PostMapping("/phonepe")
+	public void phonepe() throws NoSuchAlgorithmException, IOException, InterruptedException {
+		Phonepe phpe = new Phonepe();
+		phpe.authentication();
+	}
+	*/
 }

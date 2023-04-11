@@ -143,6 +143,11 @@
                         <li class="li_4 border" id="add_private_fare">
                             <p><i class="fa fa-solid fa-caret-right float-left"></i>Add Private Fare</p>
                         </li>
+                        <th:block sec:authorize="hasAuthority('Admin')">
+                        <li class="li_4 border" id="add_private_user_fare">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Add Private Fare (Agent)</p>
+                        </li>
+                        </th:block>
                         <li class="li_4 border" id="private_fare_list">
                             <p><i class="fa fa-solid fa-caret-right float-left"></i>Private Fare List</p>
                         </li>
@@ -175,10 +180,13 @@
 			<div th:replace="products/flightFare/view_private_fare :: content"></div>
         </div>
         <div class="col-md-10 hidden-groups" id="new_content4" style="padding: 0; display: block;">
-        	
 			<div th:replace="products/flightFare/flightList :: content"></div>
         </div>
-
+        <th:block sec:authorize="hasAuthority('Admin')">
+        <div class="col-md-10 hidden-groups" id="new_content5" style="padding: 0; display: none;">
+			<div th:replace="products/flightFare/private_fare_user_form :: content"></div>
+        </div>
+		</th:block>
     </div>
 </div>
 		
@@ -207,6 +215,10 @@
 	    $("#private_fare_list").click(function() {
 	    	$(".hidden-groups").css("display", "none");
 	        $("#new_content3").css("display", "block");
+	    });
+	    $("#add_private_user_fare").click(function() {
+	    	$(".hidden-groups").css("display", "none");
+	        $("#new_content5").css("display", "block");
 	    });
     
     });

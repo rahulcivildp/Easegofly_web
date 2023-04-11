@@ -516,17 +516,28 @@ body {
 			 	
 			       <div class="col-4 text-center">
 			          <a th:if="${lastValue1} != null" th:href="@{'/flight_search_' + ${lastValue1.id} + '_pnr__0_0,0_active'}">
-			          	<p style=" position: relative; top:10px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
+			          	<div style="display: flex; justify-content: center;">
+				          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
+			          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
+			          	</div>
+			          
+			          
 			          </a>
 			       </div>
 			       <div class="col-4 text-center">
 			          <a th:if="${lastValue2} != null" th:href="@{'/flight_search_' + ${lastValue2.id} + '_pnr__0_0,0_active'}">
-			          	<p style=" position: relative; top:10px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
+			          	<div style="display: flex; justify-content: center;">
+				          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
+				          	<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
+			          	</div>
 			          </a>
 			       </div>
 			       <div class="col-4 text-center">
 			          <a th:if="${lastValue3} != null" th:href="@{'/flight_search_' + ${lastValue3.id} + '_pnr__0_0,0_active'}">
-			          	<p style=" position: relative; top:10px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
+			          	<div style="display: flex; justify-content: center;">
+				          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
+			          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
+			          	</div>
 			          </a>
 			       </div>
 		        
@@ -1100,8 +1111,8 @@ body {
 	        		<div class="col-6" style="margin: 10px 0;">
 	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
 	        				<a style="cursor: pointer;" th:href="@{/shimla_view}">
-							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0; padding-bottom: 32px;">
-							      <img th:src="@{/images/deals/lakshay-saini-5lpFn4a3qaQ.jpg}" style="width: 100%;">
+							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
+							      <img th:src="@{/images/deals/lakshay-saini-5lpFn4a3qaQ222.jpg}" style="width: 100%;">
 							    </div>
 							    <div class="specialoffer_next">
 			                       <h3>Himachal Pradesh</h3>
@@ -1177,10 +1188,10 @@ body {
                         <div class="next_trip">
                             <div class="content" style="border-radius: 10px;">
                                 <div class="content-overlay"></div>
-                                <img class="content-image" th:src="@{/images/deals/1-35r.jpg}" style="width: 100%;">
+                                <img class="content-image" th:src="@{/images/deals/beachFun2.jpg}" style="width: 100%;">
 
                                 <div class="content-details fadeIn-bottom">
-                                    <h3 class="content-title">Goa, India</h3>
+                                    <h3 class="content-title">Kanyakumari, India</h3>
                                     <a class="btn btn-primary" >Book Now</a>
                                 </div>
                     

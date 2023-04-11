@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.City;
@@ -556,9 +557,8 @@ public class SearchHistoryController {
 				System.out.println("Last Value of Search: " + searchId);
 				return "redirect:/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 			}else {
-			    Integer totalPrice = 0;
 				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
-						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ totalPrice +"_"+ activeTime;
+						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 			}
 			
 	}
@@ -579,4 +579,12 @@ public class SearchHistoryController {
 		Integer searchId = lastValue.getId();
 		return searchId;
 	}
+	
+	@GetMapping("/process")
+    @ResponseBody
+    public String process() throws InterruptedException {
+        // simulate a long-running process
+        Thread.sleep(5000);
+        return "process-complete";
+    }
 }

@@ -74,6 +74,7 @@
 						<th class="hideable-column" width="40%">
 							<th th:replace="fragments :: column_link('products', 'name','Product Name', 'tag')" />
 						</th>
+						<th>Create Time</th>
 						<th>Brands</th>
 						<th>Segments</th>
 						<th>Created By</th>
@@ -84,15 +85,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="product : ${listProductsAdmin}">
+					<tr th:each="product : ${listAll}">
 					
 						<td class="hideable-column">[[${product.id}]]</td>
 						<td class="hideable-column">
 						<a title="View details" class="styleLink styleLinkHover" th:href="@{'/products/flights/' + ${product.id}}">[[${product.name}]]</a>
 						</td>
+						<td>[[${#dates.format(product.updatedTime, 'E, HH:mm, dd MM yyyy')}]]</td>
 						<td th:each="brands : ${product.brands}">[[${brands.name}]]</td>
 						<td>[[${product.cityOne}]]-[[${product.cityTwo}]]</td>
-						<td sec:authentication="principal.fullName"></td>
+						<td th:each="user : ${product.user}">[[${user.firstName}]] [[${user.lastName}]]</td>
 						<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
 							<td>
 								<div th:replace="fragments :: enabled(${product.enabled}, ${product.id}, 'products')"></div>
@@ -115,7 +117,7 @@
 			</table>
 		</div>
 		<div class="less-details">
-			<div th:each="product : ${listProductsAdmin}" class="row m-1">
+			<div th:each="product : ${listAll}" class="row m-1">
 				<div class="col-5">
 					
 				</div>
@@ -132,7 +134,7 @@
 				</div>
 			</div>
 		</div>
-		<div th:replace="fragments :: pagination_product('products', 'Products', ${totalItems}, ${endCount}, ${startCount}, ${totalPages})"></div>
+		
 		
 		</th:block>
 		
@@ -207,6 +209,7 @@
 						<th class="hideable-column" width="40%">
 							<th th:replace="fragments :: column_link('products', 'name','Product Name', 'tag')" />
 						</th>
+						<th>Create Time</th>
 						<th>Brands</th>
 						<th>Segments</th>
 						<th>Created By</th>
@@ -223,9 +226,10 @@
 						<td class="hideable-column">
 						<a title="View details" class="styleLink styleLinkHover" th:href="@{'/products/flights/' + ${product.id}}">[[${product.name}]]</a>
 						</td>
+						<td>[[${#dates.format(product.updatedTime, 'E, HH:mm, dd MM yyyy')}]]</td>
 						<td th:each="brands : ${product.brands}">[[${brands.name}]]</td>
 						<td>[[${product.cityOne}]]-[[${product.cityTwo}]]</td>
-						<td sec:authentication="principal.fullName"></td>
+						<td th:each="user : ${product.user}">[[${user.firstName}]] [[${user.lastName}]]</td>
 						<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
 							<td>
 								<div th:replace="fragments :: enabled(${product.enabled}, ${product.id}, 'products')"></div>
@@ -265,9 +269,7 @@
 				</div>
 			</div>
 		</div>
-		
-			<div th:replace="fragments :: pagination_product('products', 'Products', ${totalItems2}, ${endCount2}, ${startCount2}, ${totalPages2})"></div>
-		
+
 		</th:block>
 		
 		

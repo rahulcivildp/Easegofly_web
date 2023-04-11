@@ -46,6 +46,11 @@ public class MainController {
 		return "index";
 	}
 
+	@GetMapping("/loading")
+	public String loading() {
+		return "loading";
+	}
+	
 	private void historyPart(Model model, Customer customer) {
 		List<SearchHistory> searches =  customer.getSearchHistory();
 		

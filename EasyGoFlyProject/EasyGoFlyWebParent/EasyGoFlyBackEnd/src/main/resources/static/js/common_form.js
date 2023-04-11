@@ -15,6 +15,7 @@ $(document).ready(function(){
 		$("textarea[name='ADMIN_ADDRESS']").richText();
 		$("#customerVerificationContent").richText();
 		$("#ORDER_CONFIRMATION_CONTENT").richText();
+		$("textarea[name='REFUND_CANCELLATION']").richText();
 		
 		var length = $("textarea[name='FAQ']").val().length;
 		$("#no-1").text(length);

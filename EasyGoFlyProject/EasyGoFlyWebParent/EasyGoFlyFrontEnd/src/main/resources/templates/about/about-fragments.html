@@ -184,6 +184,16 @@ body {
                 $("#9m").addClass("active");
             }
             
+            if (window.location.href == baseURL + "about#no-10") {
+                $("#no-10").addClass("activate");
+                $("#10m").addClass("active");
+            }
+            
+            if (window.location.href == baseURL + "about#no-10") {
+                $("#no-11").addClass("activate");
+                $("#11m").addClass("active");
+            }
+            
             $("li").click(function(e) {
 				$("li").removeClass("active");
 				$(this).addClass("active");
@@ -226,6 +236,14 @@ body {
 				$(".content").removeClass("activate");
 				$("#no-9").addClass("activate");
 			});
+			$("#10").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-10").addClass("activate");
+			});
+			$("#11").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-11").addClass("activate");
+			});
 
 			//mobile view
 			$("#1m").click(function() {
@@ -264,6 +282,14 @@ body {
 				$(".content").removeClass("activate");
 				$("#no-9").addClass("activate");
 			});
+			$("#10m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-10").addClass("activate");
+			});
+			$("#11m").click(function() {
+				$(".content").removeClass("activate");
+				$("#no-11").addClass("activate");
+			});
 		});
 	
 </script>
@@ -290,8 +316,12 @@ body {
 				class="menu-text">Payment Security</span></li>
 			<li class="nav-item specialButton" id="8" style="width: 260px;"><i class="fa fa-code-fork"></i><span
 				class="menu-text">Service</span></li>
-			<li class="nav-item specialButton" id="9" style="width: 260px;"><i class="fa fa-reply-all"></i><span
+			<li class="nav-item specialButton" id="9" style="width: 260px;"><i class="fa fa-solid fa-phone-volume"></i><span
 				class="menu-text">Customer Support</span></li>
+			<li class="nav-item specialButton" id="10" style="width: 260px;"><i class="fa fa-reply-all"></i><span
+				class="menu-text">Refund & Cancellation</span></li>
+			<li class="nav-item specialButton" id="11" style="width: 260px;"><i class="fa fa-regular fa-building-columns"></i><span
+				class="menu-text">Bank Details</span></li>
 	  </ul>
 	</div>
 </div>
@@ -316,9 +346,14 @@ body {
 					class="menu-text">Payment Security</span></li>
 				<li class="nav-item" id="8m"><i class="fa fa-code-fork"></i><span
 					class="menu-text">Service</span></li>
-				<li class="nav-item" id="9m"><i class="fa fa-reply-all"></i><span
+				<li class="nav-item" id="9m"><i class="fa fa-solid fa-phone-volume"></i><span
 					class="menu-text">Customer Support</span></li>
+				<li class="nav-item" id="10m"><i class="fa fa-reply-all"></i><span
+					class="menu-text">Refund & Cancellation</span></li>
+				<li class="nav-item" id="11m"><i class="fa fa-regular fa-building-columns"></i><span
+					class="menu-text">Bank Details</span></li>
 			</ul>
+	  <br>
 		</nav>
 		<div class="inner_conetnt col-md-9 col-12">
 			<div class="content col" id="no-1">
@@ -351,6 +386,14 @@ body {
 			</div>
 			<div class="content col" id="no-9">
 				<div th:utext="${CONTACT_US}"></div>
+				<div style="margin-bottom: 15px;"></div>
+			</div>
+			<div class="content col" id="no-10">
+				<div th:utext="${REFUND_CANCELLATION}"></div>
+				<div style="margin-bottom: 15px;"></div>
+			</div>
+			<div class="content col" id="no-11">
+				<div th:utext="${BANK}"></div>
 				<div style="margin-bottom: 15px;"></div>
 			</div>
 		</div>

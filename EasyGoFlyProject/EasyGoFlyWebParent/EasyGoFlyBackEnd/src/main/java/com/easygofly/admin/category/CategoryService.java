@@ -22,7 +22,7 @@ import com.easygofly.entity.exception.CategoryNotFoundException;
 @Transactional
 public class CategoryService {
 	
-	public static final int ITEMS_PER_PAGE = 12;
+	public static final int ITEMS_PER_PAGE = 100;
 	
 	@Autowired
 	private CategoryRepository categoryRepo;

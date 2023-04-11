@@ -69,6 +69,7 @@ public class ProductController {
 		Page<Product> productPageAdmin = productService.listByPage(pageNum, sortField, sortDir, keyword, categoryId);
 		List<Product> listProducts = productPage.getContent();
 		List<Product> listProductsAdmin = productPageAdmin.getContent();
+		List<Product> listAll = productService.listAll();
 		
 		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
 		
@@ -90,6 +91,9 @@ public class ProductController {
 			model.addAttribute("categoryId", categoryId);
 		}
 		
+		List<User> users = (List<User>) userRepo.findAll();
+
+		model.addAttribute("users", users);
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("totalPages", productPageAdmin.getTotalPages());
 		model.addAttribute("startCount", startCount);
@@ -101,6 +105,7 @@ public class ProductController {
 		model.addAttribute("totalItems2", productPage.getTotalElements());
 		model.addAttribute("listProducts", listProducts);
 		model.addAttribute("listProductsAdmin", listProductsAdmin);
+		model.addAttribute("listAll", listAll);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSort", reverseSort);
@@ -151,7 +156,25 @@ public class ProductController {
 		
 		return "redirect:/products";
 	}
-
+	
+	@PostMapping("/products/user-save")
+	public String saveProductByUser(Product products, RedirectAttributes redirectAttributes,  
+			@AuthenticationPrincipal EasyGoFlyUserDetails loggedUser, @RequestParam(name = "email") String email) throws IOException, ProductNotFoundException {
+		
+		User user = userRepo.getUserByEmail(email);
+		if (loggedUser.hasRole("Salesperson")) {
+			Product product = productService.getProductDetails(products.getId());
+			productService.saveProductPrice(products);
+			redirectAttributes.addFlashAttribute("message", "The product price has been saved sucessfully.");
+			return ProductSaveHelper.getRedirectURLtoAffectedUser(product);
+		}
+		
+		productService.saveProduct(products, user);
+		
+		redirectAttributes.addFlashAttribute("message", "The product has been saved sucessfully.");
+		
+		return "redirect:/products";
+	}
 
 	@GetMapping("/products/flights/{id}")
 	public String listFlighPage(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes, @AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) throws ProductNotFoundException {

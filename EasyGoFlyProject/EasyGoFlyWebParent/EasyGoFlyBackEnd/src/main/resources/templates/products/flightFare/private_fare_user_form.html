@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<form th:action="@{/products/user-save}" method="post" th:object="${product}" onsubmit="return(checkNameUnique(this))">
+			
+			<input type="hidden" th:field="*{id}">
+			<input th:if="${product.categories != null}" type="hidden" id="categoryId" th:value="${product.categories.id}">
+			<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
+				<div class="row " style="padding-left: 15px;">
+					<h4>Add Private Fare</h4>
+					<hr style="width: 98% !important;">
+					<div class="form-group col-sm-7" style="margin-bottom: 25px;">
+						<label class="col-form-label">Agent Name* :</label>
+						<div >
+							<input type="text" class="form-control" name="email" required="required" list="user-email">
+							<datalist id="user-email">
+								<th:block th:each="user : ${users}">
+								<option th:value="${user.email}">[[${user.firstName}]] [[${user.lastName}]] <span sec:authentication="principal.authorities"></span></option>
+								</th:block>
+							</datalist>
+						</div>
+					</div>
+					<div class="form-group col-sm-6">
+						<label class="col-form-label">Reference Number* :</label>
+						<div >
+							<input type="text" class="form-control" name="name" th:field="*{name}" required="required">
+						</div>
+					</div>
+					<div class="form-group col-sm-6 row">
+						<div class="col-sm-8">
+							<label class="col-form-label">Journey Class* :</label>
+							<div >
+								<select class="form-control" name="journeyClass" th:field="*{journeyClass}" required="required">
+									<option value="Economy">Economy</option>
+									<option value="Premium Economy">Premium Economy</option>
+									<option value="Business">Business</option>
+									<option value="Premium Business">Premium Business</option>
+									<option value="First Class">First Class</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-check" style="padding-top: 30px; display: flex; justify-content: center;"  >
+							  <input class="form-check-input" type="checkbox" th:field="*{inStock}">
+							  <label class="form-check-label" for="flexRadioDefault2">
+							    &nbsp;In Stock
+							  </label>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="padding-top: 20px;">
+						<div class="form-group col-sm-5 row">
+							<label class="col-sm-1 col-form-label">Brand:</label>
+							<div class="col-sm-4">
+								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
+								<select th:field="*{brands}" class="form-control">
+									<option value="0">None Selected</option>
+									<th:block th:each="brands : ${listBrand}">
+										<option th:value="${brands.id}">[[${brands.name}]]</option>
+									</th:block>
+								</select>
+								</th:block>
+								<th:block sec:authorize="hasAuthority('Salesperson')" >
+									<input type="text" class="form-control"
+										th:value="${product.brands.name}" readonly disabled>
+								</th:block>
+							</div>
+						</div>
+						<br>
+						<div class="form-group col-sm-5 row">
+							<label class="col-sm-2 col-form-label">Category:</label>
+							<div class="col-sm-4">
+								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
+									<th:block th:if="${product.categories != null}">
+										<select th:field="*{categories}" class="form-control">
+											<th:block th:each="categories : ${product.brands.categories}">
+												<option th:value="${categories.id}">[[${categories.name}]]</option>
+											</th:block>
+										</select>
+									</th:block>
+									<th:block th:if="${product.categories == null}">
+										<select th:field="*{categories}" class="form-control">
+											<th:block th:each="categories : ${listCategory}">
+												<option th:value="${categories.id}">[[${categories.name}]]</option>
+											</th:block>
+										</select>
+									</th:block>
+								</th:block>
+								<th:block sec:authorize="hasAuthority('Salesperson')" >
+									<input type="text" class="form-control"
+										th:value="${product.categories.name}" readonly disabled>
+								</th:block>
+							</div>
+						</div>
+		</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-sm-4 text-center" style="margin-top: 10px; ">
+						<input type="checkbox" name="passportADT" th:field="*{passportADT}"> Require Passport For ADT ( Adult )
+					</div>
+					<div class="col-sm-4 text-center" style="margin-top: 10px; ">
+						<input type="checkbox" name="passportCHD" th:field="*{passportCHD}"> Require Passport For CHD ( Child )
+					</div>
+					<div class="col-sm-4 text-center" style="margin-top: 10px; ">
+						<input type="checkbox" name="passportINF" th:field="*{passportINF}"> Require Passport For INF( Infant )
+					</div>
+					<div class="col-sm-4 text-center" style="margin-top: 10px; ">
+						<input type="checkbox" name="dob_ADT" th:field="*{dob_ADT}"> Require Date Of Birth For ADT ( Adult )
+					</div>
+					<div class="col-sm-4 text-center" style="margin-top: 10px; ">
+						<input type="checkbox" name="dobCHD" th:field="*{dobCHD}"> Require Date Of Birth For CHD ( Child )
+					</div>
+					<div class="col-sm-4 text-center" style="margin-top: 10px; ">
+						<input type="checkbox" name="dobINF" th:field="*{dobINF}"> Require Date Of Birth For INF ( Infant )
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
+				<div class="row " style="padding-left: 15px;">
+					<h4>Fare Information</h4>
+					<hr style="width: 98% !important;">
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Origin Code* :</label>
+						<div >
+							<input type="text" class="form-control" name="cityOne" th:field="*{cityOne}" required="required" list="cityOneList" oninput="checkCityCodeMatch(document.getElementById('cityTwo'))">
+							<datalist id="cityOneList">
+								<th:block th:each="city : ${cities}">
+									<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+								</th:block>
+							</datalist>
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Destination Code* :</label>
+						<div >
+							<input type="text" class="form-control" name="cityTwo" th:field="*{cityTwo}" required="required" list="cityTwoList" oninput="checkCityCodeMatch(this)">
+							<datalist id="cityTwoList">
+								<th:block th:each="city : ${cities}">
+									<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+								</th:block>
+							</datalist>
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Stops :</label>
+						<div >
+							<select class="form-control" name="stops" th:field="*{stops}" >
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<div class="form-check col" style="padding-top: 30px; display: flex; justify-content: center;" >
+						  <input class="form-check-input" type="checkbox" th:field="*{fundState}">
+						  <label class="form-check-label" for="fundState">
+						    &nbsp;Non-refundable
+						  </label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px; margin-bottom: 25px;">
+				<div class="row " style="padding-left: 15px;">
+					<h4>Segment Details</h4>
+					<hr style="width: 98% !important;">
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Origin Airport Code* :</label>
+						<div >
+							<input type="text" class="form-control" required="required" list="cityOneList1">
+							<datalist id="cityOneList1">
+								<th:block th:each="city : ${cities}">
+									<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+								</th:block>
+							</datalist>
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Destination Airport Code* :</label>
+						<div >
+							<input type="text" class="form-control" required="required" list="cityOneList2">
+							<datalist id="cityOneList2">
+								<th:block th:each="city : ${cities}">
+									<option th:value="${city.code}">[[${city.cityName}]] - [[${city.name}]]</option>
+								</th:block>
+							</datalist>
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Airline Code* :</label>
+						<div >
+							<input type="text" class="form-control" name="airlineCode" th:field="*{airlineCode}">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Duration Time* (In minutes):</label>
+						<div >
+							<input type="number" class="form-control" name="duration" th:field="*{duration}">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Origin Terminal* :</label>
+						<div >
+							<input type="text" class="form-control" name="originTerminal" th:field="*{originTerminal}" required="required">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Destination Terminal* :</label>
+						<div >
+							<input type="text" class="form-control" name="destinationTerminal" th:field="*{destinationTerminal}" required="required">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Craft* :</label>
+						<div >
+							<input type="text" class="form-control" name="craft" th:field="*{craft}" required="required">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Fare Class* :</label>
+						<div >
+							<select class="form-control">
+								<option value="Economy">Economy</option>
+								<option value="Premium Economy">Premium Economy</option>
+								<option value="Business">Business</option>
+								<option value="Premium Business">Premium Business</option>
+								<option value="First Class">First Class</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Fare Base Price* :</label>
+						<div >
+							<input type="number" class="form-control" name="price" th:field="*{price}" required="required">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Baggage (in kg)* :</label>
+						<div >
+							<input type="number" class="form-control" name="baggage" th:field="*{baggage}" required="required">
+						</div>
+					</div>
+					<div class="form-group col-sm-3">
+						<label class="col-form-label">Cabin Baggage (in kg)* :</label>
+						<div >
+							<input type="number" class="form-control" name="cabinBaggage" th:field="*{cabinBaggage}" required="required">
+						</div>
+					</div>
+					
+					<div class="form-group col-sm-12">
+						<label class="col-form-label">Airline Remarks* :</label>
+						<div >
+							<textarea class="form-control" name="remarks" th:field="*{remarks}" required="required"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div >
+				<div class="shadow" style="border-radius: 5px; margin-bottom: 25px !important; width: fit-content; margin: 0 auto;">
+					<input type="submit" value="Submit" class="buttonStyle">
+				</div>
+			</div>
+		</form>
+		
+	</div>
+	
+	<script type="text/javascript">
+	brandModuleURL = "[[@{/brands}]]";
+	moduleURL = "[[@{/products}]]";
+	
+	dropDownBrands = $("#brands");
+	dropDownCategories = $("#categories");
+	
+	$(document).ready(function(){
+		
+		$("#shortDescription").richText();
+		
+		dropDownBrands.change(function(){
+			dropDownCategories.empty();
+			getCategories();
+		});
+		
+		getCategoriesForNewForm();
+		
+	});
+	
+	
+	
+	
+	function getCategoriesForNewForm(){
+		catIdField = $("#categoryId").val();
+		editMode = false;
+		
+		if(catIdField.length){
+			editMode = true;
+		}
+		
+		if(!editMode && catIdField == 0){
+			getCategories();
+		}
+	}
+	
+	function getCategories() {
+		brandId = dropDownBrands.val();
+		url = brandModuleURL + "/" + brandId + "/categories";
+		
+		alert(url);
+		
+		$.get(url, function(responseJson) {
+			$.each(responseJson, function(index, category) {
+				$("<option>").val(category.id).text(category.name).appendTo(dropDownCategories);
+			});
+		})
+	};
+	
+	function checkCityCodeMatch(confirmCityCode) {
+		if(confirmCityCode.value == $("#cityOne").val()) {
+			confirmCityCode.setCustomValidity("Two City code should not match!");
+		} else {
+			confirmCityCode.setCustomValidity("");
+		}
+	}
+	</script>
+	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
+	<script type="text/javascript" th:src="@{/js/product_form.js}"></script>
+</body>
+</html>

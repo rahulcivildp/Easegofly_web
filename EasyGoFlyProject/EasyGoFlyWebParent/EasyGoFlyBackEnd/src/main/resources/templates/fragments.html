@@ -47,7 +47,7 @@
 	<!-- setting page link for pagination. -->
 	<div th:fragment="pagination(property, entityNames)" th:remove="tag"> 
 		<div class="text-center m-1" th:if="${totalItems > 0}">
-			<span>Showing [[${entityNames}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+			<span>Showing [[${entityNames}]] # ([[${startCount}]] - [[${endCount}]]) of [[${totalItems}]]</span>
 		</div>
 		<div class="text-center m-1" th:unless="${totalItems > 0}">
 			<span>No [[${property}]] found</span>
@@ -127,7 +127,7 @@
 	<!-- Footer section -->
 	<div th:fragment="footer" class="text-center">
 			<p>Email: <a href="mailto:support@easegofly.com"> support@easegofly.com</a>, Ph: 8001012134  </p>
-			<p>EaseGoFly Control Panel - Copyright © easegofly</p>
+			<p>EaseGoFly Control Panel - Copyright © easegofly <br>Developed by <a href="https://webkoro.com/" style="text-decoration: none;">Webkoro.com</a></p>
 			<script type="text/javascript" th:src="@{/js/common.js}"></script>
 	</div>
 </body>

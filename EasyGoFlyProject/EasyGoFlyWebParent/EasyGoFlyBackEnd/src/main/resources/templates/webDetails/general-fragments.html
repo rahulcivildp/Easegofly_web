@@ -113,6 +113,24 @@
 			</div>
 			<br>
 			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Refund & Cancellation:</label>
+				<div class="col-sm-10"> 
+					<div class="row">
+						<div class="col-sm-11">
+							<textarea class="form-control mt-1" name="REFUND_CANCELLATION" th:value="${REFUND_CANCELLATION}" >
+								<div th:utext="${REFUND_CANCELLATION}"></div>
+							</textarea>
+						</div>
+						<div class="col-sm-1">
+							Word Count: 
+							<span id="no-2"></span>
+							<p style="color: red;">**Maximum length permissible is 10240.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
 				<label class="col-sm-2 col-form-label">Advertisement Image:</label>
 				<div class="col-sm-10">
 					<img class="img-thumbnail img-fluid" id="thumbnail" th:src="@{${AD_IMAGE}}" alt="Site Logo thumbnail" style="width: 150px; height: 70px;"/>
