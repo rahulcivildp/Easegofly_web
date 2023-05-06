@@ -9,12 +9,14 @@ import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,19 +24,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ccavenue.security.AesCryptUtil;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
+import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.PaymentMethod;
+import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.Setting;
 import com.easygofly.entity.TravellerDetail;
+import com.easygofly.entity.User;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
@@ -43,6 +52,7 @@ import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
@@ -62,6 +72,12 @@ public class OrderController {
 	@Autowired private OrderRepository orderRepo;
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailService productService;
+	@Autowired private SettingService settingService;
+	
+	private String[] parameter = new String[20];
+	private String checksum;
+	private Boolean verifiedChecksum;
+	private String[] responseParameters;
 	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
@@ -159,9 +175,20 @@ public class OrderController {
 		
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
 		Integer intAmount = (int) (checkoutInfo.getPaymentTotal() * 100);
-		String amount = "" + intAmount;
-		//String amount = "100";
+		//String amount = "" + intAmount;
+		String amount = "100";
 
+		//Cookie cookie = request.getCookies().get("JSESSIONID");
+		//String value = cookie.getValue();
+		
+		for (Cookie cookie : request.getCookies()) {
+			if(cookie.getName().equals("JSESSIONID")) {
+				String value = cookie.getValue();
+				model.addAttribute("JSESSIONID", value);
+			}
+		}
+		
+		
 		Transaction transaction = new Transaction();
 		
 		try {
@@ -204,28 +231,104 @@ public class OrderController {
 	}
 	
 	/**/
-	
-	@GetMapping("/zaakpay/response")
-	public String zaakpayResponse (HttpServletRequest request, Model model) throws Exception {
+	@CrossOrigin(origins = {"https://easegofly.com/"})
+	@RequestMapping(value = "/zaakpay/response",
+			method = {RequestMethod.POST})
+	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+		com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
+		
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
 	    String checksumString = "" ;
+	    Integer n= 0;
 	    for (String param: transaction.getResponseParameters()) {
-			model.addAttribute("parameter", request.getParameter(param));
-			model.addAttribute("checksum", request.getParameter("checksum"));
-			
 	        checksumString=checksumString+param+"="+request.getParameter(param);
 	        checksumString=checksumString+"&";
 	        //This will create the checksum string against every parameter.
+	        parameter[n] = request.getParameter(param);
+	        n+=1;
 	    }
+	    for (String string : parameter) {
+	        System.out.println("Array Parameters: " + string);
+		}
 	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    verifiedChecksum = verifyChecksum;
+	    checksum = request.getParameter("checksum");
+	    responseParameters = transaction.getResponseParameters();
+		
+	    String orderParam = parameter[8];
+		String[] parts = orderParam.split("R");
+		String part2 = parts[1]; // 034556
+		Integer convert = Integer.parseInt(part2);
+		Order order = orderRepo.findById(convert).get();
+		
+		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+			orderService.updateOrder(order, OrderStatus.CANCELLED);
+		} else if (parameter[12].equals("The transaction was completed successfully.")) {
+			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+		}
 	    
-		model.addAttribute("verifyChecksum", verifyChecksum);
-		model.addAttribute("responseParameters", transaction.getResponseParameters());
+		return "redirect:/zaakpay/response";
+	}
+	
+	@CrossOrigin(origins = {"https://easegofly.com/"})
+	@RequestMapping(value = "/zaakpay/response",
+			method = {RequestMethod.GET})
+	public String zaakpayResponseSe (HttpServletRequest request, Model model, HttpServletResponse response, 
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+		
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+
+		//Order order = orderRepo.findByCartItemOrder(item_id); 
+		String orderParam = parameter[8];
+		model.addAttribute("orderId", orderParam);
+		String[] parts = orderParam.split("R");
+		String part2 = parts[1]; // 034556
+		Integer convert = Integer.parseInt(part2);
+		Order order = orderRepo.findById(convert).get();
+		ProductDetail productDetail = order.getProductDetail();
+		Product product = productDetail.getProduct();
+		User user = product.getUser();
+		model.addAttribute("user", user);
+		//CartItem cartItem = cartRepo.findById(order.getCartId()).get();
+		if (parameter[9].equals("Not Found") && parameter[10].equals("unknown") ) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		}
+		
+		List<Setting> settings = settingService.getGeneralSettingBag();
+		
+		
+		Double amount = Double.parseDouble(parameter[0])/100;
+		
+		model.addAttribute("paymentSuccess", parameter[12]);
+		model.addAttribute("amount", amount);
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
 		
 		return "zaakpay/response";
+		
+		
 	}
 
+	@GetMapping("/newpage")
+	public String hello(@RequestParam(value = "name", defaultValue = "World",
+    required = true) String name, Model model) {
+    model.addAttribute("name", name);
+    return "hello";
+	}
 	/*
 	@PostMapping("/payg")
 	public void payg(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -2,11 +2,11 @@ package com.easygofly.site.zaakpay;
 
 public class Config {
 
-    public static String ZAAKPAY_SECRET_KEY = "0678056d96914a8583fb518caf42828a" ;
+    public static String ZAAKPAY_SECRET_KEY = "5eca8d6445324ba4b37c345bb7c94d82" ;
 
-    public static String ENVIRONMENT = "https://zaakstaging.zaakpay.com" ;
+    public static String ENVIRONMENT = "https://api.zaakpay.com" ;
 
-    public static String ZAAKPAY_MERCHANT_IDENTIFIER = "b19e8f103bce406cbd3476431b6b7973" ;
+    public static String ZAAKPAY_MERCHANT_IDENTIFIER = "74ea6846304c49559e823f018bbbc46a" ;
 
     public static String TRANSACTION_API_URL = "/api/paymentTransact/V8" ;
 

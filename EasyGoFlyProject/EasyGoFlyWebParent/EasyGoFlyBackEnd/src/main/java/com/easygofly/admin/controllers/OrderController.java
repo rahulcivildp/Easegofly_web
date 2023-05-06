@@ -82,9 +82,10 @@ public class OrderController {
 		CartItem cartItem = cartItemRepo.findById(order.getCartId()).get();
 		GeneralSettingBag settingBag = settingService.getGeneralSettingBag();
 		String logoLink = settingBag.getSiteLogo();
+		String faviconLink = settingBag.getFavicon();
 		List<TravellerDetail> travellers = travelerRepo.findTravellers(cartItem, order.getProductDetail());
 		
-		exporter.export(order, response, city1, city2, cartItem, logoLink, travellers); 
+		exporter.export(order, response, city1, city2, cartItem, logoLink, travellers, faviconLink); 
 
 	}
 }

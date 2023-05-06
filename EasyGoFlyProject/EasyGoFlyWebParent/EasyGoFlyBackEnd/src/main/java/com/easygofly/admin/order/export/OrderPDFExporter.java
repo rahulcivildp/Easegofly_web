@@ -39,7 +39,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 public class OrderPDFExporter extends AbstractOrderExporter {
 
-	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, CartItem cartItem, String logoLink, List<TravellerDetail> travellerDetails) throws Exception {
+	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, CartItem cartItem, String logoLink, List<TravellerDetail> travellerDetails, String faviconLink) throws Exception {
 		super.setResponseHeader(response, "application/pdf", ".pdf");
 		
 		Document document = new Document(PageSize.A4);
@@ -51,7 +51,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		ProductDetail flight = order.getProductDetail();
 		
 		headerTable(new PdfPTable(3), document, order);
-		addressAndBarCode(cb, new PdfPTable(3), document, order);
+		addressAndBarCode(cb, new PdfPTable(3), document, order, faviconLink);
 		flightItinary(new PdfPTable(3), document, order, cityOne, cityTwo);
 		flightDetailsHeader(new PdfPTable(1), document, order, cityOne, cityTwo, cartItem);
 		flightDetails(new PdfPTable(5), document, order, cityOne, cityTwo, cartItem);
@@ -111,7 +111,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		document.add(table);
 	}
 	
-	private void addressAndBarCode(PdfContentByte cb, PdfPTable table, Document document, Order order) throws Exception {
+	private void addressAndBarCode(PdfContentByte cb, PdfPTable table, Document document, Order order, String faviconLink) throws Exception {
 
 		table.setWidthPercentage(100f);
 		table.setSpacingBefore(10);
@@ -126,7 +126,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		fontBold.setColor(Color.BLACK);
 		
 		//1st cell...
-		Path path = Paths.get("../site-febicon/kannya.jpg");
+		Path path = Paths.get(".." + faviconLink);
 		Image imgFavicon = Image.getInstance(path.toFile().getAbsolutePath());
 
 		PdfPCell cell = new PdfPCell(imgFavicon, true);
@@ -359,7 +359,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 	    String dayWeekText = new SimpleDateFormat("EE").format(date);
 	    
 		Chunk dp = new Chunk("\n");
-		Chunk dp1 = new Chunk("\nDEPARTURE: ", fontFancy);
+		Chunk dp1 = new Chunk("DEPARTURE: ", fontFancy);
 		Chunk dp2 = new Chunk(cityOne.getCityName() + "\n", fontBold);
 		Chunk dp3 = new Chunk(cityOne.getCode() + " - ", fontBold);
 		Chunk dp4 = new Chunk(flight.getDepTime() + ", " + dayWeekText + "\n", fontBold);
@@ -419,7 +419,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cell = new PdfPCell();
 		
 		Chunk arr = new Chunk("\n");
-		Chunk arr1 = new Chunk("\nARRIVAL: ", fontFancy);
+		Chunk arr1 = new Chunk("ARRIVAL: ", fontFancy);
 		Chunk arr2 = new Chunk(cityTwo.getCityName() + "\n", fontBold);
 		Chunk arr3 = new Chunk(cityTwo.getCode() + " - ", fontBold);
 		Chunk arr4 = new Chunk(flight.getArrTime() + ", " + dayWeekText + "\n", fontBold);
@@ -441,7 +441,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		
 		//5th cell...............................................
 		cell = new PdfPCell();
-		Chunk pnr = new Chunk("\n\n\n");
+		Chunk pnr = new Chunk("\n");
 		Chunk pnr1 = new Chunk("PNR STATUS\n", fontBold);
 		
 		String status = order.getOrderStatus().toString();

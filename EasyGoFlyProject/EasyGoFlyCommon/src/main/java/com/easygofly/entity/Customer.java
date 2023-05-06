@@ -97,6 +97,9 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Request> requests = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<Transaction> transactions = new ArrayList<>();
+	
 	@Column(name="reset_password_token", length = 30)
 	private String resetPasswordToken;
 	
@@ -293,6 +296,14 @@ public class Customer {
 
 	public String getResetPasswordToken() {
 		return resetPasswordToken;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 	public void setResetPasswordToken(String resetPasswordToken) {

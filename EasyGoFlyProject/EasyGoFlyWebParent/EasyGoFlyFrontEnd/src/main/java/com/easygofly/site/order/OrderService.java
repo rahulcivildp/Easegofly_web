@@ -70,6 +70,11 @@ public class OrderService {
 		return orderRepo.save(newOrder);
 	}
 	
+	public Order updateOrder(Order order, OrderStatus orderStatus) {
+		order.setOrderStatus(orderStatus);
+		return orderRepo.save(order);
+	}
+	
 	public void deleteOrder(Integer id) throws UserNotFoundException {
 		Long count = orderRepo.countById(id);
 		if(count == null || count == 0) {

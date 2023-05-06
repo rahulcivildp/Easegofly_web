@@ -17,6 +17,9 @@ spring:
         globally_quoted_identifiers: true
     show-sql: false
   mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
     pathmatch:
       matching-strategy: ant-path-matcher
   main:

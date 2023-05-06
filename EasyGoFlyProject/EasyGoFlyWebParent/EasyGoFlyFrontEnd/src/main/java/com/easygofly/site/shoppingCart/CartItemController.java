@@ -73,7 +73,9 @@ public class CartItemController {
 		if (endCount1 > pageOrder.getTotalElements()) {
 			endCount1 = pageOrder.getTotalElements();
 		}
-		OrderStatus orderStatus = OrderStatus.NEW;
+		OrderStatus newOrder = OrderStatus.NEW;
+		OrderStatus orderCancelled = OrderStatus.CANCELLED;
+		OrderStatus orderSuccess = OrderStatus.SUCCESSFULL;
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
 		
 		model.addAttribute("currentPage", pageNum);
@@ -84,7 +86,9 @@ public class CartItemController {
 		model.addAttribute("listOrders", listOrders);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
-		model.addAttribute("orderStatus", orderStatus);
+		model.addAttribute("newOrder", newOrder);
+		model.addAttribute("orderCancelled", orderCancelled);
+		model.addAttribute("orderSuccess", orderSuccess);
 		model.addAttribute("reverseSort", reverseSort);
 		
 		return pageOrder;

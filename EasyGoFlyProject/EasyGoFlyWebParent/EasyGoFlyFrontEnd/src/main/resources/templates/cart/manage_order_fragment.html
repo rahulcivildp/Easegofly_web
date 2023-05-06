@@ -46,6 +46,22 @@
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
+.orderCancelled {
+	background-image: linear-gradient(to right, rgb(255 255 255 / 89%),#eb040424, #d90f00d9);
+}
+.orderCancelledText {
+	background: linear-gradient(to right, #a1574ed9, rgb(255 255 255 / 89%));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+.orderSuccess {
+	background-image: linear-gradient(to right, rgb(255 255 255 / 89%),#6deb0424, #007708d9);
+}
+.orderSuccessText {
+	background: linear-gradient(to right, #6cb569d9, rgb(255 255 255 / 89%));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
 .textPosition {
 	display: flex;
     flex-wrap: wrap;
@@ -101,7 +117,7 @@
 		<div class="full-details">
 			<div class="row">
 				<th:block th:each="order : ${listOrders}">
-				<div th:class="${order.orderStatus} == ${orderStatus} ? 'col-6 cardStyle shadow newOrder' : ''" style="margin: 0 10px 10px 0;">
+				<div th:if="${order.orderStatus} == ${newOrder}" th:class="${order.orderStatus} == ${newOrder} ? 'col-6 cardStyle shadow newOrder' : ''" style="margin: 0 10px 10px 0;">
 					<div class="row">
 						<div class="col-2">
 							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
@@ -112,7 +128,35 @@
 							<p class="float-left noMargin">Passenger No.: [[${order.passengerNum}]]</p><br>
 						</div>
 						<div class="col-2"></div>
-						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${orderStatus}" ><h2 class="newOrderText">New Order</h2></div>
+						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${newOrder}" ><h2 class="newOrderText">New Order</h2></div>
+					</div>
+				</div>
+				<div th:if="${order.orderStatus} == ${orderCancelled}" th:class="${order.orderStatus} == ${orderCancelled} ? 'col-6 cardStyle shadow orderCancelled' : ''" style="margin: 0 10px 10px 0;">
+					<div class="row">
+						<div class="col-2">
+							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
+						</div>
+						<div class="col-4">
+							<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
+							<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
+							<p class="float-left noMargin">Passenger No.: [[${order.passengerNum}]]</p><br>
+						</div>
+						<div class="col-2"></div>
+						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${orderCancelled}" ><h2 class="orderCancelledText">Order Cancelled</h2></div>
+					</div>
+				</div>
+				<div th:if="${order.orderStatus} == ${orderSuccess}" th:class="${order.orderStatus} == ${orderSuccess} ? 'col-6 cardStyle shadow orderSuccess' : ''" style="margin: 0 10px 10px 0;">
+					<div class="row">
+						<div class="col-2">
+							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
+						</div>
+						<div class="col-4">
+							<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
+							<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
+							<p class="float-left noMargin">Passenger No.: [[${order.passengerNum}]]</p><br>
+						</div>
+						<div class="col-2"></div>
+						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${orderSuccess}" ><h2 class="orderSuccessText">Order Success</h2></div>
 					</div>
 				</div>
 				</th:block>
