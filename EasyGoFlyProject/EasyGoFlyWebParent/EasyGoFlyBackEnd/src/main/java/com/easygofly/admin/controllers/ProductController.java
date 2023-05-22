@@ -265,6 +265,26 @@ public class ProductController {
 			return "redirect:/products/flights/" + product_id;
 	}
 	
+	@PostMapping("/products/flights/update_product_detail")
+	public String updateTotalSeats(@RequestParam(name = "product_id") Integer product_id, 
+			@RequestParam(name = "flight_id") Integer flight_id, 
+			@RequestParam(name = "pnr") String pnr,
+			@RequestParam(name = "totalSeats") String totalSeats,
+			@RequestParam(name = "uploadSeats") String uploadSeats, 
+			@RequestParam(name = "flightNum") String flightNum,
+			@RequestParam(name = "stops") Integer stops, 
+			@RequestParam(name = "depTime") String depTime,
+			@RequestParam(name = "arrTime") String arrTime, 
+			@RequestParam(name = "duration") Integer duration,
+			@RequestParam(name = "priceADT") Float priceADT, 
+			@RequestParam(name = "priceINF") Float priceINF,
+			@RequestParam(name = "markupADT") Float markupADT, 
+			@RequestParam(name = "markupINF") Float markupINF) {
+		productDetailService.updateProductDetail(flight_id, totalSeats, uploadSeats, flightNum, stops, depTime, arrTime, duration, priceADT, priceINF, markupADT, markupINF, pnr);
+		
+		return "redirect:/products/flights/" + product_id;
+	}
+	
 	@GetMapping("/products/edit/{id}")
 	public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) throws ProductNotFoundException {
 		try {

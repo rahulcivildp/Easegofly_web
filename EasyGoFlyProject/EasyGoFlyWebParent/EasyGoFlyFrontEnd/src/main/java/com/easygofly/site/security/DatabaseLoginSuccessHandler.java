@@ -44,10 +44,10 @@ public class DatabaseLoginSuccessHandler extends SavedRequestAwareAuthentication
 	}
 	
 	protected String determineTargetUrl(final Authentication authentication) {
-
+		
 	    Map<String, String> roleTargetUrlMap = new HashMap<>();
 	    roleTargetUrlMap.put("Customer", "/");
-
+	    
 	    final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 	    for (final GrantedAuthority grantedAuthority : authorities) {
 	        String authorityName = grantedAuthority.getAuthority();

@@ -1,6 +1,13 @@
 package com.easygofly.site.shoppingCart;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,13 +23,17 @@ import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.order.OrderService;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.zaakpay.Transaction;
+import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
 @Controller
 public class CartItemController {
@@ -35,25 +46,25 @@ public class CartItemController {
 	
 
 	@GetMapping("/manage_booking")
-	public String getManageBooking(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
-		return listByPage(loggedCustomer, googleLogin, 1, model, "id", "asc", null);
+	public String getManageBooking(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model, HttpServletRequest request) {
+		return listByPage(loggedCustomer, googleLogin, 1, model, "id", "asc", null, request);
 	}
 	
 	@GetMapping("/manage_booking/{pageNum}")
-	public String listByPage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
+	public String listByPage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, HttpServletRequest request) {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
-			pagingOrder(pageNum, sortField, sortDir, customer, model);
+			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
-			pagingOrder(pageNum, sortField, sortDir, customer, model);
+			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
 		}
 		
 		model.addAttribute("currentPage", pageNum);
@@ -64,10 +75,54 @@ public class CartItemController {
 		return "cart/manage_booking";
 	} 
 	
-	private Page<Order> pagingOrder(int pageNum, String sortField, String sortDir, Customer customer, Model model) {
+	private Page<Order> pagingOrder(int pageNum, String sortField, String sortDir, Customer customer, Model model, HttpServletRequest request) {
 		Page<Order> pageOrder = orderService.listByPageOrder(customer, pageNum, sortField, sortDir);
 		
 		List<Order> listOrders = pageOrder.getContent();
+		/* ------ ZAAKPAY -------- */ /**/
+		Date date = Calendar.getInstance().getTime();  
+	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+	    DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+	    String strDate1 = dateFormat1.format(date);
+	    String strDate2 = dateFormat2.format(date);
+	    
+	    for (Cookie cookie : request.getCookies()) {
+			if(cookie.getName().equals("JSESSIONID")) {
+				String value = cookie.getValue();
+				model.addAttribute("JSESSIONID", value);
+			}
+		}
+	    
+		for (Order order : listOrders) {
+			ProductDetail productDetail = order.getProductDetail();
+			model.addAttribute("totalSeat", productDetail.getTotalSeats());
+			model.addAttribute("passengerNum", order.getPassengerNum());
+			
+			String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
+			Integer intAmount = (int) (order.getPrice() * 100);
+			String amount = "" + intAmount;
+			//String amount = "100";
+
+			//Cookie cookie = request.getCookies().get("JSESSIONID");
+			//String value = cookie.getValue();
+
+			Transaction transaction = new Transaction();
+			
+			try {
+				ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
+				
+				model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
+				model.addAttribute("requestUrl", processPayment.getRequestUrl());
+				model.addAttribute("checksum", processPayment.getChecksum());
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		/*===================================*/
+		
 		long startCount1 = (pageNum - 1) * OrderService.ORDER_PER_PAGE + 1;
 		long endCount1 = startCount1 + OrderService.ORDER_PER_PAGE - 1;
 		if (endCount1 > pageOrder.getTotalElements()) {
@@ -76,7 +131,12 @@ public class CartItemController {
 		OrderStatus newOrder = OrderStatus.NEW;
 		OrderStatus orderCancelled = OrderStatus.CANCELLED;
 		OrderStatus orderSuccess = OrderStatus.SUCCESSFULL;
+		OrderStatus orderFailed = OrderStatus.FAILED;
+		
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
+		
+	
+		
 		
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("totalPages1", pageOrder.getTotalPages());
@@ -89,6 +149,7 @@ public class CartItemController {
 		model.addAttribute("newOrder", newOrder);
 		model.addAttribute("orderCancelled", orderCancelled);
 		model.addAttribute("orderSuccess", orderSuccess);
+		model.addAttribute("orderFailed", orderFailed);
 		model.addAttribute("reverseSort", reverseSort);
 		
 		return pageOrder;
@@ -100,11 +161,12 @@ public class CartItemController {
 		
 		List<CartItem> listItems = pageCart.getContent();
 		for (CartItem cartItem : listItems) {
-			List<SearchHistory> findByItem = searchRepo.findByCartItem(cartItem);
-			for (SearchHistory history : findByItem) {
-				model.addAttribute("history", history);
-			}
-			
+			if (!cartItem.equals(null)) {
+				List<SearchHistory> findByItem = searchRepo.findByCartItem(cartItem);
+				for (SearchHistory history : findByItem) {
+					model.addAttribute("history", history);
+				}
+			} 
 		}
 		
 		long startCount = (pageNum - 1) * CartItemService.ITEM_PER_PAGE + 1;

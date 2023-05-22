@@ -16,6 +16,7 @@ import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
+import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 
 @Service
@@ -52,6 +53,11 @@ public class ProductDetailService {
 		
 	}
 	
+	public List<ProductDetail> listAllFLightByCity(String cityOne, String cityTwo, Sort sort) {
+		List<ProductDetail> productDetails = flightRepo.findFlightByCity(cityOne, cityTwo, sort);
+		return productDetails;
+		
+	}
 	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date, Sort sort) {
 		
 		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCity(date, cityOne, cityTwo, sort);
@@ -244,5 +250,5 @@ public class ProductDetailService {
 	public List<TravellerDetail> findTraveller(ProductDetail productDetail, CartItem cartItem) {
 		return travellerRepo.findTravellerByCustomerAndProductDetail(productDetail, cartItem);
 	}
-	
+
 }

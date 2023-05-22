@@ -167,6 +167,14 @@
                         </li>
                     </ul>
                 </div>
+                <h3 class="sections"><img th:src="@{/images/gif-icons/icons8-edit.gif}" style="width: 23px;"/><span>Flight Activities</span></h3>
+                <div class="set_margin">
+                    <ul>
+                        <li class="li_1 border" id="activities">
+                            <p><i class="fa fa-solid fa-caret-right float-left"></i>Activities</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -184,6 +192,9 @@
 			<div th:replace="products/flightFare/private_fare_user_form :: content"></div>
         </div>
 		</th:block>
+        <div class="col-md-10 hidden-groups" id="new_content6" style="padding: 0; display: none;">
+			Something
+        </div>
     </div>
 </div>
 		<div class="modal fade text-center" id="deleteConfirmModal">
@@ -251,6 +262,10 @@
     $("#add_private_user_fare").click(function() {
     	$(".hidden-groups").css("display", "none");
         $("#new_content4").css("display", "block");
+    });
+    $("#activities").click(function() {
+    	$(".hidden-groups").css("display", "none");
+        $("#new_content6").css("display", "block");
     });
     
     if(window.location.href == productLocation + "/products/page") {

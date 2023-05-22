@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html  xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+th:fragment="air-search-noDate">
+    <head>
+        <style>
+             @media screen and (max-width: 800px) {
+        .tabss {
+            margin: 2px !important;
+            padding: 3px 10px !important;
+            }
+        #adjusted {
+                width: 100% !important;
+            }
+        #searchBox {
+                width: 95% !important;
+                margin-top: 50px !important;
+            }
+        .aligner {
+            border: none !important;
+        }
+        .tile_settings {
+            width: 100% !important;
+        }
+        }
+        @media (min-width: 576px){
+            .container, .container-sm {
+                max-width: 100% !important;
+            }
+        }
+        .tabss {
+            background: white;
+            margin: 12px;
+            padding: 3px 15px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .tabss:hover {
+            position: relative;
+            top: -8px;
+            background: #D32F2F;
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+        }
+        .tabss:hover a {
+            color: white;
+        }
+        .tabss a {
+            color: black;
+            text-decoration: none;
+        }
+        #adjusted {
+            list-style-type: none;
+            width: 70%;
+            margin: 0 auto;
+            text-align: center;
+            height: 48px;
+            padding: 0;
+        }
+        .activated {
+            background: #D32F2F !important;
+        }
+        .activated a {
+            color: white !important;
+        }
+        #searchBox {
+            border-radius: 10px;
+            background: white;
+            margin: 0 auto;
+            width: 80%;
+            padding: 18px;
+            padding-top: 33px;
+            margin-bottom: 30px;
+        }
+        .empty1 {
+            border-radius: 26px;
+            border: 1px solid gray;
+            margin-top: 10px;
+            padding: 12px 0;
+        }
+        #radio_search_1 {
+            width: 98%;
+            margin: 0 auto;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        #radio_search_2 {
+            width: 98%;
+            margin: 0 auto;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .radio_search {
+            display: none;
+        }
+        .aligner {
+            float: left;
+            margin: 6px 0px;
+        }
+        .tile_settings {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .tile_settings p {
+            margin-bottom: 6px;
+        }
+        .dropdown ul {
+            list-style: none;
+            padding: 5px 5px;
+            border: 1px solid gray;
+            width: 195px;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+            position: absolute;
+            background: white;
+        }
+        .pass_list {
+            width: 100%;
+        }
+        .dropdowns-menu p {
+            margin-left: 4px;
+            color: gray;
+            float: left;
+        }
+        .dropdowns-menu {
+            display: none;
+        }
+        .dropdowns-menu b {
+            float: left;
+        }
+        .radios {
+            cursor: pointer;
+            float: left;
+            margin: 0 7px;
+        }
+        .radios input {
+            cursor: pointer;
+        }
+        input:checked +br+ label {
+            font-weight: 600;
+        }
+        .pass_list1 {
+            width: 100%;
+        }
+        .pass_list2 {
+            width: 100%;
+        }
+        .pass_list3 {
+            width: 100%;
+        }
+        .pass_list4 {
+            width: 100%;
+        }
+        .pass_list5 {
+            width: 100%;
+        }
+        .pass_list6 {
+            width: 100%;
+        }
+        .pass_list-1 {
+            width: 100%;
+        }
+        .pass_list-2 {
+            width: 100%;
+        }
+        .n-text {
+            display: block;
+            font-size: 18px;
+            margin: 19px 0;
+        }
+        .submit_btns {
+            width: 100%; 
+            height: 62px; 
+            border-radius: 9px;
+            background-color: #faff69;
+            font-size: 24px;
+            font-weight: 630;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+        .submit_btns:hover {
+            background-color: #d32f2f;
+            position: relative;
+            top: 2px;
+            box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.2), 0 18px 60px 0 rgba(0, 0, 0, 0.19);
+            color: white;
+        }   
+        
+        #dropdown:hover {
+        	display: block !important;
+        }
+        
+        .active {
+        	display: block;
+        }
+        .deactive {
+        	display: none;
+        }
+        .input_styles {
+        	width: 95%;
+		    padding: 44px 12px 30px !important;
+		    font-size: 24px;
+		    font-weight: 600;
+		    font-family: 'Open Sans';
+        }
+        .input_calender {
+       	    width: 95%;
+		    padding: 7px 8px;
+		    font-size: 24px;
+		    font-weight: 600;
+		    color: #747474;
+        }
+        .input_calender:focus {
+			color: black;
+		}
+        </style>
+    </head>
+    <body>
+    <div class="container" id="searchBox" >
+            <div class="row">
+                <div class="radio_sec">
+                    
+
+                </div>
+                <div class="empty1">
+                    <form th:action="@{/flight_activity_search}" method="post">
+                        <div class="radio_search col-12" id="radio_search_1">
+							<input type="hidden" name="tripType" value="oneWay">
+                            <div class="col-md-7 col-12" style=" float: left; ">
+                                
+                                <div class="col-md-6 col-6 aligner form-floating" id="aligner3">
+                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" placeholder="Depurture City" list="cityOneList" oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
+                                    <datalist id="cityOneList">
+										<th:block th:each="city : ${cities}">
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+										</th:block>
+									</datalist>
+                                    <label class="labelStyle" for="cityOne"><i class="fa fa-circle-o-notch fa-spin"></i> From</label>
+                                </div>
+                                <div class="col-md-6 col-6 aligner form-floating" id="aligner4">
+                                    <input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" required>
+                                    <datalist id="cityTwoList">
+										<th:block th:each="city : ${cities}">
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+										</th:block>
+									</datalist>
+                                    <label class="labelStyle" for="cityTwo"><i class="fa fa-circle-o-notch fa-spin"></i> To</label>
+                                </div>
+
+                            </div>
+                                <div class="col-md-5 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+                                    <div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+                                        <div class="dropdown">
+                                        <div class="" type="button" id="drop_button" style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;" onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+                                        <h5 id="result3"></h5>
+                                        <h5 id="result"></h5> 
+                                        <input type="hidden" name="something" id="passengerNum1" value="">
+                                        <h1 class="n-text" >Travelers</h1>
+                                        </div>
+                                        <ul class="dropdownMenu deactive" onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+                                             <li>
+                                                <b>Class</b>
+	                                             <select class="pass_list-1 form-control" name="journeyClass" required="required">
+													<option value="Economy">Economy</option>
+													<option value="Premium Economy">Premium Economy</option>
+													<option value="Business">Business</option>
+													<option value="Premium Business">Premium Business</option>
+													<option value="First Class">First Class</option>
+												</select>
+                                            </li>
+                                            <li>
+                                                <b>Adult</b><p>(12+ yrs)</p>
+                                                <select class="pass_list1 form-control" name="adultNum" required="required">
+													<option value="1">1</option>
+	                                                <option value="2">2</option>
+	                                                <option value="3">3</option>
+	                                                <option value="4">4</option>
+	                                                <option value="5">5</option>
+	                                                <option value="6">6</option>
+	                                                <option value="7">7</option>
+	                                                <option value="8">8</option>
+	                                                <option value="9">9</option>
+												</select>
+                                            </li>
+                                            <li>
+                                                <b>Children</b><p>(2-12 yrs)</p>
+                                                <select class="pass_list2 form-control" name="childNum" >
+	                                                <option value="0">0</option>
+	                                                <option value="1">1</option>
+	                                                <option value="2">2</option>
+	                                                <option value="3">3</option>
+	                                                <option value="4">4</option>
+	                                                <option value="5">5</option>
+	                                                <option value="6">6</option>
+	                                                <option value="7">7</option>
+	                                                <option value="8">8</option>
+	                                                <option value="9">9</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <b>Infant</b><p>Under 2yrs</p>
+                                                <select class="pass_list3 form-control" name="infantNum" >
+	                                                <option value="0">0</option>
+	                                                <option value="1">1</option>
+	                                                <option value="2">2</option>
+	                                                <option value="3">3</option>
+	                                                <option value="4">4</option>
+	                                                <option value="5">5</option>
+	                                                <option value="6">6</option>
+	                                                <option value="7">7</option>
+	                                                <option value="8">8</option>
+	                                                <option value="9">9</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <button type="button" id="submit" style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+                                            </li>
+                                        </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+                                        <input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
+                                    </div> 
+                                </div>
+                        </div>
+                    </form>
+                    
+                    
+                </div>
+            </div>
+    </div>
+    </body>
+    <script type="text/javascript">
+    function checkCityCodeMatch(confirmCityCode) {
+		if(confirmCityCode.value == $("#cityOne").val()) {
+			confirmCityCode.setCustomValidity("Two City code should not match!");
+		} else {
+			confirmCityCode.setCustomValidity("");
+		}
+	}
+    
+    function checkCityCodeMatch2(confirmCityCode) {
+		if(confirmCityCode.value == $("#cityOne2").val()) {
+			confirmCityCode.setCustomValidity("Two City code should not match!");
+		} else {
+			confirmCityCode.setCustomValidity("");
+		}
+	}
+    </script>
+    <script>
+    
+    function dropdownOpen(x) {
+    	$(".dropdownMenu").addClass("active");
+    	$(".dropdownMenu").removeClass("deactive");
+        $(".dropdownMenu").css("z-index", "6");
+    };
+    
+    function dropdownClose(x) {
+    	$(".dropdownMenu").removeClass("active");
+    	$(".dropdownMenu").addClass("deactive");
+    };
+    
+</script> 
+<script>
+        $(".radios").click(function(){
+            $(".radios input").prop("checked", false);
+            $("input", this).prop("checked", true);
+        })
+        $("#radio-1").click(function(){
+            $(".radio_search").css("display", "none");
+            $("#radio_search_1").css("display", "block");
+        })
+        $("#radio-2").click(function(){
+            $(".radio_search").css("display", "none");
+            $("#radio_search_2").css("display", "block");
+        })
+        $("#radio-3").click(function(){
+            $(".radio_search").css("display", "none");
+            $("#radio_search_3").css("display", "block");
+        })
+        $(document).ready(function(){
+            $("#radio_search_1").css("display", "block");
+        })
+    </script>
+    <script>
+        $("#aligner1").click(function(){
+            $("label", this).html("Depurture City");
+        })
+        $("#aligner2").click(function(){
+            $("label", this).html("Arrival City");
+        })
+        $("#aligner3").click(function(){
+            $("label", this).html("Depurture City");
+        })
+        $("#aligner4").click(function(){
+            $("label", this).html("Arrival City");
+        })
+    </script>
+    <script>
+        $("#input_roundtrip").click(function(){
+            $(".radios input").prop("checked", false);
+            $("input", "#radio-2").prop("checked", true);
+            $(".radio_search").css("display", "none");
+            $("#radio_search_2").css("display", "block");
+        })
+    </script>
+     <script>
+
+    $("#submit").click(function(){
+        var d = $(".pass_list-1 option:selected").text();
+        var a = parseInt($(".pass_list1 option:selected").val());
+        var b = parseInt($(".pass_list2 option:selected").val()); 
+        var c = parseInt($(".pass_list3 option:selected").val()); 
+        
+        var sum = a + b + c;
+        
+        if (sum < 10 ) {
+            event.stopPropagation();
+            $("#result").html("No: " + Math.round(sum)); 
+            $("#result3").html(d); 
+        } 
+        else {
+            event.stopPropagation();
+            $("#result3").html("<b style='color: red;'>INVALID<br>Max - 9</b>");
+            $("#result").html(" "); 
+        }
+
+        $( ".dropdowns-menu" ).toggle();
+        $(".n-text").css("display", "none");
+
+    })
+    $("#submit1").click(function(){
+        var d = $(".pass_list-2 option:selected").text();
+        var a = parseInt($(".pass_list4 option:selected").val());
+        var b = parseInt($(".pass_list5 option:selected").val()); 
+        var c = parseInt($(".pass_list6 option:selected").val()); 
+
+        var sum = a + b + c;
+
+        if (sum < 10 ) {
+            event.stopPropagation();
+            $("#result1").html("No: " + Math.round(sum));  
+            $("#result4").html(d); 
+        } 
+        else {
+            event.stopPropagation();
+            $("#result4").html("<b style='color: red;'>INVALID<br>Max - 9</b>");
+            $("#result1").html(" "); 
+        }
+
+        $( ".dropdowns-menu" ).toggle();
+        $(".n-text").css("display", "none");
+    })
+    </script>
+</html>

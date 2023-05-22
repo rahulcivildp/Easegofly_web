@@ -42,6 +42,9 @@ public class SearchHistory {
 	@Column(length = 5)
 	private Integer infantNum;
 	
+	@Column()
+	private Integer cart_id;
+	
 	@Column(nullable = false, name = "trip_type")
 	private String tripType;
 	
@@ -126,6 +129,14 @@ public class SearchHistory {
 
 	public Integer getAdultNum() {
 		return adultNum;
+	}
+
+	public Integer getCart_id() {
+		return cart_id;
+	}
+
+	public void setCart_id(Integer cart_id) {
+		this.cart_id = cart_id;
 	}
 
 	public CartItem getCartItem() {

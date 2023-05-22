@@ -1,19 +1,12 @@
 package com.easygofly.site.order;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.NoSuchAlgorithmException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -32,8 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ccavenue.security.AesCryptUtil;
+import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.City;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
@@ -41,17 +35,23 @@ import com.easygofly.entity.PaymentMethod;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
-import com.easygofly.entity.Setting;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
+import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.flight.CityRepository;
+import com.easygofly.site.flight.CityService;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.ProductDetailService;
+import com.easygofly.site.flight.TravellerRepository;
+import com.easygofly.site.order.exporter.OrderPDFExporter;
 import com.easygofly.site.search.SearchHistoryRepository;
+import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.GeneralSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
@@ -66,6 +66,7 @@ public class OrderController {
 	@Autowired private CustomerService customerService;
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private SearchHistoryRepository searchRepo;
+	@Autowired private SearchHistoryService searchService;
 	@Autowired private CartItemRepository cartRepo;
 	@Autowired private CartItemService cartService;
 	@Autowired private OrderService orderService;
@@ -73,6 +74,10 @@ public class OrderController {
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailService productService;
 	@Autowired private SettingService settingService;
+	@Autowired private CityRepository cityRepo;
+	@Autowired private CityService cityService;
+	@Autowired private TravellerRepository travellerRepo;
+	
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -86,9 +91,6 @@ public class OrderController {
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request) {
 		try {
-			
-
-			
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
 			CartItem item = cartRepo.findById(item_id).get();
@@ -106,6 +108,11 @@ public class OrderController {
 
 			Order order = orderRepo.findByCartItemOrder(item_id);
 			
+			List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByCustomerAndProductDetail(flight, item);
+			for (TravellerDetail travellerDetail : travellerDetails) {
+				travellerDetail.setOrder(order);
+			}
+			
 			cartService.updateCartItemOrdered(item);
 			
 			String email; 
@@ -120,6 +127,7 @@ public class OrderController {
 				customer = customerService.getByEmail(email);
 				saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer);
 			}
+			
 			
 			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id;
 		} catch (Exception e) {
@@ -158,14 +166,22 @@ public class OrderController {
 		}
 		
 		ProductDetail flight = flightRepo.findById(flight_id).get();
-		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+		
+		System.out.println("item_id: " + item_id);
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
 		Order order = orderRepo.findByCartItemOrder(item_id);
 		
+		if (!search_id.equals(null)) {
+			SearchHistory search = searchRepo.findById(search_id).get();
+			model.addAttribute("search", search);
+		} else {
+			SearchHistory search = searchRepo.findByCart_id(item_id);
+			model.addAttribute("search", search);
+		}
 		/* ------ ZAAKPAY -------- */ /**/
 		Date date = Calendar.getInstance().getTime();  
 	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
@@ -175,8 +191,8 @@ public class OrderController {
 		
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
 		Integer intAmount = (int) (checkoutInfo.getPaymentTotal() * 100);
-		//String amount = "" + intAmount;
-		String amount = "100";
+		String amount = "" + intAmount;
+		//String amount = "100";
 
 		//Cookie cookie = request.getCookies().get("JSESSIONID");
 		//String value = cookie.getValue();
@@ -224,7 +240,6 @@ public class OrderController {
 		model.addAttribute("checkoutInfo", checkoutInfo);
 		model.addAttribute("travelers", travelers);
 		model.addAttribute("item", item);
-		model.addAttribute("search", search);
 		model.addAttribute("flight", flight);
 		
 		return "order/flight_order";
@@ -262,13 +277,44 @@ public class OrderController {
 		String part2 = parts[1]; // 034556
 		Integer convert = Integer.parseInt(part2);
 		Order order = orderRepo.findById(convert).get();
-		
+		ProductDetail productDetail = order.getProductDetail();
 		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
 			orderService.updateOrder(order, OrderStatus.CANCELLED);
-		} else if (parameter[12].equals("The transaction was completed successfully.")) {
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			orderService.updateOrder(order, OrderStatus.FAILED);
+		}else {
 			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+			Integer totalSeatRemaining = Integer.parseInt(productDetail.getTotalSeats()) - order.getPassengerNum();
+			orderService.updateTotalPassenger(order, totalSeatRemaining);
 		}
-	    
+		
+		try {
+			CartItem cartItem = cartRepo.findById(order.getCartId()).get();
+			if (!cartItem.equals(null)) {
+				if (order.getOrderStatus().equals(OrderStatus.CANCELLED) || order.getOrderStatus().equals(OrderStatus.SUCCESSFULL) || order.getOrderStatus().equals(OrderStatus.FAILED)) {
+					List<SearchHistory> search = cartItem.getSearchHistory();
+					for (SearchHistory searchHistory : search) {
+						List<TravellerDetail> travellerDetail2 = travellerRepo.findTravellerByCustomerAndProductDetail(productDetail, cartItem);
+						for (TravellerDetail travellerDetail : travellerDetail2) {
+							travellerDetail.setCartItem(null);
+							travellerRepo.save(travellerDetail);
+						}
+							
+						searchService.updateSearchHistoryCart(searchHistory, cartItem);
+						searchHistory.setCartItem(null);
+						searchRepo.save(searchHistory);
+					}
+					cartItem.setSearchHistory(null);
+					cartRepo.save(cartItem);
+					
+					cartService.deleteCartItem(cartItem.getId());
+				}
+			}
+		} catch (Exception e) {
+			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+			return "redirect:/zaakpay/response";
+		}
+		
 		return "redirect:/zaakpay/response";
 	}
 	
@@ -298,18 +344,78 @@ public class OrderController {
 		String part2 = parts[1]; // 034556
 		Integer convert = Integer.parseInt(part2);
 		Order order = orderRepo.findById(convert).get();
+		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
+		String pnr = productDetail.getPnr();
+		model.addAttribute("pnrBarcode", pnr);
+		model.addAttribute("orderStatusO", order.getOrderStatus());
+		
+		String cityOne = productDetail.getCityOne();
+		String cityTwo = productDetail.getCityTwo();
+		City city1 = cityRepo.getCityByCode(cityOne);
+		City city2 = cityRepo.getCityByCode(cityTwo);
+		model.addAttribute("cityOne", city1.getCityName());
+		model.addAttribute("cityTwo", city2.getCityName());
+		model.addAttribute("city1", cityOne);
+		model.addAttribute("city2", cityTwo);
+		
+		Date date1 = productDetail.getDate();  
+		DateFormat dateFormat1 = new SimpleDateFormat("E, dd-MM-yyyy");  
+	    String flightDateTime = dateFormat1.format(date1);
+		model.addAttribute("flightDateTime", flightDateTime);
+		
+		Date date2 = order.getCreatedTime();  
+		DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");  
+	    String orderDateTime = dateFormat2.format(date2);
+		model.addAttribute("orderDateTime", orderDateTime);
+		
+		model.addAttribute("passengerPhone", order.getPassengerNum());
+		model.addAttribute("passengerEmail", order.getContactEmail());
+		
 		Product product = productDetail.getProduct();
+		Brand brand = product.getBrands();
+		model.addAttribute("brandPath", ".." + brand.getPhotosImagePath());
+		model.addAttribute("brandName", brand.getName());
+		model.addAttribute("productDetail", productDetail);
+		model.addAttribute("originTerminal", product.getOriginTerminal());
+		model.addAttribute("destinationTerminal", product.getDestinationTerminal());
+		model.addAttribute("baggage", product.getBaggage());
+		model.addAttribute("cabinBaggage", product.getCabinBaggage());
+		
+		Integer dateInt = productDetail.getDuration()/60;
+		if (dateInt >= 10) {
+			model.addAttribute("dateInt", dateInt);
+		} else {
+			model.addAttribute("dateInt", "0" + dateInt);
+		}
+		Integer timeInt = productDetail.getDuration()%60;
+		if (timeInt >= 10) {
+			model.addAttribute("timeInt", timeInt);
+		} else {
+			model.addAttribute("timeInt", "0" + timeInt);
+		}
+		
+		Path flightUpPath = Paths.get("../pdf-images/flight-up.png");
+		Path flightDownPath = Paths.get("../pdf-images/flight-down.png");
+		Path demoTicketPath = Paths.get("../pdf-images/demo-ticket.png");
+		Path thumbLogoPath = Paths.get("../pdf-images/thumb-logo.png");
+		model.addAttribute("flightUpPath", flightUpPath);
+		model.addAttribute("flightDownPath", flightDownPath);
+		model.addAttribute("demoTicketPath", demoTicketPath);
+		model.addAttribute("thumbLogoPath", thumbLogoPath);
+		
 		User user = product.getUser();
 		model.addAttribute("user", user);
-		//CartItem cartItem = cartRepo.findById(order.getCartId()).get();
+		
 		if (parameter[9].equals("Not Found") && parameter[10].equals("unknown") ) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		}
 		
-		List<Setting> settings = settingService.getGeneralSettingBag();
-		
-		
+		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
+		model.addAttribute("travellerDetails", travellerDetails);
+        
 		Double amount = Double.parseDouble(parameter[0])/100;
 		
 		model.addAttribute("paymentSuccess", parameter[12]);
@@ -323,11 +429,20 @@ public class OrderController {
 		
 	}
 
-	@GetMapping("/newpage")
-	public String hello(@RequestParam(value = "name", defaultValue = "World",
-    required = true) String name, Model model) {
-    model.addAttribute("name", name);
-    return "hello";
+	@GetMapping("/order/export_pdf/{id}")
+	public void exportToPDF(HttpServletResponse response, @PathVariable("id") Integer id) throws Exception {
+		Order order = orderRepo.findById(id).get();
+		ProductDetail productDetail = order.getProductDetail();
+		OrderPDFExporter exporter = new OrderPDFExporter();
+		City city1 = cityService.findCityOneByCode(order);
+		City city2 = cityService.findCityTwoByCode(order);
+		GeneralSettingBag settingBag = settingService.getGeneralSettingBag();
+		String logoLink = settingBag.getSiteLogo();
+		String faviconLink = settingBag.getFavicon();
+		List<TravellerDetail> travellers = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
+		
+		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink); 
+
 	}
 	/*
 	@PostMapping("/payg")

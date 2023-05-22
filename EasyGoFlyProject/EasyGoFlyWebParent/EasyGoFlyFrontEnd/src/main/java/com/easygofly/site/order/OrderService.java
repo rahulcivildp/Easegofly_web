@@ -18,8 +18,10 @@ import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.PaymentMethod;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.checkout.CheckoutInfo;
+import com.easygofly.site.flight.TravellerRepository;
 
 @Service
 public class OrderService {
@@ -27,6 +29,7 @@ public class OrderService {
 	public static final int ORDER_PER_PAGE = 6;
 	
 	@Autowired OrderRepository orderRepo;
+	@Autowired TravellerRepository travellerRepo;
 
 	public Order createOrder(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo, SearchHistory searchHistory, String orderName) {
 		Order newOrder = new Order();
@@ -59,6 +62,7 @@ public class OrderService {
 		newOrder.setPassengerNum(searchHistory.getPassengerNum());
 		newOrder.setTripType(searchHistory.getTripType());
 		newOrder.setCartId(cartItem.getId());
+		newOrder.setContactEmail(cartItem.getEmail());
 		
 		
 		String transaction_id = "UIGIK&*^HJAS585789";
@@ -72,6 +76,12 @@ public class OrderService {
 	
 	public Order updateOrder(Order order, OrderStatus orderStatus) {
 		order.setOrderStatus(orderStatus);
+		return orderRepo.save(order);
+	}
+	
+	public Order updateTotalPassenger(Order order, Integer totalSeat) {
+		ProductDetail productDetail = order.getProductDetail();
+		productDetail.setTotalSeats(totalSeat.toString());
 		return orderRepo.save(order);
 	}
 	

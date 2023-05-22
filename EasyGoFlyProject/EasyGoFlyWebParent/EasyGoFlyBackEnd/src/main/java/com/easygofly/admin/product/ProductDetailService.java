@@ -42,4 +42,34 @@ public class ProductDetailService {
 		
 		productDetailRepo.deleteById(id);
 	}
+	
+	public ProductDetail updateProductDetail(Integer flight_id, 
+			String totalSeats, 
+			String uploadSeats, 
+			String flightNum, 
+			Integer stops, 
+			String depTime, 
+			String arrTime, 
+			Integer duration, 
+			Float priceADT,
+			Float priceINF,
+			Float markupADT,
+			Float markupINF,
+			String pnr) {
+		ProductDetail productDetail = productDetailRepo.findById(flight_id).get();
+		productDetail.setPnr(pnr);
+		productDetail.setTotalSeats(totalSeats);
+		productDetail.setUploadSeats(uploadSeats);
+		productDetail.setFlightNum(flightNum);
+		productDetail.setStopNum(stops);
+		productDetail.setDepTime(depTime);
+		productDetail.setArrTime(arrTime);
+		productDetail.setDuration(duration);
+		productDetail.setPriceADT(priceADT);
+		productDetail.setPriceINF(priceINF);
+		productDetail.setMarkupADT(markupADT);
+		productDetail.setMarkupINF(markupINF);
+		return productDetailRepo.save(productDetail);
+	}
+	
 }

@@ -48,6 +48,29 @@
 	background-color: green;
 	color: white;
 }
+*.specialButtonRed {
+	background-color: #cf5b4a;
+	color: white;
+	cursor: pointer;
+	width: auto;
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-weight: 600;
+    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+	  -webkit-transition: background-color 2s ease-out;
+	  -moz-transition: background-color 2s ease-out;
+	  -o-transition: background-color 2s ease-out;
+	  transition: background-color 2s ease-out;
+	  -webkit-transition: color 0.5s ease-out;
+	  -moz-transition: color 0.5s ease-out;
+	  -o-transition: color 0.5s ease-out;
+	  transition: color 0.5s ease-out;
+}
+*.specialButtonRed:hover {
+	background-color: #fdf4f2;
+	color: #2c2c2ceb;
+    border: 1px solid #cf5b4a;
+}
 *.specialButton_reverse {
 	cursor: pointer;
 	width: auto;

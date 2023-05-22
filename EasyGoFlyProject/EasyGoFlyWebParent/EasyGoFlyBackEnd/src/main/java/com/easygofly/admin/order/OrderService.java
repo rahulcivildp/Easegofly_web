@@ -17,7 +17,7 @@ import com.easygofly.entity.Order;
 @Transactional
 public class OrderService {
 	
-	private static final int ORDER_PER_PAGE = 8;
+	public static final int ORDER_PER_PAGE = 8;
 	@Autowired private OrderRepository orderRepo;
 
 	public List<Order> listAll() {

@@ -93,9 +93,9 @@
 							<th>ID</th>
 							<th>Date</th>
 							<th>PNR</th>
-							<th>Total Seats</th>
-							<th>Booked Seats</th>
 							<th>Available Seats</th>
+							<th>Booked Seats</th>
+							<th>Total Seats</th>
 							<th>Flight Number</th>
 							<th>Stops</th>
 							<th>Depart Time</th>
@@ -110,13 +110,15 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="flight : ${productDetails.details}">
+						<th:block th:each="flight : ${productDetails.details}">
+						<tr>
 							<td>[[${flight.id}]]</td>
 							<td>[[${flight.date}]]</td>
 							<td>[[${flight.pnr}]]</td>
-							<td>[[${flight.totalSeats}]]</td>
-							<td class="bookedSeats"></td>
-							<td>[[${flight.uploadSeats}]]</td>
+							<td th:id="'totalSeats' + ${flight.id}" style="display: flex; justify-content: space-around;">[[${flight.totalSeats}]]
+							</td>
+							<td th:id="'bookedSeats' + ${flight.id}"></td>
+							<td style="display: flex; justify-content: space-around;">[[${flight.uploadSeats}]]</td>
 							<td>[[${flight.flightNum}]]</td>
 							<td>
 								<p class="text-center" th:if="${flight.stopNum} == 0" style="margin: 0;">0 </p>
@@ -134,9 +136,35 @@
 							<td>[[${flight.markupINF}]]</td>
 							<td th:if="${flight.order} != null" style="background: #edefaf; text-align: center; font-weight: 600;">Ordered</td>
 							<td th:if="${flight.order} == null" style="background: #a7cea7; text-align: center; font-weight: 600;">Active</td>
-							<td>
+							<td >
 								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')" >
-									<div th:replace="fragments :: edit('products', ${product.id})"></div>
+								<div class="dropdown dropstart">
+								  <button style="border: none;" type="button" th:id="'dropdownMenuButton' + ${flight.id}" data-bs-toggle="dropdown" aria-expanded="false">
+								    <i class="fa-solid fa-pen-to-square fa-2x icon-green styleLink "></i>
+								  </button>
+								  <div class="dropdown-menu" style="width: 2847%;">
+								  	<form th:action="@{/products/flights/update_product_detail}" method="post">
+									  	<div class="row" style="padding: 0 6px;">
+									  		<input type="hidden" name="product_id" th:value="${flight.product.id}">
+									  		<input type="hidden" name="flight_id" th:value="${flight.id}">
+									  		<div class="col-1"><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" th:value="${flight.pnr}"></div>
+									  		<div class="col-1"><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" th:value="${flight.totalSeats}"></div>
+									  		<div class="col-1"><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;"  th:value="${flight.uploadSeats}"></div>
+									  		<div class="col-1"><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" th:value="${flight.flightNum}"></div>
+									  		<div class="col-1"><input type="number" name="stops" placeholder="stops" style=" width: 100%;" th:value="${flight.stopNum}"></div>
+									  		<div class="col-1"><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" th:value="${flight.depTime}"></div>
+									  		<div class="col-1"><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" th:value="${flight.arrTime}"></div>
+									  		<div class="col-1"><input type="text" name="duration" placeholder="Duration" style=" width: 100%;" th:value="${flight.duration}"></div>
+									  		<div class="col-1"><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" th:value="${flight.priceADT}"></div>
+									  		<div class="col-1"><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" th:value="${flight.priceINF}"></div>
+									  		<div class="col-1"><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" th:value="${flight.markupADT}"></div>
+									  		<div class="col-1"><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" th:value="${flight.markupINF}"></div>
+									  		<div class="col-1"><button type="submit" style="border: none; margin: 5px 0"><i class="fa-solid fa-floppy-disk fa-2x"></i></button></div>
+									  	</div>
+								  	</form>
+								  </div>
+								  		
+								  </div>
 								</th:block>
 								&nbsp;
 								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
@@ -144,7 +172,8 @@
 		data-bs-target="#deleteConfirmModal2" data-bs-toggle="modal" ></a>
 								</th:block>
 							</td>
-								<!-- Modal -->
+							
+							<!-- Modal -->
 								<div class="modal fade" th:id="'stopsModal' + ${flight.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								  <div class="modal-dialog modal-dialog-centered modal-lg">
 								    <div class="modal-content">
@@ -210,20 +239,25 @@
 								    </div>
 								  </div>
 								</div>
+						</tr>
+						
 							<script type="text/javascript">
 								totalSeats = [[${flight.totalSeats}]];
 								uploadSeats = [[${flight.uploadSeats}]];
 								
-								bookedSeats = totalSeats - uploadSeats;
+								bookedSeats =  uploadSeats - totalSeats;
 								
-								$(".bookedSeats").text(bookedSeats);
+								$("#bookedSeats" + [[${flight.id}]]).text(bookedSeats);
 									
 								flightId = "#stopsModal" + [[${flight.id}]];
 								
 								value = $("#modal-button" + [[${flight.id}]]).attr("data-bs-target", flightId);
 								
 							</script>
-						</tr>
+							
+							
+						
+						</th:block>
 					</tbody>
 				</table>
 

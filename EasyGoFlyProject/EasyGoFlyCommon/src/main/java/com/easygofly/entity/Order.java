@@ -1,8 +1,11 @@
 package com.easygofly.entity;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -38,6 +42,9 @@ public class Order {
 	
 	@Column(name = "phone_number", length = 15, nullable = false)
 	private BigInteger phoneNumber;
+	
+	@Column(name = "contact_email", nullable = false)
+	private String contactEmail;
 	
 	@Column(name = "address_line1", length = 64, nullable = false)
 	private String addressLine1;
@@ -107,6 +114,8 @@ public class Order {
     @JoinColumn(name = "product_detail_id")
     private ProductDetail productDetail;
 	
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	private List<TravellerDetail> travellerDetails = new ArrayList<>();
 	 
 	
 	public Order() {}
@@ -145,6 +154,14 @@ public class Order {
 
 	public String getTransactionId() {
 		return transactionId;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
 	}
 
 	public String getCityOne() {
@@ -201,6 +218,14 @@ public class Order {
 
 	public void setInfantNum(Integer infantNum) {
 		this.infantNum = infantNum;
+	}
+
+	public List<TravellerDetail> getTravellerDetails() {
+		return travellerDetails;
+	}
+
+	public void setTravellerDetails(List<TravellerDetail> travellerDetails) {
+		this.travellerDetails = travellerDetails;
 	}
 
 	public String getTripType() {

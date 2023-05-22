@@ -40,6 +40,14 @@ public class SearchHistoryService {
 		return searchRepo.save(searchHistory);
 	}
 	
+	public SearchHistory updateSearchHistoryCart(SearchHistory search, CartItem item) {
+		SearchHistory searchHistory = searchRepo.findById(search.getId()).get();
+		
+		searchHistory.setCart_id(item.getId());
+		
+		return searchRepo.save(searchHistory);
+	}
+	
 	public void deleteSearchResult(Customer customer) {
 		Customer userLoggedin = customerRepo.findById(customer.getId()).get();
 		Customer cust = entityManager.find(Customer.class, userLoggedin.getId());

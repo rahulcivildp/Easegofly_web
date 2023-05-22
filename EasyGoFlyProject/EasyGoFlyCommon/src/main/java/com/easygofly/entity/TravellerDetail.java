@@ -41,6 +41,10 @@ public class TravellerDetail {
 	@JoinColumn(name = "cart_item_id")
 	private CartItem cartItem;
 	
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order order;
+	
 	
 	
 	public TravellerDetail() {}
@@ -100,6 +104,14 @@ public class TravellerDetail {
 
 	public void setProductDetail(ProductDetail productDetail) {
 		this.productDetail = productDetail;
+	}
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
 	public CartItem getCartItem() {

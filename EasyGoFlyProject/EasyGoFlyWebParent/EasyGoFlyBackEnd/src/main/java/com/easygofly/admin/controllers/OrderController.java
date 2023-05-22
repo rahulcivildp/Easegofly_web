@@ -20,7 +20,6 @@ import com.easygofly.admin.order.export.OrderPDFExporter;
 import com.easygofly.admin.setting.GeneralSettingBag;
 import com.easygofly.admin.setting.SettingService;
 import com.easygofly.admin.setting.city.CityService;
-import com.easygofly.admin.user.UserService;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
@@ -49,8 +48,8 @@ public class OrderController {
 		
 		List<Order> listOrders = pageOrder.getContent();
 		
-		long startCount = (pageNum - 1) * UserService.USER_PER_PAGE + 1;
-		long endCount = startCount + UserService.USER_PER_PAGE - 1;
+		long startCount = (pageNum - 1) * OrderService.ORDER_PER_PAGE + 1;
+		long endCount = startCount + OrderService.ORDER_PER_PAGE - 1;
 		if (endCount > pageOrder.getTotalElements()) {
 			endCount = pageOrder.getTotalElements();
 		}

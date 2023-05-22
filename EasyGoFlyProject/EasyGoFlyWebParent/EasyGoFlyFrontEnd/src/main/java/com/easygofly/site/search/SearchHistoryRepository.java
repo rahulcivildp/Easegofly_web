@@ -22,4 +22,7 @@ public interface SearchHistoryRepository extends CrudRepository<SearchHistory, I
 	public List<SearchHistory> findByCustomer(Customer customer);
 	
 	public List<SearchHistory> findByCartItem(CartItem cartItem);
+	
+	@Query("SELECT s FROM SearchHistory s WHERE s.cart_id = :cart_id")
+	public SearchHistory findByCart_id(Integer cart_id);
 }

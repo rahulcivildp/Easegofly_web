@@ -22,10 +22,14 @@ public class WebSettingService  {
 	public PolicyDetailBag getGeneralSettingBag() {
 		List<WebDetails> webDetails = new ArrayList<>();
 		List<WebDetails> detailsPolicy = repo.findByCategory(WebSettingCategory.POLICY);
-		List<WebDetails> detailsAdvertisement = repo.findByCategory(WebSettingCategory.ADVERTISEMENT);
+		List<WebDetails> detailsContact = repo.findByCategory(WebSettingCategory.CONTACT);
+		List<WebDetails> detailsImage = repo.findByCategory(WebSettingCategory.IMAGE);
+		List<WebDetails> detailsLowestFare = repo.findByCategory(WebSettingCategory.LOWEST_FARE_FINDER);
 		
 		webDetails.addAll(detailsPolicy);
-		webDetails.addAll(detailsAdvertisement);
+		webDetails.addAll(detailsContact);
+		webDetails.addAll(detailsImage);
+		webDetails.addAll(detailsLowestFare);
 		
 		return new PolicyDetailBag(webDetails);
 		
