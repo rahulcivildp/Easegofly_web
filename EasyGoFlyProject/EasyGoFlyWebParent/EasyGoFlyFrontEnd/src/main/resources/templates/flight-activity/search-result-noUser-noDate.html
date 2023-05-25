@@ -193,6 +193,7 @@
 	background-color: #2dce03; 
 	border: 1px solid #2dce03;
 }
+
 </style>
 
 
@@ -240,8 +241,6 @@
                                             <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px;"> : [[${journeyClass}]]</p>
                                             <p class="tile-align para_styl" style="padding-right: 6px;">Travellers </p>
                                             <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px"> : [[${passengerNum}]]</p>
-                                            <p class="tile-align para_styl" style="padding-right: 6px;">Date </p>
-                                            <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px"> : [[${date}]]</p>
                                         </div>
                                     </div>
                                 </div>
@@ -263,34 +262,36 @@
             </div>
         </div>
     </div>
-    <div id="time-limit">
-        <div class="container">
-            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
-                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
-                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
-            </div>
-        </div>
-    </div>
-    <div id="flight-category" style="background-color: white;">
-        <div class="container" style=" padding: 10px 0;">
+    <div id="flight-category " style="background-color: white;">
+        <div class="container media-hide" style=" padding: 10px 0;">
             <div class="row">
                 <div class="col-md-1 col-1">
                     <i class="fa fa-solid fa-caret-left fa-2x"></i>
-                    <div class="media-hide" style="height: 100%;border-right: 1px solid grey; float: right;"></div>
                 </div>
-                <div class="col-md-10  col-10 row" style="font-size: 12px;">
-                	<th:block th:each="brand : ${getProductBrand}">
-	                    <div class="col-md-1 col" style="padding: 0;height: 100%;border-right: 1px solid grey;padding-left: 12px;">
-	                        <div class="tile-align">
-	                            <img th:src="@{${brand.brands.photosImagePath}}" width="35" height="40" style="margin-right: 10px;">
-	                        </div>
-	                        <div class="tile-align">
-	                            <p style="margin: 0;">[[${brand.brands.name}]]</p>
-	                            <span><i class="fa fa-inr" aria-hidden="true"></i>0000</span>
-	                        </div>
-	                    </div>
-                    </th:block>
-                    
+                <div class="col-md-10 col-10">
+	                <form th:action="@{flight_activity_filter}" method="post">
+	                	<div class="row" style="font-size: 12px;">
+	                	
+		                	<div class="form-floating col-2" style="padding: 0;">
+			                	<input type="hidden" name="cityOne" th:value="${cityOne}">
+					            <input type="hidden" name="cityTwo" th:value="${cityTwo}">
+					            <input type="hidden" name="journeyClass" th:value="${journeyClass}">
+					            <input type="hidden" name="tripType" th:value="${tripType}">
+					            <input type="hidden" name="adultNum" th:value="${adultNum}">
+					            <input type="hidden" name="childNum" th:value="${childNum}">
+					            <input type="hidden" name="infantNum" th:value="${infantNum}">
+					            <input type="hidden" name="passengerNum" th:value="${passengerNum}">
+		                		<select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="brand">
+		                			<th:block th:each="brand : ${brandsFlight}">
+		                				<option th:value="${brand.name}">[[${brand.name}]]</option>
+		                			</th:block>
+		                		</select>
+		                		<label for="floatingSelect">Select Brand</label>
+		                	</div>
+		                	<div class="col-8"></div>
+	                		<button type="submit" class="btn btn-success col-2">Do Filter</button>
+	                	</div>
+	                </form>
                 </div>
                 <div class="col-md-1  col-1">
                     <i class="fa fa-solid fa-caret-right fa-2x"></i>
@@ -300,9 +301,6 @@
     </div>
     <div class="container" style="height: 150%; margin-top: 20px;">
     	<div class="row">
-    		<div class="col-md-3 tile-align media-hide">
-    			<!-- <div th:replace="flight/search_filter :: search_filter('tag')"></div> -->
-    		</div>
         	<div class="col-md-3 media_status" style="padding-bottom: 5px;">
         		<!-- Button trigger modal -->
 				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -318,11 +316,31 @@
 				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				      </div>
 				      <div class="modal-body" id="modal_body_button">
-				        <!-- <div th:replace="flight/search_filter :: search_filter('tag')"></div> -->
+				        <form th:action="@{flight_activity_filter}" method="post" id="filter_form">
+		                	<div class="row" style="font-size: 12px;">
+		                	
+			                	<div class="form-floating col-12">
+				                	<input type="hidden" name="cityOne" th:value="${cityOne}">
+						            <input type="hidden" name="cityTwo" th:value="${cityTwo}">
+						            <input type="hidden" name="journeyClass" th:value="${journeyClass}">
+						            <input type="hidden" name="tripType" th:value="${tripType}">
+						            <input type="hidden" name="adultNum" th:value="${adultNum}">
+						            <input type="hidden" name="childNum" th:value="${childNum}">
+						            <input type="hidden" name="infantNum" th:value="${infantNum}">
+						            <input type="hidden" name="passengerNum" th:value="${passengerNum}">
+			                		<select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="brand">
+			                			<th:block th:each="brand : ${brandsFlight}">
+			                				<option th:value="${brand.name}">[[${brand.name}]]</option>
+			                			</th:block>
+			                		</select>
+			                		<label for="floatingSelect">Select Brand</label>
+			                	</div>
+		                	</div>
+		                </form>
 				      </div>
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				        <button type="button" class="btn btn-primary">Save changes</button>
+				        <button type="submit" form="filter_form" class="btn btn-success"> Do Filter </button>
 				      </div>
 				    </div>
 				  </div>
@@ -330,7 +348,7 @@
 
         	</div>
         	
-        <div class="col-md-9">
+        <div class="col-md-12">
         <div class="row">
             <div class="col-md-12 shadow rounded" style="margin-bottom: 33px; background-color: white;">
                     <div style="background-color: #f93737;">
@@ -356,27 +374,27 @@
                     <div>
                         <div class="row media-hide" style="list-style-type: none;">
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_brand_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_activity_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_brand_' + ${brand} + '_0_0,0_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Air Line
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_depTime_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_activity_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_depTime_' + ${brand} + '_0_0,0_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Departure
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_arrTime_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_activity_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_arrTime_' + ${brand} + '_0_0,0_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Arrival
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_duration_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_activity_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_duration_' + ${brand} + '_0_0,0_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Duration
                                 </a>
                             </div>
                             <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_search-noUser_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_' + ${strDate} + '_price_brand_9_0,_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
+                                <a class="nav-link dropdown-toggle" th:href="@{'/flight_activity_' + ${cityOne} + '_' + ${cityTwo} + '_' + ${journeyClass} + '_' + ${tripType} + '_' + ${adultNum} + '_' + ${childNum} + '_' + ${infantNum} + '_priceADT_' + ${brand} + '_0_0,0_active'}" id="navbarDropdownMenuLink" role="button" aria-expanded="false" style="padding: 10px !important;">
                                     Price
                                 </a>
                             </div>
@@ -398,7 +416,7 @@
             </div>
           	<th:block th:each="flight : ${listProducts}">
           	<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
-            	<form th:action="@{/flight_booking_save}" method="post" >
+            	<form th:action="@{/flight_activity_booking_save}" method="post" >
           			<div th:class="'flightSearchResult' + ${flight.id}"></div>
           		</form>
           	</div>
@@ -410,8 +428,14 @@
           	console.log("Total searched seats: " + search_passenger_num);
           	
           	htmlCodeBlock = `
-          	
-		            
+		            <input type="hidden" name="cityOne" value="[[${flight.cityOne}]]">
+		            <input type="hidden" name="cityTwo" value="[[${flight.cityTwo}]]">
+		            <input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
+		            <input type="hidden" name="tripType" value="[[${tripType}]]">
+		            <input type="hidden" name="adultNum" value="[[${adultNum}]]">
+		            <input type="hidden" name="childNum" value="[[${childNum}]]">
+		            <input type="hidden" name="infantNum" value="[[${infantNum}]]">
+		            <input type="hidden" name="passengerNum" value="[[${passengerNum}]]">
 		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
 		                    <div class="row">
 		                    	<div class="col-md-10 col">
@@ -514,7 +538,7 @@
 	                                	<small>(For [[${passengerNum}]] Passenger/s)</small>
 	                                </div>
 		                            <div style="display: flex; justify-content: center;">
-		                                 <a type="submit" class="btn btn-primary submit_btn_stl" style="" id="book_now" name="book_now" href="https://easegofly.com/login">Book Now</a>
+		                            	<button type="submit" class="btn btn-primary submit_btn_stl" id="book_now" name="book_now">Book Now</button>
 		                            </div>
 		                    	
 		                    	</div>

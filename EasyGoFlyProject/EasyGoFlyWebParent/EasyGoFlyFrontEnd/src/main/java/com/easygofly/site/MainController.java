@@ -1,6 +1,9 @@
 package com.easygofly.site;
 
+import java.security.Principal;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,14 +19,17 @@ import com.easygofly.entity.City;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.Wallet;
 import com.easygofly.entity.WebDetails;
 import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.search.SearchHistoryService;
+import com.easygofly.site.security.DatabaseLoginSuccessHandler;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.web.WebSettingService;
+import com.easygofly.site.wallet.WalletService;
 
 
 @Controller
@@ -34,6 +40,7 @@ public class MainController {
 	@Autowired private WebSettingService webSettingService;
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private BrandRepositoy brandRepo;
+	@Autowired private WalletService walletService;
 	
 	@GetMapping("/")
 	public String viewHomePage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
@@ -44,11 +51,15 @@ public class MainController {
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			Customer customer = searchHistoryService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			Customer customer = searchHistoryService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);	
 		}
 		
@@ -155,7 +166,9 @@ public class MainController {
 	}
 	
 	@GetMapping("/login")
-	public String viewLoginPage() {
+	public String viewLoginPage(Principal principal, HttpServletRequest request) {
+		String referer = request.getHeader("Referer");
+		request.getSession().setAttribute(DatabaseLoginSuccessHandler.REDIRECT_URL_SESSION_ATTRIBUTE_NAME, referer);
 		Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
 			return "user_credential/login";

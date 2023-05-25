@@ -37,7 +37,6 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
-import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
@@ -251,7 +250,7 @@ public class OrderController {
 			method = {RequestMethod.POST})
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
-		com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
+		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
 		
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();

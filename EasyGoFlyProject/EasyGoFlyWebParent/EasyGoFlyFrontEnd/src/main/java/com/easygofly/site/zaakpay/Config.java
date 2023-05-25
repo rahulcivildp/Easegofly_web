@@ -16,4 +16,6 @@ public class Config {
 
     public static String RETURN_URL = "https://easegofly.com/zaakpay/response" ;
 
+    public static String RETURN_URL_SECOND = "https://easegofly.com/zaakpay/recharge" ;
+
 }

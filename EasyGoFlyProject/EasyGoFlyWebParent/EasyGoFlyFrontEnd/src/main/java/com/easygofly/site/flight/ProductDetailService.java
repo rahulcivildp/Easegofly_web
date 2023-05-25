@@ -53,10 +53,14 @@ public class ProductDetailService {
 		
 	}
 	
+	public List<ProductDetail> listAllFLightByCityAndBrand(String cityOne, String cityTwo, String brand, Sort sort) {
+		List<ProductDetail> productDetails = flightRepo.findFlightByCityAndBrand(cityOne, cityTwo, brand, sort);
+		return productDetails;
+	}
+	
 	public List<ProductDetail> listAllFLightByCity(String cityOne, String cityTwo, Sort sort) {
 		List<ProductDetail> productDetails = flightRepo.findFlightByCity(cityOne, cityTwo, sort);
 		return productDetails;
-		
 	}
 	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date, Sort sort) {
 		

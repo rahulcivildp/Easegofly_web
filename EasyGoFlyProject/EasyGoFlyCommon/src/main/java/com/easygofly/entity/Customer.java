@@ -22,6 +22,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -71,6 +72,9 @@ public class Customer {
 	@Column(name = "gender", length = 10)
 	private String gender;
 	
+	@Column(name = "balance")
+	private Integer balance;
+	
 	@Column(length = 128)
 	private String photos;
 	
@@ -106,6 +110,10 @@ public class Customer {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "authentication_type", length = 10)
 	private AuthenticationType authenticationType;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "wallet_id")
+	private Wallet wallet;
 	
 	public Customer() {}
 	
@@ -258,6 +266,14 @@ public class Customer {
 		this.enabled = enabled;
 	}
 
+	public Integer getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Integer balance) {
+		this.balance = balance;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -316,6 +332,14 @@ public class Customer {
 
 	public void setAuthenticationType(AuthenticationType authenticationType) {
 		this.authenticationType = authenticationType;
+	}
+
+	public Wallet getWallet() {
+		return wallet;
+	}
+
+	public void setWallet(Wallet wallet) {
+		this.wallet = wallet;
 	}
 
 	public List<Request> getRequests() {

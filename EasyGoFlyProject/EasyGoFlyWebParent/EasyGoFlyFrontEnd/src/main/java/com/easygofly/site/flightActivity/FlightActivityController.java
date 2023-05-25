@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.exception.ProductNotFoundException;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsRepository;
@@ -35,6 +37,7 @@ public class FlightActivityController {
 	@Autowired CustomerService customerService;
 	@Autowired ProductDetailService productDetailService;
 	@Autowired ProductDetailsRepository productRepo;
+	@Autowired BrandRepositoy brandRepo;
 	
 	@PostMapping("/flight_activity_search")
 	public String searchHistorySave(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
@@ -92,20 +95,25 @@ public class FlightActivityController {
 			@PathVariable(name = "infantNum") Integer infantNum,
 			@PathVariable(name = "sortName") String sortName,
 			@PathVariable(name = "activeTime") String[] activeTime,
-			@PathVariable(name = "brand") String[] brands,
+			@PathVariable(name = "brand") String brand,
 			@PathVariable(name = "stop") Integer[] stops,
 			@PathVariable(name = "totalPrice") Integer[] totalPrice,
 			Model model, RedirectAttributes redirectAttributes) {
-		List<ProductDetail> productDetails = productDetailService.listAllFLightByCity(cityOne, cityTwo, Sort.by(sortName).ascending());
-		for (ProductDetail productDetail : productDetails) {
-			System.out.println("getCode: " + productDetail.getPnr());
+		
+		if (brand.equals("")) {
+			List<ProductDetail> productDetails = productDetailService.listAllFLightByCity(cityOne, cityTwo, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", productDetails);
+		} else {
+			List<ProductDetail> productDetails = productDetailService.listAllFLightByCityAndBrand(cityOne, cityTwo, brand, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", productDetails);
 		}
 		
 		Integer passengerNum = adultNum + childNum + infantNum;
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
+		Iterable<Brand> brands = brandRepo.findAll();
+		
 		model.addAttribute("getProductBrand", getProductBrand);
-		model.addAttribute("listProducts", productDetails);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("cityTwo", cityTwo);
 		model.addAttribute("journeyClass", journeyClass);
@@ -114,10 +122,51 @@ public class FlightActivityController {
 		model.addAttribute("childNum", childNum);
 		model.addAttribute("infantNum", infantNum);
 		model.addAttribute("passengerNum", passengerNum);
-		model.addAttribute("brands", brands);
+		model.addAttribute("brand", brand);
+		model.addAttribute("brandsFlight", brands);
 		model.addAttribute("stops", stops);
 		model.addAttribute("totalPrice", totalPrice);
 		return "flight-activity/search-result-noUser-noDate";
 	}
 
+	@PostMapping("/flight_activity_filter")
+	public String flightActivityFilter(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@RequestParam(name = "cityOne", required = true) String cityOne, 
+			@RequestParam(name = "cityTwo", required = true) String cityTwo,  
+			@RequestParam(name = "passengerNum", required = false) Integer passengerNum,
+			@RequestParam(name = "journeyClass", required = false) String journeyClass,
+			@RequestParam(name = "tripType", required = false) String tripType,
+			@RequestParam(name = "adultNum", required = false) Integer adultNum,
+			@RequestParam(name = "childNum", required = false) Integer childNum,
+			@RequestParam(name = "infantNum", required = false) Integer infantNum,
+			@RequestParam(name = "brand", required = false) String brand,
+			Model model) {
+		
+		String email; 
+		Customer customer;
+
+		City city1 = cityRepo.getCityByCode(cityOne);
+	    City city2 = cityRepo.getCityByCode(cityTwo);
+	   
+	    String sort = "pnr";
+	    Integer stop = 0;
+	    String activeTime = "active";
+	    String arrayPrice = "0,0";
+	    
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+
+		return "redirect:/flight_activity_" + city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum +"_"+ childNum +"_"+ infantNum +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+		
+	}
+	
 }

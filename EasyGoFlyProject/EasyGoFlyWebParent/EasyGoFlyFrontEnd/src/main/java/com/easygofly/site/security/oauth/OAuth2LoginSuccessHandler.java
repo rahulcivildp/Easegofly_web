@@ -27,7 +27,7 @@ import com.easygofly.site.customer.CustomerService;
 public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler  {
 
 	@Autowired private CustomerService customerService;
-	
+	public static final String REDIRECT_URL_SESSION_ATTRIBUTE_NAME = "REDIRECT_URL";
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	
 	@Override
@@ -45,12 +45,16 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 		Customer customer = customerService.getByEmail(email);
 		
 		if (customer == null) {
-			customerService.addNewCustomerUponOAuth2Login(name, email, countryCode, authenticationType); 
+			Customer newCustomer = customerService.addNewCustomerUponOAuth2Login(name, email, countryCode, authenticationType); 
+			customerService.addWallet(newCustomer);
 		} else {
 			customerService.updateAuthentication(customer,authenticationType);
+			if (customer.getWallet() == null) {	
+				customerService.addWallet(customer);
+			}
 		}
 		
-		String targetUrl = determineTargetUrl(authentication);
+		String targetUrl = determineTargetUrl(authentication, request);
 		
 		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}
@@ -65,10 +69,18 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 		}
 	}
 	
-	protected String determineTargetUrl(final Authentication authentication) {
+	protected String determineTargetUrl(final Authentication authentication, HttpServletRequest request) {
+		Object redirectURLObject = request.getSession().getAttribute(REDIRECT_URL_SESSION_ATTRIBUTE_NAME);
 
-	    Map<String, String> roleTargetUrlMap = new HashMap<>();
-	    roleTargetUrlMap.put("ROLE_USER", "/");
+		Map<String, String> roleTargetUrlMap = new HashMap<>();
+		
+        if(redirectURLObject != null) {
+        	roleTargetUrlMap.put("ROLE_USER", redirectURLObject.toString());
+        } else{
+        	roleTargetUrlMap.put("ROLE_USER", "/");
+        }
+        
+	    request.getSession().removeAttribute(REDIRECT_URL_SESSION_ATTRIBUTE_NAME);
 
 	    final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 	    for (final GrantedAuthority grantedAuthority : authorities) {

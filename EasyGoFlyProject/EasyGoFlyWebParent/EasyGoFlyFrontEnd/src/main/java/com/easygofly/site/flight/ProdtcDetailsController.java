@@ -132,7 +132,6 @@ public class ProdtcDetailsController {
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
-
 			return "redirect:/flight_booking" + searchId + "&" + flightId + "&" + travelerDetailsPart(searchId, flightId, customer);
 			
 		} else if (googleLogin != null) {
@@ -143,8 +142,63 @@ public class ProdtcDetailsController {
 		} else {
 			return "redirect:/";
 		}
+	}
+	
+	@PostMapping("/flight_activity_booking_save")
+	public String filghtActivityBookingSave(
+			@RequestParam(name = "flight_id") Integer flightId,  
+			@RequestParam(name = "cityOne", required = false) String cityOne, 
+			@RequestParam(name = "cityTwo", required = false) String cityTwo,  
+			@RequestParam(name = "passengerNum", required = false) Integer passengerNum,
+			@RequestParam(name = "journeyClass", required = false) String journeyClass,
+			@RequestParam(name = "tripType", required = false) String tripType,
+			@RequestParam(name = "adultNum", required = false) Integer adultNum,
+			@RequestParam(name = "childNum", required = false) Integer childNum,
+			@RequestParam(name = "infantNum", required = false) Integer infantNum,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+		ProductDetail productDetail = flightRepo.findById(flightId).get();
 		
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			
+			SearchHistory history = searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
+					childNum, infantNum, customer);
+			
+			return "redirect:/flight_booking" + history.getId() + "&" + flightId + "&" + travelerDetailsPart(history.getId(), flightId, customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			
+			SearchHistory history = searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
+					childNum, infantNum, customer);
+			
+			model.addAttribute("customer", customer);
+			return "redirect:/flight_booking" + history.getId() + "&" + flightId + "&" + travelerDetailsPart(history.getId(), flightId, customer);
+		} else {
+			return "redirect:/login";
+		}
+	}
+
+	private SearchHistory searcHistorySave(ProductDetail productDetail, String cityOne, String cityTwo, Integer passengerNum, String journeyClass,
+			String tripType, Integer adultNum, Integer childNum, Integer infantNum, Customer customer) {
+		SearchHistory history = new SearchHistory();
+		history.setDate(productDetail.getDate());
+		history.setCityOne(cityOne);
+		history.setCityTwo(cityTwo);
+		history.setPassengerNum(passengerNum);
+		history.setJourneyClass(journeyClass);
+		history.setTripType(tripType);
+		history.setAdultNum(adultNum);
+		history.setChildNum(childNum);
+		history.setInfantNum(infantNum);
+		history.setCustomer(customer);
 		
+		return searchRepo.save(history);
 	}
 
 	private Integer travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {

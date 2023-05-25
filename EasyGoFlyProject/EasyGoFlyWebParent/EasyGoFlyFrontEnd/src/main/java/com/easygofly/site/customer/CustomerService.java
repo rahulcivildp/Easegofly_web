@@ -14,8 +14,10 @@ import com.easygofly.entity.AuthenticationType;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Role;
+import com.easygofly.entity.Wallet;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.setting.CountryRepository;
+import com.easygofly.site.wallet.WalletRepository;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -27,6 +29,7 @@ public class CustomerService {
 	@Autowired private CountryRepository countryRepo;
 	@Autowired private RoleRepository roleRepo;
 	@Autowired private PasswordEncoder passwordEncoder;
+	@Autowired private WalletRepository walletRepo;
 	
 	
 	public List<Country> listAllCountries() {
@@ -121,11 +124,22 @@ public class CustomerService {
 		} 
 	}
 	
+	public Customer addWallet(Customer customer) {
+		Wallet wallet = new Wallet();
+		wallet.setBalance(0);
+		wallet.setCustomer(customer);
+		wallet.setTempValue(0);
+		
+		Wallet savedWallet = walletRepo.save(wallet);
+		customer.setWallet(savedWallet);
+		return customerRepo.save(customer);
+	}
+	
 	public Customer getCustomerByEmail(String email) {
 		return customerRepo.findCustomerByEmail(email);
 	}
 	
-	public void addNewCustomerUponOAuth2Login(String name, String email, String countryCode, AuthenticationType authenticationType) {
+	public Customer addNewCustomerUponOAuth2Login(String name, String email, String countryCode, AuthenticationType authenticationType) {
 		Role roleCustomer = new Role(3);
 		Customer customer = new Customer();
 		customer.setEmail(email);
@@ -144,7 +158,7 @@ public class CustomerService {
 		customer.setPostalCode("");
 		customer.setPhoneNumber("");
 		
-		customerRepo.save(customer);
+		return customerRepo.save(customer);
 	}
 	
 	private void setNameSplit(String name, Customer customer) {
