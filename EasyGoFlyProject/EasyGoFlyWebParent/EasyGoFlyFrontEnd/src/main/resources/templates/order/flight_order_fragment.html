@@ -253,6 +253,7 @@
                                                 </h2>
                                                 <div id="flush-collapseOne1" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
                                                     
+						                       
                                                 </div>
                                             </div>
                                         </div>
@@ -266,7 +267,7 @@
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
                                                             </div>
-                                                            <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"></p></div>
+                                                            <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i></p></div>
                                                         </div>
                                                     </div>
                                                 </h2>
@@ -279,10 +280,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div>
+                                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
+                                                    <div aria-expanded="true">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries">Coupon</button>
+                                                            </div>
+                                                            <div class="col-md-5"><p th:if="${coupon} != null" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;">- <i class="fa fa-inr" aria-hidden="true"></i>[[${coupon.couponAmount}]].0</p></div>
+                                                        </div>
+                                                    </div>
+                                                </h2>
+                                                <div id="flush-collapseOne3" class="accordion-collapse collapse" aria-labelledby="flush-headingOne3" data-bs-parent="#accordionFlushExample">
+                                                    <div class="alert alert-success" role="alert" th:if="${coupon} != null">
+						                       			<p>[[${coupon.couponCode}]] is added!</p>
+													</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div style="border:1px solid grey; height: 40px; background-color: #07162d;">
                                         <h2 style=" float: left; font-size: 18px; margin: 10px 20px; color:white;">Total</h2>
                                         <div style="float: right;">
-                                            <p style="margin: 0;font-size: 16px;padding: 8px 20px; color:white;"><i class="fa fa-inr" aria-hidden="true"></i>[[${checkoutInfo.paymentTotal}]]</p>
+                                            <p style="margin: 0;font-size: 16px;padding: 8px 20px; color:white;"><i class="fa fa-inr" aria-hidden="true"></i>[[${order.price}]]</p>
                                         </div>
                                     </div>
                                 </div>
@@ -352,7 +374,9 @@
     <script type="text/javascript">
     	feesCharges = [[${checkoutInfo.flightGSTCost}]] + [[${checkoutInfo.flightServiceCost}]];
     	
-    	insertHtml = `<i class="fa fa-inr" aria-hidden="true"></i> ${feesCharges}`;
+    	floatValue = parseFloat(feesCharges).toFixed(1);
+    	
+    	insertHtml = `<i class="fa fa-inr" aria-hidden="true"></i> ${floatValue}`;
     
     	$("#feesAndCharges").html(insertHtml);
     
@@ -374,42 +398,8 @@
 	});
      
     </script>
-    <!-- 
-    <script>
-function save(){
-	$("#response").empty();
-	$(".help-block").empty();
-	var url = "[[@{/payg}]]";
-	$.ajax({
-		url: url,
-		type: "POST",
-		data: $('#form').serialize(),
-		dataType: "JSON",
-		beforeSend:function(){
-			$("button").prop("disabled",true);
-		},
-		success: function (data)
-		{
-			$("button").prop("disabled",false);
-			if(data){
-				var html="";;
-				$.each(data, function (key, val) {
-				    html += key+":"+val+", ";
-				});
-				
-				$("#response").html(html);
-				$('#form')[0].reset();
-			}else{
-				alert("Ooops! Something went wrong.");
-			}
-		},
-		error: function (jqXHR, textStatus, errorThrown)
-		{
-			
-		}
-	});
-}
-</script>
+    
+ 
 
- -->
+
 </html>

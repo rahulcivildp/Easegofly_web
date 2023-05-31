@@ -1,5 +1,6 @@
 package com.easygofly.admin.controllers;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easygofly.admin.order.CartItemRepository;
 import com.easygofly.admin.order.OrderRepository;
@@ -23,6 +26,8 @@ import com.easygofly.admin.setting.city.CityService;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
+import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
 
 @Controller
@@ -63,11 +68,13 @@ public class OrderController {
 		model.addAttribute("startCount", startCount);
 		model.addAttribute("endCount", endCount);
 		model.addAttribute("totalItems", pageOrder.getTotalElements());
-		model.addAttribute("listOrders", listOrders);
+		model.addAttribute("orders", listOrders);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSort", reverseSort);
-		model.addAttribute("keyword", keyword);
+		model.addAttribute("keyword", keyword);;
+		model.addAttribute("successful", OrderStatus.SUCCESSFULL);
+		model.addAttribute("pending", OrderStatus.PENDING);
 		
 		return "orders/orders";
 	}
@@ -75,16 +82,31 @@ public class OrderController {
 	@GetMapping("/order/export_pdf/{id}")
 	public void exportToPDF(HttpServletResponse response, @PathVariable("id") Integer id) throws Exception {
 		Order order = orderRepo.findById(id).get();
+		ProductDetail productDetail = order.getProductDetail();
 		OrderPDFExporter exporter = new OrderPDFExporter();
 		City city1 = cityService.findCityOneByCode(order);
 		City city2 = cityService.findCityTwoByCode(order);
-		CartItem cartItem = cartItemRepo.findById(order.getCartId()).get();
 		GeneralSettingBag settingBag = settingService.getGeneralSettingBag();
 		String logoLink = settingBag.getSiteLogo();
 		String faviconLink = settingBag.getFavicon();
-		List<TravellerDetail> travellers = travelerRepo.findTravellers(cartItem, order.getProductDetail());
-		
-		exporter.export(order, response, city1, city2, cartItem, logoLink, travellers, faviconLink); 
+		List<TravellerDetail> travellers = travelerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
+
+		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink); 
 
 	}
+	
+	@PostMapping("/orders/successful")
+	public String orderSuccessful(@RequestParam(name = "order_id") Integer order_id) {
+		orderService.updateStatus(order_id, OrderStatus.SUCCESSFULL);
+		
+		return "redirect:/orders";
+	}
+	
+	@PostMapping("/orders/pending")
+	public String orderPending(@RequestParam(name = "order_id") Integer order_id) {
+		orderService.updateStatus(order_id, OrderStatus.PENDING);
+		
+		return "redirect:/orders";
+	}
+	
 }

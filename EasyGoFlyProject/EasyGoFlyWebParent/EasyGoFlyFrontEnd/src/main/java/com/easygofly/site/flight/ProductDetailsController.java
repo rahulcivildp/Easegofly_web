@@ -29,7 +29,7 @@ import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
 
 @Controller
-public class ProdtcDetailsController {
+public class ProductDetailsController {
 	
 	@Autowired private ProductDetailService productService;
 	@Autowired private CustomerService customerService;
@@ -74,6 +74,8 @@ public class ProdtcDetailsController {
 		model.addAttribute("item", item);
 		model.addAttribute("search", search);
 		model.addAttribute("flight", flight);
+		model.addAttribute("falied", "Please provide a correct coupon code!!!");
+		model.addAttribute("success", "The coupon is verified!");
 		
 		return "flight/booking/flight_traveler_details";
 	}

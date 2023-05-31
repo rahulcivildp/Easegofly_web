@@ -4,12 +4,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,21 +54,13 @@ public class WalletController {
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
-			Wallet wallet = customer.getWallet();
-			
-			Integer INRbalance = wallet.getBalance() / 100;
-			model.addAttribute("wallet", wallet);
-			model.addAttribute("balance", INRbalance);
+			responseBalance(model, customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
-			Wallet wallet = customer.getWallet();
-
-			Integer INRbalance = wallet.getBalance() / 100;
-			model.addAttribute("wallet", wallet);
-			model.addAttribute("balance", INRbalance);
+			responseBalance(model, customer);
 		} 
 		
 		
@@ -237,11 +231,13 @@ public class WalletController {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
+			responseBalance(model, customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
+			responseBalance(model, customer);
 		}
 		
 		if (parameter[9].equals("Not Found") && parameter[10].equals("unknown") ) {
@@ -250,6 +246,8 @@ public class WalletController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		}
 		
+		
+		model.addAttribute("amountRecharged", parameter[0]);
 		model.addAttribute("paymentSuccess", parameter[12]);
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);
@@ -258,5 +256,38 @@ public class WalletController {
 		return "zaakpay/response-wallet";
 		
 		
+	}
+
+	private void responseBalance(Model model, Customer customer) {
+		Wallet wallet = customer.getWallet();
+		Integer INRbalance = wallet.getBalance() / 100;
+		model.addAttribute("wallet", wallet);
+		model.addAttribute("balance", INRbalance);
+	}
+	
+	@GetMapping("/show-history")
+	public String showHistory(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
+			model.addAttribute("rechargeHistories", rechargeHistories);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
+
+			model.addAttribute("rechargeStatus", RechargeHistoryStatus.SUCCESSFULL);
+			model.addAttribute("rechargeHistories", rechargeHistories);
+			model.addAttribute("customer", customer);
+		}
+		return "wallet/show-history";
 	}
 }

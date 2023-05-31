@@ -17,9 +17,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.admin.FileUploadUtil;
 import com.easygofly.admin.setting.city.CityRepository;
+import com.easygofly.admin.setting.web.CouponService;
 import com.easygofly.admin.setting.web.PolicyDetailBag;
 import com.easygofly.admin.setting.web.WebSettingService;
 import com.easygofly.entity.City;
+import com.easygofly.entity.Coupon;
 import com.easygofly.entity.WebDetails;
 
 @Controller
@@ -27,16 +29,19 @@ public class WebSettingController {
 	
 	@Autowired private WebSettingService service; 
 	@Autowired private CityRepository cityRepo;
+	@Autowired private CouponService couponService ;
 	
 	@GetMapping("/web_settings")
 	public String listAll(Model model) {
 		List<WebDetails> listAllSettings = service.listAllSettings();
 		List<City> cities = cityRepo.findAllByOrderByNameAsc();
+		List<Coupon> coupons = couponService.listAllCoupons();
 		
 		for (WebDetails details : listAllSettings) {
 			model.addAttribute(details.getKey(), details.getValue());
 		}
 		model.addAttribute("cities", cities);
+		model.addAttribute("coupons", coupons);
 		
 		return "webDetails/web_settings";
 	}
@@ -71,6 +76,13 @@ public class WebSettingController {
 		updateSettingValueInForm(request, generalSetting.list());
 		
 		ra.addFlashAttribute("message", "Contact settings have been updated.");
+		
+		return "redirect:/web_settings";
+	}
+	
+	@PostMapping("/web_settings/save_coupon")
+	public String saveCouponSettings(@RequestParam(name = "couponAmount") Integer couponAmount) throws IOException {
+		couponService.createCoupon(couponAmount);
 		
 		return "redirect:/web_settings";
 	}

@@ -1,6 +1,10 @@
 package com.easygofly.site.wallet;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.Customer;
@@ -33,6 +37,7 @@ public class WalletService {
 		rechargeHistory.setWallet(wallet);
 		rechargeHistory.setRechargeAmount(wallet.getTempValue());
 		rechargeHistory.setTransaction(transId);
+		rechargeHistory.setDate(new Date());
 		
 		return rechargeHistoryRepo.save(rechargeHistory);
 	}
@@ -50,5 +55,10 @@ public class WalletService {
 		wallet.setTempValue(0);
 		
 		return walletRepo.save(wallet);
+	}
+	
+	public List<RechargeHistory> listAllRechargeHistory(Wallet wallet, Sort sort) {
+		List<RechargeHistory> rechargeHistories = rechargeHistoryRepo.findByWallet(wallet, sort);
+		return rechargeHistories;
 	}
 }

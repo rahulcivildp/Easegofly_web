@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.Coupon;
 
 @Service
 public class CheckoutService {
@@ -16,6 +17,23 @@ public class CheckoutService {
 		float flightServiceCost = calculateFlightServiceCost(item);
 		float flightGSTCost = calculateFlightGSTCost(item);
 		double paymentTotal = flightCost + flightServiceCost + flightGSTCost ;
+		
+		checkoutInfo.setFlightCost(flightCost);
+		checkoutInfo.setFlightServiceCost(flightServiceCost);
+		checkoutInfo.setFlightGSTCost(flightGSTCost);
+		checkoutInfo.setOrderDate(new Date());
+		checkoutInfo.setPaymentTotal(paymentTotal);
+		
+		return checkoutInfo;
+	}
+	
+	public CheckoutInfo prepareCheckoutWithCoupon(CartItem item, Coupon coupon) {
+		CheckoutInfo checkoutInfo = new CheckoutInfo();
+		
+		double flightCost = calculateFlightCost(item);
+		float flightServiceCost = calculateFlightServiceCost(item);
+		float flightGSTCost = calculateFlightGSTCost(item);
+		double paymentTotal = flightCost + flightServiceCost + flightGSTCost - coupon.getCouponAmount() ;
 		
 		checkoutInfo.setFlightCost(flightCost);
 		checkoutInfo.setFlightServiceCost(flightServiceCost);

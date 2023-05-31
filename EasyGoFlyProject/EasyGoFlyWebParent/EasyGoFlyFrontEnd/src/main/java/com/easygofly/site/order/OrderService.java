@@ -31,7 +31,7 @@ public class OrderService {
 	@Autowired OrderRepository orderRepo;
 	@Autowired TravellerRepository travellerRepo;
 
-	public Order createOrder(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo, SearchHistory searchHistory, String orderName) {
+	public Order createOrder(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo, SearchHistory searchHistory, String orderName, List<TravellerDetail> travellerDetails) {
 		Order newOrder = new Order();
 		newOrder.setCreatedTime(new Date());
 		newOrder.setOrderStatus(OrderStatus.NEW);
@@ -63,7 +63,7 @@ public class OrderService {
 		newOrder.setTripType(searchHistory.getTripType());
 		newOrder.setCartId(cartItem.getId());
 		newOrder.setContactEmail(cartItem.getEmail());
-		
+		newOrder.setTravellerDetails(travellerDetails);
 		
 		String transaction_id = "UIGIK&*^HJAS585789";
 		String transaction_token = "ashdjgh3284270&^%@#*&)asahj31";
@@ -77,6 +77,27 @@ public class OrderService {
 	public Order updateOrder(Order order, OrderStatus orderStatus) {
 		order.setOrderStatus(orderStatus);
 		return orderRepo.save(order);
+	}
+	
+	public Order updateOrderPrice(Order order, CheckoutInfo checkoutInfo) {
+		Order savedOrder = orderRepo.findById(order.getId()).get();
+		
+		savedOrder.setPrice(checkoutInfo.getPaymentTotal());
+		return orderRepo.save(savedOrder);
+	}
+	
+	public Order addCouponCode(Order order, String couponCode) {
+		Order savedOrder = orderRepo.findById(order.getId()).get();
+		
+		savedOrder.setCouponCode(couponCode);
+		return orderRepo.save(savedOrder);
+	}
+	
+	public Order deleteCouponCode(Order order) {
+		Order savedOrder = orderRepo.findById(order.getId()).get();
+		
+		savedOrder.setCouponCode(null);
+		return orderRepo.save(savedOrder);
 	}
 	
 	public Order updateTotalPassenger(Order order, Integer totalSeat) {
@@ -106,6 +127,12 @@ public class OrderService {
 		Pageable pageable = PageRequest.of(pageNum - 1, ORDER_PER_PAGE, sort);
 		
 		return orderRepo.findByCustomer(customer, pageable);
+	}
+	
+	public TravellerDetail updateTravelersOrderId(Integer travelerId, Order order) {
+		TravellerDetail travellerDetail = travellerRepo.findById(travelerId).get();
+		travellerDetail.setOrder(order);
+		return travellerRepo.save(travellerDetail);
 	}
 	
 }

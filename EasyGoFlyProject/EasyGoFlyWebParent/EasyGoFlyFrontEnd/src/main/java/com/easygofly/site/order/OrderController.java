@@ -24,10 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.City;
+import com.easygofly.entity.Coupon;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
@@ -76,6 +78,7 @@ public class OrderController {
 	@Autowired private CityRepository cityRepo;
 	@Autowired private CityService cityService;
 	@Autowired private TravellerRepository travellerRepo;
+	@Autowired private CouponService couponService ;
 	
 	
 	private String[] parameter = new String[20];
@@ -87,8 +90,10 @@ public class OrderController {
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
+			@RequestParam(name = "couponCode") String couponCode,
+			@RequestParam(name = "couponCode1") String couponCode1,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			HttpServletRequest request) {
+			HttpServletRequest request, Order order3) {
 		try {
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
@@ -97,7 +102,7 @@ public class OrderController {
 			String paymentType = "PAYMENT_GATEWAY";
 			PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
 			
-			CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
+			
 			
 			Date date = flight.getDate();  
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
@@ -108,25 +113,94 @@ public class OrderController {
 			Order order = orderRepo.findByCartItemOrder(item_id);
 			
 			List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByCustomerAndProductDetail(flight, item);
-			for (TravellerDetail travellerDetail : travellerDetails) {
-				travellerDetail.setOrder(order);
-			}
 			
 			cartService.updateCartItemOrdered(item);
-			
+
+			System.out.println("couponCode : "+couponCode);
+			System.out.println("couponCode1 : "+couponCode1);
+			Coupon coupon = couponService.findCouponByCode(couponCode);
+			Coupon coupon1 = couponService.findCouponByCode(couponCode1);
+			CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
 			String email; 
 			Customer customer; 
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
 				customer = customerService.getByEmail(email);
-				saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer);
+				if (coupon1 != null) {
+					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
+					if (order != null) {
+						orderService.updateOrderPrice(order, checkoutInfo1);
+						orderService.addCouponCode(order, couponCode1);
+					}
+					
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+					orderService.addCouponCode(order2, couponCode1);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+				} else if (coupon != null) {
+					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
+					if (order != null) {
+						orderService.updateOrderPrice(order, checkoutInfo1);
+						orderService.addCouponCode(order, couponCode);
+					}
+					
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+					orderService.addCouponCode(order2, couponCode);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+				} else if (order != null) {
+					orderService.updateOrderPrice(order, checkoutInfo);
+					orderService.deleteCouponCode(order);
+				} else {
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+					orderService.deleteCouponCode(order2);
+						
+				}
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
 				customer = customerService.getByEmail(email);
-				saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer);
+				if (coupon1 != null) {
+					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
+					if (order != null) {
+						orderService.updateOrderPrice(order, checkoutInfo1);
+						orderService.addCouponCode(order, couponCode1);
+					}
+					
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+					orderService.addCouponCode(order2, couponCode1);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+				} else if (coupon != null) {
+					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
+					if (order != null) {
+						orderService.updateOrderPrice(order, checkoutInfo1);
+						orderService.addCouponCode(order, couponCode);
+					}
+					
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+					orderService.addCouponCode(order2, couponCode);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+				} else if (order != null) {
+					orderService.updateOrderPrice(order, checkoutInfo);
+					orderService.deleteCouponCode(order);
+				} else {
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+					orderService.deleteCouponCode(order2);
+						
+				}
 			}
-			
 			
 			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id;
 		} catch (Exception e) {
@@ -135,12 +209,14 @@ public class OrderController {
 		
 	}
 
-	private void saveOrderCreate(ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod,
-			CheckoutInfo checkoutInfo, String orderName, Order order, Customer customer) {
+	private Order saveOrderCreate(ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod,
+			CheckoutInfo checkoutInfo, String orderName, Order order, Customer customer, List<TravellerDetail> travellerDetails) {
 		if (order == null) {
-			orderService.createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName);
+			return orderService.createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
 		}else if (item.getId() != order.getCartId()) {
-			orderService.createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName);
+			return orderService.createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
+		} else {
+			return null;
 		}
 	}
 	
@@ -149,7 +225,7 @@ public class OrderController {
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
 		
 		String email; 
 		Customer customer; 
@@ -189,7 +265,7 @@ public class OrderController {
 	    String strDate2 = dateFormat2.format(date);
 		
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
-		Integer intAmount = (int) (checkoutInfo.getPaymentTotal() * 100);
+		Integer intAmount = (int) (order.getPrice() * 100);
 		String amount = "" + intAmount;
 		//String amount = "100";
 
@@ -235,11 +311,17 @@ public class OrderController {
 		model.addAttribute("accessCode", accessCode);
 		*/
 		
+		Coupon coupon = couponService.findCouponByCode(order.getCouponCode());
+		
 		model.addAttribute("order_id", order.getId());
+		model.addAttribute("order", order);
 		model.addAttribute("checkoutInfo", checkoutInfo);
 		model.addAttribute("travelers", travelers);
 		model.addAttribute("item", item);
 		model.addAttribute("flight", flight);
+		model.addAttribute("search_id", search_id);
+		model.addAttribute("item_id", item_id);
+		model.addAttribute("coupon", coupon);
 		
 		return "order/flight_order";
 	}
@@ -282,7 +364,12 @@ public class OrderController {
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
 			orderService.updateOrder(order, OrderStatus.FAILED);
 		}else {
-			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+			if (productDetail.getPnr().equals(null) || productDetail.getPnr().equals("")) {
+				orderService.updateOrder(order, OrderStatus.PENDING);
+			} else {
+				orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+			}
+			
 			Integer totalSeatRemaining = Integer.parseInt(productDetail.getTotalSeats()) - order.getPassengerNum();
 			orderService.updateTotalPassenger(order, totalSeatRemaining);
 		}
@@ -310,7 +397,6 @@ public class OrderController {
 				}
 			}
 		} catch (Exception e) {
-			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
 			return "redirect:/zaakpay/response";
 		}
 		

@@ -1,5 +1,7 @@
 package com.easygofly.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity 
 @Table(name = "recharge_history")
@@ -27,6 +31,9 @@ public class RechargeHistory {
 	
 	@Column(nullable = false, name = "transaction")
 	private String transaction;
+	
+	@Temporal(TemporalType.DATE)
+	private Date date;
 	
 	@ManyToOne
 	@JoinColumn(name = "wallet_id")
@@ -74,6 +81,14 @@ public class RechargeHistory {
 
 	public void setWallet(Wallet wallet) {
 		this.wallet = wallet;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 	

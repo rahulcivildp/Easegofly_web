@@ -3,16 +3,7 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 		th:fragment="flight_booking(remove)" th:remove="${remove}">
 
-    <script>
-        $(function () {
-            $("#datepicker").datepicker({ 
-                    autoclose: true,
-                    todayHighlight: true,
-                    changeMonth: true,
-                    changeYear: true
-            }).datepicker('update', new Date());
-        });
-    </script>
+    
     <style>
         .tile-align {
             float: left;
@@ -512,10 +503,93 @@
 		                                </div>
                                 </div>
                                 <div class="media_status" style="display: none;">
-	                            	<div th:replace="flight/booking/finall_bill :: final_bill('tag')"></div>
+	                            	<div id="selection_summary" class="booking_tiles">
+       <div style="background-color: #ecf5fd;">
+           <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Selection Summary</p>
+       </div>
+       <div>
+           <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item">
+                   <h2 class="accordion-header" id="flush-headingOne1" style="background-color: white !important;">
+                       <div aria-expanded="true">
+                           <div class="row">
+                               <div class="col-md-7">
+                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
+                               </div>
+                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${item.totalPrice}]]</p></div>
+                           </div>
+                       </div>
+                   </h2>
+                   <div id="flush-collapseOne1" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
+                       
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div>
+           <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item">
+                   <h2 class="accordion-header" id="flush-headingOne2" style="background-color: white !important;">
+                       <div aria-expanded="true">
+                           <div class="row">
+                               <div class="col-md-7">
+                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
+                               </div>
+                               <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i> 0.0</p></div>
+                                          </div>
+                                      </div>
+                                  </h2>
+                                  <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample">
+                                      <div class="accordion-body">
+											<p>Service Charge: </p>
+                                 			<p>GST: <i class="fa fa-inr" aria-hidden="true"></i>[[${checkoutInfo.flightGSTCost}]]</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                       <div class="alert alert-success" role="alert" style="display: none;" id="successAlert">
+									</div>
+                                    <div class="alert alert-danger" role="alert" style="display: none;" id="failedAlert">
+										 [[${falied}]]
+									</div>
+       								<div>
+                                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
+                                                    <div aria-expanded="true">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
+                                                            </div>
+                                                            <div class="col-md-5"> <p id="amountOfCoupon1" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;}"></p></div>
+                                                        </div>
+                                                    </div>
+                                                </h2>
+                                                <div id="flush-collapseOne3" class="accordion-collapse collapse" aria-labelledby="flush-headingOne3" data-bs-parent="#accordionFlushExample">
+                                                    <div style=" padding: 8px; display: flex; justify-content: space-evenly;">
+	                                                   	<input type="text" name="couponCode" id="coupon" form="order_form">
+	                                                   	<button id="buttonCheckCoupon">Check</button>
+                                                   	</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                      <div style="border:1px solid grey; height: 40px; background-color: #07162d;">
+       	<div style="float: left; ">
+       		<h2 style=" font-size: 22px; margin: 6px 20px; color:white;">Total</h2>
+       	</div>
+           
+           <div style="float: right;">
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment1"><i class="fa fa-inr" aria-hidden="true"></i><b>[[${checkoutInfo.paymentTotal}]]</b></p>
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: none;" id="totalPaymentNew1"><i class="fa fa-inr" aria-hidden="true"></i><b></b></p>
+           </div>
+       </div>
+   </div>
 	                            </div>
-                                <form th:action="@{/flight_order_save}" method="post">
-                                
+                                <form th:action="@{/flight_order_save}" method="post" id="order_form">
+                                	
 						            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
 						            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
 									<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
@@ -531,7 +605,92 @@
 		                        </form>
                             </div>
                             <div class="col-md-3 media-hide">
-                                <div th:replace="flight/booking/finall_bill :: final_bill('tag')"></div>
+                                <div id="selection_summary" class="booking_tiles">
+       <div style="background-color: #ecf5fd;">
+           <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Selection Summary</p>
+       </div>
+       <div>
+           <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item">
+                   <h2 class="accordion-header" id="flush-headingOne1" style="background-color: white !important;">
+                       <div aria-expanded="true">
+                           <div class="row">
+                               <div class="col-md-7">
+                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
+                               </div>
+                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${item.totalPrice}]]</p></div>
+                           </div>
+                       </div>
+                   </h2>
+                   <div id="flush-collapseOne1" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
+                       
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div>
+           <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item">
+                   <h2 class="accordion-header" id="flush-headingOne2" style="background-color: white !important;">
+                       <div aria-expanded="true">
+                           <div class="row">
+                               <div class="col-md-7">
+                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
+                               </div>
+                               <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i> 0.0</p></div>
+                                          </div>
+                                      </div>
+                                  </h2>
+                                  <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample">
+                                      <div class="accordion-body">
+											<p>Service Charge: </p>
+                                 			<p>GST: <i class="fa fa-inr" aria-hidden="true"></i>[[${checkoutInfo.flightGSTCost}]]</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                       <div class="alert alert-success" role="alert" style="display: none;" id="successAlert1">
+									</div>
+                                    <div class="alert alert-danger" role="alert" style="display: none;" id="failedAlert1">
+										 [[${falied}]]
+									</div>
+       								<div>
+                                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
+                                                    <div aria-expanded="true">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
+                                                            </div>
+                                                            <div class="col-md-5"> <p id="amountOfCoupon" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;}"></p></div>
+                                                        </div>
+                                                    </div>
+                                                </h2>
+                                                <div id="flush-collapseOne3" class="accordion-collapse collapse" aria-labelledby="flush-headingOne3" data-bs-parent="#accordionFlushExample">
+                                                    <div style=" padding: 8px; display: flex; justify-content: space-evenly;">
+	                                                   	<input type="text" name="couponCode1" id="coupon1" form="order_form">
+	                                                   	<button id="buttonCheckCoupon1">Check</button>
+                                                   	</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                      <div style="border:1px solid grey; height: 40px; background-color: #07162d;">
+       	<div style="float: left; ">
+       		<h2 style=" font-size: 22px; margin: 6px 20px; color:white;">Total</h2>
+       	</div>
+           
+           <div style="float: right;">
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment"><i class="fa fa-inr" aria-hidden="true"></i><b>[[${checkoutInfo.paymentTotal}]]</b></p>
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: none;" id="totalPaymentNew"><i class="fa fa-inr" aria-hidden="true"></i><b></b></p>
+           </div>
+       </div>
+   </div>
+                               
+                                    
                             </div>
                         </div>
                         
@@ -542,11 +701,7 @@
         </div>
      
     </body>
-     <script>
-	  $( function() {
-	    $( "#checkBoxes > input[type='radio']" ).checkboxradio();
-	  } );
-  	</script>
+  
  
     <script>
     	feesCharges = [[${checkoutInfo.flightGSTCost}]] + [[${checkoutInfo.flightServiceCost}]];
@@ -573,4 +728,88 @@
 	});
      
     </script>
+    <script type="text/javascript">
+  	contextPath = "[[@{/}]]";
+	buttonCheckCoupon = $("#buttonCheckCoupon");
+	successAlert1 = "[[${success}]]";
+	totalPaymentAbout1 = "[[${checkoutInfo.paymentTotal}]]";
+	
+	$(document).ready(function(){
+		buttonCheckCoupon.click(function() {
+			checkCoupon();
+		});
+	});
+		
+	function checkCoupon(){
+		var coupon = $("#coupon").val();
+		var url = contextPath + "flight_order_check_coupon";
+
+		jsonData = {couponCode: coupon};
+		
+		$.ajax({
+			type: 'POST',
+			url: url,
+			data: JSON.stringify(jsonData),
+			contentType: 'application/json'
+		}).done(function(cou) {
+			var totalAmount = (parseFloat(totalPaymentAbout) - parseFloat(cou.couponAmount)).toFixed(2);
+			$("#successAlert").css("display", "block");
+			$("#successAlert").text(successAlert + " " + cou.couponCode);
+			$("#amountOfCoupon1").css("display", "flex");
+			$("#amountOfCoupon1").text("-" + cou.couponAmount + ".0");
+			$("#failedAlert").css("display", "none");
+			$("#totalPayment1").css("display", "none");
+			$("#totalPaymentNew1").css("display", "block");
+			$("#totalPaymentNew1").text(totalAmount);
+		}).fail(function() {
+			$("#failedAlert").css("display", "block");
+			$("#successAlert").css("display", "none");
+			$("#amountOfCoupon1").css("display", "none");
+			$("#totalPaymentNew1").css("display", "none");
+			$("#totalPayment1").css("display", "block");
+		});
+	};
+</script>
+<script type="text/javascript">
+  	contextPath = "[[@{/}]]";
+	buttonCheckCoupon1 = $("#buttonCheckCoupon1");
+	successAlert = "[[${success}]]";
+	totalPaymentAbout = "[[${checkoutInfo.paymentTotal}]]";
+	
+	$(document).ready(function(){
+		buttonCheckCoupon1.click(function() {
+			checkCoupon1();
+		});
+	});
+		
+	function checkCoupon1(){
+		var coupon = $("#coupon1").val();
+		var url = contextPath + "flight_order_check_coupon";
+
+		jsonData = {couponCode: coupon};
+		
+		$.ajax({
+			type: 'POST',
+			url: url,
+			data: JSON.stringify(jsonData),
+			contentType: 'application/json'
+		}).done(function(cou) {
+			var totalAmount = (parseFloat(totalPaymentAbout) - parseFloat(cou.couponAmount)).toFixed(2);
+			$("#successAlert1").css("display", "block");
+			$("#successAlert1").text(successAlert + " " + cou.couponCode);
+			$("#amountOfCoupon").css("display", "flex");
+			$("#amountOfCoupon").text("-" + cou.couponAmount + ".0");
+			$("#failedAlert1").css("display", "none");
+			$("#totalPayment").css("display", "none");
+			$("#totalPaymentNew").css("display", "block");
+			$("#totalPaymentNew").text(totalAmount);
+		}).fail(function() {
+			$("#failedAlert1").css("display", "block");
+			$("#successAlert1").css("display", "none");
+			$("#amountOfCoupon").css("display", "none");
+			$("#totalPaymentNew").css("display", "none");
+			$("#totalPayment").css("display", "block");
+		});
+	};
+</script>
 </html>

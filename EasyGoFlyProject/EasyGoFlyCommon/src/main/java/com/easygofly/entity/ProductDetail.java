@@ -28,7 +28,7 @@ public class ProductDetail {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(nullable = false, length = 25)
+	@Column(length = 25)
 	private String pnr;
 	
 	@Column(nullable = false, length = 5)

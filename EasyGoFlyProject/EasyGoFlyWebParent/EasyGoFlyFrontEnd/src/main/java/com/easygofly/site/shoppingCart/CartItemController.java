@@ -132,6 +132,7 @@ public class CartItemController {
 		OrderStatus orderCancelled = OrderStatus.CANCELLED;
 		OrderStatus orderSuccess = OrderStatus.SUCCESSFULL;
 		OrderStatus orderFailed = OrderStatus.FAILED;
+		OrderStatus orderPending = OrderStatus.PENDING;
 		
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
 		
@@ -150,6 +151,7 @@ public class CartItemController {
 		model.addAttribute("orderCancelled", orderCancelled);
 		model.addAttribute("orderSuccess", orderSuccess);
 		model.addAttribute("orderFailed", orderFailed);
+		model.addAttribute("orderPending", orderPending);
 		model.addAttribute("reverseSort", reverseSort);
 		
 		return pageOrder;

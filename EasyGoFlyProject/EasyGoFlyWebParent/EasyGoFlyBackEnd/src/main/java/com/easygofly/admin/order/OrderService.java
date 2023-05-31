@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.Order;
+import com.easygofly.entity.OrderStatus;
 
 @Service
 @Transactional
@@ -35,5 +36,12 @@ public class OrderService {
 			return orderRepo.findOrder(keyword, pageable);
 		}
 		return orderRepo.findAll(pageable);
+	}
+	
+	public Order updateStatus(Integer orderId, OrderStatus orderStatus) {
+		Order order = orderRepo.findById(orderId).get();
+		order.setOrderStatus(orderStatus);
+		
+		return orderRepo.save(order);
 	}
 }

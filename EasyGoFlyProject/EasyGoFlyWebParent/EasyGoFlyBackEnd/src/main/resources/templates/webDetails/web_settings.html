@@ -37,6 +37,9 @@
 				<li class="nav-item">
 					<a class="nav-link" data-bs-toggle="tab" href="#lowest_fare_set" role="tab">Set lowest Fare</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#coupons" role="tab">Set Coupon</a>
+				</li>
 			</ul>
 			
 			<div class="tab-content">
@@ -55,6 +58,9 @@
 				</div>
 				<div class="tab-pane p-3" id="lowest_fare_set" role="tabpanel">
 					<div th:replace="webDetails/lowest-fare-fragments :: content"></div>
+				</div>
+				<div class="tab-pane p-3" id="coupons" role="tabpanel">
+					<div th:replace="webDetails/coupon-fragments :: content"></div>
 				</div>
 			</div>
 		</div>

@@ -63,11 +63,11 @@
 						<th>Destination</th>
 						<th>Passenger No.</th>
 						<th>Price</th>
-						<th></th>
+						<th>Save as</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="order : ${listOrders}">
+					<tr th:each="order : ${orders}">
 						<td class="hideable-column">[[${order.customer.fullName}]]</td>
 						<td>[[${order.id}]]</td>
 						<td class="hideable-column"><img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45">&nbsp;[[${order.productDetail.product.brands.name}]]</td>
@@ -79,10 +79,44 @@
 						<td>[[${CURRENCY_SYMBOL}]][[${order.price}]]</td>
 						<td>	
 					    	<a th:href="@{'/order/export_pdf/' + ${order.id}}" class="fa fa-solid fa-file-pdf fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download PDF file"></a>
+					    	<form th:action="@{/orders/successful}" method="post" id="successful">
+					    		<input type="hidden" name="order_id" th:value="${order.id}">
+					    	<button type="submit" th:if="${order.orderStatus} == ${pending}" class="styleLink styleLinkButton float-right margin-both_side" title="Make the order successful." aria-hidden="true" style=" color: green; border: 2px solid green; ">Successful</button>
+					    	</form>
+					    	<form th:action="@{/orders/pending}" method="post" id="pending">
+					    		<input type="hidden" name="order_id" th:value="${order.id}">
+					    			<button type="submit" th:if="${order.orderStatus} == ${successful}" class="styleLink styleLinkButton float-right margin-both_side" title="Make the order pending." aria-hidden="true" style=" color: #ffc107; border: 2px solid #ffc107; ">Pending</button>
+					    	
+					    	</form>
 						</td>
 					</tr>
 				</tbody>
 			</table>
+			<a th:fragment="page_Link(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/page/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>
+			
+			<div> 
+				<div class="text-center m-1" th:if="${totalItems > 0}">
+					<span>Showing Orders # ([[${startCount}]] - [[${endCount}]]) of [[${totalItems}]]</span>
+				</div>
+				<div class="text-center m-1" th:unless="${totalItems > 0}">
+					<span>No orders found</span>
+				</div>
+				
+				<div th:if="${totalItems > 1}">
+					<nav aria-label="Page navigation example">
+					  <ul class="pagination justify-content-center flex-wrap">
+					  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="orders/orders :: page_Link(orders, 1, 'First')">First</a></li>
+					    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="orders/orders :: page_Link(orders, ${currentPage - 1}, 'Previous')">Previous</a></li>
+					    
+					    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="orders/orders :: page_Link(orders, ${i}, ${i})"></a></li>
+					    
+					    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="orders/orders :: page_Link(orders, ${currentPage + 1}, 'Next')" ></a></li>
+					    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="orders/orders :: page_Link(orders, ${totalPages}, 'Last')"></a></li>
+					  </ul>
+					</nav>
+				</div>
+			</div>
+			
 		</div>
 		<div class="less-details">
 			<div class="row m-1">
@@ -96,9 +130,31 @@
 					</div>
 				</div>
 			</div>
+			<div> 
+				<div class="text-center m-1" th:if="${totalItems > 0}">
+					<span>Showing Orders # ([[${startCount}]] - [[${endCount}]]) of [[${totalItems}]]</span>
+				</div>
+				<div class="text-center m-1" th:unless="${totalItems > 0}">
+					<span>No orders found</span>
+				</div>
+				
+				<div th:if="${totalItems > 1}">
+					<nav aria-label="Page navigation example">
+					  <ul class="pagination justify-content-center flex-wrap">
+					  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="orders/orders :: page_Link(orders, 1, 'First')">First</a></li>
+					    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="orders/orders :: page_Link(orders, ${currentPage - 1}, 'Previous')">Previous</a></li>
+					    
+					    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="orders/orders :: page_Link(orders, ${i}, ${i})"></a></li>
+					    
+					    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="orders/orders :: page_Link(orders, ${currentPage + 1}, 'Next')" ></a></li>
+					    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="orders/orders :: page_Link(orders, ${totalPages}, 'Last')"></a></li>
+					  </ul>
+					</nav>
+				</div>
+			</div>
 		</div>
 		
-		<!-- <div th:replace="fragments :: pagination('users', 'Users')"></div> -->
+		
 		
 
 		<div class="modal fade text-center" id="deleteConfirmModal">

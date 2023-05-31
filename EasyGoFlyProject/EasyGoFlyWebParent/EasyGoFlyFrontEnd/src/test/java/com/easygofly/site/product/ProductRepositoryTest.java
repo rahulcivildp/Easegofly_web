@@ -22,11 +22,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.easygofly.entity.Order;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
+import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.ProductDetailsRepository;
+import com.easygofly.site.flight.TravellerRepository;
+import com.easygofly.site.order.OrderRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -34,14 +38,11 @@ import com.easygofly.site.flight.ProductDetailsRepository;
 @ContextConfiguration(classes = EasyGoFlyFrontEndApplication.class)
 public class ProductRepositoryTest {
 
-	@Autowired 
-	private ProductDetailsRepository repo;
-	
-	@Autowired
-	private FlightRepository flightRepo;
-	
-	@Autowired
-	private TestEntityManager enityManager;
+	@Autowired private ProductDetailsRepository repo;
+	@Autowired private FlightRepository flightRepo;
+	@Autowired private TestEntityManager enityManager;
+	@Autowired private OrderRepository orderRepo ;
+	@Autowired private TravellerRepository travellerRepo;
 	
 	@Test
 	public void testSerachByDate() {
@@ -97,4 +98,19 @@ public class ProductRepositoryTest {
 		// 2018-05-12
 	}
 	
+	
+	@Test
+	public void searchListTraveler() {
+		Order order = orderRepo.findById(26).get();
+		
+		TravellerDetail travellerDetail = travellerRepo.findById(13).get();
+		
+		travellerDetail.setOrder(order);
+		
+		travellerRepo.save(travellerDetail);
+		
+		System.out.println(travellerDetail.getFirstName());
+		
+		
+	}
 }

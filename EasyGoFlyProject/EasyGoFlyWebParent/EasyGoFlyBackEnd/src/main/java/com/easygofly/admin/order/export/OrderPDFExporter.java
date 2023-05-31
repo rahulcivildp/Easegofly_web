@@ -13,7 +13,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 
 import com.easygofly.entity.Brand;
-import com.easygofly.entity.CartItem;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.Product;
@@ -39,7 +38,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 public class OrderPDFExporter extends AbstractOrderExporter {
 
-	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, CartItem cartItem, String logoLink, List<TravellerDetail> travellerDetails, String faviconLink) throws Exception {
+	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, String logoLink, List<TravellerDetail> travellerDetails, String faviconLink) throws Exception {
 		super.setResponseHeader(response, "application/pdf", ".pdf");
 		
 		Document document = new Document(PageSize.A4);
@@ -53,8 +52,8 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		headerTable(new PdfPTable(3), document, order);
 		addressAndBarCode(cb, new PdfPTable(3), document, order, faviconLink);
 		flightItinary(new PdfPTable(3), document, order, cityOne, cityTwo);
-		flightDetailsHeader(new PdfPTable(1), document, order, cityOne, cityTwo, cartItem);
-		flightDetails(new PdfPTable(5), document, order, cityOne, cityTwo, cartItem);
+		flightDetailsHeader(new PdfPTable(1), document, order, cityOne, cityTwo);
+		flightDetails(new PdfPTable(5), document, order, cityOne, cityTwo);
 		travelerDetailsHeader(new PdfPTable(2), document, order);
 		travelerTableHeader(new PdfPTable(6), document, order);
 		
@@ -64,7 +63,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		travelerBorder(new PdfPTable(1), document);
 		totalFareTable(new PdfPTable(2), document, order);
 		extraDetailsAfterPrice(new PdfPTable(2), document, order, logoLink);
-		travellerInfo(cb, new PdfPTable(3), document, order, cartItem);
+		travellerInfo(cb, new PdfPTable(3), document, order);
 		helpInfo(new PdfPTable(1), document);
 		additionalInfo(new PdfPTable(1), document);
 		footerDialog(new PdfPTable(1), document);
@@ -241,7 +240,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		document.add(table);
 	}
 	
-	private void flightDetailsHeader(PdfPTable table, Document document, Order order, City cityOne, City cityTwo, CartItem cartItem) throws BadElementException, IOException {
+	private void flightDetailsHeader(PdfPTable table, Document document, Order order, City cityOne, City cityTwo) throws BadElementException, IOException {
 		table.setWidthPercentage(100f);
 		table.setSpacingBefore(10);
 		table.setWidths(new float[] {14.5f});
@@ -262,7 +261,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cellModifyStyle(cell);
 		Paragraph p = new Paragraph("");
 		Chunk normal = new Chunk("Passenger CTCM: ", font);
-		Chunk bold = new Chunk(cartItem.getPhoneNum().toString(), fontBold);
+		Chunk bold = new Chunk(order.getPhoneNumber().toString(), fontBold);
 		p.add(normal);
 		p.add(bold);
 		cell.setPhrase(p);
@@ -303,7 +302,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cell.setFixedHeight(19.0f);
 	}
 
-	private void flightDetails(PdfPTable table, Document document, Order order, City cityOne, City cityTwo, CartItem cartItem) throws BadElementException, IOException {
+	private void flightDetails(PdfPTable table, Document document, Order order, City cityOne, City cityTwo) throws BadElementException, IOException {
 		table.setWidthPercentage(100f);
 		table.setWidths(new float[] {2.6f, 3.2f, 2.9f, 3.2f, 2.6f});
 		table.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -817,7 +816,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		document.add(table);
 	}
 	
-	private void travellerInfo(PdfContentByte cb, PdfPTable table, Document document, Order order, CartItem cartItem) throws BadElementException, IOException {
+	private void travellerInfo(PdfContentByte cb, PdfPTable table, Document document, Order order) throws BadElementException, IOException {
 		table.setWidthPercentage(100f);
 		table.setSpacingBefore(4);
 		table.setWidths(new float[] {7.5f, 1.5f, 3.5f});
@@ -835,9 +834,9 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cell.setBorderColor(Color.WHITE);
 		
 		Chunk infoChk = new Chunk("Traveller Information\n", font);
-		String phNum = cartItem.getPhoneNum().toString();
+		String phNum = order.getPhoneNumber().toString();
 		Chunk infoChk1 = new Chunk("Contact No.: " + phNum + "\n", fontSmall);
-		Chunk infoChk2 = new Chunk("Email: " + cartItem.getEmail(), fontSmall);
+		Chunk infoChk2 = new Chunk("Email: " + order.getContactEmail(), fontSmall);
 		
 		Phrase infoPhrs = new Phrase();
 		infoPhrs.add(infoChk); infoPhrs.add(infoChk1); infoPhrs.add(infoChk2);

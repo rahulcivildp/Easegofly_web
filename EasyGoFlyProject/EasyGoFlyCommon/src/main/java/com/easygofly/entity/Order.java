@@ -70,6 +70,9 @@ public class Order {
 	@Column(length = 256)
 	private String transactionToken;
 	
+	@Column(name = "coupon_code")
+	private String couponCode;
+	
 	private String status;
 	 
 	private double price;
@@ -246,6 +249,14 @@ public class Order {
 
 	public void setTransactionToken(String transactionToken) {
 		this.transactionToken = transactionToken;
+	}
+
+	public String getCouponCode() {
+		return couponCode;
+	}
+
+	public void setCouponCode(String couponCode) {
+		this.couponCode = couponCode;
 	}
 
 	public String getStatus() {
