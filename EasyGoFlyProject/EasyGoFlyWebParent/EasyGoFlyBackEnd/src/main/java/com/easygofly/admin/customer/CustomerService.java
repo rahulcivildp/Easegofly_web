@@ -14,11 +14,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.easygofly.admin.order.CartItemRepository;
+import com.easygofly.admin.order.OrderRepository;
 import com.easygofly.admin.setting.CountryRepository;
 import com.easygofly.admin.user.RoleRepository;
+import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.Order;
+import com.easygofly.entity.RechargeHistory;
+import com.easygofly.entity.RechargeHistoryStatus;
 import com.easygofly.entity.Role;
+import com.easygofly.entity.Wallet;
 import com.easygofly.entity.exception.UserNotFoundException;
 
 import net.bytebuddy.utility.RandomString;
@@ -28,17 +35,14 @@ import net.bytebuddy.utility.RandomString;
 public class CustomerService {
 	public static final int CUSTOMER_PER_PAGE = 6;
 	
-	@Autowired
-	private CustomerRepository customerRepo;
-	
-	@Autowired
-	private RoleRepository roleRepo;
-	
-	@Autowired 
-	private CountryRepository countryRepo;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	@Autowired private CustomerRepository customerRepo;
+	@Autowired private RoleRepository roleRepo;
+	@Autowired private CountryRepository countryRepo;
+	@Autowired private PasswordEncoder passwordEncoder;
+	@Autowired private CartItemRepository cartItemRepo;
+	@Autowired private OrderRepository orderRepo;
+	@Autowired private RechargeHistoryRepository rechargeHistoryRepo ;
+	@Autowired private WalletRepository walletRepo  ;
 	
 	
 	public List<Country> listAllCountries() {
@@ -152,6 +156,22 @@ public class CustomerService {
 	}
 	
 	public void deleteCustomer(Integer id) throws UserNotFoundException {
+		Customer customer = customerRepo.findById(id).get();
+		List<CartItem> cartItems = cartItemRepo.findByCustomer(customer);
+		List<Order> orders = orderRepo.findByCustomer(customer);
+		if (orders != null) {
+			for (Order order : orders) {
+				order.setCustomer(null);
+				orderRepo.save(order);
+			}
+		}
+		if (cartItems != null) {
+			for (CartItem cartItem : cartItems) {
+				cartItem.setCustomer(null);
+				cartItemRepo.save(cartItem);
+			}
+		}
+		
 		Long count = customerRepo.countById(id);
 		if(count == null || count == 0) {
 			throw new UserNotFoundException("Could not find any user with ID: " + id);
@@ -162,5 +182,34 @@ public class CustomerService {
 	
 	public void updateCustomerEnabledStatus(Integer id, boolean enabled) {
 		customerRepo.updateEnableStatus(id, enabled);
+	}
+	
+	public RechargeHistory createRechargeHistory(Customer customer, String transId, Integer addedBalance) {
+		Wallet wallet = customer.getWallet();
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest22222222");
+		RechargeHistory rechargeHistory = new RechargeHistory();
+		rechargeHistory.setWallet(wallet);
+		rechargeHistory.setRechargeAmount(addedBalance);
+		rechargeHistory.setTransaction(transId);
+		rechargeHistory.setDate(new Date());
+		rechargeHistory.setRechargeHistoryStatus(RechargeHistoryStatus.SUCCESSFULL);
+
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest33333333333");
+		return rechargeHistoryRepo.save(rechargeHistory);
+	}
+	
+	public List<RechargeHistory> listAllRechargeHistory(Wallet wallet, Sort sort) {
+		List<RechargeHistory> rechargeHistories = rechargeHistoryRepo.findByWallet(wallet, sort);
+		return rechargeHistories;
+	}
+	
+	public Wallet createWallet(Customer customer) {
+		Wallet wallet = new Wallet();
+		
+		wallet.setCustomer(customer);
+		wallet.setBalance(0);
+		wallet.setTempValue(0);
+
+		return walletRepo.save(wallet);
 	}
 }

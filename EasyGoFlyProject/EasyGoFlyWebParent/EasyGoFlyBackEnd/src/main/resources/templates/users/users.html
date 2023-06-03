@@ -87,9 +87,8 @@
 						<td>
 							<div th:replace="fragments :: enabled(${user.enabled}, ${user.id}, 'users')"></div>
 						</td>
-						<td>
+						<td style=" display: flex; justify-content: space-around; align-items: center;">
 							<div th:replace="fragments :: edit('users', ${user.id})"></div>
-							&nbsp;
 							<div th:replace="fragments :: delete('users', ${user.id})"></div>
 						</td>
 					</tr>

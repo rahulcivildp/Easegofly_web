@@ -151,6 +151,24 @@
 			    height: 100%;
 			    width: 65%;
         }
+        
+        .payment_zaakpay {
+        	border: 2px solid #197af6;
+		    width: 250px;    
+		    padding: 14px 33px;
+		    height: 66px;
+		    margin: 16px;
+		    border-radius: 7px;
+		    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+		    background-repeat: no-repeat;
+		    background-size: cover;
+		    background-position: center;
+        }
+        
+        .check_input {
+        	width: 27px;
+    		height: 27px;
+        }
     </style>
 
     <body>
@@ -309,6 +327,27 @@
                                     </div>
                                 </div>
                         </div>
+                        <div class="col-md-9" style="padding: 0;">
+							<div id="payment_selection" class="booking_tiles back_white shadow">
+							                                <div style="background-color: #ecf5fd;">
+							                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Choose a Payment Method</p>
+							                                </div>
+							 <div class="row" style="padding: 10px;">
+							  <div class="form-check col-md-3 col-12" style="display: flex; align-items: center; margin-left: 24px;">
+							  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+							  <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
+							</div>
+							<div class="form-check col-md-3 col-12" style="display: flex; align-items: center; margin-left: 24px;">
+							  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+							  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
+							  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
+							  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
+							  </div>
+							  </label>
+							</div>
+							</div>
+							</div>
+						</div>
                     </div>
                     
                     <div class="row">
@@ -354,7 +393,13 @@
                            			<input type="hidden" th:name="${orderInfo.getKey}" th:value="${orderInfo.getValue}">
                            		</th:block>
                            		<input type="hidden" name="checksum" th:value="${checksum}">
-                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" type="submit" value="Book Now" id="payButton">
+                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white; display: block;" type="submit" value="Book Now" id="payButton">
+                            </form>
+                            
+                            <form th:action="@{/flight_wallet_check}" method="post" id="payment_form_wallet" onsubmit="return(checkWalletBalance(this))">
+                            	<input type="hidden" name="flight_price" th:value="${order.price}">
+                            	<input type="hidden" name="Order_id" th:value="${order.id}">
+                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white; display: none;" type="submit" value="Book Now" id="payButtonWallet" data-bs-toggle="modal" data-bs-target="#modalDialogue">
                             </form>
                            
                         </div>
@@ -362,12 +407,24 @@
                     </div>
                 </div>
                 
-                
-                
-                
             </div>
         </div>
-     
+     <div class="modal fade text-center" id="modalDialogue">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle"></h4>
+						<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<span id="modalBody" style="color: red;"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>	
+		</div>
     </body>
      
  
@@ -398,8 +455,45 @@
 	});
      
     </script>
+    <script type="text/javascript">
     
- 
+    	$("#flexRadioDefault2").click(function() {
+    		$("#payButton").css("display", "none");
+    		$("#payButtonWallet").css("display", "block");
+    	});
+    	$("#flexRadioDefault1").click(function() {
+    		$("#payButton").css("display", "block");
+    		$("#payButtonWallet").css("display", "none");
+    	});
+    </script>
+ 	<script type="text/javascript">
+ 	
+ 	function checkWalletBalance(form) {
+		orderPrice = $("input[name='flight_price']").val();
+		url = "[[@{/check_wallet_balance}]]"
+		
+		params = {price: orderPrice};
+			
+		$.post(url, params, function(response) {
+			if (response == "insufficient") {
+				showModelDialogue("Alert!!!", "Insufficient balance in your wallet.");
+			} else {
+				form.submit();
+			}
+		}).fail(function(){
+			showModelDialogue("Error", "Could not connect to the server.");
+		});
+		
+		return false;
+	};
+	
+	function showModelDialogue(title, message) {
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message);
+		$("#modalDialogue").modal();
+	};
+ 	
+ 	</script>
 
 
 </html>

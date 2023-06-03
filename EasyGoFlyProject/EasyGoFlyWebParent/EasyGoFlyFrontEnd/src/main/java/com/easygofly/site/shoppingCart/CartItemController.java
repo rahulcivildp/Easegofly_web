@@ -25,7 +25,6 @@ import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
-import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.order.OrderService;

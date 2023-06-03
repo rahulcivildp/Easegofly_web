@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.Order;
 import com.easygofly.entity.RechargeHistory;
 import com.easygofly.entity.RechargeHistoryStatus;
 import com.easygofly.entity.Wallet;
@@ -60,5 +61,24 @@ public class WalletService {
 	public List<RechargeHistory> listAllRechargeHistory(Wallet wallet, Sort sort) {
 		List<RechargeHistory> rechargeHistories = rechargeHistoryRepo.findByWallet(wallet, sort);
 		return rechargeHistories;
+	}
+	
+	public Wallet updateWalletBalanceByOrder(Customer customer, Order order, String transId) {
+		Wallet wallet = customer.getWallet();
+		Integer intOrder100 = (int) order.getPrice() * 100;
+		Integer intOrder = (int) order.getPrice();
+		if (wallet.getBalance() >= intOrder100) {
+			System.out.println((wallet.getBalance() / 100) + " is BIGGER than " + intOrder);
+			wallet.setBalance(wallet.getBalance() - intOrder100);
+			wallet.setTempValue(intOrder100);
+			
+			RechargeHistory rechargeHistory = createRechargeHistory(customer, transId);
+			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
+			
+			return walletRepo.save(wallet);
+		} else {
+			System.out.println((wallet.getBalance() / 100) + " is SMALLER than " + intOrder);
+			return null;
+		}
 	}
 }

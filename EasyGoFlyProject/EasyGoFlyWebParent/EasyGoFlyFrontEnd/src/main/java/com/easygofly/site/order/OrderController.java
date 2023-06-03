@@ -39,6 +39,7 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
+import com.easygofly.entity.Wallet;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
@@ -56,6 +57,7 @@ import com.easygofly.site.setting.GeneralSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
+import com.easygofly.site.wallet.WalletService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
@@ -79,12 +81,14 @@ public class OrderController {
 	@Autowired private CityService cityService;
 	@Autowired private TravellerRepository travellerRepo;
 	@Autowired private CouponService couponService ;
-	
+	@Autowired private WalletService walletService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
 	private Boolean verifiedChecksum;
 	private String[] responseParameters;
+	private Integer savedOrderId;
+	private Integer updatedOrderId;
 	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
@@ -232,11 +236,17 @@ public class OrderController {
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			Double doubleAmount = (double) (wallet.getBalance() / 100);
+			model.addAttribute("balance", doubleAmount);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			Double doubleAmount = (double) (wallet.getBalance() / 100);
+			model.addAttribute("balance", doubleAmount);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -313,6 +323,8 @@ public class OrderController {
 		
 		Coupon coupon = couponService.findCouponByCode(order.getCouponCode());
 		
+		savedOrderId = order.getId();
+		
 		model.addAttribute("order_id", order.getId());
 		model.addAttribute("order", order);
 		model.addAttribute("checkoutInfo", checkoutInfo);
@@ -377,7 +389,7 @@ public class OrderController {
 		try {
 			CartItem cartItem = cartRepo.findById(order.getCartId()).get();
 			if (!cartItem.equals(null)) {
-				if (order.getOrderStatus().equals(OrderStatus.CANCELLED) || order.getOrderStatus().equals(OrderStatus.SUCCESSFULL) || order.getOrderStatus().equals(OrderStatus.FAILED)) {
+				if (order.getOrderStatus().equals(OrderStatus.CANCELLED) || order.getOrderStatus().equals(OrderStatus.SUCCESSFULL) || order.getOrderStatus().equals(OrderStatus.FAILED) || order.getOrderStatus().equals(OrderStatus.PENDING )) {
 					List<SearchHistory> search = cartItem.getSearchHistory();
 					for (SearchHistory searchHistory : search) {
 						List<TravellerDetail> travellerDetail2 = travellerRepo.findTravellerByCustomerAndProductDetail(productDetail, cartItem);
@@ -406,7 +418,7 @@ public class OrderController {
 	@CrossOrigin(origins = {"https://easegofly.com/"})
 	@RequestMapping(value = "/zaakpay/response",
 			method = {RequestMethod.GET})
-	public String zaakpayResponseSe (HttpServletRequest request, Model model, HttpServletResponse response, 
+	public String zaakpayResponseSe (Model model, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 		String email; 
@@ -422,7 +434,6 @@ public class OrderController {
 			model.addAttribute("customer", customer);
 		}
 
-		//Order order = orderRepo.findByCartItemOrder(item_id); 
 		String orderParam = parameter[8];
 		model.addAttribute("orderId", orderParam);
 		String[] parts = orderParam.split("R");
@@ -529,30 +540,182 @@ public class OrderController {
 		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink); 
 
 	}
-	/*
-	@PostMapping("/payg")
-	public void payg(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		com.easygofly.site.payg.Order ordr = new com.easygofly.site.payg.Order();
-		Process process = ordr.create(request);
-		
-		InputStream is = process.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
-        String line,output="";
-        while ((line = br.readLine()) != null) {
-        	output += line;
-        }
-      
-        System.out.println(request.toString());
-        
-		response.getWriter().write(output);
-	}*/
 	
-	/*
-	@PostMapping("/phonepe")
-	public void phonepe() throws NoSuchAlgorithmException, IOException, InterruptedException {
-		Phonepe phpe = new Phonepe();
-		phpe.authentication();
+	@PostMapping("/flight_wallet_check")
+	public String walletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin) {
+		
+		String email; 
+		Customer customer; 
+		Order order = orderRepo.findById(savedOrderId).get();
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = walletPayOrder(customer, order);
+			if (wallet != null) {
+				Order updatedOrder = orderUpdateWallet(order);
+				updatedOrderId = updatedOrder.getId();
+			}
+			System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest11111111111111" + savedOrderId);
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = walletPayOrder(customer, order);
+			if (wallet != null) {
+				Order updatedOrder = orderUpdateWallet(order);
+				updatedOrderId = updatedOrder.getId();
+			}
+		}
+		
+		return "redirect:/flight_wallet_response";
 	}
-	*/
+
+	private Order orderUpdateWallet(Order order) {
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest44444444444444444");
+		ProductDetail productDetail = order.getProductDetail();
+		
+		if (productDetail.getPnr().equals(null) || productDetail.getPnr().equals("")) {
+			orderService.updateOrder(order, OrderStatus.PENDING);
+		} else {
+			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+		}
+		
+		Integer totalSeatRemaining = Integer.parseInt(productDetail.getTotalSeats()) - order.getPassengerNum();
+		orderService.updateTotalPassenger(order, totalSeatRemaining);
+		
+
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest222222222222");
+		try {
+			CartItem cartItem = cartRepo.findById(order.getCartId()).get();
+			if (!cartItem.equals(null)) {
+				if (order.getOrderStatus().equals(OrderStatus.CANCELLED) || order.getOrderStatus().equals(OrderStatus.SUCCESSFULL) || order.getOrderStatus().equals(OrderStatus.FAILED) || order.getOrderStatus().equals(OrderStatus.PENDING )) {
+					List<SearchHistory> search = cartItem.getSearchHistory();
+					for (SearchHistory searchHistory : search) {
+						List<TravellerDetail> travellerDetail2 = travellerRepo.findTravellerByCustomerAndProductDetail(productDetail, cartItem);
+						for (TravellerDetail travellerDetail : travellerDetail2) {
+							travellerDetail.setCartItem(null);
+							travellerRepo.save(travellerDetail);
+						}
+							
+						searchService.updateSearchHistoryCart(searchHistory, cartItem);
+						searchHistory.setCartItem(null);
+						searchRepo.save(searchHistory);
+					}
+					cartItem.setSearchHistory(null);
+					cartRepo.save(cartItem);
+					
+					cartService.deleteCartItem(cartItem.getId());
+				}
+			}
+		} catch (Exception e) {
+			return order;
+		}
+		return order;
+	}
+
+	private Wallet walletPayOrder(Customer customer, Order order) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
+		return walletService.updateWalletBalanceByOrder(customer, order, orderString);
+	}
+	
+	@GetMapping("/flight_wallet_response")
+	public String showWalletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest0000000000000" + updatedOrderId);
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest3333333333333");
+		
+		Order order = orderRepo.findById(updatedOrderId).get();
+		model.addAttribute("orderId", order.getId());
+		ProductDetail productDetail = order.getProductDetail();
+		String pnr = productDetail.getPnr();
+		model.addAttribute("pnrBarcode", pnr);
+		model.addAttribute("orderStatusO", order.getOrderStatus());
+		
+		String cityOne = productDetail.getCityOne();
+		String cityTwo = productDetail.getCityTwo();
+		City city1 = cityRepo.getCityByCode(cityOne);
+		City city2 = cityRepo.getCityByCode(cityTwo);
+		model.addAttribute("cityOne", city1.getCityName());
+		model.addAttribute("cityTwo", city2.getCityName());
+		model.addAttribute("city1", cityOne);
+		model.addAttribute("city2", cityTwo);
+		
+		Date date1 = productDetail.getDate();  
+		DateFormat dateFormat1 = new SimpleDateFormat("E, dd-MM-yyyy");  
+	    String flightDateTime = dateFormat1.format(date1);
+		model.addAttribute("flightDateTime", flightDateTime);
+		
+		Date date2 = order.getCreatedTime();  
+		DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");  
+	    String orderDateTime = dateFormat2.format(date2);
+		model.addAttribute("orderDateTime", orderDateTime);
+		
+		model.addAttribute("passengerPhone", order.getPassengerNum());
+		model.addAttribute("passengerEmail", order.getContactEmail());
+		
+		Product product = productDetail.getProduct();
+		Brand brand = product.getBrands();
+		model.addAttribute("brandPath", ".." + brand.getPhotosImagePath());
+		model.addAttribute("brandName", brand.getName());
+		model.addAttribute("productDetail", productDetail);
+		model.addAttribute("originTerminal", product.getOriginTerminal());
+		model.addAttribute("destinationTerminal", product.getDestinationTerminal());
+		model.addAttribute("baggage", product.getBaggage());
+		model.addAttribute("cabinBaggage", product.getCabinBaggage());
+		
+		Integer dateInt = productDetail.getDuration()/60;
+		if (dateInt >= 10) {
+			model.addAttribute("dateInt", dateInt);
+		} else {
+			model.addAttribute("dateInt", "0" + dateInt);
+		}
+		Integer timeInt = productDetail.getDuration()%60;
+		if (timeInt >= 10) {
+			model.addAttribute("timeInt", timeInt);
+		} else {
+			model.addAttribute("timeInt", "0" + timeInt);
+		}
+		
+		Path flightUpPath = Paths.get("../pdf-images/flight-up.png");
+		Path flightDownPath = Paths.get("../pdf-images/flight-down.png");
+		Path demoTicketPath = Paths.get("../pdf-images/demo-ticket.png");
+		Path thumbLogoPath = Paths.get("../pdf-images/thumb-logo.png");
+		model.addAttribute("flightUpPath", flightUpPath);
+		model.addAttribute("flightDownPath", flightDownPath);
+		model.addAttribute("demoTicketPath", demoTicketPath);
+		model.addAttribute("thumbLogoPath", thumbLogoPath);
+		
+		User user = product.getUser();
+		model.addAttribute("user", user);
+		
+		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
+		model.addAttribute("travellerDetails", travellerDetails);
+        
+		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+		model.addAttribute("amount", order.getPrice());
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
+		
+		return "wallet/response";
+	}
 }

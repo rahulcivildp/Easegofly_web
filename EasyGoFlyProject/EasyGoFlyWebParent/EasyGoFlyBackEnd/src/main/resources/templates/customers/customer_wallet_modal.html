@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+<head>
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+</head>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modalTitle">View Wallet</h4>
+		<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+	</div>
+	<div class="modal-body">
+		<div th:replace="customers/wallet-fragment :: content( ${customer.wallet.balance}, 'tag')"></div>
+	</div>
+										
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+	</div>
+</html>

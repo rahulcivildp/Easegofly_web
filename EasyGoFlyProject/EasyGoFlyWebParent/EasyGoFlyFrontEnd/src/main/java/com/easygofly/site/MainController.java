@@ -29,7 +29,6 @@ import com.easygofly.site.security.DatabaseLoginSuccessHandler;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.web.WebSettingService;
-import com.easygofly.site.wallet.WalletService;
 
 
 @Controller
@@ -40,7 +39,6 @@ public class MainController {
 	@Autowired private WebSettingService webSettingService;
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private BrandRepositoy brandRepo;
-	@Autowired private WalletService walletService;
 	
 	@GetMapping("/")
 	public String viewHomePage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 

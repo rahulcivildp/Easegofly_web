@@ -1,13 +1,9 @@
 package com.easygofly.site.flightActivity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,8 +51,8 @@ public class FlightActivityController {
 			String email; 
 			Customer customer;
 	
-			City city1 = cityRepo.getCityByCode(cityOne);
-		    City city2 = cityRepo.getCityByCode(cityTwo);
+			City city1 = cityRepo.getCityByName(cityOne);
+		    City city2 = cityRepo.getCityByName(cityTwo);
 		   
 		    String sort = "pnr";
 		    String brand = "";
@@ -80,7 +76,10 @@ public class FlightActivityController {
 	}
 	
 	@GetMapping("/flight_activity")
-	public String flightActivity() {
+	public String flightActivity(Model model) {
+		Iterable<City> cities = cityRepo.findAll();
+		
+		model.addAttribute("cities", cities);
 		return "flight-activity/flight-activity";
 	}
 	
@@ -112,7 +111,9 @@ public class FlightActivityController {
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
 		Iterable<Brand> brands = brandRepo.findAll();
+		Iterable<City> cities = cityRepo.findAll();
 		
+		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("cityTwo", cityTwo);

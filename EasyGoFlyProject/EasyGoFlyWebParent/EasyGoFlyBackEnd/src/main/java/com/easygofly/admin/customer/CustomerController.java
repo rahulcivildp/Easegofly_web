@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +21,17 @@ import com.easygofly.admin.FileUploadUtil;
 import com.easygofly.admin.user.UserService;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.RechargeHistory;
+import com.easygofly.entity.RechargeHistoryStatus;
+import com.easygofly.entity.Wallet;
 import com.easygofly.entity.exception.UserNotFoundException;
 
 @Controller
 public class CustomerController {
 
-	@Autowired
-	private CustomerService service;
+	@Autowired private CustomerService service;
+	@Autowired private CustomerRepository customerRepo;
+	@Autowired WalletRepository walletRepo;
 	
 	@GetMapping("/customers")
 	public String listFirstPage(Model model) {
@@ -38,24 +43,24 @@ public class CustomerController {
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
 		//System.out.println("Sort Field: " + sortField);
 		//System.out.println("Sort Order: " + sortDir);
-		Page<Customer> pageUser = service.listByPage(pageNum, sortField, sortDir, keyword);
+		Page<Customer> pageCustomer = service.listByPage(pageNum, sortField, sortDir, keyword);
 		
-		List<Customer> listUsers = pageUser.getContent();
+		List<Customer> listCustomers = pageCustomer.getContent();
 		
 		long startCount = (pageNum - 1) * UserService.USER_PER_PAGE + 1;
 		long endCount = startCount + UserService.USER_PER_PAGE - 1;
-		if (endCount > pageUser.getTotalElements()) {
-			endCount = pageUser.getTotalElements();
+		if (endCount > pageCustomer.getTotalElements()) {
+			endCount = pageCustomer.getTotalElements();
 		}
 		
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
 		
 		model.addAttribute("currentPage", pageNum);
-		model.addAttribute("totalPages", pageUser.getTotalPages());
+		model.addAttribute("totalPages", pageCustomer.getTotalPages());
 		model.addAttribute("startCount", startCount);
 		model.addAttribute("endCount", endCount);
-		model.addAttribute("totalItems", pageUser.getTotalElements());
-		model.addAttribute("listUsers", listUsers);
+		model.addAttribute("totalItems", pageCustomer.getTotalElements());
+		model.addAttribute("listCustomers", listCustomers);
 		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSort", reverseSort);
@@ -134,6 +139,43 @@ public class CustomerController {
 		service.updateCustomerEnabledStatus(id, enabled);
 		String status = enabled? "ENABLED" : "DISABLED";
 		redirectAttributes.addFlashAttribute("message", "User ID: " + id + " is successfully " + status + ".");
+		return "redirect:/customers";
+	}
+	
+	@GetMapping("/customers/show_modal_wallet/{id}")
+	public String showModal(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+		Customer customer = customerRepo.findById(id).get();
+		
+		model.addAttribute("customer", customer);
+		return "customers/customer_wallet_modal";
+	}
+	
+	@GetMapping("/show-history-{id}")
+	public String showHistory(@PathVariable(name = "id") Integer id, Model model) {
+		Customer customer = customerRepo.findById(id).get();
+		Wallet wallet = customer.getWallet();
+		List<RechargeHistory> rechargeHistories = service.listAllRechargeHistory(wallet, Sort.by("date").ascending());
+		model.addAttribute("rechargeHistories", rechargeHistories);
+		model.addAttribute("customer", customer);
+		model.addAttribute("rechargeStatus", RechargeHistoryStatus.SUCCESSFULL);
+		
+		return "customers/show-history";
+	}
+	
+	@PostMapping("/create_wallet_all_customers")
+	public String showHistory(RedirectAttributes redirectAttributes) {
+		Iterable<Customer> customers = customerRepo.findAll();
+		for (Customer customer : customers) {
+			if (customer.getWallet() == null) {
+				Wallet wallet = service.createWallet(customer);
+				customer.setWallet(wallet);
+				
+				customerRepo.save(customer);
+				redirectAttributes.addAttribute("message", "An Wallet has been created for each of the customers.");
+			} else {
+				redirectAttributes.addAttribute("alert", "Wallet is already existed.");
+			}
+		}
 		return "redirect:/customers";
 	}
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+<head>
+<head th:replace="fragments :: page_head('Recharge History Page', 'tag')"></head>
+	<style type="text/css">
+		.rowSuccess {
+			    padding: 10px;
+			    border: 1px solid grey;
+			    border-radius: 7px;
+			    background: #0080007a;
+			    color: white;
+			    margin: 5px 0;
+		} 
+		
+		.rowCancel {
+			    padding: 10px;
+			    border: 1px solid grey;
+			    border-radius: 7px;
+			    background: #80000042;
+			    color: white;
+			    margin: 5px 0;
+		} 
+	
+	</style>
+</head>	
+<body>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<div class="container-fluid">
+		<div th:replace="navigation :: nav_menu"></div>
+
+<div class="container" style="border: 3px solid #848cea; border-radius: 8px; margin-bottom: 20px; margin-top: 30px; box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px; padding: 20px;">
+	<h2>Recharge History:</h2>
+	<th:block th:each="rechargeHistory : ${rechargeHistories}">
+		<div th:class="${rechargeHistory.rechargeHistoryStatus} == ${rechargeStatus} ? 'row rowSuccess' : 'row rowCancel'">
+			<div class="col-2">Date: [[${rechargeHistory.date}]]</div>
+			<div class="col-2"></div>
+			<div class="col-2">TRN ID: [[${rechargeHistory.transaction}]]</div>
+			<div class="col-2" th:id="'rechargeAmount' + ${rechargeHistory.id}"></div>
+			<div class="col-2"></div>
+			<div class="col-2">Status: [[${rechargeHistory.rechargeHistoryStatus}]]</div>
+		</div>
+		<script type="text/javascript">
+			rechargeAmount = [[${rechargeHistory.rechargeAmount}]] / 100;
+			rechargeAmountString = "Rs. " + rechargeAmount + " INR";
+			$("#rechargeAmount" + [[${rechargeHistory.id}]]).text(rechargeAmountString);
+		</script>
+	</th:block>
+</div>
+ 
+</div>
+</body>
+
+</html>	
+ 
+
+

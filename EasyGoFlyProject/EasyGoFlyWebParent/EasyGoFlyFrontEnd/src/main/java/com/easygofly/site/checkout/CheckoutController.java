@@ -3,20 +3,15 @@ package com.easygofly.site.checkout;
 
 import com.cashfree.lib.constants.Constants.Environment;
 import com.cashfree.lib.payout.clients.Payouts;
-import com.easygofly.site.setting.SettingService;
 
 import javax.servlet.http.HttpServletRequest;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CheckoutController {
-	
-	@Autowired private SettingService settingService;
 	
 	@PostMapping("/order_creation")
 	public String newOrder(HttpServletRequest request, RedirectAttributes redirectAttributes) {

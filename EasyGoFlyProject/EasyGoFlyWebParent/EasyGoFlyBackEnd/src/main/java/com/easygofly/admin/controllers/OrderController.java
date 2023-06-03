@@ -1,6 +1,5 @@
 package com.easygofly.admin.controllers;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.easygofly.admin.order.CartItemRepository;
 import com.easygofly.admin.order.OrderRepository;
 import com.easygofly.admin.order.OrderService;
 import com.easygofly.admin.order.TravelerRepository;
@@ -23,7 +21,6 @@ import com.easygofly.admin.order.export.OrderPDFExporter;
 import com.easygofly.admin.setting.GeneralSettingBag;
 import com.easygofly.admin.setting.SettingService;
 import com.easygofly.admin.setting.city.CityService;
-import com.easygofly.entity.CartItem;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
@@ -36,7 +33,6 @@ public class OrderController {
 	@Autowired private OrderService orderService;
 	@Autowired private OrderRepository orderRepo;
 	@Autowired private CityService cityService;
-	@Autowired private CartItemRepository cartItemRepo;
 	@Autowired private SettingService settingService;
 	@Autowired private TravelerRepository travelerRepo ;
 	

@@ -16,7 +16,6 @@ import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
-import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 
 @Service

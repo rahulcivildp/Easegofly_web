@@ -49,12 +49,7 @@
 							</th:block>
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
 								<li class="dropdowns ">
-								<input type="hidden" id="effectType" value="Drop">
-								  <a class="nav-link dropdown-toggle " th:href="@{/customers}" type="button" id="toggleButtonDropdown" data-bs-toggle="dropdowns" aria-expanded="false">Customers</a>
-								  <ul class="dropdown-menu">
-								    <li><a th:href="@{/customers/new}" class="dropdown-item" title="Create new product" th:hidden="${#authorization.expression('hasAuthority(''Salesperson'')')}">Create New</a></li>
-								    <li><a class="dropdown-item" th:href="@{/customers}" >View All</a></li>
-								  </ul>
+								  <a class="nav-link" th:href="@{/customers}">Customers <i class="fa fa-solid fa-caret-down"></i></a>
 								</li>
 							</th:block>
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Shipper')">

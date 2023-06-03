@@ -91,7 +91,9 @@ public class SearchHistoryController {
 
 		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
 		
+		Iterable<City> cities = cityRepo.findAll();
 		
+		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("search", search);
 		
@@ -126,7 +128,9 @@ public class SearchHistoryController {
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
 		Integer passengerNum = adultNum + childNum + infantNum;
+		Iterable<City> cities = cityRepo.findAll();
 		
+		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("cityTwo", cityTwo);

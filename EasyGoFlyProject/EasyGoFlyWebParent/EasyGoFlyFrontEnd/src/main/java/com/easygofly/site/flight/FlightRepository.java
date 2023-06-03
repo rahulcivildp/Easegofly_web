@@ -7,7 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.easygofly.entity.Brand;
 import com.easygofly.entity.ProductDetail;
 
 public interface FlightRepository extends CrudRepository<ProductDetail, Integer> {

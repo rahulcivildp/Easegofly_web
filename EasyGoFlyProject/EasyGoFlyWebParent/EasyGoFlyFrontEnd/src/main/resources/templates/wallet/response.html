@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<head th:replace="fragments :: page_head(': Response', 'tag')"></head>
+<link rel="stylesheet" type="text/css" th:href="@{/css/zaakpay.css}" >
+<link href='https://fonts.googleapis.com/css?family=Libre Barcode 39' rel='stylesheet'>
+<style type="text/css">
+*.specialButtonRed {
+	background-color: #cf5b4a;
+	color: white;
+	cursor: pointer;
+	width: auto;
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-weight: 600;
+    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+	  -webkit-transition: background-color 2s ease-out;
+	  -moz-transition: background-color 2s ease-out;
+	  -o-transition: background-color 2s ease-out;
+	  transition: background-color 2s ease-out;
+	  -webkit-transition: color 0.5s ease-out;
+	  -moz-transition: color 0.5s ease-out;
+	  -o-transition: color 0.5s ease-out;
+	  transition: color 0.5s ease-out;
+}
+*.specialButtonRed:hover {
+	background-color: #fdf4f2;
+	color: #2c2c2ceb;
+    border: 1px solid #cf5b4a;
+}
+</style>
+</head>
+<body>
+
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+
+  <!-- Vendor JS Files -->
+  <script type="text/javascript" th:src="@{../assets/vendor/purecounter/purecounter_vanilla.js}"></script>
+  <script type="text/javascript" th:src="@{../assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script type="text/javascript" th:src="@{../assets/vendor/glightbox/js/glightbox.min.js}"></script>
+  <script type="text/javascript" th:src="@{../assets/vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+  <script type="text/javascript" th:src="@{../assets/vendor/swiper/swiper-bundle.min.js}"></script>
+  <script type="text/javascript" th:src="@{../assets/vendor/php-email-form/validate.js}"></script>
+
+  <!-- Template Main JS File -->
+  <script type="text/javascript" src="../assets/js/main.js"></script>
+  
+  <div th:replace="whatsapp :: content"></div>
+<br><br>
+<br><br>
+<br><br>
+<div align="center">
+    <table width="500px;" class="customtable-all card">
+	    <tr>
+	    	<td width="50%" align="center" valign="middle">Payment Status</td>
+	    	<td width="50%" align="center" valign="middle" bgcolor="green">[[${paymentSuccess}]] </td>
+	    </tr>
+    <!-- 
+    <tr>
+        <td width="50%" align="center" valign="middle">Received Checksum</td>
+        <td width="50%" align="center" valign="middle">[[${checksum}]]</td>
+    </tr>
+    <tr>
+        <td width="50%" align="center" valign="middle">Checksum Verified</td>
+        <td width="50%" align="center" valign="middle">[[${verifyChecksum}]]</td>
+    </tr>
+     -->
+    </table>
+</div>
+<br><br>
+
+
+   
+    <div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; border-radius: 7px; padding: 20px;">
+	    <div class="row">
+	    	<div class="col-1">
+	    		<img alt="alt" th:src="@{${FAVICON}}" style="width: 100%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; border-radius: 7px; padding: 20px;">
+	    	</div>
+	    	<div class="col-5" style="padding-left: 50px;">
+	    		<h1>Easegofly Team</h1>
+	    		<p style=" margin: 0;">KOLKATA 700099, WEST BENGAL, INDIA.</p>
+	    		<p>8348000139, support@easegofly.com</p>
+	    	</div>
+	    	<div class="col-4" style="text-align: center;">
+	    		<p style="font-family: 'Libre Barcode 39'; font-size: 80px; margin: 0;">[[${pnrBarcode}]]</p>
+	    	</div>
+	    	<div class="col-2" style="display: flex;justify-content: center;align-items: center;">
+	    		<a th:href="@{'/order/export_pdf/' + ${orderId}}" class="specialButtonRed"> Download Ticket</a>
+	    	</div>
+	    </div>
+	    <div class="row">
+			<div class="col-8">
+            	<p>Flight Itinerary: <b>[[${cityOne}]]</b> to <b>[[${cityTwo}]]</b> | [[${flightDateTime}]]</p>
+			</div>
+        	<div class="col-4">
+				<p style="float: right;">Issued Date: [[${orderDateTime}]]</p>
+        	</div> 
+     	</div>
+	    <div class="row" style="background: #dee0db; align-items: baseline; border-radius: 10px 10px 0 0;">
+			<div class="col-6">
+            	<p>Passenger CTCM: <b>[[${passengerPhone}]]</b></p>
+			</div>
+			<div class="col-5">
+            	<p>AIRLINE PNR: <b>[[${pnrBarcode}]]</b></p>
+			</div>
+        	<div class="col-1">
+				<img alt="" th:src="@{${brandPath}}" style="width: 50%">
+        	</div> 
+     	</div>
+	    <div class="row" style="text-align: center;">
+			<div class="col-2" style="border: 1px solid grey; border-radius: 0 0 0 8px;">
+				<img alt="" th:src="@{${brandPath}}" style="width: 50%">
+				<p>[[${brandName}]]</p>
+				<p>[[${productDetail.flightNum}]]</p>
+			</div>
+			<div class="col-3" style="border: 1px solid grey; ">
+				<p>DEPARTURE: <b>[[${cityOne}]]</b></p>
+				<p><b>[[${city1}]]- [[${productDetail.depTime}]]</b></p>
+				<p>[[${flightDateTime}]]</p>
+				<img alt="" th:src="@{${flightUpPath}}" style="width: 20%;">
+				<p><b>TERMINAL: [[${originTerminal}]]</b></p>
+			</div>
+        	<div class="col-2" style="border: 1px solid grey; ">
+        		<p>[[${dateInt}]]HRS : [[${timeInt}]]MINS</p><br>
+        		<th:block th:if="${productDetail.stopNum} == '0'">
+        			<p><b style="color: red;">NON STOP</b></p>
+        		</th:block>
+        		<th:block th:if="${productDetail.stopNum} > '0'">
+        			<p><b>[[${productDetail.stopNum}]] STOP/S</b></p>
+        		</th:block>
+        	</div>
+			<div class="col-3" style="border: 1px solid grey; ">
+				<p>ARRIVAL: <b>[[${cityTwo}]]</b></p>
+				<p><b>[[${city2}]]- [[${productDetail.arrTime}]]</b></p>
+				<p>[[${flightDateTime}]]</p>
+				<img alt="" th:src="@{${flightDownPath}}" style="width: 20%;">
+				<p><b>TERMINAL: [[${destinationTerminal}]]</b></p>
+			</div> 
+			<div class="col-2" style="border: 1px solid grey; border-radius:0 0 8px 0;">
+			<h2>PNR STATUS</h2>
+			<b style="color: green;">[[${orderStatusO}]]</b><br>
+			<img alt="" th:src="@{${demoTicketPath}}" style="width: 100%;">
+			</div>
+     	</div>
+     	<br>
+	    <div class="row" style=" display: flex; background: #dee0db; align-items: baseline; border-radius: 10px 10px 0 0;">
+			<div class="col-6">
+            	<p>Traveler Details:</p>
+			</div>
+			<div class="col-6" style="display: flex; justify-content: end;">
+            	<p style="margin: 1rem;">Baggage info Check-In: [[${baggage}]],Cabin: [[${cabinBaggage}]] | LowFare</p>
+			</div>
+     	</div>
+	    <div class="row" style="text-align: center; padding: 13px 0; background: #efefed;">
+			<div class="col-2">
+            	<b>TRAVELLER / (TYPE)</b>
+			</div>
+			<div class="col-2">
+            	<b>TICKET NUMBER</b>
+			</div>
+			<div class="col-2">
+            	<b>BASIC</b>
+			</div>
+			<div class="col-2">
+            	<b>TAX</b>
+			</div>
+			<div class="col-2">
+            	<b>CABIN + CHECK-IN</b>
+			</div>
+			<div class="col-2">
+            	<b>TOTAL FARE</b>
+			</div>
+     	</div>
+     	<th:block th:each="traveler : ${travellerDetails}">
+		    <div class="row" style="text-align: center; padding: 13px 0; border: 1px solid #c7c7c7;">
+				<div class="col-2">
+	            	<b>[[${traveler.salutation}]] [[${traveler.firstName}]] [[${traveler.lastName}]]</b>
+				</div>
+				<div class="col-2">
+	            	<b>[[${pnrBarcode}]]</b>
+				</div>
+				<div class="col-2">
+	            	<b>[[${productDetail.priceADT}]]</b>
+				</div>
+				<div class="col-2">
+	            	<b>0</b>
+				</div>
+				<div class="col-2">
+	            	<b>([[${baggage}]] + [[${cabinBaggage}]])KG</b>
+				</div>
+				<div class="col-2">
+	            	<b>[[${productDetail.priceADT}]]</b>
+				</div>
+	     	</div>
+     	</th:block>
+     	<br>
+     	<div class="row">
+			<div class="col-6">
+            	<h3>Fare Summary</h3>
+            	<p>Thank you for making the payment of @ - [[${amount}]]</p>
+			</div>
+			<div class="col-6" style=" display: flex; justify-content: end; padding-right: 50px; align-items: center; background: #dee0db;">
+            	<h2>GROSS FARE:</h2><h3>@ - [[${amount}]]</h3>
+			</div>
+     	</div>
+     	<br>
+     	<div class="row">
+			<div class="col-4">
+            	<img alt="" th:src="@{${SITE_LOGO}}" style="width: 30%;">
+			</div>
+			<div class="col-6" style="display: flex; justify-content: end; padding-right: 50px; align-items: center;">
+            	<p>Booking Ref: </p>
+            	<p> Issued Date: [[${orderDateTime}]]</p>
+			</div>
+	    	<div class="col-2" style="display: flex;justify-content: center;align-items: center;">
+	    		<a th:href="@{'/order/export_pdf/' + ${orderId}}" class="specialButtonRed"> Download Ticket</a>
+	    	</div>
+     	</div>
+     	<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+		  <div class="carousel-indicators">
+		    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+		    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+		    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+		  </div>
+		  <div class="carousel-inner" style="padding: 30px 0; text-align: center; font-size: 20px;">
+		    <div class="carousel-item active">
+		      <p>"Life is either a daring adventure or nothing at all." - Helen Keller</p>
+		    </div>
+		    <div class="carousel-item">
+		      <p>"The world is a book, and those who do not travel read only a page." - Saint Augustine</p>
+		    </div>
+		    <div class="carousel-item">
+		      <p>"Traveling – it leaves you speechless, then turns you into a storyteller." - Ibn Battuta</p>
+		    </div>
+		  </div>
+		  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="visually-hidden">Previous</span>
+		  </button>
+		  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="visually-hidden">Next</span>
+		  </button>
+		</div>
+    </div>
+    
+<br><br>
+<br><br>
+	<footer th:replace="fragments :: page_footer"></footer>
+ 	<script type="text/javascript" th:src="@{../js/common.js}"></script>
+</body>
+<link type="text/css" th:href="@{/css/custom.css}" rel="stylesheet">
+</html>
