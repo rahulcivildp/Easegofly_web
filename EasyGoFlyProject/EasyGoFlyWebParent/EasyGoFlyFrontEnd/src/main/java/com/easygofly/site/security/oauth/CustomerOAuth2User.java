@@ -15,7 +15,6 @@ public class CustomerOAuth2User implements OAuth2User {
 	private String clientName;
 	private OAuth2User oauth2User;
 	
-	
 	public CustomerOAuth2User(OAuth2User oauth2User, String clientName) {
 		this.oauth2User = oauth2User;
 		this.clientName = clientName;
@@ -37,7 +36,6 @@ public class CustomerOAuth2User implements OAuth2User {
 	}
 	
 	public String getEmail() {
-		System.out.println("Email: " + oauth2User.getAttribute("email"));
 		return oauth2User.getAttribute("email");
 	}
 

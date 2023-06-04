@@ -22,7 +22,7 @@ public class CustomerRestController {
 	@Autowired CustomerService customerService ;
 	@Autowired WalletRepository walletRepo;
 
-	@PostMapping("/customers/page/add_balance_{id}_{addedBalance}")
+	@PostMapping("/add_balance_{id}_{addedBalance}")
 	public String addBalance(@PathVariable("id") Integer id, @PathVariable("addedBalance") Integer addedBalance) {
 		Wallet wallet = walletRepo.findById(id).get();
 		Integer intTotalAmount = wallet.getBalance() + (addedBalance * 100);
@@ -39,7 +39,7 @@ public class CustomerRestController {
 		
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "W"+ savedWallet.getId();
 		
-		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
+		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest" + id + "   -   " + addedBalance);
 		customerService.createRechargeHistory(savedWallet.getCustomer(), orderString, intAmount);
 		
 		return "" + savedWallet.getBalance();

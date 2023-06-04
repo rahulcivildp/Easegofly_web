@@ -108,7 +108,7 @@
 					<div class="col-4">
 						<ul  class="navbar-nav float-end">
 							<li>
-								<span class="fa fa-solid fa-user fa-2x icon-silver"></span>
+								<img alt="" id="showImage" width="37" height="37" style="border-radius: 8px;">
 							</li>
 							<li class="dropdown ">
 								<input type="hidden" id="effectType" value="Drop">
@@ -125,7 +125,13 @@
 			</nav>
 			
 			<script type="text/javascript">
+				imageLink = "[[${#authentication.principal.imageLink}]]";
+				contextUrl = "[[@{/}]]";
 				
+				var myArrayOne = imageLink.split("/");
+				generatedImageLink = myArrayOne[1] + "/" + myArrayOne[2] + "/" + myArrayOne[3];
+				
+				$("#showImage").attr("src", contextUrl + generatedImageLink);
 			</script>
 		</div>
 		

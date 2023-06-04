@@ -10,8 +10,8 @@
 		<div>
 			<h1>Manage User | [[${pageTitle}]]</h1>
 		</div>
-		<form th:action="@{/users/save}" method="post" style="max-width: 700px; margin: 0 auto;" th:object="${user}" onsubmit="return(checkEmailUnique(this))" enctype="multipart/form-data">
-			<input type="hidden" th:field="*{id}">
+		<form th:action="@{/users/save}" method="post" style="max-width: 700px; margin: 0 auto;" th:object="${user}" onsubmit="return(checkEmailUniqueUser(this))" enctype="multipart/form-data">
+			<input type="hidden" th:field="*{id}" >
 			<div class="border border-secondary rounded p-3">
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Email:</label>
@@ -95,48 +95,68 @@
 		
 		<div th:replace="fragments :: footer"></div>
 	</div>
-	
+
 <script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 	
 <script type="text/javascript">
-
 	moduleURL = "[[@{/users}]]";
 	
 	imageSize = 1024;
 	
 	sizeScale = "MB";
 	
-	function checkEmailUnique(form) {
-		url = "[[@{/users/check_email}]]";
-		userEmail = $("#email").val();
-		userId = $("#id").val();
-		csrfVal = $("input[name='_csrf']").val();
-		params = {id: userId, email: userEmail, _csrf: csrfVal};
-			
-		$.post(url, params, function(response) {
-			if (response == "OK") {
-				showModelDialogue("Success", "User is Created");
-				form.submit();
-			} else if (response == "Duplicate Email") {
-				showModelDialogue("Warning", response + " is provided: " + userEmail);
-			} else {
-				showModelDialogue("Error", "Unknown response from server.");
-			}
-		}).fail(function(){
-			showModelDialogue("Error", "Could not connect to the server.");
-		});
-		
-		return false;
-	};
+	var winLocation = window.location.href;
+	var myArray = winLocation.split("/");
+	var newSaveUrl = myArray[3] + "/" + myArray[4] + "/" + myArray[5];
 	
-	function showModelDialogue(title, message) {
-		if (message != null) {
-			$("#modalTitle").text(message);
-			$("#modalBody").text(message);
-			$("#modalDialogue").modal();
+	if (newSaveUrl == "admin/users/new") {
+		
+		function checkEmailUniqueUser(form) {
+			userEmail = $("#email").val();
+			userId = $("#id").val();
+			url = "[[@{/users/check_email_}]]" + userEmail;
+			csrfVal = $("input[name='_csrf']").val();
+			params = {id: userId, email: userEmail, _csrf: csrfVal};
+				
+			$.post(url, params, function(response) {
+				if (response == "OK") {
+					form.submit();
+				} else if (response == "Duplicate Email") {
+					showModelDialogue("Warning", response + " is provided: " + userEmail);
+				} else {
+					showModelDialogue("Error", "Unknown response from server.");
+				}
+			}).fail(function(){
+				showModelDialogue("Error", "Could not connect to the server.");
+			});
+			
+			return false;
 		};
-	};
+		
+		function showModelDialogue(title, message) {
+			if (message != null) {
+				$("#modalTitle").text(message);
+				$("#modalBody").text(message);
+				$("#modalDialogue").modal();
+			};
+		};
+	}
+	
 </script>
+
+<script type="text/javascript">
+
+var reader = new FileReader();
+reader.onload = function(r_event) {
+  document.getElementById('thumbnail').setAttribute('src', r_event.target.result);
+}
+
+document.getElementsByName('image')[0].addEventListener('change', function(event) {
+    reader.readAsDataURL(this.files[0]);
+});
+
+</script>
+
 </body>
 
 </html>

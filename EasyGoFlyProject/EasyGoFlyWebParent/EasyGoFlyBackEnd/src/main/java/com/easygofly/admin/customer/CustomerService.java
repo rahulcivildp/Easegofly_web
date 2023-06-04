@@ -186,7 +186,7 @@ public class CustomerService {
 	
 	public RechargeHistory createRechargeHistory(Customer customer, String transId, Integer addedBalance) {
 		Wallet wallet = customer.getWallet();
-		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest22222222");
+		
 		RechargeHistory rechargeHistory = new RechargeHistory();
 		rechargeHistory.setWallet(wallet);
 		rechargeHistory.setRechargeAmount(addedBalance);
@@ -194,7 +194,6 @@ public class CustomerService {
 		rechargeHistory.setDate(new Date());
 		rechargeHistory.setRechargeHistoryStatus(RechargeHistoryStatus.SUCCESSFULL);
 
-		System.out.println("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest33333333333");
 		return rechargeHistoryRepo.save(rechargeHistory);
 	}
 	

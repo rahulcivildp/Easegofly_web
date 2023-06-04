@@ -384,6 +384,11 @@ public class Customer {
 		return "/customer-photos/" + this.id + "/" + this.photos;
 	}
 	
+	@Transient
+	public String getImageLink() {
+		return "/customer-photos/" + this.id + "/" + this.photos;
+	}
+	
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName

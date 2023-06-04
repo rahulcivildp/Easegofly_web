@@ -61,6 +61,10 @@ public class EasyGoFlyUserDetails implements UserDetails {
 	public String getFullName() {
 		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
+	
+	public String getImageLink() {
+		return this.user.getPhotosImagePath();
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {

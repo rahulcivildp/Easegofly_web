@@ -69,7 +69,7 @@ $(document).ready(function(){
 		csrfVal = $("input[name='_csrf']").val();
 		params = {id: userId, email: userEmail, _csrf: csrfVal};
 			
-		$.post(url, params, function(response) {
+		$.post(emailUrl, params, function(response) {
 			if (response == "OK") {
 				showModelDialogue("Success", "User is Created");
 				form.submit();

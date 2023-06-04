@@ -42,6 +42,7 @@
 							</div>
 							<div class="form-floating col-6" style="padding: 0;">
 								<input type="hidden" name="customer_id" th:value="${customer.id}">
+								<input type="hidden" name="wallet_id" th:value="${customer.wallet.id}" th:id="'wallet_id' + ${customer.id}">
 							  <input type="number" class="form-control" th:id="'floatingInputValue' + ${customer.id}" name="addedBalance">
 							  <label for="floatingInputValue">Amount</label>
 							</div>
@@ -59,28 +60,30 @@
 	<script type="text/javascript">
 	
 	customerId = "[[${customer.id}]]";
+	contextPath = "[[@{/}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
 	
+	urlBalance = "";
+
 	$(document).ready(function() {
 		var balance = "[[${balance}]]" / 100;
 		$("#wallet_balance" + [[${customer.id}]]).text( balance + " INR");
 		
-		$("#recharge_button" + [[${customer.id}]]).click(function(){
-			addBalance(customerId);
+		$("#recharge_button[[${customer.id}]]").click(function(){
+			inputValue = $("#floatingInputValue[[${customer.id}]]");
+			walletBalanceView = $("#wallet_balance[[${customer.id}]]");
+			walletId = $("#wallet_id[[${customer.id}]]");
+			if (inputValue.val() != 0) {
+				urlBalance = contextPath + "add_balance_" + walletId.val() + "_" + inputValue.val();
+				addBalance();
+			}
 		});
 	});
 	
-	contextPath = "[[@{/}]]";
-	var csrfHeaderName = "[[${_csrf.headerName}]]";
-	var csrfValue = "[[${_csrf.token}]]";
-
-	function addBalance(index){
-		
-		inputValue = $("#floatingInputValue" + index).val();
-		walletId = "[[${customer.wallet.id}]]";
-		urlBalance = contextPath + "customers/page/add_balance_" + walletId + "_" + inputValue;
-		
+	function addBalance(){
 		jsonData = {};
-		
+
 		$.ajax({
 			type: 'POST',
 			url: urlBalance,
@@ -91,12 +94,11 @@
 			contentType: 'application/json'
 		}).done(function(bal) {
 			var intAmount = bal / 100;
-			$("#wallet_balance" + index).text( intAmount + " INR");
-			$("#floatingInputValue" + index).val("");
+			walletBalanceView.text( intAmount + " INR");
+			inputValue.val("");
 		}).fail(function() {
 			consol.log("Error occured!!");
 		});
 	};
-	
 	</script>
 	</html>

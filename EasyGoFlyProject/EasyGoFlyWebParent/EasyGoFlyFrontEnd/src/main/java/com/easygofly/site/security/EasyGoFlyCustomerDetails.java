@@ -88,4 +88,8 @@ public class EasyGoFlyCustomerDetails implements UserDetails {
 	public Customer getCustomer() {
 		return this.customer;
 	}
+	
+	public String getEmail() {
+		return this.customer.getEmail();
+	}
 }
