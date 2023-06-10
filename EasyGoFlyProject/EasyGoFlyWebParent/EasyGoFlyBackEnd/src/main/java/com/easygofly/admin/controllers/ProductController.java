@@ -50,7 +50,7 @@ public class ProductController {
 	public String listFirstPage(Model model, @AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) {
 		String product = "products/products";
 		
-		return listByPage(1, model, "name", "asc", null, 0, product, loggedUser);
+		return listByPage(1, model, "id", "asc", null, 0, product, loggedUser);
 	}
 	
 	@GetMapping("/products/page/{pageNum}")

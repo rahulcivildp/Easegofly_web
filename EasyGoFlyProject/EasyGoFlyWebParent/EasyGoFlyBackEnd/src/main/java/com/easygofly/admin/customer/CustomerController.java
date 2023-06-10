@@ -35,7 +35,7 @@ public class CustomerController {
 	
 	@GetMapping("/customers")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, "firstName", "asc", null);
+		return listByPage(1, model, "id", "asc", null);
 		
 	}
 	

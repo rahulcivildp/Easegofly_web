@@ -3,16 +3,10 @@ package com.easygofly.site;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-
-@XmlAccessorType(value = XmlAccessType.NONE)
-@XmlRootElement(name = "url")
+@JsonRootName(value = "url")
 public class XmlUrl {
     public enum Priority {
         HIGH("1.0"), MEDIUM("0.5");
@@ -28,19 +22,19 @@ public class XmlUrl {
         }
     }
 
-    @XmlElement
+ 
 	@JsonProperty(namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")
     private String loc;
 
-    @XmlElement
+   
 	@JsonProperty(namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")
     private String lastmod;
 
-    @XmlElement
+   
 	@JsonProperty(namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")
     private String changefreq = "daily";
 
-    @XmlElement
+   
 	@JsonProperty(namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")
     private String priority;
 

@@ -38,7 +38,7 @@ public class OrderController {
 	
 	@GetMapping("/orders")
 	public String getAllOrders(Model model, Order order) {
-		return listByPage(1, model, "firstName", "asc", null, order);
+		return listByPage(1, model, "id", "desc", null, order);
 	}
 	
 	@GetMapping("/orders/page/{pageNum}")

@@ -114,7 +114,29 @@
 			</div>
 		</div>
 		
-		<div th:replace="fragments :: pagination('users', 'Users')"></div>
+		<div> 
+			<div class="text-center m-1" th:if="${totalItems > 0}">
+				<span>Showing Users # ([[${startCount}]] - [[${endCount}]]) of [[${totalItems}]]</span>
+			</div>
+			<div class="text-center m-1" th:unless="${totalItems > 0}">
+				<span>No User found</span>
+			</div>
+			<a th:fragment="page_Link_wallet(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/page/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>
+		
+			<div th:if="${totalItems > 1}">
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination justify-content-center flex-wrap">
+				  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="users/users :: page_Link_wallet(users, 1, 'First')">First</a></li>
+				    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="users/users :: page_Link_wallet(customers, ${currentPage - 1}, 'Previous')">Previous</a></li>
+				    
+				    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="users/users :: page_Link_wallet(users, ${i}, ${i})"></a></li>
+				    
+				    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="users/users :: page_Link_wallet(users, ${currentPage + 1}, 'Next')" ></a></li>
+				    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="users/users :: page_Link_wallet(users, ${totalPages}, 'Last')"></a></li>
+				  </ul>
+				</nav>
+			</div>
+		</div>
 		
 
 		<div class="modal fade text-center" id="deleteConfirmModal">
