@@ -4,15 +4,20 @@ import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
@@ -32,6 +37,8 @@ import com.easygofly.site.setting.web.WebSettingService;
 
 
 @Controller
+@Component
+@Scope("session")
 public class MainController {
 	
 	@Autowired private SearchHistoryService searchHistoryService ;
@@ -52,6 +59,9 @@ public class MainController {
 			Wallet wallet = customer.getWallet();
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpSession session= attr.getRequest().getSession(true);
+			System.out.println(session);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
@@ -59,6 +69,9 @@ public class MainController {
 			Wallet wallet = customer.getWallet();
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);	
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpSession session= attr.getRequest().getSession(true);
+			System.out.println(session);
 		}
 		
 		List<WebDetails> webDetails = webSettingService.listAllSettings();

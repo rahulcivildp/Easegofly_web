@@ -443,11 +443,12 @@
 		                    			<div class="col-3" style="padding: 0;">
 				                    		<div style="float: left; padding: 0px">
 				                                <p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px;">Non-refundable</p>
-		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45" style="margin-left: 28px;">
+		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45" style="margin-left: 28px;" title="[[${flight.product.brands.name}]]">
 		                                    </div>
 		                                    <div style="float: left; font-size: 15px; padding: 10px 25px;">
 		                                        <b> [[${flight.product.brands.name}]] </b>
 		                                        <p id="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p> 
+		                                        <h4 style="margin: 7px 0;" title="Flight Depurture Date">[[${#dates.format(flight.date, 'dd MMM, yyyy')}]]</h4>
 		                                    </div>
 				                    	</div>
 				                    	<div class="col-7" style="padding-top: 48px;">

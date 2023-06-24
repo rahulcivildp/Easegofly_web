@@ -15,6 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -49,6 +53,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         return new CorsFilter(source);
     }
 	
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+	    return new HttpSessionEventPublisher();
+	}
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
@@ -75,6 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			.oauth2Login()
 				.loginPage("/login")
+				.tokenEndpoint(token -> token
+				        .accessTokenResponseClient(this.accessTokenResponseClient()))
 				.userInfoEndpoint()
 				.userService(oAuth2UserService)
 				.and()
@@ -84,11 +95,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.logout().permitAll()
 			.and()
 			.rememberMe().key("AbcDefgHijKlmnopqrst_1234567890").tokenValiditySeconds(7 * 24 * 60 * 60)
-			.and();
+			.and()
+			.sessionManagement()
+				.sessionFixation().migrateSession()
+				.maximumSessions(2)
+				.expiredUrl("/login");
 		
 			http.cors();
 	}
 
+	private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
+		return new DefaultAuthorizationCodeTokenResponseClient();
+	}
+	
 	@Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "../brand-logos/**", "../site-logo/**", "../favicon/**");

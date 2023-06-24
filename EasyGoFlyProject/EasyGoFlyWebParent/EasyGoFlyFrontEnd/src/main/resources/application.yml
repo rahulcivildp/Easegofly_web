@@ -2,6 +2,9 @@ server:
   port: 443
   servlet:
     context-path: /
+    session:
+      cookie:
+        same-site: none
 spring:
   datasource:
     password: tanmay@311

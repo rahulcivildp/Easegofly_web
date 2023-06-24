@@ -48,26 +48,11 @@
             <optional>true</optional>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.cashfree</groupId>
-            <artifactId>cashfreelibjava</artifactId>
-            <version>0.0.6</version>
-        </dependency>
         <dependency> 
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-configuration-processor</artifactId>
         	<optional>true</optional>
         </dependency>
-        <dependency> 
-		    <groupId>com.paytm.pg</groupId>
-		    <artifactId>paytm-checksum</artifactId>
-		    <version>1.2.1</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.ccavenue.java</groupId>
-		    <artifactId>ccavenue-java</artifactId>
-		    <version>2.0</version> 
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
@@ -101,6 +86,12 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.3</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		</dependency>
+				
 	</dependencies>
 	<build>
 		<plugins>

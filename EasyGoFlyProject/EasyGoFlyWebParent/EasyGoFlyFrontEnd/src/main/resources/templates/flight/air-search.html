@@ -262,13 +262,13 @@ th:fragment="air-search">
                             <div class="col-md-7 col-12" style=" float: left;">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
-                                    <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
-                                    <input type="date" class="form-control input_calender" name="date" id="floatingInput" required>
+                                    <label for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
+                                    <input type="date" name="floatingInputDepurture" class="form-control input_calender" id="floatingInputDepurture" required>
                                     
                                 </div>
                                 <div class="col-md-4 col-6 aligner" ><!-- id="input_roundtrip" -->
-                                    <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-                                    <input type="date" class="form-control input_calender" id="floatingInput" disabled>
+                                    <label for="floatingInputCalender"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
+                                    <input type="date" class="form-control input_calender" id="floatingInputCalender" disabled>
                                     
                                 </div>
                                 <div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
@@ -378,12 +378,12 @@ th:fragment="air-search">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
-                                    <input type="date" class="form-control input_calender" name="date" id="floatingInput">
+                                    <input type="date" class="form-control input_calender" name="date" id="floatingInputDepurtureReturn">
                                     
                                 </div>
                                 <div class="col-md-4 col-6 aligner">
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-                                    <input type="date" class="form-control input_calender" name="return_date" id="floatingInput">
+                                    <input type="date" class="form-control input_calender" name="return_date" id="floatingInputReturnReturn">
                                     
                                 </div>
                                 <div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
@@ -589,5 +589,28 @@ th:fragment="air-search">
         $( ".dropdowns-menu" ).toggle();
         $(".n-text").css("display", "none");
     })
+    </script>
+    <script type="text/javascript">
+    
+    $(document).ready(function(){
+    	$("#floatingInputDepurture").click(function(){
+    		calenderView($("#floatingInputDepurture"));
+    	});
+    	
+    	$("#floatingInputDepurtureReturn").click(function(){
+    		calenderView($("#floatingInputDepurtureReturn"));
+    	});
+    	
+    	$("#floatingInputReturnReturn").click(function(){
+    		calenderView($("#floatingInputReturnReturn"));
+    	});
+    })
+    
+    function calenderView(input){
+    	name = input.attr("name")
+    	var today = new Date().toISOString().split('T')[0];
+    	document.getElementsByName(name)[0].setAttribute('min', today);
+    }
+    
     </script>
 </html>
