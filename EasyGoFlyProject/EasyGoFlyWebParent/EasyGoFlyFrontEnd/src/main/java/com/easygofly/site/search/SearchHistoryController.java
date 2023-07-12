@@ -531,6 +531,8 @@ public class SearchHistoryController {
 			@RequestParam(name = "infantNum", required = false) Integer infantNum,
 			Model model) throws ProductNotFoundException {
 		
+			System.out.println("Last Value of Search: " + date);
+		
 			String email; 
 			Customer customer;
 			City city1 = cityRepo.getCityByName(cityOne);
