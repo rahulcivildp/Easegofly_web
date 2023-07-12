@@ -1,11 +1,18 @@
 package com.easygofly.site.search;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,7 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.City;
@@ -29,6 +35,7 @@ import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.ProductSaveHelper;
+import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 
@@ -41,6 +48,11 @@ public class SearchHistoryController {
 	@Autowired private SearchHistoryRepository searchRepo;
 	@Autowired private ProductDetailsRepository productRepo;
 	@Autowired private CityRepository cityRepo;
+	@Autowired private OnlineFlightService onlineFlightService;
+	@Autowired private EntityManager enityManager;
+	
+	private String searchURL = "";
+	List<ProductDetail> listProductDetails;
 	
 	@GetMapping("/search_result")
 	public String viewSearchResult(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
@@ -97,6 +109,32 @@ public class SearchHistoryController {
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("search", search);
 		
+		try {
+			// Create URL object with the API end-point
+            URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+
+            // Open a connection
+            HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+            
+            StringBuilder responseBodySearch = new StringBuilder();
+            
+            int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), search.getInfantNum(), search.getDate());
+            
+            JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
+            
+            model.addAttribute("responseCode", responseCode);
+            model.addAttribute("responseBody", responseBodySearch.toString());
+
+            System.out.println("Response Body: " + responseBodySearch.toString());
+            
+            
+            // Close the connection
+            connectionSearch.disconnect();
+            
+		} catch (Exception e) {
+			return searchURL;// TODO: handle exception
+		}
+		
 		return "flight/search-result";
 	}
 	
@@ -146,6 +184,68 @@ public class SearchHistoryController {
 		model.addAttribute("stops", stops);
 		model.addAttribute("totalPrice", totalPrice);
 		
+		try {
+			// Create URL object with the API end-point
+            URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+
+            // Open a connection
+            HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+            
+            StringBuilder responseBodySearch = new StringBuilder();
+            
+            int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
+            
+            JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
+            for (int i = 0; i < jsonObjSearch.length(); i++) {
+				JSONArray jsonArray = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(i);
+				JSONObject mainObj = new JSONObject();
+				for (int j = 0; j < jsonArray.length(); j++) {
+					mainObj.put("result-" + j, jsonArray.getJSONObject(j));
+					JSONArray jsonArraySegment = new JSONArray();
+					for (int k = 0; k < mainObj.length(); k++) {
+						jsonArraySegment.put(mainObj.getJSONObject("result-" + k).getJSONArray("Segments").getJSONArray(0));
+						JSONObject mainObjSeg = new JSONObject();
+						JSONObject jsonObjInnerMember = new JSONObject();
+						JSONObject jsonObjInnerOrigin = new JSONObject();
+						for (int l = 0; l < jsonArraySegment.length(); l++) {
+							mainObjSeg.put("Segment-" + l, jsonArraySegment.getJSONArray(l).getJSONObject(0));
+							jsonObjInnerMember.put("Origin-" + l, mainObjSeg.getJSONObject("Segment-" + l).getJSONObject("Origin"));
+							jsonObjInnerOrigin.put("Airport-" + l, jsonObjInnerMember.getJSONObject("Origin-" + l).getJSONObject("Airport"));
+//							for (int m = 0; m < mainObjSeg.length(); m++) {
+//								jsonObjInnerMember.put("Origin-" + m, mainObjSeg.getJSONObject("Segment-" + m).getJSONObject("Origin"));
+////								JSONObject mainObjSegInner = new JSONObject();
+////								for (int n = 0; n < jsonArraySegmentInner.length(); n++) {
+////									mainObjSegInner.put("inner-seg" + n, jsonArraySegmentInner);
+////									model.addAttribute("responseBody", mainObjSegInner);
+////								}
+//								//model.addAttribute("responseBody", jsonArraySegmentInner);
+//							}
+							//model.addAttribute("responseBody", jsonObjInnerMember);
+						}
+						model.addAttribute("responseBody", jsonObjInnerOrigin);
+					}
+					//model.addAttribute("responseBody", mainObj);
+				}
+			}
+            //model.addAttribute("responseBody", jsonObjSearch);
+            model.addAttribute("responseCode", responseCode);
+
+            //System.out.println("Response Body: " + responseBodySearch.toString());
+           // System.out.println("Commited Response: " + jsonObjSearch.getJSONObject("Response").get("Destination"));
+            
+            Product productOnline = enityManager.find(Product.class, 15);
+            
+            ProductDetail productDetailsOnline = new ProductDetail(sortName, "100", "100", "flightNum", date, 
+            		"depTime", "arrTime", 9000, 9000, 500, 500, cityOne, cityTwo, true, true, 0, 180, "air india", 17, 13.3f, productOnline);
+            listProductDetails.add(productDetailsOnline);
+            
+            // Close the connection
+            connectionSearch.disconnect();
+            
+		} catch (Exception e) {
+			return searchURL;// TODO: handle exception
+		}
+		
 		return "flight/search-result-noUser";
 		
 	}
@@ -162,74 +262,74 @@ public class SearchHistoryController {
 
 		if (brands.length == 2 && stops.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			brand1 = brands[1];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (brands.length == 3 && stops.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			brand1 = brands[1];
 			brand2 = brands[2];  
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByBrand(cityOne, cityTwo, date, brand1, brand2);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (stops.length == 2 && brands.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			brand1 = "";
 			brand2 = "";
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (stops.length == 3 && brands.length == 1 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = stops[2];
 			brand1 = "";
 			brand2 = "";
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByStop(cityOne, cityTwo, date, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (stops.length == 2 && brands.length == 2 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			brand1 = brands[1];
 			brand2 = "";
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (stops.length == 3 && brands.length == 2 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = stops[2];
 			brand1 = brands[1];
 			brand2 = "";
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (stops.length == 3 && brands.length == 3 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = stops[2];
 			brand1 = brands[1];
 			brand2 = brands[2];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (stops.length == 2 && brands.length == 3 && totalPrice[1] == null && activeTime.length == 1) {
 			stop0 = stops[1];
 			stop1 = null;
 			brand1 = brands[1];
 			brand2 = brands[2];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByBrandSort(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 1 && brands.length == 1 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTotalPriceADT(cityOne, cityTwo, date, priceTotal);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTotalPriceADT(cityOne, cityTwo, date, priceTotal);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 1 && brands.length == 2 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
 				brand1 = brands[1];
 				brand2 = "";
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandTotalPriceADT(cityOne,
+				listProductDetails = productService.findAllFlightsByBrandTotalPriceADT(cityOne,
 						cityTwo, date, brand1, brand2, priceTotal);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 2 && brands.length == 1 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
 				stop0 = stops[1];
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByStopNumTotalPriceADT(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByStopNumTotalPriceADT(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 2 && brands.length == 2 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
@@ -237,8 +337,8 @@ public class SearchHistoryController {
 				stop0 = stops[1];
 				brand1 = brands[1];
 				brand2 = "";
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 3 && brands.length == 2 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
@@ -247,8 +347,8 @@ public class SearchHistoryController {
 				stop1 = stops[2];
 				brand1 = brands[1];
 				brand2 = "";
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 2 && brands.length == 3 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
@@ -256,8 +356,8 @@ public class SearchHistoryController {
 				stop0 = stops[1];
 				brand1 = brands[1];
 				brand2 = brands[2];
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (totalPrice[1] != null && infantNum == 0 && stops.length == 3 && brands.length == 3 && activeTime.length == 1) {
 			priceTotal = totalPrice[1];
@@ -266,29 +366,29 @@ public class SearchHistoryController {
 				stop1 = stops[2];
 				brand1 = brands[1];
 				brand2 = brands[2];
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByBrandStopNumTotalPriceADT(cityOne, cityTwo, date, brand1, brand2, stop0, stop1, stop2, stop3, priceTotal);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] == null && brands.length == 1) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
 			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTime(cityOne, cityTwo, date, convertedArrTime1, convertedArrTime2);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTime(cityOne, cityTwo, date, convertedArrTime1, convertedArrTime2);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] == null && brands.length == 1) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
 			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
 			stop0 = stops[1];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeStopNum(cityOne, cityTwo, date, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTimeStopNum(cityOne, cityTwo, date, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] == null && brands.length == 2) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
 			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
 			brand1 = brands[1];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrand(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTimeBrand(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
@@ -296,8 +396,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADT(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceADT(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -306,8 +406,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePrice(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePrice(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] == null && brands.length == 2) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -315,8 +415,8 @@ public class SearchHistoryController {
 			float convertedArrTime2 = Float.parseFloat(combainedTime[1]);
 			brand1 = brands[1];
 			stop0 = stops[1];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] == null  && brands.length == 2) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
@@ -324,8 +424,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			stop0 = stops[1];
 			stop1 = stops[2];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] == null && brands.length == 3) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
@@ -333,8 +433,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			brand2 = brands[2];
 			stop0 = stops[1];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] == null && brands.length == 3) {
 			combainedTime = activeTime[1].split(":", 2);
 			float convertedArrTime1 = Float.parseFloat(combainedTime[0]);
@@ -343,8 +443,8 @@ public class SearchHistoryController {
 			brand2 = brands[2];
 			stop0 = stops[1];
 			stop1 = stops[2];
-			List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
-			model.addAttribute("listProducts", listProductDetailsBrand);
+			listProductDetails = productService.findAllFlightsByTimeBrandStopNum(cityOne, cityTwo, date, brand1, brand2, convertedArrTime1, convertedArrTime2, stop0, stop1, stop2, stop3);
+			model.addAttribute("listProducts", listProductDetails);
 
 			
 		}	 else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
@@ -354,8 +454,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrand(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceADTBrand(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 1 && totalPrice[1] != null && brands.length == 2) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -364,8 +464,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrand(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceBrand(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 1 && infantNum == 0) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -374,8 +474,8 @@ public class SearchHistoryController {
 			stop0 = stops[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeStopNumPriceADT(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimeStopNumPriceADT(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 1) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -384,8 +484,8 @@ public class SearchHistoryController {
 			stop0 = stops[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimeStopNumPrice(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimeStopNumPrice(cityOne, cityTwo, date, priceTotal, stop0, stop1, stop2, stop3, convertedArrTime1, convertedArrTime2);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -395,8 +495,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 				
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 2) {
@@ -409,8 +509,8 @@ public class SearchHistoryController {
 			brand2 = brands[2];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		}  else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 2 && infantNum == 0) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -421,8 +521,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 2) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -433,8 +533,8 @@ public class SearchHistoryController {
 			brand1 = brands[1];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 3 && infantNum == 0) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -445,8 +545,8 @@ public class SearchHistoryController {
 			brand2 = brands[2];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		} else if (activeTime.length == 2 && stops.length == 2 && totalPrice[1] != null && brands.length == 3) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -457,8 +557,8 @@ public class SearchHistoryController {
 			brand2 = brands[2];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		}  else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 3 && infantNum == 0) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -470,8 +570,8 @@ public class SearchHistoryController {
 			brand2 = brands[2];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceADTBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		}  else if (activeTime.length == 2 && stops.length == 3 && totalPrice[1] != null && brands.length == 3) {
 			combainedTime = activeTime[1].split(":", 2);
@@ -483,38 +583,32 @@ public class SearchHistoryController {
 			brand2 = brands[2];
 			priceTotal = totalPrice[1];
 			if (priceTotal != null) {
-				List<ProductDetail> listProductDetailsBrand = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
-				model.addAttribute("listProducts", listProductDetailsBrand);
+				listProductDetails = productService.findAllFlightsByTimePriceBrandStopNum(cityOne, cityTwo, date, priceTotal, convertedArrTime1, convertedArrTime2, brand1, brand2, stop0, stop1, stop2, stop3);
+				model.addAttribute("listProducts", listProductDetails);
 			}
 		}
 	}
 
 	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
 		if (sortName.equals("pnr")) {
-			List<ProductDetail> listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("price")) {
-			List<ProductDetail> listProductDetailsPrice = productService.listAllFlightsByPrice(cityOne, cityTwo, date);
-			model.addAttribute("listProducts", listProductDetailsPrice);
+			listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("duration")) {
-			List<ProductDetail> listProductDetailsDuration = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
-			model.addAttribute("listProducts", listProductDetailsDuration);
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("arrTime")) {
-			List<ProductDetail> listProductDetailsArrival = productService.listAllFlightsByArrival(cityOne, cityTwo, date);
-			model.addAttribute("listProducts", listProductDetailsArrival);
+			listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("depTime")) {
-			List<ProductDetail> listProductDetailsDeparture = productService.listAllFlightsByDeparture(cityOne, cityTwo, date);
-			model.addAttribute("listProducts", listProductDetailsDeparture);
+			listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("brand")) {
-			List<ProductDetail> listProductDetailsAirline = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
-			model.addAttribute("listProducts", listProductDetailsAirline);
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetails);
 		}
-	}
-	
-	@GetMapping("/get_value")
-	public String somevalue(@RequestParam("cityOne") String cityOne) {
-		System.out.println("City one: " + cityOne);
-		return "redirect:/";
 	}
 	
 	@GetMapping("/flight_search_save")
@@ -546,14 +640,16 @@ public class SearchHistoryController {
 		    String activeTime = "active";
 		    String arrayPrice = "0,0";
 		    
-			if (loggedCustomer != null) {
+		    
+            if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				System.out.println("Last Value of Search: " + searchId);
-				return "redirect:/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+				searchURL = "/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+				return "redirect:/loading_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
 				customer = customerService.getByEmail(email);
@@ -561,12 +657,14 @@ public class SearchHistoryController {
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				System.out.println("Last Value of Search: " + searchId);
-				return "redirect:/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+				searchURL = "/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+				return "redirect:/loading_";
 			}else {
-				return "redirect:/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+				searchURL = "/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
 						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+				return "redirect:/loading_";
 			}
-			
+            
 	}
 
 	private Integer saveHistoryPart(String cityOne, String cityTwo, Date date, String journeyClass, String tripType,
@@ -585,12 +683,11 @@ public class SearchHistoryController {
 		Integer searchId = lastValue.getId();
 		return searchId;
 	}
-	
-	@GetMapping("/process")
-    @ResponseBody
-    public String process() throws InterruptedException {
-        // simulate a long-running process
-        Thread.sleep(5000);
-        return "process-complete";
+
+	@GetMapping("/loading_")
+    public String performApiRequest(Model model) {
+        model.addAttribute("searchURL", searchURL);
+        return "loading/loading";
     }
+	
 }
