@@ -1,11 +1,15 @@
 package com.easygofly.site.search;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -80,7 +84,7 @@ public class SearchHistoryController {
 			@PathVariable(name = "brand") String[] brands,
 			@PathVariable(name = "stop") Integer[] stops,
 			@PathVariable(name = "totalPrice") Integer[] totalPrice, 
-			Model model, RedirectAttributes redirectAttributes) {
+			Model model, RedirectAttributes redirectAttributes) throws MalformedURLException, IOException {
 		String email; 
 		Customer customer;
 		if (loggedCustomer != null) {
@@ -109,31 +113,7 @@ public class SearchHistoryController {
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("search", search);
 		
-		try {
-			// Create URL object with the API end-point
-            URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
-
-            // Open a connection
-            HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
-            
-            StringBuilder responseBodySearch = new StringBuilder();
-            
-            int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), search.getInfantNum(), search.getDate());
-            
-            JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
-            
-            model.addAttribute("responseCode", responseCode);
-            model.addAttribute("responseBody", responseBodySearch.toString());
-
-            System.out.println("Response Body: " + responseBodySearch.toString());
-            
-            
-            // Close the connection
-            connectionSearch.disconnect();
-            
-		} catch (Exception e) {
-			return searchURL;// TODO: handle exception
-		}
+		searchFlightAPI(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), search.getInfantNum(), sortName, model, search.getDate());
 		
 		return "flight/search-result";
 	}
@@ -153,7 +133,7 @@ public class SearchHistoryController {
 			@PathVariable(name = "brand") String[] brands,
 			@PathVariable(name = "stop") Integer[] stops,
 			@PathVariable(name = "totalPrice") Integer[] totalPrice,
-			Model model, RedirectAttributes redirectAttributes) throws ParseException {
+			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 		 
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 	    
@@ -184,70 +164,145 @@ public class SearchHistoryController {
 		model.addAttribute("stops", stops);
 		model.addAttribute("totalPrice", totalPrice);
 		
-		try {
-			// Create URL object with the API end-point
-            URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
-
-            // Open a connection
-            HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
-            
-            StringBuilder responseBodySearch = new StringBuilder();
-            
-            int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
-            
-            JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
-            for (int i = 0; i < jsonObjSearch.length(); i++) {
-				JSONArray jsonArray = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(i);
-				JSONObject mainObj = new JSONObject();
-				for (int j = 0; j < jsonArray.length(); j++) {
-					mainObj.put("result-" + j, jsonArray.getJSONObject(j));
-					JSONArray jsonArraySegment = new JSONArray();
-					for (int k = 0; k < mainObj.length(); k++) {
-						jsonArraySegment.put(mainObj.getJSONObject("result-" + k).getJSONArray("Segments").getJSONArray(0));
-						JSONObject mainObjSeg = new JSONObject();
-						JSONObject jsonObjInnerMember = new JSONObject();
-						JSONObject jsonObjInnerOrigin = new JSONObject();
-						for (int l = 0; l < jsonArraySegment.length(); l++) {
-							mainObjSeg.put("Segment-" + l, jsonArraySegment.getJSONArray(l).getJSONObject(0));
-							jsonObjInnerMember.put("Origin-" + l, mainObjSeg.getJSONObject("Segment-" + l).getJSONObject("Origin"));
-							jsonObjInnerOrigin.put("Airport-" + l, jsonObjInnerMember.getJSONObject("Origin-" + l).getJSONObject("Airport"));
-//							for (int m = 0; m < mainObjSeg.length(); m++) {
-//								jsonObjInnerMember.put("Origin-" + m, mainObjSeg.getJSONObject("Segment-" + m).getJSONObject("Origin"));
-////								JSONObject mainObjSegInner = new JSONObject();
-////								for (int n = 0; n < jsonArraySegmentInner.length(); n++) {
-////									mainObjSegInner.put("inner-seg" + n, jsonArraySegmentInner);
-////									model.addAttribute("responseBody", mainObjSegInner);
-////								}
-//								//model.addAttribute("responseBody", jsonArraySegmentInner);
-//							}
-							//model.addAttribute("responseBody", jsonObjInnerMember);
-						}
-						model.addAttribute("responseBody", jsonObjInnerOrigin);
-					}
-					//model.addAttribute("responseBody", mainObj);
-				}
-			}
-            //model.addAttribute("responseBody", jsonObjSearch);
-            model.addAttribute("responseCode", responseCode);
-
-            //System.out.println("Response Body: " + responseBodySearch.toString());
-           // System.out.println("Commited Response: " + jsonObjSearch.getJSONObject("Response").get("Destination"));
-            
-            Product productOnline = enityManager.find(Product.class, 15);
-            
-            ProductDetail productDetailsOnline = new ProductDetail(sortName, "100", "100", "flightNum", date, 
-            		"depTime", "arrTime", 9000, 9000, 500, 500, cityOne, cityTwo, true, true, 0, 180, "air india", 17, 13.3f, productOnline);
-            listProductDetails.add(productDetailsOnline);
-            
-            // Close the connection
-            connectionSearch.disconnect();
-            
-		} catch (Exception e) {
-			return searchURL;// TODO: handle exception
-		}
+		
+		searchFlightAPI(cityOne, cityTwo, adultNum, childNum, infantNum, sortName, model, date);
 		
 		return "flight/search-result-noUser";
 		
+	}
+
+	private void searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
+			String sortName, Model model, Date date) throws MalformedURLException, IOException {
+		// Create URL object with the API end-point
+        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+
+        // Open a connection
+        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+        
+        StringBuilder responseBodySearch = new StringBuilder();
+        
+        int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
+        
+        JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
+        
+        for (int i = 0; i < jsonObjSearch.length(); i++) {
+			JSONArray jsonArray = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(i);
+			JSONObject mainObj = new JSONObject();
+			
+			for (int j = 0; j < jsonArray.length(); j++) {
+				mainObj.put("result-" + j, jsonArray.getJSONObject(j));
+				JSONArray jsonArraySegment = new JSONArray();
+				
+				for (int k = 0; k < mainObj.length(); k++) {
+					jsonArraySegment.put(mainObj.getJSONObject("result-" + k).getJSONArray("Segments").getJSONArray(0));
+					
+					JSONObject mainObjSegments = new JSONObject(),
+								mainObjFare = new JSONObject(),
+								jsonObjOrigin = new JSONObject(),
+								jsonObjDestination = new JSONObject(),
+								jsonObjInnerOrigin = new JSONObject(),
+								jsonObjInnerDestination = new JSONObject(),
+								jsonObjAirline = new JSONObject();
+					
+					for (int l = 0; l < jsonArraySegment.length(); l++) {
+						List<String> originAirpotCodes = new ArrayList<String>(),
+								originAirpotNames = new ArrayList<String>(),
+								destinationAirpotCodes = new ArrayList<String>(),
+								destinationAirpotNames = new ArrayList<String>(),
+								flightNumbers = new ArrayList<String>(),
+								arrivalTimeList = new ArrayList<String>(),
+								depurtureTimeList = new ArrayList<String>(),
+								durationList = new ArrayList<String>(),
+								flightStatusList = new ArrayList<String>(),
+								publishedFareList = new ArrayList<String>(),
+								stopOverList = new ArrayList<String>();
+						
+						List<ProductDetail> listProductDetails = new ArrayList<ProductDetail>();
+			            Product productOnline = enityManager.find(Product.class, 15);
+			            ProductDetail[] productDetail = new ProductDetail[200];
+			            
+						mainObjFare.put("Fare-" + l, mainObj.getJSONObject("result-" + l).getJSONObject("Fare"));
+						mainObjSegments.put("Segment-" + l, jsonArraySegment.getJSONArray(l).getJSONObject(0));
+						jsonObjOrigin.put("Origin-" + l, mainObjSegments.getJSONObject("Segment-" + l).getJSONObject("Origin"));
+						jsonObjAirline.put("Airline-" + l, mainObjSegments.getJSONObject("Segment-" + l).getJSONObject("Airline"));
+						jsonObjDestination.put("Destination-" + l, mainObjSegments.getJSONObject("Segment-" + l).getJSONObject("Destination"));
+						jsonObjInnerOrigin.put("Airport-" + l, jsonObjOrigin.getJSONObject("Origin-" + l).getJSONObject("Airport"));
+						jsonObjInnerDestination.put("Airport-" + l, jsonObjDestination.getJSONObject("Destination-" + l).getJSONObject("Airport"));
+						
+						for (int m = 0; m < jsonObjInnerDestination.length(); m++) {
+							originAirpotCodes.add(jsonObjInnerOrigin.getJSONObject("Airport-" + m).get("AirportCode").toString());
+							originAirpotNames.add(jsonObjInnerOrigin.getJSONObject("Airport-" + m).get("AirportName").toString());
+							destinationAirpotCodes.add(jsonObjInnerDestination.getJSONObject("Airport-" + m).get("AirportCode").toString());
+							destinationAirpotNames.add(jsonObjInnerDestination.getJSONObject("Airport-" + m).get("AirportName").toString());
+							
+							String flightNum = jsonObjAirline.getJSONObject("Airline-" + l).get("AirlineCode").toString() + "-" + jsonObjAirline.getJSONObject("Airline-" + l).get("FlightNumber").toString();
+							flightNumbers.add(flightNum);
+							
+							String stopPointDepartureTime = jsonObjOrigin.getJSONObject("Origin-" + m).get("DepTime").toString();
+							String[] departureTimeParts = stopPointDepartureTime.split("T");
+							String[] departureTimeInnerParts = departureTimeParts[1].split(":");
+							String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
+							depurtureTimeList.add(stringDepTime);
+
+							String stopPointArrivalTime = jsonObjDestination.getJSONObject("Destination-" + m).get("ArrTime").toString();
+							String[] arrivalTimeParts = stopPointArrivalTime.split("T");
+							String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
+							String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
+							arrivalTimeList.add(stringArrTime);
+							
+							String durationT = mainObjSegments.getJSONObject("Segment-" + m).get("Duration").toString();
+							durationList.add(durationT);
+							
+							String flightStatus = mainObjSegments.getJSONObject("Segment-" + m).get("FlightStatus").toString();
+							flightStatusList.add(flightStatus);
+							
+							String totalFare = mainObjFare.getJSONObject("Fare-" + m).get("PublishedFare").toString();
+							publishedFareList.add(totalFare);
+							
+							String stopOver = mainObjSegments.getJSONObject("Segment-" + m).get("StopOver").toString();
+							stopOverList.add(stopOver);
+							
+							String cityOneApi = jsonObjInnerOrigin.getJSONObject("Airport-" + m).get("AirportCode").toString();
+							String cityTwoApi = jsonObjInnerDestination.getJSONObject("Airport-" + m).get("AirportCode").toString();
+							String airlineName = jsonObjAirline.getJSONObject("Airline-" + l).get("AirlineName").toString();
+							String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
+							Float depTimeFloat = Float.parseFloat(depTimeString);
+							String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
+							Float arrTimeFloat = Float.parseFloat(arrTimeString);
+							Integer fareAdjustment = adultNum + childNum + infantNum;
+							Integer intDuration = Integer.parseInt(durationT);
+							Double doubleFare = Double.parseDouble(totalFare);
+							Integer intTotalFare = ((int) Math.round(doubleFare)) / fareAdjustment;
+							
+							productDetail[m] = new ProductDetail(200 + m, sortName, "100", "100", flightNum, date, 
+				            		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, cityOneApi, cityTwoApi, true, true, 0, intDuration, airlineName, depTimeFloat, arrTimeFloat, productOnline);
+							
+				            listProductDetails.add(productDetail[m]);	
+						}
+						
+						model.addAttribute("originAirpotCode", originAirpotCodes);
+						model.addAttribute("originAirpotName", originAirpotNames);
+						model.addAttribute("destinationAirpotCode", destinationAirpotCodes);
+						model.addAttribute("destinationAirpotName", destinationAirpotNames);
+						model.addAttribute("flightNumbers", flightNumbers);
+						model.addAttribute("depurtureTimeList", depurtureTimeList);
+						model.addAttribute("arrivalTimeList", arrivalTimeList);
+						model.addAttribute("durationList", durationList);
+						model.addAttribute("flightStatusList", flightStatusList);
+						model.addAttribute("publishedFareList", publishedFareList);
+						model.addAttribute("stopOverList", stopOverList);
+						model.addAttribute("listProducts", listProductDetails);
+//							model.addAttribute("mainObjSeg", mainObjSeg);
+					}
+				}
+				//model.addAttribute("responseBody", mainObj);
+			}
+		}
+        //model.addAttribute("responseBody", jsonObjSearch);
+        model.addAttribute("responseCode", responseCode);
+        
+        // Close the connection
+        connectionSearch.disconnect();
 	}
 
 	private void searchFilter(String cityOne, String cityTwo, String[] brands, Model model, Date date, Integer[] stops, Integer[] totalPrice, Integer infantNum, String[] activeTime) {

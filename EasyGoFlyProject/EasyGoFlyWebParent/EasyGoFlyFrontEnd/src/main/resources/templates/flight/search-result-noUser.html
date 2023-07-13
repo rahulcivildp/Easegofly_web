@@ -231,7 +231,73 @@
                                             <p class="tile-align">&nbsp; - &nbsp;</p>
                                             <p class="tile-align" style="padding-right: 6px;">Destination </p>
                                             <p class="tile-align" style="color: #f1c043;"> : [[${cityTwo}]]</p>
-                                            <p>[[${responseBody}]]</p>
+                                            <!-- <p>[[${responseBody}]]</p> -->  <!-- ctrl + shift + / -->
+                                            <!-- <select name="originAirpotCode">
+	                                            <th:block th:each="depCode : ${originAirpotCode}">
+	                                            	<option value="${depCode}">[[${depCode}]]</option>
+	                                            </th:block>
+                                            </select>
+                                            
+                                            <select name="destinationAirpotCode">
+	                                            <th:block th:each="arrCode : ${destinationAirpotCode}">
+	                                            	<option value="${arrCode}">[[${arrCode}]]</option>
+	                                            </th:block>
+                                            </select>
+                                            
+                                            <select name="originAirpotName">
+	                                            <th:block th:each="depName : ${originAirpotName}">
+	                                            	<option value="${depName}">[[${depName}]]</option>
+	                                            </th:block>
+                                            </select>
+                                            
+                                            <select name="destinationAirpotName">
+	                                            <th:block th:each="arrName : ${destinationAirpotName}">
+	                                            	<option value="${arrName}">[[${arrName}]]</option>
+	                                            </th:block>
+                                            </select>
+                                            
+                                            <select name="flightNumbers">
+	                                            <th:block th:each="flightNum : ${flightNumbers}">
+	                                            	<option value="${flightNum}">[[${flightNum}]]</option>
+                                           		</th:block>
+                                            </select>
+                                            
+                                            <select name="depurtureTimeList">
+	                                            <th:block th:each="depTime : ${depurtureTimeList}">
+	                                            	<option value="${depTime}">[[${depTime}]]</option>
+                                           		</th:block>
+                                            </select>
+                                            
+                                            <select name="arrivalTimeList">
+	                                            <th:block th:each="arrTime : ${arrivalTimeList}">
+	                                            	<option value="${arrTime}">[[${arrTime}]]</option>
+                                           		</th:block>
+                                            </select>
+                                            
+                                            <select name="durationList">
+	                                            <th:block th:each="duration : ${durationList}">
+	                                            	<option value="${duration}">[[${duration}]]</option>
+                                           		</th:block>
+                                            </select>
+                                            
+                                            <select name="flightStatusList">
+	                                            <th:block th:each="flightStatus : ${flightStatusList}">
+	                                            	<option value="${flightStatus}">[[${flightStatus}]]</option>
+                                           		</th:block>
+                                            </select>
+                                            
+                                            <select name="flightStatusList">
+	                                            <th:block th:each="totalFare : ${publishedFareList}">
+	                                            	<option value="${totalFare}">[[${totalFare}]]</option>
+                                           		</th:block>
+                                            </select>
+                                            
+                                            <select name="flightStatusList">
+	                                            <th:block th:each="stopOver : ${stopOverList}">
+	                                            	<option value="${stopOver}">[[${stopOver}]]</option>
+                                           		</th:block>
+                                            </select> -->
+                                            
                                             
                                     </div>
                                 </div>
@@ -424,7 +490,7 @@
 		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45" style="margin-left: 28px;">
 		                                    </div>
 		                                    <div style="float: left; font-size: 15px; padding: 10px 25px;">
-		                                        <b> [[${flight.product.brands.name}]] </b>
+		                                        <b> [[${flight.brand}]] </b>
 		                                        <p id="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p> 
 		                                    </div>
 				                    	</div>
