@@ -40,6 +40,10 @@ public class ProductDetailsController {
 	@Autowired private CartItemService cartService;
 	@Autowired private TravellerRepository travelerRepo;
 	@Autowired private CheckoutService checkoutService;
+	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
+	
+	public List<ProductDetail> listProductDetailsOnline;
+	private Integer flightIdLocal = 0;
 	
 	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")
 	public String filghtTravelerDetailsSave(@PathVariable(name = "search_id") Integer search_id, 
@@ -80,6 +84,91 @@ public class ProductDetailsController {
 		return "flight/booking/flight_traveler_details";
 	}
 	
+	private CartItem travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {
+		ProductDetail flight = null;
+		SearchHistory search = searchRepo.findById(searchId).get();
+		
+		try {
+			String mode = "Offline-data";
+			ProductDetail newFlight  = flightRepo.findProductDetailByIdMode(flightId, mode);
+			
+			newFlight.addBooking(customer);
+			productService.saveCartItem(newFlight);
+			
+			ProductDetail savedCart = productService.saveCartItem(newFlight);
+			List<CartItem> savedCartItemProduct = savedCart.getCartItems();
+			CartItem LastItem = savedCartItemProduct.get(savedCartItemProduct.size() - 1);
+			float totalAdultPrice = (newFlight.getPriceADT() + newFlight.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+			float totalInfantPrice = (newFlight.getPriceINF() + newFlight.getMarkupINF()) * search.getInfantNum();
+			double totalPrice = totalAdultPrice + totalInfantPrice;
+			
+			System.out.println("totalAdultPrice : " + totalAdultPrice + " totalInfantPrice : " + totalInfantPrice + " totalPrice : " + totalPrice);
+			
+			cartService.updateTotalPrice(LastItem, totalPrice);
+			searchService.updateSearchHistory(search, LastItem);
+			
+			flightIdLocal = newFlight.getId();
+			
+			return LastItem;
+			
+		} catch (Exception e) {
+			for (ProductDetail flightOnline : listProductDetailsOnline) {
+				if (flightOnline.getId() == flightId) {
+					flight = flightOnline;
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
+					
+					String modeOnline = "Online-data";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking(customer);
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					System.out.println("totalAdultPrice : " + totalAdultPriceOnline + " totalInfantPrice : " + totalInfantPriceOnline + " totalPrice : " + totalPriceOnline);
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					flightIdLocal = newFlightOnlineSaved.getId();
+					
+					return LastItemOnline;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	@PostMapping("/flight_booking_save")
+	public String filghtBookingSave(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "flight_id") Integer flightId, 
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			CartItem cartItem = travelerDetailsPart(searchId, flightId, customer);
+			System.out.println("flightIdLocal: " + flightIdLocal);
+			return "redirect:/flight_booking" + searchId + "&" + flightIdLocal + "&" + cartItem.getId();
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			CartItem cartItem = travelerDetailsPart(searchId, flightId, customer);
+			return "redirect:/flight_booking" + searchId + "&" + flightIdLocal + "&" + cartItem.getId();
+		} else {
+			return "redirect:/";
+		}
+	}
+	
 	@GetMapping("/flight_booking{search_id}&{flight_id}&{item_id}")
 	public String filghtBookingSave(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
@@ -101,10 +190,12 @@ public class ProductDetailsController {
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
-		
+		System.out.println("Flight ID: " + flight_id);
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+		
+		model.addAttribute("listProductDetailsOnline", listProductDetailsOnline);
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 		for (TravellerDetail travellerDetail : travelers) {
@@ -122,28 +213,6 @@ public class ProductDetailsController {
 		model.addAttribute("flight", flight);
 		
 		return "flight/booking/flight_booking";
-	}
-	
-	@PostMapping("/flight_booking_save")
-	public String filghtBookingSave(@RequestParam(name = "search_id") Integer searchId, 
-			@RequestParam(name = "flight_id") Integer flightId, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
-		String email; 
-		Customer customer; 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
-			return "redirect:/flight_booking" + searchId + "&" + flightId + "&" + travelerDetailsPart(searchId, flightId, customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
-			model.addAttribute("customer", customer);
-			return "redirect:/flight_booking" + searchId + "&" + flightId + "&" + travelerDetailsPart(searchId, flightId, customer);
-		} else {
-			return "redirect:/";
-		}
 	}
 	
 	@PostMapping("/flight_activity_booking_save")
@@ -203,26 +272,7 @@ public class ProductDetailsController {
 		return searchRepo.save(history);
 	}
 
-	private Integer travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {
-		ProductDetail flight = flightRepo.findById(flightId).get();
-		SearchHistory search = searchRepo.findById(searchId).get();
-		
-		flight.addBooking(customer);
-		productService.saveCartItem(flight);
-		
-		ProductDetail savedCart = productService.saveCartItem(flight);
-		List<CartItem> savedCartItemProduct = savedCart.getCartItems();
-		CartItem LastItem = savedCartItemProduct.get(savedCartItemProduct.size() - 1);
-		float totalAdultPrice = (flight.getPriceADT() + flight.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
-		float totalInfantPrice = (flight.getPriceINF() + flight.getMarkupINF()) * search.getInfantNum();
-		double totalPrice = totalAdultPrice + totalInfantPrice;
-		
-		System.out.println("totalAdultPrice : " + totalAdultPrice + " totalInfantPrice : " + totalInfantPrice + " totalPrice : " + totalPrice);
-		
-		cartService.updateTotalPrice(LastItem, totalPrice);
-		searchService.updateSearchHistory(search, LastItem);
-		return LastItem.getId();
-	}
+	
 	
 	@PostMapping("/traveller_details")
 	public String saveTravellerDetails(@RequestParam(name = "search_id") Integer searchId, 

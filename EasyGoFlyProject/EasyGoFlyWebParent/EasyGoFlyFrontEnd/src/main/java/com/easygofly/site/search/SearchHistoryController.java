@@ -35,6 +35,7 @@ import com.easygofly.entity.exception.ProductNotFoundException;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
+import com.easygofly.site.flight.ProductDetailsController;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.ProductSaveHelper;
 import com.easygofly.site.flightAPI.OnlineFlightService;
@@ -52,6 +53,7 @@ public class SearchHistoryController {
 	@Autowired private CityRepository cityRepo;
 	@Autowired private OnlineFlightService onlineFlightService;
 	@Autowired private EntityManager enityManager;
+	@Autowired private ProductDetailsController productDetailsController;
 	
 	private String searchURL = "";
 	List<ProductDetail> listProductDetails;
@@ -181,7 +183,7 @@ public class SearchHistoryController {
         
         int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
         
-        List<ProductDetail> listProductDetails = new ArrayList<ProductDetail>(); 
+        productDetailsController.listProductDetailsOnline = new ArrayList<ProductDetail>(); 
         Product productOnline = enityManager.find(Product.class, 15);
         ProductDetail[] productDetail = new ProductDetail[200];
         
@@ -195,10 +197,10 @@ public class SearchHistoryController {
 		JSONObject mainObjAirline = new JSONObject();
 		JSONObject mainObjFare = new JSONObject();
        
-		onlineFlightService.traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
+		String traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
 		System.out.println(onlineFlightService.traceId);
         
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < jsonArrays.length(); i++) {
 
 	        mainObj.put("Result-" + i, jsonArrays.getJSONObject(i));
 	        jsonObjSegment.put(mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
@@ -242,17 +244,20 @@ public class SearchHistoryController {
 			Double doubleFare = Double.parseDouble(strTotalFare);
 			Integer intTotalFare = ((int) Math.round(doubleFare)) / fareAdjustment;
 			
-			onlineFlightService.resultIndex = mainObj.getJSONObject("Result-" + i).get("ResultIndex").toString();
-			onlineFlightService.airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+			String resultIndex = mainObj.getJSONObject("Result-" + i).get("ResultIndex").toString();
+			String airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+			
+			String mode = "Online-data";
 			
 			productDetail[i] = new ProductDetail(200 + i, sortName, "100", "100", flightNumber, date, 
-            		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, airlineName, depTimeFloat, arrTimeFloat, productOnline);
+            		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, productOnline);
 			
-			listProductDetails.add(productDetail[i]);
+			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 	        
 		}
+		System.out.println(mainObj);
 
-		model.addAttribute("listProducts", listProductDetails);
+		model.addAttribute("listProducts", productDetailsController.listProductDetailsOnline);
         model.addAttribute("responseCode", responseCode);
         
         // Close the connection

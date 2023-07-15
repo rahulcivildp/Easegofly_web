@@ -84,6 +84,14 @@ public class ProductDetail {
 	
 	private boolean inStock;
 	
+	private String traceId;
+	
+	private String resultIndex;
+	
+	private String airlineRemarks;
+	
+	private String mode;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
@@ -136,9 +144,10 @@ public class ProductDetail {
 		this.depTimeInteger = depTimeInteger;
 	}
 	
-	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
+	public ProductDetail(int id, String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
-			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, float arrTimeInteger, Product product) {
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, Product product) {
+		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
 		this.uploadSeats = uploadSeats;
@@ -160,6 +169,37 @@ public class ProductDetail {
 		this.brand = brand;
 		this.arrTimeInteger = arrTimeInteger;
 		this.depTimeInteger = depTimeInteger;
+		this.traceId = traceId;
+		this.resultIndex = resultIndex;
+		this.airlineRemarks = airlineRemarks;
+		this.mode = mode;
+	}
+	
+	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
+			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, float arrTimeInteger, String mode, Product product) {
+		this.pnr = pnr;
+		this.totalSeats = totalSeats;
+		this.uploadSeats = uploadSeats;
+		this.flightNum = flightNum;
+		this.date = date;
+		this.depTime = depTime;
+		this.arrTime = arrTime;
+		this.priceADT = priceADT;
+		this.priceINF = priceINF;
+		this.markupADT = markupADT;
+		this.markupINF = markupINF;
+		this.cityOne = cityOne;
+		this.cityTwo = cityTwo;
+		this.enabled = enabled;
+		this.inStock = inStock;
+		this.product = product;
+		this.stopNum = stopNum;
+		this.duration = duration;
+		this.brand = brand;
+		this.arrTimeInteger = arrTimeInteger;
+		this.depTimeInteger = depTimeInteger;
+		this.mode = mode;
 	}
 
 	public int getId() {
@@ -244,6 +284,14 @@ public class ProductDetail {
 
 	public List<Stop> getStops() {
 		return stops;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 
 	public void setStops(List<Stop> stops) {
@@ -354,6 +402,38 @@ public class ProductDetail {
 		this.product = product;
 	}
 	
+	public String getTraceId() {
+		return traceId;
+	}
+
+	public void setTraceId(String traceId) {
+		this.traceId = traceId;
+	}
+
+	public String getResultIndex() {
+		return resultIndex;
+	}
+
+	public void setResultIndex(String resultIndex) {
+		this.resultIndex = resultIndex;
+	}
+
+	public String getAirlineRemarks() {
+		return airlineRemarks;
+	}
+
+	public void setAirlineRemarks(String airlineRemarks) {
+		this.airlineRemarks = airlineRemarks;
+	}
+
+	public void setDepTimeInteger(float depTimeInteger) {
+		this.depTimeInteger = depTimeInteger;
+	}
+
+	public void setArrTimeInteger(float arrTimeInteger) {
+		this.arrTimeInteger = arrTimeInteger;
+	}
+
 	public List<CartItem> getCartItems() {
 		return cartItems;
 	}

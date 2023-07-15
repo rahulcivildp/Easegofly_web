@@ -11,6 +11,9 @@ import com.easygofly.entity.ProductDetail;
 
 public interface FlightRepository extends CrudRepository<ProductDetail, Integer> {
 	
+	@Query("SELECT p FROM ProductDetail p WHERE p.id = :id AND p.mode = :mode")
+	public ProductDetail findProductDetailByIdMode(Integer id, String mode);
+	
 	@Query("SELECT p FROM ProductDetail p WHERE p.cityOne = :cityOne AND p.cityTwo = :cityTwo")
 	public List<ProductDetail> findFlightByCity(String cityOne, String cityTwo, Sort ascending);
 	
