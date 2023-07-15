@@ -232,19 +232,19 @@
                                             <p class="tile-align" style="padding-right: 6px;">Destination </p>
                                             <p class="tile-align" style="color: #f1c043;"> : [[${cityTwo}]]</p>
                                             <!-- <p>[[${responseBody}]]</p> -->  <!-- ctrl + shift + / -->
-                                            <!-- <select name="originAirpotCode">
-	                                            <th:block th:each="depCode : ${originAirpotCode}">
-	                                            	<option value="${depCode}">[[${depCode}]]</option>
+                                            <select name="adultBaseFareList">
+	                                            <th:block th:each="adultBaseFare : ${resultIndexList}">
+	                                            	<option value="${adultBaseFare}">[[${adultBaseFare}]]</option>
 	                                            </th:block>
                                             </select>
                                             
-                                            <select name="destinationAirpotCode">
-	                                            <th:block th:each="arrCode : ${destinationAirpotCode}">
+                                            <select name="airlineRemarkList">
+	                                            <th:block th:each="arrCode : ${airlineRemarkList}">
 	                                            	<option value="${arrCode}">[[${arrCode}]]</option>
 	                                            </th:block>
                                             </select>
                                             
-                                            <select name="originAirpotName">
+                                            <!-- <select name="originAirpotName">
 	                                            <th:block th:each="depName : ${originAirpotName}">
 	                                            	<option value="${depName}">[[${depName}]]</option>
 	                                            </th:block>

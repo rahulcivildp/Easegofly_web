@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 public class OnlineFlightService {
 	@SuppressWarnings("unused")
 	public String tokenId = "";
+	public String traceId = "";
+	public String resultIndex = "";
+	public String airlineRemark = "";
 
 	public int apiAuthentication(HttpURLConnection connection, StringBuilder responseBody)
 			throws IOException {
