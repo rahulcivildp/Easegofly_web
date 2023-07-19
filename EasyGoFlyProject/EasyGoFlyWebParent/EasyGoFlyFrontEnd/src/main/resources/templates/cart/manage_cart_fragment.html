@@ -114,6 +114,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="item : ${listItems}" style="background: white;">
+						<th:block th:if="${item.productDetail.traceId} == null">
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" >[[${item.productDetail.cityOne}]] - [[${item.productDetail.cityTwo}]]</td>
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" >[[${#dates.format(item.productDetail.date, 'E, dd MM yyyy')}]]</td>
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" >[[${item.productDetail.depTime}]]</td>
@@ -138,6 +139,7 @@
 								</div>
 							</div>
 						</td>
+						</th:block>
 					</tr>
 				</tbody>
 			</table>
@@ -145,6 +147,7 @@
 		
 		<div class="less-details">
 		<th:block th:each="item : ${listItems}" >
+			<th:block th:if="${item.productDetail.traceId} == null">
 			<div class="row m-1 styleLinkButton"  style="background: white;">
 				<div class="col-5">
 					<img th:src="@{${item.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
@@ -178,6 +181,7 @@
 					</div>
 				</div>
 			</div>
+			</th:block>
 			</th:block>
 		</div>
 		

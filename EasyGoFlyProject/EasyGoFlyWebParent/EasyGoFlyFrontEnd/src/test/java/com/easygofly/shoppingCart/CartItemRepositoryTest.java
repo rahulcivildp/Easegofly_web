@@ -40,7 +40,7 @@ import com.razorpay.RazorpayException;
 
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
+//@AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
 @ContextConfiguration(classes = EasyGoFlyFrontEndApplication.class)
 public class CartItemRepositoryTest {

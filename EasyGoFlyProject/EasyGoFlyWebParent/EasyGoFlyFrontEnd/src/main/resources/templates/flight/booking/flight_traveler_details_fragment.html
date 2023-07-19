@@ -164,6 +164,7 @@
                                 <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
                                 <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
                                 <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
+                                <p>[[${jsonObjFare_quote}]]</p>
                             </div>
                         </div>
                     </div>
@@ -331,8 +332,15 @@
 											            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
 														<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
 											            <input type="hidden" name="traveler_id" id="traveler_id" th:value="${traveler.id}">
-									                    <p style="margin: 0; color: green;">Adult:</p>
-									                    <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
+									                    
+											            <div class="form-floating" >
+									                        <select class="form-select" aria-label="Floating label select example" disabled>
+									                        	<th:block th:each="type : ${traveler.paxTypes}">
+									                            	<option th:value="${type.id}">[[${type.name}]]</option>
+									                            </th:block>
+									                        </select>
+									                        <label for="floatingSelect">Type</label>
+									                    </div>
 									                </div>
 									                <div class="col-md-2">
 									                    <div class="form-floating " >

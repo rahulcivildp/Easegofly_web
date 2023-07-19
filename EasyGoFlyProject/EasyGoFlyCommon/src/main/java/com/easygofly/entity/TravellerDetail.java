@@ -1,13 +1,18 @@
 package com.easygofly.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -45,6 +50,14 @@ public class TravellerDetail {
 	@JoinColumn(name = "order_id")
 	private Order order;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+				name = "travelers_types",
+				joinColumns = @JoinColumn(name = "traveler_id"),
+				inverseJoinColumns = @JoinColumn(name = "passenger_type_id")
+			)
+	private Set<PaxType> paxTypes = new HashSet<>();
+	
 	
 	
 	public TravellerDetail() {}
@@ -56,6 +69,16 @@ public class TravellerDetail {
 		this.dob = dob;
 		this.productDetail = productDetail;
 		this.cartItem = cartItem;
+	}
+	
+	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem, PaxType paxType) {
+		this.salutation = salutation;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dob = dob;
+		this.productDetail = productDetail;
+		this.cartItem = cartItem;
+		addPaxType(paxType);
 	}
 
 	public Integer getId() {
@@ -120,6 +143,18 @@ public class TravellerDetail {
 
 	public void setCartItem(CartItem cartItem) {
 		this.cartItem = cartItem;
+	}
+
+	public Set<PaxType> getPaxTypes() {
+		return paxTypes;
+	}
+
+	public void setPaxTypes(Set<PaxType> paxTypes) {
+		this.paxTypes = paxTypes;
+	}
+	
+	public void addPaxType(PaxType paxType) {
+		this.paxTypes.add(paxType);
 	}
 
 	@Override

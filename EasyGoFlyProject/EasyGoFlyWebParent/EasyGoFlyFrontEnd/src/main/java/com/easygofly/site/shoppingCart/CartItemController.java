@@ -2,6 +2,7 @@ package com.easygofly.site.shoppingCart;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -135,8 +136,10 @@ public class CartItemController {
 		
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
 		
-	
+		String array[] = {"{abc}", "{def}", "{ghi}"};
 		
+		String complete = Arrays.toString(array);
+		System.out.println("\"PreferredCurrency\":" + "\"" + complete + "\"");
 		
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("totalPages1", pageOrder.getTotalPages());

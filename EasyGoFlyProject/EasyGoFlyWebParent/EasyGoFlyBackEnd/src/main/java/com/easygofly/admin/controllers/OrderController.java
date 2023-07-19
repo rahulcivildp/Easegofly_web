@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.easygofly.admin.cartItem.CartItemService;
 import com.easygofly.admin.order.OrderRepository;
 import com.easygofly.admin.order.OrderService;
 import com.easygofly.admin.order.TravelerRepository;
@@ -34,7 +35,8 @@ public class OrderController {
 	@Autowired private OrderRepository orderRepo;
 	@Autowired private CityService cityService;
 	@Autowired private SettingService settingService;
-	@Autowired private TravelerRepository travelerRepo ;
+	@Autowired private TravelerRepository travelerRepo;
+	@Autowired private CartItemService cartItemService ;
 	
 	@GetMapping("/orders")
 	public String getAllOrders(Model model, Order order) {
@@ -105,4 +107,15 @@ public class OrderController {
 		return "redirect:/orders";
 	}
 	
+	@GetMapping("/cart-offline")
+	public String cartOffline() {
+		cartItemService.updateModeOffline();
+		return "redirect:/orders";
+	}
+	
+	@GetMapping("/cart-online")
+	public String cartOnline() {
+		cartItemService.updateModeOnline();
+		return "redirect:/orders";
+	}
 }

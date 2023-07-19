@@ -139,6 +139,7 @@
                                 <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
                                 <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
                                 <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
+                                <p>[[${jsonObjFare_quote}]]</p>
                             </div>
                         </div>
                     </div>
@@ -162,7 +163,7 @@
                     <div class="row" style="padding: 15px 0;">
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c1"></div>
-                            <P style="text-align: center; color: #959eac;">Traveller Details</P>
+                            <P style="text-align: center; color: #959eac;">Traveler Details</P>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c2"></div>
@@ -305,7 +306,14 @@
 		                            	<div style="padding-top: 20px;">
 	                                    	<div class="row" style="padding: 0 7px;">
 								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
-										            
+										            <div class="form-floating" >
+								                        <select class="form-select" aria-label="Floating label select example" disabled>
+								                        	<th:block th:each="type : ${traveler.paxTypes}">
+								                            	<option th:value="${type.id}">[[${type.name}]]</option>
+								                            </th:block>
+								                        </select>
+								                        <label for="floatingSelect">Type</label>
+								                    </div>
 								                    <p style="margin: 0; color: green;">Adult :</p>
 								                    <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
 								                </div>
@@ -334,10 +342,10 @@
 								                        <input 
 								                                type="date"
 								                                class="datepicker form-control border-2"
-								                                id="datepicker"
+								                                id="datepick"
 								                                th:value="${traveler.dob}" disabled
 								                                >
-								                        <label for="datepicker">Date of Birth</label>
+								                        <label for="datepick">Date of Birth</label>
 								                    </div>
 								                </div>
 								                </div>
@@ -347,9 +355,14 @@
 	                                    <div style="padding: 20px 10px 0;">
 	                                    	<div class="row" style="padding: 0 7px;">
 								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
-										            
-								                    <p style="margin: 0; color: green;">Adult :</p>
-								                    <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
+								    				<div class="form-floating">
+							                        <select class="form-select" aria-label="Floating label select example" id="paxType" name="paxType" required>
+							                        	<th:block th:each="type : ${paxTypes}">
+							                            	<option th:value="${type.id}">[[${type.name}]]</option>
+							                            </th:block>
+							                        </select>
+							                        <label for="paxType">Type</label>
+								                	</div>
 								                </div>
 								                <div class="col-md-2 col-12">
 								                    <div class="form-floating">
@@ -358,7 +371,7 @@
 								                            <option value="Mrs.">Mrs.</option>
 								                            <option value="Miss">Miss</option>
 								                        </select>
-								                        <label for="floatingSelect">Title</label>
+								                        <label for="salutation">Title</label>
 								                    </div>
 								                </div>
 								                <div class="col-md-3 col-12">
@@ -386,6 +399,108 @@
 								                </div>
 								                </div>
 	                                    </div>
+	                                    <script type="text/javascript">
+		                                 	$(document).ready(function() {
+		                                 		if($("#paxType").val() == "1") {
+		                                 			$("input[name='dob']").attr("id", "datepickerAdult");
+		                                 			var dobidadt = $("input[name='dob']").attr("id");
+		                                 			dateOfbirthAdult(dobidadt);
+	                                 			}
+		                                 		
+		                                 		$("#paxType").change(function() {
+		                                 			if($("#paxType").val() == "2") {
+			                                 			$("input[name='dob']").attr("id", "datepickerChild");
+			                                 			var dobidchd = $("input[name='dob']").attr("id");
+			                                 			dateOfbirthChild(dobidchd);
+		                                 			} else if($("#paxType").val() == "3") {
+			                                 			$("input[name='dob']").attr("id", "datepickerInfant");
+			                                 			var dobidinf = $("input[name='dob']").attr("id");
+			                                 			dateOfbirthInfant(dobidinf);
+		                                 			} else if($("#paxType").val() == "1") {
+			                                 			$("input[name='dob']").attr("id", "datepickerAdult");
+			                                 			var dobidadt = $("input[name='dob']").attr("id");
+			                                 			dateOfbirthAdult(dobidadt);
+		                                 			}
+		                                 		});
+		                                 	});
+		                                 	
+		                                 	function dateOfbirthAdult(dobid){
+			                                    var today = new Date();
+			                                    var dd = today.getDate();
+			                                    var mm = today.getMonth() + 1; //January is 0!
+			                                    var yyyy = today.getFullYear() - 18;
+			                                     if(dd<10){
+			                                            dd='0'+dd
+			                                        } 
+			                                        if(mm<10){
+			                                            mm='0'+mm
+			                                        } 
+		
+			                                    today = yyyy+'-'+mm+'-'+dd;
+			                                    document.getElementById(dobid).setAttribute("max", today);
+			                                    document.getElementById(dobid).setAttribute("min", "");
+		                                    }
+		                                 	
+		                                 	function dateOfbirthChild(dobid){
+		                                 		var todayNow = new Date();
+			                                    var dd2 = todayNow.getDate();
+			                                    var mm2 = todayNow.getMonth() + 1; 
+			                                    var yyyy2 = todayNow.getFullYear();
+			                                    if(dd2<10){
+		                                            dd2='0'+dd2
+		                                        } 
+		                                        if(mm2<10){
+		                                            mm2='0'+mm2
+		                                        }
+			                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
+			                                    document.getElementById(dobid).setAttribute("max", todayNow);
+			                                    
+			                                    var today = new Date();
+			                                    var dd = today.getDate();
+			                                    var mm = today.getMonth() + 1; //January is 0!
+			                                    var yyyy = today.getFullYear() - 18;
+			                                     if(dd<10){
+			                                            dd='0'+dd
+			                                        } 
+			                                        if(mm<10){
+			                                            mm='0'+mm
+			                                        } 
+		
+			                                    today = yyyy+'-'+mm+'-'+dd;
+			                                    document.getElementById(dobid).setAttribute("min", today);
+		                                    }
+		                                 	
+		                                 	function dateOfbirthInfant(dobid){
+		                                 		var todayNow = new Date();
+			                                    var dd2 = todayNow.getDate();
+			                                    var mm2 = todayNow.getMonth() + 1; 
+			                                    var yyyy2 = todayNow.getFullYear();
+			                                    if(dd2<10){
+		                                            dd2='0'+dd2
+		                                        } 
+		                                        if(mm2<10){
+		                                            mm2='0'+mm2
+		                                        }
+			                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
+			                                    document.getElementById(dobid).setAttribute("max", todayNow);
+			                                    
+			                                    var today = new Date();
+			                                    var dd = today.getDate();
+			                                    var mm = today.getMonth() + 1; //January is 0!
+			                                    var yyyy = today.getFullYear() - 5;
+			                                     if(dd<10){
+			                                            dd='0'+dd
+			                                        } 
+			                                        if(mm<10){
+			                                            mm='0'+mm
+			                                        } 
+		
+			                                    today = yyyy+'-'+mm+'-'+dd;
+			                                    document.getElementById(dobid).setAttribute("min", today);
+		                                    }
+	                                    
+	                                    </script>
+	                                    
 	                                    </th:block>
 	                                </div>
 	                                
@@ -417,6 +532,29 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div id="farerule_details" class="booking_tiles back_white shadow">
+                                <div style="background-color: #ecf5fd;">
+	                                <div class="row">
+	                                	<div class="col-8">
+	                                    	<p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Farerule Details</p>
+	                                    </div>
+	                                	<div class="col-4" >
+	                                		<button class="accordion-button buttn_stly collapsed" type="button" style="text-align: right;" aria-expanded="false" aria-controls="flush-collapseTwo" data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" id="button_collapse">Show</button>
+	                                	</div>
+	                                </div>
+                                </div>
+                                <div>
+                                    
+		                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+		                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
+		                                	<p th:utext="${jsonObjFarerule}"></p>
+		                                </div>
+		                            </div>
+                                </div>
+                            </div>
+                            
+                            
                             <div class="media_status" style="display: none;">
                             	<div th:replace="flight/booking/bill_page :: bill_section('tag')"></div>
                             </div>

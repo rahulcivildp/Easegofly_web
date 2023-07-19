@@ -1,8 +1,16 @@
 package com.easygofly.site.flight;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,12 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.PaxType;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
@@ -41,6 +51,9 @@ public class ProductDetailsController {
 	@Autowired private TravellerRepository travelerRepo;
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
+	@Autowired private OnlineFlightService onlineFlightService ;
+	@Autowired private EntityManager entityManager;
+	@Autowired private PaxTypeRepository paxTypeRepo ;
 	
 	public List<ProductDetail> listProductDetailsOnline;
 	private Integer flightIdLocal = 0;
@@ -51,7 +64,7 @@ public class ProductDetailsController {
 			@PathVariable(name = "item_id") Integer item_id, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			Model model, CartItem cartItem) {
+			Model model, CartItem cartItem) throws IOException {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
@@ -69,6 +82,24 @@ public class ProductDetailsController {
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
 		
+		if (!flight.getTraceId().equals(null)) {
+        	/* Fare-quote details */
+        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+            // Open a connection
+            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
+            
+            StringBuilder responseBodyFarequote = new StringBuilder();
+            
+        	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, flight.getTraceId(), flight.getResultIndex());
+        	
+        	System.out.println(responseCodeFarequote);
+        	
+        	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString());
+        	
+        	model.addAttribute("jsonObjFare_quote", jsonObjFareQuotes);
+        	
+		}
+		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
@@ -84,6 +115,7 @@ public class ProductDetailsController {
 		return "flight/booking/flight_traveler_details";
 	}
 	
+	
 	private CartItem travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {
 		ProductDetail flight = null;
 		SearchHistory search = searchRepo.findById(searchId).get();
@@ -97,6 +129,10 @@ public class ProductDetailsController {
 			
 			ProductDetail savedCart = productService.saveCartItem(newFlight);
 			List<CartItem> savedCartItemProduct = savedCart.getCartItems();
+			for (CartItem cartItem : savedCartItemProduct) {
+				cartItem.setCartMode("offline");
+				cartRepo.save(cartItem);
+			}
 			CartItem LastItem = savedCartItemProduct.get(savedCartItemProduct.size() - 1);
 			float totalAdultPrice = (newFlight.getPriceADT() + newFlight.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
 			float totalInfantPrice = (newFlight.getPriceINF() + newFlight.getMarkupINF()) * search.getInfantNum();
@@ -125,6 +161,10 @@ public class ProductDetailsController {
 					
 					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
 					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
 					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
 					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
 					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
@@ -176,7 +216,7 @@ public class ProductDetailsController {
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, 
-			CartItem cartItem ) {
+			CartItem cartItem ) throws IOException {
 		
 		String email; 
 		Customer customer; 
@@ -194,6 +234,119 @@ public class ProductDetailsController {
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+		Iterable<PaxType> paxTypes = paxTypeRepo.findAll();
+
+		if (!flight.getTraceId().equals(null)) {
+        	/* Fare-rule details */
+        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+            // Open a connection
+            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+            
+            StringBuilder responseBodyFarerule = new StringBuilder();
+            
+        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, flight.getTraceId(), flight.getResultIndex());
+        	
+        	System.out.println(responseCode);
+        	
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());System.out.println(jsonObjFarerules);
+        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
+        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
+        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
+        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
+        	
+        	System.out.println(jsonObjFarerules);
+
+        	/* Fare-quote details */
+        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+            // Open a connection
+            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
+            
+            StringBuilder responseBodyFarequote = new StringBuilder();
+            
+        	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, flight.getTraceId(), flight.getResultIndex());
+        	
+        	System.out.println(responseCodeFarequote);
+        	
+        	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
+        	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
+        	JSONArray jsonObjSegment = jsonResult.getJSONArray("Segments").getJSONArray(0);
+        	JSONObject mainObjSegment = jsonObjSegment.getJSONObject(0);
+    		JSONObject mainObjOrigin = mainObjSegment.getJSONObject("Origin");
+    		JSONObject mainObjDestination = mainObjSegment.getJSONObject("Destination");
+    		JSONObject mainObjAirline = mainObjSegment.getJSONObject("Airline");
+//    		JSONObject mainObjFare = mainObj.getJSONObject("Results").getJSONObject("Fare");
+    		
+    		String depTerminal = mainObjOrigin.getJSONObject("Airport").get("Terminal").toString();
+    		String arrTerminal = mainObjDestination.getJSONObject("Airport").get("Terminal").toString();
+    		String airlineCOde = mainObjAirline.get("AirlineCode").toString();
+    		String flightNumber = mainObjAirline.get("FlightNumber").toString();
+    		String flightClass = mainObjAirline.get("FareClass").toString();
+    		String airlineName = mainObjAirline.get("AirlineName").toString();
+    		String cabinBaggage = mainObjSegment.get("CabinBaggage").toString();
+    		String baggage = mainObjSegment.get("Baggage").toString();
+    		String duration = mainObjSegment.get("Duration").toString();
+    		String flightStatus = mainObjSegment.get("FlightStatus").toString();
+    		String stopOver = mainObjSegment.get("StopOver").toString();
+//           
+//    		String traceId = jsonObjFareQuotes.getJSONObject("Response").get("TraceId").toString();
+//    		System.out.println(onlineFlightService.traceId);
+//            
+//	        String depAirportCode = mainObjOrigin.getJSONObject("Origin-" + i).getJSONObject("Airport").get("AirportCode").toString();
+//	        String depAirportName = mainObjOrigin.getJSONObject("Origin-" + i).getJSONObject("Airport").get("AirportName").toString();
+//	        String depTerminal = mainObjOrigin.getJSONObject("Origin-" + i).getJSONObject("Airport").get("Terminal").toString();
+//	        
+//	        String arrAirportCode = mainObjDestination.getJSONObject("Destination-" + i).getJSONObject("Airport").get("AirportCode").toString();
+//	        String arrAirportName = mainObjDestination.getJSONObject("Destination-" + i).getJSONObject("Airport").get("AirportName").toString();
+//	        String arrTerminal = mainObjDestination.getJSONObject("Destination-" + i).getJSONObject("Airport").get("Terminal").toString();
+//	        
+//	        String airlineName = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineName").toString();
+//	        String fareClass = mainObjAirline.getJSONObject("Airline-" + i).get("FareClass").toString();
+//	        String flightNumber = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirline.getJSONObject("Airline-" + i).get("FlightNumber").toString();
+//	        
+//	        String depTime = mainObjOrigin.getJSONObject("Origin-" + i).get("DepTime").toString();
+//	        String[] departureTimeParts = depTime.split("T");
+//			String[] departureTimeInnerParts = departureTimeParts[1].split(":");
+//			String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
+//			String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
+//			Float depTimeFloat = Float.parseFloat(depTimeString);
+//			
+//			String arrTime = mainObjDestination.getJSONObject("Destination-" + i).get("ArrTime").toString();
+//			String[] arrivalTimeParts = arrTime.split("T");
+//			String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
+//			String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
+//			String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
+//			Float arrTimeFloat = Float.parseFloat(arrTimeString);
+//			
+//			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+//			String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
+//			
+//			String strTotalFare = mainObjFare.getJSONObject("Fare-" + i).get("PublishedFare").toString();
+//			Integer fareAdjustment = adultNum + childNum + infantNum;
+//			Double doubleFare = Double.parseDouble(strTotalFare);
+//			Integer intTotalFare = ((int) Math.round(doubleFare)) / fareAdjustment;
+//			
+//			String resultIndex = mainObj.getJSONObject("Result-" + i).get("ResultIndex").toString();
+//			String airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+//		
+        	System.out.println(mainObjOrigin);
+        	System.out.println(mainObjDestination);
+        	System.out.println(depTerminal);
+        	System.out.println(arrTerminal);
+        	System.out.println(airlineCOde);
+        	
+        	System.out.println(flightNumber);
+        	System.out.println(flightClass);
+        	
+        	System.out.println(airlineName);
+        	System.out.println(cabinBaggage);
+        	System.out.println(baggage);
+        	System.out.println(duration);
+        	System.out.println(flightStatus);
+        	System.out.println(stopOver);
+        	
+        	model.addAttribute("jsonObjFare_quote", jsonObjFareQuotes);
+        	
+		}
 		
 		model.addAttribute("listProductDetailsOnline", listProductDetailsOnline);
 		
@@ -206,7 +359,8 @@ public class ProductDetailsController {
 		
 		
 		int[] list= new int[search.getPassengerNum()];
-
+		
+		model.addAttribute("paxTypes", paxTypes);
 		model.addAttribute("list", list);
 		model.addAttribute("item", item);
 		model.addAttribute("search", search);
@@ -284,7 +438,9 @@ public class ProductDetailsController {
 			@RequestParam(name = "salutation", required = false) String[] salutation, 
 			@RequestParam(name = "firstName", required = false) String[] firstName,  
 			@RequestParam(name = "lastName", required = false) String[] lastName, 
-			@RequestParam(name = "dob", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date[] dob, CartItem cartItem	 ) {
+			@RequestParam(name = "dob", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date[] dob, 
+			@RequestParam(name = "paxType", required = false) String[] paxType, 
+			CartItem cartItem	 ) {
 		try {
 			String email; 
 			Customer customer; 
@@ -304,9 +460,12 @@ public class ProductDetailsController {
 			CartItem item = cartRepo.findById(item_id).get();
 			
 			cartService.updateCartItem(item, cartItem.getEmail(), cartItem.getPhoneNum(), search.getPassengerNum(), false); 
+			
+			
 				
 			for (int i = 0; i < search.getPassengerNum(); i++) {
-				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item);
+				PaxType passengerType = paxTypeRepo.findById(Integer.parseInt(paxType[i])).get();
+				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, passengerType);
 				productService.saveFlightPassengerDetails(flight);
 				ProductDetail flightDetails = productService.saveFlightPassengerDetails(flight);
 				model.addAttribute("flightDetails", flightDetails);

@@ -30,7 +30,7 @@ public interface CartItemRepository extends PagingAndSortingRepository<CartItem,
 	@Query("SELECT c FROM CartItem c WHERE CONCAT(c.email, ' ', c.customer, ' ', c.id) LIKE %?1%")
 	public Page<CartItem> findBooking(String keyword, Pageable pageable); 
 	
-	@Query("SELECT c FROM CartItem c WHERE c.customer = :customer")
+	@Query("SELECT c FROM CartItem c WHERE c.customer = :customer AND (c.cartMode LIKE 'offline')")
 	public Page<CartItem> findByCustomer(Customer customer, Pageable pageable); 
 	
 	public Long countById(Integer id);

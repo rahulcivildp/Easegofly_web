@@ -249,7 +249,7 @@ public class SearchHistoryController {
 			
 			String mode = "Online-data";
 			
-			productDetail[i] = new ProductDetail(200 + i, sortName, "100", "100", flightNumber, date, 
+			productDetail[i] = new ProductDetail(200 + i, "waiting...", "100", "100", flightNumber, date, 
             		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, productOnline);
 			
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);

@@ -42,6 +42,8 @@ public class CartItem {
 	
 	@Column(unique = false)
 	private String email;
+
+	private String cartMode;
 	
 	private BigInteger phoneNum;
  
@@ -109,6 +111,16 @@ public class CartItem {
 		this.quantity = quantity;
 	}
 	
+	public String getCartMode() {
+		return cartMode;
+	}
+
+
+	public void setCartMode(String cartMode) {
+		this.cartMode = cartMode;
+	}
+
+
 	public double getTotalPrice() {
 		return totalPrice;
 	}

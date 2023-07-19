@@ -462,6 +462,10 @@ public class ProductDetail {
 		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem));
 	}
 	
+	public void addTravellerDetails(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, PaxType paxType) {
+		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem, paxType));
+	}
+	
 	public void addStopDetails(String cityName, String depTime, String arrTime, String totalTime) {
 		this.stops.add(new Stop(cityName, depTime, arrTime, totalTime, this));
 	}

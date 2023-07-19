@@ -11,8 +11,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.easygofly.entity.City;
+import com.easygofly.entity.PaxType;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.CityRepository;
+import com.easygofly.site.flight.PaxTypeRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -21,6 +23,7 @@ import com.easygofly.site.flight.CityRepository;
 public class CityRepositoryTest {
 
 	@Autowired private CityRepository cityRepo;
+	@Autowired private PaxTypeRepository paxTypeRepo ;
 	
 	@Test
 	public void testUpdateCity() {
@@ -31,6 +34,17 @@ public class CityRepositoryTest {
 		
 		cityRepo.save(city);
 	}
+	
+	@Test
+	public void testAddPaxType() {
+		PaxType paxTypeAdult = new PaxType("Adult", "18+ including Minor (13 to 18)");
+		PaxType paxTypeChild = new PaxType("Child", "5 to 12 years");
+		PaxType paxTypeInfant = new PaxType("Infant", "Under 5 years");
+		
+		paxTypeRepo.saveAll(List.of(paxTypeAdult, paxTypeChild, paxTypeInfant));
+		
+	}
+	
 	
 	@Test
 	public void testUpdateCities() {
@@ -96,4 +110,5 @@ public class CityRepositoryTest {
 				city26, city27, city28, city29, city30, city31, city32, city33, city34, city35, city36, city37, city38, city39, city40, city41, city42, city43, city44, city45, city46, city47, city48, city49, city50, city51, city52,
 				city53, city54, city55, city56));
 	}
+	
 }

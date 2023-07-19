@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.PaxType;
 import com.easygofly.entity.ProductDetail;
 
 public class ProductSaveHelper {
@@ -39,5 +40,11 @@ public class ProductSaveHelper {
 		if(firstName == null || lastName == null) return;
 		
 		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem);
+	}
+	
+	public static void setTravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, PaxType paxType) {
+		if(firstName == null || lastName == null) return;
+		
+		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem, paxType);
 	}
 }
