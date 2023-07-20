@@ -11,10 +11,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.easygofly.entity.City;
-import com.easygofly.entity.PaxType;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.CityRepository;
-import com.easygofly.site.flight.PaxTypeRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -23,7 +21,6 @@ import com.easygofly.site.flight.PaxTypeRepository;
 public class CityRepositoryTest {
 
 	@Autowired private CityRepository cityRepo;
-	@Autowired private PaxTypeRepository paxTypeRepo ;
 	
 	@Test
 	public void testUpdateCity() {
@@ -34,17 +31,6 @@ public class CityRepositoryTest {
 		
 		cityRepo.save(city);
 	}
-	
-	@Test
-	public void testAddPaxType() {
-		PaxType paxTypeAdult = new PaxType("Adult", "18+ including Minor (13 to 18)");
-		PaxType paxTypeChild = new PaxType("Child", "5 to 12 years");
-		PaxType paxTypeInfant = new PaxType("Infant", "Under 5 years");
-		
-		paxTypeRepo.saveAll(List.of(paxTypeAdult, paxTypeChild, paxTypeInfant));
-		
-	}
-	
 	
 	@Test
 	public void testUpdateCities() {

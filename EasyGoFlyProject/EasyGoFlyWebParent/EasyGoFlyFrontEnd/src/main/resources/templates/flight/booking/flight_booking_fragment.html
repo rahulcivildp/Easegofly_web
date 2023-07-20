@@ -121,7 +121,6 @@
             background-color: #2abd2a !important;
         }
     </style>
-
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
         <div class="choosen_request">
@@ -308,8 +307,14 @@
 								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
 										            <div class="form-floating" >
 								                        <select class="form-select" aria-label="Floating label select example" disabled>
-								                        	<th:block th:each="type : ${traveler.paxTypes}">
-								                            	<option th:value="${type.id}">[[${type.name}]]</option>
+								                        	<th:block th:if="${traveler.paxType} = '1'">
+								                            	<option th:value="${traveler.paxType}">Adult</option>
+								                            </th:block>
+								                            <th:block th:if="${traveler.paxType} = '2'">
+								                            	<option th:value="${traveler.paxType}">Child</option>
+								                            </th:block>
+								                            <th:block th:if="${traveler.paxType} = '3'">
+								                            	<option th:value="${traveler.paxType}">Infant</option>
 								                            </th:block>
 								                        </select>
 								                        <label for="floatingSelect">Type</label>
@@ -351,157 +356,168 @@
 								                </div>
 	                                    </div>
 		                            </th:block>
-	                                <th:block th:if="${travellerDetail} == null" th:each="rows : ${list}">
-	                                    <div style="padding: 20px 10px 0;">
-	                                    	<div class="row" style="padding: 0 7px;">
-								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
-								    				<div class="form-floating">
-							                        <select class="form-select" aria-label="Floating label select example" id="paxType" name="paxType" required>
-							                        	<th:block th:each="type : ${paxTypes}">
-							                            	<option th:value="${type.id}">[[${type.name}]]</option>
-							                            </th:block>
-							                        </select>
-							                        <label for="paxType">Type</label>
-								                	</div>
-								                </div>
-								                <div class="col-md-2 col-12">
-								                    <div class="form-floating">
-								                        <select class="form-select" style="margin-bottom: 16px;" id="salutation" name="salutation" aria-label="Floating label select example" required>
-								                            <option selected value="Mr.">Mr.</option>
-								                            <option value="Mrs.">Mrs.</option>
-								                            <option value="Miss">Miss</option>
-								                        </select>
-								                        <label for="salutation">Title</label>
-								                    </div>
-								                </div>
-								                <div class="col-md-3 col-12">
-								                    <div class="form-floating mb-3">
-								                        <input type="text" class="form-control" name="firstName" placeholder="name@example.com" required>
-								                        <label for="floatingInput">First Name</label>
-								                    </div>
-								                </div>
-								                <div class="col-md-3 col-12">
-								                    <div class="form-floating mb-3">
-								                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="name@example.com" required>
-								                        <label for="floatingInput">Last Name</label>
-								                    </div>
-								                </div>
-								                <div class="col-md-2 col-12">
-								                    <div class="form-floating mb-4 d-flex">
-								                        <input 
-								                                type="date"
-								                                class="datepicker form-control border-2"
-								                                id="datepicker"
-								                                name="dob" 
-								                                >
-								                        <label for="datepicker" required>Date of Birth</label>
-								                    </div>
-								                </div>
-								                </div>
-	                                    </div>
+	                                
+	                                    <div id="appendTraveler" style="padding: 20px 10px 0;"></div>
 	                                    <script type="text/javascript">
+		                                    var travelerId = [[${#lists.size(list)}]];
+	                                    
 		                                 	$(document).ready(function() {
-		                                 		if($("#paxType").val() == "1") {
-		                                 			$("input[name='dob']").attr("id", "datepickerAdult");
-		                                 			var dobidadt = $("input[name='dob']").attr("id");
-		                                 			dateOfbirthAdult(dobidadt);
-	                                 			}
-		                                 		
-		                                 		$("#paxType").change(function() {
-		                                 			if($("#paxType").val() == "2") {
-			                                 			$("input[name='dob']").attr("id", "datepickerChild");
-			                                 			var dobidchd = $("input[name='dob']").attr("id");
-			                                 			dateOfbirthChild(dobidchd);
-		                                 			} else if($("#paxType").val() == "3") {
-			                                 			$("input[name='dob']").attr("id", "datepickerInfant");
-			                                 			var dobidinf = $("input[name='dob']").attr("id");
-			                                 			dateOfbirthInfant(dobidinf);
-		                                 			} else if($("#paxType").val() == "1") {
-			                                 			$("input[name='dob']").attr("id", "datepickerAdult");
-			                                 			var dobidadt = $("input[name='dob']").attr("id");
-			                                 			dateOfbirthAdult(dobidadt);
+		                                 		for (let i = 0; i < travelerId; i++) {
+		                                 			
+		                                 			htmlCode = `
+			                                    		<div class="row" style="padding: 0 7px;">
+										    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
+										    				<div class="form-floating">
+									                        <select class="form-select" aria-label="Floating label select example" id="paxType` + i + `" name="paxType" required>
+									                            <option value="1">Adult</option>
+									                            <option value="2">Child</option>
+									                            <option value="3">Infant</option>
+									                        </select>
+									                        <label for="paxType">Type</label>
+										                	</div>
+										                </div>
+										                <div class="col-md-2 col-12">
+										                    <div class="form-floating">
+										                        <select class="form-select" style="margin-bottom: 16px;" id="salutation" name="salutation" aria-label="Floating label select example" required>
+										                            <option selected value="Mr">Mr.</option>
+										                            <option value="Mrs">Mrs.</option>
+										                            <option value="Miss">Miss</option>
+										                        </select>
+										                        <label for="salutation">Title</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-3 col-12">
+										                    <div class="form-floating mb-3">
+										                        <input type="text" class="form-control" name="firstName" placeholder="name@example.com" required>
+										                        <label for="floatingInput">First Name</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-3 col-12">
+										                    <div class="form-floating mb-3">
+										                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="name@example.com" required>
+										                        <label for="floatingInput">Last Name</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-2 col-12">
+										                    <div id="identify` + i + `" class="form-floating mb-4 d-flex">
+										                        <input 
+										                                type="date"
+										                                class="datepicker form-control border-2"
+										                                id="datepicker` + i + `"
+										                                name="dob" 
+										                                >
+										                        <label for="datepicker" required>Date of Birth</label>
+										                    </div>
+										                </div>
+										                </div>
+			                                    	`;
+			                                    	
+			                                    	$("#appendTraveler").append(htmlCode);
+			                                    	
+		                                 			if($("#paxType" + i).val() == "1") {
+		                                 				$("#identify" + i).children().attr("id", "datepickerAdult" + i );
+			                                 			var dobidadt = $("#datepickerAdult" + i );
+			                                 			var today = new Date();
+					                                    var dd = today.getDate();
+					                                    var mm = today.getMonth() + 1; //January is 0!
+					                                    var yyyy = today.getFullYear() - 18;
+					                                     if(dd<10){
+					                                            dd='0'+dd
+					                                        } 
+					                                        if(mm<10){
+					                                            mm='0'+mm
+					                                        } 
+				
+					                                    today = yyyy+'-'+mm+'-'+dd;
+					                                    dobidadt.attr("max", today);
+					                                    dobidadt.attr("min", "");
 		                                 			}
-		                                 		});
+			                                 		
+			                                 		$("#paxType" + i).change(function() {
+			                                 			if($("#paxType" + i).val() == "2") {
+			                                 				$("#identify" + i).children().attr("id", "datepickerChild" + i );
+				                                 			var dobidchd = $("#datepickerChild" + i );
+				                                 			var todayNow = new Date();
+						                                    var dd2 = todayNow.getDate();
+						                                    var mm2 = todayNow.getMonth() + 1; 
+						                                    var yyyy2 = todayNow.getFullYear() - 5;
+						                                    if(dd2<10){
+					                                            dd2='0'+dd2
+					                                        } 
+					                                        if(mm2<10){
+					                                            mm2='0'+mm2
+					                                        }
+						                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
+						                                    dobidchd.attr("max", todayNow);
+						                                    
+						                                    var today = new Date();
+						                                    var dd = today.getDate();
+						                                    var mm = today.getMonth() + 1; //January is 0!
+						                                    var yyyy = today.getFullYear() - 18;
+						                                     if(dd<10){
+						                                            dd='0'+dd
+						                                        } 
+						                                        if(mm<10){
+						                                            mm='0'+mm
+						                                        } 
+					
+						                                    today = yyyy+'-'+mm+'-'+dd;
+						                                    dobidchd.attr("min", today);
+			                                 			} else if($("#paxType" + i).val() == "3") {
+			                                 				$("#identify" + i).children().attr("id", "datepickerInfant" + i );
+				                                 			var dobidinf = $("#datepickerInfant" + i );
+				                                 			var todayNow = new Date();
+						                                    var dd2 = todayNow.getDate();
+						                                    var mm2 = todayNow.getMonth() + 1; 
+						                                    var yyyy2 = todayNow.getFullYear();
+						                                    if(dd2<10){
+					                                            dd2='0'+dd2
+					                                        } 
+					                                        if(mm2<10){
+					                                            mm2='0'+mm2
+					                                        }
+						                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
+						                                    dobidinf.attr("max", todayNow);
+						                                    
+						                                    var today = new Date();
+						                                    var dd = today.getDate();
+						                                    var mm = today.getMonth() + 1; //January is 0!
+						                                    var yyyy = today.getFullYear() - 5;
+						                                     if(dd<10){
+						                                            dd='0'+dd
+						                                        } 
+						                                        if(mm<10){
+						                                            mm='0'+mm
+						                                        } 
+					
+						                                    today = yyyy+'-'+mm+'-'+dd;
+						                                    dobidinf.attr("min", today);
+			                                 			} else if($("#paxType" + i).val() == "1") {
+			                                 				$("#identify" + i).children().attr("id", "datepickerAdult" + i );
+				                                 			var dobidadt = $("#datepickerAdult" + i );
+				                                 			var today = new Date();
+						                                    var dd = today.getDate();
+						                                    var mm = today.getMonth() + 1; //January is 0!
+						                                    var yyyy = today.getFullYear() - 18;
+						                                     if(dd<10){
+						                                            dd='0'+dd
+						                                        } 
+						                                        if(mm<10){
+						                                            mm='0'+mm
+						                                        } 
+					
+						                                    today = yyyy+'-'+mm+'-'+dd;
+						                                    dobidadt.attr("max", today);
+						                                    dobidadt.attr("min", "");
+			                                 			}
+			                                 		});
+			                                 		
+		                                 			
+		                                 		} 
+		                                 		
 		                                 	});
-		                                 	
-		                                 	function dateOfbirthAdult(dobid){
-			                                    var today = new Date();
-			                                    var dd = today.getDate();
-			                                    var mm = today.getMonth() + 1; //January is 0!
-			                                    var yyyy = today.getFullYear() - 18;
-			                                     if(dd<10){
-			                                            dd='0'+dd
-			                                        } 
-			                                        if(mm<10){
-			                                            mm='0'+mm
-			                                        } 
-		
-			                                    today = yyyy+'-'+mm+'-'+dd;
-			                                    document.getElementById(dobid).setAttribute("max", today);
-			                                    document.getElementById(dobid).setAttribute("min", "");
-		                                    }
-		                                 	
-		                                 	function dateOfbirthChild(dobid){
-		                                 		var todayNow = new Date();
-			                                    var dd2 = todayNow.getDate();
-			                                    var mm2 = todayNow.getMonth() + 1; 
-			                                    var yyyy2 = todayNow.getFullYear();
-			                                    if(dd2<10){
-		                                            dd2='0'+dd2
-		                                        } 
-		                                        if(mm2<10){
-		                                            mm2='0'+mm2
-		                                        }
-			                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
-			                                    document.getElementById(dobid).setAttribute("max", todayNow);
-			                                    
-			                                    var today = new Date();
-			                                    var dd = today.getDate();
-			                                    var mm = today.getMonth() + 1; //January is 0!
-			                                    var yyyy = today.getFullYear() - 18;
-			                                     if(dd<10){
-			                                            dd='0'+dd
-			                                        } 
-			                                        if(mm<10){
-			                                            mm='0'+mm
-			                                        } 
-		
-			                                    today = yyyy+'-'+mm+'-'+dd;
-			                                    document.getElementById(dobid).setAttribute("min", today);
-		                                    }
-		                                 	
-		                                 	function dateOfbirthInfant(dobid){
-		                                 		var todayNow = new Date();
-			                                    var dd2 = todayNow.getDate();
-			                                    var mm2 = todayNow.getMonth() + 1; 
-			                                    var yyyy2 = todayNow.getFullYear();
-			                                    if(dd2<10){
-		                                            dd2='0'+dd2
-		                                        } 
-		                                        if(mm2<10){
-		                                            mm2='0'+mm2
-		                                        }
-			                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
-			                                    document.getElementById(dobid).setAttribute("max", todayNow);
-			                                    
-			                                    var today = new Date();
-			                                    var dd = today.getDate();
-			                                    var mm = today.getMonth() + 1; //January is 0!
-			                                    var yyyy = today.getFullYear() - 5;
-			                                     if(dd<10){
-			                                            dd='0'+dd
-			                                        } 
-			                                        if(mm<10){
-			                                            mm='0'+mm
-			                                        } 
-		
-			                                    today = yyyy+'-'+mm+'-'+dd;
-			                                    document.getElementById(dobid).setAttribute("min", today);
-		                                    }
 	                                    
 	                                    </script>
-	                                    
-	                                    </th:block>
 	                                </div>
 	                                
 	                            </div>

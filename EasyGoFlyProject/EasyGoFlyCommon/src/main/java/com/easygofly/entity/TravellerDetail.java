@@ -34,6 +34,9 @@ public class TravellerDetail {
 	@Column(name = "last_name", length = 45)
 	private String lastName;
 	
+	@Column(name = "passenger_type", length = 45)
+	private String paxType;
+	
 	@Column()
 	@Temporal(TemporalType.DATE)
 	private Date dob;
@@ -49,16 +52,7 @@ public class TravellerDetail {
 	@ManyToOne
 	@JoinColumn(name = "order_id")
 	private Order order;
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-				name = "travelers_types",
-				joinColumns = @JoinColumn(name = "traveler_id"),
-				inverseJoinColumns = @JoinColumn(name = "passenger_type_id")
-			)
-	private Set<PaxType> paxTypes = new HashSet<>();
-	
-	
+
 	
 	public TravellerDetail() {}
 
@@ -71,14 +65,14 @@ public class TravellerDetail {
 		this.cartItem = cartItem;
 	}
 	
-	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem, PaxType paxType) {
+	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem, String paxType) {
 		this.salutation = salutation;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dob = dob;
 		this.productDetail = productDetail;
 		this.cartItem = cartItem;
-		addPaxType(paxType);
+		this.paxType = paxType;
 	}
 
 	public Integer getId() {
@@ -145,22 +139,21 @@ public class TravellerDetail {
 		this.cartItem = cartItem;
 	}
 
-	public Set<PaxType> getPaxTypes() {
-		return paxTypes;
+	
+	
+	public String getPaxType() {
+		return paxType;
 	}
 
-	public void setPaxTypes(Set<PaxType> paxTypes) {
-		this.paxTypes = paxTypes;
-	}
-	
-	public void addPaxType(PaxType paxType) {
-		this.paxTypes.add(paxType);
+	public void setPaxType(String paxType) {
+		this.paxType = paxType;
 	}
 
 	@Override
 	public String toString() {
-		return "TravellerDetail [id=" + id + ", salutation=" + salutation + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", dob=" + dob + ", productDetail=" + productDetail + "]";
+		return "TravellerDetail [salutation=" + salutation + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", dob=" + dob + ", productDetail=" + productDetail + ", cartItem=" + cartItem + ", order=" + order
+				+ "]";
 	}
-	
+
 }

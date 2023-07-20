@@ -164,7 +164,6 @@
                                 <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
                                 <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
                                 <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
-                                <p>[[${jsonObjFare_quote}]]</p>
                             </div>
                         </div>
                     </div>
@@ -335,8 +334,14 @@
 									                    
 											            <div class="form-floating" >
 									                        <select class="form-select" aria-label="Floating label select example" disabled>
-									                        	<th:block th:each="type : ${traveler.paxTypes}">
-									                            	<option th:value="${type.id}">[[${type.name}]]</option>
+									                        	<th:block th:if="${traveler.paxType} == '1'">
+									                            	<option th:value="${traveler.paxType}">Adult</option>
+									                            </th:block>
+									                            <th:block th:if="${traveler.paxType} == '2'">
+									                            	<option th:value="${traveler.paxType}">Child</option>
+									                            </th:block>
+									                            <th:block th:if="${traveler.paxType} == '3'">
+									                            	<option th:value="${traveler.paxType}">Infant</option>
 									                            </th:block>
 									                        </select>
 									                        <label for="floatingSelect">Type</label>
