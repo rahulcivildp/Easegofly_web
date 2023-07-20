@@ -113,7 +113,13 @@ public class SearchHistoryController {
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("search", search);
 		
-		searchFlightAPI(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), search.getInfantNum(), sortName, model, search.getDate());
+		int responseCode = searchFlightAPI(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), search.getInfantNum(), sortName, model, search.getDate());
+		if (responseCode != HttpURLConnection.HTTP_OK) {
+			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
+					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
+				return "redirect:/";
+		}
 		
 		return "flight/search-result";
 	}
@@ -165,13 +171,19 @@ public class SearchHistoryController {
 		model.addAttribute("totalPrice", totalPrice);
 		
 		
-		searchFlightAPI(cityOne, cityTwo, adultNum, childNum, infantNum, sortName, model, date);
+		int responseCode = searchFlightAPI(cityOne, cityTwo, adultNum, childNum, infantNum, sortName, model, date);
+		if (responseCode != HttpURLConnection.HTTP_OK) {
+			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
+					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
+				return "redirect:/";
+		}
 		
 		return "flight/search-result-noUser";
 		
 	}
 
-	private void searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
+	private Integer searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
 			String sortName, Model model, Date date) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
         URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
@@ -238,6 +250,7 @@ public class SearchHistoryController {
 			
 			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
 			String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
+			String noOfSeatAvailable = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
 			
 			String strTotalFare = mainObjFare.getJSONObject("Fare-" + i).get("PublishedFare").toString();
 			Integer fareAdjustment = adultNum + childNum + infantNum;
@@ -249,19 +262,22 @@ public class SearchHistoryController {
 			
 			String mode = "Online-data";
 			
-			productDetail[i] = new ProductDetail(200 + i, "waiting...", "100", "100", flightNumber, date, 
+			productDetail[i] = new ProductDetail(200 + i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
             		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, productOnline);
 			
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 	        
 		}
 		System.out.println(mainObj);
-
+		System.out.println(responseCode);
+		
 		model.addAttribute("listProducts", productDetailsController.listProductDetailsOnline);
         model.addAttribute("responseCode", responseCode);
         
         // Close the connection
         connectionSearch.disconnect();
+        
+        return responseCode;
 	}
 
 	private void searchFilter(String cityOne, String cityTwo, String[] brands, Model model, Date date, Integer[] stops, Integer[] totalPrice, Integer infantNum, String[] activeTime) {

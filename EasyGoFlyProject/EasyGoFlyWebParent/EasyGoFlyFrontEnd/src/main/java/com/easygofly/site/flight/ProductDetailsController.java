@@ -99,7 +99,13 @@ public class ProductDetailsController {
             StringBuilder responseBodyFarequote = new StringBuilder();
             
         	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, flight.getTraceId(), flight.getResultIndex());
-        	
+        	if (responseCodeFarequote != HttpURLConnection.HTTP_OK) {
+    			if (responseCodeFarequote == HttpURLConnection.HTTP_MOVED_TEMP
+    				|| responseCodeFarequote == HttpURLConnection.HTTP_MOVED_PERM
+    					|| responseCodeFarequote == HttpURLConnection.HTTP_SEE_OTHER)
+    				return "redirect:/";
+    		}
+    		
         	System.out.println(responseCodeFarequote);
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
@@ -419,7 +425,13 @@ public class ProductDetailsController {
             StringBuilder responseBodyFarerule = new StringBuilder();
             
         	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, flight.getTraceId(), flight.getResultIndex());
-        	
+        	if (responseCode != HttpURLConnection.HTTP_OK) {
+    			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+    				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
+    					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
+    				return "redirect:/";
+    		}
+    		
         	System.out.println(responseCode);
         	
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());System.out.println(jsonObjFarerules);
