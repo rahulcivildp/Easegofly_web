@@ -266,7 +266,7 @@ public class SearchHistoryController {
             		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, productOnline);
 			
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
-	        
+	         
 		}
 		System.out.println(mainObj);
 		System.out.println(responseCode);

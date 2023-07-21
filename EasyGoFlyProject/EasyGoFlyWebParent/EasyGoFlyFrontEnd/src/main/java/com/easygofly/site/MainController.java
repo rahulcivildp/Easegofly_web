@@ -197,6 +197,12 @@ public class MainController {
 		return "loading";
 	}
 	
+	@GetMapping("/find_brand")
+	public String findBrand() {
+		
+		return "find_brand";
+	}
+	
 	private void historyPart(Model model, Customer customer) {
 		List<SearchHistory> searches =  customer.getSearchHistory();
 		

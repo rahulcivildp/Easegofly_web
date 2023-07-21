@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_head(': find brand', 'tag')"></head>
+<body>
+	<input name="name" type="text" value="indigo" disabled>
+	<p id="brand"></p>
+	<div id="brandImage"></div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		checkBrand();
+	});
+	
+	function checkBrand() {
+		brandName = $("input[name='name']").val();
+		url = "[[@{/find_brand_}]]" + brandName;
+		
+		$.get(url, function(response) {
+			htmlImg = `
+				<img src="[[@{` + response + `}]]" width="100" height="100">
+			`;
+			$("#brandImage").html(htmlImg);
+		}).fail(function(){
+			alert("Could not connect to the server.");
+		});
+		
+		return false;
+	};
+	
+	
+	</script>
+</body>
+</html>
