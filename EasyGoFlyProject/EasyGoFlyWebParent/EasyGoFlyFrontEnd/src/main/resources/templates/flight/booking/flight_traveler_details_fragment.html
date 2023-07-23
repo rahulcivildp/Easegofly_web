@@ -145,6 +145,27 @@
         	border-radius: 8px;
         	padding: 6px 8px;
         }
+        
+        .mealStyle {
+        	display: flex; 
+        	align-items: center; 
+        	margin: 10px 0 10px 24px; 
+        	border-radius: 8px; 
+        	border: 1px solid gray; 
+        	padding-left: 37px;
+        	background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			color: white;
+        }
+        
+        .baggageStyle{
+        	background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			color: black;
+			font-weight: bold;
+        }
     </style>
 
     <body>
@@ -481,7 +502,112 @@
 	                                    </th:block>
 	                               </div>
 	                            </div>
-                                
+                                <div id="meal_details" class="booking_tiles back_white shadow">
+	                                <div style="background-color: #ecf5fd;">
+	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Meal</p>
+	                                </div>
+	                                <th:block th:each="traveler : ${travelers}">
+	                                <div class="row">
+	                                	<div class="col-3" style="display: flex; justify-content: center;">
+	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
+	                                	</div>
+	                                	<div  style="padding: 5px 0; margin: 0;" class="col-6">
+	                                		<select name="meals" id="meals">
+		                                		<th:block th:each="meal : ${mealsOnlineList}">
+		                                			<th:block th:if="${meal.name} == ''">
+		                                			<option th:value="${meal.code}">No meal</option>
+		                                			</th:block>
+		                                			<th:block th:if="${meal.name} != ''">
+		                                			<option th:value="${meal.code}">[[${meal.name}]]</option>
+		                                			</th:block>
+		                                		</th:block>
+		                                	</select>
+	                                	</div>
+	                                	<div class="col-3">
+		                                	<p id="mealPrice" style="padding: 5px 0; margin: 0;"></p>
+		                                </div>
+	                                </div>
+	                                </th:block>
+                            	</div>
+	                            <div id="baggage_details" class="booking_tiles back_white shadow">
+	                                <div style="background-color: #ecf5fd;">
+	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Baggage</p>
+	                                </div>
+	                                <th:block th:each="traveler : ${travelers}">
+	                                
+	                                <div class="row">
+	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
+	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
+	                                	</div>
+											 <div class="form-check mealStyle col-3 baggageStyle" th:style="'background-image: url(' + @{'/images/TNRTN-6845.png'} + ');'">
+											  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault" checked>
+											  <label class="form-check-label col-12" th:for="flexRadioDefault">
+		                                		<div>
+	                                				
+		                                			<div style="display: flex; justify-content: space-between;">	
+		                                				<p>Quantity:</p>
+		                                				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" id="baggageSelect">
+		                                					<th:block th:each="baggage : ${baggageOnlineList}">
+		                                					<option th:value="${baggage.weight}">[[${baggage.weight}]]</option>
+	                                						</th:block>
+		                                				</select>
+		                                			</div>
+		                                			<p id="baggaggePrice" style="padding: 5px 0; margin: 0;"></p>
+		                                		</div>
+											  
+											  </label>
+											</div>
+											
+											<script type="text/javascript">
+												$(document).ready(function() {
+													findBaggage();
+												});
+												
+												$("#baggageSelect").change(function(){
+									    			 findBaggage();
+									    		 });
+										    	
+											    function findBaggage() {
+													baggage = $("#baggageSelect").val();
+													url = "[[@{/find_baggage_}]]" + baggage;
+													
+													$.get(url, function(response) {
+														$("#baggaggePrice").html("Price: " + response);
+													}).fail(function(){
+														alert("Could not connect to the server.");
+													});
+													
+													return false;
+												};
+										    
+										    </script>
+											
+											<script type="text/javascript">
+												$(document).ready(function() {
+													findMeal();
+												});
+												
+												$("#meals").change(function(){
+									    			 findMeal();
+									    		 });
+										    	
+											    function findMeal() {
+													meal = $("#meals").val();
+													url = "[[@{/find_meal_}]]" + meal;
+													
+													$.get(url, function(response) {
+														$("#mealPrice").html("Price: " + response);
+													}).fail(function(){
+														alert("Could not connect to the server.");
+													});
+													
+													return false;
+												};
+										    
+										    </script>
+	                                </div>
+	                                </th:block>
+                            	</div>
                                 <div id="contact_details" class="booking_tiles back_white shadow">
                                     <div style="background-color: #ecf5fd;">
                                         <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Contact Details</p>

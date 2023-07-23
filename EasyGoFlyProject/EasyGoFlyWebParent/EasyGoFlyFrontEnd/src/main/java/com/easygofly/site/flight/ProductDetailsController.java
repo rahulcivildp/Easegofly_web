@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
@@ -59,6 +61,8 @@ public class ProductDetailsController {
 	
 	public List<ProductDetail> listProductDetailsOnline;
 	private Integer flightIdLocal = 0;
+	List<BaggageOnline> baggageOnlineList = new ArrayList<BaggageOnline>();
+	List<MealsOnline> mealsOnlineList = new ArrayList<MealsOnline>();
 	
 	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")
 	public String filghtTravelerDetailsSave(@PathVariable(name = "search_id") Integer search_id, 
@@ -91,7 +95,7 @@ public class ProductDetailsController {
 		
 		
 		if (!flight.getTraceId().equals(null)) {
-        	/* Fare-quote details */
+			/* Fare-quote details */
         	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
             // Open a connection
             HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
@@ -154,6 +158,64 @@ public class ProductDetailsController {
 //    		String resultIndex = jsonResult.get("ResultIndex").toString();
 
 //        	model.addAttribute("jsonObjFare_quote", jsonObjFareQuotes);
+    		
+
+    		/* SSR details */
+        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+            // Open a connection
+            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
+            
+            StringBuilder responseBodySSR = new StringBuilder();
+            
+        	int responseCodeSSR = onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, flight.getTraceId(), flight.getResultIndex());
+        	if (responseCodeSSR != HttpURLConnection.HTTP_OK) {
+    			if (responseCodeSSR == HttpURLConnection.HTTP_MOVED_TEMP
+    				|| responseCodeSSR == HttpURLConnection.HTTP_MOVED_PERM
+    					|| responseCodeSSR == HttpURLConnection.HTTP_SEE_OTHER)
+    				return "redirect:/";
+    		}
+			
+        	System.out.println(responseCodeSSR);
+        	
+        	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
+        	JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("MealDynamic").getJSONArray(0); 
+        	JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
+        	
+        	MealsOnline[] mealsOnline = new MealsOnline[100];
+        	BaggageOnline[] baggageOnline = new BaggageOnline[100];
+        	
+        	for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+        		JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+        		String mealPrice = jsonObjectMeals.get("Price").toString();
+        		String mealAirlineDescription = jsonObjectMeals.get("AirlineDescription").toString();
+        		String mealCode = jsonObjectMeals.get("Code").toString();
+        		String mealQuantity = jsonObjectMeals.get("Quantity").toString();
+        		
+        		mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+        		mealsOnlineList.add(mealsOnline[i]);
+			}
+        	
+        	for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
+				
+        		JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
+        		
+        		String baggagePrice = jsonObjectBagages.get("Price").toString();
+        		String baggageCode = jsonObjectBagages.get("Code").toString();
+        		String baggageWeight = jsonObjectBagages.get("Weight").toString();
+        		
+        		baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
+        		baggageOnlineList.add(baggageOnline[i]);
+				
+			}
+        	
+        	//System.out.println(jsonResultArrayBaggage);
+        	MealsOnline mealsOnline2 = new MealsOnline();
+        	
+    		model.addAttribute("mealsOnline", mealsOnline2);
+    		model.addAttribute("mealsOnlineList", mealsOnlineList);
+    		model.addAttribute("baggageOnlineList", baggageOnlineList);
+        	
+        	
         	
         	for (TravellerDetail travellerDetail : travelers) {
     			Date getDOB = travellerDetail.getDob();
@@ -440,6 +502,25 @@ public class ProductDetailsController {
         	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
         	
         	model.addAttribute("jsonObjFarerule", fareRuleDetail);
+        	
+        	
+			/* Fare-quote details */
+        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+            // Open a connection
+            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
+            
+            StringBuilder responseBodyFarequote = new StringBuilder();
+            
+        	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, flight.getTraceId(), flight.getResultIndex());
+        	if (responseCodeFarequote != HttpURLConnection.HTTP_OK) {
+    			if (responseCodeFarequote == HttpURLConnection.HTTP_MOVED_TEMP
+    				|| responseCodeFarequote == HttpURLConnection.HTTP_MOVED_PERM
+    					|| responseCodeFarequote == HttpURLConnection.HTTP_SEE_OTHER)
+    				return "redirect:/";
+    		}
+    		
+        	System.out.println(responseCodeFarequote);
+        	
 		}
 		
 		model.addAttribute("listProductDetailsOnline", listProductDetailsOnline);

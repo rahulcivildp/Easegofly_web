@@ -120,6 +120,7 @@
         .circles_active {
             background-color: #2abd2a !important;
         }
+        
     </style>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
@@ -303,24 +304,23 @@
 									<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
 									<th:block th:each="traveler : ${travelers}">
 		                            	<div style="padding-top: 20px;">
+											<input type="hidden" th:id="'existing_traveller_id' + ${flight.id}" th:value="${traveler.id}">
 	                                    	<div class="row" style="padding: 0 7px;">
 								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
 										            <div class="form-floating" >
 								                        <select class="form-select" aria-label="Floating label select example" disabled>
-								                        	<th:block th:if="${traveler.paxType} = '1'">
+								                        	<th:block th:if="${traveler.paxType}== '1'">
 								                            	<option th:value="${traveler.paxType}">Adult</option>
 								                            </th:block>
-								                            <th:block th:if="${traveler.paxType} = '2'">
+								                            <th:block th:if="${traveler.paxType} == '2'">
 								                            	<option th:value="${traveler.paxType}">Child</option>
 								                            </th:block>
-								                            <th:block th:if="${traveler.paxType} = '3'">
+								                            <th:block th:if="${traveler.paxType} == '3'">
 								                            	<option th:value="${traveler.paxType}">Infant</option>
 								                            </th:block>
 								                        </select>
 								                        <label for="floatingSelect">Type</label>
 								                    </div>
-								                    <p style="margin: 0; color: green;">Adult :</p>
-								                    <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
 								                </div>
 								                <div class="col-md-2 col-12" style="margin-bottom: 14px;">
 								                    <div class="form-floating" >
@@ -409,7 +409,12 @@
 										                </div>
 			                                    	`;
 			                                    	
-			                                    	$("#appendTraveler").append(htmlCode);
+			                                    	valTraveler = $("#existing_traveller_id" + [[${flight.id}]]).val();
+			                                    	if(valTraveler == null){
+				                                    	$("#appendTraveler").append(htmlCode);
+				                                    	
+			                                    	}
+			                                    	
 			                                    	
 		                                 			if($("#paxType" + i).val() == "1") {
 		                                 				$("#identify" + i).children().attr("id", "datepickerAdult" + i );
@@ -556,7 +561,8 @@
 	                                </div>
 	                                
 	                            </div>
-                            
+	                            
+	                            
                             <div id="contact_details" class="booking_tiles back_white shadow">
                                 <div style="background-color: #ecf5fd;">
                                     <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Contact Details</p>
@@ -631,6 +637,7 @@
         </div>
      
     </body>
+    
  
     <script>
         $("#button_collapse").click(function(){

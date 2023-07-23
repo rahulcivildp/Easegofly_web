@@ -169,7 +169,7 @@ public class OnlineFlightService {
         // Enable writing data to the connection
         connection.setDoOutput(true);
         
-     // Create the request body
+        // Create the request body
         String requestBody = "{\r\n"
         		+ "	\"PreferredCurrency\": null,\r\n"
         		+ "	\"ResultIndex\": \"" + resultIndex + "\",\r\n"
@@ -199,4 +199,44 @@ public class OnlineFlightService {
 		return responseCode;
 	}
 
+	
+	public int apiOnlineSSR(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Create the request body
+        String requestBody = "{"
+        		+ "\"EndUserIp\": \"49.37.50.177\", "
+        		+ "\"TokenId\": \"" + tokenId + "\", "
+        		+ "\"TraceId\": \"" + traceId + "\", "
+        		+ "\"ResultIndex\": \"" + resultIndex + "\""
+        		+ "}";
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
 }
