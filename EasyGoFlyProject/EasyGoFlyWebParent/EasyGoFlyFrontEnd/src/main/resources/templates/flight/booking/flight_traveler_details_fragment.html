@@ -511,7 +511,7 @@
 	                                	<div class="col-3" style="display: flex; justify-content: center;">
 	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 	                                	</div>
-	                                	<div  style="padding: 5px 0; margin: 0;" class="col-6">
+	                                	<div  style="padding: 5px 0; margin: 0; display: flex; justify-content: center;" class="col-6">
 	                                		<select name="meals" id="meals" style="width: 70%;">
 		                                		<th:block th:each="meal : ${mealsOnlineList}">
 		                                			<th:block th:if="${meal.name} == ''">
@@ -528,7 +528,9 @@
 		                                </div>
 	                                </div>
 	                                		<script type="text/javascript">
-	                                			
+												totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
+												mealAmount = 0;
+												
 												$(document).ready(function() {
 													findMeal();
 												});
@@ -543,13 +545,17 @@
 													
 													$.get(url, function(response) {
 														$("#mealPrice").html("Price: " + response);
+														mealAmount = parseInt(response);
+														//alert(totalPaymentAbout + mealAmount);
+														changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
+														$("#totalPayment").text(changedAmount);
 													}).fail(function(){
 														alert("Could not connect to the server.");
 													});
 													
 													return false;
 												};
-										    
+	                                			
 										    </script>
 										    <script type="text/javascript">
 										    	flightId = [[${traveler.id}]];
@@ -592,12 +598,11 @@
 	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
 	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 	                                	</div>
-		                                <div class="col-6">		
-                                			<div style="display: flex; justify-content: space-between;">	
-                                				<p>Quantity:</p>
+		                                <div class="col-6" style="display: flex; justify-content: center;">		
+                                			<div style="display: flex; justify-content: space-between;">
                                 				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" id="baggageSelect">
                                 					<th:block th:each="baggage : ${baggageOnlineList}">
-                                					<option th:value="${baggage.code}">[[${baggage.weight}]]</option>
+                                					<option th:value="${baggage.code}">KG: [[${baggage.weight}]]</option>
                                						</th:block>
                                 				</select>
                                 			</div>
@@ -608,6 +613,8 @@
 									</div>
 											
 											<script type="text/javascript">
+												baggageAmount = 0;
+											
 												$(document).ready(function() {
 													findBaggage();
 												});
@@ -619,9 +626,13 @@
 											    function findBaggage() {
 													baggage = $("#baggageSelect").val();
 													url = "[[@{/find_baggage_}]]" + baggage;
-													
+
 													$.get(url, function(response) {
 														$("#baggaggePrice").html("Price: " + response);
+														baggageAmount = parseInt(response);
+														changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
+														$("#totalPayment").text(changedPrice);
+														
 													}).fail(function(){
 														alert("Could not connect to the server.");
 													});
@@ -659,6 +670,92 @@
 													return false;
 												};
 											</script>
+	                                </th:block>
+                            	</div>
+                            	<div id="seat_details" class="booking_tiles back_white shadow">
+	                                <div style="background-color: #ecf5fd;">
+	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Seat</p>
+	                                </div>
+	                                <th:block th:each="traveler : ${travelers}">
+	                                
+	                                <div class="row">
+	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
+	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
+	                                	</div>
+		                                <div class="col-6"  style="display: flex; justify-content: center;">		
+                                			<div style="display: flex; justify-content: space-between;">	
+                                				<select name="seatSelet" style="height: 32px; border-radius: 6px;" id="seatSelet">
+                                					<th:block th:each="seat : ${seatsOnlineList}">
+                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
+                               						</th:block>
+                                				</select>
+                                			</div>
+		                                </div>
+									  	<div class="col-3">
+                              				<p id="seatPrice" style="padding: 5px 0; margin: 0;"></p>
+                              			</div>
+									</div>
+											
+											<script type="text/javascript">
+												seatAmount = 0;
+											
+												$(document).ready(function() {
+													findSeat();
+												});
+												
+												$("#seatSelet").change(function(){
+													findSeat();
+									    		 });
+										    	
+											    function findSeat() {
+													seat = $("#seatSelet").val();
+													url = "[[@{/find_seat_}]]" + seat;
+													
+													$.get(url, function(response) {
+														//alert(response);
+														$("#seatPrice").html("Price: " + response);
+														seatAmount = parseInt(response);
+
+														changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
+														$("#totalPayment").text(changedPriceSeat);
+														
+													}).fail(function(){
+														alert("Could not connect to the server.");
+													});
+													
+													return false;
+												};
+										    
+										    </script>
+											<!-- <script type="text/javascript">
+										    	flightId = [[${traveler.id}]];
+										    	orderForm = $("#order_form");
+										    
+												$(document).ready(function() {
+													saveBaggage(orderForm);
+												});
+												
+												$("#baggageSelect").change(function(){
+													saveBaggage(orderForm);
+											  	});
+											   	
+											    function saveBaggage(form) {
+											    	baggage = $("#baggageSelect").val();
+													url = "[[@{/save_baggage/}]]" + flightId + "/" + baggage;
+
+													
+													$.post(url, function(response) {
+														if (response == "OK") {
+															form.submit;
+														} else if (response == "FAILED") {
+															alert("Something went wrong in Baggage!!!");
+														}
+													}).fail(function(){
+														alert("Could not connect to the server.");
+													});
+													return false;
+												};
+											</script> -->
 	                                </th:block>
                             	</div>
                                 <div id="contact_details" class="booking_tiles back_white shadow">
@@ -723,12 +820,12 @@
                <div class="accordion-item">
                    <h2 class="accordion-header" id="flush-headingOne2" style="background-color: white !important;">
                        <div aria-expanded="true">
-                           <div class="row">
-                               <div class="col-md-7">
-                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
-                               </div>
-                               <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i> 0.0</p></div>
-                                          </div>
+	                           <div class="row">
+	                               <div class="col-md-7">
+	                                   <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
+	                               </div>
+	                               <div class="col-md-5"><p id="feesAndCharges" style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i> 0.0</p></div>
+	                           </div>
                                       </div>
                                   </h2>
                                   <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample">
@@ -750,12 +847,14 @@
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
                                                     <div aria-expanded="true">
+                       									<th:block th:if="${flight.traceId} == null">
                                                         <div class="row">
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
                                                             </div>
                                                             <div class="col-md-5"> <p id="amountOfCoupon1" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;}"></p></div>
                                                         </div>
+                                                        </th:block>
                                                     </div>
                                                 </h2>
                                                 <div id="flush-collapseOne3" class="accordion-collapse collapse" aria-labelledby="flush-headingOne3" data-bs-parent="#accordionFlushExample">
@@ -852,12 +951,14 @@
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
                                                     <div aria-expanded="true">
+                       									<th:block th:if="${flight.traceId} == null">
                                                         <div class="row">
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
                                                             </div>
                                                             <div class="col-md-5"> <p id="amountOfCoupon" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;}"></p></div>
                                                         </div>
+                                                        </th:block>
                                                     </div>
                                                 </h2>
                                                 <div id="flush-collapseOne3" class="accordion-collapse collapse" aria-labelledby="flush-headingOne3" data-bs-parent="#accordionFlushExample">
@@ -924,7 +1025,7 @@
   	contextPath = "[[@{/}]]";
 	buttonCheckCoupon = $("#buttonCheckCoupon");
 	successAlert1 = "[[${success}]]";
-	totalPaymentAbout1 = "[[${checkoutInfo.paymentTotal}]]";
+	totalPaymentAbout1 = [[${checkoutInfo.paymentTotal}]];
 	
 	$(document).ready(function(){
 		buttonCheckCoupon.click(function() {
@@ -966,7 +1067,7 @@
   	contextPath = "[[@{/}]]";
 	buttonCheckCoupon1 = $("#buttonCheckCoupon1");
 	successAlert = "[[${success}]]";
-	totalPaymentAbout = "[[${checkoutInfo.paymentTotal}]]";
+	totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	
 	$(document).ready(function(){
 		buttonCheckCoupon1.click(function() {
@@ -1004,6 +1105,9 @@
 		});
 	};
 </script>
+<script type="text/javascript">
 
+
+</script>
 
 </html>

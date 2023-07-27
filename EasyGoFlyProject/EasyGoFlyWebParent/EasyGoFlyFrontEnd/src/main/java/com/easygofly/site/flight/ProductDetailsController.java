@@ -216,9 +216,11 @@ public class ProductDetailsController {
         	
         	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
         	JSONObject jsonInnerObjectSeats = new JSONObject();
-        	SeatsOnline[] seatsOnline = new SeatsOnline[200];
+        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
+        	Integer count = 0;
         	for (int i = 0; i < jsonArraySeats.length(); i++) {
         		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
+        		
         		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
         			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
         			
@@ -232,12 +234,18 @@ public class ProductDetailsController {
         			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
         			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
         			
-        			seatsOnline[(i + j)] = new SeatsOnline((i + j), price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
-        			seatsOnlineList.add(seatsOnline[(i + j)]);
+        			Integer serialNo = count++;
+        			
+        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
+        			seatsOnlineList.add(seatsOnline[serialNo]);
+        			
+        			
 				}
+//        		System.out.println(jsonInnerArraySeats.length());
 			}
-        	
-        	System.out.println(jsonInnerObjectSeats);
+
+        	System.out.println(seatsOnlineList.size());
+        	System.out.println(count);
         	MealsOnline mealsOnline2 = new MealsOnline();
         	
     		model.addAttribute("mealsOnline", mealsOnline2);

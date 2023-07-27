@@ -15,6 +15,7 @@ import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.MealsOnline;
+import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.order.CouponRepository;
 
@@ -48,15 +49,16 @@ public class ProductDetailsRestController {
 	}
 
 	
-	@GetMapping("/find_baggage_{kg}")
-	public String findBaggage(@PathVariable(name = "kg") String kg) {
+	@GetMapping("/find_baggage_{code}")
+	public String findBaggage(@PathVariable(name = "code") String code) {
 		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
 		String price = "";
 		for (BaggageOnline baggageOnline : baggageOnlineList) {
-			if (baggageOnline.getWeight().equals(kg)) {
+			if (baggageOnline.getCode().equals(code)) {
 				price = baggageOnline.getPrice();
 			}
 		}
+		System.out.println(price);
 		return price;
 	}
 	
@@ -67,6 +69,18 @@ public class ProductDetailsRestController {
 		for (MealsOnline mealsOnline : mealList) {
 			if (mealsOnline.getCode().equals(code)) {
 				price = mealsOnline.getPrice();
+			}
+		}
+		return price;
+	}
+	
+	@GetMapping("/find_seat_{id}")
+	public String findSeat(@PathVariable(name = "id") Integer id) {
+		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
+		String price = "";
+		for (SeatsOnline seatsOnline : seatsOnlineList) {
+			if (seatsOnline.getId() == id ) {
+				price = seatsOnline.getPrice();
 			}
 		}
 		return price;
@@ -107,4 +121,6 @@ public class ProductDetailsRestController {
 		}
 		return resp;
 	}
+	
+	
 }
