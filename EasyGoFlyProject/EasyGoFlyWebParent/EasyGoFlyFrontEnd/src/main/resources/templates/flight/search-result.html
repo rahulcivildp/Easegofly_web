@@ -395,11 +395,12 @@
                 </div>
             </div>
           	<th:block th:each="flight : ${listProducts}">
-          	<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
-            	<form th:action="@{/flight_booking_save}" method="post" >
-          			<div th:class="'flightSearchResult' + ${flight.id}"></div>
-          		</form>
-          	</div>
+          		<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
+	            	<form th:action="@{/flight_booking_save}" method="post" >
+	          			<input type="hidden" th:id="'inputSeatNum-' + ${flight.id}" th:value="${flight.totalSeats}">
+		          		<div th:id="'flightSearchResult' + ${flight.id}"></div>
+	          		</form>
+          		</div>
           	<script type="text/javascript">
           	
           	search_passenger_num = [[${search.passengerNum}]];
@@ -523,11 +524,9 @@
           	
           	`;
           	
-          	if (search_passenger_num >= flight_seats) {
-          		//console.log("Flight Total Seat same/above searched seats: " + flight_seats);
-          	} else if (search_passenger_num <= flight_seats) {
+          	if (search_passenger_num <= flight_seats) {
           		console.log("Flight Total Seat same/below searched seats: " + flight_seats + " flight id: " + [[${flight.id}]]);
-          		$(".flightSearchResult" + [[${flight.id}]]).html(htmlCodeBlock);
+          		$("#flightSearchResult" + [[${flight.id}]]).html(htmlCodeBlock);
           		checkBrand();
           	}
           	
@@ -556,6 +555,14 @@
           		totalPrice = totalAdultPrice + totalInfantPrice;
           		$("#totalPrice" + [[${flight.id}]]).text(totalPrice);
           		$("#totalPriceDesk" + [[${flight.id}]]).text(totalPrice);
+          		
+				inputVal = $("#inputSeatNum-" + [[${flight.id}]]);
+              	
+              	//alert(inputVal.val());
+              	if(search_passenger_num > inputVal.val()) {
+          			alert(inputVal.val());
+      				inputVal.parent().css("display", "none");
+      			}
 			</script>
 			<script type="text/javascript">
 				

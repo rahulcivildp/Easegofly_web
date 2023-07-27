@@ -1,18 +1,13 @@
 package com.easygofly.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,6 +31,12 @@ public class TravellerDetail {
 	
 	@Column(name = "passenger_type", length = 45)
 	private String paxType;
+	
+	private String meal;
+	
+	private String baggage;
+	
+	private String seat;
 	
 	@Column()
 	@Temporal(TemporalType.DATE)
@@ -138,9 +139,31 @@ public class TravellerDetail {
 	public void setCartItem(CartItem cartItem) {
 		this.cartItem = cartItem;
 	}
+	
+	public String getMeal() {
+		return meal;
+	}
 
-	
-	
+	public void setMeal(String meal) {
+		this.meal = meal;
+	}
+
+	public String getBaggage() {
+		return baggage;
+	}
+
+	public void setBaggage(String baggage) {
+		this.baggage = baggage;
+	}
+
+	public String getSeat() {
+		return seat;
+	}
+
+	public void setSeat(String seat) {
+		this.seat = seat;
+	}
+
 	public String getPaxType() {
 		return paxType;
 	}

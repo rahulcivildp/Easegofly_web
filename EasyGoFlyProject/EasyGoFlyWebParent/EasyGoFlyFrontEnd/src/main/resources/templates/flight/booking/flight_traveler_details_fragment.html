@@ -512,7 +512,7 @@
 	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 	                                	</div>
 	                                	<div  style="padding: 5px 0; margin: 0;" class="col-6">
-	                                		<select name="meals" id="meals">
+	                                		<select name="meals" id="meals" style="width: 70%;">
 		                                		<th:block th:each="meal : ${mealsOnlineList}">
 		                                			<th:block th:if="${meal.name} == ''">
 		                                			<option th:value="${meal.code}">No meal</option>
@@ -527,6 +527,59 @@
 		                                	<p id="mealPrice" style="padding: 5px 0; margin: 0;"></p>
 		                                </div>
 	                                </div>
+	                                		<script type="text/javascript">
+	                                			
+												$(document).ready(function() {
+													findMeal();
+												});
+												
+												$("#meals").change(function(){
+									    			 findMeal();
+									    		 });
+										    	
+											    function findMeal() {
+													meal = $("#meals").val();
+													url = "[[@{/find_meal_}]]" + meal;
+													
+													$.get(url, function(response) {
+														$("#mealPrice").html("Price: " + response);
+													}).fail(function(){
+														alert("Could not connect to the server.");
+													});
+													
+													return false;
+												};
+										    
+										    </script>
+										    <script type="text/javascript">
+										    	flightId = [[${traveler.id}]];
+										    	orderForm = $("#order_form");
+										    
+												$(document).ready(function() {
+													saveMeal(orderForm);
+												});
+												
+												$("#meals").change(function(){
+													saveMeal(orderForm);
+											  	});
+											   	
+											    function saveMeal(form) {
+													meal = $("#meals").val();
+													url = "[[@{/save_meal/}]]" + flightId + "/" + meal;
+
+													
+													$.post(url, function(response) {
+														if (response == "OK") {
+															form.submit;
+														} else if (response == "FAILED") {
+															alert("Something went wrong in Meal!!!");
+														}
+													}).fail(function(){
+														alert("Could not connect to the server.");
+													});
+													return false;
+												};
+											</script>
 	                                </th:block>
                             	</div>
 	                            <div id="baggage_details" class="booking_tiles back_white shadow">
@@ -539,24 +592,20 @@
 	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
 	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 	                                	</div>
-											 <div class="form-check mealStyle col-3 baggageStyle" th:style="'background-image: url(' + @{'/images/TNRTN-6845.png'} + ');'">
-											  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault" checked>
-											  <label class="form-check-label col-12" th:for="flexRadioDefault">
-		                                		<div>
-	                                				
-		                                			<div style="display: flex; justify-content: space-between;">	
-		                                				<p>Quantity:</p>
-		                                				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" id="baggageSelect">
-		                                					<th:block th:each="baggage : ${baggageOnlineList}">
-		                                					<option th:value="${baggage.weight}">[[${baggage.weight}]]</option>
-	                                						</th:block>
-		                                				</select>
-		                                			</div>
-		                                			<p id="baggaggePrice" style="padding: 5px 0; margin: 0;"></p>
-		                                		</div>
-											  
-											  </label>
-											</div>
+		                                <div class="col-6">		
+                                			<div style="display: flex; justify-content: space-between;">	
+                                				<p>Quantity:</p>
+                                				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" id="baggageSelect">
+                                					<th:block th:each="baggage : ${baggageOnlineList}">
+                                					<option th:value="${baggage.code}">[[${baggage.weight}]]</option>
+                               						</th:block>
+                                				</select>
+                                			</div>
+		                                </div>
+									  	<div class="col-3">
+                              				<p id="baggaggePrice" style="padding: 5px 0; margin: 0;"></p>
+                              			</div>
+									</div>
 											
 											<script type="text/javascript">
 												$(document).ready(function() {
@@ -581,31 +630,35 @@
 												};
 										    
 										    </script>
-											
 											<script type="text/javascript">
+										    	flightId = [[${traveler.id}]];
+										    	orderForm = $("#order_form");
+										    
 												$(document).ready(function() {
-													findMeal();
+													saveBaggage(orderForm);
 												});
 												
-												$("#meals").change(function(){
-									    			 findMeal();
-									    		 });
-										    	
-											    function findMeal() {
-													meal = $("#meals").val();
-													url = "[[@{/find_meal_}]]" + meal;
+												$("#baggageSelect").change(function(){
+													saveBaggage(orderForm);
+											  	});
+											   	
+											    function saveBaggage(form) {
+											    	baggage = $("#baggageSelect").val();
+													url = "[[@{/save_baggage/}]]" + flightId + "/" + baggage;
+
 													
-													$.get(url, function(response) {
-														$("#mealPrice").html("Price: " + response);
+													$.post(url, function(response) {
+														if (response == "OK") {
+															form.submit;
+														} else if (response == "FAILED") {
+															alert("Something went wrong in Baggage!!!");
+														}
 													}).fail(function(){
 														alert("Could not connect to the server.");
 													});
-													
 													return false;
 												};
-										    
-										    </script>
-	                                </div>
+											</script>
 	                                </th:block>
                             	</div>
                                 <div id="contact_details" class="booking_tiles back_white shadow">
@@ -951,4 +1004,6 @@
 		});
 	};
 </script>
+
+
 </html>

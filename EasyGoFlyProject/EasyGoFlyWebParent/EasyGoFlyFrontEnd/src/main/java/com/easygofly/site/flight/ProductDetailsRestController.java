@@ -15,6 +15,7 @@ import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.MealsOnline;
+import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.order.CouponRepository;
 
 @RestController
@@ -23,6 +24,7 @@ public class ProductDetailsRestController {
 	@Autowired CouponRepository couponRepo;
 	@Autowired BrandRepositoy brandRepo;
 	@Autowired ProductDetailsController productDetailsController;
+	@Autowired TravellerRepository travellerRepo ;
 
 	@PostMapping("/flight_order_check_coupon")
 	public Coupon checkCoupon(@RequestBody Coupon coupon, RedirectAttributes redirectAttributes) throws IOException {
@@ -68,5 +70,41 @@ public class ProductDetailsRestController {
 			}
 		}
 		return price;
+	}
+	
+	@PostMapping("/save_baggage/{id}/{code}")
+	public String saveBaggage(@PathVariable(name = "id") Integer id, 
+			@PathVariable(name = "code") String code) {
+		
+		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
+		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
+		String resp = "FAILED";
+		for (BaggageOnline baggageOnline : baggageOnlineList) {
+			if (baggageOnline.getCode().equals(code) ) {
+				travellerDetail.setBaggage(code + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
+				travellerRepo.save(travellerDetail);
+				String ok = "OK";
+				resp = ok;
+			} 
+		}
+		return resp;
+	}
+	
+	@PostMapping("/save_meal/{id}/{code}")
+	public String saveMeal(@PathVariable(name = "id") Integer id,
+			@PathVariable(name = "code") String code) {
+		
+		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
+		List<MealsOnline> mealList = productDetailsController.mealsOnlineList;
+		String resp = "FAILED";
+		for (MealsOnline mealsOnline : mealList) {
+			if (mealsOnline.getCode().equals(code) ) {
+				travellerDetail.setMeal(code + "|" + mealsOnline.getQuantity() + "|" + mealsOnline.getPrice() + "|" + mealsOnline.getName());
+				travellerRepo.save(travellerDetail);
+				String ok = "OK";
+				resp = ok;
+			} 
+		}
+		return resp;
 	}
 }

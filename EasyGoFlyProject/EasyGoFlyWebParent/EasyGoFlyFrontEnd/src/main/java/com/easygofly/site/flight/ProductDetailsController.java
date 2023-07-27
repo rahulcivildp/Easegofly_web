@@ -2,18 +2,16 @@ package com.easygofly.site.flight;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,6 +29,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
@@ -63,6 +62,7 @@ public class ProductDetailsController {
 	private Integer flightIdLocal = 0;
 	List<BaggageOnline> baggageOnlineList = new ArrayList<BaggageOnline>();
 	List<MealsOnline> mealsOnlineList = new ArrayList<MealsOnline>();
+	List<SeatsOnline>  seatsOnlineList= new ArrayList<SeatsOnline>();
 	
 	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")
 	public String filghtTravelerDetailsSave(@PathVariable(name = "search_id") Integer search_id, 
@@ -178,23 +178,10 @@ public class ProductDetailsController {
         	System.out.println(responseCodeSSR);
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
-        	JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("MealDynamic").getJSONArray(0); 
+        	System.out.println(jsonObjSSR);
+        	
         	JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
-        	
-        	MealsOnline[] mealsOnline = new MealsOnline[100];
         	BaggageOnline[] baggageOnline = new BaggageOnline[100];
-        	
-        	for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
-        		JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
-        		String mealPrice = jsonObjectMeals.get("Price").toString();
-        		String mealAirlineDescription = jsonObjectMeals.get("AirlineDescription").toString();
-        		String mealCode = jsonObjectMeals.get("Code").toString();
-        		String mealQuantity = jsonObjectMeals.get("Quantity").toString();
-        		
-        		mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-        		mealsOnlineList.add(mealsOnline[i]);
-			}
-        	
         	for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
 				
         		JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
@@ -205,13 +192,56 @@ public class ProductDetailsController {
         		
         		baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
         		baggageOnlineList.add(baggageOnline[i]);
-				
+			}
+
+
+        	try {
+				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("MealDynamic").getJSONArray(0); 
+				MealsOnline[] mealsOnline = new MealsOnline[100];
+				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+					String mealPrice = jsonObjectMeals.get("Price").toString();
+					String mealAirlineDescription = jsonObjectMeals.get("AirlineDescription").toString();
+					String mealCode = jsonObjectMeals.get("Code").toString();
+					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
+					
+					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+					mealsOnlineList.add(mealsOnline[i]);
+				}
+			} catch (JSONException e) {
+				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+				mealsOnlineList.add(mealsOnline);
 			}
         	
-        	//System.out.println(jsonResultArrayBaggage);
+        	
+        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
+        	JSONObject jsonInnerObjectSeats = new JSONObject();
+        	SeatsOnline[] seatsOnline = new SeatsOnline[200];
+        	for (int i = 0; i < jsonArraySeats.length(); i++) {
+        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
+        		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
+        			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
+        			
+        			Integer compartment = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Compartment").toString());
+        			Integer availablityType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("AvailablityType").toString());
+        			Integer deck = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Deck").toString());
+        			String rowNo = jsonInnerArraySeats.getJSONObject(j).get("RowNo").toString();
+        			String code = jsonInnerArraySeats.getJSONObject(j).get("Code").toString();
+        			String price = jsonInnerArraySeats.getJSONObject(j).get("Price").toString();
+        			Integer seatType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("SeatType").toString());
+        			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
+        			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
+        			
+        			seatsOnline[(i + j)] = new SeatsOnline((i + j), price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
+        			seatsOnlineList.add(seatsOnline[(i + j)]);
+				}
+			}
+        	
+        	System.out.println(jsonInnerObjectSeats);
         	MealsOnline mealsOnline2 = new MealsOnline();
         	
     		model.addAttribute("mealsOnline", mealsOnline2);
+    		model.addAttribute("seatsOnlineList", seatsOnlineList);
     		model.addAttribute("mealsOnlineList", mealsOnlineList);
     		model.addAttribute("baggageOnlineList", baggageOnlineList);
         	

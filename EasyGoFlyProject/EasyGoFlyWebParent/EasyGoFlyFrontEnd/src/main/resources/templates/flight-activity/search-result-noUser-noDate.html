@@ -415,11 +415,12 @@
                 </div>
             </div>
           	<th:block th:each="flight : ${listProducts}">
-          	<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
-            	<form th:action="@{/flight_activity_booking_save}" method="post" >
-          			<div th:class="'flightSearchResult' + ${flight.id}"></div>
-          		</form>
-          	</div>
+          	<form th:action="@{/flight_activity_booking_save}" method="post" >
+	          	<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
+          			<input type="hidden" th:id="'inputSeatNum-' + ${flight.id}" th:value="${flight.totalSeats}">
+	          		<div th:id="'flightSearchResult' + ${flight.id}"></div>
+	          	</div>
+          	</form>
           	<script type="text/javascript">
           	
           	search_passenger_num = [[${passengerNum}]];
@@ -549,13 +550,13 @@
           	
           	`;
           	
-          	if (search_passenger_num >= flight_seats) {
-          		//console.log("Flight Total Seat same/above searched seats: " + flight_seats);
-          	} else if (search_passenger_num <= flight_seats) {
+          	
+          	
+          	if (search_passenger_num <= flight_seats) {
           		console.log("Flight Total Seat same/below searched seats: " + flight_seats + " flight id: " + [[${flight.id}]]);
-          		$(".flightSearchResult" + [[${flight.id}]]).html(htmlCodeBlock);
+          		$("#flightSearchResult" + [[${flight.id}]]).html(htmlCodeBlock);
           	}
-    		
+          	
           	if ([[${flight.stopNum}]] == 0) {
           		$("#non_stop-" + [[${flight.id}]]).text("Non-Stop");
           	} else {
@@ -576,6 +577,16 @@
           		totalPrice = totalAdultPrice + totalInfantPrice;
           		$("#totalPrice" + [[${flight.id}]]).text(totalPrice);
           		$("#totalPriceDesk" + [[${flight.id}]]).text(totalPrice);
+          		
+
+              	inputVal = $("#inputSeatNum-" + [[${flight.id}]]);
+              	
+              	//alert(inputVal.val());
+              	if(search_passenger_num > inputVal.val()) {
+          			alert(inputVal.val());
+      				inputVal.parent().css("display", "none");
+      			}
+        		
 			</script>
 	          </th:block> 
 		</div>
