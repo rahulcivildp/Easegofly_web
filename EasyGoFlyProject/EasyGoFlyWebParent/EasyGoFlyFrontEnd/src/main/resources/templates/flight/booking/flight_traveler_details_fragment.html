@@ -548,7 +548,9 @@
 														mealAmount = parseInt(response);
 														//alert(totalPaymentAbout + mealAmount);
 														changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
-														$("#totalPayment").text(changedAmount);
+														$("#totalPayment").text("₹" + changedAmount);
+														$("#inputPrice").val(changedAmount);
+														
 													}).fail(function(){
 														alert("Could not connect to the server.");
 													});
@@ -631,7 +633,8 @@
 														$("#baggaggePrice").html("Price: " + response);
 														baggageAmount = parseInt(response);
 														changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-														$("#totalPayment").text(changedPrice);
+														$("#totalPayment").text("₹" + changedPrice);
+														$("#inputPrice").val(changedPrice);
 														
 													}).fail(function(){
 														alert("Could not connect to the server.");
@@ -717,7 +720,8 @@
 														seatAmount = parseInt(response);
 
 														changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-														$("#totalPayment").text(changedPriceSeat);
+														$("#totalPayment").text("₹" + changedPriceSeat);
+														$("#inputPrice").val(changedPriceSeat);
 														
 													}).fail(function(){
 														alert("Could not connect to the server.");
@@ -727,21 +731,21 @@
 												};
 										    
 										    </script>
-											<!-- <script type="text/javascript">
+											<script type="text/javascript">
 										    	flightId = [[${traveler.id}]];
 										    	orderForm = $("#order_form");
 										    
 												$(document).ready(function() {
-													saveBaggage(orderForm);
+													saveSeat(orderForm);
 												});
 												
-												$("#baggageSelect").change(function(){
-													saveBaggage(orderForm);
+												$("#seatSelet").change(function(){
+													saveSeat(orderForm);
 											  	});
 											   	
-											    function saveBaggage(form) {
-											    	baggage = $("#baggageSelect").val();
-													url = "[[@{/save_baggage/}]]" + flightId + "/" + baggage;
+											    function saveSeat(form) {
+											    	seat = $("#seatSelet").val();
+													url = "[[@{/save_seat/}]]" + flightId + "/" + seat;
 
 													
 													$.post(url, function(response) {
@@ -755,7 +759,7 @@
 													});
 													return false;
 												};
-											</script> -->
+											</script>
 	                                </th:block>
                             	</div>
                                 <div id="contact_details" class="booking_tiles back_white shadow">
@@ -977,8 +981,9 @@
        	</div>
            
            <div style="float: right;">
-               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment"><i class="fa fa-inr" aria-hidden="true"></i><b>[[${checkoutInfo.paymentTotal}]]</b></p>
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment"><b>[[${checkoutInfo.paymentTotal}]]</b></p>
                <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: none;" id="totalPaymentNew"><i class="fa fa-inr" aria-hidden="true"></i><b></b></p>
+               <input type="hidden" name="totalPayment" form="order_form" id="inputPrice">
            </div>
        </div>
    </div>

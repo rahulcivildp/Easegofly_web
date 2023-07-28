@@ -74,6 +74,49 @@ public class OrderService {
 		return orderRepo.save(newOrder);
 	}
 	
+	public Order createOrderOnline(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, String price, SearchHistory searchHistory, String orderName, List<TravellerDetail> travellerDetails) {
+		Order newOrder = new Order();
+		newOrder.setCreatedTime(new Date());
+		newOrder.setOrderStatus(OrderStatus.NEW);
+		newOrder.setCustomer(customer);
+		newOrder.setProductDetail(productDetail);
+		newOrder.setPrice(Double.parseDouble(price));
+		newOrder.setPaymentMethod(paymentMethod);
+		newOrder.setName(orderName);
+
+		newOrder.setAddressLine1(customer.getAddressLine1());
+		newOrder.setAddressLine2(customer.getAddressLine2());
+		newOrder.setCity(customer.getCity());
+		
+		Country country = customer.getCountry();
+		newOrder.setCountry(country.getName());
+		
+		newOrder.setPostalCode(customer.getPostalCode());
+		newOrder.setState(customer.getState());
+		newOrder.setFirstName(customer.getFirstName());
+		newOrder.setLastName(customer.getLastName());
+		newOrder.setPhoneNumber(cartItem.getPhoneNum());
+		newOrder.setAdultNum(searchHistory.getAdultNum());
+		newOrder.setChildNum(searchHistory.getChildNum());
+		newOrder.setInfantNum(searchHistory.getInfantNum());
+		newOrder.setCityOne(searchHistory.getCityOne());
+		newOrder.setCityTwo(searchHistory.getCityTwo());
+		newOrder.setJourneyClass(searchHistory.getJourneyClass());
+		newOrder.setPassengerNum(searchHistory.getPassengerNum());
+		newOrder.setTripType(searchHistory.getTripType());
+		newOrder.setCartId(cartItem.getId());
+		newOrder.setContactEmail(cartItem.getEmail());
+		newOrder.setTravellerDetails(travellerDetails);
+		
+		String transaction_id = "UIGIK&*^HJAS585789";
+		String transaction_token = "ashdjgh3284270&^%@#*&)asahj31";
+		
+		newOrder.setTransactionId(transaction_id);
+		newOrder.setTransactionToken(transaction_token);
+		
+		return orderRepo.save(newOrder);
+	}
+	
 	public Order updateOrder(Order order, OrderStatus orderStatus) {
 		order.setOrderStatus(orderStatus);
 		return orderRepo.save(order);
@@ -83,6 +126,13 @@ public class OrderService {
 		Order savedOrder = orderRepo.findById(order.getId()).get();
 		
 		savedOrder.setPrice(checkoutInfo.getPaymentTotal());
+		return orderRepo.save(savedOrder);
+	}
+	
+	public Order updateOrderPriceOnline(Order order, String price) {
+		Order savedOrder = orderRepo.findById(order.getId()).get();
+		
+		savedOrder.setPrice(Double.parseDouble(price));
 		return orderRepo.save(savedOrder);
 	}
 	

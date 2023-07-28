@@ -122,5 +122,26 @@ public class ProductDetailsRestController {
 		return resp;
 	}
 	
+	@PostMapping("/save_seat/{id}/{seatId}")
+	public String saveSeat(@PathVariable(name = "id") Integer id,
+			@PathVariable(name = "seatId") Integer seatId) {
+		
+		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
+		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
+		String resp = "FAILED";
+		for (SeatsOnline seatsOnline : seatsOnlineList) {
+			if (seatsOnline.getId() == seatId ) {
+				travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
+				+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
+				+ "|" + seatsOnline.getCraftType() + "|" + seatsOnline.getCode());
+				
+				travellerRepo.save(travellerDetail);
+				String ok = "OK";
+				resp = ok;
+			} 
+		}
+		return resp;
+	}
+	
 	
 }

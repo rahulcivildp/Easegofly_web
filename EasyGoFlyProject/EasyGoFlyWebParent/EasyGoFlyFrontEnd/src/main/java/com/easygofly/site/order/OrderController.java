@@ -1,18 +1,26 @@
 package com.easygofly.site.order;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -47,7 +55,9 @@ import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.CityService;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.ProductDetailService;
+import com.easygofly.site.flight.ProductDetailsController;
 import com.easygofly.site.flight.TravellerRepository;
+import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.order.exporter.OrderPDFExporter;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
@@ -82,6 +92,8 @@ public class OrderController {
 	@Autowired private TravellerRepository travellerRepo;
 	@Autowired private CouponService couponService ;
 	@Autowired private WalletService walletService;
+	@Autowired private ProductDetailsController productDetailsController;
+	@Autowired private OnlineFlightService onlineFlightService ;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -96,6 +108,7 @@ public class OrderController {
 			@RequestParam(name = "item_id") Integer item_id,
 			@RequestParam(name = "couponCode") String couponCode,
 			@RequestParam(name = "couponCode1") String couponCode1,
+			@RequestParam(name = "totalPayment") String totalPayment,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
@@ -155,15 +168,28 @@ public class OrderController {
 						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
 				} else if (order != null) {
-					orderService.updateOrderPrice(order, checkoutInfo);
-					orderService.deleteCouponCode(order);
-				} else {
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					if (flight.getTraceId().equals(null)) {
+						orderService.updateOrderPrice(order, checkoutInfo);
+						orderService.deleteCouponCode(order);
+					} else {
+						orderService.updateOrderPriceOnline(order, totalPayment);
+						orderService.deleteCouponCode(order);
 					}
-					orderService.deleteCouponCode(order2);
-						
+					
+				} else {
+					if (flight.getTraceId().equals(null)) {
+						Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+						for (TravellerDetail travellerDetail : travellerDetails) {
+							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						}
+						orderService.deleteCouponCode(order2);
+					} else {
+						Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+						for (TravellerDetail travellerDetail : travellerDetails) {
+							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						}
+						orderService.deleteCouponCode(order2);
+					}	
 				}
 				
 			} else if (googleLogin != null) {
@@ -197,12 +223,19 @@ public class OrderController {
 					orderService.updateOrderPrice(order, checkoutInfo);
 					orderService.deleteCouponCode(order);
 				} else {
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-					orderService.deleteCouponCode(order2);
-						
+					if (flight.getTraceId().equals(null)) {
+						Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+						for (TravellerDetail travellerDetail : travellerDetails) {
+							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						}
+						orderService.deleteCouponCode(order2);
+					} else {
+						Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+						for (TravellerDetail travellerDetail : travellerDetails) {
+							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						}
+						orderService.deleteCouponCode(order2);
+					}	
 				}
 			}
 			
@@ -229,7 +262,7 @@ public class OrderController {
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
+			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 		
 		String email; 
 		Customer customer; 
@@ -267,6 +300,199 @@ public class OrderController {
 			SearchHistory search = searchRepo.findByCart_id(item_id);
 			model.addAttribute("search", search);
 		}
+		
+		List<String> travelerDetailsArray = new ArrayList<String>();
+		
+		if (!flight.getTraceId().equals(null)) {
+			/* SSR details */
+        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+            // Open a connection
+            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
+            
+            StringBuilder responseBodySSR = new StringBuilder();
+            
+        	int responseCodeSSR = onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, flight.getTraceId(), flight.getResultIndex());
+        	if (responseCodeSSR != HttpURLConnection.HTTP_OK) {
+    			if (responseCodeSSR == HttpURLConnection.HTTP_MOVED_TEMP
+    				|| responseCodeSSR == HttpURLConnection.HTTP_MOVED_PERM
+    					|| responseCodeSSR == HttpURLConnection.HTTP_SEE_OTHER)
+    				return "redirect:/";
+    		}
+			
+        	System.out.println(responseCodeSSR);
+    		
+        	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
+        	String traceId = jsonObjSSR.getJSONObject("Response").get("TraceId").toString(); 
+        	
+        	
+			for (TravellerDetail travellerDetail : travelers) {
+    			Date getDOB = travellerDetail.getDob();
+    			Integer genNum = 0;
+    			if (travellerDetail.getSalutation().equals("Mr.")) {
+    				genNum = 1;
+    			} else {
+    				genNum = 2;
+    			}
+    			String baseFare = "";
+    			String tax = "";
+    			
+    			if (travellerDetail.getPaxType().equals("1")) {
+    				baseFare = productDetailsController.basefareTravelerAdult;
+    				tax = productDetailsController.taxTravelerAdult;
+				} else if (travellerDetail.getPaxType().equals("2")) {
+    				baseFare = productDetailsController.basefareTravelerChild;
+    				tax = productDetailsController.taxTravelerChild;
+				} else {
+    				baseFare = productDetailsController.basefareTravelerInfant;
+    				tax = productDetailsController.taxTravelerInfant;
+				}
+    			
+    			//baggage information
+    			if (travellerDetail.getBaggage() != null) {
+					String baggage = travellerDetail.getBaggage();
+	    			String[] bagArray = baggage.split("|");
+	    			String bagCode = bagArray[0];
+	    			String bagWeight = bagArray[1];
+	    			String bagPrice = bagArray[2];
+				}
+    			
+    			
+    			//meal information
+    			if (travellerDetail.getMeal() != null) {
+					String meal = travellerDetail.getMeal();
+	    			String[] mealArray = meal.split("|");
+	    			String mealCode = mealArray[0];
+	    			String mealName = mealArray[3];
+	    			String mealQuantity = mealArray[1];
+	    			String mealPrice = mealArray[2];
+				}
+    			
+    			
+    			//seat information
+    			if (travellerDetail.getSeat() != null) {
+					String seat = travellerDetail.getSeat();
+	    			String[] seatArray = seat.split("|");
+	    			String seatAvailabilityType = seatArray[6];
+	    			String seatCode = seatArray[8];
+	    			String seatRowNo = seatArray[2];
+	    			String seatNo = seatArray[3];
+	    			String seatType = seatArray[5];
+	    			String seatDeck = seatArray[1];
+	    			String seatCompartment = seatArray[0];
+	    			String seatPrice = seatArray[4];
+	    			String seatCraftType = seatArray[7];
+				}
+    			
+    					
+    			
+    			String details = "{\r\n"
+    					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
+    					+ "		\"FirstName\": \"" + travellerDetail.getFirstName() + "\",\r\n"
+    					+ "		\"LastName\": \"" + travellerDetail.getLastName() + "\",\r\n"
+    					+ "		\"PaxType\": " + travellerDetail.getPaxType() + ",\r\n"
+    					+ "		\"DateOfBirth\": \"" + getDOB + "T00:00:00\",\r\n"
+    					+ "		\"Gender\": " + genNum + ",\r\n"
+    					+ "		\"PassportNo\": \"KJHHJKHKJH\",\r\n"
+    					+ "		\"PassportExpiry\": \"2030-12-06T00:00:00\",\r\n"
+    					+ "		\"AddressLine1\": \"123, Test\",\r\n"
+    					+ "		\"AddressLine2\": \"\",\r\n"
+    					+ "		\"Fare\": {\r\n"
+    					+ "			\"BaseFare\": " + baseFare + ",\r\n"
+    					+ "			\"Tax\": " + tax + ",\r\n"
+    					+ "			\"YQTax\": 0.0,\r\n"
+    					+ "			\"AdditionalTxnFeePub\": 0.0,\r\n"
+    					+ "			\"AdditionalTxnFeeOfrd\": 0.0,\r\n"
+    					+ "			\"OtherCharges\": 0.0\r\n"
+    					+ "		},\r\n"
+    					+ "		\"City\": \"Gurgaon\",\r\n"
+    					+ "		\"CountryCode\": \"IN\",\r\n"
+    					+ "		\"CountryName\": \"India\",      \r\n"
+    					+ "     \"Nationality\": \"IN\",\r\n"
+    					+ "		\"ContactNo\": \"" + item.getPhoneNum() + "\",\r\n"
+    					+ "		\"Email\": \"" + item.getEmail() + "\",\r\n"
+    					+ "		\"IsLeadPax\": true,\r\n"
+    					+ "		\"FFAirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "		\"FFNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "		\"Baggage\":[\r\n"
+    					+ "            {\r\n"
+    					+ "                \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "                \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "                \"WayType\": 2,\r\n"
+    					+ "                \"Code\": \"NoBaggage\",\r\n"
+    					+ "                \"Description\": 2,\r\n"
+    					+ "                \"Weight\": 0,\r\n"
+    					+ "                \"Currency\": \"INR\",\r\n"
+    					+ "                 \"Price\": 0,\r\n"
+    					+ "                 \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
+    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
+    					+ "				}\r\n"
+    					+ "			],\r\n"
+    					+ "     \"MealDynamic\": [\r\n"
+    					+ "        {\r\n"
+    					+ "          \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "          \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "          \"WayType\": 2,\r\n"
+    					+ "          \"Code\": \"NoMeal\",\r\n"
+    					+ "          \"Description\": 2,\r\n"
+    					+ "          \"AirlineDescription\": \"\",\r\n"
+    					+ "          \"Quantity\": 0,\r\n"
+    					+ "          \"Currency\": \"INR\",\r\n"
+    					+ "          \"Price\": 0,\r\n"
+    					+ "          \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
+    					+ "          \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
+    					+ "        }],\r\n"
+    					+ "		\"SeatDynamic\": [\r\n"
+    					+ "        {\r\n"
+    					+ "	    \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "             \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "              \"CraftType\": \"" + productDetailsController.craftType + "\",\r\n"
+    					+ "               \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
+    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\",\r\n"
+    					+ "                \"AvailablityType\": 1,\r\n"
+    					+ "                \"Description\": 2,\r\n"
+    					+ "                \"Code\": \"2A\",\r\n"
+    					+ "                \"RowNo\": \"2\",\r\n"
+    					+ "                \"SeatNo\": \"A\",\r\n"
+    					+ "                \"SeatType\": 1,\r\n"
+    					+ "                \"SeatWayType\": 2,\r\n"
+    					+ "                \"Compartment\": 1,\r\n"
+    					+ "                \"Deck\": 1,\r\n"
+    					+ "                \"Currency\": \"INR\",\r\n"
+    					+ "                \"Price\": 300                                                                                                                                                                                                      \r\n"
+    					+ "			\r\n"
+    					+ "		}],\r\n"
+    					+ "		\"GSTCompanyAddress\": \"\",\r\n"
+    					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
+    					+ "		\"GSTCompanyName\": \"\",\r\n"
+    					+ "		\"GSTNumber\": \"\",\r\n"
+    					+ "		\"GSTCompanyEmail\": \"\"\r\n"
+    					+ "}";
+    			
+//    			System.out.println(details);
+    			
+    			travelerDetailsArray.add(details);
+    			
+    		}
+        	
+        	String arrayTraveler = travelerDetailsArray.stream().map(n -> String.valueOf(n)).collect(Collectors.joining(",", "[", "]"));
+
+        	/* Ticket details */
+        	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+            // Open a connection
+            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
+            
+            StringBuilder responseBodyTicket = new StringBuilder();
+            
+        	int responseCodeTicket = onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, traceId, flight.getResultIndex(), arrayTraveler);
+        	
+        	System.out.println(responseCodeTicket);
+        	
+        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
+
+        	System.out.println(jsonObjTicket);
+		}
+		
+		
 		/* ------ ZAAKPAY -------- */ /**/
 		Date date = Calendar.getInstance().getTime();  
 	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
