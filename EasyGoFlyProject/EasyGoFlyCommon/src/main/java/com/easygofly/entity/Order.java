@@ -74,6 +74,9 @@ public class Order {
 	private String couponCode;
 	
 	private String status;
+	
+	@Column(name = "booking_id")
+	private String bookingId;
 	 
 	private double price;
 	
@@ -205,6 +208,14 @@ public class Order {
 
 	public void setAdultNum(Integer adultNum) {
 		this.adultNum = adultNum;
+	}
+
+	public String getBookingId() {
+		return bookingId;
+	}
+
+	public void setBookingId(String bookingId) {
+		this.bookingId = bookingId;
 	}
 
 	public Integer getChildNum() {

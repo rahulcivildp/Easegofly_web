@@ -161,7 +161,6 @@
 			<div class="row">
 				<th:block th:each="order : ${listOrders}">
 				<div th:if="${order.orderStatus} == ${newOrder}" th:class="${order.orderStatus} == ${newOrder} ? 'col-5 cardStyle shadow newOrder' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
-				<div th:if="${totalSeat} >= ${passengerNum}">
 					<div class="row">
 						<div class="col-2">
 							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
@@ -173,12 +172,11 @@
 						</div>
 						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${newOrder}" ><h2 class="newOrderText">New Order</h2></div>
 						<!-- <a class="col-2 colorHovertabBlue" th:href="@{'/flight_traveler_details' + ${history.id} +'&' + ${order.productDetail.id} + '&' + ${order.id}}" style="justify-content: center; display: flex; align-items: center; color: black; border-radius: 50%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; text-align: center; border: none; background: #ffffff;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-cart-shopping" style="font-size: 24px; margin-top: 10px;"></i><br>Book Now</p></a> -->
-									
+						
 					</div>
 				</div>
-				</div>
 				<div th:if="${order.orderStatus} == ${orderPending}" th:class="${order.orderStatus} == ${orderPending} ? 'col-5 cardStyle shadow orderPending' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 					<div class="row">
 						<div class="col-2">
 							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
@@ -188,14 +186,14 @@
 							<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
 							<p class="float-left noMargin">Passenger No.: [[${order.passengerNum}]]</p><br>
 						</div>
-						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${orderPending}" ><h2 class="orderPendingText">New Order</h2></div>
+						<div class="col-4 textPosition" th:if="${order.orderStatus} == ${orderPending}" ><h2 class="orderPendingText">Pending Order</h2></div>
 						<!-- <a class="col-2 colorHovertabBlue" th:href="@{'/flight_traveler_details' + ${history.id} +'&' + ${order.productDetail.id} + '&' + ${order.id}}" style="justify-content: center; display: flex; align-items: center; color: black; border-radius: 50%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; text-align: center; border: none; background: #ffffff;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-cart-shopping" style="font-size: 24px; margin-top: 10px;"></i><br>Book Now</p></a> -->
 									
 					</div>
-				</div>
+				
 				</div>
 					<div th:if="${order.orderStatus} == ${orderCancelled}" th:class="${order.orderStatus} == ${orderCancelled} ? 'col-5 cardStyle shadow orderCancelled' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 						<div class="row">
 							<div class="col-2">
 								<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
@@ -217,10 +215,10 @@
 	                        </div>
 	                        <button class="col-2 colorHovertabRed" form="payment_form" style="display: flex; align-items: center; color: black; border-radius: 50%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; text-align: center; border: none; background: #ffffff;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-reply" style="font-size: 24px; margin-top: 10px;"></i><br>Retry Payment</p></button>
 						</div>
-					</div>
+					
 				</div>
 					<div th:if="${order.orderStatus} == ${orderFailed}" th:class="${order.orderStatus} == ${orderFailed} ? 'col-5 cardStyle shadow orderCancelled' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 						<div class="row">
 							<div class="col-2">
 								<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
@@ -242,7 +240,7 @@
 	                        </div>
 	                        <button class="col-2 colorHovertabRed" form="payment_form" style="display: flex; align-items: center; color: black; border-radius: 50%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; text-align: center; border: none; background: #ffffff;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-reply" style="font-size: 24px; margin-top: 10px;"></i><br>Retry Payment</p></button>
 						</div>
-					</div>
+					
 				</div>
 				<div th:if="${order.orderStatus} == ${orderSuccess}" th:class="${order.orderStatus} == ${orderSuccess} ? 'col-5 cardStyle shadow orderSuccess' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
 					<div class="row">
@@ -267,7 +265,7 @@
 		<div class="less-details">
 		<th:block th:each="order : ${listOrders}">
 			<div th:if="${order.orderStatus} == ${newOrder}" th:class="${order.orderStatus} == ${newOrder} ? 'cardStyle shadow newOrder' : ''" >
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 				<div class="row m-1 styleLinkButton">
 					<div class="col-4">
 						<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
@@ -282,10 +280,10 @@
 						<!-- <a class="col-12 colorHovertabBlue" th:href="@{'/flight_traveler_details' + ${history.id} +'&' + ${order.productDetail.id} + '&' + ${order.id}}" style="justify-content: center; display: flex; align-items: center; color: black; border-radius: 50%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; text-align: center; border: none; background: #ffffff;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-cart-shopping" style="font-size: 24px; margin-top: 10px;"></i><br>Book Now</p></a> -->
 					</div>
 				</div>
-			</div>
+			
 				</div>
 				<div th:if="${order.orderStatus} == ${orderCancelled}" th:class="${order.orderStatus} == ${orderCancelled} ? 'cardStyle shadow orderCancelled' : ''" >
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 					<div class="row m-1 styleLinkButton">
 						<div class="col-4">
 							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
@@ -307,10 +305,10 @@
 	                        <button class="col-12 colorHovertabRed" form="payment_form2" style="display: flex; align-items: center; color: black; border-radius: 8%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; justify-content: center; border: none; background: #ffffff26;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-reply" style="font-size: 24px; margin-top: 10px;"></i><br>Retry Payment</p></button>
 						</div>
 					</div>
-				</div>
+				
 			</div>
 				<div th:if="${order.orderStatus} == ${orderPending}" th:class="${order.orderStatus} == ${orderPending} ? 'cardStyle shadow orderPending' : ''" >
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 					<div class="row m-1 styleLinkButton">
 						<div class="col-4">
 							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
@@ -332,10 +330,9 @@
 	                        <button class="col-12 colorHovertabRed" form="payment_form2" style="display: flex; align-items: center; color: black; border-radius: 8%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; justify-content: center; border: none; background: #ffffff26;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-reply" style="font-size: 24px; margin-top: 10px;"></i><br>Retry Payment</p></button>
 						</div>
 					</div>
-				</div>
 			</div>
 				<div th:if="${order.orderStatus} == ${orderFailed}" th:class="${order.orderStatus} == ${orderFailed} ? 'cardStyle shadow orderCancelled' : ''" >
-				<div th:if="${totalSeat} >= ${passengerNum}">
+				
 					<div class="row m-1 styleLinkButton">
 						<div class="col-4">
 							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
@@ -357,7 +354,7 @@
 	                        <button class="col-12 colorHovertabRed" form="payment_form2" style="display: flex; align-items: center; color: black; border-radius: 8%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; justify-content: center; border: none; background: #ffffff26;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-reply" style="font-size: 24px; margin-top: 10px;"></i><br>Retry Payment</p></button>
 						</div>
 					</div>
-				</div>
+				
 			</div>
 			<div th:if="${order.orderStatus} == ${orderSuccess}" th:class="${order.orderStatus} == ${orderSuccess} ? 'cardStyle shadow orderSuccess' : ''" >
 				<div class="row m-1 styleLinkButton">

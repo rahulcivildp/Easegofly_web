@@ -201,8 +201,8 @@
                                                     <div class="col-md-4">
                                                         <div  style="float: left; font-size: 15px; padding: 10px 10px;">
                                                         	<h2 style="margin: 0;">[[${stop.cityName}]]</h2>
-                                                            <b>[[${flight.product.brands.name}]]</b>
-                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.pnr}]]</h4>
+                                                            <b>[[${flight.brand}]]</b>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</h4>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1">
@@ -235,11 +235,9 @@
                                             <div class="col-md-9">
                                                 <div class="row">
                                                     <div class="col-md-4 col-3">
-                                                        <div style="float: left; padding: 15px 20px 10px;">
-                                                            <img th:src="@{${flight.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
-                                                        </div>
+                                                    	<div th:id="'brandImage' + ${flight.id}" style="float: left; padding: 15px 20px 10px;"></div>
                                                         <div  style="float: left; font-size: 15px; padding: 10px 10px;">
-                                                            <b>[[${flight.product.brands.name}]]</b>
+                                                            <b>[[${flight.brand}]]</b>
                                                             <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p>
                                                         </div>
                                                     </div>
@@ -284,9 +282,7 @@
                                             </div>
                                             <div class="col-md-3 media-hide">
                                                 <div class="row">
-                                                    <div class="col-md-12" style="margin: 16px 0; padding: 0 30px;">
-                                                        Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${item.totalPrice}]]/-</span> 
-                                                    </div>
+                                                    <div class="col-md-12" style="margin: 16px 0; padding: 0 30px;"> </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -296,7 +292,7 @@
                            		
 	                            <div id="traveller_detailss" class="booking_tiles back_white shadow">
 	                                <div style="background-color: #ecf5fd;">
-	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Traveller Details</p>
+	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Traveler Details</p>
 	                                </div>
 	                                <div>
 	                                <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
@@ -637,7 +633,27 @@
         </div>
      
     </body>
-    
+    <script type="text/javascript">
+		$(document).ready(function() {
+			checkBrand();
+		});
+
+		function checkBrand() {
+			brandName = "[[${flight.brand}]]";
+			url = "[[@{/find_brand_}]]" + brandName;
+			
+			$.get(url, function(response) {
+				htmlImg = `
+					<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
+				`;
+				$("#brandImage" + [[${flight.id}]]).append(htmlImg);
+			}).fail(function(){
+				alert("Could not connect to the server.");
+			});
+			
+			return false;
+		};
+	</script>
  
     <script>
         $("#button_collapse").click(function(){

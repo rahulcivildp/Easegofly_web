@@ -6,11 +6,11 @@ public class MealsOnline {
 
 	private Integer id;
 	
-	@Column(unique = true)
 	private String name;
 	
 	private String price;
 	
+	@Column(nullable = false, unique = true)
 	private String code;
 	
 	private String quantity;

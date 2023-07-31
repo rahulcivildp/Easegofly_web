@@ -156,6 +156,12 @@ public class OrderService {
 		return orderRepo.save(order);
 	}
 	
+	public Order updateBookingId(Order order, String bookingId) {
+		Order savedOrder = orderRepo.findById(order.getId()).get();
+		savedOrder.setBookingId(bookingId);
+		return orderRepo.save(savedOrder);
+	}
+	
 	public void deleteOrder(Integer id) throws UserNotFoundException {
 		Long count = orderRepo.countById(id);
 		if(count == null || count == 0) {

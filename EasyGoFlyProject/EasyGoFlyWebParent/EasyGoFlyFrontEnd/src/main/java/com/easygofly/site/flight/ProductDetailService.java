@@ -12,10 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.MealsOnline;
+import com.easygofly.entity.Order;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
+import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 
 @Service
@@ -25,12 +29,10 @@ public class ProductDetailService {
 	public static final int FLIGHT_PER_PAGE = 4;
 
 	@Autowired private ProductDetailsRepository productRepo;
-	
 	@Autowired private BrandRepositoy brandRepo;
-	
 	@Autowired private FlightRepository flightRepo;
-	
 	@Autowired private TravellerRepository travellerRepo;
+	@Autowired private ProductDetailsController productDetailsController;
 	
 	public Product searchFlights(Integer id, String cityOne, String cityTwo) {
 		Product productBycity = productRepo.findProductByCity(cityOne, cityTwo);
@@ -250,8 +252,70 @@ public class ProductDetailService {
 		return flightRepo.save(savedFlightPassengerDetails);
 	}
 	
+	public ProductDetail updatePNROnline(ProductDetail productDetail, String pnr) {
+		ProductDetail savedFlightPassengerDetails = flightRepo.findById(productDetail.getId()).get();
+		savedFlightPassengerDetails.setPnr(pnr);
+		
+		return flightRepo.save(savedFlightPassengerDetails);
+	}
+	
+	public ProductDetail setTotalSeatOnline(ProductDetail productDetail, String totalSeat) {
+		ProductDetail savedFlightPassengerDetails = flightRepo.findById(productDetail.getId()).get();
+		savedFlightPassengerDetails.setTotalSeats(totalSeat);;
+		
+		return flightRepo.save(savedFlightPassengerDetails);
+	}
+	
+	public List<TravellerDetail> setMealBaggageSeatOnline(List<TravellerDetail> travellerDetails2, String mealCode, String baggageCode, Integer seatId) {
+		
+		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
+		List<MealsOnline> mealList = productDetailsController.mealsOnlineList;
+		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
+		
+		List<TravellerDetail> travellerDetails = travellerDetails2;
+		for (TravellerDetail travellerDetail : travellerDetails) {
+			for (BaggageOnline baggageOnline : baggageOnlineList) {
+				if (baggageOnline.getCode().equals(baggageCode) ) {
+					travellerDetail.setBaggage(baggageCode + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
+				} 
+			}
+			
+			for (MealsOnline mealsOnline : mealList) {
+				
+				String mealName = "";
+				if (mealsOnline.getCode().equals("NoMeal") ) {
+					mealName = "No Meal";
+				} else {
+					mealName = mealsOnline.getName();
+				}
+				
+				if (mealsOnline.getCode().equals(mealCode) ) {
+					
+					travellerDetail.setMeal(mealCode + "|" + mealsOnline.getQuantity() + "|" + mealsOnline.getPrice() + "|" + mealName);
+				} 
+			}
+			
+			String resp = "FAILED";
+			for (SeatsOnline seatsOnline : seatsOnlineList) {
+				if (seatsOnline.getId() == seatId ) {
+					travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
+					+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
+					+ "|" + seatsOnline.getCraftType() + "|" + seatsOnline.getCode());
+				} 
+			}
+			
+			travellerRepo.save(travellerDetail);
+		}
+		
+		return travellerDetails;
+	}
+	
 	public List<TravellerDetail> findTraveller(ProductDetail productDetail, CartItem cartItem) {
-		return travellerRepo.findTravellerByCustomerAndProductDetail(productDetail, cartItem);
+		return travellerRepo.findTravellerByCurtItemAndProductDetail(productDetail, cartItem);
+	}
+	
+	public List<TravellerDetail> findTravellerByOrderANDProductDetail(ProductDetail productDetail, Order order) {
+		return travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 	}
 
 }

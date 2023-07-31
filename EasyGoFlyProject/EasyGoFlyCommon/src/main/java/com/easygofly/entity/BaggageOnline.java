@@ -1,11 +1,14 @@
 package com.easygofly.entity;
 
+import javax.persistence.Column;
+
 public class BaggageOnline {
 
 	private Integer id;
 	
 	private String price;
 	
+	@Column(nullable = false, unique = true)
 	private String code;
 	
 	private String weight;

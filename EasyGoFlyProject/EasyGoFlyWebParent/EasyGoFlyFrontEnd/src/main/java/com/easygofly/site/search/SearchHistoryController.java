@@ -98,8 +98,6 @@ public class SearchHistoryController {
 		}
 		
 		SearchHistory search = searchRepo.findById(id).get();
-
-		System.out.println("Date: " + search.getDate());
 		
 		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
 		
@@ -142,8 +140,6 @@ public class SearchHistoryController {
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 		 
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-	    
-		System.out.println("no User Date: " + date + " - "+ sortName);
 
 		searchSort(cityOne, cityTwo, sortName, model, date);
 		
@@ -210,7 +206,6 @@ public class SearchHistoryController {
 		JSONObject mainObjFare = new JSONObject();
        
 		String traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
-		System.out.println(onlineFlightService.traceId);
         
 		for (int i = 0; i < jsonArrays.length(); i++) {
 
@@ -268,8 +263,6 @@ public class SearchHistoryController {
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 	         
 		}
-		System.out.println(mainObj);
-		System.out.println(responseCode);
 		
 		model.addAttribute("listProducts", productDetailsController.listProductDetailsOnline);
         model.addAttribute("responseCode", responseCode);
@@ -655,8 +648,6 @@ public class SearchHistoryController {
 			@RequestParam(name = "infantNum", required = false) Integer infantNum,
 			Model model) throws ProductNotFoundException {
 		
-			System.out.println("Last Value of Search: " + date);
-		
 			String email; 
 			Customer customer;
 			City city1 = cityRepo.getCityByName(cityOne);
@@ -677,7 +668,6 @@ public class SearchHistoryController {
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
-				System.out.println("Last Value of Search: " + searchId);
 				searchURL = "/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 				return "redirect:/loading_";
 			} else if (googleLogin != null) {
@@ -686,7 +676,6 @@ public class SearchHistoryController {
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
-				System.out.println("Last Value of Search: " + searchId);
 				searchURL = "/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 				return "redirect:/loading_";
 			}else {

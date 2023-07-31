@@ -16,7 +16,6 @@ import com.easygofly.entity.Brand;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.SeatsOnline;
-import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.order.CouponRepository;
 
 @RestController
@@ -85,63 +84,5 @@ public class ProductDetailsRestController {
 		}
 		return price;
 	}
-	
-	@PostMapping("/save_baggage/{id}/{code}")
-	public String saveBaggage(@PathVariable(name = "id") Integer id, 
-			@PathVariable(name = "code") String code) {
-		
-		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
-		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
-		String resp = "FAILED";
-		for (BaggageOnline baggageOnline : baggageOnlineList) {
-			if (baggageOnline.getCode().equals(code) ) {
-				travellerDetail.setBaggage(code + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
-				travellerRepo.save(travellerDetail);
-				String ok = "OK";
-				resp = ok;
-			} 
-		}
-		return resp;
-	}
-	
-	@PostMapping("/save_meal/{id}/{code}")
-	public String saveMeal(@PathVariable(name = "id") Integer id,
-			@PathVariable(name = "code") String code) {
-		
-		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
-		List<MealsOnline> mealList = productDetailsController.mealsOnlineList;
-		String resp = "FAILED";
-		for (MealsOnline mealsOnline : mealList) {
-			if (mealsOnline.getCode().equals(code) ) {
-				travellerDetail.setMeal(code + "|" + mealsOnline.getQuantity() + "|" + mealsOnline.getPrice() + "|" + mealsOnline.getName());
-				travellerRepo.save(travellerDetail);
-				String ok = "OK";
-				resp = ok;
-			} 
-		}
-		return resp;
-	}
-	
-	@PostMapping("/save_seat/{id}/{seatId}")
-	public String saveSeat(@PathVariable(name = "id") Integer id,
-			@PathVariable(name = "seatId") Integer seatId) {
-		
-		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
-		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
-		String resp = "FAILED";
-		for (SeatsOnline seatsOnline : seatsOnlineList) {
-			if (seatsOnline.getId() == seatId ) {
-				travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
-				+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
-				+ "|" + seatsOnline.getCraftType() + "|" + seatsOnline.getCode());
-				
-				travellerRepo.save(travellerDetail);
-				String ok = "OK";
-				resp = ok;
-			} 
-		}
-		return resp;
-	}
-	
 	
 }

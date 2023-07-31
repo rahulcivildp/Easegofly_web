@@ -239,4 +239,45 @@ public class OnlineFlightService {
 		bufferedReader.close();
 		return responseCode;
 	}
+	
+	
+	public int apiOnlineGetBookingDetails(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, String bookingId)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Create the request body
+        String requestBody = "{\r\n"
+        		+ "	\"EndUserIp\": \"192.168.11.58\",\r\n"
+        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"PNR\": \"" + pnr + "\",\r\n"
+        		+ "	\"BookingId\": \"" + bookingId + "\"\r\n"
+        		+ "}";
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
 }

@@ -95,7 +95,7 @@ public class CartItemController {
 	    
 		for (Order order : listOrders) {
 			ProductDetail productDetail = order.getProductDetail();
-			model.addAttribute("totalSeat", productDetail.getTotalSeats());
+			model.addAttribute("totalSeat", Integer.parseInt(productDetail.getTotalSeats()));
 			model.addAttribute("passengerNum", order.getPassengerNum());
 			
 			String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
@@ -135,11 +135,6 @@ public class CartItemController {
 		OrderStatus orderPending = OrderStatus.PENDING;
 		
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
-		
-		String array[] = {"{abc}", "{def}", "{ghi}"};
-		
-		String complete = Arrays.toString(array);
-		System.out.println("\"PreferredCurrency\":" + "\"" + complete + "\"");
 		
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("totalPages1", pageOrder.getTotalPages());

@@ -12,7 +12,7 @@ import com.easygofly.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-	@Query("SELECT o FROM Order o WHERE o.customer = ?1 ")
+	@Query("SELECT o FROM Order o INNER JOIN ProductDetail p ON p.id = o.productDetail WHERE p.totalSeats >= o.passengerNum AND o.customer = ?1")
 	public Page<Order> findByCustomer(Customer customer, Pageable pageable);
 	
 	@Query("SELECT o FROM Order o WHERE o.customer = ?1 ")

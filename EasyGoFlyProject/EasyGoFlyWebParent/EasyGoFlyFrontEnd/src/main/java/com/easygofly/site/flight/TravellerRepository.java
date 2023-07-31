@@ -19,7 +19,7 @@ public interface TravellerRepository extends CrudRepository<TravellerDetail, Int
 	public List<TravellerDetail> findTravellerByNameAndDate(String firstName, String lastName, Date dob, Sort ascending);
 	
 	@Query("SELECT t FROM TravellerDetail t WHERE t.productDetail = :productDetail AND t.cartItem = :cartItem")
-	public List<TravellerDetail> findTravellerByCustomerAndProductDetail(ProductDetail productDetail, CartItem cartItem);
+	public List<TravellerDetail> findTravellerByCurtItemAndProductDetail(ProductDetail productDetail, CartItem cartItem);
 	
 	@Query("SELECT t FROM TravellerDetail t WHERE t.productDetail = :productDetail AND t.order = :order")
 	public List<TravellerDetail> findTravellerByProductDetailAndOrder(ProductDetail productDetail, Order order);

@@ -6,9 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +53,6 @@ public class ProductDetailsController {
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	@Autowired private OnlineFlightService onlineFlightService ;
-	@Autowired private EntityManager entityManager;
 	
 	public List<ProductDetail> listProductDetailsOnline;
 	private Integer flightIdLocal = 0;
@@ -103,11 +99,34 @@ public class ProductDetailsController {
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
-
-		List<String> travelerDetailsArray = new ArrayList<String>();
 		
 		
 		if (!flight.getTraceId().equals(null)) {
+			
+			/* Fare-rule details */
+        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+            // Open a connection
+            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+            
+            StringBuilder responseBodyFarerule = new StringBuilder();
+            
+        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, flight.getTraceId(), flight.getResultIndex());
+        	if (responseCode != HttpURLConnection.HTTP_OK) {
+    			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+    				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
+    					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
+    				return "redirect:/";
+    		}
+  
+        	
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
+        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
+        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
+        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
+        	
+        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
+        	
+        	
 			/* Fare-quote details */
         	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
             // Open a connection
@@ -122,8 +141,6 @@ public class ProductDetailsController {
     					|| responseCodeFarequote == HttpURLConnection.HTTP_SEE_OTHER)
     				return "redirect:/";
     		}
-    		
-        	System.out.println(responseCodeFarequote);
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
@@ -184,24 +201,26 @@ public class ProductDetailsController {
     					|| responseCodeSSR == HttpURLConnection.HTTP_SEE_OTHER)
     				return "redirect:/";
     		}
-			
-        	System.out.println(responseCodeSSR);
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
-        	System.out.println(jsonObjSSR);
         	
-        	JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
-        	BaggageOnline[] baggageOnline = new BaggageOnline[100];
-        	for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
-				
-        		JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
-        		
-        		String baggagePrice = jsonObjectBagages.get("Price").toString();
-        		String baggageCode = jsonObjectBagages.get("Code").toString();
-        		String baggageWeight = jsonObjectBagages.get("Weight").toString();
-        		
-        		baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
-        		baggageOnlineList.add(baggageOnline[i]);
+        	try {
+				JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
+				BaggageOnline[] baggageOnline = new BaggageOnline[100];
+				for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
+					
+					JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
+					
+					String baggagePrice = jsonObjectBagages.get("Price").toString();
+					String baggageCode = jsonObjectBagages.get("Code").toString();
+					String baggageWeight = jsonObjectBagages.get("Weight").toString();
+					
+					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
+					baggageOnlineList.add(baggageOnline[i]);
+				}
+			} catch (JSONException e1) {
+				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
+				baggageOnlineList.add(baggageOnline);
 			}
 
 
@@ -251,21 +270,14 @@ public class ProductDetailsController {
         			
         			
 				}
-//        		System.out.println(jsonInnerArraySeats.length());
 			}
 
-        	System.out.println(seatsOnlineList.size());
-        	System.out.println(count);
         	MealsOnline mealsOnline2 = new MealsOnline();
         	
     		model.addAttribute("mealsOnline", mealsOnline2);
     		model.addAttribute("seatsOnlineList", seatsOnlineList);
     		model.addAttribute("mealsOnlineList", mealsOnlineList);
     		model.addAttribute("baggageOnlineList", baggageOnlineList);
-        	
-        	
-        	
-        	
         	
 		}
 		
@@ -303,8 +315,6 @@ public class ProductDetailsController {
 			float totalInfantPrice = (newFlight.getPriceINF() + newFlight.getMarkupINF()) * search.getInfantNum();
 			double totalPrice = totalAdultPrice + totalInfantPrice;
 			
-			System.out.println("totalAdultPrice : " + totalAdultPrice + " totalInfantPrice : " + totalInfantPrice + " totalPrice : " + totalPrice);
-			
 			cartService.updateTotalPrice(LastItem, totalPrice);
 			searchService.updateSearchHistory(search, LastItem);
 			
@@ -335,8 +345,6 @@ public class ProductDetailsController {
 					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
 					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
 					
-					System.out.println("totalAdultPrice : " + totalAdultPriceOnline + " totalInfantPrice : " + totalInfantPriceOnline + " totalPrice : " + totalPriceOnline);
-					
 					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
 					searchService.updateSearchHistory(search, LastItemOnline);
 					
@@ -361,7 +369,6 @@ public class ProductDetailsController {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
 			CartItem cartItem = travelerDetailsPart(searchId, flightId, customer);
-			System.out.println("flightIdLocal: " + flightIdLocal);
 			return "redirect:/flight_booking" + searchId + "&" + flightIdLocal + "&" + cartItem.getId();
 			
 		} else if (googleLogin != null) {
@@ -395,7 +402,6 @@ public class ProductDetailsController {
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
-		System.out.println("Flight ID: " + flight_id);
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
@@ -415,33 +421,14 @@ public class ProductDetailsController {
     					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
     				return "redirect:/";
     		}
-    		
-        	System.out.println(responseCode);
+  
         	
-        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());System.out.println(jsonObjFarerules);
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
         	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
         	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
         	
         	model.addAttribute("jsonObjFarerule", fareRuleDetail);
-        	
-        	
-			/* Fare-quote details */
-        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, flight.getTraceId(), flight.getResultIndex());
-        	if (responseCodeFarequote != HttpURLConnection.HTTP_OK) {
-    			if (responseCodeFarequote == HttpURLConnection.HTTP_MOVED_TEMP
-    				|| responseCodeFarequote == HttpURLConnection.HTTP_MOVED_PERM
-    					|| responseCodeFarequote == HttpURLConnection.HTTP_SEE_OTHER)
-    				return "redirect:/";
-    		}
-    		
-        	System.out.println(responseCodeFarequote);
         	
 		}
 		
@@ -449,7 +436,6 @@ public class ProductDetailsController {
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 		for (TravellerDetail travellerDetail : travelers) {
-			System.out.println("working " + travellerDetail.getFirstName());
 			model.addAttribute("travellerDetail", travellerDetail);
 		}
 		model.addAttribute("travelers", travelers);
@@ -569,8 +555,6 @@ public class ProductDetailsController {
 			model.addAttribute("item", item);
 			model.addAttribute("search", search);
 			model.addAttribute("flight", flight);
-			System.out.println("Item Id: " + item_id);
-			System.out.println("Item Id: " + item.getEmail());
 
 			return  "redirect:/flight_traveler_details" + searchId + "&" + flightId + "&" + item_id;
 		} catch (Exception e) {

@@ -25,6 +25,7 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	
 	<!-- Vendor CSS Files -->
 	<link th:href="@{assets/vendor/animate.css/animate.min.css}" rel="stylesheet">
@@ -485,9 +486,8 @@
 		                    	<div class="col-md-10 col">
 		                    		<div class="row seacrh_margin">
 		                    			<div class="col-3" style="padding: 0;">
-				                    		<div style="float: left; padding: 0px">
-				                                <p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px;">Non-refundable</p>
-		                                        <img src="[[@{${flight.product.brands.photosImagePath}}]]" width="40" height="45" style="margin-left: 28px;">
+			                    			<div id="brandImage[[${flight.id}]]" style="float: left; padding: 0px">
+				                    			<p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px;">Non-refundable</p> 
 		                                    </div>
 		                                    <div style="float: left; font-size: 15px; padding: 10px 25px;">
 		                                        <b> [[${flight.brand}]] </b>
@@ -595,6 +595,7 @@
           	if (search_passenger_num <= flight_seats) {
           		console.log("Flight Total Seat same/below searched seats: " + flight_seats + " flight id: " + [[${flight.id}]]);
           		$("#flightSearchResult" + [[${flight.id}]]).html(htmlCodeBlock);
+          		checkBrand();
           	}
     		
           	if ([[${flight.stopNum}]] == 0) {
@@ -626,6 +627,24 @@
       				inputVal.parent().css("display", "none");
       			}
               	
+			</script>
+			<script type="text/javascript">
+				
+				function checkBrand() {
+					brandName = "[[${flight.brand}]]";
+					url = "[[@{/find_brand_}]]" + brandName;
+					
+					$.get(url, function(response) {
+						htmlImg = `
+							<img src="[[@{` + response + `}]]" width="40" height="45" style="margin-left: 28px;">
+						`;
+						$("#brandImage" + [[${flight.id}]]).append(htmlImg);
+					}).fail(function(){
+						alert("Could not connect to the server.");
+					});
+					
+					return false;
+				};
 			</script>
 	          </th:block> 
 		</div>

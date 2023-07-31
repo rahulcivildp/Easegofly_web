@@ -70,7 +70,6 @@ public class MainController {
 			historyPart(model, customer);
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			HttpSession session= attr.getRequest().getSession(true);
-			System.out.println(session);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
@@ -80,7 +79,6 @@ public class MainController {
 			historyPart(model, customer);	
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			HttpSession session= attr.getRequest().getSession(true);
-			System.out.println(session);
 		}
 		
 		List<WebDetails> webDetails = webSettingService.listAllSettings();
@@ -163,13 +161,8 @@ public class MainController {
             model.addAttribute("errorCode", jsonObjInnerError.get("ErrorCode"));
             model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
             
-            System.out.println("Token ID: " + jsonObj.get("TokenId"));
             onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
-            // Print the response
-//            System.out.println("Response Code: " + responseCode);
-//            System.out.println("Response Body: " + responseBody.toString());
-
-            // Close the connection
+            
             connection.disconnect();
 
         } catch (IOException e) {
