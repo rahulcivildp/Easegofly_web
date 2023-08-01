@@ -57,7 +57,8 @@ public class SearchHistoryController {
 	
 	private String searchURL = "";
 	List<ProductDetail> listProductDetails;
-	
+	public String traceId = "";
+			
 	@GetMapping("/search_result")
 	public String viewSearchResult(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		String email; 
@@ -205,7 +206,7 @@ public class SearchHistoryController {
 		JSONObject mainObjAirline = new JSONObject();
 		JSONObject mainObjFare = new JSONObject();
        
-		String traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
+		traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
         
 		for (int i = 0; i < jsonArrays.length(); i++) {
 
@@ -257,8 +258,9 @@ public class SearchHistoryController {
 			
 			String mode = "Online-data";
 			
-			productDetail[i] = new ProductDetail(200 + i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-            		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, productOnline);
+			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+            		stringDepTime, stringArrTime, intTotalFare, 0, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, 
+            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "1", "t", "t", 15, 7, null);
 			
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 	         

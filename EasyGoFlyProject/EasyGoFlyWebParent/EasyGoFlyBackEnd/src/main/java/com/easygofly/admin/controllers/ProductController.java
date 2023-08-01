@@ -218,7 +218,8 @@ public class ProductController {
 		Brand brand = product.getBrands();
 		
 		ProductSaveHelper.setProductDetails(products, pnr, totalSeats, uploadSeats, flightNum, date, depTime, arrTime, priceADT, 
-				priceINF, markupADT, markupINF, cityOne, cityTwo, setInStock, setEnable, stops, duration, brand.getName());
+				priceINF, markupADT, markupINF, cityOne, cityTwo, setInStock, setEnable, stops, duration, brand.getName(), product.getJourneyClass(), 
+				product.getOriginTerminal(), product.getDestinationTerminal(), product.getBaggage(), product.getCabinBaggage());
 		
 		productService.saveProductDetails(products);
 		

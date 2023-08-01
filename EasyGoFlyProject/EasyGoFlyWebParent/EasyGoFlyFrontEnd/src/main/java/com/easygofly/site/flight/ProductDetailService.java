@@ -252,6 +252,14 @@ public class ProductDetailService {
 		return flightRepo.save(savedFlightPassengerDetails);
 	}
 	
+	public ProductDetail updateOtherDetails(ProductDetail productDetail, String terminalDep, String terminalArr) {
+		ProductDetail savedFlightPassengerDetails = flightRepo.findById(productDetail.getId()).get();
+		savedFlightPassengerDetails.setTerminalDep(terminalDep);
+		savedFlightPassengerDetails.setTerminalArr(terminalArr);
+		
+		return flightRepo.save(savedFlightPassengerDetails);
+	}
+	
 	public ProductDetail updatePNROnline(ProductDetail productDetail, String pnr) {
 		ProductDetail savedFlightPassengerDetails = flightRepo.findById(productDetail.getId()).get();
 		savedFlightPassengerDetails.setPnr(pnr);
@@ -277,6 +285,7 @@ public class ProductDetailService {
 			for (BaggageOnline baggageOnline : baggageOnlineList) {
 				if (baggageOnline.getCode().equals(baggageCode) ) {
 					travellerDetail.setBaggage(baggageCode + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
+					travellerDetail.setBaggageWT(Integer.parseInt(baggageOnline.getWeight()));
 				} 
 			}
 			

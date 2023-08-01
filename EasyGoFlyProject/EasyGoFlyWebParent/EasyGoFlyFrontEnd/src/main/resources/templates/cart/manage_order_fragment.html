@@ -162,9 +162,7 @@
 				<th:block th:each="order : ${listOrders}">
 				<div th:if="${order.orderStatus} == ${newOrder}" th:class="${order.orderStatus} == ${newOrder} ? 'col-5 cardStyle shadow newOrder' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
 					<div class="row">
-						<div class="col-2">
-							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
-						</div>
+						<div th:id="'brandImageNew' + ${order.id}" class="col-2" style="float: left; padding: 15px 20px 10px;"></div>
 						<div class="col-4">
 							<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
 							<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
@@ -174,13 +172,12 @@
 						<!-- <a class="col-2 colorHovertabBlue" th:href="@{'/flight_traveler_details' + ${history.id} +'&' + ${order.productDetail.id} + '&' + ${order.id}}" style="justify-content: center; display: flex; align-items: center; color: black; border-radius: 50%; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; font-size: 14px; text-align: center; border: none; background: #ffffff;" type="submit"><p style="font-weight: 600;"><i class="fa fa-solid fa-cart-shopping" style="font-size: 24px; margin-top: 10px;"></i><br>Book Now</p></a> -->
 						
 					</div>
+					
 				</div>
 				<div th:if="${order.orderStatus} == ${orderPending}" th:class="${order.orderStatus} == ${orderPending} ? 'col-5 cardStyle shadow orderPending' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
 				
 					<div class="row">
-						<div class="col-2">
-							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
-						</div>
+						<div th:id="'brandImagePending' + ${order.id}" class="col-2" style="float: left; padding: 15px 20px 10px;"></div>
 						<div class="col-4">
 							<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
 							<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
@@ -195,9 +192,7 @@
 					<div th:if="${order.orderStatus} == ${orderCancelled}" th:class="${order.orderStatus} == ${orderCancelled} ? 'col-5 cardStyle shadow orderCancelled' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
 				
 						<div class="row">
-							<div class="col-2">
-								<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
-							</div>
+							<div th:id="'brandImageCancel' + ${order.id}" class="col-2" style="float: left; padding: 15px 20px 10px;"></div>
 							<div class="col-4">
 								<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
 								<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
@@ -220,9 +215,7 @@
 					<div th:if="${order.orderStatus} == ${orderFailed}" th:class="${order.orderStatus} == ${orderFailed} ? 'col-5 cardStyle shadow orderCancelled' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
 				
 						<div class="row">
-							<div class="col-2">
-								<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
-							</div>
+							<div th:id="'brandImageFailed' + ${order.id}" class="col-2" style="float: left; padding: 15px 20px 10px;"></div>
 							<div class="col-4">
 								<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
 								<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
@@ -244,9 +237,7 @@
 				</div>
 				<div th:if="${order.orderStatus} == ${orderSuccess}" th:class="${order.orderStatus} == ${orderSuccess} ? 'col-5 cardStyle shadow orderSuccess' : ''" style="margin: 0 40px 10px 40px; padding-right: 20px;">
 					<div class="row">
-						<div class="col-2">
-							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="80" height="85" style="border: 1px solid #e2e0e0;">
-						</div>
+						<div th:id="'brandImageSuccess' + ${order.id}" class="col-2" style="float: left; padding: 15px 20px 10px;"></div>
 						<div class="col-4">
 							<p class="float-left noMargin">[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${#dates.format(order.productDetail.date, 'E, dd MM yyyy')}]]</p><br>
 							<p class="float-left noMargin">[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</p><br>
@@ -257,7 +248,17 @@
 							<p><i class="fa fa-solid fa-download" style="font-size: 30px !important; padding-top: 10px;"></i><br> Download Ticket</p>
 						</a>
 					</div>
+					
 				</div>
+				<script type="text/javascript">
+						$(document).ready(function() {
+							checkBrand($("#brandImageNew" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+							checkBrand($("#brandImagePending" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+							checkBrand($("#brandImageCancel" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+							checkBrand($("#brandImageFailed" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+							checkBrand($("#brandImageSuccess" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+						});
+				</script>
 				</th:block>
 			</div>
 			
@@ -267,9 +268,7 @@
 			<div th:if="${order.orderStatus} == ${newOrder}" th:class="${order.orderStatus} == ${newOrder} ? 'cardStyle shadow newOrder' : ''" >
 				
 				<div class="row m-1 styleLinkButton">
-					<div class="col-4">
-						<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
-					</div>
+					<div th:id="'brandImageNew2' + ${order.id}" class="col-4" style="float: left; padding: 15px 20px 10px;"></div>
 					<div class="col-8 mt-2">
 						<div>[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${order.productDetail.date}]]</div>
 						<div>[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</div>
@@ -286,7 +285,7 @@
 				
 					<div class="row m-1 styleLinkButton">
 						<div class="col-4">
-							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
+							<div th:id="'brandImageCancel2' + ${order.id}" class="col-4" style="float: left; padding: 15px 20px 10px;"></div>
 							<form th:action="@{${requestUrl}}" method="post" id="payment_form2">
 	                       		<input type="hidden" name="JSESSIONID" th:value="${JSESSIONID}">
 	                       		<th:block th:each="orderInfo : ${entrySet}">
@@ -311,7 +310,8 @@
 				
 					<div class="row m-1 styleLinkButton">
 						<div class="col-4">
-							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
+							
+							<div th:id="'brandImagePending2' + ${order.id}" class="col-4" style="float: left; padding: 15px 20px 10px;"></div>
 							<form th:action="@{${requestUrl}}" method="post" id="payment_form2">
 	                       		<input type="hidden" name="JSESSIONID" th:value="${JSESSIONID}">
 	                       		<th:block th:each="orderInfo : ${entrySet}">
@@ -335,7 +335,8 @@
 				
 					<div class="row m-1 styleLinkButton">
 						<div class="col-4">
-							<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
+							
+						<div th:id="'brandImageFailed2' + ${order.id}" class="col-4" style="float: left; padding: 15px 20px 10px;"></div>
 							<form th:action="@{${requestUrl}}" method="post" id="payment_form2">
 	                       		<input type="hidden" name="JSESSIONID" th:value="${JSESSIONID}">
 	                       		<th:block th:each="orderInfo : ${entrySet}">
@@ -358,9 +359,8 @@
 			</div>
 			<div th:if="${order.orderStatus} == ${orderSuccess}" th:class="${order.orderStatus} == ${orderSuccess} ? 'cardStyle shadow orderSuccess' : ''" >
 				<div class="row m-1 styleLinkButton">
-					<div class="col-4">
-						<img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
-					</div>
+					
+					<div th:id="'brandImageSuccess2' + ${order.id}" class="col-4" style="float: left; padding: 15px 20px 10px;"></div>
 					<div class="col-8 mt-2">
 						<div>[[${order.cityOne}]]-[[${order.cityTwo}]] : [[${order.productDetail.date}]]</div>
 						<div>[[${order.productDetail.depTime}]]-[[${order.productDetail.arrTime}]]</div>
@@ -374,6 +374,15 @@
 					</div>
 				</div>
 			</div>
+			<script type="text/javascript">
+					$(document).ready(function() {
+						checkBrand($("#brandImageNew2" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+						checkBrand($("#brandImagePending2" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+						checkBrand($("#brandImageCancel2" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+						checkBrand($("#brandImageFailed2" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+						checkBrand($("#brandImageSuccess2" + [[${order.id}]]), "[[${order.productDetail.brand}]]");
+					});
+			</script>
 		</th:block>
 		</div>
 		
@@ -402,7 +411,6 @@
 	</div>
 	
 
-
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(".link-delete").click(function(e){
@@ -419,6 +427,22 @@
 		window.location = "[[@{/users}]]";
 	};
 	
+</script>
+<script type="text/javascript">
+function checkBrand(brand, brandName) {
+	url = "[[@{/find_brand_}]]" + brandName;
+	
+	$.get(url, function(response) {
+		htmlImg = `
+			<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
+		`;
+		brand.append(htmlImg);
+	}).fail(function(){
+		alert("Could not connect to the server.");
+	});
+	
+	return false;
+};
 </script>
 </div>
 </body>

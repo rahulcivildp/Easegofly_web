@@ -54,6 +54,11 @@ public class Brand {
 		this.categories = categories;
 	}
 
+	
+	public Brand(String name) {
+		this.name = name;
+	}
+
 	public Integer getId() {
 		return id;
 	}

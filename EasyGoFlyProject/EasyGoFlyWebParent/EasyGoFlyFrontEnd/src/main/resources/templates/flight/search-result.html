@@ -542,11 +542,7 @@
           	
           	$("#duration-" + [[${flight.id}]]).text(timeInHour + "h-" + timeRemaining + "m");
           	
-          	if ("[[${flight.product.user.firstName}]]" != "Tanmay"){
-            	$("#agent" + [[${flight.id}]]).text("A-[[${flight.product.user.id}]]");
-            }else {
-            	$("#agent" + [[${flight.id}]]).text("");
-            }
+          
           	</script>
             <script type="text/javascript">
           		totalAdultPrice = ([[${flight.priceADT}]] + [[${flight.markupADT}]]) * ([[${search.adultNum}]] + [[${search.childNum}]]);

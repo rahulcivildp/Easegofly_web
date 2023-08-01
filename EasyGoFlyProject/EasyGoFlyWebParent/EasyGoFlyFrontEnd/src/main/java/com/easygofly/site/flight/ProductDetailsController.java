@@ -32,6 +32,7 @@ import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flightAPI.OnlineFlightService;
+import com.easygofly.site.search.SearchHistoryController;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
@@ -53,6 +54,7 @@ public class ProductDetailsController {
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	@Autowired private OnlineFlightService onlineFlightService ;
+	@Autowired private SearchHistoryController searchHistoryController  ;
 	
 	public List<ProductDetail> listProductDetailsOnline;
 	private Integer flightIdLocal = 0;
@@ -110,7 +112,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, flight.getTraceId(), flight.getResultIndex());
+        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
         	if (responseCode != HttpURLConnection.HTTP_OK) {
     			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
     				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
@@ -134,7 +136,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarequote = new StringBuilder();
             
-        	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, flight.getTraceId(), flight.getResultIndex());
+        	int responseCodeFarequote = onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
         	if (responseCodeFarequote != HttpURLConnection.HTTP_OK) {
     			if (responseCodeFarequote == HttpURLConnection.HTTP_MOVED_TEMP
     				|| responseCodeFarequote == HttpURLConnection.HTTP_MOVED_PERM
@@ -143,6 +145,8 @@ public class ProductDetailsController {
     		}
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
+        	System.out.println(jsonObjFareQuotes);
+        	
         	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
         	JSONArray jsonObjSegment = jsonResult.getJSONArray("Segments").getJSONArray(0);
         	JSONObject mainObjSegment = jsonObjSegment.getJSONObject(0);
@@ -546,7 +550,7 @@ public class ProductDetailsController {
 			
 				
 			for (int i = 0; i < search.getPassengerNum(); i++) {
-				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, paxType[i]);
+				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, paxType[i], flight.getBaggage(), flight.getCabinBaggage());
 				productService.saveFlightPassengerDetails(flight);
 				ProductDetail flightDetails = productService.saveFlightPassengerDetails(flight);
 				model.addAttribute("flightDetails", flightDetails);

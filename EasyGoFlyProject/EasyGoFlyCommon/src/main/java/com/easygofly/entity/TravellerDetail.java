@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.criteria.CriteriaBuilder.In;
 
 @Entity
 @Table(name = "traveller_details")
@@ -31,6 +32,12 @@ public class TravellerDetail {
 	
 	@Column(name = "passenger_type", length = 45)
 	private String paxType;
+	
+	@Column(name = "cabin_baggage")
+	private Integer cabinBaggage;
+	
+	@Column(name = "baggage_weight")
+	private Integer baggageWT;
 	
 	private String meal;
 	
@@ -66,7 +73,7 @@ public class TravellerDetail {
 		this.cartItem = cartItem;
 	}
 	
-	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem, String paxType) {
+	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage) {
 		this.salutation = salutation;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -74,6 +81,8 @@ public class TravellerDetail {
 		this.productDetail = productDetail;
 		this.cartItem = cartItem;
 		this.paxType = paxType;
+		this.baggageWT = baggageWT;
+		this.cabinBaggage = cabinBaggage;
 	}
 
 	public Integer getId() {
@@ -116,12 +125,28 @@ public class TravellerDetail {
 		this.dob = dob;
 	}
 
+	public Integer getBaggageWT() {
+		return baggageWT;
+	}
+
+	public void setBaggageWT(Integer baggageWT) {
+		this.baggageWT = baggageWT;
+	}
+
 	public ProductDetail getProductDetail() {
 		return productDetail;
 	}
 
 	public void setProductDetail(ProductDetail productDetail) {
 		this.productDetail = productDetail;
+	}
+
+	public Integer getCabinBaggage() {
+		return cabinBaggage;
+	}
+
+	public void setCabinBaggage(Integer cabinBaggage) {
+		this.cabinBaggage = cabinBaggage;
 	}
 
 	public Order getOrder() {

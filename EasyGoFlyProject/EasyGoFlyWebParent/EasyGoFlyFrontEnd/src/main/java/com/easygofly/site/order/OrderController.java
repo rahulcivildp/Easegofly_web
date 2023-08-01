@@ -12,12 +12,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.Category;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.Customer;
@@ -49,6 +53,8 @@ import com.easygofly.entity.Wallet;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.flight.BrandRepositoy;
+import com.easygofly.site.flight.CategoryRepository;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.CityService;
 import com.easygofly.site.flight.FlightRepository;
@@ -70,6 +76,7 @@ import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
+import com.google.gson.JsonArray;
 
 @Controller
 public class OrderController {
@@ -91,7 +98,10 @@ public class OrderController {
 	@Autowired private CouponService couponService ;
 	@Autowired private WalletService walletService;
 	@Autowired private ProductDetailsController productDetailsController;
-	@Autowired private OnlineFlightService onlineFlightService ;
+	@Autowired private OnlineFlightService onlineFlightService;
+	@Autowired private BrandRepositoy brandRepo;
+	@Autowired private CategoryRepository categoryRepo;
+	@Autowired private EntityManager entityManager;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -552,9 +562,17 @@ public class OrderController {
 		GeneralSettingBag settingBag = settingService.getGeneralSettingBag();
 		String logoLink = settingBag.getSiteLogo();
 		String faviconLink = settingBag.getFavicon();
+		Brand brand = brandRepo.getBrandByName(productDetail.getBrand());
+		Category category = entityManager.find(Category.class, 1);
+		
+		if (brand == null) {
+			brand = new Brand(productDetail.getBrand());
+			brand.addCategory(category);
+		} 
+		
 		List<TravellerDetail> travellers = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		
-		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink); 
+		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink, brand); 
 
 	}
 	
@@ -688,14 +706,14 @@ public class OrderController {
 		model.addAttribute("passengerEmail", order.getContactEmail());
 		
 		Product product = productDetail.getProduct();
-		Brand brand = product.getBrands();
+		Brand brand = brandRepo.getBrandByName(productDetail.getBrand());
 		model.addAttribute("brandPath", ".." + brand.getPhotosImagePath());
 		model.addAttribute("brandName", brand.getName());
 		model.addAttribute("productDetail", productDetail);
-		model.addAttribute("originTerminal", product.getOriginTerminal());
-		model.addAttribute("destinationTerminal", product.getDestinationTerminal());
-		model.addAttribute("baggage", product.getBaggage());
-		model.addAttribute("cabinBaggage", product.getCabinBaggage());
+		model.addAttribute("originTerminal", productDetail.getTerminalDep());
+		model.addAttribute("destinationTerminal", productDetail.getTerminalArr());
+		model.addAttribute("baggage", productDetail.getBaggage());
+		model.addAttribute("cabinBaggage", productDetail.getCabinBaggage());
 		
 		Integer dateInt = productDetail.getDuration()/60;
 		if (dateInt >= 10) {
@@ -905,11 +923,24 @@ public class OrderController {
         	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
         	System.out.println(jsonObjTicket);
         	JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+        	JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
+//        	JSONObject jsonObjectSegments = new JSONObject();
+        	
+        	String terminalDep = "", terminalArr = "";
+        	for (int i = 0; i < jsonArraySegment.length(); i++) {
+        		JSONObject jsonObjectSegments = jsonArraySegment.getJSONObject(i);
+				if (i == 0) {
+					terminalDep = jsonObjectSegments.getJSONObject("Origin").getJSONObject("Airport").get("Terminal").toString();
+				}
+				if (i == (jsonArraySegment.length() - 1)) {
+					terminalArr = jsonObjectSegments.getJSONObject("Destination").getJSONObject("Airport").get("Terminal").toString();
+				}
+			}
         	
         	String onlinePNR = jsonObjTicketResponse.get("PNR").toString();
         	String onlineBookingId = jsonObjTicketResponse.get("BookingId").toString();
 	
-        	
+        	productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
         	productService.updatePNROnline(productDetail, onlinePNR);
         	productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
         	orderService.updateBookingId(order, onlineBookingId);

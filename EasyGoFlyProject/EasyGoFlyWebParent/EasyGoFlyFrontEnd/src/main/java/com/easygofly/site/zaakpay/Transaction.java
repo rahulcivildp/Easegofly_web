@@ -15,7 +15,7 @@ public class Transaction {
         //String orderId = "ZPLive"+System.currentTimeMillis();
        // String amount = "100" ; //In Paisa
         
-        System.out.println(amount + "   --   " + orderId);
+//        System.out.println(amount + "   --   " + orderId);
         RequestParameters order = new RequestParameters(Config.ZAAKPAY_MERCHANT_IDENTIFIER,Config.RETURN_URL,orderId,amount);
         zaakpayApiRequestParameters.setRequestParameters(order.getPaymentRequestParameters());
 
@@ -26,7 +26,7 @@ public class Transaction {
         //System.out.println(checksum);
         zaakpayApiRequestParameters.setChecksum(checksum);
         
-        System.out.println(checksumString + "checksum=" + zaakpayApiRequestParameters.getChecksum());
+//        System.out.println(checksumString + "checksum=" + zaakpayApiRequestParameters.getChecksum());
 
         return zaakpayApiRequestParameters ;
 
@@ -47,7 +47,7 @@ public class Transaction {
         //String orderId = "ZPLive"+System.currentTimeMillis();
        // String amount = "100" ; //In Paisa
         
-        System.out.println(amount + "   --   " + orderId);
+//        System.out.println(amount + "   --   " + orderId);
         RequestParameters order = new RequestParameters(Config.ZAAKPAY_MERCHANT_IDENTIFIER,Config.RETURN_URL_SECOND,orderId,amount);
         zaakpayApiRequestParameters.setRequestParameters(order.getPaymentRequestParameters());
 
@@ -58,7 +58,7 @@ public class Transaction {
         //System.out.println(checksum);
         zaakpayApiRequestParameters.setChecksum(checksum);
         
-        System.out.println(checksumString + "checksum=" + zaakpayApiRequestParameters.getChecksum());
+//        System.out.println(checksumString + "checksum=" + zaakpayApiRequestParameters.getChecksum());
 
         return zaakpayApiRequestParameters ;
 

@@ -41,9 +41,9 @@ public class ProductSaveHelper {
 		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem);
 	}
 	
-	public static void setTravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType) {
+	public static void setTravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage) {
 		if(firstName == null || lastName == null) return;
 		
-		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem, paxType);
+		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage);
 	}
 }
