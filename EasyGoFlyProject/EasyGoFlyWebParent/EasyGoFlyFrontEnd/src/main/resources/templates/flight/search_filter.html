@@ -37,32 +37,13 @@
                    </div>
                <div>
                    <div style="margin-bottom: 16px;">
-		           <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Airlines</h2>
-				<div class="form-check">
-				  <input class="form-check-input" type="checkbox" name="brand" id="brand2" value="air india">
-				  <label class="form-check-label" for="brand2">
-				    Air India Only
-				  </label>
-				</div>
-		           <div class="form-check">
-				  <input class="form-check-input" type="checkbox" name="brand" id="brand1" value="indigo">
-				  <label class="form-check-label" for="brand1">
-				    Indigo Only
-				  </label>
-				</div>
-				<div class="form-check">
-				  <input class="form-check-input" type="checkbox" name="brand" id="brand3" value="brand">
-				  <label class="form-check-label" for="brand3">
-				    Go First Only
-				  </label>
-				</div>
-				<div class="form-check">
-				  <input class="form-check-input" type="checkbox" name="brand" id="brand4" value="brand">
-				  <label class="form-check-label" for="brand4">
-				    Air Asia India Only
-				  </label>
-				</div>
-				  
+			           <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Airlines</h2>
+			           <select class="form-select" aria-label="Default select example" name="brand" multiple style=" height: 106px;">
+						  <option value="air india">Air India Only</option>
+						  <option value="indigo">Indigo Only</option>
+						  <option value="spicejet">SpiceJet Only</option>
+						  <option value="brand">Air Asia India Only</option>
+						</select>
                    </div>
                    <div style="margin-bottom: 16px; background: #e0e0e0;">
                        <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Flight Fare Type</h2>
@@ -109,31 +90,14 @@
                    </div>
                    <div style="padding-bottom: 12px;">
                        <h2 style="font-size: 18px;"><i class="fa fa-map-marker" aria-hidden="true"></i> Stops</h2>
-                       <div style="padding: 0; height: 77px; overflow: auto; width: 60%;">
-			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" name="stop" id="stop1" value="0">
-			  <label class="form-check-label" for="stop1">
-			    0 Stop
-			  </label>
-			</div>
-			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" name="stop" id="stop2" value="1">
-			  <label class="form-check-label" for="stop2">
-			    1 Stop
-			  </label>
-			</div>
-			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" name="stop" id="stop3" value="2">
-			  <label class="form-check-label" for="stop3">
-			    2 Stops
-			  </label>
-			</div>
-			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" name="stop" id="stop4" value="3">
-			  <label class="form-check-label" for="stop4">
-			    3 Stops
-			  </label>
-			</div>
+                       <div style="padding: 0; width: 60%;">
+                       <select class="form-select" aria-label="Default select example" name="stop" multiple style="height: 82px;">
+						  <option value="0">0 Stop</option>
+						  <option value="1">1 Stop</option>
+						  <option value="2">2 Stops</option>
+						  <option value="3">3 Stops</option>
+						</select>
+			
 		</div>
         </div>
         <div style="margin-bottom: 16px; background: #e0e0e0;">
@@ -162,9 +126,9 @@
             <ul style="list-style-type: none; padding: 0;">
                 <li>
                     <div class="slidecontainer">
-                        <p style="float: left;"> 3000 INR</p>
+                        <p style="float: left;"> 0 INR</p>
                         <p style="float: right;"> 30000 INR</p>
-                        <input type="range" min="3000" max="30000" value="12000" class="slider" id="myRange">
+                        <input type="range" min="0" max="30000" value="" class="slider" id="myRange">
                     </div>
                     <div style="margin: 15px 0;">
                         <input type="number" id="searchboes" placeholder="0" style=" width: 90%;" name="totalPrice">

@@ -201,7 +201,8 @@ public class ProductDetail {
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
 			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
-			float arrTimeInteger, String mode, String journeyClass, String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, Product product) {
+			float arrTimeInteger, String mode, String journeyClass, String terminalDep, String terminalArr, Integer baggage, 
+			Integer cabinBaggage, String traceId, Product product) {
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
 		this.uploadSeats = uploadSeats;
@@ -229,6 +230,7 @@ public class ProductDetail {
 		this.terminalArr = terminalArr;
 		this.baggage = baggage;
 		this.cabinBaggage = cabinBaggage;
+		this.traceId = traceId;
 	}
 
 	public int getId() {

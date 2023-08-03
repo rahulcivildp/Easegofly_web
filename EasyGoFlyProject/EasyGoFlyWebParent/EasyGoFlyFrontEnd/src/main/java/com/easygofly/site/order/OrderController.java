@@ -178,7 +178,7 @@ public class OrderController {
 						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
 				} else if (order != null) {
-					if (flight.getTraceId().equals(null)) {
+					if (flight.getTraceId().equals("offline")) {
 						orderService.updateOrderPrice(order, checkoutInfo);
 						orderService.deleteCouponCode(order);
 					} else {
@@ -187,7 +187,7 @@ public class OrderController {
 					}
 					
 				} else {
-					if (flight.getTraceId().equals(null)) {
+					if (flight.getTraceId().equals("offline")) {
 						Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
 						for (TravellerDetail travellerDetail : travellerDetails) {
 							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
@@ -230,10 +230,15 @@ public class OrderController {
 						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
 				} else if (order != null) {
-					orderService.updateOrderPrice(order, checkoutInfo);
-					orderService.deleteCouponCode(order);
+					if (flight.getTraceId().equals("offline")) {
+						orderService.updateOrderPrice(order, checkoutInfo);
+						orderService.deleteCouponCode(order);
+					} else {
+						orderService.updateOrderPriceOnline(order, totalPayment);
+						orderService.deleteCouponCode(order);
+					}
 				} else {
-					if (flight.getTraceId().equals(null)) {
+					if (flight.getTraceId().equals("offline")) {
 						Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
 						for (TravellerDetail travellerDetail : travellerDetails) {
 							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
@@ -398,6 +403,8 @@ public class OrderController {
 		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
 			orderService.updateOrder(order, OrderStatus.CANCELLED);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			orderService.updateOrder(order, OrderStatus.FAILED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
 			orderService.updateOrder(order, OrderStatus.FAILED);
 		}else {
 			if (productDetail.getPnr().equals(null) || productDetail.getPnr().equals("")) {
@@ -756,7 +763,7 @@ public class OrderController {
 		List<String> travelerDetailsArray = new ArrayList<String>();
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 		
-		if (!productDetail.getTraceId().equals(null)) {
+		if (!productDetail.getTraceId().equals("offline")) {
 		
 			for (TravellerDetail travellerDetail : travelers) {
     			Date getDOB = travellerDetail.getDob();

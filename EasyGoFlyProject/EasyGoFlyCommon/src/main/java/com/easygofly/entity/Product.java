@@ -391,10 +391,10 @@ public class Product {
 	public void addDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne, String cityTwo, 
 			boolean inStock, boolean enabled,  int stopNum, Integer duration, String brand, float depTimeInteger, float arrTimeInteger, 
-			String mode, String journeyClass, String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage) {
+			String mode, String journeyClass, String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String traceId) {
 		this.details.add(new ProductDetail(pnr, totalSeats, uploadSeats, flightNum, date, depTime, arrTime, priceADT, priceINF, markupADT, 
 				markupINF, cityOne, cityTwo, inStock, enabled, stopNum, duration, brand, depTimeInteger, arrTimeInteger, mode, journeyClass, 
-				terminalDep, terminalArr, baggage, cabinBaggage, this));
+				terminalDep, terminalArr, baggage, cabinBaggage, traceId, this));
 	}
 	
 	public void addDetail(int id, String pnr, String totalSeats, String uploadSeats, String flightNum, Date date,

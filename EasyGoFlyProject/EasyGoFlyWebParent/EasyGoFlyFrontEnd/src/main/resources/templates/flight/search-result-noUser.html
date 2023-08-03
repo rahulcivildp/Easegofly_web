@@ -194,6 +194,19 @@
 	background-color: #2dce03; 
 	border: 1px solid #2dce03;
 }
+
+.filterText {
+	background: #d5d1d1;
+    margin: 0;
+    border: 1px solid #bbb6b6;
+    margin-right: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    cursor: pointer
+}
 </style>
 
 
@@ -232,73 +245,6 @@
                                             <p class="tile-align">&nbsp; - &nbsp;</p>
                                             <p class="tile-align" style="padding-right: 6px;">Destination </p>
                                             <p class="tile-align" style="color: #f1c043;"> : [[${cityTwo}]]</p>
-                                            <!-- <p>[[${responseBody}]]</p> -->  <!-- ctrl + shift + / -->
-                                            <!-- <select name="adultBaseFareList">
-	                                            <th:block th:each="adultBaseFare : ${resultIndexList}">
-	                                            	<option value="${adultBaseFare}">[[${adultBaseFare}]]</option>
-	                                            </th:block>
-                                            </select>
-                                            
-                                            <select name="airlineRemarkList">
-	                                            <th:block th:each="arrCode : ${airlineRemarkList}">
-	                                            	<option value="${arrCode}">[[${arrCode}]]</option>
-	                                            </th:block>
-                                            </select> -->
-                                            
-                                            <!-- <select name="originAirpotName">
-	                                            <th:block th:each="depName : ${originAirpotName}">
-	                                            	<option value="${depName}">[[${depName}]]</option>
-	                                            </th:block>
-                                            </select>
-                                            
-                                            <select name="destinationAirpotName">
-	                                            <th:block th:each="arrName : ${destinationAirpotName}">
-	                                            	<option value="${arrName}">[[${arrName}]]</option>
-	                                            </th:block>
-                                            </select>
-                                            
-                                            <select name="flightNumbers">
-	                                            <th:block th:each="flightNum : ${flightNumbers}">
-	                                            	<option value="${flightNum}">[[${flightNum}]]</option>
-                                           		</th:block>
-                                            </select>
-                                            
-                                            <select name="depurtureTimeList">
-	                                            <th:block th:each="depTime : ${depurtureTimeList}">
-	                                            	<option value="${depTime}">[[${depTime}]]</option>
-                                           		</th:block>
-                                            </select>
-                                            
-                                            <select name="arrivalTimeList">
-	                                            <th:block th:each="arrTime : ${arrivalTimeList}">
-	                                            	<option value="${arrTime}">[[${arrTime}]]</option>
-                                           		</th:block>
-                                            </select>
-                                            
-                                            <select name="durationList">
-	                                            <th:block th:each="duration : ${durationList}">
-	                                            	<option value="${duration}">[[${duration}]]</option>
-                                           		</th:block>
-                                            </select>
-                                            
-                                            <select name="flightStatusList">
-	                                            <th:block th:each="flightStatus : ${flightStatusList}">
-	                                            	<option value="${flightStatus}">[[${flightStatus}]]</option>
-                                           		</th:block>
-                                            </select>
-                                            
-                                            <select name="flightStatusList">
-	                                            <th:block th:each="totalFare : ${publishedFareList}">
-	                                            	<option value="${totalFare}">[[${totalFare}]]</option>
-                                           		</th:block>
-                                            </select>
-                                            
-                                            <select name="flightStatusList">
-	                                            <th:block th:each="stopOver : ${stopOverList}">
-	                                            	<option value="${stopOver}">[[${stopOver}]]</option>
-                                           		</th:block>
-                                            </select> -->
-                                            
                                             
                                     </div>
                                 </div>
@@ -370,6 +316,7 @@
     <div class="container" style="height: 150%; margin-top: 20px;">
     	<div class="row">
     		<div class="col-md-3 tile-align media-hide">
+    			<h3 class="filterText" id="filterTextOffline">Offline Filter</h3>
     			<div th:replace="flight/search_filter :: search_filter('tag')"></div>
     		</div>
         	<div class="col-md-3 media_status" style="padding-bottom: 5px;">
@@ -621,10 +568,10 @@
           		
 				inputVal = $("#inputSeatNum-" + [[${flight.id}]]);
               	
-              	//alert(inputVal.val());
               	if(search_passenger_num > inputVal.val()) {
-          			alert(inputVal.val());
       				inputVal.parent().css("display", "none");
+      			} else if (search_passenger_num == inputVal.val()) {
+      				inputVal.parent().css("display", "block");
       			}
               	
 			</script>
@@ -702,60 +649,32 @@
 <script>
 
     var slider = document.getElementById("myRange");
-    var output = document.getElementById("demo");
-    output.innerHTML = slider.value;
-
+    var output = document.getElementById("searchboes");
+    output.value = slider.value;
+    
     slider.oninput = function() {
-    output.innerHTML = this.value;
+    output.value = this.value;
     var value = (this.value-this.min)/(this.max-this.min)*100
     this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #cccccc ' + value + '%, #cccccc 100%)'
     }
 
+    /* alert($("input[name = 'brand']").val());
+    alert($("input[name = 'stop']").val()); */
 </script>
 <script>
 
     var searchPrice = document.getElementById("myRange");
     var priceSelector = document.getElementById("searchboes");
     var searchbutton = document.getElementById("searchbutton");
-    var output2 = document.getElementById("demo");
 
     searchbutton.onclick = function() {
     searchPrice.value = priceSelector.value;
-    output2.innerHTML = slider.value;
     var value = (priceSelector.value-searchPrice.min)/(searchPrice.max-searchPrice.min)*100
-
     searchPrice.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #cccccc ' + value + '%, #cccccc 100%)'
     }
 
 </script>
-<script>
 
-    var slider1 = document.getElementById("myduration");
-    var output1 = document.getElementById("demo2");
-    output1.innerHTML = slider1.value;
 
-    slider1.oninput = function() {
-    output1.innerHTML = this.value;
-    var value1 = (this.value-this.min)/(this.max-this.min)*100
-    this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value1 + '%, #cccccc ' + value1 + '%, #cccccc 100%)'
-    }
-
-</script>
-<script>
-
-    var searchPrice1 = document.getElementById("myduration");
-    var priceSelector1 = document.getElementById("searchboxess");
-    var searchbutton1 = document.getElementById("searchbuttonss");
-    var output3 = document.getElementById("demo2");
-
-    searchbutton1.onclick = function() {
-    searchPrice1.value = priceSelector1.value;
-    output3.innerHTML = slider1.value;
-    var value1 = (priceSelector1.value-searchPrice1.min)/(searchPrice1.max-searchPrice1.min)*100
-
-    searchPrice1.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value1 + '%, #cccccc ' + value1 + '%, #cccccc 100%)'
-    }
-
-</script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>

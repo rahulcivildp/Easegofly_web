@@ -33,10 +33,11 @@ public class ProductSaveHelper {
 			String selectedMode = "Offline-data";
 			String replaceArr = arrTime1.replace(":", ".");
 			String replaceDep = depTime1.replace(":", ".");
+			String traceIdOffline = "offline";
 		
 			products.addDetail(pnr1, totalSeats1, uploadSeats1, flightNum1, date1, depTime1, arrTime1, priceADT1, priceINF1, 
 					markupADT1, markupINF1, cityOne1, cityTwo1, inStock1, enabled1, stopNum, duration, brand, Float.parseFloat(replaceDep), 
-					Float.parseFloat(replaceArr), selectedMode, journeyClass, terminalDep, terminalArr, baggage, cabinBaggage);
+					Float.parseFloat(replaceArr), selectedMode, journeyClass, terminalDep, terminalArr, baggage, cabinBaggage, traceIdOffline);
 			
 	}
 	

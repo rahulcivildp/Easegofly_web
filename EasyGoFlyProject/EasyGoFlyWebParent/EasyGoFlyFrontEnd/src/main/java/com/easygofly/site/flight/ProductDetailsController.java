@@ -103,7 +103,7 @@ public class ProductDetailsController {
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
 		
 		
-		if (!flight.getTraceId().equals(null)) {
+		if (!flight.getTraceId().equals("offline")) {
 			
 			/* Fare-rule details */
         	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
@@ -410,7 +410,7 @@ public class ProductDetailsController {
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
 
-		if (!flight.getTraceId().equals(null)) {
+		if (!flight.getTraceId().equals("offline")) {
         	/* Fare-rule details */
         	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
             // Open a connection
