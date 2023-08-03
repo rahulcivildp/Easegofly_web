@@ -244,10 +244,12 @@ public class WalletController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
 		}
 		
-		
-		model.addAttribute("amountRecharged", parameter[0]);
+		Integer amountIntRech = Integer.parseInt(parameter[0]) / 100;
+		model.addAttribute("amountRecharged", amountIntRech);
 		model.addAttribute("paymentSuccess", parameter[12]);
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);

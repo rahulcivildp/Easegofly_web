@@ -541,6 +541,8 @@ public class OrderController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
 		}
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);

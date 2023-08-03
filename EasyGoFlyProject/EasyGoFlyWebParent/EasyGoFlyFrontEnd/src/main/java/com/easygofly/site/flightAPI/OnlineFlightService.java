@@ -37,7 +37,7 @@ public class OnlineFlightService {
         		+ "\"ClientId\": \"ApiIntegrationNew\", "
         		+ "\"UserName\": \"aladdin\", "
         		+ "\"Password\": \"aladdin@1234\", "
-        		+ "\"EndUserIp\": \"49.37.50.177\""
+        		+ "\"EndUserIp\": \"89.116.231.35\""
         		+ "}";
         
         
@@ -78,7 +78,7 @@ public class OnlineFlightService {
         
      // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"49.37.50.177\", "
+        		+ "\"EndUserIp\": \"89.116.231.35\", "
         		+ "\"TokenId\": \"" + tokenId + "\", "
         		+ "\"AdultCount\": \"" + adultNum + "\", "
         		+ "\"ChildCount\": \"" + childNum + "\", "
@@ -131,7 +131,7 @@ public class OnlineFlightService {
         
      // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"49.37.50.177\", "
+        		+ "\"EndUserIp\": \"89.116.231.35\", "
         		+ "\"TokenId\": \"" + tokenId + "\", "
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
@@ -175,7 +175,7 @@ public class OnlineFlightService {
         		+ "	\"ResultIndex\": \"" + resultIndex + "\",\r\n"
         		+ "	\"AgentReferenceNo\": \"sonam1234567890\",\r\n"
         		+ "	\"Passengers\": " + arrayTraveler + "	,\r\n"
-        		+ "	\"EndUserIp\": \"192.168.11.58\",\r\n"
+        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
         		+ "}";
@@ -215,7 +215,7 @@ public class OnlineFlightService {
         
         // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"49.37.50.177\", "
+        		+ "\"EndUserIp\": \"89.116.231.35\", "
         		+ "\"TokenId\": \"" + tokenId + "\", "
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
@@ -256,7 +256,7 @@ public class OnlineFlightService {
         
         // Create the request body
         String requestBody = "{\r\n"
-        		+ "	\"EndUserIp\": \"192.168.11.58\",\r\n"
+        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
         		+ "	\"PNR\": \"" + pnr + "\",\r\n"
         		+ "	\"BookingId\": \"" + bookingId + "\"\r\n"
