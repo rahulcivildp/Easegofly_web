@@ -3,6 +3,8 @@ package com.easygofly.site.flight;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,8 +55,8 @@ public class ProductDetailsController {
 	@Autowired private TravellerRepository travelerRepo;
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
-	@Autowired private OnlineFlightService onlineFlightService ;
-	@Autowired private SearchHistoryController searchHistoryController  ;
+	@Autowired private OnlineFlightService onlineFlightService;
+	@Autowired private SearchHistoryController searchHistoryController;
 	
 	public List<ProductDetail> listProductDetailsOnline;
 	private Integer flightIdLocal = 0;
@@ -363,23 +365,47 @@ public class ProductDetailsController {
 	}
 	
 	@PostMapping("/flight_booking_save")
-	public String filghtBookingSave(@RequestParam(name = "search_id") Integer searchId, 
+	public String filghtBookingSave(@RequestParam(name = "search_id") float searchId, 
 			@RequestParam(name = "flight_id") Integer flightId, 
+			@RequestParam(name = "adultNum") Integer adultNum,
+			@RequestParam(name = "childNum") Integer childNum,
+			@RequestParam(name = "infantNum") Integer infantNum,
+			@RequestParam(name = "cityOne") String cityOne,
+			@RequestParam(name = "cityTwo") String cityTwo,
+			@RequestParam(name = "journeyClass") String journeyClass,
+			@RequestParam(name = "date") String date,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
 		String email; 
 		Customer customer; 
+		CartItem cartItem = new CartItem();
+		Integer searchIdInt = 0;
+		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
-			CartItem cartItem = travelerDetailsPart(searchId, flightId, customer);
-			return "redirect:/flight_booking" + searchId + "&" + flightIdLocal + "&" + cartItem.getId();
+			if (searchId == 1.5f) {
+				Integer savedSearchId = searchHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
+						infantNum, customer);
+				searchIdInt = savedSearchId;
+			} else {
+				searchIdInt = (int)searchId;
+			}
+			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			return "redirect:/flight_booking" + searchIdInt + "&" + flightIdLocal + "&" + cartItem.getId();
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
-			CartItem cartItem = travelerDetailsPart(searchId, flightId, customer);
-			return "redirect:/flight_booking" + searchId + "&" + flightIdLocal + "&" + cartItem.getId();
+			if (searchId == 1.5f) {
+				Integer savedSearchId = searchHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
+						infantNum, customer);
+				searchIdInt = savedSearchId;
+			} else {
+				searchIdInt = (int)searchId;
+			}
+			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			return "redirect:/flight_booking" + searchIdInt + "&" + flightIdLocal + "&" + cartItem.getId();
 		} else {
 			return "redirect:/";
 		}
@@ -428,6 +454,7 @@ public class ProductDetailsController {
   
         	
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
+        	System.out.println(jsonObjFarerules);
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
         	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
         	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();

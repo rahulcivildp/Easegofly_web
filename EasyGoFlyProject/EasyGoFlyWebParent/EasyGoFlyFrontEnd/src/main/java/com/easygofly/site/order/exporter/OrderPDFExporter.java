@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.Brand;
@@ -20,7 +18,6 @@ import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
-import com.easygofly.site.flight.BrandRepositoy;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -40,8 +37,6 @@ import com.lowagie.text.pdf.PdfWriter;
 
 @Service
 public class OrderPDFExporter extends AbstractOrderExporter {
-	
-	@Autowired private BrandRepositoy brandRepo;
 
 	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, String logoLink, List<TravellerDetail> travellerDetails, String faviconLink, Brand brand) throws Exception {
 		super.setResponseHeader(response, "application/pdf", ".pdf");

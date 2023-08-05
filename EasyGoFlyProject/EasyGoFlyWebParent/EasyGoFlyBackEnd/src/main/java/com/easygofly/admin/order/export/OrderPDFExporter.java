@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
-import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
 import com.lowagie.text.BadElementException;
@@ -35,10 +35,10 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-
+@Service
 public class OrderPDFExporter extends AbstractOrderExporter {
 
-	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, String logoLink, List<TravellerDetail> travellerDetails, String faviconLink) throws Exception {
+	public void export(Order order, HttpServletResponse response, City cityOne, City cityTwo, String logoLink, List<TravellerDetail> travellerDetails, String faviconLink, Brand brand) throws Exception {
 		super.setResponseHeader(response, "application/pdf", ".pdf");
 		
 		Document document = new Document(PageSize.A4);
@@ -52,8 +52,8 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		headerTable(new PdfPTable(3), document, order);
 		addressAndBarCode(cb, new PdfPTable(3), document, order, faviconLink);
 		flightItinary(new PdfPTable(3), document, order, cityOne, cityTwo);
-		flightDetailsHeader(new PdfPTable(1), document, order, cityOne, cityTwo);
-		flightDetails(new PdfPTable(5), document, order, cityOne, cityTwo);
+		flightDetailsHeader(new PdfPTable(1), document, order, cityOne, cityTwo, brand);
+		flightDetails(new PdfPTable(5), document, order, cityOne, cityTwo, brand);
 		travelerDetailsHeader(new PdfPTable(2), document, order);
 		travelerTableHeader(new PdfPTable(6), document, order);
 		
@@ -169,10 +169,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cell.setBorderColor(Color.WHITE);
 	}
 	
-	private static Image imageLogo(Order order) throws BadElementException, IOException {
-		ProductDetail flight = order.getProductDetail();
-		Product product = flight.getProduct();
-		Brand brand = product.getBrands();
+	private Image imageLogo(Order order, Brand brand) throws BadElementException, IOException {
 		Path path = Paths.get(".." + brand.getPhotosImagePath());
 		
 		Image img = Image.getInstance(path.toFile().getAbsolutePath());
@@ -240,7 +237,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		document.add(table);
 	}
 	
-	private void flightDetailsHeader(PdfPTable table, Document document, Order order, City cityOne, City cityTwo) throws BadElementException, IOException {
+	private void flightDetailsHeader(PdfPTable table, Document document, Order order, City cityOne, City cityTwo, Brand brand) throws BadElementException, IOException {
 		table.setWidthPercentage(100f);
 		table.setSpacingBefore(10);
 		table.setWidths(new float[] {14.5f});
@@ -286,7 +283,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		tableNested.addCell(cell);
 		
 		//4th cell
-		cell = new PdfPCell(imageLogo(order), true);
+		cell = new PdfPCell(imageLogo(order, brand), true);
 		cellModifyStyle(cell);
 		tableNested.addCell(cell);
 		
@@ -302,7 +299,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cell.setFixedHeight(19.0f);
 	}
 
-	private void flightDetails(PdfPTable table, Document document, Order order, City cityOne, City cityTwo) throws BadElementException, IOException {
+	private void flightDetails(PdfPTable table, Document document, Order order, City cityOne, City cityTwo, Brand brand) throws BadElementException, IOException {
 		table.setWidthPercentage(100f);
 		table.setWidths(new float[] {2.6f, 3.2f, 2.9f, 3.2f, 2.6f});
 		table.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -328,13 +325,11 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		fontBold.setColor(Color.BLACK);
 
 		//1st cell...............................................
-		PdfPCell cell = new PdfPCell(imageLogo(order), true);
+		PdfPCell cell = new PdfPCell(imageLogo(order, brand), true);
 		cell.setFixedHeight(100.0f);
 		ProductDetail flight = order.getProductDetail();
-		Product product = flight.getProduct();
-		Brand brand = product.getBrands();
 		
-		Image img = imageLogo(order);
+		Image img = imageLogo(order, brand);
         img.scaleAbsolute(40, 40);
 		
         Chunk ck = new Chunk("\n");
@@ -369,7 +364,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		flightUp.scaleAbsolute(30, 30);
 		
 		Chunk dp6 = new Chunk(flightUp, 0, 0);
-		Chunk dp7 = new Chunk("\nTERMINAL: " + product.getOriginTerminal(), fontBold);
+		Chunk dp7 = new Chunk("\nTERMINAL: " + flight.getTerminalDep(), fontBold);
 		
 		Phrase deph = new Phrase();
 		deph.add(dp); deph.add(dp1); deph.add(dp2); deph.add(dp3); deph.add(dp4); deph.add(dp5); deph.add(dp6); deph.add(dp7); 
@@ -381,8 +376,8 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		//3rd cell...............................................
 		cell = new PdfPCell();
 		
-		Integer durationHours = product.getDuration()/60;
-		Integer durationMinutes = product.getDuration()%60;
+		Integer durationHours = flight.getDuration()/60;
+		Integer durationMinutes = flight.getDuration()%60;
 		String durationHoursWord = "0" + durationHours.toString();
 		String durationMinutesWord = durationMinutes.toString();
 		
@@ -405,7 +400,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 			duration2 = new Chunk("NON STOP\n", fontRed);
 		}
 		
-		Chunk duration3 = new Chunk(product.getJourneyClass(), fontFancy);
+		Chunk duration3 = new Chunk(flight.getJourneyClass(), fontFancy);
 		
 		Phrase dura = new Phrase();
 		dura.add(duration); dura.add(duration1); dura.add(duration2); dura.add(duration3);
@@ -429,7 +424,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		flightDown.scaleAbsolute(30, 30);
 		
 		Chunk arr6 = new Chunk(flightDown, 0, 0);
-		Chunk arr7 = new Chunk("\nTERMINAL: " + product.getDestinationTerminal(), fontBold);
+		Chunk arr7 = new Chunk("\nTERMINAL: " + flight.getTerminalArr(), fontBold);
 		
 		Phrase arrPhr = new Phrase();
 		arrPhr.add(arr); arrPhr.add(arr1); arrPhr.add(arr2); arrPhr.add(arr3); arrPhr.add(arr4); arrPhr.add(arr5); arrPhr.add(arr6); arrPhr.add(arr7); 
@@ -489,9 +484,8 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 		ProductDetail flight = order.getProductDetail();
-		Product product = flight.getProduct();
 		
-		Chunk baggageChk = new Chunk("Baggage info Check-In: " + product.getBaggage() + ", Cabin: " + product.getCabinBaggage() + " | LowFare");
+		Chunk baggageChk = new Chunk("Baggage info Check-In: " + flight.getBaggage() + ", Cabin: " + flight.getCabinBaggage() + " | LowFare");
 		
 		Phrase baggagePhr = new Phrase();
 		baggagePhr.add(baggageChk);
@@ -659,8 +653,7 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		border = new Rectangle(0f, 0f);
 		travellerTableHeaderPart2(border, cell, color, color2);
 
-		Product product = productDetail.getProduct();
-		Integer convertCabinBaggage = (Integer)product.getCabinBaggage();
+		Integer convertCabinBaggage = productDetail.getCabinBaggage();
 		String cabinBaggage = convertCabinBaggage.toString();
 		
 		cell.setPhrase(new Phrase(cabinBaggage + "KG+1", font));

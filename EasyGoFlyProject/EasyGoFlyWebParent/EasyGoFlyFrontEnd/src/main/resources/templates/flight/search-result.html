@@ -423,7 +423,14 @@
           	console.log("Total searched seats: " + search_passenger_num);
           	
           	htmlCodeBlock = `
-          	
+
+	  				<input type="hidden" name="cityOne" value="[[${flight.cityOne}]]">
+	  				<input type="hidden" name="cityTwo" value="[[${flight.cityTwo}]]">
+	  				<input type="hidden" name="date" value="[[${flight.date}]]">
+  					<input type="hidden" name="journeyClass" value="[[${flight.journeyClass}]]">
+          			<input type="hidden" name="adultNum" value="[[${search.adultNum}]]">
+  					<input type="hidden" name="childNum" value="[[${search.childNum}]]">
+  					<input type="hidden" name="infantNum" value="[[${search.infantNum}]]">
 		            <input type="hidden" name="search_id" value="[[${search.id}]]">
 		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
 		                    <div class="row">

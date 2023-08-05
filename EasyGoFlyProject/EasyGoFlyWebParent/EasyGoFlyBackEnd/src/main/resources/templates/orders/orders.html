@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="fragments :: page_head('EasyGoFly Order page', 'none')"></head>
+<head>
+	<head th:replace="fragments :: page_head('EasyGoFly Order page', 'tag')"></head>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
 <body>
 	<div class="container-fluid">
 	
@@ -74,7 +78,7 @@
 					<tr th:each="order : ${orders}">
 						<td class="hideable-column">[[${order.customer.fullName}]]</td>
 						<td>[[${order.id}]]</td>
-						<td class="hideable-column"><img th:src="@{${order.productDetail.product.brands.photosImagePath}}" width="40" height="45">&nbsp;[[${order.productDetail.product.brands.name}]]</td>
+						<td class="hideable-column">[[${order.productDetail.brand}]]</td>
 						<td>[[${order.productDetail.flightNum}]]</td>
 						<td>[[${order.productDetail.pnr}]]</td>
 						<td>[[${#dates.format(order.createdTime, 'E, dd MM yyyy')}]]</td>
@@ -94,6 +98,7 @@
 					    	</form>
 						</td>
 					</tr>
+					
 				</tbody>
 			</table>
 			<a th:fragment="page_Link(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/page/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>

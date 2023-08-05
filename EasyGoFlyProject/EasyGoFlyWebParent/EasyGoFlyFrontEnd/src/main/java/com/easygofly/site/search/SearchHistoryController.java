@@ -148,6 +148,9 @@ public class SearchHistoryController {
 		Integer passengerNum = adultNum + childNum + infantNum;
 		Iterable<City> cities = cityRepo.findAll();
 		
+		System.out.println(date);
+		System.out.println(strDate);
+		
 		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("cityOne", cityOne);
@@ -354,7 +357,7 @@ public class SearchHistoryController {
             
 	}
 
-	private Integer saveHistoryPart(String cityOne, String cityTwo, Date date, String journeyClass, String tripType,
+	public Integer saveHistoryPart(String cityOne, String cityTwo, Date date, String journeyClass, String tripType,
 			Integer adultNum, Integer childNum, Integer infantNum, Customer customer) {
 		Integer totalPassenger = adultNum + childNum + infantNum;
 		

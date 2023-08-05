@@ -426,7 +426,14 @@
           	console.log("Total searched seats: " + search_passenger_num);
           	
           	htmlCodeBlock = `
-          	
+      				<input type="hidden" name="adultNum" value="[[${adultNum}]]">
+      				<input type="hidden" name="childNum" value="[[${childNum}]]">
+      				<input type="hidden" name="infantNum" value="[[${infantNum}]]">
+      				<input type="hidden" name="cityOne" value="[[${cityOne}]]">
+      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
+      				<input type="hidden" name="date" value="[[${strDate}]]">
+      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
+          			<input type="hidden" name="search_id" value="1.5">
 		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
 		                    <div class="row">
 		                    	<div class="col-md-10 col">
@@ -528,9 +535,8 @@
 	                                	<small>(For [[${passengerNum}]] Passenger/s)</small>
 	                                </div>
 		                            <div style="display: flex; justify-content: center;">
-		                                 <a type="submit" class="btn btn-primary submit_btn_stl" style="" id="book_now" name="book_now" href="https://easegofly.com/login">Book Now</a>
+	                                 	<button type="submit" class="btn btn-primary submit_btn_stl" id="book_now" name="book_now">Book Now</button>
 		                            </div>
-		                    	
 		                    	</div>
 		                    <div>
 		                        

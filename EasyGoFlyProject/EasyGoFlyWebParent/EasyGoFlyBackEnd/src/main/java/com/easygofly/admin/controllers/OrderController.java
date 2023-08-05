@@ -2,6 +2,7 @@ package com.easygofly.admin.controllers;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.easygofly.admin.brand.BrandRepositoy;
 import com.easygofly.admin.cartItem.CartItemService;
 import com.easygofly.admin.order.OrderRepository;
 import com.easygofly.admin.order.OrderService;
@@ -22,6 +24,8 @@ import com.easygofly.admin.order.export.OrderPDFExporter;
 import com.easygofly.admin.setting.GeneralSettingBag;
 import com.easygofly.admin.setting.SettingService;
 import com.easygofly.admin.setting.city.CityService;
+import com.easygofly.entity.Brand;
+import com.easygofly.entity.Category;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
@@ -36,7 +40,9 @@ public class OrderController {
 	@Autowired private CityService cityService;
 	@Autowired private SettingService settingService;
 	@Autowired private TravelerRepository travelerRepo;
-	@Autowired private CartItemService cartItemService ;
+	@Autowired private CartItemService cartItemService;
+	@Autowired private BrandRepositoy brandRepo;
+	@Autowired private EntityManager entityManager;
 	
 	@GetMapping("/orders")
 	public String getAllOrders(Model model, Order order) {
@@ -87,9 +93,17 @@ public class OrderController {
 		GeneralSettingBag settingBag = settingService.getGeneralSettingBag();
 		String logoLink = settingBag.getSiteLogo();
 		String faviconLink = settingBag.getFavicon();
+		Brand brand = brandRepo.getBrandByName(productDetail.getBrand());
+		Category category = entityManager.find(Category.class, 1);
+		
+		if (brand == null) {
+			brand = new Brand(productDetail.getBrand());
+			brand.addCategory(category);
+		} 
+		
 		List<TravellerDetail> travellers = travelerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 
-		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink); 
+		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink, brand); 
 
 	}
 	
