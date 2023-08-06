@@ -624,10 +624,8 @@
                                 			<div style="display: flex; justify-content: space-between;">	
                                 				<select name="seatSelet" style="height: 32px; border-radius: 6px;" id="seatSelet" form="order_form">
                                 					<th:block th:each="seat : ${seatsOnlineList}">
-                                						<th:block th:if="${seat.rowNo} != '0'">
-                                							<th:block th:if="${seat.availablityType} == 1">
-		                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
-		                                					</th:block>
+                               							<th:block th:if="${seat.availablityType} != 3">
+	                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
 	                                					</th:block>
                                						</th:block>
                                 				</select>

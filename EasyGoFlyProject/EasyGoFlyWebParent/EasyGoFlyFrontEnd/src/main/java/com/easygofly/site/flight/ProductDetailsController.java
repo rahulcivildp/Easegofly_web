@@ -200,7 +200,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodySSR = new StringBuilder();
             
-        	int responseCodeSSR = onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, flight.getTraceId(), flight.getResultIndex());
+        	int responseCodeSSR = onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, flight.getResultIndex());
         	if (responseCodeSSR != HttpURLConnection.HTTP_OK) {
     			if (responseCodeSSR == HttpURLConnection.HTTP_MOVED_TEMP
     				|| responseCodeSSR == HttpURLConnection.HTTP_MOVED_PERM
@@ -209,6 +209,7 @@ public class ProductDetailsController {
     		}
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
+        	System.out.println(jsonObjSSR);
         	
         	try {
 				JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
@@ -248,34 +249,37 @@ public class ProductDetailsController {
 				mealsOnlineList.add(mealsOnline);
 			}
         	
-        	
-        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
-        	JSONObject jsonInnerObjectSeats = new JSONObject();
-        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
-        	Integer count = 0;
-        	for (int i = 0; i < jsonArraySeats.length(); i++) {
-        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
-        		
-        		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
-        			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
-        			
-        			Integer compartment = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Compartment").toString());
-        			Integer availablityType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("AvailablityType").toString());
-        			Integer deck = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Deck").toString());
-        			String rowNo = jsonInnerArraySeats.getJSONObject(j).get("RowNo").toString();
-        			String code = jsonInnerArraySeats.getJSONObject(j).get("Code").toString();
-        			String price = jsonInnerArraySeats.getJSONObject(j).get("Price").toString();
-        			Integer seatType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("SeatType").toString());
-        			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
-        			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
-        			
-        			Integer serialNo = count++;
-        			
-        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
-        			seatsOnlineList.add(seatsOnline[serialNo]);
-        			
-        			
+        	try {
+	        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
+	        	JSONObject jsonInnerObjectSeats = new JSONObject();
+	        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
+	        	Integer count = 0;
+	        	for (int i = 0; i < jsonArraySeats.length(); i++) {
+	        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
+	        		
+	        		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
+	        			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
+	        			
+	        			Integer compartment = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Compartment").toString());
+	        			Integer availablityType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("AvailablityType").toString());
+	        			Integer deck = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Deck").toString());
+	        			String rowNo = jsonInnerArraySeats.getJSONObject(j).get("RowNo").toString();
+	        			String code = jsonInnerArraySeats.getJSONObject(j).get("Code").toString();
+	        			String price = jsonInnerArraySeats.getJSONObject(j).get("Price").toString();
+	        			Integer seatType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("SeatType").toString());
+	        			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
+	        			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
+	        			
+	        			Integer serialNo = count++;
+	        			
+	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
+	        			seatsOnlineList.add(seatsOnline[serialNo]);
+					}
 				}
+			
+			} catch (Exception e) {
+				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
+    			seatsOnlineList.add(seatsOnline);
 			}
 
         	MealsOnline mealsOnline2 = new MealsOnline();
@@ -444,7 +448,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, flight.getTraceId(), flight.getResultIndex());
+        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
         	if (responseCode != HttpURLConnection.HTTP_OK) {
     			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
     				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
@@ -461,7 +465,7 @@ public class ProductDetailsController {
         	
         	model.addAttribute("jsonObjFarerule", fareRuleDetail);
         	
-		}
+		} 
 		
 		model.addAttribute("listProductDetailsOnline", listProductDetailsOnline);
 		

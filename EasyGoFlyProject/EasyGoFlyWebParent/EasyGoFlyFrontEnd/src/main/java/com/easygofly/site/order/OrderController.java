@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -54,7 +53,6 @@ import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.BrandRepositoy;
-import com.easygofly.site.flight.CategoryRepository;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.CityService;
 import com.easygofly.site.flight.FlightRepository;
@@ -63,6 +61,7 @@ import com.easygofly.site.flight.ProductDetailsController;
 import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.order.exporter.OrderPDFExporter;
+import com.easygofly.site.search.SearchHistoryController;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
@@ -76,7 +75,6 @@ import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
-import com.google.gson.JsonArray;
 
 @Controller
 public class OrderController {
@@ -100,8 +98,8 @@ public class OrderController {
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private OnlineFlightService onlineFlightService;
 	@Autowired private BrandRepositoy brandRepo;
-	@Autowired private CategoryRepository categoryRepo;
 	@Autowired private EntityManager entityManager;
+	@Autowired private SearchHistoryController searchHistoryController;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -714,9 +712,14 @@ public class OrderController {
 		model.addAttribute("passengerPhone", order.getPassengerNum());
 		model.addAttribute("passengerEmail", order.getContactEmail());
 		
-		Product product = productDetail.getProduct();
-		Brand brand = brandRepo.getBrandByName(productDetail.getBrand());
-		model.addAttribute("brandPath", ".." + brand.getPhotosImagePath());
+		String photoImagePath = "";
+		Brand brand = brandRepo.getBrandByName(productDetail.getBrand().toLowerCase());
+		if (brand.equals(null)) {
+			photoImagePath = brand.getPhotosImagePath();
+		} else {
+			photoImagePath = "#";
+		}
+		model.addAttribute("brandPath", ".." + photoImagePath);
 		model.addAttribute("brandName", brand.getName());
 		model.addAttribute("productDetail", productDetail);
 		model.addAttribute("originTerminal", productDetail.getTerminalDep());
@@ -746,8 +749,8 @@ public class OrderController {
 		model.addAttribute("demoTicketPath", demoTicketPath);
 		model.addAttribute("thumbLogoPath", thumbLogoPath);
 		
-		User user = product.getUser();
-		model.addAttribute("user", user);
+//		User user = product.getUser();
+//		model.addAttribute("user", user);
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
@@ -912,7 +915,6 @@ public class OrderController {
     					+ "		\"GSTCompanyEmail\": \"\"\r\n"
     					+ "}";
     			
-    			System.out.println(details);
     			travelerDetailsArray.add(details);
     			
     		}
@@ -926,7 +928,7 @@ public class OrderController {
             
             StringBuilder responseBodyTicket = new StringBuilder();
             
-        	int responseCodeTicket = onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, productDetail.getTraceId(), productDetail.getResultIndex(), arrayTraveler);
+        	int responseCodeTicket = onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, searchHistoryController.traceId, productDetail.getResultIndex(), arrayTraveler);
         	
         	
         	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
@@ -962,7 +964,7 @@ public class OrderController {
             
             StringBuilder responseBodyGetBookingDetails = new StringBuilder();
             
-        	int responseCodeGetBookingDetails = onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, productDetail.getTraceId(), onlinePNR, onlineBookingId);
+        	int responseCodeGetBookingDetails = onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, searchHistoryController.traceId, onlinePNR, onlineBookingId);
         	
         	JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString()); 
 
