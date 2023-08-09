@@ -183,7 +183,12 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	            	<b>[[${pnrBarcode}]]</b>
 				</div>
 				<div class="col-2">
-	            	<b>[[${productDetail.priceADT}]]</b>
+					<th:block th:if="${traveler.paxType} != '3'">
+						<b>[[${productDetail.priceADT}]]</b>
+					</th:block>
+					<th:block th:if="${traveler.paxType} == '3'">
+						<b>[[${productDetail.priceINF}]]</b>
+					</th:block>
 				</div>
 				<div class="col-2">
 	            	<b>0</b>

@@ -64,6 +64,7 @@ public class ProductDetailsController {
 	List<MealsOnline> mealsOnlineList = new ArrayList<MealsOnline>();
 	List<SeatsOnline>  seatsOnlineList= new ArrayList<SeatsOnline>();
 	
+	public JSONObject mainObjFareBreakdown = new JSONObject();
 	public JSONObject mainObjFareBreakdownAdult = new JSONObject();
 	public JSONObject mainObjFareBreakdownChild = new JSONObject(), mainObjFareBreakdownInfant = new JSONObject();
 	
@@ -73,7 +74,7 @@ public class ProductDetailsController {
 	
 	public String depTerminal = "",arrTerminal = "",airlineCOde = "", flightNumber = "", flightClass = "", 
 			airlineName = "", cabinBaggage = "", baggage = "", duration = "", flightStatus = "", stopOver = "", 
-			passengerCount = "", airportCodeOrigin = "", airportCodeDestination = "", craftType = "";
+			airportCodeOrigin = "", airportCodeDestination = "", craftType = "";
 	
 	public String traceId ="" , resultIndex ="";
 	
@@ -156,18 +157,27 @@ public class ProductDetailsController {
     		JSONObject mainObjDestination = mainObjSegment.getJSONObject("Destination");
     		JSONObject mainObjAirline = mainObjSegment.getJSONObject("Airline");
     		JSONArray jsonObjFareBreakdown = jsonResult.getJSONArray("FareBreakdown");
-    		mainObjFareBreakdownAdult = jsonObjFareBreakdown.getJSONObject(0);
     		
-    		if (jsonObjFareBreakdown.length() == 2 ) {
-    			mainObjFareBreakdownChild = jsonObjFareBreakdown.getJSONObject(1);
-        		basefareTravelerChild = mainObjFareBreakdownAdult.get("BaseFare").toString();
-        		taxTravelerChild = mainObjFareBreakdownAdult.get("Tax").toString();
-        		passengerTypeChild = mainObjFareBreakdownAdult.get("PassengerType").toString();
-			} else if (jsonObjFareBreakdown.length() == 3 ) {
-				mainObjFareBreakdownInfant = jsonObjFareBreakdown.getJSONObject(2);
-				basefareTravelerInfant = mainObjFareBreakdownAdult.get("BaseFare").toString();
-				taxTravelerInfant = mainObjFareBreakdownAdult.get("Tax").toString();
-				passengerTypeInfant = mainObjFareBreakdownAdult.get("PassengerType").toString();
+    		String passengerTypeInner = "";
+    		for (int i = 0; i < jsonObjFareBreakdown.length(); i++) {
+    				mainObjFareBreakdown = jsonObjFareBreakdown.getJSONObject(i);
+    				passengerTypeInner = mainObjFareBreakdown.get("PassengerType").toString();
+				if (passengerTypeInner.equals("2")) {
+	    			mainObjFareBreakdownChild = jsonObjFareBreakdown.getJSONObject(i);
+	        		basefareTravelerChild = mainObjFareBreakdownChild.get("BaseFare").toString();
+	        		taxTravelerChild = mainObjFareBreakdownChild.get("Tax").toString();
+	        		passengerTypeChild = mainObjFareBreakdownChild.get("PassengerType").toString();
+				} else if (passengerTypeInner.equals("3")) {
+					mainObjFareBreakdownInfant = jsonObjFareBreakdown.getJSONObject(i);
+					basefareTravelerInfant = mainObjFareBreakdownInfant.get("BaseFare").toString();
+					taxTravelerInfant = mainObjFareBreakdownInfant.get("Tax").toString();
+					passengerTypeInfant = mainObjFareBreakdownInfant.get("PassengerType").toString();
+				} else {
+					mainObjFareBreakdownAdult = jsonObjFareBreakdown.getJSONObject(i);
+					basefareTravelerAdult = mainObjFareBreakdownAdult.get("BaseFare").toString();
+		    		taxTravelerAdult = mainObjFareBreakdownAdult.get("Tax").toString();
+		    		passengerTypeAdult = mainObjFareBreakdownAdult.get("PassengerType").toString();
+				}
 			}
     		
     		depTerminal = mainObjOrigin.getJSONObject("Airport").get("Terminal").toString();
@@ -181,10 +191,7 @@ public class ProductDetailsController {
     		duration = mainObjSegment.get("Duration").toString();
     		flightStatus = mainObjSegment.get("FlightStatus").toString();
     		stopOver = mainObjSegment.get("StopOver").toString();
-    		basefareTravelerAdult = mainObjFareBreakdownAdult.get("BaseFare").toString();
-    		taxTravelerAdult = mainObjFareBreakdownAdult.get("Tax").toString();
-    		passengerTypeAdult = mainObjFareBreakdownAdult.get("PassengerType").toString();
-    		passengerCount = mainObjFareBreakdownAdult.get("PassengerCount").toString();
+    		
     		airportCodeOrigin = mainObjOrigin.getJSONObject("Airport").get("AirportCode").toString();
     		airportCodeDestination = mainObjDestination.getJSONObject("Airport").get("AirportCode").toString();
     		craftType = mainObjSegment.get("Craft").toString();

@@ -245,23 +245,24 @@ public class SearchFilterController {
 	}
 	
 	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
+		String traceIdstr = "offline";
 		if (sortName.equals("pnr")) {
-			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
 		} else if (sortName.equals("price")) {
-			searchHistoryController.listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date);
+			searchHistoryController.listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date, traceIdstr);
 			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
 		} else if (sortName.equals("duration")) {
-			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
 		} else if (sortName.equals("arrTime")) {
-			searchHistoryController.listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date);
+			searchHistoryController.listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date, traceIdstr);
 			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
 		} else if (sortName.equals("depTime")) {
-			searchHistoryController.listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date);
+			searchHistoryController.listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date, traceIdstr);
 			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
 		} else if (sortName.equals("brand")) {
-			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
 		}
 	}

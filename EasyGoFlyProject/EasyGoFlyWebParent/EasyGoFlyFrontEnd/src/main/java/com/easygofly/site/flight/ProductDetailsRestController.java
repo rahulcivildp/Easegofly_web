@@ -99,11 +99,7 @@ public class ProductDetailsRestController {
 		List<MealsOnline> mealsOnlines = productDetailsController.mealsOnlineList;
 		for (MealsOnline mealsOnline : mealsOnlines) {
 			if (mealsOnline.getCode().equals(code) || mealsOnline.getCode() == code) {
-				MealsOnline mealsRepo = mealRepo.findByTravellerDetail(travellerDetail);
-				if (mealsRepo == null && travellerDetail.getMeal() == null ) {
-					travellerDetail.addMeal(mealsOnline.getName(), mealsOnline.getPrice(), mealsOnline.getCode(), mealsOnline.getQuantity());
-					travellerRepo.save(travellerDetail);
-				} else {
+				if (travellerDetail.getMeal() != null ) {
 					MealsOnline meal = travellerDetail.getMealOnline();
 					meal.setName(mealsOnline.getName());
 					meal.setPrice(mealsOnline.getPrice());
@@ -112,7 +108,7 @@ public class ProductDetailsRestController {
 					meal.setTravellerDetail(travellerDetail);
 					
 					mealRepo.save(meal);
-				}
+				} 
 			} 
 		}
 	}
@@ -124,11 +120,7 @@ public class ProductDetailsRestController {
 		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
 		for (BaggageOnline baggageOnline : baggageOnlineList) {
 			if (baggageOnline.getCode().equals(code) || baggageOnline.getCode() == code) {
-				if (travellerDetail.getBaggageOnline() == null) {
-					BaggageOnline baggage = new BaggageOnline(baggageOnline.getPrice(), baggageOnline.getCode(), baggageOnline.getWeight(), travellerDetail);
-					travellerDetail.setBaggageOnline(baggage);
-					travellerRepo.save(travellerDetail);
-				} else {
+				if (travellerDetail.getBaggageOnline() != null) {
 					BaggageOnline baggage = travellerDetail.getBaggageOnline();
 					baggage.setPrice(baggageOnline.getPrice());
 					baggage.setCode(baggageOnline.getCode());
@@ -136,7 +128,7 @@ public class ProductDetailsRestController {
 					baggage.setTravellerDetail(travellerDetail);
 					
 					baggageRepo.save(baggage);
-				}
+				} 
 			}
 		}
 	}
@@ -148,12 +140,7 @@ public class ProductDetailsRestController {
 		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
 		for (SeatsOnline seatsOnline : seatsOnlineList) {
 			if (seatsOnline.getId() == seatId) {
-				if (travellerDetail.getSeatsOnline() == null) {
-					SeatsOnline seat = new SeatsOnline(seatsOnline.getPrice(), seatsOnline.getCompartment(), seatsOnline.getAvailablityType(), seatsOnline.getDeck(), 
-							seatsOnline.getRowNo(), seatsOnline.getCode(), seatsOnline.getSeatType(), seatsOnline.getSeatNo(), seatsOnline.getCraftType(), travellerDetail);
-					travellerDetail.setSeatsOnline(seat);
-					travellerRepo.save(travellerDetail);
-				} else {
+				if (travellerDetail.getSeatsOnline() != null) {
 					SeatsOnline seat = travellerDetail.getSeatsOnline();
 					seat.setPrice(seatsOnline.getPrice());
 					seat.setCompartment(seatsOnline.getCompartment());
@@ -167,9 +154,46 @@ public class ProductDetailsRestController {
 					seat.setTravellerDetail(travellerDetail);
 					
 					seatRepo.save(seat);
-				}
+				} 
 			}
 		}
+	}
+	
+	@PostMapping("/save_every_components")
+	public void saveEveryComponents(@Param("id") Integer id, @Param("seatId") Integer seatId, @Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
 		
+		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
+		List<MealsOnline> mealsOnlines = productDetailsController.mealsOnlineList;
+		for (MealsOnline mealsOnline : mealsOnlines) {
+			if (mealsOnline.getCode().equals(mealCode) || mealsOnline.getCode() == mealCode) {
+				if (travellerDetail.getMeal() == null ) {
+					travellerDetail.addMeal(mealsOnline.getName(), mealsOnline.getPrice(), mealsOnline.getCode(), mealsOnline.getQuantity());
+					travellerRepo.save(travellerDetail);
+				} 
+			} 
+		}
+		
+		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
+		for (BaggageOnline baggageOnline : baggageOnlineList) {
+			if (baggageOnline.getCode().equals(baggageCode) || baggageOnline.getCode() == baggageCode) {
+				if (travellerDetail.getBaggageOnline() == null) {
+					BaggageOnline baggage = new BaggageOnline(baggageOnline.getPrice(), baggageOnline.getCode(), baggageOnline.getWeight(), travellerDetail);
+					travellerDetail.setBaggageOnline(baggage);
+					travellerRepo.save(travellerDetail);
+				}
+			} 
+		}
+		
+		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
+		for (SeatsOnline seatsOnline : seatsOnlineList) {
+			if (seatsOnline.getId() == seatId) {
+				if (travellerDetail.getSeatsOnline() == null) {
+					SeatsOnline seat = new SeatsOnline(seatsOnline.getPrice(), seatsOnline.getCompartment(), seatsOnline.getAvailablityType(), seatsOnline.getDeck(), 
+							seatsOnline.getRowNo(), seatsOnline.getCode(), seatsOnline.getSeatType(), seatsOnline.getSeatNo(), seatsOnline.getCraftType(), travellerDetail);
+					travellerDetail.setSeatsOnline(seat);
+					travellerRepo.save(travellerDetail);
+				} 
+			} 
+		}
 	}
 }

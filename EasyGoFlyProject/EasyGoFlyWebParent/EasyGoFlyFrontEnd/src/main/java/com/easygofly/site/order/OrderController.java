@@ -35,18 +35,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Category;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.PaymentMethod;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
 import com.easygofly.entity.Wallet;
@@ -467,6 +470,8 @@ public class OrderController {
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
 		
+		methodSSR(productDetail);
+		
 		ticketDetails(order, productDetail);
 		
 		String pnr = productDetail.getPnr();
@@ -552,6 +557,20 @@ public class OrderController {
 		return "zaakpay/response";
 		
 		
+	}
+
+	private void methodSSR(ProductDetail productDetail) throws MalformedURLException, IOException {
+		/* SSR details */
+    	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+        // Open a connection
+        HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
+        
+        StringBuilder responseBodySSR = new StringBuilder();
+        
+    	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, productDetail.getResultIndex());
+    	
+    	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
+    	System.out.println(jsonObjSSR);
 	}
 
 	@GetMapping("/order/export_pdf/{id}")
@@ -679,6 +698,8 @@ public class OrderController {
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
 
+		methodSSR(productDetail);
+		
 		ticketDetails(order, productDetail);
 		
 		String pnr = productDetail.getPnr();
@@ -766,11 +787,14 @@ public class OrderController {
 		if (!productDetail.getTraceId().equals("offline")) {
 		
 			for (TravellerDetail travellerDetail : travelers) {
+				BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
+				MealsOnline mealsOnline = travellerDetail.getMealOnline();
+				SeatsOnline seatsOnline = travellerDetail.getSeatsOnline();
+				
     			Date getDOB = travellerDetail.getDob();
     			Integer genNum = 0;
     			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
     				genNum = 1;
-    				System.out.println(genNum);
     			} else {
     				genNum = 2;
     			}
@@ -778,43 +802,16 @@ public class OrderController {
     			String tax = "";
     			
     			//baggage information
-    			String bagCode = "", bagWeight = "", bagPrice = "";
-    			if (travellerDetail.getBaggage() != null) {
-					String baggage = travellerDetail.getBaggage();
-	    			String[] bagArray = baggage.split("\\|");
-	    			bagCode = bagArray[0];
-	    			bagWeight = bagArray[1];
-	    			bagPrice = bagArray[2];
-				}
-    			
+    			String bagCode = baggageOnline.getCode(), bagWeight = baggageOnline.getWeight(), bagPrice = baggageOnline.getPrice();
     			
     			//meal information
-    			String mealCode = "", mealName = "", mealQuantity = "", mealPrice = "";
-    			if (travellerDetail.getMeal() != null) {
-					String meal = travellerDetail.getMeal();
-	    			String[] mealArray = meal.split("\\|");
-	    			mealCode = mealArray[0];
-	    			mealName = mealArray[3];
-	    			mealQuantity = mealArray[1];
-	    			mealPrice = mealArray[2];
-				}
-    			
+    			String mealCode = mealsOnline.getCode(), mealName = mealsOnline.getName(), mealQuantity = mealsOnline.getQuantity(), mealPrice = mealsOnline.getPrice();
     			
     			//seat information
-    			String seatAvailabilityType = "", seatCode = "", seatRowNo = "", seatNo = "", seatType = "", seatDeck = "", seatCompartment = "", seatPrice = "", seatCraftType = "";
-    			if (travellerDetail.getSeat() != null) {
-					String seat = travellerDetail.getSeat();
-	    			String[] seatArray = seat.split("\\|");
-	    			seatAvailabilityType = seatArray[6];
-	    			seatCode = seatArray[8];
-	    			seatRowNo = seatArray[2];
-	    			seatNo = seatArray[3];
-	    			seatType = seatArray[5];
-	    			seatDeck = seatArray[1];
-	    			seatCompartment = seatArray[0];
-	    			seatPrice = seatArray[4];
-	    			seatCraftType = seatArray[7];
-				}
+    			String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
+    					seatNo = seatsOnline.getSeatNo(), seatType = seatsOnline.getSeatType().toString(), seatDeck = seatsOnline.getDeck().toString(), seatCompartment = seatsOnline.getCompartment().toString(), 
+    					seatPrice = seatsOnline.getPrice(), seatCraftType = seatsOnline.getCraftType();
+    			
     			
     			String baggageDetailsString = "		\"Baggage\":[\r\n"
     					+ "            {\r\n"
@@ -867,32 +864,20 @@ public class OrderController {
     					+ "			\r\n"
     					+ "		}],\r\n";
     			
-    			String baggageDetails = "";
-    			String mealDetails = "";
-    			String seatDetails = "";
+    			String baggageDetails = baggageDetailsString;
+    			String mealDetails = mealDetailsString;
+    			String seatDetails = seatDetailsString;
     			
     			if (travellerDetail.getPaxType().equals("1")) {
     				baseFare = productDetailsController.basefareTravelerAdult;
     				tax = productDetailsController.taxTravelerAdult;
-    				baggageDetails = baggageDetailsString;
-    				mealDetails = mealDetailsString;
-    				seatDetails = seatDetailsString;
-//    				System.out.println(seatDetails);
 				} else if (travellerDetail.getPaxType().equals("2")) {
     				baseFare = productDetailsController.basefareTravelerChild;
     				tax = productDetailsController.taxTravelerChild;
-    				baggageDetails = baggageDetailsString;
-    				mealDetails = mealDetailsString;
-    				seatDetails = seatDetailsString;
-//    				System.out.println(seatDetails);
 				} else {
     				baseFare = productDetailsController.basefareTravelerInfant;
     				tax = productDetailsController.taxTravelerInfant;
-    				mealDetails = mealDetailsString;
 				}
-    			
-    			
-    				
     			
     			String details = "{\r\n"
     					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
@@ -933,9 +918,6 @@ public class OrderController {
     					+ "}";
     			
     			travelerDetailsArray.add(details);
-    			System.out.println(details);
-    			System.out.println("seatDetails : " + seatDetails);
-    			
     		}
         	
         	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));

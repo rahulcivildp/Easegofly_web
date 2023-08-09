@@ -635,7 +635,13 @@ public class OrderPDFExporter extends AbstractOrderExporter {
 		travellerTableBodyPart(cell);
 		border = new Rectangle(0f, 0f);
 		travellerTableHeaderPart2(border, cell, color, color2);
-		String price = Double.toString(productDetail.getPriceADT());
+		String price = "";
+		if (travellerDetail.getPaxType().equals("3")) {
+			price = Double.toString(productDetail.getPriceINF());
+		} else {
+			price = Double.toString(productDetail.getPriceADT());
+		}
+		 
 		cell.setPhrase(new Phrase(price, font));
 		table.addCell(cell);
 		

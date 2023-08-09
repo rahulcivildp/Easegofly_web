@@ -20,17 +20,17 @@ public interface FlightRepository extends CrudRepository<ProductDetail, Integer>
 	@Query("SELECT p FROM ProductDetail p WHERE p.cityOne = :cityOne AND p.cityTwo = :cityTwo AND p.brand = :brand")
 	public List<ProductDetail> findFlightByCityAndBrand(String cityOne, String cityTwo, String brand, Sort ascending);
 
-	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo")
-	public List<ProductDetail> findFlightByDateAndCity(Date date, String cityOne, String cityTwo, Sort ascending);
+	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo AND p.traceId = :traceId")
+	public List<ProductDetail> findFlightByDateAndCity(Date date, String cityOne, String cityTwo, String traceId, Sort ascending);
 	
-	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo ORDER BY (priceADT + priceINF + markupADT + markupINF) + 0 ASC")
-	public List<ProductDetail> findFlightByDateAndCityPrice(Date date, String cityOne, String cityTwo);
+	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo AND p.traceId = :traceId ORDER BY (priceADT + priceINF + markupADT + markupINF) + 0 ASC")
+	public List<ProductDetail> findFlightByDateAndCityPrice(Date date, String cityOne, String cityTwo, String traceId);
 	
-	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo ORDER BY p.arrTime + 0 ASC")
-	public List<ProductDetail> findFlightByDateAndCityArrival(Date date, String cityOne, String cityTwo);
+	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo AND p.traceId = :traceId ORDER BY p.arrTime + 0 ASC")
+	public List<ProductDetail> findFlightByDateAndCityArrival(Date date, String cityOne, String cityTwo, String traceId);
 	
-	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo ORDER BY p.depTime + 0 ASC")
-	public List<ProductDetail> findFlightByDateAndCityDeparture(Date date, String cityOne, String cityTwo);
+	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo AND p.traceId = :traceId ORDER BY p.depTime + 0 ASC")
+	public List<ProductDetail> findFlightByDateAndCityDeparture(Date date, String cityOne, String cityTwo, String traceId);
 	
 	@Query("SELECT p FROM ProductDetail p WHERE p.date = :date AND p.cityOne = :cityOne AND p.cityTwo = :cityTwo ORDER BY p.stopNum + 0 ASC")
 	public List<ProductDetail> findFlightByDateAndCityStop(Date date, String cityOne, String cityTwo);

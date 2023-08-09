@@ -570,11 +570,13 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    
 										    $(document).ready(function() {
 										    	mealCode = $("#meals" + [[${traveler.id}]]).val();
-												urlMealSave = "[[@{/save_meal}]]";
+										    	baggageCode = $("#baggageSelect" + [[${traveler.id}]]).val();
+										    	seatId = $("#seatSelet" + [[${traveler.id}]]).val();
+												urlComponentsSave = "[[@{/save_every_components}]]";
 												
-										    	params = {id: [[${traveler.id}]], code: mealCode};
+										    	params = {id: [[${traveler.id}]], seatId: seatId, mealCode: mealCode, baggageCode: baggageCode};
 										    	
-										    	$.post(urlMealSave, params, function() {
+										    	$.post(urlComponentsSave, params, function() {
 										    		
 										    	}).fail(function(){
 									    			alert("Something went wrong in the server!");
@@ -602,6 +604,9 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Baggage</p>
 	                                </div>
 	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:if="${traveler.paxType} == '3'">
+	                                	<input type="hidden" name="baggageSelect" th:id="'baggageSelect' + ${traveler.id}" value="NoBaggage">
+	                                </th:block>
 	                                <th:block th:if="${traveler.paxType} != '3'">
 	                                <div class="row">
 	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
@@ -659,19 +664,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    </script>
 											<script>
 										    
-										    
-										    $(document).ready(function() {
-										    	baggageCode = $("#baggageSelect" + [[${traveler.id}]]).val();
-												urlBaggageSave = "[[@{/save_baggage}]]";
-												
-										    	params = {id: [[${traveler.id}]], code: baggageCode};
-										    	
-										    	$.post(urlBaggageSave, params, function() {
-										    		
-										    	}).fail(function(){
-									    			alert("Something went wrong in the server!");
-										    	});
-										    });
+										
 										    
 										    $("#baggageSelect" + [[${traveler.id}]]).change(function(){
 										    	newBaggage = $("#baggageSelect" + [[${traveler.id}]]).val();
@@ -696,6 +689,9 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Seat</p>
 	                                </div>
 	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:if="${traveler.paxType} == '3'">
+	                                	<input type="hidden" name="seatSelet" th:id="'seatSelet'  + ${traveler.id}" value="1">
+	                                </th:block>
 	                                <th:block th:if="${traveler.paxType} != '3'">
 	                                
 	                                <div class="row">
@@ -763,18 +759,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    <script>
 										    
 										    
-										    $(document).ready(function() {
-										    	seatId = $("#seatSelet" + [[${traveler.id}]]).val();
-												urlSeatSave = "[[@{/save_seat}]]";
-												
-										    	params = {id: [[${traveler.id}]], seatId: seatId};
-										    	
-										    	$.post(urlSeatSave, params, function() {
-										    		
-										    	}).fail(function(){
-									    			alert("Something went wrong in the server!");
-										    	});
-										    });
+										   
 										    
 										    $("#seatSelet" + [[${traveler.id}]]).change(function(){
 										    	seatChangeSave = $("#seatSelet" + [[${traveler.id}]]).val();

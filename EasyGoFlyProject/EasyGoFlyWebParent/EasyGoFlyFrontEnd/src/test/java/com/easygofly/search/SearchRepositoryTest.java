@@ -106,7 +106,8 @@ public class SearchRepositoryTest {
 		travellerDetail.addMeal("No Meal", "0", "NoMeal", "0");
 		
 		TravellerDetail savedTraveler = travellerRepo.save(travellerDetail);
-		System.out.println(savedTraveler.getFirstName());
+		MealsOnline neawMeal = savedTraveler.getMealOnline();
+		System.out.println(neawMeal.getName());
 		
 	}
 }

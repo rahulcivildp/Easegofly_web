@@ -180,6 +180,8 @@ public class OnlineFlightService {
         		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
         		+ "}";
         
+        System.out.println(requestBody);
+        
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());

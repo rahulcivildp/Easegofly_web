@@ -63,27 +63,27 @@ public class ProductDetailService {
 		List<ProductDetail> productDetails = flightRepo.findFlightByCity(cityOne, cityTwo, sort);
 		return productDetails;
 	}
-	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date, Sort sort) {
+	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date, String traceId, Sort sort) {
 		
-		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCity(date, cityOne, cityTwo, sort);
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCity(date, cityOne, cityTwo, traceId, sort);
 		return productDetails;
 	}
 	
-	public List<ProductDetail> listAllFlightsByPrice(String cityOne, String cityTwo, Date date) {
+	public List<ProductDetail> listAllFlightsByPrice(String cityOne, String cityTwo, Date date, String traceId) {
 		
-		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityPrice(date, cityOne, cityTwo);
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityPrice(date, cityOne, cityTwo, traceId);
 		return productDetails;
 	}
 	
-	public List<ProductDetail> listAllFlightsByArrival(String cityOne, String cityTwo, Date date) {
+	public List<ProductDetail> listAllFlightsByArrival(String cityOne, String cityTwo, Date date, String traceId) {
 		
-		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityArrival(date, cityOne, cityTwo);
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityArrival(date, cityOne, cityTwo, traceId);
 		return productDetails;
 	}
 	
-	public List<ProductDetail> listAllFlightsByDeparture(String cityOne, String cityTwo, Date date) {
+	public List<ProductDetail> listAllFlightsByDeparture(String cityOne, String cityTwo, Date date, String traceId) {
 		
-		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityDeparture(date, cityOne, cityTwo);
+		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCityDeparture(date, cityOne, cityTwo, traceId);
 		return productDetails;
 	}
 	

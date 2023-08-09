@@ -192,9 +192,11 @@ public class SearchHistoryController {
         StringBuilder responseBodySearch = new StringBuilder();
         
         int responseCode = onlineFlightService.apiOnlineMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
-        
+
+		String traceIdStr = "offline";
+		
         productDetailsController.listProductDetailsOnline = new ArrayList<ProductDetail>(); 
-		listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+		listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdStr, Sort.by(sortName).ascending());
 		for (ProductDetail productDetailOffline : listProductDetails) {
 			productDetailsController.listProductDetailsOnline.add(productDetailOffline);
 		}
@@ -274,6 +276,7 @@ public class SearchHistoryController {
 			
 			JSONObject jsonObjectAdult = new JSONObject();
 			Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
+			Integer intTotalAdultChildPrice = 0;
 			
 			for (int j = 0; j < jsonArrayFareBreakdown.getJSONArray(i).length(); j++) {
 				jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdown.getJSONArray(i).getJSONObject(j));
@@ -291,8 +294,14 @@ public class SearchHistoryController {
 					adultTax = Integer.parseInt(taxOnline) / adultNum;
 				}
 			}
-			Integer intTotalAdultChildFare = adultPrice + childPrice;
-			Integer intTotalAdultChildTax = adultTax + childTax;
+			
+			if (childPrice != 0) {
+				intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
+			} else {
+				intTotalAdultChildPrice = adultPrice + adultTax;
+			}
+
+			Integer intTotalInfantPrice = infantPrice + infantTax;
 			
 			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
 			String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
@@ -310,12 +319,14 @@ public class SearchHistoryController {
 			String mode = "Online-data";
 			
 			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-            		stringDepTime, stringArrTime, intTotalAdultChildFare, infantPrice, intTotalAdultChildTax, infantTax, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
             		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, null);
 			
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 			
 			listProductDetailsInSearch.add(productDetail[i]);
+			System.out.println(intTotalAdultChildPrice);
+			System.out.println(intTotalInfantPrice);
 		}
 		System.out.println(jsonArrayFareBreakdown);
 		
@@ -331,23 +342,25 @@ public class SearchHistoryController {
 	}
 
 	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
+		String traceIdStr = "offline";
+		
 		if (sortName.equals("pnr")) {
-			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdStr, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("price")) {
-			listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date);
+			listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date, traceIdStr);
 			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("duration")) {
-			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdStr, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("arrTime")) {
-			listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date);
+			listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date, traceIdStr);
 			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("depTime")) {
-			listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date);
+			listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date, traceIdStr);
 			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("brand")) {
-			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, Sort.by(sortName).ascending());
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdStr, Sort.by(sortName).ascending());
 			model.addAttribute("listProducts", listProductDetails);
 		}
 	}
