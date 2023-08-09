@@ -1,17 +1,29 @@
 package com.easygofly.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "baggages")
 public class BaggageOnline {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
 	private Integer id;
 	
 	private String price;
 	
-	@Column(nullable = false, unique = true)
 	private String code;
 	
 	private String weight;
+
+	@OneToOne(mappedBy = "baggageOnline")
+	private TravellerDetail travellerDetail;
 	
 
 	public BaggageOnline() {}
@@ -21,6 +33,13 @@ public class BaggageOnline {
 		this.price = price;
 		this.code = code;
 		this.weight = weight;
+	}
+
+	public BaggageOnline(String price, String code, String weight, TravellerDetail travellerDetail) {
+		this.price = price;
+		this.code = code;
+		this.weight = weight;
+		this.travellerDetail = travellerDetail;
 	}
 
 	public Integer getId() {
@@ -53,6 +72,14 @@ public class BaggageOnline {
 
 	public void setWeight(String weight) {
 		this.weight = weight;
+	}
+
+	public TravellerDetail getTravellerDetail() {
+		return travellerDetail;
+	}
+
+	public void setTravellerDetail(TravellerDetail travellerDetail) {
+		this.travellerDetail = travellerDetail;
 	}
 	
 	

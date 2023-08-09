@@ -253,7 +253,7 @@ public class ProductDetailsController {
 	        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
 	        	JSONObject jsonInnerObjectSeats = new JSONObject();
 	        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
-	        	Integer count = 0;
+	        	Integer count = 1;
 	        	for (int i = 0; i < jsonArraySeats.length(); i++) {
 	        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
 	        		

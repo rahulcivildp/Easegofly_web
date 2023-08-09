@@ -167,7 +167,9 @@
 			font-weight: bold;
         }
     </style>
-
+<script type="text/javascript">
+totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
+</script>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
         <div class="choosen_request">
@@ -508,7 +510,7 @@
 	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 	                                	</div>
 	                                	<div  style="padding: 5px 0; margin: 0; display: flex; justify-content: center;" class="col-6">
-	                                		<select name="meals" id="meals" style="width: 70%;" form="order_form">
+	                                		<select name="meals" th:id="'meals' + ${traveler.id}" style="width: 70%;" form="order_form">
 		                                		<th:block th:each="meal : ${mealsOnlineList}">
 		                                			<th:block th:if="${meal.name} == ''">
 		                                			<option th:value="${meal.code}">No meal</option>
@@ -520,38 +522,78 @@
 		                                	</select>
 	                                	</div>
 	                                	<div class="col-3">
-		                                	<p id="mealPrice" style="padding: 5px 0; margin: 0;"></p>
+		                                	<p th:id="'mealPrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
 		                                </div>
 	                                </div>
 	                                		<script type="text/javascript">
-												totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
+												
 												mealAmount = 0;
 												
-												findMeal();
+												meal = $("#meals" + [[${traveler.id}]]).val();
 												
-												$("#meals").change(function(){
-									    			 findMeal();
-									    		 });
-										    	
-											    function findMeal() {
-													meal = $("#meals").val();
-													url = "[[@{/find_meal_}]]" + meal;
+												urlMeal = "[[@{/find_meal_}]]" + meal;
+												
+												$.get(urlMeal, function(response) {
+													$("#mealPrice" + [[${traveler.id}]]).html("Price: " + response);
+													mealAmount = parseInt(response);
+													//alert(totalPaymentAbout + mealAmount);
+													changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
+													$("#totalPayment").text("₹" + changedAmount);
+													$("#inputPrice").val(changedAmount);
 													
-													$.get(url, function(response) {
-														$("#mealPrice").html("Price: " + response);
-														mealAmount = parseInt(response);
-														//alert(totalPaymentAbout + mealAmount);
-														changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
-														$("#totalPayment").text("₹" + changedAmount);
-														$("#inputPrice").val(changedAmount);
+												}).fail(function(){
+													alert("Could not connect to the server.");
+												});
+												
+												
+												$("#meals" + [[${traveler.id}]]).change(function(){
+													 newMeal = $("#meals" + [[${traveler.id}]]).val();
+									    			 urlMealChange = "[[@{/find_meal_}]]" + newMeal;
 														
-													}).fail(function(){
-														alert("Could not connect to the server.");
-													});
-													
-													return false;
-												};
-	                                			
+														$.get(urlMealChange, function(responseChange) {
+															$("#mealPrice" + [[${traveler.id}]]).html("Price: " + responseChange);
+															mealAmount = parseInt(responseChange);
+															//alert(totalPaymentAbout + mealAmount);
+															//changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
+															$("#totalPayment").text("₹" + changedAmount);
+															$("#inputPrice").val(changedAmount);
+															
+														}).fail(function(){
+															alert("Could not connect to the server.");
+														});
+												});
+												
+												
+										    </script>
+										    <script>
+										    
+										    
+										    $(document).ready(function() {
+										    	mealCode = $("#meals" + [[${traveler.id}]]).val();
+												urlMealSave = "[[@{/save_meal}]]";
+												
+										    	params = {id: [[${traveler.id}]], code: mealCode};
+										    	
+										    	$.post(urlMealSave, params, function() {
+										    		
+										    	}).fail(function(){
+									    			alert("Something went wrong in the server!");
+										    	});
+										    });
+										    
+										    $("#meals" + [[${traveler.id}]]).change(function(){
+										    	newMealSave = $("#meals" + [[${traveler.id}]]).val();
+												urlMealChangeSave = "[[@{/save_meal}]]";
+										    	
+										    	params = {id: [[${traveler.id}]], code: newMealSave};
+										    	
+										    	$.post(urlMealChangeSave, params, function() {
+										    		
+										    	}).fail(function(){
+									    			alert("Something went wrong in the server!");
+										    	});
+										    });
+										    
 										    </script>
 	                                </th:block>
                             	</div>
@@ -560,14 +602,14 @@
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Baggage</p>
 	                                </div>
 	                                <th:block th:each="traveler : ${travelers}">
-	                                
+	                                <th:block th:if="${traveler.paxType} != '3'">
 	                                <div class="row">
 	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
 	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 	                                	</div>
 		                                <div class="col-6" style="display: flex; justify-content: center;">		
                                 			<div style="display: flex; justify-content: space-between;">
-                                				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" id="baggageSelect" form="order_form">
+                                				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" th:id="'baggageSelect' + ${traveler.id}" form="order_form">
                                 					<th:block th:each="baggage : ${baggageOnlineList}">
                                 					<option th:value="${baggage.code}">KG: [[${baggage.weight}]]</option>
                                						</th:block>
@@ -575,39 +617,78 @@
                                 			</div>
 		                                </div>
 									  	<div class="col-3">
-                              				<p id="baggaggePrice" style="padding: 5px 0; margin: 0;"></p>
+                              				<p th:id="'baggaggePrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
                               			</div>
 									</div>
 											
 											<script type="text/javascript">
 												baggageAmount = 0;
-											
-												findBaggage();
 												
-												$("#baggageSelect").change(function(){
-									    			 findBaggage();
+												baggage = $("#baggageSelect" + [[${traveler.id}]]).val();
+												urlBaggage = "[[@{/find_baggage_}]]" + baggage;
+
+												$.get(urlBaggage, function(response) {
+													$("#baggaggePrice" + [[${traveler.id}]]).html("Price: " + response);
+													baggageAmount = parseInt(response);
+													changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
+													$("#totalPayment").text("₹" + changedPrice);
+													$("#inputPrice").val(changedPrice);
+													
+												}).fail(function(){
+													alert("Could not connect to the server.");
+												});
+												
+												
+												$("#baggageSelect" + [[${traveler.id}]]).change(function(){
+									    			 	baggageChange = $("#baggageSelect" + [[${traveler.id}]]).val();
+														urlBaggageChange = "[[@{/find_baggage_}]]" + baggageChange;
+	
+														$.get(urlBaggageChange, function(response) {
+															$("#baggaggePrice" + [[${traveler.id}]]).html("Price: " + response);
+															baggageAmount = parseInt(response);
+															//changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
+															$("#totalPayment").text("₹" + changedPrice);
+															$("#inputPrice").val(changedPrice);
+															
+														}).fail(function(){
+															alert("Could not connect to the server.");
+														});
 									    		 });
 										    	
-											    function findBaggage() {
-													baggage = $("#baggageSelect").val();
-													url = "[[@{/find_baggage_}]]" + baggage;
-
-													$.get(url, function(response) {
-														$("#baggaggePrice").html("Price: " + response);
-														baggageAmount = parseInt(response);
-														changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-														$("#totalPayment").text("₹" + changedPrice);
-														$("#inputPrice").val(changedPrice);
-														
-													}).fail(function(){
-														alert("Could not connect to the server.");
-													});
-													
-													return false;
-												};
 										    
 										    </script>
-											
+											<script>
+										    
+										    
+										    $(document).ready(function() {
+										    	baggageCode = $("#baggageSelect" + [[${traveler.id}]]).val();
+												urlBaggageSave = "[[@{/save_baggage}]]";
+												
+										    	params = {id: [[${traveler.id}]], code: baggageCode};
+										    	
+										    	$.post(urlBaggageSave, params, function() {
+										    		
+										    	}).fail(function(){
+									    			alert("Something went wrong in the server!");
+										    	});
+										    });
+										    
+										    $("#baggageSelect" + [[${traveler.id}]]).change(function(){
+										    	newBaggage = $("#baggageSelect" + [[${traveler.id}]]).val();
+												urlBaggageChangeSave = "[[@{/save_baggage}]]";
+										    	
+										    	params = {id: [[${traveler.id}]], code: newBaggage};
+										    	
+										    	$.post(urlBaggageChangeSave, params, function() {
+										    		
+										    	}).fail(function(){
+									    			alert("Something went wrong in the server!");
+										    	});
+										    });
+										    
+										    </script>
+										    
+										    </th:block>
 	                                </th:block>
                             	</div>
                             	<div id="seat_details" class="booking_tiles back_white shadow">
@@ -615,6 +696,7 @@
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Seat</p>
 	                                </div>
 	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:if="${traveler.paxType} != '3'">
 	                                
 	                                <div class="row">
 	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
@@ -622,7 +704,7 @@
 	                                	</div>
 		                                <div class="col-6"  style="display: flex; justify-content: center;">		
                                 			<div style="display: flex; justify-content: space-between;">	
-                                				<select name="seatSelet" style="height: 32px; border-radius: 6px;" id="seatSelet" form="order_form">
+                                				<select name="seatSelet" style="height: 32px; border-radius: 6px;" th:id="'seatSelet'  + ${traveler.id}" form="order_form">
                                 					<th:block th:each="seat : ${seatsOnlineList}">
                                							<th:block th:if="${seat.availablityType} != 3">
 	                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
@@ -632,29 +714,40 @@
                                 			</div>
 		                                </div>
 									  	<div class="col-3">
-                              				<p id="seatPrice" style="padding: 5px 0; margin: 0;"></p>
+                              				<p th:id="'seatPrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
                               			</div>
 									</div>
 											
 											<script type="text/javascript">
 												seatAmount = 0;
 											
-												findSeat();
+												seat = $("#seatSelet"  + [[${traveler.id}]]).val();
+												urlSeat = "[[@{/find_seat_}]]" + seat;
 												
-												$("#seatSelet").change(function(){
-													findSeat();
-									    		 });
-										    	
-											    function findSeat() {
-													seat = $("#seatSelet").val();
-													url = "[[@{/find_seat_}]]" + seat;
+												$.get(urlSeat, function(response) {
+													//alert(response);
+													$("#seatPrice"  + [[${traveler.id}]]).html("Price: " + response);
+													seatAmount = parseInt(response);
+
+													changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
+													$("#totalPayment").text("₹" + changedPriceSeat);
+													$("#inputPrice").val(changedPriceSeat);
 													
-													$.get(url, function(response) {
+												}).fail(function(){
+													alert("Could not connect to the server.");
+												});
+												
+												$("#seatSelet"  + [[${traveler.id}]]).change(function(){
+													
+													newSeat = $("#seatSelet"  + [[${traveler.id}]]).val();
+													urlSeatChange = "[[@{/find_seat_}]]" + newSeat;
+													
+													$.get(urlSeatChange, function(response) {
 														//alert(response);
-														$("#seatPrice").html("Price: " + response);
+														$("#seatPrice"  + [[${traveler.id}]]).html("Price: " + response);
 														seatAmount = parseInt(response);
 
-														changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
+														//changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
 														$("#totalPayment").text("₹" + changedPriceSeat);
 														$("#inputPrice").val(changedPriceSeat);
 														
@@ -662,11 +755,43 @@
 														alert("Could not connect to the server.");
 													});
 													
-													return false;
-												};
+									    		 });
+										    	
+											    
 										    
 										    </script>
-											
+										    <script>
+										    
+										    
+										    $(document).ready(function() {
+										    	seatId = $("#seatSelet" + [[${traveler.id}]]).val();
+												urlSeatSave = "[[@{/save_seat}]]";
+												
+										    	params = {id: [[${traveler.id}]], seatId: seatId};
+										    	
+										    	$.post(urlSeatSave, params, function() {
+										    		
+										    	}).fail(function(){
+									    			alert("Something went wrong in the server!");
+										    	});
+										    });
+										    
+										    $("#seatSelet" + [[${traveler.id}]]).change(function(){
+										    	seatChangeSave = $("#seatSelet" + [[${traveler.id}]]).val();
+												urlSeatChangeSave = "[[@{/save_seat}]]";
+										    	
+										    	params = {id: [[${traveler.id}]], seatId: seatChangeSave};
+										    	
+										    	$.post(urlSeatChangeSave, params, function() {
+										    		
+										    	}).fail(function(){
+									    			alert("Something went wrong in the server!");
+										    	});
+										    });
+										    
+										    </script>
+										    
+										</th:block>	
 	                                </th:block>
                             	</div>
                                 <div id="contact_details" class="booking_tiles back_white shadow">
@@ -906,6 +1031,9 @@
         </div>
      
     </body>
+<script type="text/javascript">
+
+</script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		checkBrand();

@@ -14,9 +14,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.MealsOnline;
+import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
+import com.easygofly.site.flight.MealRepository;
+import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.search.SearchHistoryRepository;
 
 @DataJpaTest
@@ -25,11 +31,10 @@ import com.easygofly.site.search.SearchHistoryRepository;
 @ContextConfiguration(classes = EasyGoFlyFrontEndApplication.class)
 public class SearchRepositoryTest {
 
-	@Autowired
-	private SearchHistoryRepository repo;
-	
-	@Autowired
-	private TestEntityManager entityManager;
+	@Autowired private SearchHistoryRepository repo;
+	@Autowired private TestEntityManager entityManager;
+	@Autowired private MealRepository mealRepo;
+	@Autowired private TravellerRepository travellerRepo;
 	
 	@Test
 	public void createSearchHistory() {
@@ -91,5 +96,17 @@ public class SearchRepositoryTest {
 		return counter;
 	}
 	
-	
+	@Test
+	public void setTravelerMeal() {
+		Date date = new Date();
+		ProductDetail productDetail = entityManager.find(ProductDetail.class, 208);
+		CartItem cartItem = entityManager.find(CartItem.class, 248);
+		TravellerDetail travellerDetail = new TravellerDetail("Mr", "Tanmay", "Sarkar", date, productDetail, cartItem, "1", 15, 7);
+//		MealsOnline mealsOnline = new MealsOnline("No Meal", "0", "NoMeal", "1", travellerDetail);
+		travellerDetail.addMeal("No Meal", "0", "NoMeal", "0");
+		
+		TravellerDetail savedTraveler = travellerRepo.save(travellerDetail);
+		System.out.println(savedTraveler.getFirstName());
+		
+	}
 }

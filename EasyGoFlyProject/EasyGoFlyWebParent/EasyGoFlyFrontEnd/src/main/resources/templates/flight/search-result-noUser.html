@@ -574,9 +574,9 @@
 				inputVal = $("#inputSeatNum-" + [[${flight.id}]]);
               	
               	if(search_passenger_num > inputVal.val()) {
-      				inputVal.parent().css("display", "none");
+      				inputVal.parent().parent().css("display", "none");
       			} else if (search_passenger_num == inputVal.val()) {
-      				inputVal.parent().css("display", "block");
+      				inputVal.parent().parent().css("display", "block");
       			}
               	
 			</script>

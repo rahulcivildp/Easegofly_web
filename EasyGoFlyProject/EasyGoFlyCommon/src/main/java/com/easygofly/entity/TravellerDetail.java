@@ -2,6 +2,7 @@ package com.easygofly.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -60,6 +62,18 @@ public class TravellerDetail {
 	@ManyToOne
 	@JoinColumn(name = "order_id")
 	private Order order;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "meal_id", referencedColumnName = "id")
+    private MealsOnline mealOnline;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "baggage_id", referencedColumnName = "id")
+    private BaggageOnline baggageOnline ;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seat_id", referencedColumnName = "id")
+    private SeatsOnline seatsOnline ;
 
 	
 	public TravellerDetail() {}
@@ -197,6 +211,43 @@ public class TravellerDetail {
 		this.paxType = paxType;
 	}
 
+	public MealsOnline getMealOnline() {
+		return mealOnline;
+	}
+
+	public void setMealOnline(MealsOnline mealOnline) {
+		this.mealOnline = mealOnline;
+	}
+
+	public BaggageOnline getBaggageOnline() {
+		return baggageOnline;
+	}
+
+	public void setBaggageOnline(BaggageOnline baggageOnline) {
+		this.baggageOnline = baggageOnline;
+	}
+
+	public SeatsOnline getSeatsOnline() {
+		return seatsOnline;
+	}
+
+	public void setSeatsOnline(SeatsOnline seatsOnline) {
+		this.seatsOnline = seatsOnline;
+	}
+
+	public void addMeal(String name, String price, String code, String quantity) {
+		this.mealOnline = new MealsOnline(name, price, code, quantity, this);
+	}
+
+	public void addBaggage(String price, String code, String weight) {
+		this.baggageOnline = new BaggageOnline(price, code, weight, this);
+	}
+
+	public void addSeat(String price, Integer compartment, Integer availablityType, Integer deck, String rowNo,
+			String code, Integer seatType, String seatNo, String craftType) {
+		this.seatsOnline = new SeatsOnline(price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftType, this);
+	}
+	
 	@Override
 	public String toString() {
 		return "TravellerDetail [salutation=" + salutation + ", firstName=" + firstName + ", lastName=" + lastName

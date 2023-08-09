@@ -274,46 +274,72 @@ public class ProductDetailService {
 		return flightRepo.save(savedFlightPassengerDetails);
 	}
 	
-	public List<TravellerDetail> setMealBaggageSeatOnline(List<TravellerDetail> travellerDetails2, String mealCode, String baggageCode, Integer seatId) {
+	public List<TravellerDetail> setMealBaggageSeatOnline(List<TravellerDetail> travellerDetails2, String[] mealCode, String[] baggageCode, Integer[] seatId) {
 		
 		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
 		List<MealsOnline> mealList = productDetailsController.mealsOnlineList;
 		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
-		
+		String mealCodeStr = "", baggageCodeStr = "";
+		Integer seatIdInt = 0;
 		List<TravellerDetail> travellerDetails = travellerDetails2;
+		
+		for (int i = 0; i < travellerDetails.size(); i++) {
+					mealCodeStr = mealCode[i];
+					baggageCodeStr = baggageCode[i];
+					seatIdInt = seatId[i];
+		}
+		
 		for (TravellerDetail travellerDetail : travellerDetails) {
-			for (BaggageOnline baggageOnline : baggageOnlineList) {
-				if (baggageOnline.getCode().equals(baggageCode) ) {
-					travellerDetail.setBaggage(baggageCode + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
-					travellerDetail.setBaggageWT(Integer.parseInt(baggageOnline.getWeight()));
-				} 
-			}
-			
-			for (MealsOnline mealsOnline : mealList) {
+			if (travellerDetail.getPaxType().equals("1") || travellerDetail.getPaxType().equals("2")) {
 				
-				String mealName = "";
-				if (mealsOnline.getCode().equals("NoMeal") ) {
-					mealName = "No Meal";
-				} else {
-					mealName = mealsOnline.getName();
+				
+				
+				for (BaggageOnline baggageOnline : baggageOnlineList) {
+					if (baggageOnline.getCode().equals(baggageCodeStr) ) {
+						travellerDetail.setBaggage(baggageCodeStr + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
+						travellerDetail.setBaggageWT(Integer.parseInt(baggageOnline.getWeight()));
+					} 
 				}
 				
-				if (mealsOnline.getCode().equals(mealCode) ) {
+				for (MealsOnline mealsOnline : mealList) {
 					
-					travellerDetail.setMeal(mealCode + "|" + mealsOnline.getQuantity() + "|" + mealsOnline.getPrice() + "|" + mealName);
-				} 
+					String mealName = "";
+					if (mealsOnline.getCode().equals("NoMeal") ) {
+						mealName = "No Meal";
+					} else {
+						mealName = mealsOnline.getName();
+					}
+					
+					if (mealsOnline.getCode().equals(mealCodeStr) ) {
+						
+						travellerDetail.setMeal(mealCodeStr + "|" + mealsOnline.getQuantity() + "|" + mealsOnline.getPrice() + "|" + mealName);
+					} 
+				}
+				
+				String resp = "FAILED";
+				for (SeatsOnline seatsOnline : seatsOnlineList) {
+					if (seatsOnline.getId() == seatIdInt ) {
+						travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
+						+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
+						+ "|" + seatsOnline.getCraftType() + "|" + seatsOnline.getCode());
+					} 
+				}
+				
+				travellerRepo.save(travellerDetail);
+			} else {
+				
+				String resp = "FAILED";
+				for (SeatsOnline seatsOnline : seatsOnlineList) {
+					if (seatsOnline.getId() == seatIdInt ) {
+						travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
+						+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
+						+ "|" + seatsOnline.getCraftType() + "|" + seatsOnline.getCode());
+					} 
+				}
+				
+				travellerRepo.save(travellerDetail);
 			}
 			
-			String resp = "FAILED";
-			for (SeatsOnline seatsOnline : seatsOnlineList) {
-				if (seatsOnline.getId() == seatId ) {
-					travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
-					+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
-					+ "|" + seatsOnline.getCraftType() + "|" + seatsOnline.getCode());
-				} 
-			}
-			
-			travellerRepo.save(travellerDetail);
 		}
 		
 		return travellerDetails;

@@ -10,14 +10,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.PaymentMethod;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.checkout.CheckoutInfo;
@@ -129,10 +132,20 @@ public class OrderService {
 		return orderRepo.save(savedOrder);
 	}
 	
-	public Order updateOrderPriceOnline(Order order, String price) {
+	public Order updateOrderPriceOnline(Order order, List<TravellerDetail> travellerDetails, CheckoutInfo checkoutInfo) {
 		Order savedOrder = orderRepo.findById(order.getId()).get();
+		Double checkoutPrice = checkoutInfo.getPaymentTotal();
+		Double calPriceArray = 0d;
+		for (TravellerDetail travellerDetail : travellerDetails) {
+			MealsOnline mealsOnline = travellerDetail.getMealOnline();
+			BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
+			SeatsOnline seatsOnline = travellerDetail.getSeatsOnline();
+			
+			Double calPrice = Double.parseDouble(mealsOnline.getPrice()) + Double.parseDouble(baggageOnline.getPrice()) + Double.parseDouble(seatsOnline.getPrice());
+			calPriceArray = calPriceArray + calPrice;
+		}
 		
-		savedOrder.setPrice(Double.parseDouble(price));
+		savedOrder.setPrice(calPriceArray + checkoutPrice);
 		return orderRepo.save(savedOrder);
 	}
 	

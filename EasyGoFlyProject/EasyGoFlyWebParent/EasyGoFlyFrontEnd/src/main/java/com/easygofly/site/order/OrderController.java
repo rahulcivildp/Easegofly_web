@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,9 +116,6 @@ public class OrderController {
 			@RequestParam(name = "couponCode") String couponCode,
 			@RequestParam(name = "couponCode1") String couponCode1,
 			@RequestParam(name = "totalPayment") String totalPayment,
-			@RequestParam(name = "meals") String meals,
-			@RequestParam(name = "baggageSelect") String baggageSelect,
-			@RequestParam(name = "seatSelet") Integer seatSelet,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
@@ -127,9 +125,7 @@ public class OrderController {
 			
 			String paymentType = "PAYMENT_GATEWAY";
 			PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
-			
-			
-			
+
 			Date date = flight.getDate();  
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
 		    String dateTime = dateFormat.format(date);
@@ -139,8 +135,7 @@ public class OrderController {
 			Order order = orderRepo.findByCartItemOrder(item_id);
 			
 			List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByCurtItemAndProductDetail(flight, item);
-			productService.setMealBaggageSeatOnline(travellerDetails, meals, baggageSelect, seatSelet);
-			
+
 			cartService.updateCartItemOrdered(item);
 
 			Coupon coupon = couponService.findCouponByCode(couponCode);
@@ -180,7 +175,7 @@ public class OrderController {
 						orderService.updateOrderPrice(order, checkoutInfo);
 						orderService.deleteCouponCode(order);
 					} else {
-						orderService.updateOrderPriceOnline(order, totalPayment);
+						orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
 						orderService.deleteCouponCode(order);
 					}
 					
@@ -232,7 +227,7 @@ public class OrderController {
 						orderService.updateOrderPrice(order, checkoutInfo);
 						orderService.deleteCouponCode(order);
 					} else {
-						orderService.updateOrderPriceOnline(order, totalPayment);
+						orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
 						orderService.deleteCouponCode(order);
 					}
 				} else {
@@ -773,24 +768,14 @@ public class OrderController {
 			for (TravellerDetail travellerDetail : travelers) {
     			Date getDOB = travellerDetail.getDob();
     			Integer genNum = 0;
-    			if (travellerDetail.getSalutation().equals("Mr.")) {
+    			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
     				genNum = 1;
+    				System.out.println(genNum);
     			} else {
     				genNum = 2;
     			}
     			String baseFare = "";
     			String tax = "";
-    			
-    			if (travellerDetail.getPaxType().equals("1")) {
-    				baseFare = productDetailsController.basefareTravelerAdult;
-    				tax = productDetailsController.taxTravelerAdult;
-				} else if (travellerDetail.getPaxType().equals("2")) {
-    				baseFare = productDetailsController.basefareTravelerChild;
-    				tax = productDetailsController.taxTravelerChild;
-				} else {
-    				baseFare = productDetailsController.basefareTravelerInfant;
-    				tax = productDetailsController.taxTravelerInfant;
-				}
     			
     			//baggage information
     			String bagCode = "", bagWeight = "", bagPrice = "";
@@ -830,6 +815,83 @@ public class OrderController {
 	    			seatPrice = seatArray[4];
 	    			seatCraftType = seatArray[7];
 				}
+    			
+    			String baggageDetailsString = "		\"Baggage\":[\r\n"
+    					+ "            {\r\n"
+    					+ "                \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "                \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "                \"WayType\": 2,\r\n"
+    					+ "                \"Code\": \"" + bagCode + "\",\r\n"
+    					+ "                \"Description\": 2,\r\n"
+    					+ "                \"Weight\": " + bagWeight + ",\r\n"
+    					+ "                \"Currency\": \"INR\",\r\n"
+    					+ "                 \"Price\": " + bagPrice + ",\r\n"
+    					+ "                 \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
+    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
+    					+ "				}\r\n"
+    					+ "			],\r\n";
+    			
+    			String mealDetailsString = "     \"MealDynamic\": [\r\n"
+    					+ "        {\r\n"
+    					+ "          \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "          \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "          \"WayType\": 2,\r\n"
+    					+ "          \"Code\": \"" + mealCode + "\",\r\n"
+    					+ "          \"Description\": 2,\r\n"
+    					+ "          \"AirlineDescription\": \"" + mealName + "\",\r\n"
+    					+ "          \"Quantity\": " + mealQuantity + ",\r\n"
+    					+ "          \"Currency\": \"INR\",\r\n"
+    					+ "          \"Price\": " + mealPrice + ",\r\n"
+    					+ "          \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
+    					+ "          \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
+    					+ "        }],\r\n";
+    			
+    			String seatDetailsString = "		\"SeatDynamic\": [\r\n"
+    					+ "        {\r\n"
+    					+ "	    \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "             \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "              \"CraftType\": \"" + productDetailsController.craftType + "\",\r\n"
+    					+ "               \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
+    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\",\r\n"
+    					+ "                \"AvailablityType\": " + seatAvailabilityType + ",\r\n"
+    					+ "                \"Description\": 2,\r\n"
+    					+ "                \"Code\": \"" + seatCode + "\",\r\n"
+    					+ "                \"RowNo\": \"" + seatRowNo + "\",\r\n"
+    					+ "                \"SeatNo\": \"" + seatNo + "\",\r\n"
+    					+ "                \"SeatType\": " + seatType + ",\r\n"
+    					+ "                \"SeatWayType\": 2,\r\n"
+    					+ "                \"Compartment\": " + seatCompartment + ",\r\n"
+    					+ "                \"Deck\": " + seatDeck + ",\r\n"
+    					+ "                \"Currency\": \"INR\",\r\n"
+    					+ "                \"Price\": " + seatPrice + "                                                                                                                                                                                                      \r\n"
+    					+ "			\r\n"
+    					+ "		}],\r\n";
+    			
+    			String baggageDetails = "";
+    			String mealDetails = "";
+    			String seatDetails = "";
+    			
+    			if (travellerDetail.getPaxType().equals("1")) {
+    				baseFare = productDetailsController.basefareTravelerAdult;
+    				tax = productDetailsController.taxTravelerAdult;
+    				baggageDetails = baggageDetailsString;
+    				mealDetails = mealDetailsString;
+    				seatDetails = seatDetailsString;
+//    				System.out.println(seatDetails);
+				} else if (travellerDetail.getPaxType().equals("2")) {
+    				baseFare = productDetailsController.basefareTravelerChild;
+    				tax = productDetailsController.taxTravelerChild;
+    				baggageDetails = baggageDetailsString;
+    				mealDetails = mealDetailsString;
+    				seatDetails = seatDetailsString;
+//    				System.out.println(seatDetails);
+				} else {
+    				baseFare = productDetailsController.basefareTravelerInfant;
+    				tax = productDetailsController.taxTravelerInfant;
+    				mealDetails = mealDetailsString;
+				}
+    			
+    			
     				
     			
     			String details = "{\r\n"
@@ -860,54 +922,9 @@ public class OrderController {
     					+ "		\"IsLeadPax\": true,\r\n"
     					+ "		\"FFAirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
     					+ "		\"FFNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
-    					+ "		\"Baggage\":[\r\n"
-    					+ "            {\r\n"
-    					+ "                \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
-    					+ "                \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
-    					+ "                \"WayType\": 2,\r\n"
-    					+ "                \"Code\": \"" + bagCode + "\",\r\n"
-    					+ "                \"Description\": 2,\r\n"
-    					+ "                \"Weight\": " + bagWeight + ",\r\n"
-    					+ "                \"Currency\": \"INR\",\r\n"
-    					+ "                 \"Price\": " + bagPrice + ",\r\n"
-    					+ "                 \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
-    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
-    					+ "				}\r\n"
-    					+ "			],\r\n"
-    					+ "     \"MealDynamic\": [\r\n"
-    					+ "        {\r\n"
-    					+ "          \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
-    					+ "          \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
-    					+ "          \"WayType\": 2,\r\n"
-    					+ "          \"Code\": \"" + mealCode + "\",\r\n"
-    					+ "          \"Description\": 2,\r\n"
-    					+ "          \"AirlineDescription\": \"" + mealName + "\",\r\n"
-    					+ "          \"Quantity\": " + mealQuantity + ",\r\n"
-    					+ "          \"Currency\": \"INR\",\r\n"
-    					+ "          \"Price\": " + mealPrice + ",\r\n"
-    					+ "          \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
-    					+ "          \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
-    					+ "        }],\r\n"
-    					+ "		\"SeatDynamic\": [\r\n"
-    					+ "        {\r\n"
-    					+ "	    \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
-    					+ "             \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
-    					+ "              \"CraftType\": \"" + productDetailsController.craftType + "\",\r\n"
-    					+ "               \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
-    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\",\r\n"
-    					+ "                \"AvailablityType\": " + seatAvailabilityType + ",\r\n"
-    					+ "                \"Description\": 2,\r\n"
-    					+ "                \"Code\": \"" + seatCode + "\",\r\n"
-    					+ "                \"RowNo\": \"" + seatRowNo + "\",\r\n"
-    					+ "                \"SeatNo\": \"" + seatNo + "\",\r\n"
-    					+ "                \"SeatType\": " + seatType + ",\r\n"
-    					+ "                \"SeatWayType\": 2,\r\n"
-    					+ "                \"Compartment\": " + seatCompartment + ",\r\n"
-    					+ "                \"Deck\": " + seatDeck + ",\r\n"
-    					+ "                \"Currency\": \"INR\",\r\n"
-    					+ "                \"Price\": " + seatPrice + "                                                                                                                                                                                                      \r\n"
-    					+ "			\r\n"
-    					+ "		}],\r\n"
+    					+ baggageDetails
+    					+ mealDetails
+    					+ seatDetails
     					+ "		\"GSTCompanyAddress\": \"\",\r\n"
     					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
     					+ "		\"GSTCompanyName\": \"\",\r\n"
@@ -916,6 +933,8 @@ public class OrderController {
     					+ "}";
     			
     			travelerDetailsArray.add(details);
+    			System.out.println(details);
+    			System.out.println("seatDetails : " + seatDetails);
     			
     		}
         	
