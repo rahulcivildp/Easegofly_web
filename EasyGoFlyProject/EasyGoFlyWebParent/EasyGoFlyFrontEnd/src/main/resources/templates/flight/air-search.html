@@ -262,13 +262,13 @@ th:fragment="air-search">
                             <div class="col-md-7 col-12" style=" float: left;">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
-                                    <label for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
+                                    <label for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin"></i> Departure</label>
                                     <input type="date" name="date" class="form-control input_calender" id="floatingInputDepurture" required>
                                     
                                 </div>
-                                <div class="col-md-4 col-6 aligner" ><!-- id="input_roundtrip" -->
+                                <div class="col-md-4 col-6 aligner" id="input_roundtrip" ><!-- id="input_roundtrip" -->
                                     <label for="floatingInputCalender"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-                                    <input type="date" class="form-control input_calender" id="floatingInputCalender" disabled>
+                                    <input type="date" class="form-control input_calender" disabled>
                                     
                                 </div>
                                 <div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
@@ -349,7 +349,7 @@ th:fragment="air-search">
                             </div>
                         </div>
                     </form>
-                    <form  method="post">
+                    <form th:action="@{/flight_search_return_save}" method="get">
                     	
                         <div class="radio_search col-12" id="radio_search_2">
 							<input type="hidden" name="tripType" value="twoWays">
@@ -377,13 +377,13 @@ th:fragment="air-search">
                             <div class="col-md-7 col-12" style=" float: left;">
                                 
                                 <div class="col-md-4 col-6 aligner"> 
-                                    <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Depurture</label>
-                                    <input type="date" class="form-control input_calender" name="date" id="floatingInputDepurtureReturn">
+                                    <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Departure</label>
+                                    <input type="date" class="form-control input_calender" name="date" id="floatingInputDepurtureReturn" required>
                                     
                                 </div>
                                 <div class="col-md-4 col-6 aligner">
                                     <label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-                                    <input type="date" class="form-control input_calender" name="return_date" id="floatingInputReturnReturn">
+                                    <input type="date" class="form-control input_calender" name="return_date" id="floatingInputReturnReturn" required>
                                     
                                 </div>
                                 <div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">

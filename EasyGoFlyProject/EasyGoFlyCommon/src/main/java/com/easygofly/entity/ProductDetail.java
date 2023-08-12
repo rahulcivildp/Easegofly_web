@@ -124,7 +124,7 @@ public class ProductDetail {
             cascade =  CascadeType.ALL,
             mappedBy = "productDetail")
     private Order order;
-
+	
 	
 	public ProductDetail() {}
 
@@ -552,12 +552,17 @@ public class ProductDetail {
 
 	@Override
 	public String toString() {
-		return "ProductDetail [pnr=" + pnr + ", totalSeats=" + totalSeats + ", uploadSeats=" + uploadSeats
-				+ ", flightNum=" + flightNum + ", date=" + date + ", depTime=" + depTime + ", arrTime=" + arrTime
-				+ ", priceADT=" + priceADT + ", priceINF=" + priceINF + ", markupADT=" + markupADT + ", markupINF="
-				+ markupINF + ", cityOne=" + cityOne + ", cityTwo=" + cityTwo + ", enabled=" + enabled + ", inStock="
-				+ inStock + ", product=" + product + "]";
+		return "ProductDetail [id=" + id + ", pnr=" + pnr + ", totalSeats=" + totalSeats + ", uploadSeats="
+				+ uploadSeats + ", flightNum=" + flightNum + ", date=" + date + ", depTime=" + depTime + ", arrTime="
+				+ arrTime + ", depTimeInteger=" + depTimeInteger + ", arrTimeInteger=" + arrTimeInteger + ", priceADT="
+				+ priceADT + ", priceINF=" + priceINF + ", markupADT=" + markupADT + ", markupINF=" + markupINF
+				+ ", cityOne=" + cityOne + ", cityTwo=" + cityTwo + ", journeyClass=" + journeyClass + ", terminalDep="
+				+ terminalDep + ", terminalArr=" + terminalArr + ", baggage=" + baggage + ", cabinBaggage="
+				+ cabinBaggage + ", duration=" + duration + ", brand=" + brand + ", stopNum=" + stopNum + ", enabled="
+				+ enabled + ", inStock=" + inStock + ", traceId=" + traceId + ", resultIndex=" + resultIndex
+				+ ", airlineRemarks=" + airlineRemarks + ", mode=" + mode + ", product=" + product + ", stops=" + stops
+				+ ", cartItems=" + cartItems + ", travellerDetails=" + travellerDetails + ", order=" + order + "]";
 	}
-	
+
 	
 }

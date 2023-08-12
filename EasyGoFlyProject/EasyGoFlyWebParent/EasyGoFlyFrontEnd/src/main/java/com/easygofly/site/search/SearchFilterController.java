@@ -194,7 +194,7 @@ public class SearchFilterController {
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("search", search);
 		
-		return "flight/search-result";
+		return "flight/search/search-result";
 	}
 	
 	@GetMapping("/flight_search-noUser_filter_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
@@ -240,7 +240,7 @@ public class SearchFilterController {
 		model.addAttribute("stops", stops);
 		model.addAttribute("totalPrice", totalPrice);
 		
-		return "flight/search-result-noUser";
+		return "flight/search/search-result-noUser";
 		
 	}
 	

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.FlightMap;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
@@ -59,6 +60,8 @@ public class ProductDetailsController {
 	@Autowired private SearchHistoryController searchHistoryController;
 	
 	public List<ProductDetail> listProductDetailsOnline;
+	public List<ProductDetail> listProductDetailsOnlineReturn;
+	public List<FlightMap> flightMaps;
 	private Integer flightIdLocal = 0;
 	List<BaggageOnline> baggageOnlineList = new ArrayList<BaggageOnline>();
 	List<MealsOnline> mealsOnlineList = new ArrayList<MealsOnline>();

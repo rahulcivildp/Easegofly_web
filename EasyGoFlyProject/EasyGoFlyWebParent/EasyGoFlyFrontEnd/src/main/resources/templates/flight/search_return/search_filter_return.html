@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	
+<head>
+</head>	
+<body>
+<div th:fragment="search_filter(remove)" th:remove="${remove}">
+	<style type="text/css">
+		.activeTime {
+			background-color: blue;
+			border: 2px solid blue;
+			color: white;
+		}
+	
+	</style>
+	<div>
+       <form method="POST" th:action="@{/noUser_search_filter}">
+       		<input type="hidden" name="cityOne" th:value="${cityOne}">
+       		<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+       		<input type="hidden" name="date" th:value="${strDate}">
+       		<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+       		<input type="hidden" name="tripType" th:value="${tripType}">
+       		<input type="hidden" name="adultNum" th:value="${adultNum}">
+       		<input type="hidden" name="childNum" th:value="${childNum}">
+       		<input type="hidden" name="infantNum" th:value="${infantNum}">
+       		<input type="hidden" name="brand" value="brand">
+       		<input type="hidden" name="stop" value="9">
+       		<input type="hidden" name="totalPrice" value="0">
+       		<input type="hidden" name="activeTime" value="active">
+           <div class="rounded" style="margin-right: 30px; box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; background-color: white;">
+               <div style="padding: 20px;">
+                   <div class="row">
+                       <div>
+                           <input type="submit" style="float: right; margin: 6px;" value="Filter">
+                       </div>
+                   </div>
+               <div>
+                   <div style="margin-bottom: 16px;">
+			           <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Airlines</h2>
+			           <select class="form-select" aria-label="Default select example" name="brand" multiple style=" height: 106px;">
+						  <option value="air india">Air India Only</option>
+						  <option value="indigo">Indigo Only</option>
+						  <option value="spicejet">SpiceJet Only</option>
+						  <option value="brand">Air Asia India Only</option>
+						</select>
+                   </div>
+                   <div style="margin-bottom: 16px; background: #e0e0e0;">
+                       <h2 style="font-size: 18px;"><i class="fa fa-plane" aria-hidden="true"></i> Flight Fare Type</h2>
+                       <input type="checkbox" id="regular_fare" name="regular_fare" value="regular_fare" disabled>
+                       <label for="regular_fare"> Regular Fare</label><br>
+                       <input type="checkbox" id="corporate_fare" name="corporate_fare" value="corporate_fare" disabled>
+                       <label for="corporate_fare"> Corporate Fare</label><br>
+                   </div>
+                   <div style="margin-bottom: 20px;">
+                       <h2 style="font-size: 18px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Time</h2>
+                       <div>
+                           <P>Departure TIme</P>
+                           <div class="row">
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                       <div class="time_tiles" style="cursor: pointer;">
+                                           <div class="input"></div>
+                                           <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
+                                           <div class="showTime"><p style=" margin-bottom: 8px;">00:00 - 06:00</p></div>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                   		<div class="time_tiles" style="cursor: pointer;">
+                                           <div class="input"></div>
+                                           <div style=" margin-top: 8px;"><i class="fa fa-sun-o" aria-hidden="true"></i></div>
+                                           <div class="showTime"><p style=" margin-bottom: 8px;">06:00 - 12:00</p></div>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                   		<div class="time_tiles" style="cursor: pointer;">
+                                           <div class="input"></div>
+                                           <div style=" margin-top: 8px;"><i class="fa fa-sun-o" aria-hidden="true"></i></div>
+                                           <div class="showTime"><p style=" margin-bottom: 8px;">12:00 - 18:00</p></div>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3" style="padding: 0 2px;">
+                                   		<div class="time_tiles" style="cursor: pointer;">
+                                           <div class="input"></div>
+                                           <div style=" margin-top: 8px;"><i class="fa fa-moon-o" aria-hidden="true"></i></div>
+                                           <div class="showTime"><p style=" margin-bottom: 8px;">18:00 - 24:00</p></div>
+                                       </div>
+                                   </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div style="padding-bottom: 12px;">
+                       <h2 style="font-size: 18px;"><i class="fa fa-map-marker" aria-hidden="true"></i> Stops</h2>
+                       <div style="padding: 0; width: 60%;">
+                       <select class="form-select" aria-label="Default select example" name="stop" multiple style="height: 82px;">
+						  <option value="0">0 Stop</option>
+						  <option value="1">1 Stop</option>
+						  <option value="2">2 Stops</option>
+						  <option value="3">3 Stops</option>
+						</select>
+			
+		</div>
+        </div>
+        <div style="margin-bottom: 16px; background: #e0e0e0;">
+            <h2 style="font-size: 18px;"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Layover Airport</h2>
+            <ul class="layover_airport">
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Ahmedabad (AMD)</label><br>
+                </li>
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Biju Patnaik Airport (BBI)</label><br>
+                </li>
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Chhatrapati Shivaji Intl Airport (BOM)</label><br>
+                </li>
+                <li>
+                    <input type="checkbox" id="air_asia_india" name="air_asia_india" value="air_asia_india" disabled>
+                    <label for="air_asia_india"> Cuddapah Airport (CDP)</label><br>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <h2 style="font-size: 18px;"><i class="fa fa-inr" aria-hidden="true"></i> Price</h2>
+            <ul style="list-style-type: none; padding: 0;">
+                <li>
+                    <div class="slidecontainer">
+                        <p style="float: left;"> 0 INR</p>
+                        <p style="float: right;"> 30000 INR</p>
+                        <input type="range" min="0" max="30000" value="" class="slider" id="myRange">
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <input type="number" id="searchboes" placeholder="0" style=" width: 90%;" name="totalPrice">
+                        <input id="searchbutton" type="button" value="Set">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div style="background: #e0e0e0;">
+            <h2 style="font-size: 18px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Duration</h2>
+            <ul style="list-style-type: none; padding: 0;">
+                <li>
+                    <div class="slidecontainer">
+                        <p style="float: left;"> 2 Hrs</p>
+                        <p style="float: right;"> 29 Hrs</p>
+                        <input type="range" min="2" max="29" value="15" class="slider" id="myduration" disabled>
+                        <p style="float: right;">Value: <span id="demo2"></span></p>
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <input type="number" id="searchboxess" value="" placeholder="00 Hrs" style=" width: 30%;" maxlength="2" disabled>
+                                  <input id="searchbuttonss" type="button" value="Set" disabled>
+                              </div>
+                          </li>
+                      </ul></div>
+                  </div>
+              </div>
+          </div>
+        </form>
+     </div>
+<script type="text/javascript">
+	$(".time_tiles").click(function(){
+		$(".time_tiles").removeClass("activeTime");
+		$(".time_tiles").children("div.input").html("");
+		$(this).addClass("activeTime");
+		const myArray = $(this).children("div.showTime").text().split(" - ");
+		const myArrayChildDep = myArray[1].split(":");
+		const myArrayChildArr = myArray[0].split(":");
+		var combinedTime = myArrayChildArr[0] + ":" + myArrayChildDep[0];
+		$(this).children("div.input").html("<input type='hidden' name='activeTime' value='" + combinedTime + "'>");
+	})
+
+</script>
+</div>
+
+</body>	
+</html>

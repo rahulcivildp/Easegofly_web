@@ -60,7 +60,7 @@ public class OnlineFlightService {
 		return responseCode;
 	}
 	
-	public int apiOnlineMod(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
+	public int apiOnlineSearchMod(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
 			throws IOException {
 		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -93,6 +93,70 @@ public class OnlineFlightService {
         			+ "\"FlightCabinClass\": \"1\", "
         			+ "\"PreferredDepartureTime\": \"" + strDate + "T00: 00: 00\", "
         			+ "\"PreferredArrivalTime\": \"" + strDate + "T00: 00: 00\""
+        			+ "}],"
+        		+ "\"Sources\": null"
+        		+ "}";
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+	
+	public int apiOnlineSearchModReturn(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date, Date returnDate)
+			throws IOException {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		String strDate = dateFormat.format(date);
+		String strReturnDate = dateFormat.format(returnDate);
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+     // Create the request body
+        String requestBody = "{"
+        		+ "\"EndUserIp\": \"89.116.231.35\", "
+        		+ "\"TokenId\": \"" + tokenId + "\", "
+        		+ "\"AdultCount\": \"" + adultNum + "\", "
+        		+ "\"ChildCount\": \"" + childNum + "\", "
+        		+ "\"InfantCount\": \"" + infantNum + "\", "
+        		+ "\"DirectFlight\": \"false\", "
+        		+ "\"OneStopFlight\": \"false\", "
+        		+ "\"JourneyType\": \"2\", "
+        		+ "\"PreferredAirlines\": null, "
+        		+ "\"Segments\": [{"
+        			+ "\"Origin\": \"" + cityOne + "\", "
+        			+ "\"Destination\": \"" + cityTwo + "\", "
+        			+ "\"FlightCabinClass\": \"1\", "
+        			+ "\"PreferredDepartureTime\": \"" + strDate + "T00: 00: 00\", "
+        			+ "\"PreferredArrivalTime\": \"" + strDate + "T00: 00: 00\""
+        			+ "},"
+        			+ "{"
+        			+ "\"Origin\": \"" + cityTwo + "\","
+        			+ "\"Destination\": \"" + cityOne + "\",\r\n"
+        			+ "        \"FlightCabinClass\": \"1\","
+        			+ "\"PreferredDepartureTime\": \"" + strReturnDate + "T00: 00: 00\","
+        			+ "\"PreferredArrivalTime\": \"" + strReturnDate + "T00: 00: 00\""
         			+ "}],"
         		+ "\"Sources\": null"
         		+ "}";

@@ -354,6 +354,11 @@ public class Customer {
 			String tripType, Date date) {
 		this.searchHistory.add(new SearchHistory( cityOne,  cityTwo, passengerNum, journeyClass, adultNum, childNum, infantNum, tripType, date, this ));
 	}
+
+	public void addSerchHistoryReturn(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,
+			String tripType, Date date, Date returnDate) {
+		this.searchHistory.add(new SearchHistory(cityOne, cityTwo, passengerNum, journeyClass, adultNum, childNum, infantNum, tripType, date, returnDate, this));
+	}
 	
 	public void addSerchHistory(Integer id, String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,
 			String tripType, Date date) {

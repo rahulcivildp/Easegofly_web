@@ -28,6 +28,25 @@ public class ProductSaveHelper {
 			
 	}
 	
+	public static void setSearchHistoryReturn(Customer customer, String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,
+			String tripType, Date date, Date returnDate ) {
+		if(cityOne == null || cityTwo == null) return;
+		
+		Integer passengerNum1 = passengerNum; 
+		String journeyClass1 = journeyClass; 
+		Integer adultNum1 = adultNum; 
+		Integer childNum1 = childNum; 
+		Integer infantNum1 = infantNum;
+		String tripType1 = tripType; 
+		Date date1 = date;
+		Date returnDate1 = returnDate;
+		String cityOne1 = cityOne;
+		String cityTwo1 = cityTwo;
+			
+		customer.addSerchHistoryReturn(cityOne1, cityTwo1, passengerNum1, journeyClass1, adultNum1, childNum1, infantNum1, tripType1, date1, returnDate1);
+			
+	}
+	
 	public static void setContactBooking(Customer customer, ProductDetail flight, int quantity, double totalPrice, String email, BigInteger phoneNum) {
 		if(flight == null || customer == null) return;
 		

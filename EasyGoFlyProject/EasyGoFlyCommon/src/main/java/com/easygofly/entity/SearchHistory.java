@@ -52,6 +52,10 @@ public class SearchHistory {
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
+	@Column(name = "return_date")
+	@Temporal(TemporalType.DATE)
+	private Date returnDate;
+	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -76,6 +80,21 @@ public class SearchHistory {
 		this.customer = customer;
 	}
 	
+	public SearchHistory(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum,
+			Integer childNum, Integer infantNum, String tripType, Date date, Date returnDate, Customer customer) {
+		this.cityOne = cityOne;
+		this.cityTwo = cityTwo;
+		this.passengerNum = passengerNum;
+		this.journeyClass = journeyClass;
+		this.adultNum = adultNum;
+		this.childNum = childNum;
+		this.infantNum = infantNum;
+		this.tripType = tripType;
+		this.date = date;
+		this.returnDate = returnDate;
+		this.customer = customer;
+	}
+
 	public SearchHistory(Integer id, String cityOne, String cityTwo, Integer passengerNum, String journeyClass,
 			Integer adultNum, Integer childNum, Integer infantNum, String tripType, Date date, Customer customer) {
 		this.id = id;
@@ -193,6 +212,14 @@ public class SearchHistory {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
 	}
 
 	@Override

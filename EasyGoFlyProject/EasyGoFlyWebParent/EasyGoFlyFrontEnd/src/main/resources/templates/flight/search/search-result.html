@@ -314,7 +314,7 @@
     <div class="container" style="height: 150%; margin-top: 20px;">
     	<div class="row">
     		<div class="col-md-3 tile-align media-hide">
-    			<div th:replace="flight/search_filter_user :: search_filter_user('tag')"></div>
+    			<div th:replace="flight/search/search_filter_user :: search_filter_user('tag')"></div>
     		</div>
         	<div class="col-md-3 media_status" style="padding-bottom: 5px;">
         		<!-- Button trigger modal -->
@@ -331,7 +331,7 @@
 				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				      </div>
 				      <div class="modal-body" id="modal_body_button">
-				        <div th:replace="flight/search_filter_user :: search_filter_user('tag')"></div>
+				        <div th:replace="flight/search/search_filter_user :: search_filter_user('tag')"></div>
 				      </div>
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
