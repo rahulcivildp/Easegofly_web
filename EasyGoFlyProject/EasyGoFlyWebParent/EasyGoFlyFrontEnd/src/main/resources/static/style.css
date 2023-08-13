@@ -195,6 +195,7 @@
 
 *.dropdown-menu-special{ left: 50% !important;}
 *.media_status { display: none;}
+*.media_status_flex_CPN { display: none;}
 *.padding_in_popullar {
 	padding-bottom: 24px;
 }
@@ -208,6 +209,7 @@
 	  *.width_full { width: 100% !important;}
 	  *.padding_zero { padding: 0 !important;}
 	  *.media_status { display: block !important;}
+	  *.media_status_flex_CPN { display: flex !important;}
 	  *.media-hide { display: none !important;}
 	  *.media-display { display: block !important;}
 	  *.float-state {float: left !important;}
