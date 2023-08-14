@@ -316,7 +316,7 @@ public class ProductDetailService {
 					} 
 				}
 				
-				String resp = "FAILED";
+				
 				for (SeatsOnline seatsOnline : seatsOnlineList) {
 					if (seatsOnline.getId() == seatIdInt ) {
 						travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
@@ -328,7 +328,7 @@ public class ProductDetailService {
 				travellerRepo.save(travellerDetail);
 			} else {
 				
-				String resp = "FAILED";
+				
 				for (SeatsOnline seatsOnline : seatsOnlineList) {
 					if (seatsOnline.getId() == seatIdInt ) {
 						travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 

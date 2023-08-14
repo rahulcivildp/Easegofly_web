@@ -64,6 +64,7 @@ public class SearchFilterController {
 		String[] arrayStop = stop.split("\\,");
 		String[] arrayTotalPrice = totalPrice.split("\\,");
 		String brandName = "", stopName = arrayStop[0];
+		@SuppressWarnings("unused")
 		Float totalpriceInt = 0f;
 		if (arrayBrand.length == 2) {
 			brandName = arrayBrand[1];
@@ -139,6 +140,7 @@ public class SearchFilterController {
 		String[] arrayStop = stop.split("\\,");
 		String[] arrayTotalPrice = totalPrice.split("\\,");
 		String brandName = "", stopName = arrayStop[0];
+		@SuppressWarnings("unused")
 		Float totalpriceInt = 0f;
 		if (arrayBrand.length == 2) {
 			brandName = arrayBrand[1];

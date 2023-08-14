@@ -9,10 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.persistence.EntityManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -183,6 +180,7 @@ public class SearchHistoryController {
 		
 	}
 
+
 	private Integer searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
 			String sortName, Model model, Date date) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
@@ -234,8 +232,10 @@ public class SearchHistoryController {
 	        
 	        Integer innerSegmentArrayLength = mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
 	        Integer stopNumber = innerSegmentArrayLength - 1;
-	        String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
-	        String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
+	        @SuppressWarnings("unused")
+			String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
+	        @SuppressWarnings("unused")
+			String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
 	        for (int j = 0; j < innerSegmentArrayLength; j++) {
 	        	if (j == 0) {
 		        	mainObjOriginList.put("Origin-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
@@ -260,7 +260,8 @@ public class SearchHistoryController {
 			}
 	        
 	        String airlineName = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineName").toString();
-	        String fareClass = mainObjAirline.getJSONObject("Airline-" + i).get("FareClass").toString();
+	        @SuppressWarnings("unused")
+			String fareClass = mainObjAirline.getJSONObject("Airline-" + i).get("FareClass").toString();
 	        String flightNumber = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirline.getJSONObject("Airline-" + i).get("FlightNumber").toString();
 	        
 	        String[] departureTimeParts = depTime.split("T");
@@ -305,6 +306,7 @@ public class SearchHistoryController {
 			Integer intTotalInfantPrice = infantPrice + infantTax;
 			
 			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+			@SuppressWarnings("unused")
 			String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
 			String noOfSeatAvailable = "";
 			try {
@@ -438,6 +440,51 @@ public class SearchHistoryController {
 	
 	////Flight return segment.
 	
+	@GetMapping("/flight_return_search_{id}_{sortName}_{brand}_{stop}_{activeTime}")
+	public String searchFlightDetailsSinglesReturn(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@PathVariable(name = "sortName") String sortName,
+			@PathVariable(name = "activeTime") String[] activeTime,
+			@PathVariable(name = "brand") String[] brands,
+			@PathVariable(name = "stop") Integer[] stops,
+			Model model, RedirectAttributes redirectAttributes) throws MalformedURLException, IOException {
+		String email; 
+		Customer customer;
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+		
+		SearchHistory search = searchRepo.findById(id).get();
+		
+		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
+
+		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
+		
+		Iterable<City> cities = cityRepo.findAll();
+		
+		model.addAttribute("cities", cities);
+		model.addAttribute("getProductBrand", getProductBrand);
+		model.addAttribute("search", search);
+		
+		int responseCode = searchReturnFlightAPI(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), 
+				search.getInfantNum(), sortName, model, search.getDate(), search.getReturnDate());
+		if (responseCode != HttpURLConnection.HTTP_OK) {
+			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
+					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
+				return "redirect:/";
+		}
+		
+		return "flight/search_return/search-result_return";
+	}
+	
 	@GetMapping("/flight_search-noUser_return_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{strReturnDate}_{sortName}_{brand}_{stop}_{activeTime}")
 	public String searchFlightDetailsSinglesNoUserReturn(
 			@PathVariable(name = "cityOne") String cityOne,
@@ -497,6 +544,7 @@ public class SearchHistoryController {
 		
 	}
 	
+
 	private Integer searchReturnFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
 			String sortName, Model model, Date date, Date returnDate) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
@@ -521,265 +569,282 @@ public class SearchHistoryController {
         
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
-        JSONArray jsonArrays = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(0);
-        JSONArray jsonObjSegment = new JSONArray();
-		JSONObject mainObj = new JSONObject();
-		JSONObject mainObjSegment = new JSONObject();
-		JSONObject mainObjOrigin = new JSONObject();
-		JSONObject mainObjDestination = new JSONObject();
-		JSONObject mainObjAirline = new JSONObject();
-		JSONObject mainObjFare = new JSONObject();
-		JSONArray jsonArrayFareBreakdown = new JSONArray();
-       
-		traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
-        
-		for (int i = 0; i < jsonArrays.length(); i++) {
-			JSONObject mainObjOriginList = new JSONObject();
-			JSONObject mainObjDestinationList = new JSONObject();
-			
-	        mainObj.put("Result-" + i, jsonArrays.getJSONObject(i));
-	        jsonObjSegment.put(mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
-	        mainObjSegment.put("Segment-" + i, mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
-	        mainObjFare.put("Fare-" + i, mainObj.getJSONObject("Result-" + i).getJSONObject("Fare"));
-	        jsonArrayFareBreakdown.put(mainObj.getJSONObject("Result-" + i).getJSONArray("FareBreakdown"));
-	        mainObjOrigin.put("Origin-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Origin"));
-	        mainObjDestination.put("Destination-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Destination"));
-	        mainObjAirline.put("Airline-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Airline"));
-	        
-	        Integer innerSegmentArrayLength = mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
-	        Integer stopNumber = innerSegmentArrayLength - 1;
-	        String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
-	        String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
-	        for (int j = 0; j < innerSegmentArrayLength; j++) {
-	        	if (j == 0) {
-		        	mainObjOriginList.put("Origin-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
-		        	depAirportCode = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportCode").toString();
-		        	depAirportName = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportName").toString();
-		        	depTerminal = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("Terminal").toString();
-		        	depTime = mainObjOriginList.getJSONObject("Origin-" + j).get("DepTime").toString();
-		        	
-					mainObjDestinationList.put("Destination-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
-					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
-				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
-				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
-				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
-				    
-				} else if (j > 0) {
-					mainObjDestinationList.put("Destination-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
-					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
-				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
-				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
-				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
-				    
-				}
-			}
+        try {
+        	JSONArray jsonArrays = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(0);
+            JSONArray jsonObjSegment = new JSONArray();
+    		JSONObject mainObj = new JSONObject();
+    		JSONObject mainObjSegment = new JSONObject();
+    		JSONObject mainObjOrigin = new JSONObject();
+    		JSONObject mainObjDestination = new JSONObject();
+    		JSONObject mainObjAirline = new JSONObject();
+    		JSONObject mainObjFare = new JSONObject();
+    		JSONArray jsonArrayFareBreakdown = new JSONArray();
+           
+    		traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
+            
+    		for (int i = 0; i < jsonArrays.length(); i++) {
+    			JSONObject mainObjOriginList = new JSONObject();
+    			JSONObject mainObjDestinationList = new JSONObject();
+    			
+    	        mainObj.put("Result-" + i, jsonArrays.getJSONObject(i));
+    	        jsonObjSegment.put(mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+    	        mainObjSegment.put("Segment-" + i, mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+    	        mainObjFare.put("Fare-" + i, mainObj.getJSONObject("Result-" + i).getJSONObject("Fare"));
+    	        jsonArrayFareBreakdown.put(mainObj.getJSONObject("Result-" + i).getJSONArray("FareBreakdown"));
+    	        mainObjOrigin.put("Origin-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Origin"));
+    	        mainObjDestination.put("Destination-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Destination"));
+    	        mainObjAirline.put("Airline-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Airline"));
+    	        
+    	        Integer innerSegmentArrayLength = mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
+    	        Integer stopNumber = innerSegmentArrayLength - 1;
+    	        @SuppressWarnings("unused")
+				String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
+    	        @SuppressWarnings("unused")
+				String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
+    	        for (int j = 0; j < innerSegmentArrayLength; j++) {
+    	        	if (j == 0) {
+    		        	mainObjOriginList.put("Origin-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
+    		        	depAirportCode = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportCode").toString();
+    		        	depAirportName = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportName").toString();
+    		        	depTerminal = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("Terminal").toString();
+    		        	depTime = mainObjOriginList.getJSONObject("Origin-" + j).get("DepTime").toString();
+    		        	
+    					mainObjDestinationList.put("Destination-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+    					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+    				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+    				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+    				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+    				    
+    				} else if (j > 0) {
+    					mainObjDestinationList.put("Destination-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+    					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+    				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+    				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+    				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+    				    
+    				}
+    			}
 
-	        String airlineName = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineName").toString();
-	        String fareClass = mainObjAirline.getJSONObject("Airline-" + i).get("FareClass").toString();
-	        String flightNumber = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirline.getJSONObject("Airline-" + i).get("FlightNumber").toString();
-	        
-	        String[] departureTimeParts = depTime.split("T");
-			String[] departureTimeInnerParts = departureTimeParts[1].split(":");
-			String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
-			String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
-			Float depTimeFloat = Float.parseFloat(depTimeString);
-			
-			String[] arrivalTimeParts = arrTime.split("T");
-			String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
-			String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
-			String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
-			Float arrTimeFloat = Float.parseFloat(arrTimeString);
-			
-			JSONObject jsonObjectAdult = new JSONObject();
-			Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
-			Integer intTotalAdultChildPrice = 0;
-			
-			for (int j = 0; j < jsonArrayFareBreakdown.getJSONArray(i).length(); j++) {
-				jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdown.getJSONArray(i).getJSONObject(j));
-				String priceOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("BaseFare").toString();
-				String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
-				String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
-				if (passengerTypeOnline.equals("3")) {
-					infantPrice = Integer.parseInt(priceOnline) / infantNum;
-					infantTax = Integer.parseInt(taxOnline) / infantNum;
-				} else if (passengerTypeOnline.equals("2")) {
-					childPrice = Integer.parseInt(priceOnline) / childNum;
-					childTax = Integer.parseInt(taxOnline) / childNum;
-				} else {
-					adultPrice = Integer.parseInt(priceOnline) / adultNum;
-					adultTax = Integer.parseInt(taxOnline) / adultNum;
-				}
-			}
-			
-			if (childPrice != 0) {
-				intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
-			} else {
-				intTotalAdultChildPrice = adultPrice + adultTax;
-			}
+    	        String airlineName = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineName").toString();
+    	        @SuppressWarnings("unused")
+				String fareClass = mainObjAirline.getJSONObject("Airline-" + i).get("FareClass").toString();
+    	        String flightNumber = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirline.getJSONObject("Airline-" + i).get("FlightNumber").toString();
+    	        
+    	        String[] departureTimeParts = depTime.split("T");
+    			String[] departureTimeInnerParts = departureTimeParts[1].split(":");
+    			String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
+    			String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
+    			Float depTimeFloat = Float.parseFloat(depTimeString);
+    			
+    			String[] arrivalTimeParts = arrTime.split("T");
+    			String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
+    			String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
+    			String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
+    			Float arrTimeFloat = Float.parseFloat(arrTimeString);
+    			
+    			JSONObject jsonObjectAdult = new JSONObject();
+    			Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
+    			Integer intTotalAdultChildPrice = 0;
+    			
+    			for (int j = 0; j < jsonArrayFareBreakdown.getJSONArray(i).length(); j++) {
+    				jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdown.getJSONArray(i).getJSONObject(j));
+    				String priceOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("BaseFare").toString();
+    				String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
+    				String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
+    				if (passengerTypeOnline.equals("3")) {
+    					infantPrice = Integer.parseInt(priceOnline) / infantNum;
+    					infantTax = Integer.parseInt(taxOnline) / infantNum;
+    				} else if (passengerTypeOnline.equals("2")) {
+    					childPrice = Integer.parseInt(priceOnline) / childNum;
+    					childTax = Integer.parseInt(taxOnline) / childNum;
+    				} else {
+    					adultPrice = Integer.parseInt(priceOnline) / adultNum;
+    					adultTax = Integer.parseInt(taxOnline) / adultNum;
+    				}
+    			}
+    			
+    			if (childPrice != 0) {
+    				intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
+    			} else {
+    				intTotalAdultChildPrice = adultPrice + adultTax;
+    			}
 
-			Integer intTotalInfantPrice = infantPrice + infantTax;
-			
-			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
-			String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
-			String noOfSeatAvailable = "";
-			try {
-				noOfSeatAvailable = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
-			} catch (JSONException e) {
-				System.out.println(i);
-				noOfSeatAvailable = "0";
-			}
+    			Integer intTotalInfantPrice = infantPrice + infantTax;
+    			
+    			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+    			@SuppressWarnings("unused")
+				String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
+    			String noOfSeatAvailable = "";
+    			try {
+    				noOfSeatAvailable = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
+    			} catch (JSONException e) {
+    				System.out.println(i);
+    				noOfSeatAvailable = "0";
+    			}
 
-			String resultIndex = mainObj.getJSONObject("Result-" + i).get("ResultIndex").toString();
-			String airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+    			String resultIndex = mainObj.getJSONObject("Result-" + i).get("ResultIndex").toString();
+    			String airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+    			
+    			String mode = "Online-data";
+    			
+    			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+                		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+                		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null);
+    			
+    			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
+    			
+    			listProductDetailsInSearch.add(productDetail[i]);
+    		}
+		} catch (Exception e) {
 			
-			String mode = "Online-data";
-			
-			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null);
-			
-			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
-			
-			listProductDetailsInSearch.add(productDetail[i]);
 		}
+        
 
 		productDetailsController.listProductDetailsOnlineReturn = new ArrayList<ProductDetail>(); 
 		productDetailsController.flightMaps = new ArrayList<FlightMap>();
-		
-        JSONArray jsonArraysReturn = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(1);
-		JSONObject mainObjReturn = new JSONObject();
-		JSONObject mainObjSegmentReturn = new JSONObject();
-		JSONObject mainObjOriginReturn = new JSONObject();
-		JSONObject mainObjDestinationReturn = new JSONObject();
-		JSONObject mainObjAirlineReturn = new JSONObject();
-		JSONObject mainObjFareReturn = new JSONObject();
-		JSONArray jsonArrayFareBreakdownReturn = new JSONArray();
-        JSONArray jsonObjSegmentReturn = new JSONArray();
+		try {
+			JSONArray jsonArraysReturn = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(1);
+			JSONObject mainObjReturn = new JSONObject();
+			JSONObject mainObjSegmentReturn = new JSONObject();
+			JSONObject mainObjOriginReturn = new JSONObject();
+			JSONObject mainObjDestinationReturn = new JSONObject();
+			JSONObject mainObjAirlineReturn = new JSONObject();
+			JSONObject mainObjFareReturn = new JSONObject();
+			JSONArray jsonArrayFareBreakdownReturn = new JSONArray();
+	        JSONArray jsonObjSegmentReturn = new JSONArray();
 
 
-        ProductDetail[] productDetailTwo = new ProductDetail[500];
-        
-		for (int i = 0; i < jsonArraysReturn.length(); i++) {
-			JSONObject mainObjOriginList = new JSONObject();
-			JSONObject mainObjDestinationList = new JSONObject();
-			
-	        mainObjReturn.put("Result-" + i, jsonArraysReturn.getJSONObject(i));
-	        jsonObjSegmentReturn.put(mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
-	        mainObjSegmentReturn.put("Segment-" + i, mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
-	        mainObjFareReturn.put("Fare-" + i, mainObjReturn.getJSONObject("Result-" + i).getJSONObject("Fare"));
-	        jsonArrayFareBreakdownReturn.put(mainObjReturn.getJSONObject("Result-" + i).getJSONArray("FareBreakdown"));
-	        mainObjOriginReturn.put("Origin-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Origin"));
-	        mainObjDestinationReturn.put("Destination-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Destination"));
-	        mainObjAirlineReturn.put("Airline-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Airline"));
+	        ProductDetail[] productDetailTwo = new ProductDetail[500];
 	        
-	        Integer innerSegmentArrayLength = mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
-	        Integer stopNumber = innerSegmentArrayLength - 1;
-	        String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
-	        String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
-	        for (int j = 0; j < innerSegmentArrayLength; j++) {
-	        	if (j == 0) {
-		        	mainObjOriginList.put("Origin-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
-		        	depAirportCode = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportCode").toString();
-		        	depAirportName = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportName").toString();
-		        	depTerminal = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("Terminal").toString();
-		        	depTime = mainObjOriginList.getJSONObject("Origin-" + j).get("DepTime").toString();
-		        	
-					mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
-					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
-				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
-				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
-				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
-				    
-				} else if (j > 0) {
-					mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
-					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
-				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
-				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
-				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+			for (int i = 0; i < jsonArraysReturn.length(); i++) {
+				JSONObject mainObjOriginList = new JSONObject();
+				JSONObject mainObjDestinationList = new JSONObject();
+				
+		        mainObjReturn.put("Result-" + i, jsonArraysReturn.getJSONObject(i));
+		        jsonObjSegmentReturn.put(mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+		        mainObjSegmentReturn.put("Segment-" + i, mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+		        mainObjFareReturn.put("Fare-" + i, mainObjReturn.getJSONObject("Result-" + i).getJSONObject("Fare"));
+		        jsonArrayFareBreakdownReturn.put(mainObjReturn.getJSONObject("Result-" + i).getJSONArray("FareBreakdown"));
+		        mainObjOriginReturn.put("Origin-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Origin"));
+		        mainObjDestinationReturn.put("Destination-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Destination"));
+		        mainObjAirlineReturn.put("Airline-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Airline"));
+		        
+		        Integer innerSegmentArrayLength = mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
+		        Integer stopNumber = innerSegmentArrayLength - 1;
+		        @SuppressWarnings("unused")
+				String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
+		        @SuppressWarnings("unused")
+				String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
+		        for (int j = 0; j < innerSegmentArrayLength; j++) {
+		        	if (j == 0) {
+			        	mainObjOriginList.put("Origin-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
+			        	depAirportCode = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportCode").toString();
+			        	depAirportName = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportName").toString();
+			        	depTerminal = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("Terminal").toString();
+			        	depTime = mainObjOriginList.getJSONObject("Origin-" + j).get("DepTime").toString();
+			        	
+						mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+						arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+					    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+					    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+					    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+					    
+					} else if (j > 0) {
+						mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+						arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+					    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+					    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+					    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+					}
 				}
-			}
-	        
-	        String airlineName = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("AirlineName").toString();
-	        String fareClass = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("FareClass").toString();
-	        String flightNumber = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirlineReturn.getJSONObject("Airline-" + i).get("FlightNumber").toString();
-	        
-	        String[] departureTimeParts = depTime.split("T");
-			String[] departureTimeInnerParts = departureTimeParts[1].split(":");
-			String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
-			String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
-			Float depTimeFloat = Float.parseFloat(depTimeString);
-			
-			String[] arrivalTimeParts = arrTime.split("T");
-			String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
-			String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
-			String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
-			Float arrTimeFloat = Float.parseFloat(arrTimeString);
-			
-			JSONObject jsonObjectAdult = new JSONObject();
-			Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
-			Integer intTotalAdultChildPrice = 0;
-			
-			for (int j = 0; j < jsonArrayFareBreakdownReturn.getJSONArray(i).length(); j++) {
-				jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdownReturn.getJSONArray(i).getJSONObject(j));
-				String priceOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("BaseFare").toString();
-				String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
-				String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
-				if (passengerTypeOnline.equals("3")) {
-					infantPrice = Integer.parseInt(priceOnline) / infantNum;
-					infantTax = Integer.parseInt(taxOnline) / infantNum;
-				} else if (passengerTypeOnline.equals("2")) {
-					childPrice = Integer.parseInt(priceOnline) / childNum;
-					childTax = Integer.parseInt(taxOnline) / childNum;
+		        
+		        String airlineName = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("AirlineName").toString();
+		        @SuppressWarnings("unused")
+				String fareClass = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("FareClass").toString();
+		        String flightNumber = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirlineReturn.getJSONObject("Airline-" + i).get("FlightNumber").toString();
+		        
+		        String[] departureTimeParts = depTime.split("T");
+				String[] departureTimeInnerParts = departureTimeParts[1].split(":");
+				String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
+				String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
+				Float depTimeFloat = Float.parseFloat(depTimeString);
+				
+				String[] arrivalTimeParts = arrTime.split("T");
+				String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
+				String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
+				String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
+				Float arrTimeFloat = Float.parseFloat(arrTimeString);
+				
+				JSONObject jsonObjectAdult = new JSONObject();
+				Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
+				Integer intTotalAdultChildPrice = 0;
+				
+				for (int j = 0; j < jsonArrayFareBreakdownReturn.getJSONArray(i).length(); j++) {
+					jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdownReturn.getJSONArray(i).getJSONObject(j));
+					String priceOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("BaseFare").toString();
+					String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
+					String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
+					if (passengerTypeOnline.equals("3")) {
+						infantPrice = Integer.parseInt(priceOnline) / infantNum;
+						infantTax = Integer.parseInt(taxOnline) / infantNum;
+					} else if (passengerTypeOnline.equals("2")) {
+						childPrice = Integer.parseInt(priceOnline) / childNum;
+						childTax = Integer.parseInt(taxOnline) / childNum;
+					} else {
+						adultPrice = Integer.parseInt(priceOnline) / adultNum;
+						adultTax = Integer.parseInt(taxOnline) / adultNum;
+					}
+				}
+				
+				if (childPrice != 0) {
+					intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
 				} else {
-					adultPrice = Integer.parseInt(priceOnline) / adultNum;
-					adultTax = Integer.parseInt(taxOnline) / adultNum;
+					intTotalAdultChildPrice = adultPrice + adultTax;
 				}
-			}
-			
-			if (childPrice != 0) {
-				intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
-			} else {
-				intTotalAdultChildPrice = adultPrice + adultTax;
-			}
 
-			Integer intTotalInfantPrice = infantPrice + infantTax;
-			
-			Integer duration = Integer.parseInt(mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
-			String flightStatus = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
-			String noOfSeatAvailable = "";
-			try {
-				noOfSeatAvailable = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
-			} catch (JSONException e) {
-				System.out.println(i);
-				noOfSeatAvailable = "0";
-			}
-
-			String resultIndex = mainObjReturn.getJSONObject("Result-" + i).get("ResultIndex").toString();
-			String airlineRemark = mainObjReturn.getJSONObject("Result-" + i).get("AirlineRemark").toString();
-			String mode = "Online-data";
-			
-			productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null);
-			
-			productDetailsController.listProductDetailsOnlineReturn.add(productDetailTwo[i]);
-
-			String resultStrTwo = productDetailTwo[i].getResultIndex();
-			String[] arrayResultTwo = resultStrTwo.split("B");
-
-			FlightMap flightMap = new FlightMap();
-			
-			for (ProductDetail productDetail2 : productDetailsController.listProductDetailsOnline) {
-				String resultStr = productDetail2.getResultIndex();
-				String[] arrayResult = resultStr.split("B");
-				if (arrayResultTwo[1].equals(arrayResult[1])) {
-					flightMap.setId(i);
-					flightMap.setFlightIdOne(productDetailTwo[i].getId());
-					flightMap.setFlightIdTwo(productDetail2.getId());
-					productDetailsController.flightMaps.add(flightMap);
+				Integer intTotalInfantPrice = infantPrice + infantTax;
+				
+				Integer duration = Integer.parseInt(mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+				@SuppressWarnings("unused")
+				String flightStatus = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
+				String noOfSeatAvailable = "";
+				try {
+					noOfSeatAvailable = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
+				} catch (JSONException e) {
+					System.out.println(i);
+					noOfSeatAvailable = "0";
 				}
-			}		
+
+				String resultIndex = mainObjReturn.getJSONObject("Result-" + i).get("ResultIndex").toString();
+				String airlineRemark = mainObjReturn.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+				String mode = "Online-data";
+				
+				productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+	            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+	            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null);
+				
+				productDetailsController.listProductDetailsOnlineReturn.add(productDetailTwo[i]);
+
+				String resultStrTwo = productDetailTwo[i].getResultIndex();
+				String[] arrayResultTwo = resultStrTwo.split("B");
+
+				FlightMap flightMap = new FlightMap();
+				
+				for (ProductDetail productDetail2 : productDetailsController.listProductDetailsOnline) {
+					String resultStr = productDetail2.getResultIndex();
+					String[] arrayResult = resultStr.split("B");
+					if (arrayResultTwo[1].equals(arrayResult[1])) {
+						flightMap.setId(i);
+						flightMap.setFlightIdOne(productDetailTwo[i].getId());
+						flightMap.setFlightIdTwo(productDetail2.getId());
+						productDetailsController.flightMaps.add(flightMap);
+					}
+				}		
+			}
+		} catch (Exception e) {
+			
 		}
+        
 
 		model.addAttribute("flightMaps", productDetailsController.flightMaps);
 		model.addAttribute("listProducts", productDetailsController.listProductDetailsOnline);
@@ -826,14 +891,14 @@ public class SearchHistoryController {
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 
-				searchReturnURL = "/flight_search_return_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
+				searchReturnURL = "/flight_return_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
 				return "redirect:/loading_return_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
-				searchReturnURL = "/flight_search_return_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
+				searchReturnURL = "/flight_return_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
 				return "redirect:/loading_return_";
 			}else {
 				searchReturnURL = "/flight_search-noUser_return_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 

@@ -287,7 +287,9 @@
                                             <p class="tile-align para_styl" style="padding-right: 6px;">Travellers </p>
                                             <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px"> : [[${passengerNum}]]</p>
                                             <p class="tile-align para_styl" style="padding-right: 6px;">Date </p>
-                                            <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px"> : [[${date}]]</p>
+                                            <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px"> : [[${#dates.format(date, 'E, dd MM yyyy')}]]</p>
+                                            <p class="tile-align para_styl" style="padding-right: 6px;">Return Date </p>
+                                            <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px"> : [[${#dates.format(returnDate, 'E, dd MM yyyy')}]]</p>
                                         </div>
                                     </div>
                                 </div>
@@ -444,7 +446,7 @@
             </div>
             <th:block th:each="flightMap : ${flightMaps}">
           	<div class="col-md-12 shadow rounded borderChange" style="background-color: white; margin: 15px 0;">
-            	<form th:action="@{/flight_booking_save}" method="post" >
+            	<form th:action="@{/flight_booking_return_save}" method="post" >
 
 	          		<input type="hidden" name="adultNum" th:value="${adultNum}">
       				<input type="hidden" name="childNum" th:value="${childNum}">

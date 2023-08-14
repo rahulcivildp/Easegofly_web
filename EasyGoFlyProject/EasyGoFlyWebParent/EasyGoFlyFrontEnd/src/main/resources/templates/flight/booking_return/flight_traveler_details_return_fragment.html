@@ -185,13 +185,14 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                 <p class="tile-align">&nbsp; - &nbsp;</p>
                                 <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityTwo}]]</b></p>
                                 <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
+                                <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Return Date - [[${#dates.format(search.returnDate, 'E, dd MM yyyy')}]]</p>
                                 <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
                                 <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <a class="styleLinkButton styleLink" th:href="@{'/flight_search_' + ${search.id} + '_pnr__0_0,0_active'}" style="background-color: white; float: right; margin: 6px 0;"> Change Flight</a>
+                        <a class="styleLinkButton styleLink" th:href="@{'/flight_return_search_' + ${search.id} + '_pnr__0_0,0_active'}" style="background-color: white; float: right; margin: 6px 0;"> Change Flight</a>
                     </div>
                 </div>
             </div>
@@ -243,13 +244,13 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                             <div class="accordion-body" style="background: #efefef; color: #858385">
                                             	<h2>Stop Details</h2>
-												<th:block th:each="stop : ${flight.stops}">
+												<th:block th:each="stop : ${flightOne.stops}">
 												<div class="row" style="border-bottom: 1px solid grey; border-top: 1px solid grey; padding-bottom: 5px;">
                                                     <div class="col-md-4">
                                                         <div  style="float: left; font-size: 15px; padding: 10px 10px;">
                                                         	<h2 style="margin: 0;">[[${stop.cityName}]]</h2>
-                                                            <b>[[${flight.brand}]]</b>
-                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</h4>
+                                                            <b>[[${flightOne.brand}]]</b>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</h4>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1">
@@ -282,17 +283,17 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                             <div class="col-md-9">
                                                 <div class="row">
                                                     <div class="col-md-4 col-3">
-                                                    	<div th:id="'brandImage' + ${flight.id}" style="float: left; padding: 15px 20px 10px;"></div>
+                                                    	<div th:id="'brandImage' + ${flightOne.id}" style="float: left; padding: 15px 20px 10px;"></div>
                                                         <div  style="float: left; font-size: 15px; padding: 10px 10px;">
-                                                            <b>[[${flight.brand}]]</b>
-                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p>
+                                                            <b>[[${flightOne.brand}]]</b>
+                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8 col"> 
                                                         <div class="row">
                                                             <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
-                                                                <h2 style="font-size: 24px; margin: 0;">[[${flight.depTime}]]</h2>
-                                                                <p style="margin: 0;">[[${flight.cityOne}]]</p>
+                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.depTime}]]</h2>
+                                                                <p style="margin: 0;">[[${flightOne.cityOne}]]</p>
                                                             </div>
                                                             <div class="col-md-8 col">
                                                                 <div>
@@ -313,13 +314,13 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
-                                                                <h2 style="font-size: 24px; margin: 0;">[[${flight.arrTime}]]</h2>
-                                                                <p style="margin: 0;">[[${flight.cityTwo}]]</p>
+                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.arrTime}]]</h2>
+                                                                <p style="margin: 0;">[[${flightOne.cityTwo}]]</p>
                                                             </div>
                                                             <div class="col-12 media_status" style="display: none;">
                                                             	<div class="row">
 				                                                    <div style="margin: 16px 0; padding: 0 30px;">
-				                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${item.totalPrice}]]/-</span> </p>
+				                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${totalPayment}]]/-</span> </p>
 				                                                    </div>
 				                                                </div>
                                                             </div>
@@ -340,15 +341,15 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Traveler Details</p>
 	                                </div>
 	                                <div class="travelerActive back_white ">
-	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:each="traveler : ${travelersOne}">
 	                                    <div class="activeSLider media-hide" >
 		                                    <div class="row">
 		                                    	<div class="col-10" aria-labelledby="dropdownMenuButton1" style="padding: 20px 10px 0;">
 		                                    		<div class="row" >
 									    			<div class="col-md-2" style="padding: 0 0 0 31px; font-size: 14px;">
 											            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
-											            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
-														<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+											            <input type="hidden" name="flight_id" id="flight_id" th:value="${flightOne.id}">
+														<input type="hidden" name="item_id" id="item_id" th:value="${itemOne.id}">
 											            <input type="hidden" name="traveler_id" id="traveler_id" th:value="${traveler.id}">
 									                    
 											            <div class="form-floating" >
@@ -405,8 +406,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 							                                    		<div class="row" >
 														    			<div class="col-md-2" style="padding: 0 0 0 31px; font-size: 14px;">
 																            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
-																            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
-																			<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+																            <input type="hidden" name="flight_id" id="flight_id" th:value="${flightOne.id}">
+																			<input type="hidden" name="item_id" id="item_id" th:value="${itemOne.id}">
 																            <input type="hidden" name="traveler_id" id="traveler_id" th:value="${traveler.id}">
 														                    <p style="margin: 0; color: green;">Adult:</p>
 														                    <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
@@ -454,13 +455,15 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                    </th:block>
 	                                </div>
 	                                <div class="media_status" style="padding: 0 10px; display: none;">
-	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:each="traveler : ${travelersOne}">
 	                                	<form th:action="@{/traveller_detail_edit}" method="post" th:object="${traveler}">
                                     		<div class="row" >
 								    			<div class="col-12" style="padding: 0 0 0 31px; font-size: 14px;">
 										            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
-										            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
-													<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+										            <input type="hidden" name="flightOne" id="flight_id" th:value="${flightOne.id}">
+													<input type="hidden" name="itemOne" id="item_id" th:value="${itemOne.id}">
+										            <input type="hidden" name="flightTwo" id="flight_id" th:value="${flightTwo.id}">
+													<input type="hidden" name="itemTwo" id="item_id" th:value="${itemTwo.id}">
 										            <input type="hidden" name="traveler_id" id="traveler_id" th:value="${traveler.id}">
 								                    <p style="margin: 0; color: green;">Adult:</p>
 								                    <p style="margin: 0; color: #939393;">(Above 12 Years)</p>
@@ -504,106 +507,118 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                <div style="background-color: #ecf5fd;">
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Meal</p>
 	                                </div>
-	                                <th:block th:each="traveler : ${travelers}">
-	                                <div class="row">
-	                                	<div class="col-3" style="display: flex; justify-content: center;">
-	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
-	                                	</div>
-	                                	<div  style="padding: 5px 0; margin: 0; display: flex; justify-content: center;" class="col-6">
-	                                		<select name="meals" th:id="'meals' + ${traveler.id}" style="width: 70%;" form="order_form">
-		                                		<th:block th:each="meal : ${mealsOnlineList}">
-		                                			<th:block th:if="${meal.name} == ''">
-		                                			<option th:value="${meal.code}">No meal</option>
-		                                			</th:block>
-		                                			<th:block th:if="${meal.name} != ''">
-		                                			<option th:value="${meal.code}">[[${meal.name}]]</option>
-		                                			</th:block>
-		                                		</th:block>
-		                                	</select>
-	                                	</div>
-	                                	<div class="col-3">
-		                                	<p th:id="'mealPrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
-		                                </div>
-	                                </div>
-	                                		<script type="text/javascript">
-												
-												mealAmount = 0;
-												
-												meal = $("#meals" + [[${traveler.id}]]).val();
-												
-												urlMeal = "[[@{/find_meal_}]]" + meal;
-												
-												$.get(urlMeal, function(response) {
-													$("#mealPrice" + [[${traveler.id}]]).html("Price: " + response);
-													mealAmount = parseInt(response);
-													//alert(totalPaymentAbout + mealAmount);
-													changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
-													$("#totalPayment").text("₹" + changedAmount);
-													$("#inputPrice").val(changedAmount);
-													
-												}).fail(function(){
-													alert("Could not connect to the server.");
-												});
-												
-												
-												$("#meals" + [[${traveler.id}]]).change(function(){
-													 newMeal = $("#meals" + [[${traveler.id}]]).val();
-									    			 urlMealChange = "[[@{/find_meal_}]]" + newMeal;
-														
-														$.get(urlMealChange, function(responseChange) {
-															$("#mealPrice" + [[${traveler.id}]]).html("Price: " + responseChange);
-															mealAmount = parseInt(responseChange);
-															//alert(totalPaymentAbout + mealAmount);
-															//changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
-															$("#totalPayment").text("₹" + changedAmount);
-															$("#inputPrice").val(changedAmount);
-															
-														}).fail(function(){
-															alert("Could not connect to the server.");
-														});
-												});
-												
-												
-										    </script>
-										    <script>
-										    
-										    
-										    $(document).ready(function() {
-										    	mealCode = $("#meals" + [[${traveler.id}]]).val();
-										    	baggageCode = $("#baggageSelect" + [[${traveler.id}]]).val();
-										    	seatId = $("#seatSelet" + [[${traveler.id}]]).val();
-												urlComponentsSave = "[[@{/save_every_components}]]";
-												
-										    	params = {id: [[${traveler.id}]], seatId: seatId, mealCode: mealCode, baggageCode: baggageCode};
-										    	
-										    	$.post(urlComponentsSave, params, function() {
-										    		
-										    	}).fail(function(){
-									    			alert("Something went wrong in the server!");
-										    	});
-										    });
-										    
-										    $("#meals" + [[${traveler.id}]]).change(function(){
-										    	newMealSave = $("#meals" + [[${traveler.id}]]).val();
-												urlMealChangeSave = "[[@{/save_meal}]]";
-										    	
-										    	params = {id: [[${traveler.id}]], code: newMealSave};
-										    	
-										    	$.post(urlMealChangeSave, params, function() {
-										    		
-										    	}).fail(function(){
-									    			alert("Something went wrong in the server!");
-										    	});
-										    });
-										    
-										    </script>
+	                                <th:block th:each="traveler : ${travelersOne}">
+											<div class="row">
+												<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
+			                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
+			                                	</div>
+			                                	<div class="col-9">
+													<div class="row">
+														<th:block th:each="traveler2 : ${travelersTwo}" th:if="${traveler.travelerCountSerial} == ${traveler2.travelerCountSerial}">
+															<div class="col-8" style="padding: 5px 0; margin: 0; display: flex; justify-content: center;" >
+																<select name="meals" th:id="'meals' + ${traveler.id}" style="width: 70%;" form="order_form">
+							                                		<th:block th:each="meal : ${mealsOnlineList}">
+							                                			<th:block th:if="${meal.name} == ''">
+							                                			<option th:value="${meal.code}">No meal</option>
+							                                			</th:block>
+							                                			<th:block th:if="${meal.name} != ''">
+							                                			<option th:value="${meal.code}">[[${meal.name}]]</option>
+							                                			</th:block>
+							                                		</th:block>
+							                                	</select>
+															</div>
+						                                	<div class="col-4">
+							                                	<p th:id="'mealPrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
+							                                </div>
+															<div class="col-8" style="padding: 5px 0; margin: 0; display: flex; justify-content: center;" >
+																<select name="meals" th:id="'mealsTwo' + ${traveler2.id}" style="width: 70%;" form="order_form">
+							                                		<th:block th:each="meal : ${mealsOnlineList}">
+							                                			<th:block th:if="${meal.name} == ''">
+							                                			<option th:value="${meal.code}">No meal</option>
+							                                			</th:block>
+							                                			<th:block th:if="${meal.name} != ''">
+							                                			<option th:value="${meal.code}">[[${meal.name}]]</option>
+							                                			</th:block>
+							                                		</th:block>
+							                                	</select>
+															</div>
+						                                	<div class="col-4">
+							                                	<p th:id="'mealPriceTwo' + ${traveler2.id}" style="padding: 5px 0; margin: 0;"></p>
+							                                </div>
+
+						                                		<script type="text/javascript">
+																	
+																	mealAmount = 0;
+																	
+																	meal = $("#meals" + [[${traveler.id}]]).val();
+																	
+																	urlMeal = "[[@{/find_meal_}]]" + meal;
+																	
+																	$.get(urlMeal, function(response) {
+																		$("#mealPrice" + [[${traveler.id}]]).html("Price: " + response);
+																		$("#totalPayment").text("₹" + changedAmount);
+																		$("#inputPrice").val(changedAmount);
+																		
+																	}).fail(function(){
+																		alert("Could not connect to the server.");
+																	});
+																	
+																	
+																	meal2 = $("#mealsTwo" + [[${traveler2.id}]]).val();
+																	
+																	urlMeal2 = "[[@{/find_meal_}]]" + meal2;
+																	
+																	$.get(urlMeal2, function(response) {
+																		$("#mealPriceTwo" + [[${traveler2.id}]]).html("Price: " + response);
+																		$("#totalPayment").text("₹" + changedAmount);
+																		$("#inputPrice").val(changedAmount);
+																		
+																	}).fail(function(){
+																		alert("Could not connect to the server.");
+																	});
+																	
+																	
+																	$("#meals" + [[${traveler.id}]]).change(function(){
+																		 newMeal = $("#meals" + [[${traveler.id}]]).val();
+														    			 urlMealChange = "[[@{/find_meal_}]]" + newMeal;
+																			
+																			$.get(urlMealChange, function(responseChange) {
+																				$("#mealPrice" + [[${traveler.id}]]).html("Price: " + responseChange);
+																				$("#totalPayment").text("₹" + changedAmount);
+																				$("#inputPrice").val(changedAmount);
+																				
+																			}).fail(function(){
+																				alert("Could not connect to the server.");
+																			});
+																	});
+																	
+																	$("#mealsTwo" + [[${traveler.id}]]).change(function(){
+																		 newMeal2 = $("#mealsTwo" + [[${traveler2.id}]]).val();
+														    			 urlMealChange2 = "[[@{/find_meal_}]]" + newMeal2;
+																			
+																			$.get(urlMealChange2, function(responseChange) {
+																				$("#mealPriceTwo" + [[${traveler.id}]]).html("Price: " + responseChange);
+																				$("#totalPayment").text("₹" + changedAmount);
+																				$("#inputPrice").val(changedAmount);
+																				
+																			}).fail(function(){
+																				alert("Could not connect to the server.");
+																			});
+																	});
+																	
+															    </script>
+															   
+														</th:block>
+													</div>
+			                                	</div>
+											</div>
 	                                </th:block>
                             	</div>
 	                            <div id="baggage_details" class="booking_tiles back_white shadow">
 	                                <div style="background-color: #ecf5fd;">
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Baggage</p>
 	                                </div>
-	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:each="traveler : ${travelersOne}">
 	                                <th:block th:if="${traveler.paxType} == '3'">
 	                                	<input type="hidden" name="baggageSelect" th:id="'baggageSelect' + ${traveler.id}" value="NoBaggage">
 	                                </th:block>
@@ -688,7 +703,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                <div style="background-color: #ecf5fd;">
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Seat</p>
 	                                </div>
-	                                <th:block th:each="traveler : ${travelers}">
+	                                <th:block th:each="traveler : ${travelersOne}">
 	                                <th:block th:if="${traveler.paxType} == '3'">
 	                                	<input type="hidden" name="seatSelet" th:id="'seatSelet'  + ${traveler.id}" value="1">
 	                                </th:block>
@@ -784,22 +799,24 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                         <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Contact Details</p>
                                     </div>
                                     	<div>
-                                    	<form th:action="@{/cartItem_edit}" method="post">
+                                    	<form th:action="@{/cartItem_return_edit}" method="post">
 								            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
-								            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
-											<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+								            <input type="hidden" name="flightOne" id="flightOne" th:value="${flightOne.id}">
+											<input type="hidden" name="itemOne" id="itemOne" th:value="${itemOne.id}">
+								            <input type="hidden" name="flightTwo" id="flightTwo" th:value="${flightTwo.id}">
+											<input type="hidden" name="itemTwo" id="itemTwo" th:value="${itemTwo.id}">
 		                                    <div class="row" style=" margin: 16px 10px;">
 		                                        <div class="col-md-4">
 		                                        <p style=" margin: 8px 0 8px 30px;">&nbsp;</p>
 		                                            <div class="form-floating mb-3">
-		                                                <input type="email" class="form-control" id="floatingInput" th:value="${item.email}" name="email">
+		                                                <input type="email" class="form-control" id="floatingInput" th:value="${itemOne.email}" name="email">
 		                                                <label for="floatingInput">Email ID :</label>
 		                                            </div>
 		                                        </div>
 		                                        <div class="col-md-4">
 		                                        <p style=" margin: 8px 0 8px 30px;">SMS will be sent to this number</p>
 		                                            <div class="form-floating mb-3">
-		                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:value="${item.phoneNum}">
+		                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:value="${itemOne.phoneNum}">
 		                                                <label for="floatingInput">Phone No :</label>
 		                                            </div>
 		                                        </div>
@@ -826,7 +843,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                <div class="col-md-7">
                                    <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
                                </div>
-                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${item.totalPrice}]]</p></div>
+                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${totalPayment}]]</p></div>
                            </div>
                        </div>
                    </h2>
@@ -868,7 +885,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
                                                     <div aria-expanded="true">
-                       									<th:block th:if="${flight.traceId} == null">
+                       									<th:block th:if="${flightOne.traceId} == null">
                                                         <div class="row">
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
@@ -903,12 +920,14 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                 <form th:action="@{/flight_order_save}" method="post" id="order_form">
                                 	
 						            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
-						            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
-									<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+						            <input type="hidden" name="flightOne" id="flightOne" th:value="${flightOne.id}">
+									<input type="hidden" name="itemOne" id="itemOne" th:value="${itemOne.id}">
+						            <input type="hidden" name="flightTwo" id="flightTwo" th:value="${flightTwo.id}">
+									<input type="hidden" name="itemTwo" id="itemTwo" th:value="${itemTwo.id}">
                                 
                                 <div class="row" style="margin-bottom: 20px;">
 		                            <div class="col-md-9" style="border: 1px solid #a7a7a794; padding: 0; width: 100% !important;">
-		                            	<a th:href="@{'/flight_booking' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
+		                            	<a th:href="@{'/flight_booking' + ${search.id} +'&'+ ${flightOne.id} +'&'+ ${itemOne.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
 		                               
 		                                <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next1" style="float: right; color: white; border: none;" value="Next">
 		                            </div>
@@ -930,7 +949,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                <div class="col-md-7">
                                    <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
                                </div>
-                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${item.totalPrice}]]</p></div>
+                               <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${totalPayment}]]</p></div>
                            </div>
                        </div>
                    </h2>
@@ -972,7 +991,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne3" style="background-color: white !important;">
                                                     <div aria-expanded="true">
-                       									<th:block th:if="${flight.traceId} == null">
+                       									<th:block th:if="${flightOne.traceId} == null">
                                                         <div class="row">
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
@@ -1025,14 +1044,14 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	});
 
 	function checkBrand() {
-		brandName = "[[${flight.brand}]]";
+		brandName = "[[${flightOne.brand}]]";
 		url = "[[@{/find_brand_}]]" + brandName;
 		
 		$.get(url, function(response) {
 			htmlImg = `
 				<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
 			`;
-			$("#brandImage" + [[${flight.id}]]).append(htmlImg);
+			$("#brandImage" + [[${flightOne.id}]]).append(htmlImg);
 		}).fail(function(){
 			alert("Could not connect to the server.");
 		});

@@ -69,6 +69,7 @@ public class MainController {
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			@SuppressWarnings("unused")
 			HttpSession session= attr.getRequest().getSession(true);
 			
 		} else if (googleLogin != null) {
@@ -78,6 +79,7 @@ public class MainController {
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);	
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			@SuppressWarnings("unused")
 			HttpSession session= attr.getRequest().getSession(true);
 		}
 		
@@ -162,6 +164,7 @@ public class MainController {
             model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
             
             onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
+            System.out.println(onlineFlightService.tokenId);
             
             connection.disconnect();
 

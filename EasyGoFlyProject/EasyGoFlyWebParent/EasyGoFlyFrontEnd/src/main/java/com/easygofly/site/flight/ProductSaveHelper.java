@@ -67,6 +67,13 @@ public class ProductSaveHelper {
 		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage);
 	}
 	
+	public static void setTravellerDetailReturn(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage,
+			Integer travelerCountSerial) {
+		if(firstName == null || lastName == null) return;
+		
+		flight.addTravellerDetailsReturn(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial);
+	}
+	
 	public static void setMealDetail(String name, String price, String code, String quantity, TravellerDetail travellerDetail) {
 		if(code == null || name == null) return;
 		

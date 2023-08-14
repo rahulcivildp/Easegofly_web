@@ -16,6 +16,7 @@ public class OnlineFlightController {
 	@Autowired private OnlineFlightService service;
 	
 	
+	@SuppressWarnings("unused")
 	private String tokenId = "";
 	
 	@GetMapping("/authentication")

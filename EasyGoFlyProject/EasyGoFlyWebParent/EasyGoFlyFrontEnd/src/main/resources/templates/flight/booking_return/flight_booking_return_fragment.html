@@ -179,7 +179,7 @@
                 <div id="traveller_details_tab" style="margin-bottom: 15px;">
                     <div class="row">
                     	<div class="col-md-9" style="padding: 0;">
-                    	<form th:action="@{/traveller_details}" method="post">
+                    	<form th:action="@{/traveller_details_return}" method="post">
                             <div id="flight_details" class="booking_tiles back_white shadow">
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="accordion-item" style="background-color: #969393;">
@@ -196,13 +196,13 @@
                                         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                             <div class="accordion-body" style="background: #efefef; color: #858385">
                                             	<h2>Stop Details</h2>
-												<th:block th:each="stop : ${flight.stops}">
+												<th:block th:each="stop : ${flightOne.stops}">
 												<div class="row" style="border-bottom: 1px solid grey; border-top: 1px solid grey; padding-bottom: 5px;">
                                                     <div class="col-md-4">
                                                         <div  style="float: left; font-size: 15px; padding: 10px 10px;">
                                                         	<h2 style="margin: 0;">[[${stop.cityName}]]</h2>
-                                                            <b>[[${flight.brand}]]</b>
-                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</h4>
+                                                            <b>[[${flightOne.brand}]]</b>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</h4>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1">
@@ -235,17 +235,17 @@
                                             <div class="col-md-9">
                                                 <div class="row">
                                                     <div class="col-md-4 col-3">
-                                                    	<div th:id="'brandImage' + ${flight.id}" style="float: left; padding: 15px 20px 10px;"></div>
+                                                    	<div th:id="'brandImage' + ${flightOne.id}" style="float: left; padding: 15px 20px 10px;"></div>
                                                         <div  style="float: left; font-size: 15px; padding: 10px 10px;">
-                                                            <b>[[${flight.brand}]]</b>
-                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p>
+                                                            <b>[[${flightOne.brand}]]</b>
+                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8 col"> 
                                                         <div class="row">
                                                             <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
-                                                                <h2 style="font-size: 24px; margin: 0;">[[${flight.depTime}]]</h2>
-                                                                <p style="margin: 0;">[[${flight.cityOne}]]</p>
+                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.depTime}]]</h2>
+                                                                <p style="margin: 0;">[[${flightOne.cityOne}]]</p>
                                                             </div>
                                                             <div class="col-md-8 col">
                                                                 <div>
@@ -266,13 +266,13 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
-                                                                <h2 style="font-size: 24px; margin: 0;">[[${flight.arrTime}]]</h2>
-                                                                <p style="margin: 0;">[[${flight.cityTwo}]]</p>
+                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.arrTime}]]</h2>
+                                                                <p style="margin: 0;">[[${flightOne.cityTwo}]]</p>
                                                             </div>
                                                             <div class="col-12 media_status" style="display: none;">
                                                             	<div class="row">
 				                                                    <div style="margin: 16px 0; padding: 0 30px;">
-				                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${item.totalPrice}]]/-</span> </p>
+				                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${itemOne.totalPrice}]]/-</span> </p>
 				                                                    </div>
 				                                                </div>
                                                             </div>
@@ -296,11 +296,13 @@
 	                                </div>
 	                                <div>
 	                                <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
-									<input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
-									<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+									<input type="hidden" name="flightOne_id" id="flightOne_id" th:value="${flightOne.id}">
+									<input type="hidden" name="itemOne_id" id="itemOne_id" th:value="${itemOne.id}">
+									<input type="hidden" name="flightTwo_id" id="flightTwo_id" th:value="${flightTwo.id}">
+									<input type="hidden" name="itemTwo_id" id="itemTwo_id" th:value="${itemTwo.id}">
 									<th:block th:each="traveler : ${travelers}">
 		                            	<div style="padding-top: 20px;">
-											<input type="hidden" th:id="'existing_traveller_id' + ${flight.id}" th:value="${traveler.id}">
+											<input type="hidden" th:id="'existing_traveller_id' + ${flightOne.id}" th:value="${traveler.id}">
 	                                    	<div class="row" style="padding: 0 7px;">
 								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
 										            <div class="form-floating" >
@@ -405,7 +407,7 @@
 										                </div>
 			                                    	`;
 			                                    	
-			                                    	valTraveler = $("#existing_traveller_id" + [[${flight.id}]]).val();
+			                                    	valTraveler = $("#existing_traveller_id" + [[${flightOne.id}]]).val();
 			                                    	if(valTraveler == null){
 				                                    	$("#appendTraveler").append(htmlCode);
 				                                    	
@@ -569,14 +571,14 @@
                                         <div class="col-md-4">
                                         <p style=" margin: 8px 0 8px 30px;">&nbsp;</p>
                                             <div class="form-floating mb-3">
-                                                <input type="email" class="form-control" id="floatingInput" th:value="${item.email}" name="email" placeholder="name@example.com">
+                                                <input type="email" class="form-control" id="floatingInput" th:value="${itemOne.email}" name="email" placeholder="name@example.com">
                                                 <label for="floatingInput">Email ID :</label>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                         <p style=" margin: 8px 0 8px 30px;">SMS will be sent to this number</p>
                                             <div class="form-floating mb-3">
-                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:field="${item.phoneNum}" maxlength="12">
+                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:field="${itemOne.phoneNum}" maxlength="12">
                                                 <label for="floatingInput">Phone No :</label>
                                             </div>
                                         </div>
@@ -590,7 +592,7 @@
                                 <div style="background-color: #ecf5fd;">
 	                                <div class="row">
 	                                	<div class="col-8">
-	                                    	<p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Farerule Details</p>
+	                                    	<p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Farerule Details Departure</p>
 	                                    </div>
 	                                	<div class="col-4" >
 	                                		<button class="accordion-button buttn_stly collapsed" type="button" style="text-align: right;" aria-expanded="false" aria-controls="flush-collapseTwo" data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" id="button_collapse">Show</button>
@@ -601,15 +603,35 @@
                                     
 		                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
 		                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
-		                                	<p th:utext="${jsonObjFarerule}"></p>
+		                                	<p th:utext="${jsonObjFareruleOne}"></p>
 		                                </div>
 		                            </div>
                                 </div>
                             </div>
                             
+                            <div id="farerule_details_return" class="booking_tiles back_white shadow">
+                                <div style="background-color: #ecf5fd;">
+	                                <div class="row">
+	                                	<div class="col-8">
+	                                    	<p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Farerule Details Return</p>
+	                                    </div>
+	                                	<div class="col-4" >
+	                                		<button class="accordion-button buttn_stly collapsed" type="button" style="text-align: right;" aria-expanded="false" aria-controls="flush-collapseThree" data-bs-target="#flush-collapseThree" data-bs-toggle="collapse" id="button_collapseThree">Show</button>
+	                                	</div>
+	                                </div>
+                                </div>
+                                <div>
+                                    
+		                            <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+		                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
+		                                	<p th:utext="${jsonObjFareruleTwo}"></p>
+		                                </div>
+		                            </div>
+                                </div>
+                            </div>
                             
                             <div class="media_status" style="display: none;">
-                            	<div th:replace="flight/booking/bill_page :: bill_section('tag')"></div>
+                            	<div th:replace="flight/booking_return/bill_page_return :: bill_section('tag')"></div>
                             </div>
                             
 		                    <div class="row">
@@ -622,7 +644,7 @@
 		                    </form>
                         </div>
                         <div class="col-md-3 media-hide">
-                        	<div th:replace="flight/booking/bill_page :: bill_section('tag')"></div>
+                        	<div th:replace="flight/booking_return/bill_page_return :: bill_section('tag')"></div>
                         </div>
                           
                     </div>
@@ -639,14 +661,14 @@
 		});
 
 		function checkBrand() {
-			brandName = "[[${flight.brand}]]";
+			brandName = "[[${flightOne.brand}]]";
 			url = "[[@{/find_brand_}]]" + brandName;
 			
 			$.get(url, function(response) {
 				htmlImg = `
 					<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
 				`;
-				$("#brandImage" + [[${flight.id}]]).append(htmlImg);
+				$("#brandImage" + [[${flightOne.id}]]).append(htmlImg);
 			}).fail(function(){
 				alert("Could not connect to the server.");
 			});

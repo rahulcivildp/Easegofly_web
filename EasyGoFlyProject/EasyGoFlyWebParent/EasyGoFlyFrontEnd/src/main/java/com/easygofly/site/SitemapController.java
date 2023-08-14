@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class SitemapController {
-    private List<String> URLS = List.of("/", "/about#no-8", "/about#no-3", "/about#no-2");
+    @SuppressWarnings("unused")
+	private List<String> URLS = List.of("/", "/about#no-8", "/about#no-3", "/about#no-2");
     private String DOMAIN = "https://www.easegofly.com";
 
     @GetMapping(value = "/sitemap.xml", produces = {"application/xml", "text/xml"})

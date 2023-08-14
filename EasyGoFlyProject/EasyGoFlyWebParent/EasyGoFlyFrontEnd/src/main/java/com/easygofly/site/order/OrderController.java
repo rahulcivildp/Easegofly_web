@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -383,8 +382,7 @@ public class OrderController {
 	        parameter[n] = request.getParameter(param);
 	        n+=1;
 	    }
-	    for (String string : parameter) {
-		}
+	    
 	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
@@ -808,7 +806,8 @@ public class OrderController {
     			String mealCode = mealsOnline.getCode(), mealName = mealsOnline.getName(), mealQuantity = mealsOnline.getQuantity(), mealPrice = mealsOnline.getPrice();
     			
     			//seat information
-    			String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
+    			@SuppressWarnings("unused")
+				String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
     					seatNo = seatsOnline.getSeatNo(), seatType = seatsOnline.getSeatType().toString(), seatDeck = seatsOnline.getDeck().toString(), seatCompartment = seatsOnline.getCompartment().toString(), 
     					seatPrice = seatsOnline.getPrice(), seatCraftType = seatsOnline.getCraftType();
     			
@@ -929,7 +928,7 @@ public class OrderController {
             
             StringBuilder responseBodyTicket = new StringBuilder();
             
-        	int responseCodeTicket = onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, searchHistoryController.traceId, productDetail.getResultIndex(), arrayTraveler);
+        	onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, searchHistoryController.traceId, productDetail.getResultIndex(), arrayTraveler);
         	
         	
         	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
@@ -965,9 +964,10 @@ public class OrderController {
             
             StringBuilder responseBodyGetBookingDetails = new StringBuilder();
             
-        	int responseCodeGetBookingDetails = onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, searchHistoryController.traceId, onlinePNR, onlineBookingId);
+        	onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, searchHistoryController.traceId, onlinePNR, onlineBookingId);
         	
-        	JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString()); 
+        	@SuppressWarnings("unused")
+			JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString()); 
 
 		}
 	}

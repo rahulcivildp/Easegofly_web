@@ -3,8 +3,6 @@ package com.easygofly.site.flight;
 import java.io.IOException;
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +14,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
+import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.MealsOnline;
+import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.order.CouponRepository;
+import com.easygofly.site.shoppingCart.CartItemRepository;
 
 @RestController
 public class ProductDetailsRestController {
@@ -32,7 +33,10 @@ public class ProductDetailsRestController {
 	@Autowired private MealRepository mealRepo;
 	@Autowired private BaggageRepository baggageRepo;
 	@Autowired private SeatRepository seatRepo;
-
+	@Autowired private ProductDetailCrudRepository productDetailsRepo;
+	@Autowired private CartItemRepository cartItemRepo;
+	@Autowired private ProductDetailService productDetailService;
+	
 	@PostMapping("/flight_order_check_coupon")
 	public Coupon checkCoupon(@RequestBody Coupon coupon, RedirectAttributes redirectAttributes) throws IOException {
 		Coupon coupon2 = couponRepo.findByCouponCode(coupon.getCouponCode());
@@ -163,6 +167,30 @@ public class ProductDetailsRestController {
 	public void saveEveryComponents(@Param("id") Integer id, @Param("seatId") Integer seatId, @Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
 		
 		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
+		mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail);
+	}
+	
+
+	@PostMapping("/save_every_return_components")
+	public void saveEveryReturnComponents(@Param("id") Integer id, @Param("flightTwo") Integer flightTwo, @Param("cartTwo") Integer cartTwo,  @Param("seatId") Integer seatId, 
+			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
+		ProductDetail productDetailTwo = productDetailsRepo.findById(flightTwo).get();
+		CartItem cartItemTwo = cartItemRepo.findById(cartTwo).get();
+		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
+		List<TravellerDetail> travelersOne = productDetailService.findTraveller(productDetailTwo, cartItemTwo);
+		for (TravellerDetail travellerDetail2 : travelersOne) {
+			if (travellerDetail.getTravelerCountSerial() == travellerDetail2.getTravelerCountSerial()) {
+				mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail);
+				mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail2);
+			}
+		}
+		
+		
+		
+	}
+
+	private void mealBaggageSeatMethod(Integer seatId, String mealCode, String baggageCode,
+			TravellerDetail travellerDetail) {
 		List<MealsOnline> mealsOnlines = productDetailsController.mealsOnlineList;
 		for (MealsOnline mealsOnline : mealsOnlines) {
 			if (mealsOnline.getCode().equals(mealCode) || mealsOnline.getCode() == mealCode) {

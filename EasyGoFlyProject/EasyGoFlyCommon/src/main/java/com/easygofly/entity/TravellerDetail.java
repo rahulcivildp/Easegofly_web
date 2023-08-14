@@ -14,7 +14,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.criteria.CriteriaBuilder.In;
 
 @Entity
 @Table(name = "traveller_details")
@@ -40,6 +39,9 @@ public class TravellerDetail {
 	
 	@Column(name = "baggage_weight")
 	private Integer baggageWT;
+	
+	@Column(name = "traveler_count_serial")
+	private Integer travelerCountSerial;
 	
 	private String meal;
 	
@@ -97,6 +99,20 @@ public class TravellerDetail {
 		this.paxType = paxType;
 		this.baggageWT = baggageWT;
 		this.cabinBaggage = cabinBaggage;
+	}
+	
+	public TravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail productDetail, CartItem cartItem, String paxType, Integer baggageWT, 
+			Integer cabinBaggage, Integer travelerCountSerial) {
+		this.salutation = salutation;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dob = dob;
+		this.productDetail = productDetail;
+		this.cartItem = cartItem;
+		this.paxType = paxType;
+		this.baggageWT = baggageWT;
+		this.cabinBaggage = cabinBaggage;
+		this.travelerCountSerial = travelerCountSerial;
 	}
 
 	public Integer getId() {
@@ -233,6 +249,14 @@ public class TravellerDetail {
 
 	public void setSeatsOnline(SeatsOnline seatsOnline) {
 		this.seatsOnline = seatsOnline;
+	}
+
+	public Integer getTravelerCountSerial() {
+		return travelerCountSerial;
+	}
+
+	public void setTravelerCountSerial(Integer travelerCountSerial) {
+		this.travelerCountSerial = travelerCountSerial;
 	}
 
 	public void addMeal(String name, String price, String code, String quantity) {
