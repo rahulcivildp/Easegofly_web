@@ -462,6 +462,7 @@ public class SearchHistoryController {
 		}
 		
 		SearchHistory search = searchRepo.findById(id).get();
+		Integer passengerNum = search.getAdultNum() + search.getChildNum() + search.getInfantNum();
 		
 		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
 
@@ -471,6 +472,7 @@ public class SearchHistoryController {
 		
 		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
+		model.addAttribute("passengerNum", passengerNum);
 		model.addAttribute("search", search);
 		
 		int responseCode = searchReturnFlightAPI(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), 

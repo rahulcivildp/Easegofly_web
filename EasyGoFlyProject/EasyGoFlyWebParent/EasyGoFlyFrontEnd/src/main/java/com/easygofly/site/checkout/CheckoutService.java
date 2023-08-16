@@ -26,6 +26,24 @@ public class CheckoutService {
 		
 		return checkoutInfo;
 	}
+
+	public CheckoutInfo prepareCheckoutReturn(CartItem itemOne, CartItem itemTwo) {
+		CheckoutInfo checkoutInfo = new CheckoutInfo();
+		
+		double flightCost = calculateFlightCost(itemOne) + calculateFlightCost(itemTwo);
+		float flightServiceCost = calculateFlightServiceCost(itemOne) + calculateFlightServiceCost(itemTwo);
+		float flightGSTCost = calculateFlightGSTCost(itemOne) + calculateFlightGSTCost(itemTwo);
+		
+		double paymentTotal = flightCost + flightServiceCost + flightGSTCost;
+		
+		checkoutInfo.setFlightCost(flightCost);
+		checkoutInfo.setFlightServiceCost(flightServiceCost);
+		checkoutInfo.setFlightGSTCost(flightGSTCost);
+		checkoutInfo.setOrderDate(new Date());
+		checkoutInfo.setPaymentTotal(paymentTotal);
+		
+		return checkoutInfo;
+	}
 	
 	public CheckoutInfo prepareCheckoutWithCoupon(CartItem item, Coupon coupon) {
 		CheckoutInfo checkoutInfo = new CheckoutInfo();

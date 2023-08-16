@@ -172,21 +172,14 @@ public class ProductDetailsRestController {
 	
 
 	@PostMapping("/save_every_return_components")
-	public void saveEveryReturnComponents(@Param("id") Integer id, @Param("flightTwo") Integer flightTwo, @Param("cartTwo") Integer cartTwo,  @Param("seatId") Integer seatId, 
-			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
-		ProductDetail productDetailTwo = productDetailsRepo.findById(flightTwo).get();
-		CartItem cartItemTwo = cartItemRepo.findById(cartTwo).get();
-		TravellerDetail travellerDetail = travellerRepo.findById(id).get();
-		List<TravellerDetail> travelersOne = productDetailService.findTraveller(productDetailTwo, cartItemTwo);
-		for (TravellerDetail travellerDetail2 : travelersOne) {
-			if (travellerDetail.getTravelerCountSerial() == travellerDetail2.getTravelerCountSerial()) {
-				mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail);
-				mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail2);
-			}
-		}
-		
-		
-		
+	public void saveEveryReturnComponents(@Param("travelerIdOne") Integer travelerIdOne, @Param("travelerIdTwo") Integer travelerIdTwo, @Param("seatId") Integer seatId, 
+			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode, @Param("seatIdTwo") Integer seatIdTwo, @Param("mealCodeTwo") String mealCodeTwo, 
+			@Param("baggageCodeTwo") String baggageCodeTwo) {
+		TravellerDetail travellerDetail = travellerRepo.findById(travelerIdOne).get();
+		TravellerDetail travellerDetailTwo = travellerRepo.findById(travelerIdTwo).get();
+
+		mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail);
+		mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo);
 	}
 
 	private void mealBaggageSeatMethod(Integer seatId, String mealCode, String baggageCode,

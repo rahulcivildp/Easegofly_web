@@ -109,7 +109,11 @@ public class OrderController {
 	private Boolean verifiedChecksum;
 	private String[] responseParameters;
 	private Integer savedOrderId;
+	private Integer savedOrderReturnId1;
+	private Integer savedOrderReturnId2;
 	private Integer updatedOrderId;
+	private Integer updatedOrderReturnId1;
+	private Integer updatedOrderReturnId2;
 	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
@@ -127,12 +131,13 @@ public class OrderController {
 			
 			String paymentType = "PAYMENT_GATEWAY";
 			PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
-
-			Date date = flight.getDate();  
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
-		    String dateTime = dateFormat.format(date);
 			
-			String orderName = flight.getCityOne() + "-" + flight.getCityTwo() + ":(" + flight.getFlightNum() + ")" + dateTime + ":" + flight.getDepTime() + "-" + flight.getArrTime() + ":(" + search.getPassengerNum() + ")";
+			Date date = flight.getDate();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
+			String dateTime = dateFormat.format(date);
+
+			String orderName = flight.getCityOne() + "-" + flight.getCityTwo() + ":(" + flight.getFlightNum() + ")" + dateTime + ":" + flight.getDepTime() + "-" + flight.getArrTime() 
+			+ ":(" + search.getPassengerNum() + ")";
 
 			Order order = orderRepo.findByCartItemOrder(item_id);
 			
@@ -143,117 +148,124 @@ public class OrderController {
 			Coupon coupon = couponService.findCouponByCode(couponCode);
 			Coupon coupon1 = couponService.findCouponByCode(couponCode1);
 			CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
-			String email; 
-			Customer customer; 
-			if (loggedCustomer != null) {
-				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
-				if (coupon1 != null) {
-					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
-					if (order != null) {
-						orderService.updateOrderPrice(order, checkoutInfo1);
-						orderService.addCouponCode(order, couponCode1);
-					}
-					
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-					orderService.addCouponCode(order2, couponCode1);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-				} else if (coupon != null) {
-					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
-					if (order != null) {
-						orderService.updateOrderPrice(order, checkoutInfo1);
-						orderService.addCouponCode(order, couponCode);
-					}
-					
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-					orderService.addCouponCode(order2, couponCode);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-				} else if (order != null) {
-					if (flight.getTraceId().equals("offline")) {
-						orderService.updateOrderPrice(order, checkoutInfo);
-						orderService.deleteCouponCode(order);
-					} else {
-						orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
-						orderService.deleteCouponCode(order);
-					}
-					
-				} else {
-					if (flight.getTraceId().equals("offline")) {
-						Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-						for (TravellerDetail travellerDetail : travellerDetails) {
-							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-						}
-						orderService.deleteCouponCode(order2);
-					} else {
-						Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
-						for (TravellerDetail travellerDetail : travellerDetails) {
-							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-						}
-						orderService.deleteCouponCode(order2);
-					}	
-				}
-				
-			} else if (googleLogin != null) {
-				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
-				if (coupon1 != null) {
-					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
-					if (order != null) {
-						orderService.updateOrderPrice(order, checkoutInfo1);
-						orderService.addCouponCode(order, couponCode1);
-					}
-					
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-					orderService.addCouponCode(order2, couponCode1);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-				} else if (coupon != null) {
-					CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
-					if (order != null) {
-						orderService.updateOrderPrice(order, checkoutInfo1);
-						orderService.addCouponCode(order, couponCode);
-					}
-					
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-					orderService.addCouponCode(order2, couponCode);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-				} else if (order != null) {
-					if (flight.getTraceId().equals("offline")) {
-						orderService.updateOrderPrice(order, checkoutInfo);
-						orderService.deleteCouponCode(order);
-					} else {
-						orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
-						orderService.deleteCouponCode(order);
-					}
-				} else {
-					if (flight.getTraceId().equals("offline")) {
-						Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-						for (TravellerDetail travellerDetail : travellerDetails) {
-							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-						}
-						orderService.deleteCouponCode(order2);
-					} else {
-						Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
-						for (TravellerDetail travellerDetail : travellerDetails) {
-							orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
-						}
-						orderService.deleteCouponCode(order2);
-					}	
-				}
-			}
+			loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
+					paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
 			
 			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id;
 		} catch (Exception e) {
 			return "redirect:/flight_order_" + searchId + "&" + flightId + "&" + item_id;
 		}
-		
+	}
+
+	private void loginControl(String couponCode, String couponCode1, String totalPayment,
+			EasyGoFlyCustomerDetails loggedCustomer, CustomerOAuth2User googleLogin, ProductDetail flight,
+			SearchHistory search, CartItem item, PaymentMethod paymentMethod, String orderName, Order order,
+			List<TravellerDetail> travellerDetails, Coupon coupon, Coupon coupon1, CheckoutInfo checkoutInfo) {
+		String email;
+		Customer customer;
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			if (coupon1 != null) {
+				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
+				if (order != null) {
+					orderService.updateOrderPrice(order, checkoutInfo1);
+					orderService.addCouponCode(order, couponCode1);
+				}
+				
+				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+				orderService.addCouponCode(order2, couponCode1);
+				for (TravellerDetail travellerDetail : travellerDetails) {
+					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+				}
+			} else if (coupon != null) {
+				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
+				if (order != null) {
+					orderService.updateOrderPrice(order, checkoutInfo1);
+					orderService.addCouponCode(order, couponCode);
+				}
+				
+				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+				orderService.addCouponCode(order2, couponCode);
+				for (TravellerDetail travellerDetail : travellerDetails) {
+					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+				}
+			} else if (order != null) {
+				if (flight.getTraceId().equals("offline")) {
+					orderService.updateOrderPrice(order, checkoutInfo);
+					orderService.deleteCouponCode(order);
+				} else {
+					orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
+					orderService.deleteCouponCode(order);
+				}
+				
+			} else {
+				if (flight.getTraceId().equals("offline")) {
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+					orderService.deleteCouponCode(order2);
+				} else {
+					Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+					orderService.deleteCouponCode(order2);
+				}	
+			}
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			if (coupon1 != null) {
+				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
+				if (order != null) {
+					orderService.updateOrderPrice(order, checkoutInfo1);
+					orderService.addCouponCode(order, couponCode1);
+				}
+				
+				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+				orderService.addCouponCode(order2, couponCode1);
+				for (TravellerDetail travellerDetail : travellerDetails) {
+					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+				}
+			} else if (coupon != null) {
+				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
+				if (order != null) {
+					orderService.updateOrderPrice(order, checkoutInfo1);
+					orderService.addCouponCode(order, couponCode);
+				}
+				
+				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+				orderService.addCouponCode(order2, couponCode);
+				for (TravellerDetail travellerDetail : travellerDetails) {
+					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+				}
+			} else if (order != null) {
+				if (flight.getTraceId().equals("offline")) {
+					orderService.updateOrderPrice(order, checkoutInfo);
+					orderService.deleteCouponCode(order);
+				} else {
+					orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
+					orderService.deleteCouponCode(order);
+				}
+			} else {
+				if (flight.getTraceId().equals("offline")) {
+					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+					orderService.deleteCouponCode(order2);
+				} else {
+					Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+					for (TravellerDetail travellerDetail : travellerDetails) {
+						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					}
+					orderService.deleteCouponCode(order2);
+				}	
+			}
+		}
 	}
 
 	private Order saveOrderCreate(ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod,
@@ -342,8 +354,6 @@ public class OrderController {
 			model.addAttribute("checksum", processPayment.getChecksum());
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		Coupon coupon = couponService.findCouponByCode(order.getCouponCode());
@@ -595,6 +605,184 @@ public class OrderController {
 
 	}
 	
+	
+	////Flight Return Segment
+	
+	@PostMapping("/flight_order_return_save")
+	public String createNewOrderReturn(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "flightOne_id") Integer flightOne_id, 
+			@RequestParam(name = "itemOne_id") Integer itemOne_id, 
+			@RequestParam(name = "flightTwo_id") Integer flightTwo_id, 
+			@RequestParam(name = "itemTwo_id") Integer itemTwo_id,
+			@RequestParam(name = "couponCode") String couponCode,
+			@RequestParam(name = "couponCode1") String couponCode1,
+			@RequestParam(name = "totalPayment") String totalPayment,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			HttpServletRequest request, Order order3) {
+		try {
+			
+			SearchHistory search = searchRepo.findById(searchId).get();
+			ProductDetail flightOne = flightRepo.findById(flightOne_id).get();
+			CartItem itemOne = cartRepo.findById(itemOne_id).get();
+			ProductDetail flightTwo = flightRepo.findById(flightTwo_id).get();
+			CartItem itemTwo = cartRepo.findById(itemTwo_id).get();
+			
+			String returnTypeOne = "R1";
+			String returnTypeTwo = "R2";
+			
+			String paymentType = "PAYMENT_GATEWAY";
+			PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
+			Date dateOne = flightOne.getDate();
+			Date dateTwo = flightTwo.getDate();
+			Coupon coupon = couponService.findCouponByCode(couponCode);
+			Coupon coupon1 = couponService.findCouponByCode(couponCode1);
+			CheckoutInfo checkoutInfoOne = checkoutService.prepareCheckout(itemOne);
+			CheckoutInfo checkoutInfoTwo = checkoutService.prepareCheckout(itemTwo);
+			
+			orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoOne);
+			orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoTwo);
+			
+			checkoutService.prepareCheckoutReturn(itemOne, itemTwo);
+			
+			return "redirect:/flight_return_order_" + search.getId() + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
+		} catch (Exception e) {
+			return "redirect:/flight_return_order_" + searchId + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
+		}
+	}
+
+	private void orderTravelerSaveMethod(SearchHistory search, ProductDetail flight, Date date, CartItem item, String returnType, String couponCode, String couponCode1, String totalPayment, 
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, PaymentMethod paymentMethod, Coupon coupon, Coupon coupon1,
+			CheckoutInfo checkoutInfo) { 
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
+		String dateTime = dateFormat.format(date);
+		
+		String orderName = flight.getCityOne() + "-" + flight.getCityTwo() + ":(" + flight.getFlightNum() + ")" + dateTime + ":" + flight.getDepTime() + "-" + flight.getArrTime() 
+		+ ":(" + search.getPassengerNum() + ")" + ":(" + returnType + ")";
+		
+		Order order = orderRepo.findByCartItemOrder(item.getId());
+		
+		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByCurtItemAndProductDetail(flight, item);
+
+		cartService.updateCartItemOrdered(item);
+
+		loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
+				paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
+		
+	}
+	
+	@GetMapping("/flight_return_order_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}")
+	public String orderReturnPage(@PathVariable(name = "search_id") Integer search_id, 
+			@PathVariable(name = "flightOne_id") Integer flightOne_id, 
+			@PathVariable(name = "itemOne_id") Integer itemOne_id, 
+			@PathVariable(name = "flightTwo_id") Integer flightTwo_id, 
+			@PathVariable(name = "itemTwo_id") Integer itemTwo_id,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
+		
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			Double doubleAmount = (double) (wallet.getBalance() / 100);
+			model.addAttribute("balance", doubleAmount);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = customer.getWallet();
+			Double doubleAmount = (double) (wallet.getBalance() / 100);
+			model.addAttribute("balance", doubleAmount);
+			model.addAttribute("customer", customer);
+		}
+		
+		ProductDetail flight1 = flightRepo.findById(flightOne_id).get();
+		CartItem item1 = cartRepo.findById(itemOne_id).get();
+		ProductDetail flight2 = flightRepo.findById(flightTwo_id).get();
+		CartItem item2 = cartRepo.findById(itemTwo_id).get();
+		
+		List<TravellerDetail> travelers1 = productService.findTraveller(flight1, item1);
+		List<TravellerDetail> travelers2 = productService.findTraveller(flight2, item2);
+
+		CheckoutInfo checkoutInfo = checkoutService.prepareCheckoutReturn(item1, item2);
+		Order order1 = orderRepo.findByCartItemOrder(itemOne_id);
+		Order order2 = orderRepo.findByCartItemOrder(itemTwo_id);
+		
+		if (!search_id.equals(null)) {
+			SearchHistory search = searchRepo.findById(search_id).get();
+			model.addAttribute("search", search);
+		} else {
+			SearchHistory search = searchRepo.findByCart_id(itemOne_id);
+			model.addAttribute("search", search);
+		}
+		
+		/* ------ ZAAKPAY -------- */ /**/
+		Date date = Calendar.getInstance().getTime();  
+	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+	    DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+	    String strDate1 = dateFormat1.format(date);
+	    String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order1.getId() + "&"+ order2.getId();
+		Integer intAmount = (int) (order1.getPrice() * 100) + (int) (order2.getPrice() * 100);
+		String amount = "" + intAmount;
+		//String amount = "100";
+
+		//Cookie cookie = request.getCookies().get("JSESSIONID");
+		//String value = cookie.getValue();
+		
+		for (Cookie cookie : request.getCookies()) {
+			if(cookie.getName().equals("JSESSIONID")) {
+				String value = cookie.getValue();
+				model.addAttribute("JSESSIONID", value);
+			}
+		}
+		
+		
+		Transaction transaction = new Transaction();
+		
+		try {
+			ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
+			
+			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
+			model.addAttribute("requestUrl", processPayment.getRequestUrl());
+			model.addAttribute("checksum", processPayment.getChecksum());
+			
+		} catch (Exception e) {
+		}
+		
+		Coupon coupon1 = couponService.findCouponByCode(order1.getCouponCode());
+		Coupon coupon2 = couponService.findCouponByCode(order2.getCouponCode());
+		
+		savedOrderReturnId1 = order1.getId();
+		savedOrderReturnId2 = order2.getId();
+		
+		Double orderPrice = order1.getPrice() + order2.getPrice();
+
+		model.addAttribute("order1", order1);
+		model.addAttribute("orderPrice", orderPrice);
+		model.addAttribute("checkoutInfo", checkoutInfo);
+		model.addAttribute("travelers1", travelers1);
+		model.addAttribute("item1", item1);
+		model.addAttribute("flight1", flight1);
+		model.addAttribute("search_id", search_id);
+		model.addAttribute("itemOne_id", itemOne_id);
+		model.addAttribute("coupon1", coupon1);
+		model.addAttribute("order2", order2);
+		model.addAttribute("checkoutInfo", checkoutInfo);
+		model.addAttribute("travelers2", travelers2);
+		model.addAttribute("item2", item2);
+		model.addAttribute("flight2", flight2);
+		model.addAttribute("itemTwo_id", itemTwo_id);
+		model.addAttribute("coupon2", coupon2);
+		
+		return "order/return/flight_order";
+	}
+	
+	////Wallet segment
+	
 	@PostMapping("/flight_wallet_check")
 	public String walletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin) {
@@ -622,6 +810,51 @@ public class OrderController {
 		}
 		
 		return "redirect:/flight_wallet_response";
+	}
+	
+	@PostMapping("/flight_wallet_return_check")
+	public String walletPaymentReturn(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin) {
+		
+		String email; 
+		Customer customer; 
+		Order order1 = orderRepo.findById(savedOrderReturnId1).get();
+		Order order2 = orderRepo.findById(savedOrderReturnId2).get();
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = walletPayOrderReturn(customer, order1, order2);
+			if (wallet != null) {
+				Order updatedOrder1 = orderUpdateWallet(order1);
+				Order updatedOrder2 = orderUpdateWallet(order2);
+				updatedOrderReturnId1 = updatedOrder1.getId();
+				updatedOrderReturnId2 = updatedOrder2.getId();
+			}
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			Wallet wallet = walletPayOrderReturn(customer, order1, order2);
+			if (wallet != null) {
+				Order updatedOrder1 = orderUpdateWallet(order1);
+				Order updatedOrder2 = orderUpdateWallet(order2);
+				updatedOrderReturnId1 = updatedOrder1.getId();
+				updatedOrderReturnId2 = updatedOrder2.getId();;
+			}
+		}
+		
+		return "redirect:/flight_wallet_return_response";
+	}
+	
+	private Wallet walletPayOrderReturn(Customer customer, Order order1, Order order2) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order1.getId() + "&"+ order2.getId();
+		return walletService.updateWalletBalanceByOrderReturn(customer, order1, order2, orderString);
 	}
 
 	private Order orderUpdateWallet(Order order) {
@@ -776,6 +1009,120 @@ public class OrderController {
 		model.addAttribute("responseParameters", responseParameters);
 		
 		return "wallet/response";
+	}
+	
+	@GetMapping("/flight_wallet_return_response")
+	public String showWalletPaymentReturn(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
+		
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+		
+		Order order1 = orderRepo.findById(updatedOrderReturnId1).get();
+		Order order2 = orderRepo.findById(updatedOrderReturnId2).get();
+		model.addAttribute("orderId1", order1.getId());
+		model.addAttribute("orderId2", order2.getId());
+		ProductDetail productDetail1 = order1.getProductDetail();
+		ProductDetail productDetail2 = order2.getProductDetail();
+
+		methodSSR(productDetail1);
+		methodSSR(productDetail2);
+		
+		ticketDetails(order1, productDetail1);
+		ticketDetails(order2, productDetail2);
+		
+		walletResponseSegment(model, order1, productDetail1);
+		walletResponseSegment(model, order2, productDetail2);
+        
+		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+		
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
+		
+		return "wallet/response";
+	}
+
+	private void walletResponseSegment(Model model, Order order, ProductDetail productDetail) {
+		String pnr = productDetail.getPnr();
+		model.addAttribute("pnrBarcode", pnr);
+		model.addAttribute("orderStatusO", order.getOrderStatus());
+		
+		String cityOne = productDetail.getCityOne();
+		String cityTwo = productDetail.getCityTwo();
+		City city1 = cityRepo.getCityByCode(cityOne);
+		City city2 = cityRepo.getCityByCode(cityTwo);
+		model.addAttribute("cityOne", city1.getCityName());
+		model.addAttribute("cityTwo", city2.getCityName());
+		model.addAttribute("city1", cityOne);
+		model.addAttribute("city2", cityTwo);
+		
+		Date date1 = productDetail.getDate();  
+		DateFormat dateFormat1 = new SimpleDateFormat("E, dd-MM-yyyy");  
+	    String flightDateTime = dateFormat1.format(date1);
+		model.addAttribute("flightDateTime", flightDateTime);
+		
+		Date date2 = order.getCreatedTime();  
+		DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");  
+	    String orderDateTime = dateFormat2.format(date2);
+		model.addAttribute("orderDateTime", orderDateTime);
+		
+		model.addAttribute("passengerPhone", order.getPassengerNum());
+		model.addAttribute("passengerEmail", order.getContactEmail());
+		
+		String photoImagePath = "";
+		Brand brand = brandRepo.getBrandByName(productDetail.getBrand().toLowerCase());
+		if (brand.equals(null)) {
+			photoImagePath = brand.getPhotosImagePath();
+		} else {
+			photoImagePath = "#";
+		}
+		model.addAttribute("brandPath", ".." + photoImagePath);
+		model.addAttribute("brandName", brand.getName());
+		model.addAttribute("productDetail", productDetail);
+		model.addAttribute("originTerminal", productDetail.getTerminalDep());
+		model.addAttribute("destinationTerminal", productDetail.getTerminalArr());
+		model.addAttribute("baggage", productDetail.getBaggage());
+		model.addAttribute("cabinBaggage", productDetail.getCabinBaggage());
+		
+		Integer dateInt = productDetail.getDuration()/60;
+		if (dateInt >= 10) {
+			model.addAttribute("dateInt", dateInt);
+		} else {
+			model.addAttribute("dateInt", "0" + dateInt);
+		}
+		Integer timeInt = productDetail.getDuration()%60;
+		if (timeInt >= 10) {
+			model.addAttribute("timeInt", timeInt);
+		} else {
+			model.addAttribute("timeInt", "0" + timeInt);
+		}
+		
+		Path flightUpPath = Paths.get("../pdf-images/flight-up.png");
+		Path flightDownPath = Paths.get("../pdf-images/flight-down.png");
+		Path demoTicketPath = Paths.get("../pdf-images/demo-ticket.png");
+		Path thumbLogoPath = Paths.get("../pdf-images/thumb-logo.png");
+		model.addAttribute("flightUpPath", flightUpPath);
+		model.addAttribute("flightDownPath", flightDownPath);
+		model.addAttribute("demoTicketPath", demoTicketPath);
+		model.addAttribute("thumbLogoPath", thumbLogoPath);
+		
+//		User user = product.getUser();
+//		model.addAttribute("user", user);
+		
+		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
+		model.addAttribute("travellerDetails", travellerDetails);
+        model.addAttribute("amount", order.getPrice());
 	}
 
 	private void ticketDetails(Order order, ProductDetail productDetail) throws MalformedURLException, IOException {
