@@ -32,6 +32,9 @@ public class RechargeHistory {
 	@Column(nullable = false, name = "transaction")
 	private String transaction;
 	
+	@Column(name = "zaakpay_transaction_id")
+	private String zaakpaytransactionId;
+	
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
@@ -89,6 +92,14 @@ public class RechargeHistory {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getZaakpaytransactionId() {
+		return zaakpaytransactionId;
+	}
+
+	public void setZaakpaytransactionId(String zaakpaytransactionId) {
+		this.zaakpaytransactionId = zaakpaytransactionId;
 	}
 	
 	

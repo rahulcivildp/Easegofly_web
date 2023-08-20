@@ -410,7 +410,9 @@ public class OrderController {
 			orderService.updateOrder(order, OrderStatus.FAILED);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
 			orderService.updateOrder(order, OrderStatus.FAILED);
-		}else {
+		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+		} else {
 			if (productDetail.getPnr().equals(null) || productDetail.getPnr().equals("")) {
 				orderService.updateOrder(order, OrderStatus.PENDING);
 			} else {
@@ -549,6 +551,8 @@ public class OrderController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			model.addAttribute("paymentSuccess", parameter[12]);
 		}
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
@@ -556,7 +560,6 @@ public class OrderController {
         
 		Double amount = Double.parseDouble(parameter[0])/100;
 		
-		model.addAttribute("paymentSuccess", parameter[12]);
 		model.addAttribute("amount", amount);
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);
@@ -854,7 +857,7 @@ public class OrderController {
 		String strDate2 = dateFormat2.format(date);
 		
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order1.getId() + "&"+ order2.getId();
-		return walletService.updateWalletBalanceByOrderReturn(customer, order1, order2, orderString);
+		return walletService.updateWalletBalanceByOrderReturn(customer, order1, order2, orderString, "");
 	}
 
 	private Order orderUpdateWallet(Order order) {
@@ -905,7 +908,7 @@ public class OrderController {
 		String strDate2 = dateFormat2.format(date);
 		
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
-		return walletService.updateWalletBalanceByOrder(customer, order, orderString);
+		return walletService.updateWalletBalanceByOrder(customer, order, orderString, "");
 	}
 	
 	@GetMapping("/flight_wallet_response")

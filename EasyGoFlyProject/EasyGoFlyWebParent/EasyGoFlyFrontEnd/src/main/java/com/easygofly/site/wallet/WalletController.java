@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -206,17 +207,17 @@ public class WalletController {
 	}
 
 	private void rechargeStatus(Customer customer) {
-		RechargeHistory rechargeHistory = walletService.createRechargeHistory(customer, parameter[8]);
-		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+		RechargeHistory rechargeHistory = walletService.createRechargeHistoryByZaakpay(customer, parameter[8], parameter[18]);
+		if (parameter[12].contains("Customer cancelled transaction. Transaction has failed")) {
 			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.CANCELLED);
-		
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
 			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
-			
-		}else {
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
+		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
 			RechargeHistory rechargeHistory2 = walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
 			walletService.updateWalletValue(customer, rechargeHistory2);
-		}
+		} 
 	}
 	
 	@CrossOrigin(origins = {"https://easegofly.com/"})
@@ -246,11 +247,12 @@ public class WalletController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			model.addAttribute("paymentSuccess", parameter[12]);
 		}
 		
 		Integer amountIntRech = Integer.parseInt(parameter[0]) / 100;
 		model.addAttribute("amountRecharged", amountIntRech);
-		model.addAttribute("paymentSuccess", parameter[12]);
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);
 		model.addAttribute("responseParameters", responseParameters);

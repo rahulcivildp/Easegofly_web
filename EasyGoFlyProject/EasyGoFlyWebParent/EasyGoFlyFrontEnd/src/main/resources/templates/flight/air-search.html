@@ -598,18 +598,28 @@ th:fragment="air-search">
     	});
     	
     	$("#floatingInputDepurtureReturn").click(function(){
-    		calenderView($("#floatingInputDepurtureReturn"));
+    		calenderViewReturn("floatingInputDepurtureReturn");
     	});
     	
     	$("#floatingInputReturnReturn").click(function(){
-    		calenderView($("#floatingInputReturnReturn"));
+    		calenderViewReturnDestination($("#floatingInputDepurtureReturn"), "floatingInputReturnReturn");
     	});
     })
     
     function calenderView(input){
-    	name = input.attr("name")
+    	name = input.attr("name");
     	var today = new Date().toISOString().split('T')[0];
     	document.getElementsByName(name)[0].setAttribute('min', today);
+    }
+    
+    function calenderViewReturn(input){
+    	var today = new Date().toISOString().split('T')[0];
+    	document.getElementById(input).setAttribute('min', today);
+    }
+    
+    function calenderViewReturnDestination(input, output){
+		inputAttr = input.val();
+    	document.getElementById(output).setAttribute('min', inputAttr);
     }
     
     </script>

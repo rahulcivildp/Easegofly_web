@@ -31,14 +31,15 @@ public class WalletService {
 		return walletRepo.save(wallet);
 	}
 	
-	public RechargeHistory createRechargeHistory(Customer customer, String transId) {
+	public RechargeHistory createRechargeHistoryByZaakpay(Customer customer, String transId, String zaakpayTransId) {
 		Wallet wallet = customer.getWallet();
 		
 		RechargeHistory rechargeHistory = new RechargeHistory();
+		rechargeHistory.setDate(new Date());
 		rechargeHistory.setWallet(wallet);
 		rechargeHistory.setRechargeAmount(wallet.getTempValue());
 		rechargeHistory.setTransaction(transId);
-		rechargeHistory.setDate(new Date());
+		rechargeHistory.setZaakpaytransactionId(zaakpayTransId);
 		
 		return rechargeHistoryRepo.save(rechargeHistory);
 	}
@@ -63,7 +64,7 @@ public class WalletService {
 		return rechargeHistories;
 	}
 	
-	public Wallet updateWalletBalanceByOrder(Customer customer, Order order, String transId) {
+	public Wallet updateWalletBalanceByOrder(Customer customer, Order order, String transId, String zaakpayTransId) {
 		Wallet wallet = customer.getWallet();
 		Integer intOrder100 = (int) order.getPrice() * 100;
 		Integer intOrder = (int) order.getPrice();
@@ -72,7 +73,7 @@ public class WalletService {
 			wallet.setBalance(wallet.getBalance() - intOrder100);
 			wallet.setTempValue(intOrder100);
 			
-			RechargeHistory rechargeHistory = createRechargeHistory(customer, transId);
+			RechargeHistory rechargeHistory = createRechargeHistoryByZaakpay(customer, transId, zaakpayTransId);
 			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
 			
 			return walletRepo.save(wallet);
@@ -82,7 +83,7 @@ public class WalletService {
 		}
 	}
 	
-	public Wallet updateWalletBalanceByOrderReturn(Customer customer, Order order1, Order order2, String transId) {
+	public Wallet updateWalletBalanceByOrderReturn(Customer customer, Order order1, Order order2, String transId, String zaakpayTransId) {
 		Wallet wallet = customer.getWallet();
 		Integer intOrder100 = ((int) order1.getPrice() + (int) order2.getPrice()) * 100;
 		Integer intOrder = ((int) order1.getPrice() + (int) order2.getPrice());
@@ -91,7 +92,7 @@ public class WalletService {
 			wallet.setBalance(wallet.getBalance() - intOrder100);
 			wallet.setTempValue(intOrder100);
 			
-			RechargeHistory rechargeHistory = createRechargeHistory(customer, transId);
+			RechargeHistory rechargeHistory = createRechargeHistoryByZaakpay(customer, transId, zaakpayTransId);
 			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
 			
 			return walletRepo.save(wallet);
