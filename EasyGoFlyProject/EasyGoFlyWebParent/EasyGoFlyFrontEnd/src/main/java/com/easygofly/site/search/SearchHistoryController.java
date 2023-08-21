@@ -938,5 +938,13 @@ public class SearchHistoryController {
         model.addAttribute("searchURL", searchReturnURL);
         return "loading/loading";
     }
+
+
+	@GetMapping("/test")
+    public String testLoadingAnimation(Model model) {
+        model.addAttribute("searchURL", searchReturnURL);
+        return "loading/loading";
+    }
+	
 	
 }

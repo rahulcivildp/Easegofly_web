@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+th:fragment="loading-animation(remove)" th:remove="${remove}">
+<head >
+</head>
+<style>
+	.container-animation {
+		height: 400px;
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.ring {
+		height: 300px;
+		width: 300px;
+		border: 0px solid white;
+		border-radius: 50%;
+		position: absolute;
+	}
+	.ring:nth-child(1) {
+		border-top-width: 0px;
+		border-color:  #0066B3;
+		box-shadow: rgb(0, 102, 179) 0px -33px 15px -10px, rgb(0, 102, 179) 0px 22px 15px -5px inset;
+		animation: rotate1 2s linear infinite;
+	}
+	.ring:nth-child(2) {
+		border-right-width: 0px;
+		border-color: #FFFFFF;
+		box-shadow: rgb(255, 255, 255) 33px 0px 15px -10px, rgb(255, 255, 255) -22px 0px 15px -5px inset;
+		animation: rotate2 2s linear infinite;
+	}
+	.ring:nth-child(3) {
+		border-bottom-width: 0px;
+		border-color: #FB094D;
+		box-shadow: rgb(251, 9, 77) 0px 33px 15px -10px, rgb(251, 9, 77) 0px -22px 15px -5px inset;
+		animation: rotate3 2s linear infinite;
+	}
+	
+	@keyframes rotate1 {
+		0%{
+			transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+		}
+		100%{
+			transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+		}
+	}
+	
+	@keyframes rotate2 {
+		0%{
+			transform: rotateX(60deg) rotateY(10deg) rotateZ(0deg);
+		}
+		100%{
+			transform: rotateX(60deg) rotateY(10deg) rotateZ(360deg);
+		}
+	}
+	
+	@keyframes rotate3 {
+		0%{
+			transform: rotateX(35deg) rotateY(45deg) rotateZ(0deg);
+		}
+		100%{
+			transform: rotateX(35deg) rotateY(45deg) rotateZ(360deg);
+		}
+	}
+	
+</style>
+<body>
+	<div class="container-animation">
+		<div class="ring"></div>
+		<div class="ring"></div>
+		<div class="ring"></div>
+	</div>
+</body>
+</html>

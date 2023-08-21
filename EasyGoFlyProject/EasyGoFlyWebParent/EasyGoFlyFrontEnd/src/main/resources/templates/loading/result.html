@@ -5,10 +5,18 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
+<style>
+	body {
+		background: #000E15;
+	}
+	
+</style>
 <body>
 	<div class="container">
-        <h1>loaded elements</h1>
+        <h1 style="color: aliceblue;">loaded elements</h1>
         <!-- You can add a spinner or any other loading element here -->
+        
+        <div th:replace="loading/loading-animation-fragment :: loading-animation('none')"></div>
     </div>
 </body>
 </html>

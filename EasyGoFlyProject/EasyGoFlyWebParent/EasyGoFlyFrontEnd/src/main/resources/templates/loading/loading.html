@@ -7,7 +7,31 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <meta http-equiv="refresh" th:content="|0; url=@{${searchURL}}|">
 <title>Insert title here</title>
 </head>
-<body>
+<style type="text/css">
+	#loading-label {
+		animation: changeColor 2s infinite linear(0 0%, 1 100%);
+	}
+	
+	@keyframes changeColor {
+		from {
+			color: rgb(166, 210, 255);
+		}
+		20% {
+		    color: rgb(255, 255, 255);
+		}
+		20% {
+		    color: rgb(255, 136, 136);
+		}
+		20% {
+		    color: rgb(255, 255, 255);
+		}
+		to {
+		    color: rgb(166, 210, 255);
+		}
+	}
+	
+</style>
+<body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
 
   <header id="header" class="fixed-top d-flex align-items-center" >
   	<div th:replace="fragments :: page_header('tag')"></div>
@@ -23,15 +47,16 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  
+
+  <div class="container" style="display: flex; justify-content: center; align-items: center; max-width: 100%; background-color: #000000cf;">
+	    
   <br> 
   <br>
   <br> 
   <br>
-  <div class="container" style="display: flex; justify-content: center; align-items: center;">
-  	<div style="margin: 100px 0">
-	  	<h3>Please wait. Loading...</h3>
-	  	<img alt="" th:src="@{images/animaticons/Spin-1s-200px.gif}">
+  	<div style="margin: 150px 0 50px 0">
+	  	<h3 id="loading-label">Please wait. Loading...</h3>
+	  	<div th:replace="loading/loading-animation-fragment :: loading-animation('none')"></div>
   	</div>
   </div>
  

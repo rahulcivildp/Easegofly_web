@@ -491,6 +491,7 @@ body {
 </style>
 
 <body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
+<div style="background-color: #00000047;">
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Easy Steps -->
@@ -611,182 +612,195 @@ body {
               <div class="row ">	
                    <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_1_LINK}" style="text-decoration: none;">
-                             <div class="card_wrp shadow">
-                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
-                                 	<th:block th:if="${brand1} != null">
-	                                 	<img alt="" th:src="@{${brand1.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
-	                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate1, 'dd MMM, E')}]]</h6>
-                                 	</th:block>
-                                 </div>
-                                 <div class="card_top_side">
-                                 	<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYONE}">[[${city.cityName}]]([[${PRICE_1_CITYONE}]])</span>
-                                 	</th:block>
-                                 	
-                                 </div>
-                                 <div style="display: flex; justify-content: center;">
-                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
-                                 </div>
-                                 <div class="card_center">
-                                     <th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYTWO}">[[${city.cityName}]]([[${PRICE_1_CITYTWO}]])</span>
-                                 	</th:block>
-                                 </div>
-
-                                 <div class="card_bottom">
-                                      <h4 id="PRICE_1">&#x20B9; [[${PRICE_1}]]</h4>
-                                 </div>
-                            </div>
+							 <th:block th:if="${PRICE_1_LINK} != ''">
+	                             <div class="card_wrp shadow">
+	                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
+	                                 	<th:block th:if="${brand1} != null">
+		                                 	<img alt="" th:src="@{${brand1.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
+		                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate1, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="card_top_side">
+	                                 	<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYONE}">[[${city.cityName}]]([[${PRICE_1_CITYONE}]])</span>
+	                                 	</th:block>
+	                                 	
+	                                 </div>
+	                                 <div style="display: flex; justify-content: center;">
+	                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
+	                                 </div>
+	                                 <div class="card_center">
+	                                     <th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_1_CITYTWO}">[[${city.cityName}]]([[${PRICE_1_CITYTWO}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	
+	                                 <div class="card_bottom">
+	                                      <h4 id="PRICE_1">&#x20B9; [[${PRICE_1}]]</h4>
+	                                 </div>
+	                            </div>
+                            </th:block>
                        </a>
                    </div>
                    <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_2_LINK}" style="text-decoration: none;">
-                             <div class="card_wrp shadow">
-                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
-                                 	<th:block th:if="${brand2} != null">
-	                                 	<img alt="" th:src="@{${brand2.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
-	                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate2, 'dd MMM, E')}]]</h6>
-	                                 </th:block>
-                                 </div>
-                                 <div class="card_top_side">
-                                 	<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYONE}">[[${city.cityName}]]([[${PRICE_2_CITYONE}]])</span>
-                                 	</th:block>
-                                 </div>
-                                 <div style="display: flex; justify-content: center;">
-                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
-                                 </div>
-                                 <div class="card_center">
-									<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYTWO}">[[${city.cityName}]]([[${PRICE_2_CITYTWO}]])</span>
-                                 	</th:block>
-                                 </div>
-
-                                 <div class="card_bottom">
-                                      <h4>&#x20B9; [[${PRICE_2}]]</h4>
-                                 </div>
-                            </div>
+							 <th:block th:if="${PRICE_2_LINK} != ''">
+	                             <div class="card_wrp shadow">
+	                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
+	                                 	<th:block th:if="${brand2} != null">
+		                                 	<img alt="" th:src="@{${brand2.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
+		                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate2, 'dd MMM, E')}]]</h6>
+		                                 </th:block>
+	                                 </div>
+	                                 <div class="card_top_side">
+	                                 	<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYONE}">[[${city.cityName}]]([[${PRICE_2_CITYONE}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div style="display: flex; justify-content: center;">
+	                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
+	                                 </div>
+	                                 <div class="card_center">
+										<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_2_CITYTWO}">[[${city.cityName}]]([[${PRICE_2_CITYTWO}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	
+	                                 <div class="card_bottom">
+	                                      <h4>&#x20B9; [[${PRICE_2}]]</h4>
+	                                 </div>
+	                            </div>
+                            </th:block>
                        </a>
                    </div>
 
 
                    <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_3_LINK}" style="text-decoration: none;">
-                             <div class="card_wrp shadow">
-                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
-                                 	<th:block th:if="${brand3} != null">
-	                                 	<img alt="" th:src="@{${brand3.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
-	                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate3, 'dd MMM, E')}]]</h6>
-                                 	</th:block>
-                                 </div>
-                                 <div class="card_top_side">
-                                 	<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYONE}">[[${city.cityName}]]([[${PRICE_3_CITYONE}]])</span>
-                                 	</th:block>
-                                 </div>
-                                 <div style="display: flex; justify-content: center;">
-                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
-                                 </div>
-                                 <div class="card_center">
-									<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYTWO}">[[${city.cityName}]]([[${PRICE_3_CITYTWO}]])</span>
-                                 	</th:block>
-                                 </div>
-
-                                 <div class="card_bottom">
-                                      <h4>&#x20B9; [[${PRICE_3}]]</h4>
-                                 </div>
-                            </div>
+							 <th:block th:if="${PRICE_3_LINK} != ''">
+	                             <div class="card_wrp shadow">
+	                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
+	                                 	<th:block th:if="${brand3} != null">
+		                                 	<img alt="" th:src="@{${brand3.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
+		                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate3, 'dd MMM, E')}]]</h6>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="card_top_side">
+	                                 	<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYONE}">[[${city.cityName}]]([[${PRICE_3_CITYONE}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div style="display: flex; justify-content: center;">
+	                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
+	                                 </div>
+	                                 <div class="card_center">
+										<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_3_CITYTWO}">[[${city.cityName}]]([[${PRICE_3_CITYTWO}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	
+	                                 <div class="card_bottom">
+	                                      <h4>&#x20B9; [[${PRICE_3}]]</h4>
+	                                 </div>
+	                            </div>
+                            </th:block>
                        </a>
                    </div>
 
                   <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_4_LINK}" style="text-decoration: none;">
-                             <div class="card_wrp shadow">
-                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
-                                 	<th:block th:if="${brand4} != null">
-	                                 	<img alt="" th:src="@{${brand4.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
-	                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate4, 'dd MMM, E')}]]</h6>
-                                 	</th:block>
-                                 </div>
-                                 <div class="card_top_side">
-                                 	<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYONE}">[[${city.cityName}]]([[${PRICE_4_CITYONE}]])</span>
-                                 	</th:block>
-                                 </div>
-                                 <div style="display: flex; justify-content: center;">
-                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
-                                 </div>
-                                 <div class="card_center">
-									<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYTWO}">[[${city.cityName}]]([[${PRICE_4_CITYTWO}]])</span>
-                                 	</th:block>
-                                 </div>
-
-                                 <div class="card_bottom">
-                                      <h4>&#x20B9; [[${PRICE_4}]]</h4>
-                                 </div>
-                            </div>
+							 <th:block th:if="${PRICE_4_LINK} != ''">
+	                             <div class="card_wrp shadow">
+	                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
+	                                 	<th:block th:if="${brand4} != null">
+		                                 	<img alt="" th:src="@{${brand4.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
+		                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate4, 'dd MMM, E')}]]</h6>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="card_top_side">
+	                                 	<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYONE}">[[${city.cityName}]]([[${PRICE_4_CITYONE}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div style="display: flex; justify-content: center;">
+	                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
+	                                 </div>
+	                                 <div class="card_center">
+										<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_4_CITYTWO}">[[${city.cityName}]]([[${PRICE_4_CITYTWO}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	
+	                                 <div class="card_bottom">
+	                                      <h4>&#x20B9; [[${PRICE_4}]]</h4>
+	                                 </div>
+	                            </div>
+                            </th:block>
                        </a>
                    </div>
                   
                   <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_5_LINK}" style="text-decoration: none;">
-                             <div class="card_wrp shadow">
-                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
-                                 	<th:block th:if="${brand5} != null">
-	                                 	<img alt="" th:src="@{${brand5.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
-	                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate5, 'dd MMM, E')}]]</h6>
-                                 	</th:block>
-                                 </div>
-                                 <div class="card_top_side">
-                                 	<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYONE}">[[${city.cityName}]]([[${PRICE_5_CITYONE}]])</span>
-                                 	</th:block>
-                                 </div>
-                                 <div style="display: flex; justify-content: center;">
-                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
-                                 </div>
-                                 <div class="card_center">
-									<th:block th:each="city : ${cities}">
-                                 	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYTWO}">[[${city.cityName}]]([[${PRICE_5_CITYTWO}]])</span>
-                                 	</th:block>
-                                 </div>
-
-                                 <div class="card_bottom">
-                                      <h4>&#x20B9; [[${PRICE_5}]]</h4>
-                                 </div>
-                            </div>
+							 <th:block th:if="${PRICE_5_LINK} != ''">
+	                             <div class="card_wrp shadow">
+	                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
+	                                 	<th:block th:if="${brand5} != null">
+		                                 	<img alt="" th:src="@{${brand5.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
+		                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate5, 'dd MMM, E')}]]</h6>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="card_top_side">
+	                                 	<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYONE}">[[${city.cityName}]]([[${PRICE_5_CITYONE}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	                                 <div style="display: flex; justify-content: center;">
+	                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
+	                                 </div>
+	                                 <div class="card_center">
+										<th:block th:each="city : ${cities}">
+	                                 	<span class="city_name" th:if="${city.code} == ${PRICE_5_CITYTWO}">[[${city.cityName}]]([[${PRICE_5_CITYTWO}]])</span>
+	                                 	</th:block>
+	                                 </div>
+	
+	                                 <div class="card_bottom">
+	                                      <h4>&#x20B9; [[${PRICE_5}]]</h4>
+	                                 </div>
+	                            </div>
+                            </th:block>
                        </a>
                    </div>
 
                    <div class="col-md-2 col-2 text-center cards_margin">
                        <a th:href="${PRICE_6_LINK}" style="text-decoration: none;">
-                            <div class="card_wrp shadow">
-                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
-                                 	<th:block th:if="${brand6} != null">
-	                                 	<img alt="" th:src="@{${brand6.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
-	                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate6, 'dd MMM, E')}]]</h6>
-                                 	</th:block>
-                                 </div>
-                                <div class="card_top_side">
-                                	<th:block th:each="city : ${cities}">
-                                	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYONE}">[[${city.cityName}]]([[${PRICE_6_CITYONE}]])</span>
-                                	</th:block>
-                                </div>
-                                 <div style="display: flex; justify-content: center;">
-                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
-                                 </div>
-                                <div class="card_center">
-								<th:block th:each="city : ${cities}">
-                                	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYTWO}">[[${city.cityName}]]([[${PRICE_6_CITYTWO}]])</span>
-                                	</th:block>
-                                </div>
-
-                                <div class="card_bottom">
-                                     <h4>&#x20B9; [[${PRICE_6}]]</h4>
-                                </div>
-                           </div>
+							 <th:block th:if="${PRICE_6_LINK} != ''">
+	                            <div class="card_wrp shadow">
+	                                 <div class="img_card_boxs shadow" style="margin: 2px 20px; border-radius: 7px; display: flex; align-items: center; justify-content: space-evenly;">
+	                                 	<th:block th:if="${brand6} != null">
+		                                 	<img alt="" th:src="@{${brand6.photosImagePath}}" width="45" height="45" style="border-radius: 7px;">
+		                                 	<h6 style="margin: 0;">[[${#dates.format(flightDate6, 'dd MMM, E')}]]</h6>
+	                                 	</th:block>
+	                                 </div>
+	                                <div class="card_top_side">
+	                                	<th:block th:each="city : ${cities}">
+	                                	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYONE}">[[${city.cityName}]]([[${PRICE_6_CITYONE}]])</span>
+	                                	</th:block>
+	                                </div>
+	                                 <div style="display: flex; justify-content: center;">
+	                                 	<hr style="width: 100px; border: 3px solid black; margin: 3px;">
+	                                 </div>
+	                                <div class="card_center">
+									<th:block th:each="city : ${cities}">
+	                                	<span class="city_name" th:if="${city.code} == ${PRICE_6_CITYTWO}">[[${city.cityName}]]([[${PRICE_6_CITYTWO}]])</span>
+	                                	</th:block>
+	                                </div>
+	
+	                                <div class="card_bottom">
+	                                     <h4>&#x20B9; [[${PRICE_6}]]</h4>
+	                                </div>
+	                           </div>
+                            </th:block>
                        </a>
                    </div>
             </div>
@@ -1151,10 +1165,10 @@ body {
              </div>
    		</div>
 	</div>
-</div>
+
 
 <!-- Get Inspiration -->
-<div class="get_inspiratio" style="margin-bottom: 35px;">
+<div class="get_inspiratio" style="padding-bottom: 35px;">
 	<div style="width: 80%; margin: 0 auto;">
 	    <div class="tab folder_style col-sm-4 "><h2 class="headerStyle font_resizerer">Get inspiration <span>for your next trip</span></h2></div>
 	</div>
@@ -1208,7 +1222,7 @@ body {
           </div></div>
         </div>
    </div>
-       
+      </div> 
 
 
    
@@ -1285,5 +1299,6 @@ body {
     });
     
 </script>
+</div>
 </body>
 </html>
