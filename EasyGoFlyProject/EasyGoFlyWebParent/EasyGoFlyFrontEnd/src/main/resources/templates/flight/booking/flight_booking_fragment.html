@@ -120,7 +120,13 @@
         .circles_active {
             background-color: #2abd2a !important;
         }
-        
+        .booki_page_p {
+		    color: rgb(44 43 43);
+		    font-weight: 600;
+		    background: #e5e9ff;
+		    border-radius: 6px;
+		    padding: 0 8px;
+		}
     </style>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
@@ -163,15 +169,21 @@
                     <div class="row" style="padding: 15px 0;">
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c1"></div>
-                            <P style="text-align: center; color: #959eac;">Traveler Details</P>
+                            <div style="display: flex; justify-content: center;">
+                            	<P class="booki_page_p">Traveller Details</P>
+							</div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c2"></div>
-                            <P style="text-align: center; color: #959eac;">Review</P>
+                            <div style="display: flex; justify-content: center;">
+                            	<P class="booki_page_p">Review</P>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c3"></div>
-                            <P style="text-align: center; color: #959eac;">Payment</P>
+                            <div style="display: flex; justify-content: center;">
+                            	<P class="booki_page_p">Payment</P>
+                            </div>
                         </div>
                     </div>
                     <div class="progress_border"></div>

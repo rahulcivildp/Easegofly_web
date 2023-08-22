@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -114,6 +115,8 @@ public class OrderController {
 	private Integer updatedOrderId;
 	private Integer updatedOrderReturnId1;
 	private Integer updatedOrderReturnId2;
+	private Integer hasErrorCode;
+	private String hasErrorMsg;
 	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
@@ -459,7 +462,7 @@ public class OrderController {
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 		String email; 
-		Customer customer; 
+		Customer customer = new Customer(); 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -545,15 +548,21 @@ public class OrderController {
 		User user = product.getUser();
 		model.addAttribute("user", user);
 		
-		if (parameter[9].equals("Not Found") && parameter[10].equals("unknown") ) {
+		if (parameter[9].contains("Not Found") && parameter[10].contains("unknown") ) {
 			model.addAttribute("paymentCancelled", parameter[12]);
-		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
-		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
-		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
-			model.addAttribute("paymentSuccess", parameter[12]);
+		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
+			if (hasErrorCode != null && hasErrorCode != 0) {
+				model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+				System.out.println(hasErrorCode);
+			} else {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			}
 		}
+		
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
@@ -910,13 +919,24 @@ public class OrderController {
 		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
 		return walletService.updateWalletBalanceByOrder(customer, order, orderString, "");
 	}
+
+	private Wallet walletPayOrderCancel(Customer customer, Order order) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
+		return walletService.cancelWalletBalanceByOrder(customer, order, orderString, "");
+	}
 	
 	@GetMapping("/flight_wallet_response")
 	public String showWalletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
 		String email; 
-		Customer customer; 
+		Customer customer = new Customer(); 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -1004,8 +1024,14 @@ public class OrderController {
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
-        
-		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+		if (hasErrorCode != null && hasErrorCode != 0) {
+			model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+			walletPayOrderCancel(customer, order);
+			System.out.println(hasErrorCode);
+		} else {
+			model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+		}
+		
 		model.addAttribute("amount", order.getPrice());
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);
@@ -1283,41 +1309,49 @@ public class OrderController {
         	
         	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
         	System.out.println(jsonObjTicket);
-        	JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
-        	JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
+        	try {
+				JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+				JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
 //        	JSONObject jsonObjectSegments = new JSONObject();
-        	
-        	String terminalDep = "", terminalArr = "";
-        	for (int i = 0; i < jsonArraySegment.length(); i++) {
-        		JSONObject jsonObjectSegments = jsonArraySegment.getJSONObject(i);
-				if (i == 0) {
-					terminalDep = jsonObjectSegments.getJSONObject("Origin").getJSONObject("Airport").get("Terminal").toString();
+				
+				String terminalDep = "", terminalArr = "";
+				for (int i = 0; i < jsonArraySegment.length(); i++) {
+					JSONObject jsonObjectSegments = jsonArraySegment.getJSONObject(i);
+					if (i == 0) {
+						terminalDep = jsonObjectSegments.getJSONObject("Origin").getJSONObject("Airport").get("Terminal").toString();
+					}
+					if (i == (jsonArraySegment.length() - 1)) {
+						terminalArr = jsonObjectSegments.getJSONObject("Destination").getJSONObject("Airport").get("Terminal").toString();
+					}
 				}
-				if (i == (jsonArraySegment.length() - 1)) {
-					terminalArr = jsonObjectSegments.getJSONObject("Destination").getJSONObject("Airport").get("Terminal").toString();
-				}
-			}
-        	
-        	String onlinePNR = jsonObjTicketResponse.get("PNR").toString();
-        	String onlineBookingId = jsonObjTicketResponse.get("BookingId").toString();
-	
-        	productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
-        	productService.updatePNROnline(productDetail, onlinePNR);
-        	productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-        	orderService.updateBookingId(order, onlineBookingId);
-        	
-        	
-        	/* Get Booking Details */
-        	URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
-            // Open a connection
-            HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
-            
-            StringBuilder responseBodyGetBookingDetails = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, searchHistoryController.traceId, onlinePNR, onlineBookingId);
-        	
-        	@SuppressWarnings("unused")
-			JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString()); 
+				
+				String onlinePNR = jsonObjTicketResponse.get("PNR").toString();
+				String onlineBookingId = jsonObjTicketResponse.get("BookingId").toString();
+
+				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
+				productService.updatePNROnline(productDetail, onlinePNR);
+				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
+				orderService.updateBookingId(order, onlineBookingId);
+				
+				
+				/* Get Booking Details */
+				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
+				// Open a connection
+				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
+				
+				StringBuilder responseBodyGetBookingDetails = new StringBuilder();
+				
+				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, searchHistoryController.traceId, onlinePNR, onlineBookingId);
+				
+				@SuppressWarnings("unused")
+				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+			} catch (JSONException json) {
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				
+				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
+				hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
+			} 
 
 		}
 	}

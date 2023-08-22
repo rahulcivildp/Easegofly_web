@@ -83,6 +83,25 @@ public class WalletService {
 		}
 	}
 	
+	public Wallet cancelWalletBalanceByOrder(Customer customer, Order order, String transId, String zaakpayTransId) {
+		Wallet wallet = customer.getWallet();
+		Integer intOrder100 = (int) order.getPrice() * 100;
+		Integer intOrder = (int) order.getPrice();
+		if (wallet.getBalance() >= intOrder100) {
+			System.out.println((wallet.getBalance() / 100) + " is BIGGER than " + intOrder);
+			wallet.setBalance(wallet.getBalance() + intOrder100);
+			wallet.setTempValue(intOrder100);
+			
+			RechargeHistory rechargeHistory = createRechargeHistoryByZaakpay(customer, transId, zaakpayTransId);
+			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
+			
+			return walletRepo.save(wallet);
+		} else {
+			System.out.println((wallet.getBalance() / 100) + " is SMALLER than " + intOrder);
+			return null;
+		}
+	}
+	
 	public Wallet updateWalletBalanceByOrderReturn(Customer customer, Order order1, Order order2, String transId, String zaakpayTransId) {
 		Wallet wallet = customer.getWallet();
 		Integer intOrder100 = ((int) order1.getPrice() + (int) order2.getPrice()) * 100;

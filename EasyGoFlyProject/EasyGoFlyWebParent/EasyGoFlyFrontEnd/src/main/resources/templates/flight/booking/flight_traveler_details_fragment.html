@@ -166,19 +166,58 @@
 			color: black;
 			font-weight: bold;
         }
-        .mealRow { 
-			margin: 18px 12px; 
+        .extra_detail_tab { 
+			margin: 18px 0px; 
 			border-radius: 5px;
 			background-repeat: no-repeat;
 			background-size: cover;
 			color: white;
 			box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+		    padding: 0 8px;
 		}
 		.detail-box {
 			margin: 10px; width: 97%; 
 			background-color: white; 
 			border-radius: 8px; 
 			box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		}
+        .booki_page_p {
+		    color: rgb(44 43 43);
+		    font-weight: 600;
+		    background: #e5e9ff;
+		    border-radius: 6px;
+		    padding: 0 8px;
+		}
+		.extra_detail_heading {
+			border-bottom: 2px dashed grey;
+		    padding: 5px 0;
+		    margin-bottom: 8px;
+		    display: flex;
+		    justify-content: center;
+		}
+		.extra_detail_selection {
+			width: 80%; 
+			border-radius: 6px;
+		}
+		.extra_detail_heading_para {
+			margin: 0;
+		    background: #00000080;
+		    padding: 0 5px;
+		    border-radius: 6px;
+		}
+		.extra_detail_selection_div {
+			padding: 5px 0; 
+			margin: 0; 
+			display: flex; 
+			justify-content: space-around; 
+			align-items: center;
+		}
+		.extra_detail_price {
+			padding: 5px 0; 
+			margin: 0; 
+			display: flex; 
+			justify-content: space-around; 
+			align-items: center;
 		}
     </style>
 <script type="text/javascript">
@@ -224,15 +263,21 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                     <div class="row" style="padding: 15px 0;">
                         <div class="col-md-4">
                             <div class="circles " id="c1"></div>
-                            <P style="text-align: center; color: #959eac;">Traveller Details</P>
+                            <div style="display: flex; justify-content: center;">
+                            	<P class="booki_page_p">Traveller Details</P>
+							</div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c2"></div>
-                            <P style="text-align: center; color: #959eac;">Review</P>
+                            <div style="display: flex; justify-content: center;">
+                            	<P class="booki_page_p">Review</P>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c3"></div>
-                            <P style="text-align: center; color: #959eac;">Payment</P>
+                            <div style="display: flex; justify-content: center;">
+                            	<P class="booki_page_p">Payment</P>
+                            </div>
                         </div>
                     </div>
                     <div class="progress_border"></div>
@@ -520,27 +565,77 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                </div>
 	                                <div style="display: flex; justify-content: center; background-color: #00000014;">
 		                                <th:block th:each="traveler : ${travelers}">
+			                                <th:block th:if="${traveler.paxType} == '3'">
+			                                	<input type="hidden" name="baggageSelect" th:id="'baggageSelect' + ${traveler.id}" value="NoBaggage">
+			                                	<input type="hidden" name="seatSelet" th:id="'seatSelet'  + ${traveler.id}" value="1">
+			                                </th:block>
 											<div class="col-12 detail-box">
-												<div style="display: flex; justify-content: center; border-bottom: 1px ridge gray;">
-			                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
+												<div style="display: flex; justify-content: center; border-bottom: 1px ridge gray; align-items: end;">
+			                                		<small style="padding: 5px 0;">for &nbsp;</small> <h5 style="padding: 5px 0; margin: 0;">[[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 			                                	</div>
-												<div class="col-4 mealRow" th:style="'background-image: url(' + @{'/images/food-composition.png'} + ');'">
-				                                	<div style="padding: 5px 0; margin: 0; display: flex; justify-content: center;">
-				                                		<select name="meals" th:id="'meals' + ${traveler.id}" style="width: 100%;" form="order_form">
-					                                		<th:block th:each="meal : ${mealsOnlineList}">
-					                                			<th:block th:if="${meal.name} == ''">
-					                                			<option th:value="${meal.code}">No meal</option>
-					                                			</th:block>
-					                                			<th:block th:if="${meal.name} != ''">
-					                                			<option th:value="${meal.code}">[[${meal.name}]]</option>
-					                                			</th:block>
-					                                		</th:block>
-					                                	</select>
-				                                	</div>
-				                                	<div>
-					                                	<p th:id="'mealPrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
+												<div class="row" style="padding: 0 8px;">
+													<div class="col-4">
+					                                	<div class="extra_detail_tab" th:style="'background-image: url(' + @{'/images/food-composition.png'} + ');'">
+															<div class="extra_detail_heading">
+							                                	<p class="extra_detail_heading_para">Meal</p>
+							                                </div>
+						                                	<div class="extra_detail_selection_div">
+																<i class="fa fa-solid fa-bowl-food"></i>
+																<p style="margin: 0;">&nbsp; : &nbsp;</p>
+						                                		<select class="extra_detail_selection" name="meals" th:id="'meals' + ${traveler.id}" form="order_form">
+							                                		<th:block th:each="meal : ${mealsOnlineList}">
+							                                			<th:block th:if="${meal.name} == ''">
+							                                			<option th:value="${meal.code}">No meal</option>
+							                                			</th:block>
+							                                			<th:block th:if="${meal.name} != ''">
+							                                			<option th:value="${meal.code}">[[${meal.name}]]</option>
+							                                			</th:block>
+							                                		</th:block>
+							                                	</select>
+						                                	</div>
+						                                	<div class="extra_detail_price" th:id="'mealPrice' + ${traveler.id}"></div>
+														</div>
 					                                </div>
-				                                </div>
+					                                <th:block th:if="${traveler.paxType} != '3'">
+						                                <div class="col-4">
+															<div class="extra_detail_tab" th:style="'background-image: url(' + @{'/images/baggage-img.png'} + ');'">
+																<div class="extra_detail_heading">
+								                                	<p class="extra_detail_heading_para">Baggage</p>
+								                                </div>
+								                                <div class="extra_detail_selection_div">
+																	<i style="color: black;" class="fa-solid fa-cart-flatbed-suitcase"></i>
+																	<p style="margin: 0; color: black;">&nbsp; : &nbsp;</p>
+					                                				<select class="extra_detail_selection" name="baggageSelect" th:id="'baggageSelect' + ${traveler.id}" form="order_form">
+					                                					<th:block th:each="baggage : ${baggageOnlineList}">
+					                                					<option th:value="${baggage.code}">KG: [[${baggage.weight}]]</option>
+					                               						</th:block>
+					                                				</select>
+								                                </div>
+															  	<div class="extra_detail_price" th:id="'baggaggePrice' + ${traveler.id}" style="color: black;"></div>
+															</div>
+						                                	
+														</div>
+														<div class="col-4">
+															<div class="extra_detail_tab" th:style="'background-image: url(' + @{'/images/air-seating-img.png'} + ');'">
+																<div class="extra_detail_heading">
+								                                	<p class="extra_detail_heading_para">Seat</p>
+								                                </div>
+								                                <div class="extra_detail_selection_div">
+																	<i style="color: black;" class="fa-solid fa-chair"></i>
+																	<p style="margin: 0; color: black;">&nbsp; : &nbsp;</p>
+					                                				<select class="extra_detail_selection" name="seatSelet" th:id="'seatSelet'  + ${traveler.id}" form="order_form">
+					                                					<th:block th:each="seat : ${seatsOnlineList}">
+					                               							<th:block th:if="${seat.availablityType} != 3">
+						                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
+						                                					</th:block>
+					                               						</th:block>
+					                                				</select>
+								                                </div>
+															  	<div class="extra_detail_price" th:id="'seatPrice' + ${traveler.id}" style="color: black;"></div>
+															</div>
+														</div>
+													</th:block>
+												</div>
 											</div>
 										
 		                                		<script type="text/javascript">
@@ -552,7 +647,10 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 													urlMeal = "[[@{/find_meal_}]]" + meal;
 													
 													$.get(urlMeal, function(response) {
-														$("#mealPrice" + [[${traveler.id}]]).html("Price: " + response);
+														mealHtmlPrice = `
+																<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
+																`;
+														$("#mealPrice" + [[${traveler.id}]]).html(mealHtmlPrice);
 														mealAmount = parseInt(response);
 														//alert(totalPaymentAbout + mealAmount);
 														changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
@@ -569,7 +667,10 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    			 urlMealChange = "[[@{/find_meal_}]]" + newMeal;
 															
 															$.get(urlMealChange, function(responseChange) {
-																$("#mealPrice" + [[${traveler.id}]]).html("Price: " + responseChange);
+																mealHtmlPrice = `
+																<i class="fa-solid fa-indian-rupee-sign"></i>&nbsp; : &nbsp; ` + responseChange + `
+																`;
+																$("#mealPrice" + [[${traveler.id}]]).html(mealHtmlPrice);
 																mealAmount = parseInt(responseChange);
 																//alert(totalPaymentAbout + mealAmount);
 																//changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
@@ -615,44 +716,17 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 											    });
 											    
 											    </script>
-		                                </th:block>
-	                                </div>
-                            	</div>
-	                            <div id="baggage_details" class="booking_tiles back_white shadow">
-	                                <div style="background-color: #ecf5fd;">
-	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Baggage</p>
-	                                </div>
-	                                <th:block th:each="traveler : ${travelers}">
-	                                <th:block th:if="${traveler.paxType} == '3'">
-	                                	<input type="hidden" name="baggageSelect" th:id="'baggageSelect' + ${traveler.id}" value="NoBaggage">
-	                                </th:block>
-	                                <th:block th:if="${traveler.paxType} != '3'">
-	                                <div class="row">
-	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
-	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
-	                                	</div>
-		                                <div class="col-6" style="display: flex; justify-content: center;">		
-                                			<div style="display: flex; justify-content: space-between;">
-                                				<select name="baggageSelect" style="height: 32px; border-radius: 6px;" th:id="'baggageSelect' + ${traveler.id}" form="order_form">
-                                					<th:block th:each="baggage : ${baggageOnlineList}">
-                                					<option th:value="${baggage.code}">KG: [[${baggage.weight}]]</option>
-                               						</th:block>
-                                				</select>
-                                			</div>
-		                                </div>
-									  	<div class="col-3">
-                              				<p th:id="'baggaggePrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
-                              			</div>
-									</div>
-											
-											<script type="text/javascript">
+											    <script type="text/javascript">
 												baggageAmount = 0;
 												
 												baggage = $("#baggageSelect" + [[${traveler.id}]]).val();
 												urlBaggage = "[[@{/find_baggage_}]]" + baggage;
 
 												$.get(urlBaggage, function(response) {
-													$("#baggaggePrice" + [[${traveler.id}]]).html("Price: " + response);
+													baggageHtmlPrice = `
+															<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
+															`;
+													$("#baggaggePrice" + [[${traveler.id}]]).html(baggageHtmlPrice);
 													baggageAmount = parseInt(response);
 													changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
 													$("#totalPayment").text("₹" + changedPrice);
@@ -668,7 +742,10 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 														urlBaggageChange = "[[@{/find_baggage_}]]" + baggageChange;
 	
 														$.get(urlBaggageChange, function(response) {
-															$("#baggaggePrice" + [[${traveler.id}]]).html("Price: " + response);
+														baggageHtmlPrice = `
+																<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
+																`;
+															$("#baggaggePrice" + [[${traveler.id}]]).html(baggageHtmlPrice);
 															baggageAmount = parseInt(response);
 															//changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
 															$("#totalPayment").text("₹" + changedPrice);
@@ -699,49 +776,17 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    });
 										    
 										    </script>
-										    
-										    </th:block>
-	                                </th:block>
-                            	</div>
-                            	<div id="seat_details" class="booking_tiles back_white shadow">
-	                                <div style="background-color: #ecf5fd;">
-	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Seat</p>
-	                                </div>
-	                                <th:block th:each="traveler : ${travelers}">
-	                                <th:block th:if="${traveler.paxType} == '3'">
-	                                	<input type="hidden" name="seatSelet" th:id="'seatSelet'  + ${traveler.id}" value="1">
-	                                </th:block>
-	                                <th:block th:if="${traveler.paxType} != '3'">
-	                                
-	                                <div class="row">
-	                                	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
-	                                		<h5 style="padding: 5px 0; margin: 0;">For [[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
-	                                	</div>
-		                                <div class="col-6"  style="display: flex; justify-content: center;">		
-                                			<div style="display: flex; justify-content: space-between;">	
-                                				<select name="seatSelet" style="height: 32px; border-radius: 6px;" th:id="'seatSelet'  + ${traveler.id}" form="order_form">
-                                					<th:block th:each="seat : ${seatsOnlineList}">
-                               							<th:block th:if="${seat.availablityType} != 3">
-	                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
-	                                					</th:block>
-                               						</th:block>
-                                				</select>
-                                			</div>
-		                                </div>
-									  	<div class="col-3">
-                              				<p th:id="'seatPrice' + ${traveler.id}" style="padding: 5px 0; margin: 0;"></p>
-                              			</div>
-									</div>
-											
-											<script type="text/javascript">
+										    <script type="text/javascript">
 												seatAmount = 0;
 											
 												seat = $("#seatSelet"  + [[${traveler.id}]]).val();
 												urlSeat = "[[@{/find_seat_}]]" + seat;
 												
 												$.get(urlSeat, function(response) {
-													//alert(response);
-													$("#seatPrice"  + [[${traveler.id}]]).html("Price: " + response);
+													seatHtmlPrice = `
+															<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
+															`;
+													$("#seatPrice"  + [[${traveler.id}]]).html(seatHtmlPrice);
 													seatAmount = parseInt(response);
 
 													changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
@@ -758,8 +803,10 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 													urlSeatChange = "[[@{/find_seat_}]]" + newSeat;
 													
 													$.get(urlSeatChange, function(response) {
-														//alert(response);
-														$("#seatPrice"  + [[${traveler.id}]]).html("Price: " + response);
+														seatHtmlPrice = `
+															<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
+															`;
+														$("#seatPrice"  + [[${traveler.id}]]).html(seatHtmlPrice);
 														seatAmount = parseInt(response);
 
 														//changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
@@ -794,10 +841,11 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    });
 										    
 										    </script>
-										    
-										</th:block>	
-	                                </th:block>
+		                                </th:block>
+	                                </div>
                             	</div>
+	                            
+                            	
                                 <div id="contact_details" class="booking_tiles back_white shadow">
                                     <div style="background-color: #ecf5fd;">
                                         <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Contact Details</p>
