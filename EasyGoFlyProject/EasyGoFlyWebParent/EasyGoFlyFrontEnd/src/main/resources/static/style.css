@@ -215,6 +215,10 @@
 	  *.float-state {float: left !important;}
 	  *.dropDown_toggle_md { display: none !important;}
 	  *.dropDown_toggle_col { display: block !important;}
+	  
+		*.traveler_type_form {
+			padding: 0 calc(var(--bs-gutter-x) * .5) 15px calc(var(--bs-gutter-x) * .5) !important;
+		}
 	  *.media_status_flex { 
 		  display: flex !important;
 		  justify-content: center;
@@ -409,4 +413,114 @@
 *.text_modify:hover {
 	background-color: #D32F2F;
 }
+.mealStyle {
+	display: flex; 
+	align-items: center; 
+	margin: 10px 0 10px 24px; 
+	border-radius: 8px; 
+	border: 1px solid gray; 
+	padding-left: 37px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: white;
+}
 
+.baggageStyle{
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: black;
+	font-weight: bold;
+}
+.extra_detail_tab { 
+	margin: 18px 0px; 
+	border-radius: 5px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: white;
+	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    padding: 0 8px;
+}
+.detail-box {
+	margin: 10px; 
+	width: 95% !important; 
+	background-color: white; 
+	border-radius: 8px; 
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.booki_page_p {
+    color: rgb(44 43 43);
+    font-weight: 600;
+    background: #e5e9ff;
+    border-radius: 6px;
+    padding: 0 8px;
+    margin: 5px;
+}
+.extra_detail_heading {
+	border-bottom: 2px dashed grey;
+    padding: 5px 0;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+}
+.extra_detail_selection {
+	width: 80%; 
+	border-radius: 6px;
+}
+.extra_detail_heading_para {
+	margin: 0;
+    background: #00000080;
+    padding: 0 5px;
+    border-radius: 6px;
+}
+.extra_detail_selection_div {
+	padding: 5px 0; 
+	margin: 0; 
+	display: flex; 
+	justify-content: space-around; 
+	align-items: center;
+}
+.extra_detail_price {
+	padding: 5px 0; 
+	margin: 0; 
+	display: flex; 
+	align-items: center;
+}
+.progress_div {
+	display: flex; 
+	justify-content: center;
+}
+.progress_div_active {
+	background: #75ca7d;
+}
+
+.flight_detail_box {
+	border-radius: 7px;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+*.extra_detail_row_style {
+	display: flex; 
+	justify-content: center; 
+	background-color: #00000014;
+}
+.extra_detail_headng_style {
+	display: flex; 
+	justify-content: center; 
+	border-bottom: 1px ridge gray; 
+	align-items: end;
+}
+.extra_detail_inner_div {
+	border: 2px solid grey;
+    border-radius: 8px;
+}
+
+.onward {
+	position: absolute;
+    margin-top: 10px;
+    background-color: #1369f5;
+    color: white;
+    padding: 6px 11px;
+    width: 10%;
+    border-radius: 0 20px 20px 0;
+}

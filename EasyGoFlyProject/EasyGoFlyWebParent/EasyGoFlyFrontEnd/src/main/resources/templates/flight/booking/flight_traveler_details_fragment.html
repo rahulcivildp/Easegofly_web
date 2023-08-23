@@ -57,14 +57,6 @@
         .buttn_stly_eff {
             box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important;
         }
-        .onward {
-            margin: 15px 0;
-            background-color: #1369f5;
-            color: white;
-            padding: 6px 11px;
-            width: 10%;
-            border-radius: 0 20px 20px 0;
-        }
         .non_stop {
             text-align: center;
             margin: 0;
@@ -146,79 +138,7 @@
         	padding: 6px 8px;
         }
         
-        .mealStyle {
-        	display: flex; 
-        	align-items: center; 
-        	margin: 10px 0 10px 24px; 
-        	border-radius: 8px; 
-        	border: 1px solid gray; 
-        	padding-left: 37px;
-        	background-position: center;
-			background-repeat: no-repeat;
-			background-size: cover;
-			color: white;
-        }
         
-        .baggageStyle{
-        	background-position: center;
-			background-repeat: no-repeat;
-			background-size: cover;
-			color: black;
-			font-weight: bold;
-        }
-        .extra_detail_tab { 
-			margin: 18px 0px; 
-			border-radius: 5px;
-			background-repeat: no-repeat;
-			background-size: cover;
-			color: white;
-			box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		    padding: 0 8px;
-		}
-		.detail-box {
-			margin: 10px; width: 97%; 
-			background-color: white; 
-			border-radius: 8px; 
-			box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-		}
-        .booki_page_p {
-		    color: rgb(44 43 43);
-		    font-weight: 600;
-		    background: #e5e9ff;
-		    border-radius: 6px;
-		    padding: 0 8px;
-		}
-		.extra_detail_heading {
-			border-bottom: 2px dashed grey;
-		    padding: 5px 0;
-		    margin-bottom: 8px;
-		    display: flex;
-		    justify-content: center;
-		}
-		.extra_detail_selection {
-			width: 80%; 
-			border-radius: 6px;
-		}
-		.extra_detail_heading_para {
-			margin: 0;
-		    background: #00000080;
-		    padding: 0 5px;
-		    border-radius: 6px;
-		}
-		.extra_detail_selection_div {
-			padding: 5px 0; 
-			margin: 0; 
-			display: flex; 
-			justify-content: space-around; 
-			align-items: center;
-		}
-		.extra_detail_price {
-			padding: 5px 0; 
-			margin: 0; 
-			display: flex; 
-			justify-content: space-around; 
-			align-items: center;
-		}
     </style>
 <script type="text/javascript">
 totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
@@ -260,22 +180,22 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
         <div id="booking_page">
             <div class="container">
                 <div class="media-hide">
-                    <div class="row" style="padding: 15px 0;">
+                    <div class="row" style="padding: 20px 0;">
                         <div class="col-md-4">
                             <div class="circles " id="c1"></div>
-                            <div style="display: flex; justify-content: center;">
+                            <div class="progress_div">
                             	<P class="booki_page_p">Traveller Details</P>
 							</div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c2"></div>
-                            <div style="display: flex; justify-content: center;">
-                            	<P class="booki_page_p">Review</P>
+                            <div class="progress_div">
+                            	<P class="booki_page_p progress_div_active">Review</P>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c3"></div>
-                            <div style="display: flex; justify-content: center;">
+                            <div class="progress_div">
                             	<P class="booki_page_p">Payment</P>
                             </div>
                         </div>
@@ -337,8 +257,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                 </div>
                                 <div>
                                     <div class="onward onwars_responsive"><p style="margin: 0;">Onward</p></div>
-                                        <div class="row" style="padding-bottom: 15px;">
-                                            <div class="col-md-9">
+                                        <div class="row" style="padding: 55px 20px 10px 20px;">
+                                            <div class="col-md-12 flight_detail_box">
                                                 <div class="row">
                                                     <div class="col-md-4 col-3">
                                                     	<div th:id="'brandImage' + ${flight.id}" style="float: left; padding: 15px 20px 10px;"></div>
@@ -384,11 +304,6 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 media-hide">
-                                                <div class="row">
-                                                    <div class="col-md-12" style="margin: 16px 0; padding: 0 30px;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -563,18 +478,18 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 	                                <div style="background-color: #ecf5fd;">
 	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Select Extra Amenities</p>
 	                                </div>
-	                                <div style="display: flex; justify-content: center; background-color: #00000014;">
+	                                <div class="row extra_detail_row_style">
 		                                <th:block th:each="traveler : ${travelers}">
 			                                <th:block th:if="${traveler.paxType} == '3'">
 			                                	<input type="hidden" name="baggageSelect" th:id="'baggageSelect' + ${traveler.id}" value="NoBaggage">
 			                                	<input type="hidden" name="seatSelet" th:id="'seatSelet'  + ${traveler.id}" value="1">
 			                                </th:block>
 											<div class="col-12 detail-box">
-												<div style="display: flex; justify-content: center; border-bottom: 1px ridge gray; align-items: end;">
+												<div class="extra_detail_headng_style">
 			                                		<small style="padding: 5px 0;">for &nbsp;</small> <h5 style="padding: 5px 0; margin: 0;">[[${traveler.firstName}]] [[${traveler.lastName}]]</h5>
 			                                	</div>
 												<div class="row" style="padding: 0 8px;">
-													<div class="col-4">
+													<div class="col-12 col-md-4">
 					                                	<div class="extra_detail_tab" th:style="'background-image: url(' + @{'/images/food-composition.png'} + ');'">
 															<div class="extra_detail_heading">
 							                                	<p class="extra_detail_heading_para">Meal</p>
@@ -597,7 +512,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 														</div>
 					                                </div>
 					                                <th:block th:if="${traveler.paxType} != '3'">
-						                                <div class="col-4">
+						                                <div class="col-12 col-md-4">
 															<div class="extra_detail_tab" th:style="'background-image: url(' + @{'/images/baggage-img.png'} + ');'">
 																<div class="extra_detail_heading">
 								                                	<p class="extra_detail_heading_para">Baggage</p>
@@ -615,7 +530,7 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 															</div>
 						                                	
 														</div>
-														<div class="col-4">
+														<div class="col-12 col-md-4">
 															<div class="extra_detail_tab" th:style="'background-image: url(' + @{'/images/air-seating-img.png'} + ');'">
 																<div class="extra_detail_heading">
 								                                	<p class="extra_detail_heading_para">Seat</p>

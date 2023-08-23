@@ -67,7 +67,8 @@
             box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important;
         }
         .onward {
-            margin: 15px 0;
+			position: absolute;
+            margin-top: 10px;
             background-color: #1369f5;
             color: white;
             padding: 6px 11px;
@@ -120,7 +121,6 @@
         .circles_active {
             background-color: #2abd2a !important;
         }
-        
     </style>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
@@ -160,18 +160,24 @@
         <div id="booking_page">
             <div class="container">
                 <div class="media-hide">
-                    <div class="row" style="padding: 15px 0;">
+                    <div class="row" style="padding: 20px 0;">
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c1"></div>
-                            <P style="text-align: center; color: #959eac;">Traveler Details</P>
+                            <div class="progress_div">
+                            	<P class="booki_page_p progress_div_active">Traveller Details</P>
+							</div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c2"></div>
-                            <P style="text-align: center; color: #959eac;">Review</P>
+                            <div class="progress_div">
+                            	<P class="booki_page_p">Review</P>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="circles" id="c3"></div>
-                            <P style="text-align: center; color: #959eac;">Payment</P>
+                            <div class="circles " id="c3"></div>
+                            <div class="progress_div">
+                            	<P class="booki_page_p ">Payment</P>
+                            </div>
                         </div>
                     </div>
                     <div class="progress_border"></div>
@@ -186,8 +192,8 @@
                                         <h2 class="accordion-header" id="flush-headingOne">
                                             <div aria-expanded="true">
                                                 <div class="row">
-                                                    <div class="col-md-8"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-8 col-4"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
+                                                    <div class="col-md-4 col-8">
                                                         <button class="accordion-button buttn_stly collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne" data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" id="button_collapse">Show More</button>
                                                     </div>
                                                 </div>
@@ -231,61 +237,122 @@
                                 </div>
                                 <div>
                                     <div class="onward onwars_responsive"><p style="margin: 0;">Onward</p></div>
-                                        <div class="row" style="padding-bottom: 15px;">
-                                            <div class="col-md-9">
-                                                <div class="row">
-                                                    <div class="col-md-4 col-3">
-                                                    	<div th:id="'brandImage' + ${flightOne.id}" style="float: left; padding: 15px 20px 10px;"></div>
-                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
-                                                            <b>[[${flightOne.brand}]]</b>
-                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8 col"> 
-                                                        <div class="row">
-                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
-                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.depTime}]]</h2>
-                                                                <p style="margin: 0;">[[${flightOne.cityOne}]]</p>
-                                                            </div>
-                                                            <div class="col-md-8 col">
-                                                                <div>
-                                                                    <p class="non_stop">Non-Stop</p>
-                                                                </div>
-                                                                <div>
-                                                                    
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-3"></div>
-                                                                    <div class="col-md-3" style="font-size: 12px; padding: 0; text-align: center;">
-                                                                        <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>0h 30m</span>
-                                                                    </div>
-                                                                    <div class="col-md-3" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
-                                                                        <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> 00kg</span>
-                                                                    </div>
-                                                                    <div class="col-md-3"></div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
-                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.arrTime}]]</h2>
-                                                                <p style="margin: 0;">[[${flightOne.cityTwo}]]</p>
-                                                            </div>
-                                                            <div class="col-12 media_status" style="display: none;">
-                                                            	<div class="row">
-				                                                    <div style="margin: 16px 0; padding: 0 30px;">
-				                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${itemOne.totalPrice}]]/-</span> </p>
-				                                                    </div>
-				                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 media-hide">
-                                                <div class="row">
-                                                    <div class="col-md-12" style="margin: 16px 0; padding: 0 30px;"> </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    	<div class="row media-hide" style="padding-top: 18px;">
+											<div class="col-6 progress_div" ><h4>Destination Flight</h4></div>
+											<div class="col-6 progress_div"><h4>Return Flight</h4></div>
+										</div>
+                                        <div class="row">
+											<div class="col-12 col-md-6">
+												<div class="row" style="padding: 0 18px 18px 18px;">
+													<div class="col-12 media_status_flex_CPN progress_div" style="padding-top: 54px; display: none;">
+														<h4>Destination Flight</h4>
+													</div>
+		                                            <div class="col-md-12 flight_detail_box">
+		                                                <div class="row">
+		                                                    <div class="col-md-4 col-3">
+		                                                    	<div th:id="'brandImage' + ${flightOne.id}" style="float: left; padding: 15px 20px 10px;"></div>
+		                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+		                                                            <b>[[${flightOne.brand}]]</b>
+		                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</p>
+		                                                        </div>
+		                                                    </div>
+		                                                    <div class="col-md-8 col"> 
+		                                                        <div class="row">
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.depTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightOne.cityOne}]]</p>
+		                                                            </div>
+		                                                            <div class="col-md-7 col">
+		                                                                <div>
+		                                                                    <p class="non_stop">Non-Stop</p>
+		                                                                </div>
+		                                                                <div>
+		                                                                    
+		                                                                </div>
+		                                                                <div class="row">
+		                                                                    <div class="col-md-3"></div>
+		                                                                    <div class="col-md-3" style="font-size: 12px; padding: 0; text-align: center;">
+		                                                                        <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>0h 30m</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
+		                                                                        <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> 00kg</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3"></div>
+		                                                                </div>
+		                                                            </div>
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.arrTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightOne.cityTwo}]]</p>
+		                                                            </div>
+		                                                            <div class="col-12 media_status" style="display: none;">
+		                                                            	<div class="row">
+						                                                    <div style="margin: 16px 0; padding: 0 30px;">
+						                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${itemOne.totalPrice}]]/-</span> </p>
+						                                                    </div>
+						                                                </div>
+		                                                            </div>
+		                                                        </div>
+		                                                    </div>
+		                                                </div>
+		                                            </div>
+		                                        </div>
+											</div>
+											<div class="col-12 col-md-6">
+												<div class="row" style="padding: 0 18px 18px 18px;">
+													<div class="col-12 media_status_flex_CPN progress_div" style="display: none;">
+														<h4>Return Flight</h4>
+													</div>
+		                                            <div class="col-md-12 flight_detail_box">
+		                                                <div class="row">
+		                                                    <div class="col-md-4 col-3">
+		                                                    	<div th:id="'brandImageTwo' + ${flightTwo.id}" style="float: left; padding: 15px 20px 10px;"></div>
+		                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+		                                                            <b>[[${flightTwo.brand}]]</b>
+		                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightTwo.flightNum}]]</p>
+		                                                        </div>
+		                                                    </div>
+		                                                    <div class="col-md-8 col"> 
+		                                                        <div class="row">
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightTwo.depTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightTwo.cityOne}]]</p>
+		                                                            </div>
+		                                                            <div class="col-md-7 col">
+		                                                                <div>
+		                                                                    <p class="non_stop">Non-Stop</p>
+		                                                                </div>
+		                                                                <div>
+		                                                                    
+		                                                                </div>
+		                                                                <div class="row">
+		                                                                    <div class="col-md-3"></div>
+		                                                                    <div class="col-md-3" style="font-size: 12px; padding: 0; text-align: center;">
+		                                                                        <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>0h 30m</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
+		                                                                        <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> 00kg</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3"></div>
+		                                                                </div>
+		                                                            </div>
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightTwo.arrTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightTwo.cityTwo}]]</p>
+		                                                            </div>
+		                                                            <div class="col-12 media_status" style="display: none;">
+		                                                            	<div class="row">
+						                                                    <div style="margin: 16px 0; padding: 0 30px;">
+						                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${itemTwo.totalPrice}]]/-</span> </p>
+						                                                    </div>
+						                                                </div>
+		                                                            </div>
+		                                                        </div>
+		                                                    </div>
+		                                                </div>
+		                                            </div>
+		                                        </div>
+											</div>
+										</div>
                                 </div>
                             </div>
                             
@@ -656,11 +723,13 @@
      
     </body>
     <script type="text/javascript">
+		
 		$(document).ready(function() {
-			checkBrand();
+			checkBrand($("#brandImage" + [[${flightOne.id}]]));
+			checkBrand($("#brandImageTwo" + [[${flightTwo.id}]]));
 		});
 
-		function checkBrand() {
+		function checkBrand(brandImg) {
 			brandName = "[[${flightOne.brand}]]";
 			url = "[[@{/find_brand_}]]" + brandName;
 			
@@ -668,7 +737,7 @@
 				htmlImg = `
 					<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
 				`;
-				$("#brandImage" + [[${flightOne.id}]]).append(htmlImg);
+				brandImg.append(htmlImg);
 			}).fail(function(){
 				alert("Could not connect to the server.");
 			});

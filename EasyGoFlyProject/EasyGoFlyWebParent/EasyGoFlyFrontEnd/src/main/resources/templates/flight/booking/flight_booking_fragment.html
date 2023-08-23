@@ -66,14 +66,6 @@
         .buttn_stly_eff {
             box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important;
         }
-        .onward {
-            margin: 15px 0;
-            background-color: #1369f5;
-            color: white;
-            padding: 6px 11px;
-            width: 10%;
-            border-radius: 0 20px 20px 0;
-        }
         .non_stop {
             text-align: center;
             margin: 0;
@@ -120,13 +112,6 @@
         .circles_active {
             background-color: #2abd2a !important;
         }
-        .booki_page_p {
-		    color: rgb(44 43 43);
-		    font-weight: 600;
-		    background: #e5e9ff;
-		    border-radius: 6px;
-		    padding: 0 8px;
-		}
     </style>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
@@ -166,22 +151,22 @@
         <div id="booking_page">
             <div class="container">
                 <div class="media-hide">
-                    <div class="row" style="padding: 15px 0;">
+                    <div class="row" style="padding: 20px 0;">
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c1"></div>
-                            <div style="display: flex; justify-content: center;">
-                            	<P class="booki_page_p">Traveller Details</P>
+                            <div class="progress_div">
+                            	<P class="booki_page_p progress_div_active">Traveller Details</P>
 							</div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c2"></div>
-                            <div style="display: flex; justify-content: center;">
+                            <div class="progress_div">
                             	<P class="booki_page_p">Review</P>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles" id="c3"></div>
-                            <div style="display: flex; justify-content: center;">
+                            <div class="progress_div">
                             	<P class="booki_page_p">Payment</P>
                             </div>
                         </div>
@@ -198,8 +183,8 @@
                                         <h2 class="accordion-header" id="flush-headingOne">
                                             <div aria-expanded="true">
                                                 <div class="row">
-                                                    <div class="col-md-8"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-8 col-5"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
+                                                    <div class="col-md-4 col-7">
                                                         <button class="accordion-button buttn_stly collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne" data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" id="button_collapse">Show More</button>
                                                     </div>
                                                 </div>
@@ -243,8 +228,8 @@
                                 </div>
                                 <div>
                                     <div class="onward onwars_responsive"><p style="margin: 0;">Onward</p></div>
-                                        <div class="row" style="padding-bottom: 15px;">
-                                            <div class="col-md-9">
+                                        <div class="row" style="padding: 55px 20px 10px 20px;">
+                                            <div class="col-md-12 flight_detail_box">
                                                 <div class="row">
                                                     <div class="col-md-4 col-3">
                                                     	<div th:id="'brandImage' + ${flight.id}" style="float: left; padding: 15px 20px 10px;"></div>
@@ -290,11 +275,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 media-hide">
-                                                <div class="row">
-                                                    <div class="col-md-12" style="margin: 16px 0; padding: 0 30px;"> </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -374,7 +354,7 @@
 		                                 			
 		                                 			htmlCode = `
 			                                    		<div class="row" style="padding: 0 7px;">
-										    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
+										    			<div class="col-md-2 col-12 traveler_type_form" style="padding: 0 0 0 31px; font-size: 14px;">
 										    				<div class="form-floating">
 									                        <select class="form-select" aria-label="Floating label select example" id="paxType` + i + `" name="paxType" required>
 									                            <option value="1">Adult</option>

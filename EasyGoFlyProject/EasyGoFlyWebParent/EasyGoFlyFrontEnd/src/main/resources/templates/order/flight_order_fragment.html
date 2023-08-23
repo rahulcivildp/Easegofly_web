@@ -169,6 +169,21 @@
         	width: 27px;
     		height: 27px;
         }
+        .booki_page_p {
+		    color: rgb(44 43 43);
+		    font-weight: 600;
+		    background: #e5e9ff;
+		    border-radius: 6px;
+		    padding: 0 8px;
+		    margin: 5px;
+		}
+		.progress_div {
+			display: flex; 
+			justify-content: center;
+		}
+		.progress_div_active {
+			background: #75ca7d;
+		}
     </style>
 
     <body>
@@ -208,47 +223,180 @@
         <div id="booking_page">
             <div class="container">
                 <div class="media-hide">
-                    <div class="row" style="padding: 15px 0;">
+                    <div class="row" style="padding: 20px 0;">
                         <div class="col-md-4">
                             <div class="circles " id="c1"></div>
-                            <P style="text-align: center; color: #959eac;">Traveller Details</P>
+                            <div class="progress_div">
+                            	<P class="booki_page_p">Traveller Details</P>
+							</div>
                         </div>
                         <div class="col-md-4">
-                            <div class="circles " id="c2"></div>
-                            <P style="text-align: center; color: #959eac;">Review</P>
+                            <div class="circles" id="c2"></div>
+                            <div class="progress_div">
+                            	<P class="booki_page_p">Review</P>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="circles circles_active" id="c3"></div>
-                            <P style="text-align: center; color: #959eac;">Payment</P>
+                            <div class="progress_div">
+                            	<P class="booki_page_p progress_div_active">Payment</P>
+                            </div>
                         </div>
                     </div>
                     <div class="progress_border"></div>
                 </div>
                 <div id="payment_tab" class="" style="margin-bottom: 15px;">
                     <div class="row">
+						
                         <div class="col-md-9" style="padding: 0;">
-                            <div id="make_payment" class="booking_tiles back_white shadow">
-                                <div style="background-color: #ecf5fd;">
-                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Make Payment</p>
+                            <div id="flight_details" class="booking_tiles back_white shadow">
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item" style="background-color: #969393;">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <div aria-expanded="true">
+                                                <div class="row">
+                                                    <div class="col-md-8"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
+                                                    <div class="col-md-4">
+                                                        <button class="accordion-button buttn_stly collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne" data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" id="button_collapse">Show More</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body" style="background: #efefef; color: #858385">
+                                            	<h2>Stop Details</h2>
+												<th:block th:each="stop : ${flight.stops}">
+												<div class="row" style="border-bottom: 1px solid grey; border-top: 1px solid grey; padding-bottom: 5px;">
+                                                    <div class="col-md-4">
+                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                        	<h2 style="margin: 0;">[[${stop.cityName}]]</h2>
+                                                            <b>[[${flight.brand}]]</b>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                    	<div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                        	<h5 style="margin: 0;">Arrival: </h5>
+                                                        	<br>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${stop.arrTime}]]</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style=" display: flex; justify-content: center; align-items: center; padding-left: 15px;">
+                                                    	<img th:src="@{/images/pngwingcomffe.png}" width="100%" height="25">
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                    	<div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                        	<h5 style="margin: 0;">Departure: </h5>
+                                                        	<br>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${stop.depTime}]]</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4"></div>
+                                                </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
-                                    <div class="row" style="padding-top: 20px;">
-                                        
-                                    </div>
-
+                                    <div class="onward onwars_responsive"><p style="margin: 0;">Onward</p></div>
+                                        <div class="row" style="padding-bottom: 15px;">
+                                            <div class="col-md-9">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-3">
+                                                    	<div th:id="'brandImage' + ${flight.id}" style="float: left; padding: 15px 20px 10px;"></div>
+                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                            <b>[[${flight.brand}]]</b>
+                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8 col"> 
+                                                        <div class="row">
+                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+                                                                <h2 style="font-size: 24px; margin: 0;">[[${flight.depTime}]]</h2>
+                                                                <p style="margin: 0;">[[${flight.cityOne}]]</p>
+                                                            </div>
+                                                            <div class="col-md-8 col">
+                                                                <div>
+                                                                    <p class="non_stop">Non-Stop</p>
+                                                                </div>
+                                                                <div>
+                                                                    
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-3"></div>
+                                                                    <div class="col-md-3" style="font-size: 12px; padding: 0; text-align: center;">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>0h 30m</span>
+                                                                    </div>
+                                                                    <div class="col-md-3" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
+                                                                        <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> 00kg</span>
+                                                                    </div>
+                                                                    <div class="col-md-3"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+                                                                <h2 style="font-size: 24px; margin: 0;">[[${flight.arrTime}]]</h2>
+                                                                <p style="margin: 0;">[[${flight.cityTwo}]]</p>
+                                                            </div>
+                                                            <div class="col-12 media_status" style="display: none;">
+                                                            	<div class="row">
+				                                                    <div style="margin: 16px 0; padding: 0 30px;">
+				                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${item.totalPrice}]]/-</span> </p>
+				                                                    </div>
+				                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 media-hide">
+                                                <div class="row">
+                                                    <div class="col-md-12" style="margin: 16px 0; padding: 0 30px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                 </div>
                                 <div>
-                                    <div class="form-floating" style="margin: 0 25px;">
-                                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                                        <label for="floatingTextarea2">Additional Requests /Comments</label>
-                                    </div>
-                                    <div class="form-check" style="margin: 10px 25px;">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" form="payment_form" required="required">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            i have reviewed and agreed on the Terms and Condition.
-                                        </label>
-                                    </div>
-                                </div>
+									<table class="table table-bordered table-hover tabel-responsive table-striped" style="text-align: center;">
+										<thead class="table-dark">
+											<tr>
+												<th><i class="fa-solid fa-users fa-2x"></i></th>
+												<th><i class="fa-solid fa-address-card fa-2x"></i></th>
+												<th><img th:src="@{/images/mealsss.svg}" height="38"></th>
+												<th><i class="fa-solid fa-cart-flatbed-suitcase fa-2x"></i></th>
+												<th><img th:src="@{/images/seatss.svg}" height="38"></th> 
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="traveler : ${travelers}">
+												<td>
+													<th:block th:if="${traveler.paxType} == 1">
+														Adult
+													</th:block>
+													<th:block th:if="${traveler.paxType} == 2">
+														Child
+													</th:block>
+													<th:block th:if="${traveler.paxType} == 3">
+														Infant
+													</th:block>
+												</td>
+												<td>[[${traveler.salutation}]] [[${traveler.firstName}]] [[${traveler.lastName}]]</td>
+												<td>
+													<th:block th:if="${traveler.mealOnline.name} == ''">
+														No Meal
+													</th:block>
+												</td>
+												<td>[[${traveler.baggageOnline.weight}]] KG</td>
+												<td>
+													<th:block th:if="${traveler.seatsOnline.seatNo} == 'null'">
+														No Seat
+													</th:block>
+												</td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -327,25 +475,33 @@
                                     </div>
                                 </div>
                         </div>
+                        
+                        
                         <div class="col-md-9" style="padding: 0;">
 							<div id="payment_selection" class="booking_tiles back_white shadow">
-							                                <div style="background-color: #ecf5fd;">
-							                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Choose a Payment Method</p>
-							                                </div>
-							 <div class="row" style="padding: 10px;">
-							  <div class="form-check col-md-3 col-12" style="display: flex; align-items: center; margin-left: 24px;">
-							  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-							  <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
-							</div>
-							<div class="form-check col-md-3 col-12" style="display: flex; align-items: center; margin-left: 24px;">
-							  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-							  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
-							  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
-							  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
-							  </div>
-							  </label>
-							 
-							</div>
+                                <div style="background-color: #ecf5fd;">
+                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Choose a Payment Method</p>
+                                </div>
+							 <div class="row" style="padding: 10px;"> 
+								 <div class="form-check col-md-3 col-12" style="display: flex; align-items: center; margin-left: 24px;">
+									 <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+									 <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
+								</div>
+								<div class="form-check col-md-3 col-12" style="display: flex; align-items: center; margin-left: 24px;">
+								  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+								  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
+								  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
+								  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
+								  </div>
+								  </label>
+								 
+								</div>
+		                        <div class="col-12 form-check" style="margin: 10px 25px;">
+		                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" form="payment_form" required="required">
+		                            <label class="form-check-label" for="flexCheckDefault">
+		                                i have reviewed and agreed on the Terms and Condition.
+		                            </label>
+		                        </div>
 							</div>
 							</div>
 						</div>
