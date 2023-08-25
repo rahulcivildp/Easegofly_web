@@ -164,7 +164,7 @@ public class MainController {
             model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
             
             onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
-            System.out.println(onlineFlightService.tokenId);
+            System.out.println(jsonObj);
             
             connection.disconnect();
 

@@ -158,6 +158,7 @@ public class ProductDetailsController {
         	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
+        	System.out.println(jsonObjFarerules);
         	System.out.println(jsonObjFareQuotes);
         	
         	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
@@ -965,7 +966,7 @@ public class ProductDetailsController {
 			
 				
 			for (int i = 0; i < search.getPassengerNum(); i++) {
-				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, paxType[i], flight.getBaggage(), flight.getCabinBaggage());
+				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, paxType[i], flight.getBaggage(), flight.getCabinBaggage(), i);
 				productService.saveFlightPassengerDetails(flight);
 				ProductDetail flightDetails = productService.saveFlightPassengerDetails(flight);
 				model.addAttribute("flightDetails", flightDetails);

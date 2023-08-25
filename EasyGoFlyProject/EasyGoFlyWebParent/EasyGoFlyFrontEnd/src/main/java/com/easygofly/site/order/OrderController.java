@@ -590,7 +590,7 @@ public class OrderController {
     	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, productDetail.getResultIndex());
     	
     	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
-    	System.out.println(jsonObjSSR);
+    	System.out.println("jsonObjSSR" + jsonObjSSR);
 	}
 
 	@GetMapping("/order/export_pdf/{id}")
@@ -773,20 +773,20 @@ public class OrderController {
 		
 		Double orderPrice = order1.getPrice() + order2.getPrice();
 
-		model.addAttribute("order1", order1);
+		model.addAttribute("orderOne", order1);
 		model.addAttribute("orderPrice", orderPrice);
 		model.addAttribute("checkoutInfo", checkoutInfo);
-		model.addAttribute("travelers1", travelers1);
-		model.addAttribute("item1", item1);
-		model.addAttribute("flight1", flight1);
+		model.addAttribute("travelersOne", travelers1);
+		model.addAttribute("itemOne", item1);
+		model.addAttribute("flightOne", flight1);
 		model.addAttribute("search_id", search_id);
 		model.addAttribute("itemOne_id", itemOne_id);
 		model.addAttribute("coupon1", coupon1);
-		model.addAttribute("order2", order2);
+		model.addAttribute("orderTwo", order2);
 		model.addAttribute("checkoutInfo", checkoutInfo);
-		model.addAttribute("travelers2", travelers2);
-		model.addAttribute("item2", item2);
-		model.addAttribute("flight2", flight2);
+		model.addAttribute("travelersTwo", travelers2);
+		model.addAttribute("itemTwo", item2);
+		model.addAttribute("flightTwo", flight2);
 		model.addAttribute("itemTwo_id", itemTwo_id);
 		model.addAttribute("coupon2", coupon2);
 		
@@ -1025,11 +1025,11 @@ public class OrderController {
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
 		if (hasErrorCode != null && hasErrorCode != 0) {
-			model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+			model.addAttribute("paymentCancelled", hasErrorMsg);
 			walletPayOrderCancel(customer, order);
 			System.out.println(hasErrorCode);
 		} else {
-			model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			model.addAttribute("paymentSuccess", "successfull");
 		}
 		
 		model.addAttribute("amount", order.getPrice());

@@ -141,7 +141,39 @@
         
     </style>
 <script type="text/javascript">
-totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
+	totalPaymentAbout = 0.0;
+
+	var travelerMeal = new Array([[${#lists.size(travelers)}]]);
+	var travelerBaggage = new Array([[${#lists.size(travelers)}]]);
+	var travelerSeat = new Array([[${#lists.size(travelers)}]]);
+	
+	$(document).ready(function() {
+		showTotalPriceFunction();
+	})
+	
+	function showTotalPriceFunction() {
+		totalMealPriceInput = 0;
+		totalBaggagePriceInput = 0;
+		totalSeatPriceInput = 0;
+		
+		for (var i = 0; i < travelerMeal.length; i++) {
+			totalMealPriceInput = totalMealPriceInput + travelerMeal[i];
+		}
+		
+		for (var i = 0; i < travelerBaggage.length; i++) {
+			totalBaggagePriceInput = totalBaggagePriceInput + travelerBaggage[i];
+		}
+		
+		for (var i = 0; i < travelerSeat.length; i++) {
+			totalSeatPriceInput = totalSeatPriceInput + travelerSeat[i];
+		}
+		
+		totalPaymentAbout = [[${checkoutInfo.paymentTotal}]] + totalMealPriceInput + totalBaggagePriceInput + totalSeatPriceInput ;
+		
+		$("#totalPayment").text("₹" + totalPaymentAbout);
+		$("#inputPrice").val(totalPaymentAbout);
+	};
+
 </script>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
@@ -212,8 +244,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
                                         <h2 class="accordion-header" id="flush-headingOne">
                                             <div aria-expanded="true">
                                                 <div class="row">
-                                                    <div class="col-md-8"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-8 col-5"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
+                                                    <div class="col-md-4 col-7">
                                                         <button class="accordion-button buttn_stly collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne" data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" id="button_collapse">Show More</button>
                                                     </div>
                                                 </div>
@@ -555,6 +587,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										
 		                                		<script type="text/javascript">
 													
+													
+													
 													mealAmount = 0;
 													
 													meal = $("#meals" + [[${traveler.id}]]).val();
@@ -566,11 +600,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 																<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
 																`;
 														$("#mealPrice" + [[${traveler.id}]]).html(mealHtmlPrice);
-														mealAmount = parseInt(response);
-														//alert(totalPaymentAbout + mealAmount);
-														changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
-														$("#totalPayment").text("₹" + changedAmount);
-														$("#inputPrice").val(changedAmount);
+														count = [[${traveler.travelerCountSerial}]];
+														travelerMeal[count] = parseInt(response);
 														
 													}).fail(function(){
 														alert("Could not connect to the server.");
@@ -586,11 +617,9 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 																<i class="fa-solid fa-indian-rupee-sign"></i>&nbsp; : &nbsp; ` + responseChange + `
 																`;
 																$("#mealPrice" + [[${traveler.id}]]).html(mealHtmlPrice);
-																mealAmount = parseInt(responseChange);
-																//alert(totalPaymentAbout + mealAmount);
-																//changedAmount = totalPaymentAbout + mealAmount + baggageAmount + seatAmount;
-																$("#totalPayment").text("₹" + changedAmount);
-																$("#inputPrice").val(changedAmount);
+																count = [[${traveler.travelerCountSerial}]];
+																travelerMeal[count] = parseInt(responseChange);
+																showTotalPriceFunction();
 																
 															}).fail(function(){
 																alert("Could not connect to the server.");
@@ -642,10 +671,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 															<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
 															`;
 													$("#baggaggePrice" + [[${traveler.id}]]).html(baggageHtmlPrice);
-													baggageAmount = parseInt(response);
-													changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-													$("#totalPayment").text("₹" + changedPrice);
-													$("#inputPrice").val(changedPrice);
+													count = [[${traveler.travelerCountSerial}]];
+													travelerBaggage[count] = parseInt(response);
 													
 												}).fail(function(){
 													alert("Could not connect to the server.");
@@ -657,14 +684,13 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 														urlBaggageChange = "[[@{/find_baggage_}]]" + baggageChange;
 	
 														$.get(urlBaggageChange, function(response) {
-														baggageHtmlPrice = `
+															baggageHtmlPrice = `
 																<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
 																`;
 															$("#baggaggePrice" + [[${traveler.id}]]).html(baggageHtmlPrice);
-															baggageAmount = parseInt(response);
-															//changedPrice = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-															$("#totalPayment").text("₹" + changedPrice);
-															$("#inputPrice").val(changedPrice);
+															count = [[${traveler.travelerCountSerial}]];
+															travelerBaggage[count] = parseInt(response);
+															showTotalPriceFunction();
 															
 														}).fail(function(){
 															alert("Could not connect to the server.");
@@ -702,11 +728,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 															<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
 															`;
 													$("#seatPrice"  + [[${traveler.id}]]).html(seatHtmlPrice);
-													seatAmount = parseInt(response);
-
-													changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-													$("#totalPayment").text("₹" + changedPriceSeat);
-													$("#inputPrice").val(changedPriceSeat);
+													count = [[${traveler.travelerCountSerial}]];
+													travelerSeat[count] = parseInt(response);
 													
 												}).fail(function(){
 													alert("Could not connect to the server.");
@@ -716,17 +739,15 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 													
 													newSeat = $("#seatSelet"  + [[${traveler.id}]]).val();
 													urlSeatChange = "[[@{/find_seat_}]]" + newSeat;
-													
+													 
 													$.get(urlSeatChange, function(response) {
 														seatHtmlPrice = `
 															<i class="fa-solid fa-indian-rupee-sign"></i><p style="margin: 0;">&nbsp; : &nbsp;</p><p style="width: 80%; margin: 0;"> ` + response + ` </p>
 															`;
 														$("#seatPrice"  + [[${traveler.id}]]).html(seatHtmlPrice);
-														seatAmount = parseInt(response);
-
-														//changedPriceSeat = totalPaymentAbout + baggageAmount + mealAmount + seatAmount;
-														$("#totalPayment").text("₹" + changedPriceSeat);
-														$("#inputPrice").val(changedPriceSeat);
+														count = [[${traveler.travelerCountSerial}]];
+														travelerSeat[count] = parseInt(response);
+														showTotalPriceFunction();
 														
 													}).fail(function(){
 														alert("Could not connect to the server.");
@@ -734,13 +755,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 													
 									    		 });
 										    	
-											    
-										    
 										    </script>
 										    <script>
-										    
-										    
-										   
 										    
 										    $("#seatSelet" + [[${traveler.id}]]).change(function(){
 										    	seatChangeSave = $("#seatSelet" + [[${traveler.id}]]).val();
@@ -755,6 +771,8 @@ totalPaymentAbout = [[${checkoutInfo.paymentTotal}]];
 										    	});
 										    });
 										    
+										    count = count + 1;
+										    alert(count);
 										    </script>
 		                                </th:block>
 	                                </div>

@@ -533,8 +533,8 @@ public class ProductDetail {
 		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem));
 	}
 	
-	public void addTravellerDetails(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage) {
-		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem, paxType, baggageWT, cabinBaggage));
+	public void addTravellerDetails(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial) {
+		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial));
 	}
 	
 	public void addTravellerDetailsReturn(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial) {

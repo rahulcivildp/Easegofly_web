@@ -40,7 +40,7 @@ public class OnlineFlightService {
         		+ "\"EndUserIp\": \"89.116.231.35\""
         		+ "}";
         
-        
+        System.out.println(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -96,7 +96,8 @@ public class OnlineFlightService {
         			+ "}],"
         		+ "\"Sources\": null"
         		+ "}";
-        
+
+        System.out.println(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -160,7 +161,8 @@ public class OnlineFlightService {
         			+ "}],"
         		+ "\"Sources\": null"
         		+ "}";
-        
+
+        System.out.println(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -200,7 +202,8 @@ public class OnlineFlightService {
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
         		+ "}";
-        
+
+        System.out.println(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -286,7 +289,8 @@ public class OnlineFlightService {
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
         		+ "}";
-        
+
+        System.out.println(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -327,7 +331,8 @@ public class OnlineFlightService {
         		+ "	\"PNR\": \"" + pnr + "\",\r\n"
         		+ "	\"BookingId\": \"" + bookingId + "\"\r\n"
         		+ "}";
-        
+
+        System.out.println(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
