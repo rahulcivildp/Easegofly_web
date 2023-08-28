@@ -147,33 +147,28 @@
 	var travelerBaggage = new Array([[${#lists.size(travelers)}]]);
 	var travelerSeat = new Array([[${#lists.size(travelers)}]]);
 	
-	$(document).ready(function() {
-		showTotalPriceFunction();
-	})
-	
 	function showTotalPriceFunction() {
-		totalMealPriceInput = 0;
-		totalBaggagePriceInput = 0;
-		totalSeatPriceInput = 0;
+		var totalMealPriceInput = 0;
+		var totalBaggagePriceInput = 0;
+		var totalSeatPriceInput = 0;
 		
 		for (var i = 0; i < travelerMeal.length; i++) {
 			totalMealPriceInput = totalMealPriceInput + travelerMeal[i];
 		}
 		
 		for (var i = 0; i < travelerBaggage.length; i++) {
-			totalBaggagePriceInput = totalBaggagePriceInput + travelerBaggage[i];
+			totalBaggagePriceInput = totalBaggagePriceInput + travelerBaggage[i]; 
 		}
 		
 		for (var i = 0; i < travelerSeat.length; i++) {
-			totalSeatPriceInput = totalSeatPriceInput + travelerSeat[i];
+			totalSeatPriceInput = totalSeatPriceInput + travelerSeat[i]; 
 		}
 		
-		totalPaymentAbout = [[${checkoutInfo.paymentTotal}]] + totalMealPriceInput + totalBaggagePriceInput + totalSeatPriceInput ;
+		totalPaymentAbout = [[${checkoutInfo.paymentTotal}]] + (totalMealPriceInput + totalBaggagePriceInput + totalSeatPriceInput);
 		
 		$("#totalPayment").text("₹" + totalPaymentAbout);
 		$("#inputPrice").val(totalPaymentAbout);
 	};
-
 </script>
     <body>
 		<div style="background-color:#061123; padding-top: 120px;"></div>
@@ -873,7 +868,7 @@
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
                                                             </div>
-                                                            <div class="col-md-5"> <p id="amountOfCoupon1" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;}"></p></div>
+                                                            <div class="col-md-5"> <p id="amountOfCoupon1" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;"></p></div>
                                                         </div>
                                                         </th:block>
                                                     </div>
@@ -1000,7 +995,7 @@
            <div style="float: right;">
                <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment"><b>[[${checkoutInfo.paymentTotal}]]</b></p>
                <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: none;" id="totalPaymentNew"><i class="fa fa-inr" aria-hidden="true"></i><b></b></p>
-               <input type="hidden" name="totalPayment" form="order_form" id="inputPrice">
+               <input type="hidden" name="totalPayment" form="order_form" id="inputPrice" th:value="${checkoutInfo.paymentTotal}">
            </div>
        </div>
    </div>
@@ -1017,7 +1012,7 @@
      
     </body>
 <script type="text/javascript">
-
+		
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {

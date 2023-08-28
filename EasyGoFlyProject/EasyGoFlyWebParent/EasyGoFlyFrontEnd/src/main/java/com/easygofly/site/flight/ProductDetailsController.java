@@ -301,7 +301,25 @@ public class ProductDetailsController {
     		model.addAttribute("mealsOnlineList", mealsOnlineList);
     		model.addAttribute("baggageOnlineList", baggageOnlineList);
         	
+		} else if (flight.getTraceId().equals("offline")) {
+			
+			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
+			baggageOnlineList.add(baggageOnline);
+
+			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+			mealsOnlineList.add(mealsOnline);
+
+			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
+			seatsOnlineList.add(seatsOnline);
+
+    		model.addAttribute("seatsOnlineList", seatsOnlineList);
+    		model.addAttribute("mealsOnlineList", mealsOnlineList);
+    		model.addAttribute("baggageOnlineList", baggageOnlineList);
+			System.out.println("Offline offline offline");
+			
 		}
+		
+		
 	}
 	
 	

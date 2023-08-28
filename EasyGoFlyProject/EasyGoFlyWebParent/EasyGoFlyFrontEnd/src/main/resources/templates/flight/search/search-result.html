@@ -408,7 +408,204 @@
                     <img th:src="@{/images/Image20221206005857.jpg}" style="width: 100%;" class="shadow rounded"> 
                 </div>
             </div>
+            <th:block th:each="flight : ${listProducts}">
+				<th:block th:if="${flight.traceId} == 'offline'"> 
+          		<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
+	            	<form th:action="@{/flight_booking_save}" method="post" >
+	          			<input type="hidden" th:id="'inputSeatNum_offline-' + ${flight.id}" th:value="${flight.totalSeats}">
+		          		<div th:id="'flightSearchResultOffline' + ${flight.id}"></div>
+	          		</form>
+          		</div>
+          	<script type="text/javascript">
+          	
+          	search_passenger_num = [[${search.passengerNum}]];
+          	flight_seats = parseInt([[${flight.totalSeats}]]);
+          	//imageSource = [[@{/images/no-image.png}]];
+    		
+          	console.log("Total searched seats: " + search_passenger_num);
+          	
+          	htmlCodeBlock = `
+
+	  				<input type="hidden" name="cityOne" value="[[${flight.cityOne}]]">
+	  				<input type="hidden" name="cityTwo" value="[[${flight.cityTwo}]]">
+	  				<input type="hidden" name="date" value="[[${flight.date}]]">
+  					<input type="hidden" name="journeyClass" value="[[${flight.journeyClass}]]">
+          			<input type="hidden" name="adultNum" value="[[${search.adultNum}]]">
+  					<input type="hidden" name="childNum" value="[[${search.childNum}]]">
+  					<input type="hidden" name="infantNum" value="[[${search.infantNum}]]">
+		            <input type="hidden" name="search_id" value="[[${search.id}]]">
+		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
+		                    <div class="row">
+		                    	<div class="col-md-10 col">
+		                    		<div class="row seacrh_margin">
+		                    			<div class="col-3" style="padding: 0;">
+				                    		<div id="brandImageOffline[[${flight.id}]]" style="float: left; padding: 0px">
+				                    			<p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px;">Non-refundable</p> 
+		                                    </div>
+		                                    <div style="float: left; font-size: 15px; padding: 10px 25px;">
+		                                        <b> [[${flight.brand}]] </b>
+		                                        <p id="pnr_id" style="margin: 0;">[[${flight.flightNum}]]</p> 
+		                                        <p id="agent[[${flight.id}]]" style="font-size: 8px;"></p>
+		                                    </div>
+				                    	</div>
+				                    	<div class="col-7" style="padding-top: 48px;">
+					                    	<div class="row">
+				                                <div class="col"> 
+				                                    <div class="row">
+					                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+				                                            <h2 style="font-size: 24px; margin: 0;">[[${flight.depTime}]]</h2>
+				                                            <p style="margin: 0;">[[${flight.cityOne}]]</p>
+				                                        </div>
+				                                        <div class="col">
+				                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0;">
+				                                                <b class="non_stop" id="non_stop_offline-[[${flight.id}]]"></b>
+				                                            </div>
+				                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0;">
+				                                            	<img src="[[@{/images/pngwingcomffe.png}]]" width="100%" height="25">
+				                                            </div>
+				                                        </div>
+				                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+				                                            <h2 style="font-size: 24px; margin: 0;">[[${flight.arrTime}]]</h2>
+				                                            <p style="margin: 0;">[[${flight.cityTwo}]]</p>
+				                                        </div>
+				                                	</div>
+				                             	</div>
+				                             	<div class="row">
+		                                            <div class="col" style="font-size: 16px; padding: 0; text-align: center; margin-top: -15px;">
+		                                                <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><b id="duration_offline--[[${flight.id}]]"></b>
+		                                            </div>
+		                                    	</div>
+			                          		</div>
+			                          </div>
+		                    			<div class="col-2 media-hide"></div>
+		                    			<div class="col-2 media_status" >
+					                    	<div class="col-md-10" style=" text-align: center; background-color: #ffffeb; border: 1px dashed #e8d685;">
+				                                <p style="margin: 0; color: #9d8d44;"><i class="fa fa-check-circle" aria-hidden="true"></i> CPN</p>
+				                            </div>
+				                            <div class="col-md-2 col" style="padding: 0;">
+			                                    <input type="checkbox" id="send_quote" name="send_quote" value="send_quote">
+			                                    <label for="send_quote" style="padding-left: 2px;"><i class="fa fa-envelope" aria-hidden="true"></i></label>
+			                                </div>
+				                    	</div>
+				                    	<div class="col-12 media_status" style="display: none;">
+				                    		<div class="row">
+						                    	<div class="col" >
+				                                	<p style="font-size: 28px; margin: 0;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceDesk_offline-[[${flight.id}]]" style="font-weight: 600;"></span> </p>
+				                                	<small>(For [[${search.passengerNum}]] Passenger/s)</small>
+				                                </div>
+						                    	<div class="col">
+					                                 <button type="submit" class="btn btn-primary" style="float: right; font-size: 26px;" id="book_now" name="book_now">Book Now</button>
+					                            </div>
+				                            </div>
+				                    	</div>
+			                    		<div class="col-12 media-hide">
+				                         <div class="row">
+				                            <div class="col-md-1"></div>
+				                            <div class="col-md-10" style=" text-align: center; background-color: #ffffeb; border: 1px dashed #e8d685;">
+				                                <p style="margin: 0; color: #9d8d44;"><i class="fa fa-check-circle" aria-hidden="true"></i> CPN</p>
+				                            </div>
+				                            <div class="col-md-1"></div>
+				                        </div>
+			                          </div>
+			                          <div class="col-12">
+				                          <div style="background-color: #d6e6f3; border-radius: 8px 8px 0 0;">
+				                            <div class="row" style="padding: 5px 0;">
+				                                <div class="col-md-4 col media-hide" style="padding: 0 25px;">
+				                                    <input type="checkbox" id="send_quote" name="send_quote" value="send_quote">
+				                                    <label for="send_quote"><i class="fa fa-envelope" aria-hidden="true"></i> Send Quote</label>
+				                                </div>
+				                                <div class="col-7 media_status" style="padding: 0 0 0 13px; display: none;">
+				                                	[[${flight.totalSeats}]] seat/s available
+				                                </div>
+				                                <div class="col-md-4 col media-hide"></div>
+				                                <div class="col-md-4 col-5 padding_zero" style="padding: 0 25px;">
+				                                    <a class="float-state" href="" style="text-decoration: none; float: right;"><i class="fa fa-plane" aria-hidden="true"></i> Flight Details</a>
+				                                </div>
+				                            </div>
+				                        </div>
+			                          </div>
+			                       </div>
+		                    	</div>
+		                    	
+		                    	<div class="col-md-2  text-center media-hide" style="padding: 0 0 8px; border-left: 4px solid #d6e6f3; ">
+		                    		<div class="col-8 float-right" style="background: #d2cfcfc7; padding: 0;">
+		                    			[[${flight.totalSeats}]] seat/s available
+		                    		</div>
+	                                <div  style="margin: 28px 0 15px 0; padding: 0 30px;">
+	                                	<p style="font-size: 28px; margin: 0;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPrice_offline-[[${flight.id}]]" style="font-weight: 600;"></span> </p>
+	                                	<small>(For [[${search.passengerNum}]] Passenger/s)</small>
+	                                </div>
+		                            <div style="display: flex; justify-content: center;">
+		                                 <button type="submit" class="btn btn-primary submit_btn_stl" id="book_now" name="book_now">Book Now</button>
+		                            </div>
+		                    	
+		                    	</div>
+		                    <div>
+		                        
+		                    </div>
+          	
+          	`;
+          	
+          	if (search_passenger_num <= flight_seats) {
+          		console.log("Flight Total Seat same/below searched seats: " + flight_seats + " flight id: " + [[${flight.id}]]);
+          		$("#flightSearchResultOffline" + [[${flight.id}]]).html(htmlCodeBlock);
+          		checkBrand();
+          	}
+          	
+          	if ([[${flight.stopNum}]] == 0) {
+          		$("#non_stop_offline-" + [[${flight.id}]]).text("Non-Stop");
+          	} else {
+          		$("#non_stop_offline-" + [[${flight.id}]]).text("Stop " + [[${flight.stopNum}]]);
+          	}
+          	
+          	timeDuration = [[${flight.duration}]];
+          	timeInHour = Math.floor(timeDuration / 60);
+          	timeRemaining = timeDuration - (timeInHour * 60);
+          	
+          	$("#duration_offline--" + [[${flight.id}]]).text(timeInHour + "h-" + timeRemaining + "m");
+          	
+          
+          	</script>
+            <script type="text/javascript">
+          		totalAdultPrice = ([[${flight.priceADT}]] + [[${flight.markupADT}]]) * ([[${search.adultNum}]] + [[${search.childNum}]]);
+          		totalInfantPrice = ([[${flight.priceINF}]] + [[${flight.markupINF}]]) * [[${search.infantNum}]];
+          		
+          		totalPrice = totalAdultPrice + totalInfantPrice;
+          		$("#totalPrice_offline-" + [[${flight.id}]]).text(totalPrice);
+          		$("#totalPriceDesk_offline-" + [[${flight.id}]]).text(totalPrice);
+          		
+				inputVal = $("#inputSeatNum_offline-" + [[${flight.id}]]);
+              	
+              	//alert(inputVal.val());
+              	if(search_passenger_num > inputVal.val()) {
+      				inputVal.parent().parent().css("display", "none");
+      			} else {
+      				inputVal.parent().parent().css("display", "block");
+      			}
+			</script>
+			<script type="text/javascript">
+				
+				function checkBrand() {
+					brandName = "[[${flight.brand}]]";
+					url = "[[@{/find_brand_}]]" + brandName;
+					
+					$.get(url, function(response) {
+						htmlImg = `
+							<img src="[[@{` + response + `}]]" width="40" height="45" style="margin-left: 28px;">
+						`;
+						$("#brandImageOffline" + [[${flight.id}]]).append(htmlImg);
+					}).fail(function(){
+						alert("Could not connect to the server.");
+					});
+					
+					return false;
+				};
+			</script>
+			
+	          </th:block> 
+	         </th:block>
           	<th:block th:each="flight : ${listProducts}">
+				  <th:block th:if="${flight.traceId} != 'offline'"> 
           		<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
 	            	<form th:action="@{/flight_booking_save}" method="post" >
 	          			<input type="hidden" th:id="'inputSeatNum-' + ${flight.id}" th:value="${flight.totalSeats}">
@@ -600,7 +797,7 @@
 					return false;
 				};
 			</script>
-			
+			</th:block>
 	          </th:block> 
 		</div>
 		</div>

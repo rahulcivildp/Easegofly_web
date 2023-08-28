@@ -328,8 +328,6 @@ public class SearchHistoryController {
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 			
 			listProductDetailsInSearch.add(productDetail[i]);
-			System.out.println(intTotalAdultChildPrice);
-			System.out.println(intTotalInfantPrice);
 		}
 		System.out.println(jsonArrayFareBreakdown);
 		

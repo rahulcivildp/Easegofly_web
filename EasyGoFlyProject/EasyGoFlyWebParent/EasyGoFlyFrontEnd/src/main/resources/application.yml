@@ -45,18 +45,3 @@ spring:
             - email
             - public_profile
            
-paytm.payment:
-  sandbox:
-    merchantId: kYBvDT44408653090690
-    merchantKey: Nw!vP1g@VcMR1Yzz
-    channelId: WEB
-    website: WEBSTAGING
-    industryTypeId: Retail
-    paytmUrl: https://securegw-stage.paytm.in
-    callbackUrl: http://localhost:443/pgresponse
-    details:
-      MID: ${paytm.payment.sandbox.merchantId}
-      CHANNEL_ID: ${paytm.payment.sandbox.channelId}
-      INDUSTRY_TYPE_ID: ${paytm.payment.sandbox.industryTypeId}
-      WEBSITE: ${paytm.payment.sandbox.website}
-      CALLBACK_URL: ${paytm.payment.sandbox.callbackUrl}
