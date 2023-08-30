@@ -60,13 +60,17 @@ public class ProductDetailsController {
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	@Autowired private OnlineFlightService onlineFlightService;
 	@Autowired private SearchHistoryController searchHistoryController;
+	@Autowired private TravelerService travelerService;
 	
 	public List<ProductDetail> listProductDetailsOnline;
 	public List<ProductDetail> listProductDetailsOnlineReturn;
 	public List<FlightMap> flightMaps;
 	List<BaggageOnline> baggageOnlineList = new ArrayList<BaggageOnline>();
 	List<MealsOnline> mealsOnlineList = new ArrayList<MealsOnline>();
-	List<SeatsOnline>  seatsOnlineList= new ArrayList<SeatsOnline>();
+	List<SeatsOnline>  seatsOnlineList = new ArrayList<SeatsOnline>();
+	List<BaggageOnline> baggageOnlineListReturn = new ArrayList<BaggageOnline>();
+	List<MealsOnline> mealsOnlineListReturn = new ArrayList<MealsOnline>();
+	List<SeatsOnline>  seatsOnlineListReturn = new ArrayList<SeatsOnline>();
 	
 	public JSONObject mainObjFareBreakdown = new JSONObject();
 	public JSONObject mainObjFareBreakdownAdult = new JSONObject();
@@ -75,6 +79,10 @@ public class ProductDetailsController {
 	public String basefareTravelerAdult = "", taxTravelerAdult = "", passengerTypeAdult = "";
 	public String basefareTravelerChild = "", taxTravelerChild = "", passengerTypeChild = "";
 	public String basefareTravelerInfant = "", taxTravelerInfant = "", passengerTypeInfant = "";
+	
+	public String basefareTravelerAdultReturn = "", taxTravelerAdultReturn = "", passengerTypeAdultReturn = "";
+	public String basefareTravelerChildReturn = "", taxTravelerChildReturn = "", passengerTypeChildReturn = "";
+	public String basefareTravelerInfantReturn = "", taxTravelerInfantReturn = "", passengerTypeInfantReturn = "";
 	
 	public String depTerminal = "",arrTerminal = "",airlineCOde = "", flightNumber = "", flightClass = "", 
 			airlineName = "", cabinBaggage = "", baggage = "", duration = "", flightStatus = "", stopOver = "", 
@@ -294,9 +302,6 @@ public class ProductDetailsController {
     			seatsOnlineList.add(seatsOnline);
 			}
 
-        	MealsOnline mealsOnline2 = new MealsOnline();
-        	
-    		model.addAttribute("mealsOnline", mealsOnline2);
     		model.addAttribute("seatsOnlineList", seatsOnlineList);
     		model.addAttribute("mealsOnlineList", mealsOnlineList);
     		model.addAttribute("baggageOnlineList", baggageOnlineList);
@@ -924,16 +929,19 @@ public class ProductDetailsController {
 		List<TravellerDetail> travelersTwo = productService.findTraveller(flightTwo, itemTwo);
 		Double totalPayment = itemOne.getTotalPrice() + itemTwo.getTotalPrice();
 		CheckoutInfo checkoutInfo = new CheckoutInfo();
-		checkoutInfo.setPaymentTotal(totalPayment);
+		CheckoutInfo checkoutInfoTwo = new CheckoutInfo();
+		checkoutInfo.setPaymentTotal(itemOne.getTotalPrice());
+		checkoutInfoTwo.setPaymentTotal(itemTwo.getTotalPrice());
 																
 		try {
-			fareQuoteMethod(model, flightOne);
-			fareQuoteMethod(model, flightTwo);
+			fareQuoteMethodReturn(model, flightOne, baggageOnlineList, mealsOnlineList, seatsOnlineList);
+			fareQuoteMethodReturnTwo(model, flightTwo, baggageOnlineListReturn, mealsOnlineListReturn, seatsOnlineListReturn);
 		}  catch (Exception e) {
 			return "redirect:/flight_return_booking" + search.getId() + "&" + flightOne.getId() + "&" + itemOne.getId() + "&" + flightTwo.getId() + "&" + itemTwo.getId();
 		}
 
 		model.addAttribute("checkoutInfo", checkoutInfo);
+		model.addAttribute("checkoutInfoTwo", checkoutInfoTwo);
 		model.addAttribute("travelersOne", travelersOne);
 		model.addAttribute("travelersTwo", travelersTwo);
 		model.addAttribute("totalPayment", totalPayment);
@@ -944,6 +952,12 @@ public class ProductDetailsController {
 		model.addAttribute("flightTwo", flightTwo);
 		model.addAttribute("falied", "Please provide a correct coupon code!!!");
 		model.addAttribute("success", "The coupon is verified!");
+		model.addAttribute("seatsOnlineList", seatsOnlineList);
+		model.addAttribute("mealsOnlineList", mealsOnlineList);
+		model.addAttribute("baggageOnlineList", baggageOnlineList);
+		model.addAttribute("seatsOnlineListReturn", seatsOnlineListReturn);
+		model.addAttribute("mealsOnlineListReturn", mealsOnlineListReturn);
+		model.addAttribute("baggageOnlineListReturn", baggageOnlineListReturn);
 		
 		return "flight/booking_return/flight_traveler_details_return";
 	}
@@ -1050,5 +1064,361 @@ public class ProductDetailsController {
 		
 		return  "redirect:/flight_traveler_return_details" + searchId + "&" + flightOne + "&" + itemOne + "&" + flightTwo + "&" + itemTwo;
 		
+	}
+	
+	private void fareQuoteMethodReturn(Model model, ProductDetail flight, List<BaggageOnline> baggageList, List<MealsOnline> mealList, List<SeatsOnline>  seatList ) throws MalformedURLException, IOException {
+		if (!flight.getTraceId().equals("offline")) {
+			
+			/* Fare-rule details */
+        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+            // Open a connection
+            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+            
+            StringBuilder responseBodyFarerule = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
+
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
+        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
+        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
+        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
+        	
+        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
+        	
+        	
+			/* Fare-quote details */
+        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+            // Open a connection
+            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
+            
+            StringBuilder responseBodyFarequote = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
+        	
+        	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
+        	System.out.println(jsonObjFarerules);
+        	System.out.println(jsonObjFareQuotes);
+        	
+        	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
+        	JSONArray jsonObjSegment = jsonResult.getJSONArray("Segments").getJSONArray(0);
+        	JSONObject mainObjSegment = jsonObjSegment.getJSONObject(0);
+    		JSONObject mainObjOrigin = mainObjSegment.getJSONObject("Origin");
+    		JSONObject mainObjDestination = mainObjSegment.getJSONObject("Destination");
+    		JSONObject mainObjAirline = mainObjSegment.getJSONObject("Airline");
+    		JSONArray jsonObjFareBreakdown = jsonResult.getJSONArray("FareBreakdown");
+    		
+    		String passengerTypeInner = "";
+    		for (int i = 0; i < jsonObjFareBreakdown.length(); i++) {
+    				mainObjFareBreakdown = jsonObjFareBreakdown.getJSONObject(i);
+    				passengerTypeInner = mainObjFareBreakdown.get("PassengerType").toString();
+				if (passengerTypeInner.equals("2")) {
+	    			mainObjFareBreakdownChild = jsonObjFareBreakdown.getJSONObject(i);
+	        		basefareTravelerChild = mainObjFareBreakdownChild.get("BaseFare").toString();
+	        		taxTravelerChild = mainObjFareBreakdownChild.get("Tax").toString();
+	        		passengerTypeChild = mainObjFareBreakdownChild.get("PassengerType").toString();
+				} else if (passengerTypeInner.equals("3")) {
+					mainObjFareBreakdownInfant = jsonObjFareBreakdown.getJSONObject(i);
+					basefareTravelerInfant = mainObjFareBreakdownInfant.get("BaseFare").toString();
+					taxTravelerInfant = mainObjFareBreakdownInfant.get("Tax").toString();
+					passengerTypeInfant = mainObjFareBreakdownInfant.get("PassengerType").toString();
+				} else {
+					mainObjFareBreakdownAdult = jsonObjFareBreakdown.getJSONObject(i);
+					basefareTravelerAdult = mainObjFareBreakdownAdult.get("BaseFare").toString();
+		    		taxTravelerAdult = mainObjFareBreakdownAdult.get("Tax").toString();
+		    		passengerTypeAdult = mainObjFareBreakdownAdult.get("PassengerType").toString();
+				}
+			}
+    		
+    		depTerminal = mainObjOrigin.getJSONObject("Airport").get("Terminal").toString();
+    		arrTerminal = mainObjDestination.getJSONObject("Airport").get("Terminal").toString();
+    		airlineCOde = mainObjAirline.get("AirlineCode").toString();
+    		flightNumber = mainObjAirline.get("FlightNumber").toString();
+    		flightClass = mainObjAirline.get("FareClass").toString();
+    		airlineName = mainObjAirline.get("AirlineName").toString();
+    		cabinBaggage = mainObjSegment.get("CabinBaggage").toString();
+    		baggage = mainObjSegment.get("Baggage").toString();
+    		duration = mainObjSegment.get("Duration").toString();
+    		flightStatus = mainObjSegment.get("FlightStatus").toString();
+    		stopOver = mainObjSegment.get("StopOver").toString();
+    		
+    		airportCodeOrigin = mainObjOrigin.getJSONObject("Airport").get("AirportCode").toString();
+    		airportCodeDestination = mainObjDestination.getJSONObject("Airport").get("AirportCode").toString();
+    		craftType = mainObjSegment.get("Craft").toString();
+    		
+    		/* SSR details */
+        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+            // Open a connection
+            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
+            
+            StringBuilder responseBodySSR = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, flight.getResultIndex());
+        	
+        	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
+        	System.out.println(jsonObjSSR);
+        	
+        	try {
+				JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
+				BaggageOnline[] baggageOnline = new BaggageOnline[100];
+				for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
+					
+					JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
+					
+					String baggagePrice = jsonObjectBagages.get("Price").toString();
+					String baggageCode = jsonObjectBagages.get("Code").toString();
+					String baggageWeight = jsonObjectBagages.get("Weight").toString();
+					
+					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
+					baggageList.add(baggageOnline[i]);
+				}
+			} catch (JSONException e1) {
+				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
+				baggageList.add(baggageOnline);
+			}
+
+
+        	try {
+				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("MealDynamic").getJSONArray(0); 
+				MealsOnline[] mealsOnline = new MealsOnline[100];
+				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+					String mealPrice = jsonObjectMeals.get("Price").toString();
+					String mealAirlineDescription = jsonObjectMeals.get("AirlineDescription").toString();
+					String mealCode = jsonObjectMeals.get("Code").toString();
+					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
+					
+					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+					mealList.add(mealsOnline[i]);
+				}
+			} catch (JSONException e) {
+				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+				mealList.add(mealsOnline);
+			}
+        	
+        	try {
+	        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
+	        	JSONObject jsonInnerObjectSeats = new JSONObject();
+	        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
+	        	Integer count = 1;
+	        	for (int i = 0; i < jsonArraySeats.length(); i++) {
+	        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
+	        		
+	        		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
+	        			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
+	        			
+	        			Integer compartment = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Compartment").toString());
+	        			Integer availablityType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("AvailablityType").toString());
+	        			Integer deck = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Deck").toString());
+	        			String rowNo = jsonInnerArraySeats.getJSONObject(j).get("RowNo").toString();
+	        			String code = jsonInnerArraySeats.getJSONObject(j).get("Code").toString();
+	        			String price = jsonInnerArraySeats.getJSONObject(j).get("Price").toString();
+	        			Integer seatType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("SeatType").toString());
+	        			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
+	        			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
+	        			
+	        			Integer serialNo = count++;
+	        			
+	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
+	        			seatList.add(seatsOnline[serialNo]);
+					}
+				}
+			
+			} catch (Exception e) {
+				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
+				seatList.add(seatsOnline);
+			}
+
+        	
+		} else if (flight.getTraceId().equals("offline")) {
+			
+			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
+			baggageList.add(baggageOnline);
+
+			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+			mealList.add(mealsOnline);
+
+			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
+			seatList.add(seatsOnline);
+
+			
+		}
+	}
+	
+	private void fareQuoteMethodReturnTwo(Model model, ProductDetail flight, List<BaggageOnline> baggageList, List<MealsOnline> mealList, List<SeatsOnline>  seatList ) throws MalformedURLException, IOException {
+		if (!flight.getTraceId().equals("offline")) {
+			
+			/* Fare-rule details */
+        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+            // Open a connection
+            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+            
+            StringBuilder responseBodyFarerule = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
+
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
+        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
+        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
+        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
+        	
+        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
+        	
+        	
+			/* Fare-quote details */
+        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+            // Open a connection
+            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
+            
+            StringBuilder responseBodyFarequote = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
+        	
+        	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
+        	System.out.println(jsonObjFarerules);
+        	System.out.println(jsonObjFareQuotes);
+        	
+        	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
+        	JSONArray jsonObjSegment = jsonResult.getJSONArray("Segments").getJSONArray(0);
+        	JSONObject mainObjSegment = jsonObjSegment.getJSONObject(0);
+    		JSONObject mainObjOrigin = mainObjSegment.getJSONObject("Origin");
+    		JSONObject mainObjDestination = mainObjSegment.getJSONObject("Destination");
+    		JSONObject mainObjAirline = mainObjSegment.getJSONObject("Airline");
+    		JSONArray jsonObjFareBreakdown = jsonResult.getJSONArray("FareBreakdown");
+    		
+    		String passengerTypeInner = "";
+    		for (int i = 0; i < jsonObjFareBreakdown.length(); i++) {
+    				mainObjFareBreakdown = jsonObjFareBreakdown.getJSONObject(i);
+    				passengerTypeInner = mainObjFareBreakdown.get("PassengerType").toString();
+				if (passengerTypeInner.equals("2")) {
+	    			mainObjFareBreakdownChild = jsonObjFareBreakdown.getJSONObject(i);
+	        		basefareTravelerChildReturn = mainObjFareBreakdownChild.get("BaseFare").toString();
+	        		taxTravelerChildReturn = mainObjFareBreakdownChild.get("Tax").toString();
+	        		passengerTypeChildReturn = mainObjFareBreakdownChild.get("PassengerType").toString();
+				} else if (passengerTypeInner.equals("3")) {
+					mainObjFareBreakdownInfant = jsonObjFareBreakdown.getJSONObject(i);
+					basefareTravelerInfantReturn = mainObjFareBreakdownInfant.get("BaseFare").toString();
+					taxTravelerInfantReturn = mainObjFareBreakdownInfant.get("Tax").toString();
+					passengerTypeInfantReturn = mainObjFareBreakdownInfant.get("PassengerType").toString();
+				} else {
+					mainObjFareBreakdownAdult = jsonObjFareBreakdown.getJSONObject(i);
+					basefareTravelerAdultReturn = mainObjFareBreakdownAdult.get("BaseFare").toString();
+		    		taxTravelerAdultReturn = mainObjFareBreakdownAdult.get("Tax").toString();
+		    		passengerTypeAdultReturn = mainObjFareBreakdownAdult.get("PassengerType").toString();
+				}
+			}
+    		
+    		depTerminal = mainObjOrigin.getJSONObject("Airport").get("Terminal").toString();
+    		arrTerminal = mainObjDestination.getJSONObject("Airport").get("Terminal").toString();
+    		airlineCOde = mainObjAirline.get("AirlineCode").toString();
+    		flightNumber = mainObjAirline.get("FlightNumber").toString();
+    		flightClass = mainObjAirline.get("FareClass").toString();
+    		airlineName = mainObjAirline.get("AirlineName").toString();
+    		cabinBaggage = mainObjSegment.get("CabinBaggage").toString();
+    		baggage = mainObjSegment.get("Baggage").toString();
+    		duration = mainObjSegment.get("Duration").toString();
+    		flightStatus = mainObjSegment.get("FlightStatus").toString();
+    		stopOver = mainObjSegment.get("StopOver").toString();
+    		
+    		airportCodeOrigin = mainObjOrigin.getJSONObject("Airport").get("AirportCode").toString();
+    		airportCodeDestination = mainObjDestination.getJSONObject("Airport").get("AirportCode").toString();
+    		craftType = mainObjSegment.get("Craft").toString();
+    		
+    		/* SSR details */
+        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+            // Open a connection
+            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
+            
+            StringBuilder responseBodySSR = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, flight.getResultIndex());
+        	
+        	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
+        	System.out.println(jsonObjSSR);
+        	
+        	try {
+				JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
+				BaggageOnline[] baggageOnline = new BaggageOnline[100];
+				for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
+					
+					JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
+					
+					String baggagePrice = jsonObjectBagages.get("Price").toString();
+					String baggageCode = jsonObjectBagages.get("Code").toString();
+					String baggageWeight = jsonObjectBagages.get("Weight").toString();
+					
+					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
+					baggageList.add(baggageOnline[i]);
+				}
+			} catch (JSONException e1) {
+				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
+				baggageList.add(baggageOnline);
+			}
+
+
+        	try {
+				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("MealDynamic").getJSONArray(0); 
+				MealsOnline[] mealsOnline = new MealsOnline[100];
+				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+					String mealPrice = jsonObjectMeals.get("Price").toString();
+					String mealAirlineDescription = jsonObjectMeals.get("AirlineDescription").toString();
+					String mealCode = jsonObjectMeals.get("Code").toString();
+					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
+					
+					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+					mealList.add(mealsOnline[i]);
+				}
+			} catch (JSONException e) {
+				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+				mealList.add(mealsOnline);
+			}
+        	
+        	try {
+	        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
+	        	JSONObject jsonInnerObjectSeats = new JSONObject();
+	        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
+	        	Integer count = 1;
+	        	for (int i = 0; i < jsonArraySeats.length(); i++) {
+	        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
+	        		
+	        		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
+	        			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
+	        			
+	        			Integer compartment = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Compartment").toString());
+	        			Integer availablityType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("AvailablityType").toString());
+	        			Integer deck = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Deck").toString());
+	        			String rowNo = jsonInnerArraySeats.getJSONObject(j).get("RowNo").toString();
+	        			String code = jsonInnerArraySeats.getJSONObject(j).get("Code").toString();
+	        			String price = jsonInnerArraySeats.getJSONObject(j).get("Price").toString();
+	        			Integer seatType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("SeatType").toString());
+	        			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
+	        			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
+	        			
+	        			Integer serialNo = count++;
+	        			
+	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
+	        			seatList.add(seatsOnline[serialNo]);
+					}
+				}
+			
+			} catch (Exception e) {
+				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
+				seatList.add(seatsOnline);
+			}
+
+        	
+		} else if (flight.getTraceId().equals("offline")) {
+			
+			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
+			baggageList.add(baggageOnline);
+
+			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+			mealList.add(mealsOnline);
+
+			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
+			seatList.add(seatsOnline);
+
+			
+		}
 	}
 }

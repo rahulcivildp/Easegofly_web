@@ -49,6 +49,10 @@ public class TravellerDetail {
 	
 	private String seat;
 	
+	private String basefare;
+	
+	private String tax;
+	
 	@Column()
 	@Temporal(TemporalType.DATE)
 	private Date dob;
@@ -233,6 +237,22 @@ public class TravellerDetail {
 
 	public void setMealOnline(MealsOnline mealOnline) {
 		this.mealOnline = mealOnline;
+	}
+
+	public String getBasefare() {
+		return basefare;
+	}
+
+	public void setBasefare(String basefare) {
+		this.basefare = basefare;
+	}
+
+	public String getTax() {
+		return tax;
+	}
+
+	public void setTax(String tax) {
+		this.tax = tax;
 	}
 
 	public BaggageOnline getBaggageOnline() {

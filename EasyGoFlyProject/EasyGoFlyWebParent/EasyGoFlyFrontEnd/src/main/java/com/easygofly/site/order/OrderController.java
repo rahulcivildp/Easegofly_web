@@ -485,7 +485,8 @@ public class OrderController {
 		
 		methodSSR(productDetail);
 		
-		ticketDetails(order, productDetail);
+		ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -628,7 +629,8 @@ public class OrderController {
 			@RequestParam(name = "itemTwo_id") Integer itemTwo_id,
 			@RequestParam(name = "couponCode") String couponCode,
 			@RequestParam(name = "couponCode1") String couponCode1,
-			@RequestParam(name = "totalPayment") String totalPayment,
+			@RequestParam(name = "totalPayment1") String totalPayment1,
+			@RequestParam(name = "totalPayment2") String totalPayment2,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
@@ -651,8 +653,8 @@ public class OrderController {
 			CheckoutInfo checkoutInfoOne = checkoutService.prepareCheckout(itemOne);
 			CheckoutInfo checkoutInfoTwo = checkoutService.prepareCheckout(itemTwo);
 			
-			orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoOne);
-			orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoTwo);
+			orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, couponCode, couponCode1, totalPayment1, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoOne);
+			orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, couponCode, couponCode1, totalPayment2, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoTwo);
 			
 			checkoutService.prepareCheckoutReturn(itemOne, itemTwo);
 			
@@ -783,7 +785,6 @@ public class OrderController {
 		model.addAttribute("itemOne_id", itemOne_id);
 		model.addAttribute("coupon1", coupon1);
 		model.addAttribute("orderTwo", order2);
-		model.addAttribute("checkoutInfo", checkoutInfo);
 		model.addAttribute("travelersTwo", travelers2);
 		model.addAttribute("itemTwo", item2);
 		model.addAttribute("flightTwo", flight2);
@@ -837,10 +838,8 @@ public class OrderController {
 			customer = customerService.getByEmail(email);
 			Wallet wallet = walletPayOrderReturn(customer, order1, order2);
 			if (wallet != null) {
-				Order updatedOrder1 = orderUpdateWallet(order1);
-				Order updatedOrder2 = orderUpdateWallet(order2);
-				updatedOrderReturnId1 = updatedOrder1.getId();
-				updatedOrderReturnId2 = updatedOrder2.getId();
+				updatedOrderReturnId1 = order1.getId();
+				updatedOrderReturnId2 = order2.getId();
 			}
 			
 		} else if (googleLogin != null) {
@@ -848,10 +847,8 @@ public class OrderController {
 			customer = customerService.getByEmail(email);
 			Wallet wallet = walletPayOrderReturn(customer, order1, order2);
 			if (wallet != null) {
-				Order updatedOrder1 = orderUpdateWallet(order1);
-				Order updatedOrder2 = orderUpdateWallet(order2);
-				updatedOrderReturnId1 = updatedOrder1.getId();
-				updatedOrderReturnId2 = updatedOrder2.getId();;
+				updatedOrderReturnId1 = order1.getId(); 
+				updatedOrderReturnId2 = order2.getId();
 			}
 		}
 		
@@ -954,7 +951,8 @@ public class OrderController {
 
 		methodSSR(productDetail);
 		
-		ticketDetails(order, productDetail);
+		ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -1059,6 +1057,7 @@ public class OrderController {
 		
 		Order order1 = orderRepo.findById(updatedOrderReturnId1).get();
 		Order order2 = orderRepo.findById(updatedOrderReturnId2).get();
+		
 		model.addAttribute("orderId1", order1.getId());
 		model.addAttribute("orderId2", order2.getId());
 		ProductDetail productDetail1 = order1.getProductDetail();
@@ -1067,11 +1066,16 @@ public class OrderController {
 		methodSSR(productDetail1);
 		methodSSR(productDetail2);
 		
-		ticketDetails(order1, productDetail1);
-		ticketDetails(order2, productDetail2);
+		ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
+		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn);
 		
 		walletResponseSegment(model, order1, productDetail1);
 		walletResponseSegment(model, order2, productDetail2);
+
+		orderUpdateWallet(order1);
+		orderUpdateWallet(order2);
         
 		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 		
@@ -1154,11 +1158,14 @@ public class OrderController {
         model.addAttribute("amount", order.getPrice());
 	}
 
-	private void ticketDetails(Order order, ProductDetail productDetail) throws MalformedURLException, IOException {
+	private void ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant ) throws MalformedURLException, IOException {
 		List<String> travelerDetailsArray = new ArrayList<String>();
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 		
 		if (!productDetail.getTraceId().equals("offline")) {
+			
+			String[] airlineNoArray = productDetail.getFlightNum().split("-");
 		
 			for (TravellerDetail travellerDetail : travelers) {
 				BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
@@ -1190,23 +1197,23 @@ public class OrderController {
     			
     			String baggageDetailsString = "		\"Baggage\":[\r\n"
     					+ "            {\r\n"
-    					+ "                \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
-    					+ "                \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "                \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+    					+ "                \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
     					+ "                \"WayType\": 2,\r\n"
     					+ "                \"Code\": \"" + bagCode + "\",\r\n"
     					+ "                \"Description\": 2,\r\n"
     					+ "                \"Weight\": " + bagWeight + ",\r\n"
     					+ "                \"Currency\": \"INR\",\r\n"
     					+ "                 \"Price\": " + bagPrice + ",\r\n"
-    					+ "                 \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
-    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
+    					+ "                 \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+    					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
     					+ "				}\r\n"
     					+ "			],\r\n";
     			
     			String mealDetailsString = "     \"MealDynamic\": [\r\n"
     					+ "        {\r\n"
-    					+ "          \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
-    					+ "          \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "          \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+    					+ "          \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
     					+ "          \"WayType\": 2,\r\n"
     					+ "          \"Code\": \"" + mealCode + "\",\r\n"
     					+ "          \"Description\": 2,\r\n"
@@ -1214,17 +1221,17 @@ public class OrderController {
     					+ "          \"Quantity\": " + mealQuantity + ",\r\n"
     					+ "          \"Currency\": \"INR\",\r\n"
     					+ "          \"Price\": " + mealPrice + ",\r\n"
-    					+ "          \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
-    					+ "          \"Destination\": \"" + productDetailsController.airportCodeDestination + "\"\r\n"
+    					+ "          \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+    					+ "          \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
     					+ "        }],\r\n";
     			
     			String seatDetailsString = "		\"SeatDynamic\": [\r\n"
     					+ "        {\r\n"
-    					+ "	    \"AirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
-    					+ "             \"FlightNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
-    					+ "              \"CraftType\": \"" + productDetailsController.craftType + "\",\r\n"
-    					+ "               \"Origin\": \"" + productDetailsController.airportCodeOrigin + "\",\r\n"
-    					+ "                \"Destination\": \"" + productDetailsController.airportCodeDestination + "\",\r\n"
+    					+ "	    \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+    					+ "             \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+    					+ "              \"CraftType\": \"" + productDetail.getCraftType() + "\",\r\n"
+    					+ "               \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+    					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\",\r\n"
     					+ "                \"AvailablityType\": " + seatAvailabilityType + ",\r\n"
     					+ "                \"Description\": 2,\r\n"
     					+ "                \"Code\": \"" + seatCode + "\",\r\n"
@@ -1244,14 +1251,14 @@ public class OrderController {
     			String seatDetails = seatDetailsString;
     			
     			if (travellerDetail.getPaxType().equals("1")) {
-    				baseFare = productDetailsController.basefareTravelerAdult;
-    				tax = productDetailsController.taxTravelerAdult;
+    				baseFare = basefareTravelerAdult;
+    				tax = taxTravelerAdult;
 				} else if (travellerDetail.getPaxType().equals("2")) {
-    				baseFare = productDetailsController.basefareTravelerChild;
-    				tax = productDetailsController.taxTravelerChild;
+    				baseFare = basefareTravelerChild;
+    				tax = taxTravelerChild;
 				} else {
-    				baseFare = productDetailsController.basefareTravelerInfant;
-    				tax = productDetailsController.taxTravelerInfant;
+    				baseFare = basefareTravelerInfant;
+    				tax = taxTravelerInfant;
 				}
     			
     			String details = "{\r\n"

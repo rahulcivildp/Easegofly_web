@@ -77,6 +77,45 @@ public class SearchHistoryController {
 		return "flight/search";
 	}
 	
+	private void authenticationFlight(Model model) {
+		try {
+        	
+        	// Create URL object with the API end-point
+            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+
+            // Open a connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+        	StringBuilder responseBody = new StringBuilder();
+        	
+            int authCode = onlineFlightService.apiAuthentication(connection, responseBody);
+            
+            JSONObject jsonObj = new JSONObject(responseBody.toString());
+            JSONObject jsonObjInnerError = jsonObj.getJSONObject("Error");
+            JSONObject jsonObjInnerMember = jsonObj.getJSONObject("Member");
+             
+            model.addAttribute("authCode", authCode);
+            model.addAttribute("responseBody", jsonObj);
+            model.addAttribute("memberName", jsonObjInnerMember.get("FirstName") + " " + jsonObjInnerMember.get("LastName"));
+            model.addAttribute("memberEmail", jsonObjInnerMember.get("Email"));
+            model.addAttribute("memberId", jsonObjInnerMember.get("MemberId"));
+            model.addAttribute("memberAgencyId", jsonObjInnerMember.get("AgencyId"));
+            model.addAttribute("memberLoginName", jsonObjInnerMember.get("LoginName"));
+            model.addAttribute("memberLoginDetails", jsonObjInnerMember.get("LoginDetails"));
+            model.addAttribute("memberIsPrimaryAgent", jsonObjInnerMember.get("isPrimaryAgent"));
+            model.addAttribute("errorCode", jsonObjInnerError.get("ErrorCode"));
+            model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
+            
+            onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
+            System.out.println(jsonObj);
+            
+            connection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	@GetMapping("/flight_search_{id}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSingles(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
@@ -98,6 +137,8 @@ public class SearchHistoryController {
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
+		
+		authenticationFlight(model);
 		
 		SearchHistory search = searchRepo.findById(id).get();
 		
@@ -138,7 +179,9 @@ public class SearchHistoryController {
 			@PathVariable(name = "stop") Integer[] stops,
 			@PathVariable(name = "totalPrice") Integer[] totalPrice,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
-		 
+
+		authenticationFlight(model);
+		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 
 		searchSort(cityOne, cityTwo, sortName, model, date);
@@ -320,16 +363,17 @@ public class SearchHistoryController {
 			String airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
 			
 			String mode = "Online-data";
+
+			String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
 			
 			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
             		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, null);
+            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, null, craftType);
 			
 			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
 			
 			listProductDetailsInSearch.add(productDetail[i]);
 		}
-		System.out.println(jsonArrayFareBreakdown);
 		
 		model.addAttribute("listProducts", productDetailsController.listProductDetailsOnline);
         model.addAttribute("responseCode", responseCode);
@@ -458,6 +502,8 @@ public class SearchHistoryController {
 			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
+
+		authenticationFlight(model);
 		
 		SearchHistory search = searchRepo.findById(id).get();
 		Integer passengerNum = search.getAdultNum() + search.getChildNum() + search.getInfantNum();
@@ -501,7 +547,9 @@ public class SearchHistoryController {
 			@PathVariable(name = "brand") String[] brands,
 			@PathVariable(name = "stop") Integer[] stops,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
-		 
+
+		authenticationFlight(model);
+		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 		 
 	    Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(strReturnDate);
@@ -687,9 +735,11 @@ public class SearchHistoryController {
     			
     			String mode = "Online-data";
     			
+    			String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
+    			
     			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
                 		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-                		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null);
+                		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
     			
     			productDetailsController.listProductDetailsOnline.add(productDetail[i]);
     			
@@ -734,7 +784,7 @@ public class SearchHistoryController {
 		        @SuppressWarnings("unused")
 				String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
 		        @SuppressWarnings("unused")
-				String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
+				String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "", craftType = "";
 		        for (int j = 0; j < innerSegmentArrayLength; j++) {
 		        	if (j == 0) {
 			        	mainObjOriginList.put("Origin-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
@@ -749,12 +799,16 @@ public class SearchHistoryController {
 					    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
 					    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
 					    
+						craftType = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).get("Craft").toString();
+					    
 					} else if (j > 0) {
 						mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
 						arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
 					    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
 					    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
 					    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+					    
+						craftType = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).get("Craft").toString();
 					}
 				}
 		        
@@ -819,9 +873,10 @@ public class SearchHistoryController {
 				String airlineRemark = mainObjReturn.getJSONObject("Result-" + i).get("AirlineRemark").toString();
 				String mode = "Online-data";
 				
+				
 				productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
 	            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-	            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null);
+	            		airlineName, depTimeFloat, arrTimeFloat, traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
 				
 				productDetailsController.listProductDetailsOnlineReturn.add(productDetailTwo[i]);
 

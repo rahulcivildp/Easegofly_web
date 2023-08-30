@@ -89,6 +89,8 @@ public class ProductDetail {
 	@Column(name = "cabin_baggage")
 	private Integer cabinBaggage;
 	
+	private String craftType;
+	
 	private Integer duration;
 	
 	private String brand;
@@ -164,7 +166,7 @@ public class ProductDetail {
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
 			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
 			float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, String journeyClass, 
-			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, Product product) {
+			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, Product product, String craftType) {
 		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
@@ -196,6 +198,7 @@ public class ProductDetail {
 		this.terminalArr = terminalArr;
 		this.baggage = baggage;
 		this.cabinBaggage = cabinBaggage;
+		this.craftType = craftType;
 	}
 	
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
@@ -259,6 +262,14 @@ public class ProductDetail {
 
 	public String getUploadSeats() {
 		return uploadSeats;
+	}
+
+	public String getCraftType() {
+		return craftType;
+	}
+
+	public void setCraftType(String craftType) {
+		this.craftType = craftType;
 	}
 
 	public Integer getDuration() {

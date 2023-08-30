@@ -211,11 +211,16 @@
 				totalSeatPriceInputReturn = totalSeatPriceInputReturn + travelerSeatTwo[i];
 			}
 			
-			totalPaymentAbout = [[${checkoutInfo.paymentTotal}]] + (totalMealPriceInput + totalMealPriceInputReturn + totalBaggagePriceInput + totalBaggagePriceInputReturn 
+			totalPaymentAbout = ( [[${checkoutInfo.paymentTotal}]] + [[${checkoutInfoTwo.paymentTotal}]] )+ (totalMealPriceInput + totalMealPriceInputReturn + totalBaggagePriceInput + totalBaggagePriceInputReturn 
 							+ totalSeatPriceInput + totalSeatPriceInputReturn);
 			
+			totalPayment1 = [[${checkoutInfo.paymentTotal}]] + (totalMealPriceInput  + totalBaggagePriceInput + totalSeatPriceInput );
+							
+			totalPayment2 = [[${checkoutInfoTwo.paymentTotal}]] + ( totalMealPriceInputReturn  + totalBaggagePriceInputReturn + totalSeatPriceInputReturn);
+			
 			$("#totalPayment").text("₹" + totalPaymentAbout);
-			$("#inputPrice").val(totalPaymentAbout);
+			$("#inputPrice").val(totalPayment1);
+			$("#inputPriceTwo").val(totalPayment2);
 		};
 
 	</script>
@@ -665,7 +670,7 @@
 																			<i class="fa fa-solid fa-bowl-food"></i>
 																			<p style="margin: 0;">&nbsp; : &nbsp;</p>
 									                                		<select class="extra_detail_selection" name="meals" th:id="'mealsTwo' + ${traveler2.id}" form="order_form">
-										                                		<th:block th:each="meal : ${mealsOnlineList}">
+										                                		<th:block th:each="meal : ${mealsOnlineListReturn}">
 										                                			<th:block th:if="${meal.name} == ''">
 										                                			<option th:value="${meal.code}">No meal</option>
 										                                			</th:block>
@@ -765,7 +770,7 @@
 																				<i style="color: black;" class="fa-solid fa-cart-flatbed-suitcase"></i>
 																				<p style="margin: 0; color: black;">&nbsp; : &nbsp;</p>
 								                                				<select class="extra_detail_selection" name="baggageSelect" th:id="'baggageSelectTwo' + ${traveler2.id}" form="order_form" style="width: 70%;">
-								                                					<th:block th:each="baggage : ${baggageOnlineList}">
+								                                					<th:block th:each="baggage : ${baggageOnlineListReturn}">
 								                                					<option th:value="${baggage.code}">KG: [[${baggage.weight}]]</option>
 								                               						</th:block>
 								                                				</select>
@@ -806,7 +811,7 @@
 																				<i style="color: black;" class="fa-solid fa-chair"></i>
 																				<p style="margin: 0; color: black;">&nbsp; : &nbsp;</p>
 								                                				<select class="extra_detail_selection" name="seatSelet" th:id="'seatSeletTwo'  + ${traveler2.id}" form="order_form">
-								                                					<th:block th:each="seat : ${seatsOnlineList}">
+								                                					<th:block th:each="seat : ${seatsOnlineListReturn}">
 								                               							<th:block th:if="${seat.availablityType} != 3">
 									                                					<option th:value="${seat.id}">Compartment: [[${seat.compartment}]], Deck: [[${seat.deck}]], Row: [[${seat.rowNo}]], Seat: [[${seat.seatNo}]]</option>
 									                                					</th:block>
@@ -1375,9 +1380,10 @@
        	</div>
            
            <div style="float: right;">
-               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment"><b>[[${checkoutInfo.paymentTotal}]]</b></p>
+               <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: block;" id="totalPayment"><b>[[${totalPayment}]]</b></p>
                <p style="margin: 0;font-size: 22px; color:white; margin: 2px 10px; display: none;" id="totalPaymentNew"><i class="fa fa-inr" aria-hidden="true"></i><b></b></p>
-               <input type="hidden" name="totalPayment" form="order_form" id="inputPrice" th:value="${checkoutInfo.paymentTotal}">
+               <input type="hidden" name="totalPayment1" form="order_form" id="inputPrice" th:value="${checkoutInfo.paymentTotal}">
+               <input type="hidden" name="totalPayment2" form="order_form" id="inputPriceTwo" th:value="${checkoutInfo.paymentTotal}">
            </div>
        </div>
    </div>
