@@ -59,10 +59,10 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	                <h3 class="sections" id="orderList" style="margin: 0; display: flex; justify-content: center;"><span>Order List</span></h3>
 	            </div>
 	        </div>
-	        <div class="col-md-10 hidden-groups" id="new_content1" style="padding: 10px 5px 0 0;">
+	        <div class="col-md-10 hidden-groups" id="new_content1" style="padding: 10px 5px 0 0; display: none;">
 				<div th:replace="cart/manage_cart_fragment :: manageBooking('tag')"></div>
 	        </div>
-	        <div class="col-md-10 hidden-groups" id="new_content2" style="padding: 10px 5px 0 0; display: none;">
+	        <div class="col-md-10 hidden-groups" id="new_content2" style="padding: 10px 5px 0 0;">
 				<div th:replace="cart/manage_order_fragment :: manageOrder('tag')"></div>
 	        </div>
 	    </div>

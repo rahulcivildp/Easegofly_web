@@ -57,13 +57,13 @@ public class CartItemController {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
-			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
+			pagingOrder(1, sortField, sortDir, customer, model, request);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
-			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
+			pagingOrder(1, sortField, sortDir, customer, model, request);
 		}
 		
 		model.addAttribute("currentPage", pageNum);
@@ -72,6 +72,31 @@ public class CartItemController {
 		model.addAttribute("keyword", keyword);
 		
 		return "cart/manage_booking";
+	} 
+	
+	@GetMapping("/manage_orders/{pageNum}")
+	public String listByPageOrder(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, HttpServletRequest request) {
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			pagingCartItem(1, sortField, sortDir, keyword, customer, model);
+			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			pagingCartItem(1, sortField, sortDir, keyword, customer, model);
+			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
+		}
+		
+		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("keyword", keyword);
+		
+		return "cart/manage_order";
 	} 
 	
 	private Page<Order> pagingOrder(int pageNum, String sortField, String sortDir, Customer customer, Model model, HttpServletRequest request) {

@@ -114,7 +114,6 @@
 				</thead>
 				<tbody>
 					<tr th:each="item : ${listItems}" style="background: white;">
-						<th:block th:if="${item.productDetail.traceId} == null">
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" >[[${item.productDetail.cityOne}]] - [[${item.productDetail.cityTwo}]]</td>
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" >[[${#dates.format(item.productDetail.date, 'E, dd MM yyyy')}]]</td>
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" >[[${item.productDetail.depTime}]]</td>
@@ -123,7 +122,7 @@
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" ><p th:if="${item.email} != null">[[${item.email}]]</p><p th:if="${item.email} == null" >No details...</p></td>
 						<td class="hideable-column text-center" th:class="${item.email == null} ? 'colorTab' : ''" ><p th:if="${item.phoneNum} != null">[[${item.phoneNum}]]</p><p th:if="${item.phoneNum} == null" >No details...</p></td>
 						<td class="hideable-column text-center">
-							<div class="row" style="">
+							<div class="row">
 								<div class="col" th:if="${item.email} == null" >
 								</div>
 								<div class="col" th:if="${item.email} != null" >
@@ -139,7 +138,6 @@
 								</div>
 							</div>
 						</td>
-						</th:block>
 					</tr>
 				</tbody>
 			</table>
@@ -147,10 +145,8 @@
 		
 		<div class="less-details">
 		<th:block th:each="item : ${listItems}" >
-			<th:block th:if="${item.productDetail.traceId} == null">
 			<div class="row m-1 styleLinkButton"  style="background: white;">
 				<div class="col-5">
-					<img th:src="@{${item.productDetail.product.brands.photosImagePath}}" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
 				</div>
 				<div class="col-7 mt-2">
 					<div>[[${item.productDetail.cityOne}]] - [[${item.productDetail.cityTwo}]]</div>
@@ -164,7 +160,7 @@
 					</div>
 				</div>
 				<div class="col-12">
-					<div class="row" style="">
+					<div class="row">
 						<div class="col-4" style="padding: 0;" th:if="${item.email} == null" >
 						</div>
 						<div class="col-4" style="padding: 0;" th:if="${item.email} != null" id="change_name_button">
@@ -181,7 +177,6 @@
 					</div>
 				</div>
 			</div>
-			</th:block>
 			</th:block>
 		</div>
 		

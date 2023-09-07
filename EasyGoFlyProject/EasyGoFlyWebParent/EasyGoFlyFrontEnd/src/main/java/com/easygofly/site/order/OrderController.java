@@ -758,7 +758,7 @@ public class OrderController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentReturn(orderString, amount);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -1070,76 +1070,130 @@ public class OrderController {
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
 		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
 				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn);
-		
-		walletResponseSegment(model, order1, productDetail1);
-		walletResponseSegment(model, order2, productDetail2);
 
 		orderUpdateWallet(order1);
 		orderUpdateWallet(order2);
-        
-		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 		
-		model.addAttribute("checksum", checksum);
-		model.addAttribute("verifyChecksum", verifiedChecksum);
-		model.addAttribute("responseParameters", responseParameters);
+		// Departure ticket segment ............................*****.....................
+		String pnr1 = productDetail1.getPnr();
+		model.addAttribute("pnrBarcodeOne", pnr1);
+		model.addAttribute("orderStatusOOne", order1.getOrderStatus());
 		
-		return "wallet/response";
-	}
-
-	private void walletResponseSegment(Model model, Order order, ProductDetail productDetail) {
-		String pnr = productDetail.getPnr();
-		model.addAttribute("pnrBarcode", pnr);
-		model.addAttribute("orderStatusO", order.getOrderStatus());
+		String cityOne1 = productDetail1.getCityOne();
+		String cityTwo1 = productDetail1.getCityTwo();
+		City city10 = cityRepo.getCityByCode(cityOne1);
+		City city20 = cityRepo.getCityByCode(cityTwo1);
+		model.addAttribute("cityOneOne", city10.getCityName());
+		model.addAttribute("cityTwoOne", city20.getCityName());
+		model.addAttribute("city1One", cityOne1);
+		model.addAttribute("city2One", cityTwo1);
 		
-		String cityOne = productDetail.getCityOne();
-		String cityTwo = productDetail.getCityTwo();
-		City city1 = cityRepo.getCityByCode(cityOne);
-		City city2 = cityRepo.getCityByCode(cityTwo);
-		model.addAttribute("cityOne", city1.getCityName());
-		model.addAttribute("cityTwo", city2.getCityName());
-		model.addAttribute("city1", cityOne);
-		model.addAttribute("city2", cityTwo);
-		
-		Date date1 = productDetail.getDate();  
+		Date dateDep1 = productDetail1.getDate();  
 		DateFormat dateFormat1 = new SimpleDateFormat("E, dd-MM-yyyy");  
-	    String flightDateTime = dateFormat1.format(date1);
-		model.addAttribute("flightDateTime", flightDateTime);
+	    String flightDateTime = dateFormat1.format(dateDep1);
+		model.addAttribute("flightDateTimeOne", flightDateTime);
 		
-		Date date2 = order.getCreatedTime();  
+		Date dateOrder1 = order1.getCreatedTime();  
 		DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");  
-	    String orderDateTime = dateFormat2.format(date2);
-		model.addAttribute("orderDateTime", orderDateTime);
-		
-		model.addAttribute("passengerPhone", order.getPassengerNum());
-		model.addAttribute("passengerEmail", order.getContactEmail());
-		
-		String photoImagePath = "";
-		Brand brand = brandRepo.getBrandByName(productDetail.getBrand().toLowerCase());
-		if (brand.equals(null)) {
-			photoImagePath = brand.getPhotosImagePath();
+	    String orderDateTime = dateFormat2.format(dateOrder1);
+		model.addAttribute("orderDateTimeOne", orderDateTime);
+
+		String photoImagePath1 = "";
+		Brand brand1 = brandRepo.getBrandByName(productDetail1.getBrand().toLowerCase());
+		if (brand1.equals(null)) {
+			photoImagePath1 = brand1.getPhotosImagePath();
 		} else {
-			photoImagePath = "#";
+			photoImagePath1 = "#";
 		}
-		model.addAttribute("brandPath", ".." + photoImagePath);
-		model.addAttribute("brandName", brand.getName());
-		model.addAttribute("productDetail", productDetail);
-		model.addAttribute("originTerminal", productDetail.getTerminalDep());
-		model.addAttribute("destinationTerminal", productDetail.getTerminalArr());
-		model.addAttribute("baggage", productDetail.getBaggage());
-		model.addAttribute("cabinBaggage", productDetail.getCabinBaggage());
-		
-		Integer dateInt = productDetail.getDuration()/60;
+		model.addAttribute("brandPathOne", ".." + photoImagePath1);
+		model.addAttribute("brandNameOne", brand1.getName());
+		model.addAttribute("passengerPhoneOne", order1.getPassengerNum());
+		model.addAttribute("passengerEmailOne", order1.getContactEmail());
+
+		Integer dateInt = productDetail1.getDuration()/60;
 		if (dateInt >= 10) {
-			model.addAttribute("dateInt", dateInt);
+			model.addAttribute("dateIntOne", dateInt);
 		} else {
-			model.addAttribute("dateInt", "0" + dateInt);
+			model.addAttribute("dateIntOne", "0" + dateInt);
 		}
-		Integer timeInt = productDetail.getDuration()%60;
+		Integer timeInt = productDetail1.getDuration()%60;
 		if (timeInt >= 10) {
-			model.addAttribute("timeInt", timeInt);
+			model.addAttribute("timeIntOne", timeInt);
 		} else {
-			model.addAttribute("timeInt", "0" + timeInt);
+			model.addAttribute("timeIntOne", "0" + timeInt);
 		}
+		
+		List<TravellerDetail> travellerDetails1 = travellerRepo.findTravellerByProductDetailAndOrder(productDetail1, order1);
+		model.addAttribute("travellerDetailsOne", travellerDetails1);
+        model.addAttribute("amountOne", order1.getPrice());
+
+		model.addAttribute("productDetailOne", productDetail1);
+		model.addAttribute("originTerminalOne", productDetail1.getTerminalDep());
+		model.addAttribute("destinationTerminalOne", productDetail1.getTerminalArr());
+		model.addAttribute("baggageOne", productDetail1.getBaggage());
+		model.addAttribute("cabinBaggageOne", productDetail1.getCabinBaggage());
+		//.............................******........................................
+		
+		// Return ticket segment ............................*****.....................
+		String pnr2 = productDetail2.getPnr();
+		model.addAttribute("pnrBarcodeTwo", pnr2);
+		model.addAttribute("orderStatusOTwo", order2.getOrderStatus());
+		
+		String cityOne2 = productDetail2.getCityOne();
+		String cityTwo2 = productDetail2.getCityTwo();
+		City city11 = cityRepo.getCityByCode(cityOne2);
+		City city21 = cityRepo.getCityByCode(cityTwo2);
+		model.addAttribute("cityOneTwo", city11.getCityName());
+		model.addAttribute("cityTwoTwo", city21.getCityName());
+		model.addAttribute("city1Two", cityOne2);
+		model.addAttribute("city2Two", cityTwo2);
+		
+		Date dateDep2 = productDetail2.getDate();  
+		DateFormat dateFormat11 = new SimpleDateFormat("E, dd-MM-yyyy");  
+	    String flightDateTime2 = dateFormat11.format(dateDep2);
+		model.addAttribute("flightDateTimeTwo", flightDateTime2);
+		
+		Date dateOrder2 = order2.getCreatedTime();  
+		DateFormat dateFormat22 = new SimpleDateFormat("dd-MM-yyyy");  
+	    String orderDateTime2 = dateFormat22.format(dateOrder2);
+		model.addAttribute("orderDateTimeTwo", orderDateTime2);
+		
+		String photoImagePath2 = "";
+		Brand brand2 = brandRepo.getBrandByName(productDetail2.getBrand().toLowerCase());
+		if (brand2.equals(null)) {
+			photoImagePath2 = brand2.getPhotosImagePath();
+		} else {
+			photoImagePath2 = "#";
+		}
+		model.addAttribute("brandPathTwo", ".." + photoImagePath2);
+		model.addAttribute("brandNameTwo", brand2.getName());
+		model.addAttribute("passengerPhoneTwo", order1.getPassengerNum());
+		model.addAttribute("passengerEmailTwo", order1.getContactEmail());
+
+		Integer dateInt2 = productDetail2.getDuration()/60;
+		if (dateInt2 >= 10) {
+			model.addAttribute("dateIntTwo", dateInt2);
+		} else {
+			model.addAttribute("dateIntTwo", "0" + dateInt2);
+		}
+		Integer timeInt2 = productDetail2.getDuration()%60;
+		if (timeInt2 >= 10) {
+			model.addAttribute("timeIntTwo", timeInt2);
+		} else {
+			model.addAttribute("timeIntTwo", "0" + timeInt2);
+		}
+		
+		List<TravellerDetail> travellerDetails2 = travellerRepo.findTravellerByProductDetailAndOrder(productDetail2, order2);
+		model.addAttribute("travellerDetailsTwo", travellerDetails2);
+        model.addAttribute("amountTwo", order2.getPrice());
+
+		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+		model.addAttribute("productDetailTwo", productDetail2);
+		model.addAttribute("originTerminalTwo", productDetail2.getTerminalDep());
+		model.addAttribute("destinationTerminalTwo", productDetail2.getTerminalArr());
+		model.addAttribute("baggageTwo", productDetail2.getBaggage());
+		model.addAttribute("cabinBaggageTwo", productDetail2.getCabinBaggage());
+		//.............................******........................................
 		
 		Path flightUpPath = Paths.get("../pdf-images/flight-up.png");
 		Path flightDownPath = Paths.get("../pdf-images/flight-down.png");
@@ -1149,15 +1203,343 @@ public class OrderController {
 		model.addAttribute("flightDownPath", flightDownPath);
 		model.addAttribute("demoTicketPath", demoTicketPath);
 		model.addAttribute("thumbLogoPath", thumbLogoPath);
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
 		
-//		User user = product.getUser();
-//		model.addAttribute("user", user);
-		
-		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
-		model.addAttribute("travellerDetails", travellerDetails);
-        model.addAttribute("amount", order.getPrice());
+		return "wallet/return/response";
 	}
+	
+	
+	@CrossOrigin(origins = {"https://easegofly.com/"})
+	@RequestMapping(value = "/zaakpay/return/response",
+			method = {RequestMethod.POST})
+	public String zaakpayResponseReturn (HttpServletRequest request, HttpServletResponse response,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
+		
+		Transaction transaction = new Transaction();
+	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
+	    String checksumString = "" ;
+	    Integer n= 0;
+	    for (String param: transaction.getResponseParameters()) {
+	        checksumString=checksumString+param+"="+request.getParameter(param);
+	        checksumString=checksumString+"&";
+	        //This will create the checksum string against every parameter.
+	        parameter[n] = request.getParameter(param);
+	        n+=1;
+	    }
+	    
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    verifiedChecksum = verifyChecksum;
+	    checksum = request.getParameter("checksum");
+	    responseParameters = transaction.getResponseParameters();
+		
+	    String orderParam = parameter[8];
+		String[] parts = orderParam.split("R");
+		String part2 = parts[1]; 
+		String[] orders = part2.split("&");
+		
+		Integer convert1 = Integer.parseInt(orders[0]);
+		Integer convert2 = Integer.parseInt(orders[1]);
+		Order order1 = orderRepo.findById(convert1).get();
+		Order order2 = orderRepo.findById(convert2).get();
+		ProductDetail productDetail1 = order1.getProductDetail();
+		ProductDetail productDetail2 = order2.getProductDetail();
+		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+			orderService.updateOrder(order1, OrderStatus.CANCELLED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			orderService.updateOrder(order1, OrderStatus.FAILED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			orderService.updateOrder(order1, OrderStatus.FAILED);
+		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			orderService.updateOrder(order1, OrderStatus.SUCCESSFULL);
+		} else {
+			if (productDetail1.getPnr().equals(null) || productDetail1.getPnr().equals("")) {
+				orderService.updateOrder(order1, OrderStatus.PENDING);
+			} else {
+				orderService.updateOrder(order1, OrderStatus.SUCCESSFULL);
+			}
+			
+			Integer totalSeatRemaining = Integer.parseInt(productDetail1.getTotalSeats()) - order1.getPassengerNum();
+			orderService.updateTotalPassenger(order1, totalSeatRemaining);
+		}
+		
+		///return
 
+		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+			orderService.updateOrder(order2, OrderStatus.CANCELLED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			orderService.updateOrder(order2, OrderStatus.FAILED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			orderService.updateOrder(order2, OrderStatus.FAILED);
+		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			orderService.updateOrder(order2, OrderStatus.SUCCESSFULL);
+		} else {
+			if (productDetail2.getPnr().equals(null) || productDetail2.getPnr().equals("")) {
+				orderService.updateOrder(order2, OrderStatus.PENDING);
+			} else {
+				orderService.updateOrder(order2, OrderStatus.SUCCESSFULL);
+			}
+			
+			Integer totalSeatRemaining = Integer.parseInt(productDetail2.getTotalSeats()) - order2.getPassengerNum();
+			orderService.updateTotalPassenger(order2, totalSeatRemaining);
+		}
+		
+		try {
+			CartItem cartItem1 = cartRepo.findById(order1.getCartId()).get();
+			CartItem cartItem2 = cartRepo.findById(order1.getCartId()).get();
+			if (!cartItem1.equals(null)) {
+				if (order1.getOrderStatus().equals(OrderStatus.CANCELLED) || order1.getOrderStatus().equals(OrderStatus.SUCCESSFULL) || order1.getOrderStatus().equals(OrderStatus.FAILED) 
+						|| order1.getOrderStatus().equals(OrderStatus.PENDING )) {
+					List<SearchHistory> search = cartItem1.getSearchHistory();
+					for (SearchHistory searchHistory : search) {
+						List<TravellerDetail> travellerDetail2 = travellerRepo.findTravellerByCurtItemAndProductDetail(productDetail1, cartItem1);
+						for (TravellerDetail travellerDetail : travellerDetail2) {
+							travellerDetail.setCartItem(null);
+							travellerRepo.save(travellerDetail);
+						}
+							
+						searchService.updateSearchHistoryCart(searchHistory, cartItem1);
+						searchHistory.setCartItem(null);
+						searchRepo.save(searchHistory);
+					}
+					cartItem1.setSearchHistory(null);
+					cartRepo.save(cartItem1);
+					
+					cartService.deleteCartItem(cartItem1.getId());
+				}
+			}
+			
+			//return
+			if (!cartItem2.equals(null)) {
+				if (order2.getOrderStatus().equals(OrderStatus.CANCELLED) || order2.getOrderStatus().equals(OrderStatus.SUCCESSFULL) || order2.getOrderStatus().equals(OrderStatus.FAILED) 
+						|| order2.getOrderStatus().equals(OrderStatus.PENDING )) {
+					List<SearchHistory> search = cartItem2.getSearchHistory();
+					for (SearchHistory searchHistory : search) {
+						List<TravellerDetail> travellerDetail2 = travellerRepo.findTravellerByCurtItemAndProductDetail(productDetail2, cartItem2);
+						for (TravellerDetail travellerDetail : travellerDetail2) {
+							travellerDetail.setCartItem(null);
+							travellerRepo.save(travellerDetail);
+						}
+							
+						searchService.updateSearchHistoryCart(searchHistory, cartItem2);
+						searchHistory.setCartItem(null);
+						searchRepo.save(searchHistory);
+					}
+					cartItem2.setSearchHistory(null);
+					cartRepo.save(cartItem2);
+					
+					cartService.deleteCartItem(cartItem2.getId());
+				}
+			}
+		} catch (Exception e) {
+			return "redirect:/zaakpay/return/response";
+		}
+		
+		return "redirect:/zaakpay/return/response";
+	}
+	
+	@CrossOrigin(origins = {"https://easegofly.com/"})
+	@RequestMapping(value = "/zaakpay/return/response",
+			method = {RequestMethod.GET})
+	public String zaakpayResponseSeReturn (Model model, 
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+		
+		String email; 
+		Customer customer = new Customer(); 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+
+		
+		String orderParam = parameter[8];
+		String[] parts = orderParam.split("R");
+		String part2 = parts[1]; 
+		String[] orders = part2.split("&");
+		
+		Integer convert1 = Integer.parseInt(orders[0]);
+		Integer convert2 = Integer.parseInt(orders[1]);
+		Order order1 = orderRepo.findById(convert1).get();
+		Order order2 = orderRepo.findById(convert2).get();
+		
+		model.addAttribute("orderId1", order1.getId());
+		model.addAttribute("orderId2", order2.getId());
+		
+		ProductDetail productDetail1 = order1.getProductDetail();
+		ProductDetail productDetail2 = order2.getProductDetail();
+		
+		methodSSR(productDetail1);
+		methodSSR(productDetail2);
+		
+		ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
+		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn);
+
+		// Departure ticket segment ............................*****.....................
+		String pnr1 = productDetail1.getPnr();
+		model.addAttribute("pnrBarcodeOne", pnr1);
+		model.addAttribute("orderStatusOOne", order1.getOrderStatus());
+		
+		String cityOne1 = productDetail1.getCityOne();
+		String cityTwo1 = productDetail1.getCityTwo();
+		City city10 = cityRepo.getCityByCode(cityOne1);
+		City city20 = cityRepo.getCityByCode(cityTwo1);
+		model.addAttribute("cityOneOne", city10.getCityName());
+		model.addAttribute("cityTwoOne", city20.getCityName());
+		model.addAttribute("city1One", cityOne1);
+		model.addAttribute("city2One", cityTwo1);
+		
+		Date dateDep1 = productDetail1.getDate();  
+		DateFormat dateFormat1 = new SimpleDateFormat("E, dd-MM-yyyy");  
+	    String flightDateTime = dateFormat1.format(dateDep1);
+		model.addAttribute("flightDateTimeOne", flightDateTime);
+		
+		Date dateOrder1 = order1.getCreatedTime();  
+		DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");  
+	    String orderDateTime = dateFormat2.format(dateOrder1);
+		model.addAttribute("orderDateTimeOne", orderDateTime);
+
+		String photoImagePath1 = "";
+		Brand brand1 = brandRepo.getBrandByName(productDetail1.getBrand().toLowerCase());
+		if (brand1.equals(null)) {
+			photoImagePath1 = brand1.getPhotosImagePath();
+		} else {
+			photoImagePath1 = "#";
+		}
+		model.addAttribute("brandPathOne", ".." + photoImagePath1);
+		model.addAttribute("brandNameOne", brand1.getName());
+		model.addAttribute("passengerPhoneOne", order1.getPassengerNum());
+		model.addAttribute("passengerEmailOne", order1.getContactEmail());
+
+		Integer dateInt = productDetail1.getDuration()/60;
+		if (dateInt >= 10) {
+			model.addAttribute("dateIntOne", dateInt);
+		} else {
+			model.addAttribute("dateIntOne", "0" + dateInt);
+		}
+		Integer timeInt = productDetail1.getDuration()%60;
+		if (timeInt >= 10) {
+			model.addAttribute("timeIntOne", timeInt);
+		} else {
+			model.addAttribute("timeIntOne", "0" + timeInt);
+		}
+		
+		List<TravellerDetail> travellerDetails1 = travellerRepo.findTravellerByProductDetailAndOrder(productDetail1, order1);
+		model.addAttribute("travellerDetailsOne", travellerDetails1);
+        model.addAttribute("amountOne", order1.getPrice());
+
+		model.addAttribute("productDetailOne", productDetail1);
+		model.addAttribute("originTerminalOne", productDetail1.getTerminalDep());
+		model.addAttribute("destinationTerminalOne", productDetail1.getTerminalArr());
+		model.addAttribute("baggageOne", productDetail1.getBaggage());
+		model.addAttribute("cabinBaggageOne", productDetail1.getCabinBaggage());
+		//.............................******........................................
+		
+		// Return ticket segment ............................*****.....................
+		String pnr2 = productDetail2.getPnr();
+		model.addAttribute("pnrBarcodeTwo", pnr2);
+		model.addAttribute("orderStatusOTwo", order2.getOrderStatus());
+		
+		String cityOne2 = productDetail2.getCityOne();
+		String cityTwo2 = productDetail2.getCityTwo();
+		City city11 = cityRepo.getCityByCode(cityOne2);
+		City city21 = cityRepo.getCityByCode(cityTwo2);
+		model.addAttribute("cityOneTwo", city11.getCityName());
+		model.addAttribute("cityTwoTwo", city21.getCityName());
+		model.addAttribute("city1Two", cityOne2);
+		model.addAttribute("city2Two", cityTwo2);
+		
+		Date dateDep2 = productDetail2.getDate();  
+		DateFormat dateFormat11 = new SimpleDateFormat("E, dd-MM-yyyy");  
+	    String flightDateTime2 = dateFormat11.format(dateDep2);
+		model.addAttribute("flightDateTimeTwo", flightDateTime2);
+		
+		Date dateOrder2 = order2.getCreatedTime();  
+		DateFormat dateFormat22 = new SimpleDateFormat("dd-MM-yyyy");  
+	    String orderDateTime2 = dateFormat22.format(dateOrder2);
+		model.addAttribute("orderDateTimeTwo", orderDateTime2);
+		
+		String photoImagePath2 = "";
+		Brand brand2 = brandRepo.getBrandByName(productDetail2.getBrand().toLowerCase());
+		if (brand2.equals(null)) {
+			photoImagePath2 = brand2.getPhotosImagePath();
+		} else {
+			photoImagePath2 = "#";
+		}
+		model.addAttribute("brandPathTwo", ".." + photoImagePath2);
+		model.addAttribute("brandNameTwo", brand2.getName());
+		model.addAttribute("passengerPhoneTwo", order1.getPassengerNum());
+		model.addAttribute("passengerEmailTwo", order1.getContactEmail());
+
+		Integer dateInt2 = productDetail2.getDuration()/60;
+		if (dateInt2 >= 10) {
+			model.addAttribute("dateIntTwo", dateInt2);
+		} else {
+			model.addAttribute("dateIntTwo", "0" + dateInt2);
+		}
+		Integer timeInt2 = productDetail2.getDuration()%60;
+		if (timeInt2 >= 10) {
+			model.addAttribute("timeIntTwo", timeInt2);
+		} else {
+			model.addAttribute("timeIntTwo", "0" + timeInt2);
+		}
+		
+		List<TravellerDetail> travellerDetails2 = travellerRepo.findTravellerByProductDetailAndOrder(productDetail2, order2);
+		model.addAttribute("travellerDetailsTwo", travellerDetails2);
+        model.addAttribute("amountTwo", order2.getPrice());
+
+		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+		model.addAttribute("productDetailTwo", productDetail2);
+		model.addAttribute("originTerminalTwo", productDetail2.getTerminalDep());
+		model.addAttribute("destinationTerminalTwo", productDetail2.getTerminalArr());
+		model.addAttribute("baggageTwo", productDetail2.getBaggage());
+		model.addAttribute("cabinBaggageTwo", productDetail2.getCabinBaggage());
+		//.............................******........................................
+				
+
+		Path flightUpPath = Paths.get("../pdf-images/flight-up.png");
+		Path flightDownPath = Paths.get("../pdf-images/flight-down.png");
+		Path demoTicketPath = Paths.get("../pdf-images/demo-ticket.png");
+		Path thumbLogoPath = Paths.get("../pdf-images/thumb-logo.png");
+		model.addAttribute("flightUpPath", flightUpPath);
+		model.addAttribute("flightDownPath", flightDownPath);
+		model.addAttribute("demoTicketPath", demoTicketPath);
+		model.addAttribute("thumbLogoPath", thumbLogoPath);
+		
+		
+		if (parameter[9].contains("Not Found") && parameter[10].contains("unknown") ) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
+			if (hasErrorCode != null && hasErrorCode != 0) {
+				model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+				System.out.println(hasErrorCode);
+			} else {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			}
+		}
+		
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
+		
+		return "zaakpay/response-twoway";
+		
+		
+	}
+	
 	private void ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
 			 String basefareTravelerInfant, String taxTravelerInfant ) throws MalformedURLException, IOException {
 		List<String> travelerDetailsArray = new ArrayList<String>();

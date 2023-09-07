@@ -746,6 +746,7 @@
 			if (response == "insufficient") {
 				showModelDialogue("Alert!!!", "Insufficient balance in your wallet.");
 			} else {
+				showModelDialogue("Processing...", "Please wait while processing your request!");
 				form.submit();
 			}
 		}).fail(function(){

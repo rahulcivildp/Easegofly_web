@@ -31,11 +31,22 @@
 	  <!-- Template Main CSS File -->
 	  <link type="text/css" th:href="@{../assets/css/style.css}" rel="stylesheet">
 </head>
-
 <body>
 <!-- ======= Header ======= -->
 <div th:fragment="page_header(remove)" th:remove="${remove}">
 
+	<style>
+		.containerHeader {
+			max-width: 81%;
+		}
+			
+		@media screen and (max-width: 700px) {
+			.containerHeader {
+	    		width: 100% !important;
+				max-width: 100% !important;
+			}
+		}
+	</style>
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
 	<script>
@@ -56,7 +67,7 @@
 	ga('send', 'pageview');
 	</script>
 	<!-- End Google Analytics -->
-    <div class="container d-flex align-items-center justify-content-between">
+    <div class="container d-flex align-items-center justify-content-between containerHeader">
 
       <h1 class="logo"></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
@@ -71,24 +82,24 @@
           <li class="media-hide"></li>
           <li class="media-hide"></li>
           <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
-          	<i class="fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
+          	<i class="fa fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li3" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-2}" style="background: none;">
-          	<i class="fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
+          	<i class="fa fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li4" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-3}">
-          	<i class="fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
+          	<i class="fa fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-8}" >
-          	<i class="fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
+          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/flight_activity}" >
-          	<i class="fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
+          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
           </li>
           <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
 	          <a href="#">
 		          <span style="display: flex !important;  justify-content: start;">
-		          	<i class="fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+		          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          </span> 
 		          <i class="bi bi-chevron-down"></i>
 	          </a>
@@ -98,7 +109,7 @@
           	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
 	          	<a href="#">
 	          		<span style="display: flex !important;  justify-content: start;">
-		          		<i class="fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+		          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          	</span> 
 		          	<i class="bi bi-chevron-down"></i>
 	          	</a>
