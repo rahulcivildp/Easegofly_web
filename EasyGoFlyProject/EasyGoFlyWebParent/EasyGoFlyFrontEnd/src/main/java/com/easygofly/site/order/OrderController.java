@@ -118,6 +118,9 @@ public class OrderController {
 	private Integer hasErrorCode;
 	private String hasErrorMsg;
 	
+	Integer search_id_inner = 0;
+	Integer searchReturn_id_inner = 0;
+	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
 			@RequestParam(name = "flight_id") Integer flightId,
@@ -381,9 +384,10 @@ public class OrderController {
 	@RequestMapping(value = "/zaakpay/response",
 			method = {RequestMethod.POST})
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
-		
+		search_id_inner = search_id;
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
 	    String checksumString = "" ;
@@ -485,8 +489,10 @@ public class OrderController {
 		
 		methodSSR(productDetail);
 		
+		SearchHistory search = searchRepo.findById(search_id_inner).get();		
+		
 		ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -798,7 +804,8 @@ public class OrderController {
 	
 	@PostMapping("/flight_wallet_check")
 	public String walletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin) {
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@RequestParam(name = "search_id") Integer search_id) {
 		
 		String email; 
 		Customer customer; 
@@ -822,12 +829,15 @@ public class OrderController {
 			}
 		}
 		
+		search_id_inner = search_id;
+		
 		return "redirect:/flight_wallet_response";
 	}
 	
 	@PostMapping("/flight_wallet_return_check")
 	public String walletPaymentReturn(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin) {
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@RequestParam(name = "search_id") Integer search_id) {
 		
 		String email; 
 		Customer customer; 
@@ -851,6 +861,8 @@ public class OrderController {
 				updatedOrderReturnId2 = order2.getId();
 			}
 		}
+		
+		searchReturn_id_inner = search_id;
 		
 		return "redirect:/flight_wallet_return_response";
 	}
@@ -950,9 +962,11 @@ public class OrderController {
 		ProductDetail productDetail = order.getProductDetail();
 
 		methodSSR(productDetail);
+
+		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		
 		ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -1065,15 +1079,14 @@ public class OrderController {
 
 		methodSSR(productDetail1);
 		methodSSR(productDetail2);
+
+		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
 		
 		ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
 		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
-				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn);
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search);
 
-		orderUpdateWallet(order1);
-		orderUpdateWallet(order2);
-		
 		// Departure ticket segment ............................*****.....................
 		String pnr1 = productDetail1.getPnr();
 		model.addAttribute("pnrBarcodeOne", pnr1);
@@ -1207,6 +1220,9 @@ public class OrderController {
 		model.addAttribute("verifyChecksum", verifiedChecksum);
 		model.addAttribute("responseParameters", responseParameters);
 		
+		orderUpdateWallet(order1);
+		orderUpdateWallet(order2);
+		
 		return "wallet/return/response";
 	}
 	
@@ -1215,9 +1231,11 @@ public class OrderController {
 	@RequestMapping(value = "/zaakpay/return/response",
 			method = {RequestMethod.POST})
 	public String zaakpayResponseReturn (HttpServletRequest request, HttpServletResponse response,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
 		
+		searchReturn_id_inner = search_id;
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
 	    String checksumString = "" ;
@@ -1378,11 +1396,13 @@ public class OrderController {
 		
 		methodSSR(productDetail1);
 		methodSSR(productDetail2);
+
+		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
 		
 		ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant);
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
 		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
-				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn);
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search);
 
 		// Departure ticket segment ............................*****.....................
 		String pnr1 = productDetail1.getPnr();
@@ -1541,7 +1561,7 @@ public class OrderController {
 	}
 	
 	private void ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
-			 String basefareTravelerInfant, String taxTravelerInfant ) throws MalformedURLException, IOException {
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId ) throws MalformedURLException, IOException {
 		List<String> travelerDetailsArray = new ArrayList<String>();
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 		
@@ -1633,14 +1653,20 @@ public class OrderController {
     			String seatDetails = seatDetailsString;
     			
     			if (travellerDetail.getPaxType().equals("1")) {
-    				baseFare = basefareTravelerAdult;
-    				tax = taxTravelerAdult;
+    				Integer fareInt = Integer.parseInt(basefareTravelerAdult) / searchId.getAdultNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerAdult) / searchId.getAdultNum();
+    				baseFare = "" + fareInt;
+    				tax = "" + taxInt;
 				} else if (travellerDetail.getPaxType().equals("2")) {
-    				baseFare = basefareTravelerChild;
-    				tax = taxTravelerChild;
+    				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getAdultNum();
+    				baseFare = "" + fareInt;
+    				tax = "" + taxInt;
 				} else {
-    				baseFare = basefareTravelerInfant;
-    				tax = taxTravelerInfant;
+    				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getAdultNum();
+    				baseFare = "" + fareInt;
+    				tax = "" + taxInt;
 				}
     			
     			String details = "{\r\n"
