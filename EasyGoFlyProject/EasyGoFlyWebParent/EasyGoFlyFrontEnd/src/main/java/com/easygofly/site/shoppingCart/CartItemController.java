@@ -103,6 +103,12 @@ public class CartItemController {
 		Page<Order> pageOrder = orderService.listByPageOrder(customer, pageNum, sortField, sortDir);
 		
 		List<Order> listOrders = pageOrder.getContent();
+
+		OrderStatus newOrder = OrderStatus.NEW;
+		OrderStatus orderCancelled = OrderStatus.CANCELLED;
+		OrderStatus orderSuccess = OrderStatus.SUCCESSFULL;
+		OrderStatus orderFailed = OrderStatus.FAILED;
+		OrderStatus orderPending = OrderStatus.PENDING;
 		/* ------ ZAAKPAY -------- */ /**/
 		Date date = Calendar.getInstance().getTime();  
 	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
@@ -118,32 +124,35 @@ public class CartItemController {
 		}
 	    
 		for (Order order : listOrders) {
-			ProductDetail productDetail = order.getProductDetail();
-			model.addAttribute("totalSeat", Integer.parseInt(productDetail.getTotalSeats()));
-			model.addAttribute("passengerNum", order.getPassengerNum());
-			
-			String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
-			Integer intAmount = (int) (order.getPrice() * 100);
-			String amount = "" + intAmount;
-			//String amount = "100";
-
-			//Cookie cookie = request.getCookies().get("JSESSIONID");
-			//String value = cookie.getValue();
-
-			Transaction transaction = new Transaction();
-			
-			try {
-				ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
+			if (order.getOrderStatus() != orderSuccess) {
+				ProductDetail productDetail = order.getProductDetail();
+				model.addAttribute("totalSeat", Integer.parseInt(productDetail.getTotalSeats()));
+				model.addAttribute("passengerNum", order.getPassengerNum());
 				
-				model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
-				model.addAttribute("requestUrl", processPayment.getRequestUrl());
-				model.addAttribute("checksum", processPayment.getChecksum());
+				String orderString = "EGF" + strDate1 + "T" + strDate2 + "R"+ order.getId();
+				Integer intAmount = (int) (order.getPrice() * 100);
+				String amount = "" + intAmount;
+				//String amount = "100";
+	
+				//Cookie cookie = request.getCookies().get("JSESSIONID");
+				//String value = cookie.getValue();
+	
+				Transaction transaction = new Transaction();
 				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
+					
+					model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
+					model.addAttribute("requestUrl", processPayment.getRequestUrl());
+					model.addAttribute("checksum", processPayment.getChecksum());
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println(order.getId());
 			}
-			
 		}
 		/*===================================*/
 		
@@ -152,11 +161,6 @@ public class CartItemController {
 		if (endCount1 > pageOrder.getTotalElements()) {
 			endCount1 = pageOrder.getTotalElements();
 		}
-		OrderStatus newOrder = OrderStatus.NEW;
-		OrderStatus orderCancelled = OrderStatus.CANCELLED;
-		OrderStatus orderSuccess = OrderStatus.SUCCESSFULL;
-		OrderStatus orderFailed = OrderStatus.FAILED;
-		OrderStatus orderPending = OrderStatus.PENDING;
 		
 		String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
 		

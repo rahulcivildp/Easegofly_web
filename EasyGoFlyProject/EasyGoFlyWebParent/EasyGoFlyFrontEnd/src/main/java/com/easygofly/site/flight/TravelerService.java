@@ -16,4 +16,5 @@ public class TravelerService {
 		
 		travellerRepo.save(travellerDetail);
 	}
+	
 }

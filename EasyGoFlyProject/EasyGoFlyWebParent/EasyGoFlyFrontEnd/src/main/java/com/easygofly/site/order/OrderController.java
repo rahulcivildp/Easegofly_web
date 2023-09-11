@@ -62,6 +62,7 @@ import com.easygofly.site.flight.CityService;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsController;
+import com.easygofly.site.flight.TravelerService;
 import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.order.exporter.OrderPDFExporter;
@@ -104,6 +105,7 @@ public class OrderController {
 	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private EntityManager entityManager;
 	@Autowired private SearchHistoryController searchHistoryController;
+	@Autowired private TravelerService travelerService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -1657,16 +1659,19 @@ public class OrderController {
     				Integer taxInt = Integer.parseInt(taxTravelerAdult) / searchId.getAdultNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
+    				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
 				} else if (travellerDetail.getPaxType().equals("2")) {
     				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
     				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getAdultNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
+    				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
 				} else {
     				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
     				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getAdultNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
+    				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
 				}
     			
     			String details = "{\r\n"
@@ -1708,6 +1713,8 @@ public class OrderController {
     					+ "}";
     			
     			travelerDetailsArray.add(details);
+
+				
     		}
         	
         	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
@@ -1747,7 +1754,6 @@ public class OrderController {
 				productService.updatePNROnline(productDetail, onlinePNR);
 				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
 				orderService.updateBookingId(order, onlineBookingId);
-				
 				
 				/* Get Booking Details */
 				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
