@@ -1570,6 +1570,8 @@ public class OrderController {
 		if (!productDetail.getTraceId().equals("offline")) {
 			
 			String[] airlineNoArray = productDetail.getFlightNum().split("-");
+			String isLeadPax = "false";
+			Integer countAdult = 0;
 		
 			for (TravellerDetail travellerDetail : travelers) {
 				BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
@@ -1660,18 +1662,28 @@ public class OrderController {
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
     				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+    				
+    				if (countAdult == 0) {
+						isLeadPax = "true";
+					} else {
+						isLeadPax = "false";
+					}
+    				countAdult++;
+    				System.out.println(countAdult);
 				} else if (travellerDetail.getPaxType().equals("2")) {
     				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
     				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getAdultNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
     				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+					isLeadPax = "false";
 				} else {
     				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
     				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getAdultNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
     				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+					isLeadPax = "false";
 				}
     			
     			String details = "{\r\n"
@@ -1699,7 +1711,7 @@ public class OrderController {
     					+ "     \"Nationality\": \"IN\",\r\n"
     					+ "		\"ContactNo\": \"" + order.getPhoneNumber() + "\",\r\n"
     					+ "		\"Email\": \"" + order.getContactEmail() + "\",\r\n"
-    					+ "		\"IsLeadPax\": true,\r\n"
+    					+ "		\"IsLeadPax\": " + isLeadPax + ",\r\n"
     					+ "		\"FFAirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
     					+ "		\"FFNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
     					+ baggageDetails

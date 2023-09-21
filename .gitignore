@@ -7,6 +7,7 @@
 *~
 .#*
 .*.md.html
+*.log
 .DS_Store
 .attach_pid*
 .classpath
