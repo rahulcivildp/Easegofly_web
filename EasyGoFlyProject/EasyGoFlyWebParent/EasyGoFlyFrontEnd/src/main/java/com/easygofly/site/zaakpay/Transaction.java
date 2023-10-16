@@ -97,6 +97,38 @@ public class Transaction {
     }
 
     //***********************************************************************************************************************//
+    
+  //************************************************* INITIATE INTERNATIONAL PAYMENT ***************************************************//
+
+    public ZaakpayApiRequestParameters processPaymentInternational(String orderId, String amount) throws Exception {
+
+        ZaakpayApiRequestParameters zaakpayApiRequestParameters = new ZaakpayApiRequestParameters();
+
+        String requestUrl = Config.ENVIRONMENT+Config.TRANSACTION_API_URL;
+        zaakpayApiRequestParameters.setRequestUrl(requestUrl);
+
+        //You can pass these values dynamically through function arguments
+        //String orderId = "ZPLive"+System.currentTimeMillis();
+       // String amount = "100" ; //In Paisa
+        
+//        System.out.println(amount + "   --   " + orderId);
+        RequestParameters order = new RequestParameters(Config.ZAAKPAY_MERCHANT_IDENTIFIER,Config.RETURN_URL_INTERNATIONAL,orderId,amount);
+        zaakpayApiRequestParameters.setRequestParameters(order.getPaymentRequestParameters());
+
+        String checksumString = ChecksumGenerator.getChecksumString(order.getPaymentRequestParameters());
+        System.out.println(checksumString);
+        // You can check the checksum string generated here.
+        String checksum = ChecksumGenerator.calculateChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString);
+        //System.out.println(checksum);
+        zaakpayApiRequestParameters.setChecksum(checksum);
+        
+//        System.out.println(checksumString + "checksum=" + zaakpayApiRequestParameters.getChecksum());
+
+        return zaakpayApiRequestParameters ;
+
+    }
+
+    //***********************************************************************************************************************//
     //****************************************** HANDLE ZAAKPAY CALLBACK RESPONSE *******************************************//
 
     public String[] getResponseParameters ()

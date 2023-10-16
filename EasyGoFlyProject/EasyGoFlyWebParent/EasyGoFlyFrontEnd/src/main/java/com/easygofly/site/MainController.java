@@ -16,11 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
+import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
@@ -29,10 +31,12 @@ import com.easygofly.entity.WebDetails;
 import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.FlightRepository;
+import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.DatabaseLoginSuccessHandler;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.CountryRepository;
 import com.easygofly.site.setting.web.WebSettingService;
 
 
@@ -46,6 +50,8 @@ public class MainController {
 	@Autowired private WebSettingService webSettingService;
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private BrandRepositoy brandRepo;
+	@Autowired private CountryRepository countryRepo;
+	@Autowired private SearchHistoryRepository searchRepo;
 	
 	@SuppressWarnings("unused")
 	private String tokenId = "";
@@ -53,8 +59,12 @@ public class MainController {
 	@GetMapping("/")
 	public String viewHomePage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
-		Iterable<City> cities = cityRepo.findAll();
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		model.addAttribute("cities", cities);
+		
+		Iterable<City> allCities = cityRepo.findAll();
+		model.addAttribute("allCities", allCities);
 		String email; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
@@ -149,6 +159,30 @@ public class MainController {
 	@GetMapping("/loading")
 	public String loading() {
 		return "loading";
+	}
+
+
+	@GetMapping("/loading___")
+	public String loadingSearchHistory(
+			@RequestParam(name = "searchId", required = false) Integer searchId, Model model) {
+		Country india = countryRepo.findById(106).get();
+		String searchURL = "";
+		
+		SearchHistory history = searchRepo.findById(searchId).get();
+		City cityOne = cityRepo.getCityByCode(history.getCityOne());
+		City cityTwo = cityRepo.getCityByCode(history.getCityTwo());
+		
+		
+		if (cityOne.getCountry() == india && cityTwo.getCountry() == india) {
+			searchURL = "/flight_search_" + searchId + "_pnr__0_0,0_active";
+			model.addAttribute("searchURL", searchURL);
+			
+		} else {
+			searchURL = "/flight_search_international_" + searchId + "_pnr__0_0,0_active";
+			model.addAttribute("searchURL", searchURL);
+		}
+		
+		return "loading/loading";
 	}
 	
 	@GetMapping("/find_brand")

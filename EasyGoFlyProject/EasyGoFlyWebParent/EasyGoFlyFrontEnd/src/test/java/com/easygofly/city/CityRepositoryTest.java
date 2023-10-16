@@ -11,8 +11,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.easygofly.entity.City;
+import com.easygofly.entity.Country;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.CityRepository;
+import com.easygofly.site.setting.CountryRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -21,6 +23,7 @@ import com.easygofly.site.flight.CityRepository;
 public class CityRepositoryTest {
 
 	@Autowired private CityRepository cityRepo;
+	@Autowired private CountryRepository countryRepo ;
 	
 	@Test
 	public void testUpdateCity() {
@@ -95,6 +98,15 @@ public class CityRepositoryTest {
 		cityRepo.saveAll(List.of(city1, city2, city3, city4, city5, city6, city7, city8, city9, city10, city11, city12, city13, city14, city15, city16, city17, city18, city19, city20, city21, city22, city23, city24, city25, 
 				city26, city27, city28, city29, city30, city31, city32, city33, city34, city35, city36, city37, city38, city39, city40, city41, city42, city43, city44, city45, city46, city47, city48, city49, city50, city51, city52,
 				city53, city54, city55, city56));
+	}
+	
+	@Test
+	public void testSetCountry() {
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.findAll();
+		for (City city : cities) {
+			city.setCountry(country);
+		}
 	}
 	
 }

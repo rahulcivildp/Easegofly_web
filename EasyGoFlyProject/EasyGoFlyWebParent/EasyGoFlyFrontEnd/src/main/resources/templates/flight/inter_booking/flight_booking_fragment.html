@@ -175,7 +175,7 @@
                 <div id="traveller_details_tab" style="margin-bottom: 15px;">
                     <div class="row">
                     	<div class="col-md-9" style="padding: 0;">
-                    	<form th:action="@{/traveller_details}" method="post">
+                    	<form th:action="@{/traveller_international_details}" method="post">
                             <div id="flight_details" class="booking_tiles back_white shadow">
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="accordion-item" style="background-color: #969393;">
@@ -340,17 +340,35 @@
 								                        <label for="datepick">Date of Birth</label>
 								                    </div>
 								                </div>
+								                <div class="col-md-3 col-12" style="padding: 0 0 0 31px;">
+								                    <div class="form-floating mb-3">
+								                        <input type="text" class="form-control" id="passportNo" th:value="${traveler.passportNo}" disabled>
+								                        <label for="floatingInput">Passport No.</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-3 col-12" style="padding: 0 35px;">
+								                    <div id="passportExpiryIdentify` + i + `" class="form-floating mb-4 d-flex">
+								                        <input 
+								                                type="date"
+								                                class="datepicker form-control border-2"
+								                                id="passportExpiryDatepicker` + i + `"
+								                                th:value="${traveler.passportExpiry}"
+								                                disabled>
+								                        <label for="passportExpiryDatepicker">Passport Expiry Date</label>
+								                    </div>
+								                </div>
 								                </div>
 	                                    </div>
 		                            </th:block>
 	                                
 	                                    <div id="appendTraveler" style="padding: 20px 10px 0;"></div>
 	                                    <script type="text/javascript">
-	
-		                                    var travelerIdAdult = [[${#lists.size(adultList)}]];
+		                                    var travelerId = [[${#lists.size(list)}]];
+	                                    
+		                                 	var travelerIdAdult = [[${#lists.size(adultList)}]];
 		                                    var travelerIdChild = [[${#lists.size(childList)}]];
 		                                    var travelerIdInfant = [[${#lists.size(infantList)}]];
-	
+		                                    
 		                                 	$(document).ready(function() {
 		                                 		listTraveler(travelerIdAdult, "Adult");
 		                                 		listTraveler(travelerIdChild, "Child");
@@ -358,18 +376,19 @@
 		                                 	});
 		                                 	
 		                                 	function listTraveler(traveler, type){
+												 
 												 value = 0;
 												 
 												 for (let i = 0; i < traveler; i++) {
 													
-													 if(type == "Adult") {
-														 value = 1;
-													 } else if(type == "Child") {
-														 value = 2;
-													 } else if(type == "Infant") {
-														 value = 3;
-													 }
-													 
+														 if(type == "Adult") {
+															 value = 1;
+														 } else if(type == "Child") {
+															 value = 2;
+														 } else if(type == "Infant") {
+															 value = 3;
+														 }
+		                                 			
 		                                 			htmlCode = `
 			                                    		<div class="row" style="padding: 0 7px;">
 										    			<div class="col-md-2 col-12 traveler_type_form" style="padding: 0 0 0 31px; font-size: 14px;">
@@ -420,7 +439,7 @@
 			                                    	}
 			                                    	
 			                                    	
-		                                 			if(value == 1) {
+		                                 			if(value == "1") {
 		                                 				$("#identify" + value + "-" + i).children().attr("id", "datepickerAdult" + value + "-" + i );
 			                                 			var dobidadt = $("#datepickerAdult" + value + "-" + i );
 			                                 			var today = new Date();
@@ -447,7 +466,7 @@
 						                                  `;
 						                                  salutation.html(htmlSal);
 						                                  
-		                                 			} else if(value == 2) {
+		                                 			} else if(value == "2") {
 			                                 				$("#identify" + value + "-" + i).children().attr("id", "datepickerChild" + value + "-" + i );
 				                                 			var dobidchd = $("#datepickerChild" + value + "-" + i );
 				                                 			//setting date for Child passenger
@@ -485,7 +504,7 @@
 									                          <option value="Miss">Miss</option>
 						                                  `;
 						                                  salutation.html(htmlSal);
-			                                 			} else if(value == 3) {
+			                                 			} else if(value == "3") {
 			                                 				$("#identify" + value + "-" + i).children().attr("id", "datepickerInfant" + value + "-" + i );
 				                                 			var dobidinf = $("#datepickerInfant" + value + "-" + i );
 				                                 			//setting date for Infant passenger
@@ -527,7 +546,7 @@
 			                                 			}
 			                                 		
 		                                 		} 
-											 };
+											};
 	                                    
 	                                    </script>
 	                                </div>
@@ -585,12 +604,12 @@
                             
                             
                             <div class="media_status" style="display: none;">
-                            	<div th:replace="flight/booking/bill_page :: bill_section('tag')"></div>
+                            	<div th:replace="flight/inter_booking/bill_page :: bill_section('tag')"></div>
                             </div>
                             
 		                    <div class="row">
 		                        <div class="col-md-12" style="border: 1px solid #a7a7a794; padding: 0;">
-		                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_home" style="float: left; color: white; text-decoration: none;">Home</a>
+		                          	<a th:href="@{'/flight_search_international_' + ${search.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_home" style="float: left; color: white; text-decoration: none;">Home</a>
 		                            <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next" style="float: right; border: none; color: white;" value="Next">
 		                        </div>
 		                        <div class="col-md-3"></div>
@@ -598,7 +617,7 @@
 		                    </form>
                         </div>
                         <div class="col-md-3 media-hide">
-                        	<div th:replace="flight/booking/bill_page :: bill_section('tag')"></div>
+                        	<div th:replace="flight/inter_booking/bill_page :: bill_section('tag')"></div>
                         </div>
                           
                     </div>

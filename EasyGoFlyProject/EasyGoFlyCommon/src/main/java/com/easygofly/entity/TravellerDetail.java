@@ -53,6 +53,13 @@ public class TravellerDetail {
 	
 	private String tax;
 	
+	@Column(name = "passport_no")
+	private String passportNo;
+	
+	@Column(name = "passport_expiry")
+	@Temporal(TemporalType.DATE)
+	private Date passportExpiry;
+	
 	@Column()
 	@Temporal(TemporalType.DATE)
 	private Date dob;
@@ -117,6 +124,25 @@ public class TravellerDetail {
 		this.baggageWT = baggageWT;
 		this.cabinBaggage = cabinBaggage;
 		this.travelerCountSerial = travelerCountSerial;
+	}
+	
+	
+
+	public TravellerDetail(String salutation, String firstName, String lastName, String paxType, Integer cabinBaggage,
+			Integer baggageWT, Integer travelerCountSerial, String passportNo, Date passportExpiry, Date dob,
+			ProductDetail productDetail, CartItem cartItem) {
+		this.salutation = salutation;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.paxType = paxType;
+		this.cabinBaggage = cabinBaggage;
+		this.baggageWT = baggageWT;
+		this.travelerCountSerial = travelerCountSerial;
+		this.passportNo = passportNo;
+		this.passportExpiry = passportExpiry;
+		this.dob = dob;
+		this.productDetail = productDetail;
+		this.cartItem = cartItem;
 	}
 
 	public Integer getId() {
@@ -253,6 +279,22 @@ public class TravellerDetail {
 
 	public void setTax(String tax) {
 		this.tax = tax;
+	}
+
+	public String getPassportNo() {
+		return passportNo;
+	}
+
+	public void setPassportNo(String passportNo) {
+		this.passportNo = passportNo;
+	}
+
+	public Date getPassportExpiry() {
+		return passportExpiry;
+	}
+
+	public void setPassportExpiry(Date passportExpiry) {
+		this.passportExpiry = passportExpiry;
 	}
 
 	public BaggageOnline getBaggageOnline() {

@@ -77,6 +77,21 @@ public class CartItemService {
 		return travelerRepo.save(updateTravelers);
 	}
 	
+	public TravellerDetail updateTravelerPassport(TravellerDetail traveler, String salutation, String firstName, String lastName, Date date, String passportNo, Date passportExpiry) {
+		TravellerDetail updateTravelers = travelerRepo.findById(traveler.getId()).get();
+		
+		if(updateTravelers.getId() != null) {
+			updateTravelers.setSalutation(salutation);
+			updateTravelers.setFirstName(firstName);
+			updateTravelers.setLastName(lastName);
+			updateTravelers.setDob(date);
+			updateTravelers.setPassportNo(passportNo);
+			updateTravelers.setPassportExpiry(passportExpiry);
+		}
+		
+		return travelerRepo.save(updateTravelers);
+	}
+	
 	public List<CartItem> listAll() {
 		return (List<CartItem>) cartRepo.findAll(Sort.by("firstName").ascending());
 	}

@@ -109,6 +109,8 @@ public class ProductDetail {
 	
 	private String mode;
 	
+	private boolean lcc;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
@@ -492,6 +494,14 @@ public class ProductDetail {
 		this.traceId = traceId;
 	}
 
+	public boolean isLcc() {
+		return lcc;
+	}
+
+	public void setLcc(boolean lcc) {
+		this.lcc = lcc;
+	}
+
 	public String getResultIndex() {
 		return resultIndex;
 	}
@@ -546,6 +556,10 @@ public class ProductDetail {
 	
 	public void addTravellerDetails(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial) {
 		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial));
+	}
+	
+	public void addTravellerDetails(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial, String passportNo, Date passportExpiry) {
+		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, paxType, cabinBaggage, baggageWT, travelerCountSerial, passportNo, passportExpiry, dob, this, cartItem));
 	}
 	
 	public void addTravellerDetailsReturn(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial) {

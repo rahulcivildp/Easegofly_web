@@ -352,5 +352,11 @@ public class ProductDetailService {
 	public List<TravellerDetail> findTravellerByOrderANDProductDetail(ProductDetail productDetail, Order order) {
 		return travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 	}
+	
+
+	public void methodLCC(ProductDetail flight, boolean lcc) {
+		flight.setLcc(lcc);
+		flightRepo.save(flight);
+	}
 
 }

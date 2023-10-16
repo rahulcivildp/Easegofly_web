@@ -13,12 +13,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.persistence.EntityManager;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
@@ -53,6 +50,7 @@ import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
 import com.easygofly.entity.Wallet;
+import com.easygofly.site.LogService;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
@@ -106,6 +104,7 @@ public class OrderController {
 	@Autowired private EntityManager entityManager;
 	@Autowired private SearchHistoryController searchHistoryController;
 	@Autowired private TravelerService travelerService;
+	@Autowired private LogService logService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -165,7 +164,7 @@ public class OrderController {
 		}
 	}
 
-	private void loginControl(String couponCode, String couponCode1, String totalPayment,
+	public void loginControl(String couponCode, String couponCode1, String totalPayment,
 			EasyGoFlyCustomerDetails loggedCustomer, CustomerOAuth2User googleLogin, ProductDetail flight,
 			SearchHistory search, CartItem item, PaymentMethod paymentMethod, String orderName, Order order,
 			List<TravellerDetail> travellerDetails, Coupon coupon, Coupon coupon1, CheckoutInfo checkoutInfo) {
@@ -493,8 +492,15 @@ public class OrderController {
 		
 		SearchHistory search = searchRepo.findById(search_id_inner).get();		
 		
-		ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+		if (productDetail.isLcc() == true) {
+			ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
+		} else {
+			bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+				productDetailsController.offeredFare, productDetailsController.serviceFee);
+		}
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -588,7 +594,7 @@ public class OrderController {
 		
 	}
 
-	private void methodSSR(ProductDetail productDetail) throws MalformedURLException, IOException {
+	public void methodSSR(ProductDetail productDetail) throws MalformedURLException, IOException {
 		/* SSR details */
     	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
         // Open a connection
@@ -967,8 +973,15 @@ public class OrderController {
 
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		
-		ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+		if (productDetail.isLcc() == true) {
+			ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
+		} else {
+			bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+				productDetailsController.offeredFare, productDetailsController.serviceFee);
+		}
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -1084,11 +1097,26 @@ public class OrderController {
 
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
 		
-		ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+		if (productDetail1.isLcc() == true) {
+			ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
-		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+		} else {
+			bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+					productDetailsController.offeredFare, productDetailsController.serviceFee);
+		}
+		
+		if (productDetail2.isLcc() == true) {
+			ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
 				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search);
-
+		} else {
+			bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discountReturn, 
+					productDetailsController.tdsOnIncentiveReturn, productDetailsController.tdsOnCommissionReturn, productDetailsController.tdsOnPLBReturn, productDetailsController.otherChargesReturn, 
+					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn);
+		}
+		
 		// Departure ticket segment ............................*****.....................
 		String pnr1 = productDetail1.getPnr();
 		model.addAttribute("pnrBarcodeOne", pnr1);
@@ -1400,12 +1428,26 @@ public class OrderController {
 		methodSSR(productDetail2);
 
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
-		
-		ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+		if (productDetail1.isLcc() == true) {
+			ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search);
+		} else {
+			bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+				productDetailsController.offeredFare, productDetailsController.serviceFee);
+		}
+		
+		if (productDetail2.isLcc() == true) {
 		ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
 				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search);
-
+		} else {
+			bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discountReturn, 
+					productDetailsController.tdsOnIncentiveReturn, productDetailsController.tdsOnCommissionReturn, productDetailsController.tdsOnPLBReturn, productDetailsController.otherChargesReturn, 
+					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn);
+		}
+		
 		// Departure ticket segment ............................*****.....................
 		String pnr1 = productDetail1.getPnr();
 		model.addAttribute("pnrBarcodeOne", pnr1);
@@ -1562,7 +1604,7 @@ public class OrderController {
 		
 	}
 	
-	private void ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+	public void ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
 			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId ) throws MalformedURLException, IOException {
 		List<String> travelerDetailsArray = new ArrayList<String>();
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
@@ -1672,14 +1714,14 @@ public class OrderController {
     				System.out.println(countAdult);
 				} else if (travellerDetail.getPaxType().equals("2")) {
     				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
-    				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getAdultNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getChildNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
     				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
 					isLeadPax = "false";
 				} else {
     				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
-    				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getAdultNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getInfantNum();
     				baseFare = "" + fareInt;
     				tax = "" + taxInt;
     				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
@@ -1743,6 +1785,7 @@ public class OrderController {
         	
         	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
         	System.out.println(jsonObjTicket);
+        	logService.generateLog(jsonObjTicket.toString());
         	try {
 				JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
 				JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
@@ -1778,6 +1821,199 @@ public class OrderController {
 				
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+			} catch (JSONException json) {
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				
+				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
+				hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
+			} 
+
+		}
+	}
+	
+	private void bookingDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, String discount, String tdsOnIncentive, String tdsOnCommission, String tdsOnPLB, String otherCharges, 
+			 String publishedFare, String offeredFare, String serviceFee ) throws IOException {
+		List<String> travelerDetailsArray = new ArrayList<String>();
+		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
+		
+		if (!productDetail.getTraceId().equals("offline")) {
+			
+			String[] airlineNoArray = productDetail.getFlightNum().split("-");
+			String isLeadPax = "false";
+			Integer countAdult = 0;
+		
+			for (TravellerDetail travellerDetail : travelers) {
+				BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
+				MealsOnline mealsOnline = travellerDetail.getMealOnline();
+				SeatsOnline seatsOnline = travellerDetail.getSeatsOnline();
+				
+    			Date getDOB = travellerDetail.getDob();
+    			Integer genNum = 0;
+    			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
+    				genNum = 1;
+    			} else {
+    				genNum = 2;
+    			}
+    			String baseFare = "";
+    			String tax = "";
+    			
+    			//baggage information
+    			String bagCode = baggageOnline.getCode(), bagWeight = baggageOnline.getWeight(), bagPrice = baggageOnline.getPrice();
+    			
+    			//meal information
+    			String mealCode = mealsOnline.getCode(), mealName = mealsOnline.getName(), mealQuantity = mealsOnline.getQuantity(), mealPrice = mealsOnline.getPrice();
+    			
+    			//seat information
+    			@SuppressWarnings("unused")
+				String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
+    					seatNo = seatsOnline.getSeatNo(), seatType = seatsOnline.getSeatType().toString(), seatDeck = seatsOnline.getDeck().toString(), seatCompartment = seatsOnline.getCompartment().toString(), 
+    					seatPrice = seatsOnline.getPrice(), seatCraftType = seatsOnline.getCraftType();
+
+    			
+    			if (travellerDetail.getPaxType().equals("1")) {
+    				Integer fareInt = Integer.parseInt(basefareTravelerAdult) / searchId.getAdultNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerAdult) / searchId.getAdultNum();
+    				baseFare = "" + fareInt;
+    				tax = "" + taxInt;
+    				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+    				
+    				if (countAdult == 0) {
+						isLeadPax = "true";
+					} else {
+						isLeadPax = "false";
+					}
+    				countAdult++;
+    				System.out.println(countAdult);
+				} else if (travellerDetail.getPaxType().equals("2")) {
+    				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getChildNum();
+    				baseFare = "" + fareInt;
+    				tax = "" + taxInt;
+    				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+					isLeadPax = "false";
+				} else {
+    				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
+    				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getInfantNum();
+    				baseFare = "" + fareInt;
+    				tax = "" + taxInt;
+    				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+					isLeadPax = "false";
+				}
+    			
+    			String details = "{\r\n"
+    					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
+    					+ "		\"FirstName\": \"" + travellerDetail.getFirstName() + "\",\r\n"
+    					+ "		\"LastName\": \"" + travellerDetail.getLastName() + "\",\r\n"
+    					+ "		\"PaxType\": " + travellerDetail.getPaxType() + ",\r\n"
+    					+ "		\"DateOfBirth\": \"" + getDOB + "T00:00:00\",\r\n"
+    					+ "		\"Gender\": " + genNum + ",\r\n"
+    					+ "		\"PassportNo\": \"\",\r\n"
+    					+ "		\"PassportExpiry\": \"\",\r\n"
+    					+ "		\"AddressLine1\": \"123, Test\",\r\n"
+    					+ "		\"AddressLine2\": \"\",\r\n"
+    					+ "		\"Fare\": {\r\n"
+    					+ "			\"BaseFare\": " + baseFare + ",\r\n"
+    					+ "			\"Tax\": " + tax + ",\r\n"
+    					+ "			\"YQTax\": 0.0,\r\n"
+    					+ "			\"AdditionalTxnFeePub\": 0.0,\r\n"
+    					+ "			\"AdditionalTxnFeeOfrd\": 0.0,\r\n"
+    					+ "			\"OtherCharges\": " + otherCharges + ",\r\n"
+    					+ "			\"Discount\": " + discount + ",\r\n"
+    					+ "			\"PublishedFare\": " + publishedFare + ",\r\n"
+    					+ "			\"OfferedFare\": " + offeredFare + ",\r\n"
+    					+ "			\"TdsOnCommission\": " + tdsOnCommission + ",\r\n"
+    					+ "			\"TdsOnPLB\": " + tdsOnPLB + ",\r\n"
+    					+ "			\"TdsOnIncentive\": " + tdsOnIncentive + ",\r\n"
+    					+ "			\"ServiceFee\": " + serviceFee + "\r\n"
+    					+ "		},\r\n"
+    					+ "		\"City\": \"Gurgaon\",\r\n"
+    					+ "		\"CountryCode\": \"IN\",\r\n"
+    					+ "		\"CountryName\": \"India\",      \r\n"
+    					+ "     \"Nationality\": \"IN\",\r\n"
+    					+ "		\"ContactNo\": \"" + order.getPhoneNumber() + "\",\r\n"
+    					+ "		\"Email\": \"" + order.getContactEmail() + "\",\r\n"
+    					+ "		\"IsLeadPax\": " + isLeadPax + ",\r\n"
+    					+ "		\"FFAirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+    					+ "		\"FFNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+    					+ "		\"GSTCompanyAddress\": \"\",\r\n"
+    					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
+    					+ "		\"GSTCompanyName\": \"\",\r\n"
+    					+ "		\"GSTNumber\": \"\",\r\n"
+    					+ "		\"GSTCompanyEmail\": \"\"\r\n"
+    					+ "}";
+    			
+    			travelerDetailsArray.add(details);
+
+				
+    		}
+        	
+        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+
+        	/* Ticket details */
+        	URL urlBook = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Book");
+            // Open a connection
+            HttpURLConnection connectionBook = (HttpURLConnection) urlBook.openConnection();
+            
+            StringBuilder responseBodyBook = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineBookingNonLCC(connectionBook, responseBodyBook, searchHistoryController.traceId, productDetail.getResultIndex(), arrayTraveler);
+        	
+        	JSONObject jsonObjBooking = new JSONObject(responseBodyBook.toString()); 
+        	System.out.println(jsonObjBooking);
+        	logService.generateLog(jsonObjBooking.toString());
+        	
+        	String bookingId = "", pnrBooking = "";
+        	Integer bookingIdInt = 0;
+        	
+        	try {
+				JSONObject jsonObjBookingResponse = jsonObjBooking.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+					pnrBooking = jsonObjBookingResponse.get("PNR").toString();
+					bookingId  = jsonObjBookingResponse.get("BookingId").toString();
+					bookingIdInt = Integer.parseInt(bookingId);
+				
+			} catch (Exception e) {
+				System.out.println("Not found!!");
+			}
+        	
+        	
+        	/* Ticket details */
+        	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+            // Open a connection
+            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
+            
+            StringBuilder responseBodyTicket = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineTicketNonLcc(connectionTicket, responseBodyTicket, searchHistoryController.traceId, pnrBooking, bookingIdInt);
+        	
+        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
+        	System.out.println(jsonObjTicket);
+        	logService.generateLog(jsonObjTicket.toString());
+        	try {
+				JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+				JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
+//        	JSONObject jsonObjectSegments = new JSONObject();
+				
+				String terminalDep = "", terminalArr = "";
+				for (int i = 0; i < jsonArraySegment.length(); i++) {
+					JSONObject jsonObjectSegments = jsonArraySegment.getJSONObject(i);
+					if (i == 0) {
+						terminalDep = jsonObjectSegments.getJSONObject("Origin").getJSONObject("Airport").get("Terminal").toString();
+					}
+					if (i == (jsonArraySegment.length() - 1)) {
+						terminalArr = jsonObjectSegments.getJSONObject("Destination").getJSONObject("Airport").get("Terminal").toString();
+					}
+				}
+				
+				String onlinePNR = jsonObjTicketResponse.get("PNR").toString();
+				String onlineBookingId = jsonObjTicketResponse.get("BookingId").toString();
+
+				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
+				productService.updatePNROnline(productDetail, onlinePNR);
+				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
+				orderService.updateBookingId(order, onlineBookingId);
+				
 			} catch (JSONException json) {
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				

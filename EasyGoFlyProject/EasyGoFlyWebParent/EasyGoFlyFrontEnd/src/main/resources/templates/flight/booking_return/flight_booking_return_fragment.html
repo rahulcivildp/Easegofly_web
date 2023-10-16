@@ -424,25 +424,43 @@
 	                                    <div id="appendTraveler" style="padding: 20px 10px 0;"></div>
 	                                    <script type="text/javascript">
 		                                    var travelerId = [[${#lists.size(list)}]];
-	                                    
+	
+		                                    var travelerIdAdult = [[${#lists.size(adultList)}]];
+		                                    var travelerIdChild = [[${#lists.size(childList)}]];
+		                                    var travelerIdInfant = [[${#lists.size(infantList)}]];
+		                                    
 		                                 	$(document).ready(function() {
-		                                 		for (let i = 0; i < travelerId; i++) {
+		                                 		listTraveler(travelerIdAdult, "Adult");
+		                                 		listTraveler(travelerIdChild, "Child");
+		                                 		listTraveler(travelerIdInfant, "Infant");
+		                                 	});
+		                                 	
+		                                 	function listTraveler(traveler, type){
+												 value = 0;
+												 
+												 for (let i = 0; i < traveler; i++) {
+													
+														 if(type == "Adult") {
+															 value = 1;
+														 } else if(type == "Child") {
+															 value = 2;
+														 } else if(type == "Infant") {
+															 value = 3;
+														 }
 		                                 			
 		                                 			htmlCode = `
 			                                    		<div class="row" style="padding: 0 7px;">
-										    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
+										    			<div class="col-md-2 col-12 traveler_type_form" style="padding: 0 0 0 31px; font-size: 14px;">
 										    				<div class="form-floating">
-									                        <select class="form-select" aria-label="Floating label select example" id="paxType` + i + `" name="paxType" required>
-									                            <option value="1">Adult</option>
-									                            <option value="2">Child</option>
-									                            <option value="3">Infant</option>
-									                        </select>
-									                        <label for="paxType">Type</label>
+															<input type="hidden" name="paxType" value="` + val + `" id="paxType` + val + `-` + i + `">
+										                    <div class="form-floating mb-3">
+										                        <b style="font-size: 24px; color: green;">` + type + `</b>
+										                    </div>
 										                	</div>
 										                </div>
 										                <div class="col-md-2 col-12">
 										                    <div class="form-floating">
-										                        <select class="form-select" style="margin-bottom: 16px;" id="salutation` + i + `" name="salutation" aria-label="Floating label select example" required>
+										                        <select class="form-select" style="margin-bottom: 16px;" id="salutation` + val + `-` + i + `" name="salutation" aria-label="Floating label select example" required>
 										                        </select>
 										                        <label for="salutation">Title</label>
 										                    </div>
@@ -460,11 +478,11 @@
 										                    </div>
 										                </div>
 										                <div class="col-md-2 col-12">
-										                    <div id="identify` + i + `" class="form-floating mb-4 d-flex">
+										                    <div id="identify` + val + `-` + i + `" class="form-floating mb-4 d-flex">
 										                        <input 
 										                                type="date"
 										                                class="datepicker form-control border-2"
-										                                id="datepicker` + i + `"
+										                                id="datepicker` + val + `-` + i + `"
 										                                name="dob" 
 										                                required>
 										                        <label for="datepicker" required>Date of Birth</label>
@@ -480,9 +498,9 @@
 			                                    	}
 			                                    	
 			                                    	
-		                                 			if($("#paxType" + i).val() == "1") {
-		                                 				$("#identify" + i).children().attr("id", "datepickerAdult" + i );
-			                                 			var dobidadt = $("#datepickerAdult" + i );
+		                                 			if(val == "1") {
+		                                 				$("#identify" + val + "-" + i).children().attr("id", "datepickerAdult" + val + "-" + i );
+			                                 			var dobidadt = $("#datepickerAdult" + val + "-" + i );
 			                                 			var today = new Date();
 					                                    var dd = today.getDate();
 					                                    var mm = today.getMonth() + 1; //January is 0!
@@ -499,7 +517,7 @@
 					                                    dobidadt.attr("min", "");
 					                                    
 					                                  	//setting salutation according to passenger type.
-						                                  var salutation = $("#salutation" + i);
+						                                  var salutation = $("#salutation" + val + "-" + i);
 						                                  htmlSal = `
 									                          <option selected value="Mr">Mr</option>
 									                          <option value="Mrs">Mrs</option>
@@ -507,12 +525,9 @@
 						                                  `;
 						                                  salutation.html(htmlSal);
 						                                  
-		                                 			}
-			                                 		
-			                                 		$("#paxType" + i).change(function() {
-			                                 			if($("#paxType" + i).val() == "2") {
-			                                 				$("#identify" + i).children().attr("id", "datepickerChild" + i );
-				                                 			var dobidchd = $("#datepickerChild" + i );
+		                                 			} else if(val == "2") {
+			                                 				$("#identify" + val + "-" + i).children().attr("id", "datepickerChild" + val + "-" + i );
+				                                 			var dobidchd = $("#datepickerChild" + val + "-" + i );
 				                                 			//setting date for Child passenger
 				                                 			var todayNow = new Date();
 						                                    var dd2 = todayNow.getDate();
@@ -542,16 +557,15 @@
 						                                    dobidchd.attr("min", today);
 						                                    
 						                                  //setting salutation according to passenger type.
-						                                  var salutation = $("#salutation" + i);
+						                                  var salutation = $("#salutation" + val + "-" + i);
 						                                  htmlSal = `
 									                          <option selected value="Mstr">Mstr</option>
 									                          <option value="Miss">Miss</option>
 						                                  `;
 						                                  salutation.html(htmlSal);
-						                                    
-			                                 			} else if($("#paxType" + i).val() == "3") {
-			                                 				$("#identify" + i).children().attr("id", "datepickerInfant" + i );
-				                                 			var dobidinf = $("#datepickerInfant" + i );
+			                                 			} else if(val == "3") {
+			                                 				$("#identify" + val + "-" + i).children().attr("id", "datepickerInfant" + val + "-" + i );
+				                                 			var dobidinf = $("#datepickerInfant" + val + "-" + i );
 				                                 			//setting date for Infant passenger
 				                                 			var todayNow = new Date();
 						                                    var dd2 = todayNow.getDate();
@@ -581,45 +595,17 @@
 						                                    dobidinf.attr("min", today);
 						                                    
 						                                  //setting salutation according to passenger type.
-							                                  var salutation = $("#salutation" + i);
+							                                  var salutation = $("#salutation" + val + "-" + i);
 							                                  htmlSal = `
 										                          <option selected value="Mstr">Mstr</option>
 										                          <option value="Miss">Miss</option>
 							                                  `;
 							                                  salutation.html(htmlSal);
 							                                  
-			                                 			} else if($("#paxType" + i).val() == "1") {
-			                                 				$("#identify" + i).children().attr("id", "datepickerAdult" + i );
-				                                 			var dobidadt = $("#datepickerAdult" + i );
-				                                 			//setting date for Adult passenger
-				                                 			var today = new Date();
-						                                    var dd = today.getDate();
-						                                    var mm = today.getMonth() + 1; //January is 0!
-						                                    var yyyy = today.getFullYear() - 18;
-						                                     if(dd<10){
-						                                            dd='0'+dd
-						                                        } 
-						                                        if(mm<10){
-						                                            mm='0'+mm
-						                                        } 
-					
-						                                    today = yyyy+'-'+mm+'-'+dd;
-						                                    dobidadt.attr("max", today);
-						                                    dobidadt.attr("min", "");
-						                                    
-						                                  	//setting salutation according to passenger type.
-							                                  var salutation = $("#salutation" + i);
-							                                  htmlSal = `
-										                          <option selected value="Mr">Mr</option>
-										                          <option value="Mrs">Mrs</option>
-										                          <option value="Miss">Miss</option>
-							                                  `;
-							                                  salutation.html(htmlSal);
-							                                  
 			                                 			}
-			                                 		});
+			                                 		
 		                                 		} 
-		                                 	});
+											};
 	                                    
 	                                    </script>
 	                                </div>

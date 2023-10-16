@@ -9,10 +9,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.easygofly.site.LogService;
 
 @Service
 public class OnlineFlightService {
+	@Autowired private LogService logService;
+	
 	@SuppressWarnings("unused")
 	public String tokenId = "";
 	public String traceId = "";
@@ -41,6 +46,7 @@ public class OnlineFlightService {
         		+ "}";
         
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -98,6 +104,7 @@ public class OnlineFlightService {
         		+ "}";
 
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -163,6 +170,7 @@ public class OnlineFlightService {
         		+ "}";
 
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -204,6 +212,7 @@ public class OnlineFlightService {
         		+ "}";
 
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -248,6 +257,7 @@ public class OnlineFlightService {
         		+ "}";
         
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
         
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
@@ -268,6 +278,133 @@ public class OnlineFlightService {
 		return responseCode;
 	}
 
+	public int apiOnlineBookingNonLCC(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
+			throws IOException {
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Create the request body
+        String requestBody = "{\r\n"
+        		+ "	\"ResultIndex\": \"" + resultIndex + "\",\r\n"
+        		+ "	\"Passengers\": " + arrayTraveler + "	,\r\n"
+        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
+        		+ "}";
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+	
+	public int apiOnlineTicketNonLcc(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, Integer bookingId) throws IOException {
+		// Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Create the request body
+        String requestBody = "{\r\n"
+        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TraceId\": \"" + traceId + "\",\r\n"
+                + "	\"PNR\": \"" + pnr + "\",\r\n"
+                + "	\"BookingId\": " + bookingId + "\r\n"
+        		+ "}";
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+	
+	public int apiOnlineTicketNonLccPassport(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, Integer bookingId, String arrayPassportList) throws IOException {
+		// Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Create the request body
+        String requestBody = "{\r\n"
+        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TraceId\": \"" + traceId + "\",\r\n"
+                + "\"Passport\": " + arrayPassportList + ",\r\n"
+                + "	\"PNR\": \"" + pnr + "\",\r\n"
+                + "	\"BookingId\": " + bookingId + "\r\n"
+        		+ "}";
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
 	
 	public int apiOnlineSSR(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
@@ -291,6 +428,7 @@ public class OnlineFlightService {
         		+ "}";
 
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());
@@ -333,6 +471,7 @@ public class OnlineFlightService {
         		+ "}";
 
         System.out.println(requestBody);
+        logService.generateLog(requestBody);
 		// Write the request body to the connection's output stream
 		OutputStream outputStream = connection.getOutputStream();
 		outputStream.write(requestBody.getBytes());

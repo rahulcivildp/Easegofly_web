@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,6 +24,10 @@ public class City {
 
 	@Column(nullable = false, name = "city_name")
 	private String cityName;
+	
+	@ManyToOne
+	@JoinColumn(name = "country_id")
+	private Country country;
 	
 	
 	public City() {}
@@ -70,6 +76,14 @@ public class City {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 	
 	

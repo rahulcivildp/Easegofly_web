@@ -1,5 +1,7 @@
 package com.easygofly.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,6 +31,9 @@ public class Country {
 	@OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("name asc")
 	private Set<State> states;
+	
+	@OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
+	private List<City> cities = new ArrayList<>();
 	
 	
 	public Country() {}
@@ -70,6 +75,13 @@ public class Country {
 		this.code = code;
 	}
 
+	public List<City> getCities() {
+		return cities;
+	}
+
+	public void setCities(List<City> cities) {
+		this.cities = cities;
+	}
 
 	@Override
 	public String toString() {

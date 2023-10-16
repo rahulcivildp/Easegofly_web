@@ -26,12 +26,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.City;
+import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.FlightMap;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.exception.ProductNotFoundException;
+import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
@@ -41,6 +43,7 @@ import com.easygofly.site.flight.ProductSaveHelper;
 import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.security.EasyGoFlyCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.CountryRepository;
 
 @Controller
 public class SearchHistoryController {
@@ -51,8 +54,10 @@ public class SearchHistoryController {
 	@Autowired private SearchHistoryRepository searchRepo;
 	@Autowired private ProductDetailsRepository productRepo;
 	@Autowired private CityRepository cityRepo;
+	@Autowired private CountryRepository countryRepo;
 	@Autowired private OnlineFlightService onlineFlightService;
 	@Autowired private ProductDetailsController productDetailsController;
+	@Autowired private LogService logService;
 	
 	private String searchURL = "";
 	private String searchReturnURL = "";
@@ -108,6 +113,7 @@ public class SearchHistoryController {
             
             onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
             System.out.println(jsonObj);
+            logService.generateLog(jsonObj.toString());
             
             connection.disconnect();
 
@@ -146,7 +152,8 @@ public class SearchHistoryController {
 
 		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
 		
-		Iterable<City> cities = cityRepo.findAll();
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		
 		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
@@ -189,7 +196,8 @@ public class SearchHistoryController {
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
 		Integer passengerNum = adultNum + childNum + infantNum;
-		Iterable<City> cities = cityRepo.findAll();
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		
 		System.out.println(date);
 		System.out.println(strDate);
@@ -224,7 +232,7 @@ public class SearchHistoryController {
 	}
 
 
-	private Integer searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
+	public Integer searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum,
 			String sortName, Model model, Date date) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
         URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
@@ -248,6 +256,7 @@ public class SearchHistoryController {
         
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
+        logService.generateLog(jsonObjSearch.toString());
         JSONArray jsonArrays = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(0);
         JSONArray jsonObjSegment = new JSONArray();
 		JSONObject mainObj = new JSONObject();
@@ -386,7 +395,7 @@ public class SearchHistoryController {
         return responseCode;
 	}
 
-	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
+	public void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
 		String traceIdStr = "offline";
 		
 		if (sortName.equals("pnr")) {
@@ -511,8 +520,9 @@ public class SearchHistoryController {
 		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
 
 		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
-		
-		Iterable<City> cities = cityRepo.findAll();
+
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		
 		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
@@ -557,7 +567,9 @@ public class SearchHistoryController {
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
 		Integer passengerNum = adultNum + childNum + infantNum;
-		Iterable<City> cities = cityRepo.findAll();
+		
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		
 		System.out.println(date);
 		System.out.println(strDate);
@@ -617,6 +629,7 @@ public class SearchHistoryController {
         
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
+        logService.generateLog(jsonObjSearch.toString());
         try {
         	JSONArray jsonArrays = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(0);
             JSONArray jsonObjSegment = new JSONArray();

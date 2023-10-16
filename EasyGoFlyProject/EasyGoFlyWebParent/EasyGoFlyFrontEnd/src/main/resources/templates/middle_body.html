@@ -488,6 +488,16 @@ body {
 	.displ {
 		display: none;
 	}
+	
+	.historybtn {
+	    border: none;
+	    background: transparent;
+	    color: rgb(86, 149, 34);
+	}
+	
+	.historybtn:hover {
+	    color: rgb(78 218 62);
+	}
 </style>
 
 <body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
@@ -516,30 +526,37 @@ body {
 			 <div class="row" style="margin:0 auto; padding:14px;">
 			 	
 			       <div class="col-4 text-center">
-			          <a th:if="${lastValue1} != null" th:href="@{'/flight_search_' + ${lastValue1.id} + '_pnr__0_0,0_active'}">
-			          	<div style="display: flex; justify-content: center;">
-				          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
-			          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
-			          	</div>
-			          
-			          
-			          </a>
+					   <form th:action="@{/loading___}" method="get" >
+						   <input type="hidden" name="searchId" th:value="${lastValue1.id}">
+						   <button type="submit" class="historybtn">
+					          	<div style="display: flex; justify-content: center;">
+						          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
+					          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
+					          	</div>
+						   </button>
+					   </form>
 			       </div>
 			       <div class="col-4 text-center">
-			          <a th:if="${lastValue2} != null" th:href="@{'/flight_search_' + ${lastValue2.id} + '_pnr__0_0,0_active'}">
-			          	<div style="display: flex; justify-content: center;">
-				          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
-				          	<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
-			          	</div>
-			          </a>
+					   <form th:action="@{/loading___}" method="get" >
+						   <input type="hidden" name="searchId" th:value="${lastValue2.id}">
+						   <button type="submit" class="historybtn">
+					          	<div style="display: flex; justify-content: center;">
+						          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
+				          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
+					          	</div>
+						   </button>
+					   </form>
 			       </div>
 			       <div class="col-4 text-center">
-			          <a th:if="${lastValue3} != null" th:href="@{'/flight_search_' + ${lastValue3.id} + '_pnr__0_0,0_active'}">
-			          	<div style="display: flex; justify-content: center;">
-				          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
-			          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
-			          	</div>
-			          </a>
+					   <form th:action="@{/loading___}" method="get" >
+						   <input type="hidden" name="searchId" th:value="${lastValue3.id}">
+						   <button type="submit" class="historybtn">
+					          	<div style="display: flex; justify-content: center;">
+						          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
+			          			<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
+					          	</div>
+						   </button>
+					   </form>
 			       </div>
 		        
 		    </div>
