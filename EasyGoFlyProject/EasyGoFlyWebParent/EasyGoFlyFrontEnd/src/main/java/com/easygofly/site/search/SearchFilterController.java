@@ -34,7 +34,6 @@ import com.easygofly.site.security.oauth.CustomerOAuth2User;
 
 @Controller
 public class SearchFilterController {
-	@Autowired private SearchHistoryController searchHistoryController;
 	@Autowired private ProductDetailsController productDetailsController ;
 	@Autowired private ProductDetailsRepository productRepo;
 	@Autowired private CityRepository cityRepo;
@@ -185,7 +184,7 @@ public class SearchFilterController {
 		
 		SearchHistory search = searchRepo.findById(id).get();
 		
-		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
+		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate(), productDetailsController.listProductDetailsOnline);
 
 		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
 		
@@ -218,7 +217,7 @@ public class SearchFilterController {
 		 
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 
-		searchSort(cityOne, cityTwo, sortName, model, date);
+		searchSort(cityOne, cityTwo, sortName, model, date, productDetailsController.listProductDetailsOnline);
 
 		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
 		
@@ -246,26 +245,26 @@ public class SearchFilterController {
 		
 	}
 	
-	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date) {
+	private void searchSort(String cityOne, String cityTwo, String sortName, Model model, Date date, List<ProductDetail> listProductDetails) {
 		String traceIdstr = "offline";
 		if (sortName.equals("pnr")) {
-			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
-			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("price")) {
-			searchHistoryController.listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date, traceIdstr);
-			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
+			listProductDetails = productService.listAllFlightsByPrice(cityOne, cityTwo, date, traceIdstr);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("duration")) {
-			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
-			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("arrTime")) {
-			searchHistoryController.listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date, traceIdstr);
-			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
+			listProductDetails = productService.listAllFlightsByArrival(cityOne, cityTwo, date, traceIdstr);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("depTime")) {
-			searchHistoryController.listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date, traceIdstr);
-			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
+			listProductDetails = productService.listAllFlightsByDeparture(cityOne, cityTwo, date, traceIdstr);
+			model.addAttribute("listProducts", listProductDetails);
 		} else if (sortName.equals("brand")) {
-			searchHistoryController.listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
-			model.addAttribute("listProducts", searchHistoryController.listProductDetails);
+			listProductDetails = productService.listAllFlights(cityOne, cityTwo, date, traceIdstr, Sort.by(sortName).ascending());
+			model.addAttribute("listProducts", listProductDetails);
 		}
 	}
 }

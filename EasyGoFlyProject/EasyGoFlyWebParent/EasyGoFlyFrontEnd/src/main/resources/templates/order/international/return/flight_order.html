@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
+<head>
+	<link rel="icon" th:href="@{${SITE_LOGO}}" type="image/png">
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+	<title>Flight Booking Page</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/css/front_style.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{/css/NewFile.css}" >
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+ 	 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+ 	 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/login.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}" >
+	<script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+	  <!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	
+	<!-- Vendor CSS Files -->
+	<link th:href="@{assets/vendor/animate.css/animate.min.css}" rel="stylesheet">
+	<link th:href="@{assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+	<link th:href="@{assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+	<link th:href="@{assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+	<link th:href="@{assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+	
+	<!-- Template Main CSS File -->
+	<link th:href="@{assets/css/style.css}" rel="stylesheet">
+</head>
+<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'">
+	
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  
+  <div th:replace="whatsapp :: content"></div>
+
+<div th:replace="order/international/return/flight_order_fragment :: flight_booking('tag')"></div>
+ 
+<footer th:replace="fragments :: page_footer"></footer>
+</body>
+</html>

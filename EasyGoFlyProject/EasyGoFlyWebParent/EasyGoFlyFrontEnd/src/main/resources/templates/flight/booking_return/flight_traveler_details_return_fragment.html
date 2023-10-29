@@ -700,7 +700,7 @@
 																		travelerBaggageOne[count] = parseInt(response);
 																		
 																	}).fail(function(){
-																		alert("Could not connect to the server.");
+																		alert("Could not connect to the server. traveler [[@{/find_baggage_}]]");
 																	});
 																	
 																	baggageInfant2 = $("#baggageSelect" + [[${traveler.id}]]).val();
@@ -711,7 +711,7 @@
 																		travelerBaggageTwo[count] = parseInt(response);
 																		
 																	}).fail(function(){
-																		alert("Could not connect to the server.");
+																		alert("Could not connect to the server. traveler2 [[@{/find_baggage_}]]");
 																	});
 																</script>
 						                                		<script type="text/javascript">
@@ -723,7 +723,7 @@
 																		travelerSeatOne[count] = parseInt(response);
 					
 																	}).fail(function(){
-																		alert("Could not connect to the server.");
+																		alert("Could not connect to the server. traveler [[@{/find_seat_}]]");
 																	});
 																	
 																	seatInfant2 = $("#seatSeletTwo"  + [[${traveler2.id}]]).val();
@@ -734,7 +734,7 @@
 																		travelerSeatTwo[count] = parseInt(response);
 					
 																	}).fail(function(){
-																		alert("Could not connect to the server.");
+																		alert("Could not connect to the server. traveler2 [[@{/find_seat_}]]");
 																	});
 																	
 																</script>
@@ -805,7 +805,7 @@
 											                            </div>
 											                            <div class="col-6 extra_detail_inner_div">
 																			<div class="extra_detail_heading" style="border: none;">
-											                                	<p class="extra_detail_heading_para">Destination</p>
+											                                	<p class="extra_detail_heading_para">Return</p>
 											                                </div>
 											                                <div class="extra_detail_selection_div">
 																				<i style="color: black;" class="fa-solid fa-chair"></i>
@@ -841,7 +841,7 @@
 														travelerMealOne[count] = parseInt(response);
 														
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														alert("Could not connect to the server. [[@{/find_meal_}]]");
 													});
 													
 													
@@ -858,7 +858,7 @@
 														travelerMealTwo[count] = parseInt(response);
 														
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														alert("Could not connect to the server. [[@{/find_meal_}]]");
 													});
 													
 													
@@ -876,7 +876,7 @@
 																showTotalPriceFunction();
 																
 															}).fail(function(){
-																alert("Could not connect to the server.");
+																alert("Could not connect to the server. [[@{/find_meal_}]]");
 															});
 													});
 													
@@ -894,7 +894,7 @@
 																showTotalPriceFunction();
 																
 															}).fail(function(){
-																alert("Could not connect to the server.");
+																alert("Could not connect to the server. [[@{/find_meal_}]]");
 															});
 													});
 													
@@ -916,7 +916,7 @@
 												    	$.post(urlComponentsSave, params, function() {
 												    		
 												    	}).fail(function(){
-											    			alert("Something went wrong in the server!");
+											    			alert("Something went wrong in the server! [[@{/save_every_return_components}]]");
 												    	});
 												    });
 												    
@@ -929,7 +929,7 @@
 												    	$.post(urlMealChangeSave, params, function() {
 												    		
 												    	}).fail(function(){
-											    			alert("Something went wrong in the server!");
+											    			alert("Something went wrong in the server! [[@{/save_meal}]]");
 												    	});
 												    });
 												    
@@ -942,7 +942,7 @@
 												    	$.post(urlMealChangeSave2, params2, function() {
 												    		
 												    	}).fail(function(){
-											    			alert("Something went wrong in the server!");
+											    			alert("Something went wrong in the server! [[@{/save_meal}]]");
 												    	});
 												    });
 											   </script>
@@ -960,7 +960,7 @@
 														travelerBaggageOne[count] = parseInt(response);
 														
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														alert("Could not connect to the server. [[@{/find_baggage_}]]");
 													});
 													
 													
@@ -976,7 +976,7 @@
 														travelerBaggageTwo[count] = parseInt(response);
 														
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														alert("Could not connect to the server. [[@{/find_baggage_}]]");
 													});
 													
 													
@@ -994,7 +994,7 @@
 																showTotalPriceFunction();
 																
 															}).fail(function(){
-																alert("Could not connect to the server.");
+																alert("Could not connect to the server. [[@{/find_baggage_}]]");
 															});
 													});
 													
@@ -1012,7 +1012,7 @@
 																showTotalPriceFunction();
 																
 															}).fail(function(){
-																alert("Could not connect to the server.");
+																alert("Could not connect to the server. [[@{/find_baggage_}]]");
 															});
 													});
 													
@@ -1031,7 +1031,7 @@
 											    	$.post(urlBaggageChangeSave, params, function() {
 											    		
 											    	}).fail(function(){
-										    			alert("Something went wrong in the server!");
+										    			alert("Something went wrong in the server! [[@{/save_baggage}]]");
 											    	});
 											    });
 											    
@@ -1044,7 +1044,7 @@
 											    	$.post(urlBaggageChangeSave2, params2, function() {
 											    		
 											    	}).fail(function(){
-										    			alert("Something went wrong in the server!");
+										    			alert("Something went wrong in the server! [[@{/save_baggage}]]");
 											    	});
 											    });
 											    
@@ -1063,7 +1063,7 @@
 														travelerSeatOne[count] = parseInt(response);
 	
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														alert("Could not connect to the server. traveler [[@{/find_seat_}]]");
 													});
 													
 													seat2 = $("#seatSeletTwo"  + [[${traveler2.id}]]).val();
@@ -1078,7 +1078,7 @@
 														travelerSeatTwo[count] = parseInt(response);
 	
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														alert("Could not connect to the server. traveler2 [[@{/find_seat_}]]");
 													});
 													
 													$("#seatSelet"  + [[${traveler.id}]]).change(function(){
@@ -1096,7 +1096,7 @@
 															showTotalPriceFunction();
 															
 														}).fail(function(){
-															alert("Could not connect to the server.");
+															alert("Could not connect to the server. traveler [[@{/find_seat_}]]");
 														});
 														
 										    		 });
@@ -1116,7 +1116,7 @@
 															showTotalPriceFunction();
 															
 														}).fail(function(){
-															alert("Could not connect to the server.");
+															alert("Could not connect to the server. traveler2 [[@{/find_seat_}]]");
 														});
 														
 										    		 });
@@ -1134,7 +1134,7 @@
 											    	$.post(urlSeatChangeSave, params, function() {
 											    		
 											    	}).fail(function(){
-										    			alert("Something went wrong in the server!");
+										    			alert("Something went wrong in the server! [[@{/save_seat}]]");
 											    	});
 											    });
 											    
@@ -1147,7 +1147,7 @@
 											    	$.post(urlSeatChangeSave2, params2, function() {
 											    		
 											    	}).fail(function(){
-										    			alert("Something went wrong in the server!");
+										    			alert("Something went wrong in the server! [[@{/save_seat}]]");
 											    	});
 											    });
 											    
@@ -1420,7 +1420,7 @@
 				`;
 				brandImg.append(htmlImg);
 			}).fail(function(){
-				alert("Could not connect to the server.");
+				alert("Could not connect to the server. [[@{/find_brand_}]]");
 			});
 			
 			return false;

@@ -71,8 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/", "/favicon/**", "/site-logo/**", "/customers/**", "/login**", "/registration/**", "/hotel", "/about/**", 
 					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml",
 					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search_return_save",  "/flight_search**",
-					"/flight_international_search_save", "/flight_search-noUser**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", "/get_value", "/rishikesh_view", 
-					"/shimla_view", "/kolkata_view", "/darjeeling_view", "/bangalore_view", "/kerala_view", "/mumbai_view", 
+					"/flight_international_search_save", "/flight_international_search_return_save", "/flight_search-noUser**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", 
+					"/get_value", "/rishikesh_view", "/shimla_view", "/kolkata_view", "/darjeeling_view", "/bangalore_view", "/kerala_view", "/mumbai_view", 
 					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/noUser_search_filter", 
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**", 
 					"/flight_search-noUser_filter_**", "/save_meal", "/test").permitAll()

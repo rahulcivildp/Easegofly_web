@@ -121,13 +121,6 @@ public class ProductDetailsRestController {
 		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  productDetailsController.mealsOnlineList,  productDetailsController.baggageOnlineList,  productDetailsController.seatsOnlineList);
 	}
 	
-	@PostMapping("/save_every_components_international")
-	public void saveEveryComponentsInter(@Param("id") Integer id, @Param("seatId") Integer seatId, @Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
-		
-		TravellerDetail travellerDetail =  travellerRepo.findById(id).get();
-		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
-	}
-
 	@PostMapping("/save_every_return_components")
 	public void saveEveryReturnComponents(@Param("travelerIdOne") Integer travelerIdOne, @Param("travelerIdTwo") Integer travelerIdTwo, @Param("seatId") Integer seatId, 
 			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode, @Param("seatIdTwo") Integer seatIdTwo, @Param("mealCodeTwo") String mealCodeTwo, 
@@ -138,4 +131,23 @@ public class ProductDetailsRestController {
 		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  productDetailsController.mealsOnlineList,  productDetailsController.baggageOnlineList,  productDetailsController.seatsOnlineList);
 		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  productDetailsController.mealsOnlineList,  productDetailsController.baggageOnlineList,  productDetailsController.seatsOnlineList);
 	}
+
+	@PostMapping("/save_every_components_international")
+	public void saveEveryComponentsInter(@Param("id") Integer id, @Param("seatId") Integer seatId, @Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
+		
+		TravellerDetail travellerDetail =  travellerRepo.findById(id).get();
+		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
+	}
+
+	@PostMapping("/save_every_return_components_international")
+	public void saveEveryReturnComponentsInter(@Param("travelerIdOne") Integer travelerIdOne, @Param("travelerIdTwo") Integer travelerIdTwo, @Param("seatId") Integer seatId, 
+			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode, @Param("seatIdTwo") Integer seatIdTwo, @Param("mealCodeTwo") String mealCodeTwo, 
+			@Param("baggageCodeTwo") String baggageCodeTwo) {
+		TravellerDetail travellerDetail =  travellerRepo.findById(travelerIdOne).get();
+		TravellerDetail travellerDetailTwo =  travellerRepo.findById(travelerIdTwo).get();
+
+		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
+		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
+	}
+
 }

@@ -2,9 +2,7 @@ package com.easygofly.site.flight;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,12 +13,15 @@ import org.springframework.stereotype.Service;
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.Customer;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
+import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
+import com.easygofly.site.search.SearchHistoryRepository;
 
 @Service
 @Transactional
@@ -32,7 +33,7 @@ public class ProductDetailService {
 	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private TravellerRepository travellerRepo;
-	@Autowired private ProductDetailsController productDetailsController;
+	@Autowired private SearchHistoryRepository searchRepo;
 	
 	public Product searchFlights(Integer id, String cityOne, String cityTwo) {
 		Product productBycity = productRepo.findProductByCity(cityOne, cityTwo);
@@ -63,6 +64,7 @@ public class ProductDetailService {
 		List<ProductDetail> productDetails = flightRepo.findFlightByCity(cityOne, cityTwo, sort);
 		return productDetails;
 	}
+	
 	public List<ProductDetail> listAllFlights(String cityOne, String cityTwo, Date date, String traceId, Sort sort) {
 		
 		List<ProductDetail> productDetails = flightRepo.findFlightByDateAndCity(date, cityOne, cityTwo, traceId, sort);
@@ -274,11 +276,12 @@ public class ProductDetailService {
 		return flightRepo.save(savedFlightPassengerDetails);
 	}
 	
-	public List<TravellerDetail> setMealBaggageSeatOnline(List<TravellerDetail> travellerDetails2, String[] mealCode, String[] baggageCode, Integer[] seatId) {
+	public List<TravellerDetail> setMealBaggageSeatOnline(List<TravellerDetail> travellerDetails2, String[] mealCode, String[] baggageCode, Integer[] seatId, List<BaggageOnline> baggageOnlineList,
+			List<MealsOnline> mealList, List<SeatsOnline> seatsOnlineList) {
 		
-		List<BaggageOnline> baggageOnlineList = productDetailsController.baggageOnlineList;
-		List<MealsOnline> mealList = productDetailsController.mealsOnlineList;
-		List<SeatsOnline> seatsOnlineList = productDetailsController.seatsOnlineList;
+		List<BaggageOnline> baggageOnlineListLocal = baggageOnlineList;
+		List<MealsOnline> mealListLocal = mealList;
+		List<SeatsOnline> seatsOnlineListLocal = seatsOnlineList;
 		String mealCodeStr = "", baggageCodeStr = "";
 		Integer seatIdInt = 0;
 		List<TravellerDetail> travellerDetails = travellerDetails2;
@@ -294,14 +297,14 @@ public class ProductDetailService {
 				
 				
 				
-				for (BaggageOnline baggageOnline : baggageOnlineList) {
+				for (BaggageOnline baggageOnline : baggageOnlineListLocal) {
 					if (baggageOnline.getCode().equals(baggageCodeStr) ) {
 						travellerDetail.setBaggage(baggageCodeStr + "|" + baggageOnline.getWeight() + "|" + baggageOnline.getPrice());
 						travellerDetail.setBaggageWT(Integer.parseInt(baggageOnline.getWeight()));
 					} 
 				}
 				
-				for (MealsOnline mealsOnline : mealList) {
+				for (MealsOnline mealsOnline : mealListLocal) {
 					
 					String mealName = "";
 					if (mealsOnline.getCode().equals("NoMeal") ) {
@@ -317,7 +320,7 @@ public class ProductDetailService {
 				}
 				
 				
-				for (SeatsOnline seatsOnline : seatsOnlineList) {
+				for (SeatsOnline seatsOnline : seatsOnlineListLocal) {
 					if (seatsOnline.getId() == seatIdInt ) {
 						travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
 						+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
@@ -329,7 +332,7 @@ public class ProductDetailService {
 			} else {
 				
 				
-				for (SeatsOnline seatsOnline : seatsOnlineList) {
+				for (SeatsOnline seatsOnline : seatsOnlineListLocal) {
 					if (seatsOnline.getId() == seatIdInt ) {
 						travellerDetail.setSeat(seatsOnline.getCompartment() + "|" + seatsOnline.getDeck() + "|" + seatsOnline.getRowNo() 
 						+ "|" + seatsOnline.getSeatNo() + "|" + seatsOnline.getPrice() + "|" + seatsOnline.getSeatType() + "|" + seatsOnline.getAvailablityType() 
@@ -353,10 +356,26 @@ public class ProductDetailService {
 		return travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 	}
 	
-
 	public void methodLCC(ProductDetail flight, boolean lcc) {
 		flight.setLcc(lcc);
 		flightRepo.save(flight);
 	}
-
+	
+	public SearchHistory searcHistorySave(ProductDetail productDetail, String cityOne, String cityTwo, Integer passengerNum, String journeyClass,
+			String tripType, Integer adultNum, Integer childNum, Integer infantNum, Customer customer) {
+		SearchHistory history = new SearchHistory();
+		history.setDate(productDetail.getDate());
+		history.setCityOne(cityOne);
+		history.setCityTwo(cityTwo);
+		history.setPassengerNum(passengerNum);
+		history.setJourneyClass(journeyClass);
+		history.setTripType(tripType);
+		history.setAdultNum(adultNum);
+		history.setChildNum(childNum);
+		history.setInfantNum(infantNum);
+		history.setCustomer(customer);
+		
+		return searchRepo.save(history);
+	}
+	
 }

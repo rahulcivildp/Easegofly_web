@@ -43,5 +43,11 @@ public class FlightMap {
 	public void setFlightIdTwo(Integer flightIdTwo) {
 		this.flightIdTwo = flightIdTwo;
 	}
+
+	
+	@Override
+	public String toString() {
+		return "FlightMap [id=" + id + ", flightIdOne=" + flightIdOne + ", flightIdTwo=" + flightIdTwo + "]";
+	}
 	
 }

@@ -1,28 +1,31 @@
 package com.easygofly.site.search;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.SearchHistory;
+import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerRepository;
+import com.easygofly.site.flightAPI.OnlineFlightService;
 
 @Service
 @Transactional
 public class SearchHistoryService {
 	
-	@Autowired
-	private CustomerRepository customerRepo;
-	
-	@Autowired
-	private SearchHistoryRepository searchRepo;
-	
-	@Autowired
-	private EntityManager entityManager;
+	@Autowired private CustomerRepository customerRepo;
+	@Autowired private SearchHistoryRepository searchRepo;
+	@Autowired private EntityManager entityManager;
+	@Autowired private OnlineFlightService onlineFlightService;
+	@Autowired private LogService logService;
 	
 	public Customer saveSearchHistory(Customer customer) {
 		Customer userLoggedin = customerRepo.findById(customer.getId()).get();
@@ -80,4 +83,45 @@ public class SearchHistoryService {
 	public Customer getByEmail(String email) {
 		return customerRepo.getCustomerByEmail(email);
 	}
+	
+	public void authenticationFlight(Model model) {
+		try {
+        	
+        	// Create URL object with the API end-point
+            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+
+            // Open a connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+        	StringBuilder responseBody = new StringBuilder();
+        	
+            int authCode = onlineFlightService.apiAuthentication(connection, responseBody);
+            
+            JSONObject jsonObj = new JSONObject(responseBody.toString());
+            JSONObject jsonObjInnerError = jsonObj.getJSONObject("Error");
+            JSONObject jsonObjInnerMember = jsonObj.getJSONObject("Member");
+             
+            model.addAttribute("authCode", authCode);
+            model.addAttribute("responseBody", jsonObj);
+            model.addAttribute("memberName", jsonObjInnerMember.get("FirstName") + " " + jsonObjInnerMember.get("LastName"));
+            model.addAttribute("memberEmail", jsonObjInnerMember.get("Email"));
+            model.addAttribute("memberId", jsonObjInnerMember.get("MemberId"));
+            model.addAttribute("memberAgencyId", jsonObjInnerMember.get("AgencyId"));
+            model.addAttribute("memberLoginName", jsonObjInnerMember.get("LoginName"));
+            model.addAttribute("memberLoginDetails", jsonObjInnerMember.get("LoginDetails"));
+            model.addAttribute("memberIsPrimaryAgent", jsonObjInnerMember.get("isPrimaryAgent"));
+            model.addAttribute("errorCode", jsonObjInnerError.get("ErrorCode"));
+            model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
+            
+            onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
+            System.out.println(jsonObj);
+            logService.generateLog(jsonObj.toString());
+            
+            connection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
 }

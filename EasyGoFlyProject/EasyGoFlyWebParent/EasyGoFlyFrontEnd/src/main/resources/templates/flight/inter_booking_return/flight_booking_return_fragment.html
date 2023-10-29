@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+		th:fragment="flight_booking">
+
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({ 
+                    autoclose: true,
+                    todayHighlight: true,
+                    changeMonth: true,
+                    changeYear: true
+            }).datepicker('update', new Date());
+        });
+    </script>
+    <style>
+        .tile-align {
+            float: left;
+        }
+        .reviews {
+            padding: 10px 0;
+        }
+        .reviews p {
+            margin: 0;
+        }
+        .choosen_request {
+            background-color: #969393;
+        }
+        #time-limit {
+            margin: 0px;
+            padding: 0px;
+            background: #f8f4a2;
+        }
+        .circles {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            background-color: #344755;
+            margin: 0 auto;
+            z-index: 1;
+        }
+        .progress_border {
+            border: 1px solid green;
+            position: relative;
+            bottom: 65px;
+            margin: 0 auto;
+            width: 68%;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        .buttn_stly {
+            float: right;
+            width: 60%;
+            vertical-align: middle;
+            border-radius: 0 !important;
+            padding: 8px !important;
+            background-color: #ecf5fd;
+        }
+        .buttn_stly:hover {
+            background-color: #dcdcdc;
+        }
+        .accordion-header {
+            margin-bottom: 0;
+            background-color: #ecf5fd;
+        }
+        .buttn_stly_eff {
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important;
+        }
+        .onward {
+			position: absolute;
+            margin-top: 10px;
+            background-color: #1369f5;
+            color: white;
+            padding: 6px 11px;
+            width: 10%;
+            border-radius: 0 20px 20px 0;
+        }
+        .non_stop {
+            text-align: center;
+            margin: 0;
+            font-size: 12px;
+            color: red;
+        }
+        .form-floating > .bi-calendar-date + .datepicker_input + label {
+            padding-left: 3.5rem;
+            z-index: 3;
+        }
+        .dest_box {
+            margin: 5px;
+            text-align: center;
+            background-color: #22a9bf;
+            color: white;
+        }
+        .summary_btn_stl {
+            float: left;
+            background-color: white;
+            width: 100%;
+        }
+        .booking_tiles {
+            border: 1px solid #a7a7a794; 
+            margin-bottom: 15px;
+        }
+        .booking_footer_btn {
+            background-color: #d32f2f;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+        .booking_footer_btn p {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            margin: 0;
+        }
+        .booking_page_off {
+            display: none;
+        }
+        .booking_page_on {
+            display: block;
+        }
+        .circles_active {
+            background-color: #2abd2a !important;
+        }
+    </style>
+    <body>
+		<div style="background-color:#061123; padding-top: 120px;"></div>
+        <div class="choosen_request">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 reviews">
+                        <p style="color: red;">Your Selection <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+                    </div>
+                    <div class="col-md-8 reviews">
+                        <div class="row">
+                            <div style="color: white;">
+                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityOne}]]</b></p>
+                                <p class="tile-align">&nbsp; - &nbsp;</p>
+                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityTwo}]]</b></p>
+                                <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
+                                <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
+                                <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="styleLinkButton styleLink" th:href="@{'/flight_search_' + ${search.id} + '_pnr__0_0,0_active'}" style="background-color: white; float: right; margin: 6px 0;"> Change Flight</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="time-limit">
+	        <div class="container">
+	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
+	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
+	                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
+	            </div>
+	        </div>
+	    </div>
+        <div id="booking_page">
+            <div class="container">
+                <div class="media-hide">
+                    <div class="row" style="padding: 20px 0;">
+                        <div class="col-md-4">
+                            <div class="circles circles_active" id="c1"></div>
+                            <div class="progress_div">
+                            	<P class="booki_page_p progress_div_active">Traveller Details</P>
+							</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="circles" id="c2"></div>
+                            <div class="progress_div">
+                            	<P class="booki_page_p">Review</P>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="circles " id="c3"></div>
+                            <div class="progress_div">
+                            	<P class="booki_page_p ">Payment</P>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress_border"></div>
+                </div>
+                <div id="traveller_details_tab" style="margin-bottom: 15px;">
+                    <div class="row">
+                    	<div class="col-md-9" style="padding: 0;">
+                    	<form th:action="@{/traveller_details_international_return}" method="post">
+                            <div id="flight_details" class="booking_tiles back_white shadow">
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item" style="background-color: #969393;">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <div aria-expanded="true">
+                                                <div class="row">
+                                                    <div class="col-md-8 col-4"><p style="margin: 0;font-size: 16px;padding: 8px;">Flight Details</p></div>
+                                                    <div class="col-md-4 col-8">
+                                                        <button class="accordion-button buttn_stly collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne" data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" id="button_collapse">Show More</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body" style="background: #efefef; color: #858385">
+                                            	<h2>Stop Details</h2>
+												<th:block th:each="stop : ${flightOne.stops}">
+												<div class="row" style="border-bottom: 1px solid grey; border-top: 1px solid grey; padding-bottom: 5px;">
+                                                    <div class="col-md-4">
+                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                        	<h2 style="margin: 0;">[[${stop.cityName}]]</h2>
+                                                            <b>[[${flightOne.brand}]]</b>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                    	<div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                        	<h5 style="margin: 0;">Arrival: </h5>
+                                                        	<br>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${stop.arrTime}]]</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style=" display: flex; justify-content: center; align-items: center; padding-left: 15px;">
+                                                    	<img th:src="@{/images/pngwingcomffe.png}" width="100%" height="25">
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                    	<div  style="float: left; font-size: 15px; padding: 10px 10px;">
+                                                        	<h5 style="margin: 0;">Departure: </h5>
+                                                        	<br>
+                                                            <h4 id="pnr_id" name="pnr_id" style="margin: 0;">[[${stop.depTime}]]</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4"></div>
+                                                </div>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="onward onwars_responsive"><p style="margin: 0;">Onward</p></div>
+                                    	<div class="row media-hide" style="padding-top: 18px;">
+											<div class="col-6 progress_div" ><h4>Destination Flight</h4></div>
+											<div class="col-6 progress_div"><h4>Return Flight</h4></div>
+										</div>
+                                        <div class="row">
+											<div class="col-12 col-md-6">
+												<div class="row" style="padding: 0 18px 18px 18px;">
+													<div class="col-12 media_status_flex_CPN progress_div" style="padding-top: 54px; display: none;">
+														<h4>Destination Flight</h4>
+													</div>
+		                                            <div class="col-md-12 flight_detail_box">
+		                                                <div class="row">
+		                                                    <div class="col-md-4 col-3">
+		                                                    	<div th:id="'brandImage' + ${flightOne.id}" style="float: left; padding: 15px 20px 10px;"></div>
+		                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+		                                                            <b>[[${flightOne.brand}]]</b>
+		                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightOne.flightNum}]]</p>
+		                                                        </div>
+		                                                    </div>
+		                                                    <div class="col-md-8 col"> 
+		                                                        <div class="row">
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.depTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightOne.cityOne}]]</p>
+		                                                            </div>
+		                                                            <div class="col-md-7 col">
+		                                                                <div>
+																			<th:block th.if="${flightOne.stopNum} == '0'">
+																				<p class="non_stop">Non-stop</p>
+																			</th:block>
+																			<th:block th.if="${flightOne.stopNum} >= '0'">
+																				<p class="non_stop">[[${flightTwo.stopNum}]] Stop</p>
+																			</th:block>
+		                                                                </div>
+		                                                                <div>
+		                                                                    
+		                                                                </div>
+		                                                                <div class="row">
+		                                                                    <div class="col-md-3"></div>
+		                                                                    <div class="col-md-3" style="font-size: 12px; padding: 0; text-align: center;">
+		                                                                        <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>0h 30m</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
+		                                                                        <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> 00kg</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3"></div>
+		                                                                </div>
+		                                                            </div>
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightOne.arrTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightOne.cityTwo}]]</p>
+		                                                            </div>
+		                                                            <div class="col-12 media_status" style="display: none;">
+		                                                            	<div class="row">
+						                                                    <div style="margin: 16px 0; padding: 0 30px;">
+						                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${itemOne.totalPrice}]]/-</span> </p>
+						                                                    </div>
+						                                                </div>
+		                                                            </div>
+		                                                        </div>
+		                                                    </div>
+		                                                </div>
+		                                            </div>
+		                                        </div>
+											</div>
+											<div class="col-12 col-md-6">
+												<div class="row" style="padding: 0 18px 18px 18px;">
+													<div class="col-12 media_status_flex_CPN progress_div" style="display: none;">
+														<h4>Return Flight</h4>
+													</div>
+		                                            <div class="col-md-12 flight_detail_box">
+		                                                <div class="row">
+		                                                    <div class="col-md-4 col-3">
+		                                                    	<div th:id="'brandImageTwo' + ${flightTwo.id}" style="float: left; padding: 15px 20px 10px;"></div>
+		                                                        <div  style="float: left; font-size: 15px; padding: 10px 10px;">
+		                                                            <b>[[${flightTwo.brand}]]</b>
+		                                                            <p id="pnr_id" name="pnr_id" style="margin: 0;">[[${flightTwo.flightNum}]]</p>
+		                                                        </div>
+		                                                    </div>
+		                                                    <div class="col-md-8 col"> 
+		                                                        <div class="row">
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightTwo.depTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightTwo.cityOne}]]</p>
+		                                                            </div>
+		                                                            <div class="col-md-7 col">
+		                                                                <div>
+																			<th:block th.if="${flightTwo.stopNum} == '0'">
+																				<p class="non_stop">Non-stop</p>
+																			</th:block>
+																			<th:block th.if="${flightTwo.stopNum} >= '0'">
+																				<p class="non_stop">[[${flightTwo.stopNum}]] Stop</p>
+																			</th:block>
+		                                                                </div>
+		                                                                <div>
+		                                                                    
+		                                                                </div>
+		                                                                <div class="row">
+		                                                                    <div class="col-md-3"></div>
+		                                                                    <div class="col-md-3" style="font-size: 12px; padding: 0; text-align: center;">
+		                                                                        <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><span>0h 30m</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3" style="font-size: 12px;padding: 0; text-align: center; background-color: wheat; border: 1px dashed grey;">
+		                                                                        <i class="fa fa-ship" aria-hidden="true" style=" margin-right: 4px;"></i><span> 00kg</span>
+		                                                                    </div>
+		                                                                    <div class="col-md-3"></div>
+		                                                                </div>
+		                                                            </div>
+		                                                            <div class="col-md-2 col" style="padding: 7px 0 0 0; text-align:center;">
+		                                                                <h2 style="font-size: 24px; margin: 0;">[[${flightTwo.arrTime}]]</h2>
+		                                                                <p style="margin: 0;">[[${flightTwo.cityTwo}]]</p>
+		                                                            </div>
+		                                                            <div class="col-12 media_status" style="display: none;">
+		                                                            	<div class="row">
+						                                                    <div style="margin: 16px 0; padding: 0 30px;">
+						                                                        <p style="float: right; margin: 0;"> Total Price <b>&#8377;</b><span style="font-size: 20px; font-weight: 600;"> [[${itemTwo.totalPrice}]]/-</span> </p>
+						                                                    </div>
+						                                                </div>
+		                                                            </div>
+		                                                        </div>
+		                                                    </div>
+		                                                </div>
+		                                            </div>
+		                                        </div>
+											</div>
+										</div>
+                                </div>
+                            </div>
+                            
+                           		
+	                            <div id="traveller_detailss" class="booking_tiles back_white shadow">
+	                                <div style="background-color: #ecf5fd;">
+	                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Traveler Details</p>
+	                                </div>
+	                                <div>
+	                                <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
+									<input type="hidden" name="flightOne_id" id="flightOne_id" th:value="${flightOne.id}">
+									<input type="hidden" name="itemOne_id" id="itemOne_id" th:value="${itemOne.id}">
+									<input type="hidden" name="flightTwo_id" id="flightTwo_id" th:value="${flightTwo.id}">
+									<input type="hidden" name="itemTwo_id" id="itemTwo_id" th:value="${itemTwo.id}">
+									<th:block th:each="traveler : ${travelers}">
+		                            	<div style="padding-top: 20px;">
+											<input type="hidden" th:id="'existing_traveller_id' + ${flightOne.id}" th:value="${traveler.id}">
+	                                    	<div class="row" style="padding: 0 7px;">
+								    			<div class="col-md-2 col-12" style="padding: 0 0 0 31px; font-size: 14px;">
+										            <div class="form-floating" >
+								                        <select class="form-select" aria-label="Floating label select example" disabled>
+								                        	<th:block th:if="${traveler.paxType}== '1'">
+								                            	<option th:value="${traveler.paxType}">Adult</option>
+								                            </th:block>
+								                            <th:block th:if="${traveler.paxType} == '2'">
+								                            	<option th:value="${traveler.paxType}">Child</option>
+								                            </th:block>
+								                            <th:block th:if="${traveler.paxType} == '3'">
+								                            	<option th:value="${traveler.paxType}">Infant</option>
+								                            </th:block>
+								                        </select>
+								                        <label for="floatingSelect">Type</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-2 col-12" style="margin-bottom: 14px;">
+								                    <div class="form-floating" >
+								                        <select class="form-select" aria-label="Floating label select example" disabled>
+								                            <option selected >[[${traveler.salutation}]]</option>
+								                        </select>
+								                        <label for="floatingSelect">Title</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-3 col-12">
+								                    <div class="form-floating mb-3">
+								                        <input type="text" class="form-control"  th:value="${traveler.firstName}" disabled>
+								                        <label for="floatingInput">First Name</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-3 col-12">
+								                    <div class="form-floating mb-3">
+								                        <input type="text" class="form-control" id="lastName"  th:value="${traveler.lastName}" disabled>
+								                        <label for="floatingInput">Last Name</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-2 col-12">
+								                    <div class="form-floating mb-4 d-flex">
+								                        <input 
+								                                type="date"
+								                                class="datepicker form-control border-2"
+								                                id="datepick"
+								                                th:value="${traveler.dob}" disabled
+								                                >
+								                        <label for="datepick">Date of Birth</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-3 col-12" style="padding: 0 0 0 31px;">
+								                    <div class="form-floating mb-3">
+								                        <input type="text" class="form-control" id="passportNo" th:value="${traveler.passportNo}" disabled>
+								                        <label for="floatingInput">Passport No.</label>
+								                    </div>
+								                </div>
+								                <div class="col-md-3 col-12" style="padding: 0 35px;">
+								                    <div id="passportExpiryIdentify` + i + `" class="form-floating mb-4 d-flex">
+								                        <input 
+								                                type="date"
+								                                class="datepicker form-control border-2"
+								                                id="passportExpiryDatepicker` + i + `"
+								                                th:value="${traveler.passportExpiry}"
+								                                disabled>
+								                        <label for="passportExpiryDatepicker">Passport Expiry Date</label>
+								                    </div>
+								                </div>
+								                </div>
+	                                    </div>
+		                            </th:block>
+	                                
+	                                    <div id="appendTraveler" style="padding: 20px 10px 0;"></div>
+	                                    <script type="text/javascript">
+		                                    var travelerId = [[${#lists.size(list)}]];
+	
+		                                    var travelerIdAdult = [[${#lists.size(adultList)}]];
+		                                    var travelerIdChild = [[${#lists.size(childList)}]];
+		                                    var travelerIdInfant = [[${#lists.size(infantList)}]];
+		                                    
+		                                 	$(document).ready(function() {
+		                                 		listTraveler(travelerIdAdult, "Adult");
+		                                 		listTraveler(travelerIdChild, "Child");
+		                                 		listTraveler(travelerIdInfant, "Infant");
+		                                 	});
+		                                 	
+		                                 	function listTraveler(traveler, type){
+												 val = 0;
+												 
+												 for (let i = 0; i < traveler; i++) {
+													
+														 if(type == "Adult") {
+															 val = 1;
+														 } else if(type == "Child") {
+															 val = 2;
+														 } else if(type == "Infant") {
+															 val = 3;
+														 }
+		                                 			
+		                                 			htmlCode = `
+			                                    		<div class="row" style="padding: 0 7px;">
+										    			<div class="col-md-2 col-12 traveler_type_form" style="padding: 0 0 0 31px; font-size: 14px;">
+										    				<div class="form-floating">
+															<input type="hidden" name="paxType" value="` + val + `" id="paxType` + val + `-` + i + `">
+										                    <div class="form-floating mb-3">
+										                        <b style="font-size: 24px; color: green;">` + type + `</b>
+										                    </div>
+										                	</div>
+										                </div>
+										                <div class="col-md-2 col-12">
+										                    <div class="form-floating">
+										                        <select class="form-select" style="margin-bottom: 16px;" id="salutation` + val + `-` + i + `" name="salutation" aria-label="Floating label select example" required>
+										                        </select>
+										                        <label for="salutation">Title</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-3 col-12">
+										                    <div class="form-floating mb-3">
+										                        <input type="text" class="form-control" name="firstName" placeholder="name@example.com" required>
+										                        <label for="floatingInput">First Name</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-3 col-12">
+										                    <div class="form-floating mb-3">
+										                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="name@example.com" required>
+										                        <label for="floatingInput">Last Name</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-2 col-12">
+										                    <div id="identify` + val + `-` + i + `" class="form-floating mb-4 d-flex">
+										                        <input 
+										                                type="date"
+										                                class="datepicker form-control border-2"
+										                                id="datepicker` + val + `-` + i + `"
+										                                name="dob" 
+										                                required>
+										                        <label for="datepicker" required>Date of Birth</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-3 col-12" style="padding: 0 0 0 31px;">
+										                    <div class="form-floating mb-3">
+										                        <input type="text" class="form-control" id="passportNo" name="passportNo" required>
+										                        <label for="floatingInput">Passport No.</label>
+										                    </div>
+										                </div>
+										                <div class="col-md-3 col-12" style="padding: 0 35px;">
+										                    <div id="passportExpiryIdentify` + i + `" class="form-floating mb-4 d-flex">
+										                        <input 
+										                                type="date"
+										                                class="datepicker form-control border-2"
+										                                id="passportExpiryDatepicker` + i + `"
+										                                name="passportExpiry"
+										                                required>
+										                        <label for="passportExpiryDatepicker">Passport Expiry Date</label>
+										                    </div>
+										                </div>
+										                </div>
+										                </div>
+			                                    	`;
+			                                    	
+			                                    	valTraveler = $("#existing_traveller_id" + [[${flightOne.id}]]).val();
+			                                    	if(valTraveler == null){
+				                                    	$("#appendTraveler").append(htmlCode);
+				                                    	
+			                                    	}
+			                                    	
+			                                    	
+		                                 			if(val == "1") {
+		                                 				$("#identify" + val + "-" + i).children().attr("id", "datepickerAdult" + val + "-" + i );
+			                                 			var dobidadt = $("#datepickerAdult" + val + "-" + i );
+			                                 			var today = new Date();
+					                                    var dd = today.getDate();
+					                                    var mm = today.getMonth() + 1; //January is 0!
+					                                    var yyyy = today.getFullYear() - 18;
+					                                     if(dd<10){
+					                                            dd='0'+dd
+					                                        } 
+					                                        if(mm<10){
+					                                            mm='0'+mm
+					                                        } 
+				
+					                                    today = yyyy+'-'+mm+'-'+dd;
+					                                    dobidadt.attr("max", today);
+					                                    dobidadt.attr("min", "");
+					                                    
+					                                  	//setting salutation according to passenger type.
+						                                  var salutation = $("#salutation" + val + "-" + i);
+						                                  htmlSal = `
+									                          <option selected value="Mr">Mr</option>
+									                          <option value="Mrs">Mrs</option>
+									                          <option value="Miss">Miss</option>
+						                                  `;
+						                                  salutation.html(htmlSal);
+						                                  
+		                                 			} else if(val == "2") {
+			                                 				$("#identify" + val + "-" + i).children().attr("id", "datepickerChild" + val + "-" + i );
+				                                 			var dobidchd = $("#datepickerChild" + val + "-" + i );
+				                                 			//setting date for Child passenger
+				                                 			var todayNow = new Date();
+						                                    var dd2 = todayNow.getDate();
+						                                    var mm2 = todayNow.getMonth() + 1; 
+						                                    var yyyy2 = todayNow.getFullYear() - 5;
+						                                    if(dd2<10){
+					                                            dd2='0'+dd2
+					                                        } 
+					                                        if(mm2<10){
+					                                            mm2='0'+mm2
+					                                        }
+						                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
+						                                    dobidchd.attr("max", todayNow);
+						                                    
+						                                    var today = new Date();
+						                                    var dd = today.getDate();
+						                                    var mm = today.getMonth() + 1; //January is 0!
+						                                    var yyyy = today.getFullYear() - 12;
+						                                     if(dd<10){
+						                                            dd='0'+dd
+						                                        } 
+						                                        if(mm<10){
+						                                            mm='0'+mm
+						                                        } 
+					
+						                                    today = yyyy+'-'+mm+'-'+dd;
+						                                    dobidchd.attr("min", today);
+						                                    
+						                                  //setting salutation according to passenger type.
+						                                  var salutation = $("#salutation" + val + "-" + i);
+						                                  htmlSal = `
+									                          <option selected value="Mstr">Mstr</option>
+									                          <option value="Miss">Miss</option>
+						                                  `;
+						                                  salutation.html(htmlSal);
+			                                 			} else if(val == "3") {
+			                                 				$("#identify" + val + "-" + i).children().attr("id", "datepickerInfant" + val + "-" + i );
+				                                 			var dobidinf = $("#datepickerInfant" + val + "-" + i );
+				                                 			//setting date for Infant passenger
+				                                 			var todayNow = new Date();
+						                                    var dd2 = todayNow.getDate();
+						                                    var mm2 = todayNow.getMonth() + 1; 
+						                                    var yyyy2 = todayNow.getFullYear();
+						                                    if(dd2<10){
+					                                            dd2='0'+dd2
+					                                        } 
+					                                        if(mm2<10){
+					                                            mm2='0'+mm2
+					                                        }
+						                                    todayNow = yyyy2+'-'+mm2+'-'+dd2;
+						                                    dobidinf.attr("max", todayNow);
+						                                    
+						                                    var today = new Date();
+						                                    var dd = today.getDate();
+						                                    var mm = today.getMonth() + 1; //January is 0!
+						                                    var yyyy = today.getFullYear() - 5;
+						                                     if(dd<10){
+						                                            dd='0'+dd
+						                                        } 
+						                                        if(mm<10){
+						                                            mm='0'+mm
+						                                        } 
+					
+						                                    today = yyyy+'-'+mm+'-'+dd;
+						                                    dobidinf.attr("min", today);
+						                                    
+						                                  //setting salutation according to passenger type.
+							                                  var salutation = $("#salutation" + val + "-" + i);
+							                                  htmlSal = `
+										                          <option selected value="Mstr">Mstr</option>
+										                          <option value="Miss">Miss</option>
+							                                  `;
+							                                  salutation.html(htmlSal);
+							                                  
+			                                 			}
+			                                 		
+		                                 		} 
+											};
+	                                    
+	                                    </script>
+	                                </div>
+	                                
+	                            </div>
+	                            
+	                            
+                            <div id="contact_details" class="booking_tiles back_white shadow">
+                                <div style="background-color: #ecf5fd;">
+                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Contact Details</p>
+                                </div>
+                                <div>
+                                    
+                                    <div class="row" style=" margin: 16px 10px;">
+                                        <div class="col-md-4">
+                                        <p style=" margin: 8px 0 8px 30px;">&nbsp;</p>
+                                            <div class="form-floating mb-3">
+                                                <input type="email" class="form-control" id="floatingInput" th:value="${itemOne.email}" name="email" placeholder="name@example.com">
+                                                <label for="floatingInput">Email ID :</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                        <p style=" margin: 8px 0 8px 30px;">SMS will be sent to this number</p>
+                                            <div class="form-floating mb-3">
+                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:field="${itemOne.phoneNum}" maxlength="12">
+                                                <label for="floatingInput">Phone No :</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="farerule_details" class="booking_tiles back_white shadow">
+                                <div style="background-color: #ecf5fd;">
+	                                <div class="row">
+	                                	<div class="col-8">
+	                                    	<p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Farerule Details Departure</p>
+	                                    </div>
+	                                	<div class="col-4" >
+	                                		<button class="accordion-button buttn_stly collapsed" type="button" style="text-align: right;" aria-expanded="false" aria-controls="flush-collapseTwo" data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" id="button_collapse">Show</button>
+	                                	</div>
+	                                </div>
+                                </div>
+                                <div>
+                                    
+		                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+		                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
+		                                	<p th:utext="${jsonObjFareruleOne}"></p>
+		                                </div>
+		                            </div>
+                                </div>
+                            </div>
+                            
+                            <div id="farerule_details_return" class="booking_tiles back_white shadow">
+                                <div style="background-color: #ecf5fd;">
+	                                <div class="row">
+	                                	<div class="col-8">
+	                                    	<p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Farerule Details Return</p>
+	                                    </div>
+	                                	<div class="col-4" >
+	                                		<button class="accordion-button buttn_stly collapsed" type="button" style="text-align: right;" aria-expanded="false" aria-controls="flush-collapseThree" data-bs-target="#flush-collapseThree" data-bs-toggle="collapse" id="button_collapseThree">Show</button>
+	                                	</div>
+	                                </div>
+                                </div>
+                                <div>
+                                    
+		                            <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+		                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
+		                                	<p th:utext="${jsonObjFareruleTwo}"></p>
+		                                </div>
+		                            </div>
+                                </div>
+                            </div>
+                            
+                            <div class="media_status" style="display: none;">
+                            	<div th:replace="flight/inter_booking_return/bill_page_return :: bill_section('tag')"></div>
+                            </div>
+                            
+		                    <div class="row">
+		                        <div class="col-md-12" style="border: 1px solid #a7a7a794; padding: 0;">
+		                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_home" style="float: left; color: white; text-decoration: none;">Home</a>
+		                            <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next" style="float: right; border: none; color: white;" value="Next">
+		                        </div>
+		                        <div class="col-md-3"></div>
+		                    </div>
+		                    </form>
+                        </div>
+                        <div class="col-md-3 media-hide">
+                        	<div th:replace="flight/inter_booking_return/bill_page_return :: bill_section('tag')"></div>
+                        </div>
+                          
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+     
+    </body>
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+			checkBrand($("#brandImage" + [[${flightOne.id}]]));
+			checkBrand($("#brandImageTwo" + [[${flightTwo.id}]]));
+		});
+
+		function checkBrand(brandImg) {
+			brandName = "[[${flightOne.brand}]]";
+			url = "[[@{/find_brand_}]]" + brandName;
+			
+			$.get(url, function(response) {
+				htmlImg = `
+					<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
+				`;
+				brandImg.append(htmlImg);
+			}).fail(function(){
+				alert("Could not connect to the server.");
+			});
+			
+			return false;
+		};
+	</script>
+ 
+    <script>
+        $("#button_collapse").click(function(){
+            $(this).toggleClass("buttn_stly_eff");
+        })
+    </script>
+    <script>
+        $("#footer_home").click(function(){
+            window.location.replace("https://fiction-world.com/travels/");
+        })
+
+        $("#c1").addClass("circles_active");
+     
+    </script>
+    <link th:href="@{css/custom.css}" rel="stylesheet">
+</html>

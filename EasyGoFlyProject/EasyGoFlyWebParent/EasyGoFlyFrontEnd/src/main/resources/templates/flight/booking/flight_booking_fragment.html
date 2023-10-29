@@ -245,7 +245,12 @@
                                                             </div>
                                                             <div class="col-md-8 col">
                                                                 <div>
-                                                                    <p class="non_stop">Non-Stop</p>
+																	<th:block th.if="${flight.stopNum} == '0'">
+																		<p class="non_stop">Non-stop</p>
+																	</th:block>
+																	<th:block th.if="${flight.stopNum} >= '0'">
+																		<p class="non_stop">[[${flight.stopNum}]] Stop</p>
+																	</th:block>
                                                                 </div>
                                                                 <div>
                                                                     

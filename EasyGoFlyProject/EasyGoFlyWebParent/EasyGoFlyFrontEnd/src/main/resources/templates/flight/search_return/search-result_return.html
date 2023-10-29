@@ -313,7 +313,7 @@
         <div class="container">
             <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
                 <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
-                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
+                <span id="timer" style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;"></span>
             </div>
         </div>
     </div>
@@ -847,6 +847,29 @@
     }
 
 </script>
+     <script>
+	    // Set the date and time to count down to (in this example, it's set to 10 minutes from the current time)
+	    var countDownDate = new Date().getTime() + 6 * 60 * 1000;
+	
+	    // Update the countdown every second
+	    var x = setInterval(function() {
+	      var now = new Date().getTime();
+	      var distance = countDownDate - now;
+	
+	      // Calculate remaining time
+	      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+	
+	      // Display the countdown timer in the "timer" div
+	      document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+	
+	      // When the countdown timer reaches zero, display a message
+	      if (distance < 2) {
+	        clearInterval(x);
+	        document.location.href = '[[@{/}]]';
+	      }
+	    }, 0);
+	  </script>
 
 
 <link th:href="@{css/custom.css}" rel="stylesheet">

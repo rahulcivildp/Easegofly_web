@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,15 +57,17 @@ public class ProductDetailsController {
 	@Autowired private CartItemService cartService;
 	@Autowired private TravellerRepository travelerRepo;
 	@Autowired private CheckoutService checkoutService;
-	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	@Autowired private OnlineFlightService onlineFlightService;
-	@Autowired private SearchHistoryController searchHistoryController;
-	@Autowired private TravelerService travelerService;
 	@Autowired private LogService logService;
-	
+	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
+	@Autowired private SearchHistoryController sHistoryController;
+
+	public List<ProductDetail> listProductDetails;
+	public List<ProductDetail> listProductDetailsInSearch = new ArrayList<ProductDetail>();
 	public List<ProductDetail> listProductDetailsOnline;
 	public List<ProductDetail> listProductDetailsOnlineReturn;
 	public List<FlightMap> flightMaps;
+	
 	List<BaggageOnline> baggageOnlineList = new ArrayList<BaggageOnline>();
 	List<MealsOnline> mealsOnlineList = new ArrayList<MealsOnline>();
 	List<SeatsOnline>  seatsOnlineList = new ArrayList<SeatsOnline>();
@@ -81,22 +82,21 @@ public class ProductDetailsController {
 	public String basefareTravelerAdult = "", taxTravelerAdult = "", passengerTypeAdult = "";
 	public String basefareTravelerChild = "", taxTravelerChild = "", passengerTypeChild = "";
 	public String basefareTravelerInfant = "", taxTravelerInfant = "", passengerTypeInfant = "";
-	
 	public String basefareTravelerAdultReturn = "", taxTravelerAdultReturn = "", passengerTypeAdultReturn = "";
 	public String basefareTravelerChildReturn = "", taxTravelerChildReturn = "", passengerTypeChildReturn = "";
 	public String basefareTravelerInfantReturn = "", taxTravelerInfantReturn = "", passengerTypeInfantReturn = "";
-	
 	public String depTerminal = "",arrTerminal = "",airlineCOde = "", flightNumber = "", flightClass = "", 
 			airlineName = "", cabinBaggage = "", baggage = "", duration = "", flightStatus = "", stopOver = "", 
 			airportCodeOrigin = "", airportCodeDestination = "", craftType = "";
-	
 	public String traceId ="" , resultIndex ="";
-	public boolean lcc = true;
-	public boolean lccReturn = true;
-	
 	public String discount ="" , tdsOnIncentive ="", tdsOnCommission ="", tdsOnPLB ="", otherCharges ="", publishedFare ="", offeredFare ="", serviceFee ="";
 	public String discountReturn ="" , tdsOnIncentiveReturn ="", tdsOnCommissionReturn ="", tdsOnPLBReturn ="", otherChargesReturn ="", publishedFareReturn ="", offeredFareReturn ="", serviceFeeReturn ="";
 	
+	public boolean lcc = true;
+	public boolean lccReturn = true;
+
+	////Flight one-way segment
+
 	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")
 	public String filghtTravelerDetailsSave(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id, 
@@ -126,7 +126,8 @@ public class ProductDetailsController {
 		
 		
 		try {
-			fareQuoteMethod(model, flight, mealsOnlineList, baggageOnlineList, seatsOnlineList);
+			fareQuoteMethod(model, flight);
+			
 		}  catch (IOException e) {
 			return "redirect:/flight_booking" + search.getId() + "&" + flight.getId() + "&" + item.getId();
 		}
@@ -142,7 +143,6 @@ public class ProductDetailsController {
 		
 		return "flight/booking/flight_traveler_details";
 	}
-
 
 	@PostMapping("/traveller_details")
 	public String saveTravellerDetails(@RequestParam(name = "search_id") Integer searchId, 
@@ -212,7 +212,199 @@ public class ProductDetailsController {
 		return  "redirect:/flight_traveler_details" + searchId + "&" + flightId + "&" + item_id;
 	}
 	
-	public void fareQuoteMethod(Model model, ProductDetail flight, List<MealsOnline> mealsList, List<BaggageOnline> baggageList, List<SeatsOnline>  seatsList) throws MalformedURLException, IOException {
+	@PostMapping("/flight_booking_save")
+	public String filghtBookingSave(@RequestParam(name = "search_id") float searchId, 
+			@RequestParam(name = "flight_id") Integer flightId, 
+			@RequestParam(name = "adultNum") Integer adultNum,
+			@RequestParam(name = "childNum") Integer childNum,
+			@RequestParam(name = "infantNum") Integer infantNum,
+			@RequestParam(name = "cityOne") String cityOne,
+			@RequestParam(name = "cityTwo") String cityTwo,
+			@RequestParam(name = "journeyClass") String journeyClass,
+			@RequestParam(name = "date") String date,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
+		String email; 
+		Customer customer; 
+		CartItem cartItem = new CartItem();
+		Integer searchIdInt = 0;
+		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			if (searchId == 1.5f) {
+				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
+						infantNum, customer);
+				searchIdInt = savedSearchId;
+			} else {
+				searchIdInt = (int)searchId;
+			}
+			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			ProductDetail productDetail = cartItem.getProductDetail();
+			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			if (searchId == 1.5f) {
+				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
+						infantNum, customer);
+				searchIdInt = savedSearchId;
+			} else {
+				searchIdInt = (int)searchId;
+			}
+			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			ProductDetail productDetail = cartItem.getProductDetail();
+			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+		} else {
+			return "redirect:/";
+		}
+	}
+	
+	@GetMapping("/flight_booking{search_id}&{flight_id}&{item_id}")
+	public String filghtBookingSave(@PathVariable(name = "search_id") Integer search_id, 
+			@PathVariable(name = "flight_id") Integer flight_id,
+			@PathVariable(name = "item_id") Integer item_id, 
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			Model model, 
+			CartItem cartItem ) throws IOException {
+		
+		String email; 
+		Customer customer; 
+
+	    String sort = "pnr";
+	    String brand = "";
+	    Integer stop = 0;
+	    String activeTime = "active";
+	    String arrayPrice = "0,0";
+	    
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			model.addAttribute("customer", customer);
+		}
+		ProductDetail flight = flightRepo.findById(flight_id).get();
+		SearchHistory search = searchRepo.findById(search_id).get();
+		CartItem item = cartRepo.findById(item_id).get();
+
+		if (!flight.getTraceId().equals("offline")) {
+        	/* Fare-rule details */
+        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+            // Open a connection
+            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+            
+            StringBuilder responseBodyFarerule = new StringBuilder();
+            
+            onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
+
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
+        	System.out.println(jsonObjFarerules);
+            logService.generateLog(jsonObjFarerules.toString());
+        	try {
+				JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
+				JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
+				String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
+				
+				model.addAttribute("jsonObjFarerule", fareRuleDetail);
+			} catch (Exception e) {
+				return "/flight_search_" + search.getId() +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+			}
+        	
+		} 
+		
+		model.addAttribute("listProductDetailsOnline", listProductDetailsOnline);
+		
+		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
+		for (TravellerDetail travellerDetail : travelers) {
+			model.addAttribute("travellerDetail", travellerDetail);
+		}
+		model.addAttribute("travelers", travelers);
+		
+
+		int[] adultList = new int[search.getAdultNum()];
+		int[] childList = new int[search.getChildNum()];
+		int[] infantList = new int[search.getInfantNum()];
+		int[] list= new int[search.getPassengerNum()];
+		
+		model.addAttribute("list", list);
+		model.addAttribute("adultList", adultList);
+		model.addAttribute("childList", childList);
+		model.addAttribute("infantList", infantList);
+		model.addAttribute("item", item);
+		model.addAttribute("search", search);
+		model.addAttribute("flight", flight);
+		
+		return "flight/booking/flight_booking";
+	}
+
+	public CartItem travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {
+		ProductDetail flight = null;
+		SearchHistory search = searchRepo.findById(searchId).get();
+		
+		try {
+			String mode = "Offline-data";
+			ProductDetail newFlight  = flightRepo.findProductDetailByIdMode(flightId, mode);
+			
+			newFlight.addBooking(customer);
+			productService.saveCartItem(newFlight);
+			
+			ProductDetail savedCart = productService.saveCartItem(newFlight);
+			List<CartItem> savedCartItemProduct = savedCart.getCartItems();
+			for (CartItem cartItem : savedCartItemProduct) {
+				cartItem.setCartMode("offline");
+				cartRepo.save(cartItem);
+			}
+			CartItem LastItem = savedCartItemProduct.get(savedCartItemProduct.size() - 1);
+			float totalAdultPrice = (newFlight.getPriceADT() + newFlight.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+			float totalInfantPrice = (newFlight.getPriceINF() + newFlight.getMarkupINF()) * search.getInfantNum();
+			double totalPrice = totalAdultPrice + totalInfantPrice;
+			
+			cartService.updateTotalPrice(LastItem, totalPrice);
+			searchService.updateSearchHistory(search, LastItem);
+			
+			return LastItem;
+			
+		} catch (Exception e) {
+			for (ProductDetail flightOnline : listProductDetailsOnline) {
+				if (flightOnline.getId() == flightId) {
+					flight = flightOnline;
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
+					
+					String modeOnline = "Online-data";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking(customer);
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	public void fareQuoteMethod(Model model, ProductDetail flight) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
 			
 			/* Fare-rule details */
@@ -222,7 +414,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
@@ -239,7 +431,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarequote = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFarerules);
@@ -313,7 +505,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodySSR = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -331,11 +523,11 @@ public class ProductDetailsController {
 					String baggageWeight = jsonObjectBagages.get("Weight").toString();
 					
 					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
-					baggageList.add(baggageOnline[i]);
+					baggageOnlineList.add(baggageOnline[i]);
 				}
 			} catch (JSONException e1) {
 				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-				baggageList.add(baggageOnline);
+				baggageOnlineList.add(baggageOnline);
 			}
 
 
@@ -350,32 +542,40 @@ public class ProductDetailsController {
 					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
 					
 					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealsList.add(mealsOnline[i]);
+					mealsOnlineList.add(mealsOnline[i]);
 					
 					lcc = true;
 
 					productService.methodLCC(flight, lcc);
 				}
 			} catch (JSONException e) {
-				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal"); 
-				MealsOnline[] mealsOnline = new MealsOnline[100];
-				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
-					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
-					String mealPrice = "0";
-					String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
-					String mealCode = jsonObjectMeals.get("Code").toString();
-					String mealQuantity = "1";
-					
-					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealsList.add(mealsOnline[i]);
-					
-					lcc = false;
+				try {
+					JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal"); 
+					MealsOnline[] mealsOnline = new MealsOnline[100];
+					for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+						JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+						String mealPrice = "0";
+						String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
+						String mealCode = jsonObjectMeals.get("Code").toString();
+						String mealQuantity = "1";
+						
+						mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+						mealsOnlineList.add(mealsOnline[i]);
+						
+						lcc = false;
+
+						productService.methodLCC(flight, lcc);
+					}
+				} catch (Exception e1) {
+					MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+					mealsOnlineList.add(mealsOnline);
+					lcc = true;
 
 					productService.methodLCC(flight, lcc);
 				}
 			} catch (Exception e) {
 				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-				mealsList.add(mealsOnline);
+				mealsOnlineList.add(mealsOnline);
 				lcc = true;
 
 				productService.methodLCC(flight, lcc);
@@ -405,7 +605,7 @@ public class ProductDetailsController {
 	        			Integer serialNo = count++;
 	        			
 	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
-	        			seatsList.add(seatsOnline[serialNo]);
+	        			seatsOnlineList.add(seatsOnline[serialNo]);
 					}
 				}
 			
@@ -418,104 +618,61 @@ public class ProductDetailsController {
 	        		String description = jsonObjectSeats.get("Description").toString();
 	        		
 	        		seatsOnline[i] = new SeatsOnline(i, "0", 0, 0, 0, "0", code, 0, description, "0");
-	        		seatsList.add(seatsOnline[i]);
+	        		seatsOnlineList.add(seatsOnline[i]);
         			
 					lcc = false;
 	        	}
 			} catch (Exception e) {
 				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-				seatsList.add(seatsOnline);
+				seatsOnlineList.add(seatsOnline);
 			}
 
-    		model.addAttribute("seatsOnlineList", seatsList);
-    		model.addAttribute("mealsOnlineList", mealsList);
-    		model.addAttribute("baggageOnlineList", baggageList);
+    		model.addAttribute("seatsOnlineList", seatsOnlineList);
+    		model.addAttribute("mealsOnlineList", mealsOnlineList);
+    		model.addAttribute("baggageOnlineList", baggageOnlineList);
         	
 		} else if (flight.getTraceId().equals("offline")) {
 			
 			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-			baggageList.add(baggageOnline);
+			baggageOnlineList.add(baggageOnline);
 
 			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-			mealsList.add(mealsOnline);
+			mealsOnlineList.add(mealsOnline);
 
 			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-			seatsList.add(seatsOnline);
+			seatsOnlineList.add(seatsOnline);
 
-    		model.addAttribute("seatsOnlineList", seatsList);
-    		model.addAttribute("mealsOnlineList", mealsList);
-    		model.addAttribute("baggageOnlineList", baggageList);
+    		model.addAttribute("seatsOnlineList", seatsOnlineList);
+    		model.addAttribute("mealsOnlineList", mealsOnlineList);
+    		model.addAttribute("baggageOnlineList", baggageOnlineList);
 			System.out.println("Offline offline offline");
 			
 		}
 
 	}
 	
-	
-	public CartItem travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {
-		ProductDetail flight = null;
+	@PostMapping("/cartItem_edit")
+	public String updateCartItem(
+			@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "flight_id") Integer flightId,
+			@RequestParam(name = "item_id") Integer item_id, CartItem cartItem) {
+
+		CartItem item = cartRepo.findById(item_id).get();
 		SearchHistory search = searchRepo.findById(searchId).get();
 		
-		try {
-			String mode = "Offline-data";
-			ProductDetail newFlight  = flightRepo.findProductDetailByIdMode(flightId, mode);
-			
-			newFlight.addBooking(customer);
-			productService.saveCartItem(newFlight);
-			
-			ProductDetail savedCart = productService.saveCartItem(newFlight);
-			List<CartItem> savedCartItemProduct = savedCart.getCartItems();
-			for (CartItem cartItem : savedCartItemProduct) {
-				cartItem.setCartMode("offline");
-				cartRepo.save(cartItem);
-			}
-			CartItem LastItem = savedCartItemProduct.get(savedCartItemProduct.size() - 1);
-			float totalAdultPrice = (newFlight.getPriceADT() + newFlight.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
-			float totalInfantPrice = (newFlight.getPriceINF() + newFlight.getMarkupINF()) * search.getInfantNum();
-			double totalPrice = totalAdultPrice + totalInfantPrice;
-			
-			cartService.updateTotalPrice(LastItem, totalPrice);
-			searchService.updateSearchHistory(search, LastItem);
-			
-			return LastItem;
-			
-		} catch (Exception e) {
-			for (ProductDetail flightOnline : listProductDetailsOnline) {
-				if (flightOnline.getId() == flightId) {
-					flight = flightOnline;
-					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
-					
-					String modeOnline = "Online-data";
-					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
-					
-					newFlightOnline.addBooking(customer);
-					productService.saveCartItem(newFlightOnline);
-					
-					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
-					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
-					for (CartItem cartItem : savedCartItemProductOnline) {
-						cartItem.setCartMode("online");
-						cartRepo.save(cartItem);
-					}
-					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
-					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
-					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
-					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
-					
-					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
-					searchService.updateSearchHistory(search, LastItemOnline);
-					
-					return LastItemOnline;
-				}
-			}
-		}
+		cartService.updateCartItem(item, cartItem.getEmail(), cartItem.getPhoneNum(), search.getPassengerNum(), false); 
 		
-		return null;
+		return  "redirect:/flight_traveler_details" + searchId + "&" + flightId + "&" + item_id;
+		
 	}
+
 	
-	@PostMapping("/flight_booking_save")
-	public String filghtBookingSave(@RequestParam(name = "search_id") float searchId, 
-			@RequestParam(name = "flight_id") Integer flightId, 
+	////Flight return segment
+
+	@PostMapping("/flight_booking_return_save")
+	public String filghtBookingReturnSave(@RequestParam(name = "search_id") float searchId, 
+			@RequestParam(name = "flightOne_id") Integer flightOneId, 
+			@RequestParam(name = "flightTwo_id") Integer flightTwoId, 
 			@RequestParam(name = "adultNum") Integer adultNum,
 			@RequestParam(name = "childNum") Integer childNum,
 			@RequestParam(name = "infantNum") Integer infantNum,
@@ -523,130 +680,48 @@ public class ProductDetailsController {
 			@RequestParam(name = "cityTwo") String cityTwo,
 			@RequestParam(name = "journeyClass") String journeyClass,
 			@RequestParam(name = "date") String date,
+			@RequestParam(name = "returnDate") String retunDate,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
 		String email; 
 		Customer customer; 
-		CartItem cartItem = new CartItem();
 		Integer searchIdInt = 0;
 		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		Date returnDateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(retunDate);
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
 			if (searchId == 1.5f) {
-				Integer savedSearchId = searchHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
-						infantNum, customer);
+				Integer savedSearchId = sHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer); 
 				searchIdInt = savedSearchId;
 			} else {
 				searchIdInt = (int)searchId;
 			}
-			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
-			ProductDetail productDetail = cartItem.getProductDetail();
-			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			CartItem cartItemOne = travelerDetailsPart(searchIdInt, flightOneId, customer);
+			ProductDetail productDetailOne = cartItemOne.getProductDetail();
+			CartItem cartItemTwo = travelerDetailsPartReturn(searchIdInt, flightTwoId, customer);
+			ProductDetail productDetailTwo = cartItemTwo.getProductDetail();
+			return "redirect:/flight_return_booking" + searchIdInt + "&" + productDetailOne.getId() + "&" + cartItemOne.getId() + "&" + productDetailTwo.getId() + "&" + cartItemTwo.getId();
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
 			if (searchId == 1.5f) {
-				Integer savedSearchId = searchHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
-						infantNum, customer);
+				Integer savedSearchId = sHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer);
 				searchIdInt = savedSearchId;
 			} else {
 				searchIdInt = (int)searchId;
 			}
-			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
-			ProductDetail productDetail = cartItem.getProductDetail();
-			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			CartItem cartItemOne = travelerDetailsPart(searchIdInt, flightOneId, customer);
+			ProductDetail productDetailOne = cartItemOne.getProductDetail();
+			CartItem cartItemTwo = travelerDetailsPartReturn(searchIdInt, flightTwoId, customer);
+			ProductDetail productDetailTwo = cartItemTwo.getProductDetail();
+			return "redirect:/flight_return_booking" + searchIdInt + "&" + productDetailOne.getId() + "&" + cartItemOne.getId() + "&" + productDetailTwo.getId() + "&" + cartItemTwo.getId();
 		} else {
 			return "redirect:/";
 		}
 	}
 	
-	@GetMapping("/flight_booking{search_id}&{flight_id}&{item_id}")
-	public String filghtBookingSave(@PathVariable(name = "search_id") Integer search_id, 
-			@PathVariable(name = "flight_id") Integer flight_id,
-			@PathVariable(name = "item_id") Integer item_id, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			Model model, 
-			CartItem cartItem ) throws IOException {
-		
-		String email; 
-		Customer customer; 
-
-	    String sort = "pnr";
-	    String brand = "";
-	    Integer stop = 0;
-	    String activeTime = "active";
-	    String arrayPrice = "0,0";
-	    
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
-			model.addAttribute("customer", customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
-			model.addAttribute("customer", customer);
-		}
-		ProductDetail flight = flightRepo.findById(flight_id).get();
-		SearchHistory search = searchRepo.findById(search_id).get();
-		CartItem item = cartRepo.findById(item_id).get();
-
-		if (!flight.getTraceId().equals("offline")) {
-        	/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-            onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
-
-        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
-        	System.out.println(jsonObjFarerules);
-            logService.generateLog(jsonObjFarerules.toString());
-        	try {
-				JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
-				JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
-				String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
-				
-				model.addAttribute("jsonObjFarerule", fareRuleDetail);
-			} catch (Exception e) {
-				return "/flight_search_" + search.getId() +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
-			}
-        	
-		} 
-		
-		model.addAttribute("listProductDetailsOnline", listProductDetailsOnline);
-		
-		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
-		for (TravellerDetail travellerDetail : travelers) {
-			model.addAttribute("travellerDetail", travellerDetail);
-		}
-		model.addAttribute("travelers", travelers);
-		
-
-		int[] adultList = new int[search.getAdultNum()];
-		int[] childList = new int[search.getChildNum()];
-		int[] infantList = new int[search.getInfantNum()];
-		int[] list= new int[search.getPassengerNum()];
-		
-		model.addAttribute("list", list);
-		model.addAttribute("adultList", adultList);
-		model.addAttribute("childList", childList);
-		model.addAttribute("infantList", infantList);
-		model.addAttribute("item", item);
-		model.addAttribute("search", search);
-		model.addAttribute("flight", flight);
-		
-		return "flight/booking/flight_booking";
-	}
-	
-	
-	////Flight return segment
-
 	public CartItem travelerDetailsPartReturn(Integer searchId, Integer flightId, Customer customer) {
 		ProductDetail flight = null;
 		SearchHistory search = searchRepo.findById(searchId).get();
@@ -711,59 +786,6 @@ public class ProductDetailsController {
 		return null;
 	}
 	
-	@PostMapping("/flight_booking_return_save")
-	public String filghtBookingReturnSave(@RequestParam(name = "search_id") float searchId, 
-			@RequestParam(name = "flightOne_id") Integer flightOneId, 
-			@RequestParam(name = "flightTwo_id") Integer flightTwoId, 
-			@RequestParam(name = "adultNum") Integer adultNum,
-			@RequestParam(name = "childNum") Integer childNum,
-			@RequestParam(name = "infantNum") Integer infantNum,
-			@RequestParam(name = "cityOne") String cityOne,
-			@RequestParam(name = "cityTwo") String cityTwo,
-			@RequestParam(name = "journeyClass") String journeyClass,
-			@RequestParam(name = "date") String date,
-			@RequestParam(name = "returnDate") String retunDate,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
-		String email; 
-		Customer customer; 
-		Integer searchIdInt = 0;
-		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-		Date returnDateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(retunDate);
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
-			if (searchId == 1.5f) {
-				Integer savedSearchId = searchHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer); 
-				searchIdInt = savedSearchId;
-			} else {
-				searchIdInt = (int)searchId;
-			}
-			CartItem cartItemOne = travelerDetailsPart(searchIdInt, flightOneId, customer);
-			ProductDetail productDetailOne = cartItemOne.getProductDetail();
-			CartItem cartItemTwo = travelerDetailsPartReturn(searchIdInt, flightTwoId, customer);
-			ProductDetail productDetailTwo = cartItemTwo.getProductDetail();
-			return "redirect:/flight_return_booking" + searchIdInt + "&" + productDetailOne.getId() + "&" + cartItemOne.getId() + "&" + productDetailTwo.getId() + "&" + cartItemTwo.getId();
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
-			if (searchId == 1.5f) {
-				Integer savedSearchId = searchHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer);
-				searchIdInt = savedSearchId;
-			} else {
-				searchIdInt = (int)searchId;
-			}
-			CartItem cartItemOne = travelerDetailsPart(searchIdInt, flightOneId, customer);
-			ProductDetail productDetailOne = cartItemOne.getProductDetail();
-			CartItem cartItemTwo = travelerDetailsPartReturn(searchIdInt, flightTwoId, customer);
-			ProductDetail productDetailTwo = cartItemTwo.getProductDetail();
-			return "redirect:/flight_return_booking" + searchIdInt + "&" + productDetailOne.getId() + "&" + cartItemOne.getId() + "&" + productDetailTwo.getId() + "&" + cartItemTwo.getId();
-		} else {
-			return "redirect:/";
-		}
-	}
-	
 	@GetMapping("/flight_return_booking{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}")
 	public String filghtBookingSaveReturn(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flightOne_id") Integer flightOneId,
@@ -801,7 +823,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flightOne.getResultIndex());
+        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flightOne.getResultIndex());
         	if (responseCode != HttpURLConnection.HTTP_OK) {
     			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
     				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
@@ -833,7 +855,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flightTwo.getResultIndex());
+        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flightTwo.getResultIndex());
         	if (responseCode != HttpURLConnection.HTTP_OK) {
     			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
     				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
@@ -886,64 +908,6 @@ public class ProductDetailsController {
 		return "flight/booking_return/flight_booking_return";
 	}
 	
-	@PostMapping("/flight_activity_booking_save")
-	public String filghtActivityBookingSave(
-			@RequestParam(name = "flight_id") Integer flightId,  
-			@RequestParam(name = "cityOne", required = false) String cityOne, 
-			@RequestParam(name = "cityTwo", required = false) String cityTwo,  
-			@RequestParam(name = "passengerNum", required = false) Integer passengerNum,
-			@RequestParam(name = "journeyClass", required = false) String journeyClass,
-			@RequestParam(name = "tripType", required = false) String tripType,
-			@RequestParam(name = "adultNum", required = false) Integer adultNum,
-			@RequestParam(name = "childNum", required = false) Integer childNum,
-			@RequestParam(name = "infantNum", required = false) Integer infantNum,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
-		ProductDetail productDetail = flightRepo.findById(flightId).get();
-		
-		String email; 
-		Customer customer; 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
-			
-			SearchHistory history = searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
-					childNum, infantNum, customer);
-			
-			return "redirect:/flight_booking" + history.getId() + "&" + flightId + "&" + travelerDetailsPart(history.getId(), flightId, customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
-			
-			SearchHistory history = searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
-					childNum, infantNum, customer);
-			
-			model.addAttribute("customer", customer);
-			return "redirect:/flight_booking" + history.getId() + "&" + flightId + "&" + travelerDetailsPart(history.getId(), flightId, customer);
-		} else {
-			return "redirect:/login";
-		}
-	}
-
-	private SearchHistory searcHistorySave(ProductDetail productDetail, String cityOne, String cityTwo, Integer passengerNum, String journeyClass,
-			String tripType, Integer adultNum, Integer childNum, Integer infantNum, Customer customer) {
-		SearchHistory history = new SearchHistory();
-		history.setDate(productDetail.getDate());
-		history.setCityOne(cityOne);
-		history.setCityTwo(cityTwo);
-		history.setPassengerNum(passengerNum);
-		history.setJourneyClass(journeyClass);
-		history.setTripType(tripType);
-		history.setAdultNum(adultNum);
-		history.setChildNum(childNum);
-		history.setInfantNum(infantNum);
-		history.setCustomer(customer);
-		
-		return searchRepo.save(history);
-	}
-
-
 	@PostMapping("/traveller_details_return")
 	public String saveTravellerDetailsReturn(@RequestParam(name = "search_id") Integer searchId, 
 			@RequestParam(name = "flightOne_id") Integer flightOneId,
@@ -985,15 +949,12 @@ public class ProductDetailsController {
 			
 				
 			for (int i = 0; i < search.getPassengerNum(); i++) {
-				ProductSaveHelper.setTravellerDetailReturn(salutation[i], firstName[i], lastName[i], dob[i], flightOne, itemOne, paxType[i], flightOne.getBaggage(), flightOne.getCabinBaggage(), i);
-				productService.saveFlightPassengerDetails(flightOne);
-				ProductDetail flightDetailsOne = productService.saveFlightPassengerDetails(flightOne);
-				model.addAttribute("flightDetailsOne", flightDetailsOne);
+				ProductDetail travelers1 = travelerSaveMethod(model, salutation, firstName, lastName, dob, paxType, flightOne, itemOne, i);
+				model.addAttribute("flightDetailsTwo", travelers1);
 				
-				ProductSaveHelper.setTravellerDetailReturn(salutation[i], firstName[i], lastName[i], dob[i], flightTwo, itemTwo, paxType[i], flightTwo.getBaggage(), flightTwo.getCabinBaggage(), i);
-				productService.saveFlightPassengerDetails(flightTwo);
-				ProductDetail flightDetailsTwo = productService.saveFlightPassengerDetails(flightTwo);
-				model.addAttribute("flightDetailsTwo", flightDetailsTwo);
+				ProductDetail travelers2 = travelerSaveMethod(model, salutation, firstName, lastName, dob, paxType, flightTwo, itemTwo, i);
+				model.addAttribute("flightDetailsTwo", travelers2);
+				
 			}
 			
 			model.addAttribute("item", itemOne);
@@ -1006,6 +967,14 @@ public class ProductDetailsController {
 		} catch (Exception e) {
 			return  "redirect:/flight_traveler_return_details" + searchId + "&" + flightOneId + "&" + itemOne_id + "&" + flightTwoId + "&" + itemTwo_id;
 		}
+	}
+
+	private ProductDetail travelerSaveMethod(Model model, String[] salutation, String[] firstName, String[] lastName, Date[] dob,
+			String[] paxType, ProductDetail flightOne, CartItem itemOne, int i) {
+		ProductSaveHelper.setTravellerDetailReturn(salutation[i], firstName[i], lastName[i], dob[i], flightOne, itemOne, paxType[i], flightOne.getBaggage(), flightOne.getCabinBaggage(), i);
+		productService.saveFlightPassengerDetails(flightOne);
+		ProductDetail flightDetailsOne = productService.saveFlightPassengerDetails(flightOne);
+		return flightDetailsOne;
 	}
 	
 	@PostMapping("/traveller_detail_return_edit")
@@ -1073,8 +1042,9 @@ public class ProductDetailsController {
 		checkoutInfoTwo.setPaymentTotal(itemTwo.getTotalPrice());
 																
 		try {
-			fareQuoteMethodReturn(model, flightOne, baggageOnlineList, mealsOnlineList, seatsOnlineList);
-			fareQuoteMethodReturnTwo(model, flightTwo, baggageOnlineListReturn, mealsOnlineListReturn, seatsOnlineListReturn);
+			fareQuoteMethodReturn(model, flightOne);
+			
+			fareQuoteMethodReturnTwo(model, flightTwo);
 			
 		}  catch (Exception e) {
 			return "redirect:/flight_return_booking" + search.getId() + "&" + flightOne.getId() + "&" + itemOne.getId() + "&" + flightTwo.getId() + "&" + itemTwo.getId();
@@ -1102,22 +1072,6 @@ public class ProductDetailsController {
 		return "flight/booking_return/flight_traveler_details_return";
 	}
 	
-	
-	@PostMapping("/cartItem_edit")
-	public String updateCartItem(
-			@RequestParam(name = "search_id") Integer searchId, 
-			@RequestParam(name = "flight_id") Integer flightId,
-			@RequestParam(name = "item_id") Integer item_id, CartItem cartItem) {
-
-		CartItem item = cartRepo.findById(item_id).get();
-		SearchHistory search = searchRepo.findById(searchId).get();
-		
-		cartService.updateCartItem(item, cartItem.getEmail(), cartItem.getPhoneNum(), search.getPassengerNum(), false); 
-		
-		return  "redirect:/flight_traveler_details" + searchId + "&" + flightId + "&" + item_id;
-		
-	}
-	
 	@PostMapping("/cartItem_return_edit")
 	public String updateCartItemReturn(
 			@RequestParam(name = "search_id") Integer searchId, 
@@ -1138,8 +1092,8 @@ public class ProductDetailsController {
 		return  "redirect:/flight_traveler_return_details" + searchId + "&" + flightOne + "&" + itemOne + "&" + flightTwo + "&" + itemTwo;
 		
 	}
-	
-	private void fareQuoteMethodReturn(Model model, ProductDetail flight, List<BaggageOnline> baggageList, List<MealsOnline> mealList, List<SeatsOnline>  seatList ) throws MalformedURLException, IOException {
+
+	public void fareQuoteMethodReturn(Model model, ProductDetail flight) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
 			
 			/* Fare-rule details */
@@ -1149,7 +1103,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
@@ -1166,7 +1120,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarequote = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFarerules);
@@ -1236,7 +1190,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodySSR = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -1254,11 +1208,11 @@ public class ProductDetailsController {
 					String baggageWeight = jsonObjectBagages.get("Weight").toString();
 					
 					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
-					baggageList.add(baggageOnline[i]);
+					baggageOnlineList.add(baggageOnline[i]);
 				}
 			} catch (JSONException e1) {
 				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-				baggageList.add(baggageOnline);
+				baggageOnlineList.add(baggageOnline);
 			}
 
 
@@ -1273,31 +1227,39 @@ public class ProductDetailsController {
 					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
 					
 					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealList.add(mealsOnline[i]);
+					mealsOnlineList.add(mealsOnline[i]);
 
 					lccReturn = true;
 
 					productService.methodLCC(flight, lccReturn);
 				}
 			} catch (JSONException e) {
-				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal").getJSONArray(0); 
-				MealsOnline[] mealsOnline = new MealsOnline[100];
-				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
-					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
-					String mealPrice = "0";
-					String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
-					String mealCode = jsonObjectMeals.get("Code").toString();
-					String mealQuantity = "1";
-					
-					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealList.add(mealsOnline[i]);
+				try {
+					JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal").getJSONArray(0); 
+					MealsOnline[] mealsOnline = new MealsOnline[100];
+					for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+						JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+						String mealPrice = "0";
+						String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
+						String mealCode = jsonObjectMeals.get("Code").toString();
+						String mealQuantity = "1";
+						
+						mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+						mealsOnlineList.add(mealsOnline[i]);
 
-					lccReturn = false;
+						lccReturn = false;
+						productService.methodLCC(flight, lccReturn);
+					}
+				} catch (JSONException e1) {
+					MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+					mealsOnlineList.add(mealsOnline);
+					lccReturn = true;
+
 					productService.methodLCC(flight, lccReturn);
 				}
 			} catch (Exception e) {
 				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-				mealList.add(mealsOnline);
+				mealsOnlineList.add(mealsOnline);
 				lccReturn = true;
 
 				productService.methodLCC(flight, lccReturn);
@@ -1327,7 +1289,7 @@ public class ProductDetailsController {
 	        			Integer serialNo = count++;
 	        			
 	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
-	        			seatList.add(seatsOnline[serialNo]);
+	        			seatsOnlineList.add(seatsOnline[serialNo]);
 					}
 				}
 			
@@ -1340,33 +1302,33 @@ public class ProductDetailsController {
 	        		String description = jsonObjectSeats.get("Description").toString();
 	        		
 	        		seatsOnline[i] = new SeatsOnline(i, "0", 0, 0, 0, "0", code, 0, description, "0");
-	        		seatList.add(seatsOnline[i]);
+	        		seatsOnlineList.add(seatsOnline[i]);
         			
 					lccReturn = false;
 	        	}
 			} catch (Exception e) {
 				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-				seatList.add(seatsOnline);
+				seatsOnlineList.add(seatsOnline);
 			}
 
         	
 		} else if (flight.getTraceId().equals("offline")) {
 			
 			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-			baggageList.add(baggageOnline);
+			baggageOnlineList.add(baggageOnline);
 
 			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-			mealList.add(mealsOnline);
+			mealsOnlineList.add(mealsOnline);
 
 			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-			seatList.add(seatsOnline);
+			seatsOnlineList.add(seatsOnline);
 
 			
 		}
 
 	}
 	
-	private void fareQuoteMethodReturnTwo(Model model, ProductDetail flight, List<BaggageOnline> baggageList, List<MealsOnline> mealList, List<SeatsOnline>  seatList ) throws MalformedURLException, IOException {
+	public void fareQuoteMethodReturnTwo(Model model, ProductDetail flight) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
 			
 			/* Fare-rule details */
@@ -1376,7 +1338,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarerule = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
@@ -1393,7 +1355,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodyFarequote = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFarerules);
@@ -1463,7 +1425,7 @@ public class ProductDetailsController {
             
             StringBuilder responseBodySSR = new StringBuilder();
             
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, searchHistoryController.traceId, flight.getResultIndex());
+        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -1481,11 +1443,11 @@ public class ProductDetailsController {
 					String baggageWeight = jsonObjectBagages.get("Weight").toString();
 					
 					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
-					baggageList.add(baggageOnline[i]);
+					baggageOnlineListReturn.add(baggageOnline[i]);
 				}
 			} catch (JSONException e1) {
 				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-				baggageList.add(baggageOnline);
+				baggageOnlineListReturn.add(baggageOnline);
 			}
 
 
@@ -1500,32 +1462,40 @@ public class ProductDetailsController {
 					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
 					
 					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealList.add(mealsOnline[i]);
+					mealsOnlineListReturn.add(mealsOnline[i]);
 
 					lccReturn = true;
 
 					productService.methodLCC(flight, lccReturn);
 				}
 			} catch (JSONException e) {
-				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal").getJSONArray(0); 
-				MealsOnline[] mealsOnline = new MealsOnline[100];
-				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
-					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
-					String mealPrice = "0";
-					String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
-					String mealCode = jsonObjectMeals.get("Code").toString();
-					String mealQuantity = "1";
-					
-					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealList.add(mealsOnline[i]);
-					
-					lccReturn = false;
+				try {
+					JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal").getJSONArray(0); 
+					MealsOnline[] mealsOnline = new MealsOnline[100];
+					for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
+						JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
+						String mealPrice = "0";
+						String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
+						String mealCode = jsonObjectMeals.get("Code").toString();
+						String mealQuantity = "1";
+						
+						mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
+						mealsOnlineListReturn.add(mealsOnline[i]);
+						
+						lccReturn = false;
+
+						productService.methodLCC(flight, lccReturn);
+					}
+				} catch (JSONException e1) {
+					MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
+					mealsOnlineListReturn.add(mealsOnline);
+					lccReturn = true;
 
 					productService.methodLCC(flight, lccReturn);
 				}
 			} catch (Exception e) {
 				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-				mealList.add(mealsOnline);
+				mealsOnlineListReturn.add(mealsOnline);
 				lccReturn = true;
 
 				productService.methodLCC(flight, lccReturn);
@@ -1555,7 +1525,7 @@ public class ProductDetailsController {
 	        			Integer serialNo = count++;
 	        			
 	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
-	        			seatList.add(seatsOnline[serialNo]);
+	        			seatsOnlineListReturn.add(seatsOnline[serialNo]);
 					}
 				}
 			
@@ -1568,29 +1538,73 @@ public class ProductDetailsController {
 	        		String description = jsonObjectSeats.get("Description").toString();
 	        		
 	        		seatsOnline[i] = new SeatsOnline(i, "0", 0, 0, 0, "0", code, 0, description, "0");
-	        		seatList.add(seatsOnline[i]);
+	        		seatsOnlineListReturn.add(seatsOnline[i]);
         			
 					lccReturn = false;
 	        	}
 			} catch (Exception e) {
 				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-				seatList.add(seatsOnline);
+				seatsOnlineListReturn.add(seatsOnline);
 			}
 
         	
 		} else if (flight.getTraceId().equals("offline")) {
 			
 			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-			baggageList.add(baggageOnline);
+			baggageOnlineListReturn.add(baggageOnline);
 
 			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-			mealList.add(mealsOnline);
+			mealsOnlineListReturn.add(mealsOnline);
 
 			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-			seatList.add(seatsOnline);
+			seatsOnlineListReturn.add(seatsOnline);
 
 			
 		}
 
 	}
+
+	
+	//// Offline flight activity
+
+	@PostMapping("/flight_activity_booking_save")
+	public String filghtActivityBookingSave(
+			@RequestParam(name = "flight_id") Integer flightId,  
+			@RequestParam(name = "cityOne", required = false) String cityOne, 
+			@RequestParam(name = "cityTwo", required = false) String cityTwo,  
+			@RequestParam(name = "passengerNum", required = false) Integer passengerNum,
+			@RequestParam(name = "journeyClass", required = false) String journeyClass,
+			@RequestParam(name = "tripType", required = false) String tripType,
+			@RequestParam(name = "adultNum", required = false) Integer adultNum,
+			@RequestParam(name = "childNum", required = false) Integer childNum,
+			@RequestParam(name = "infantNum", required = false) Integer infantNum,
+			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+		ProductDetail productDetail = flightRepo.findById(flightId).get();
+		
+		String email; 
+		Customer customer; 
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByEmail(email);
+			
+			SearchHistory history = productService.searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
+					childNum, infantNum, customer);
+			
+			return "redirect:/flight_booking" + history.getId() + "&" + flightId + "&" + travelerDetailsPart(history.getId(), flightId, customer);
+			
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByEmail(email);
+			
+			SearchHistory history = productService.searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
+					childNum, infantNum, customer);
+			
+			model.addAttribute("customer", customer);
+			return "redirect:/flight_booking" + history.getId() + "&" + flightId + "&" + travelerDetailsPart(history.getId(), flightId, customer);
+		} else {
+			return "redirect:/login";
+		}
+	}
+
 }

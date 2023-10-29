@@ -591,8 +591,8 @@
 										<div class="col-md-5 col-12" style=" float: left;">
 											<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
 												<input type="search" class="form-control hill1 input_styles" name="cityOne"
-													id="cityOne2" placeholder="Depurture City" list="cityOneList3"
-													oninput="checkCityCodeMatch3(document.getElementById('cityTwo2'))">
+													id="cityOne3" placeholder="Depurture City" list="cityOneList3"
+													oninput="checkCityCodeMatch3(document.getElementById('cityTwo3'))">
 												<datalist id="cityOneList3">
 													<th:block th:each="city : ${allCities}">
 														<option th:value="${city.cityName}">[[${city.country.name}]] -
@@ -604,7 +604,7 @@
 											</div>
 											<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
 												<input type="search" class="form-control hill2 input_styles" name="cityTwo"
-													id="cityTwo2" placeholder="Arrival City" list="cityTwoList4"
+													id="cityTwo3" placeholder="Arrival City" list="cityTwoList4"
 													oninput="checkCityCodeMatch3(this)">
 												<datalist id="cityTwoList4">
 													<th:block th:each="city : ${allCities}">
@@ -723,14 +723,14 @@
 					    </div>
 					    <div class="carousel-item">
 					      <div class="empty1" style="height: 115px;">
-								<form th:action="@{/flight_search_return_save}" method="get">
+								<form th:action="@{/flight_international_search_return_save}" method="get">
 									<div class=" col-12">
-										<input type="hidden" name="tripType" value="international">
+										<input type="hidden" name="tripType" value="twoWays">
 										<div class="col-md-5 col-12" style=" float: left;">
 											<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
 												<input type="search" class="form-control hill1 input_styles" name="cityOne"
-													id="cityOne2" placeholder="Depurture City" list="cityOneList3"
-													oninput="checkCityCodeMatch3(document.getElementById('cityTwo2'))">
+													id="cityOne4" placeholder="Depurture City" list="cityOneList3"
+													oninput="checkCityCodeMatch4(document.getElementById('cityTwo4'))">
 												<datalist id="cityOneList3">
 													<th:block th:each="city : ${allCities}">
 														<option th:value="${city.cityName}">[[${city.country.name}]] -
@@ -742,8 +742,8 @@
 											</div>
 											<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
 												<input type="search" class="form-control hill2 input_styles" name="cityTwo"
-													id="cityTwo2" placeholder="Arrival City" list="cityTwoList4"
-													oninput="checkCityCodeMatch3(this)">
+													id="cityTwo4" placeholder="Arrival City" list="cityTwoList4"
+													oninput="checkCityCodeMatch4(this)">
 												<datalist id="cityTwoList4">
 													<th:block th:each="city : ${allCities}">
 														<option th:value="${city.cityName}">[[${city.country.name}]] -
@@ -884,6 +884,14 @@
 	}
 
 	function checkCityCodeMatch3(confirmCityCode) {
+		if (confirmCityCode.value == $("#cityOne2").val()) {
+			confirmCityCode.setCustomValidity("Two City code should not match!");
+		} else {
+			confirmCityCode.setCustomValidity("");
+		}
+	}
+
+	function checkCityCodeMatch4(confirmCityCode) {
 		if (confirmCityCode.value == $("#cityOne2").val()) {
 			confirmCityCode.setCustomValidity("Two City code should not match!");
 		} else {
