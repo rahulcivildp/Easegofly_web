@@ -96,6 +96,7 @@ public class ProductDetailsInternationController {
 	public String discount ="" , tdsOnIncentive ="", tdsOnCommission ="", tdsOnPLB ="", otherCharges ="", publishedFare ="", offeredFare ="", serviceFee ="";
 	public String discountReturn ="" , tdsOnIncentiveReturn ="", tdsOnCommissionReturn ="", tdsOnPLBReturn ="", otherChargesReturn ="", publishedFareReturn ="", offeredFareReturn ="", serviceFeeReturn ="";
 
+	public Integer timeRemainingPro = 0;
 	////International flight one-way segment
 
 	@PostMapping("/flight_international_booking_save")
@@ -674,6 +675,7 @@ public class ProductDetailsInternationController {
 			@RequestParam(name = "journeyClass") String journeyClass,
 			@RequestParam(name = "date") String date,
 			@RequestParam(name = "returnDate") String retunDate,
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
 		String email; 
@@ -681,6 +683,7 @@ public class ProductDetailsInternationController {
 		Integer searchIdInt = 0;
 		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		Date returnDateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(retunDate);
+		timeRemainingPro = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -833,6 +836,7 @@ public class ProductDetailsInternationController {
 		model.addAttribute("search", search);
 		model.addAttribute("flightOne", flightOne);
 		model.addAttribute("flightTwo", flightTwo);
+		model.addAttribute("timeRemainingPro", timeRemainingPro);
 		
 		return "flight/inter_booking_return/flight_booking_return";
 	}
