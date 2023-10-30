@@ -89,7 +89,7 @@ public class ProductDetailsInternationController {
 			airlineName = "", cabinBaggage = "", baggage = "", duration = "", flightStatus = "", stopOver = "", 
 			airportCodeOrigin = "", airportCodeDestination = "", craftType = "";
 	
-	public String traceId ="" , resultIndex ="";
+	public String traceId ="" , traceIdReturn ="" , resultIndex ="";
 	public boolean lcc = true;
 	public boolean lccReturn = true;
 	

@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -845,10 +844,13 @@ public class OrderInternationalController {
 					pInternationController.offeredFare, pInternationController.serviceFee, hasErrorCode, hasErrorMsg, pInternationController.traceId);
 		}
 		
+		String traceIdReturn = orderService.searchReturnInternationalFlightAPIOnlyTraceId(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), search.getInfantNum(), "pnr", model, search.getDate(), search.getReturnDate(), pInternationController.traceIdReturn);
+		orderService.fareqouteAPI(productDetail2, traceIdReturn);
+		
 		if (productDetail2.isLcc() == true) {
 			orderService.ticketDetailsInternational(order2, productDetail2, pInternationController.basefareTravelerAdultReturn, pInternationController.taxTravelerAdultReturn, pInternationController.basefareTravelerChildReturn, 
 				pInternationController.taxTravelerChildReturn, pInternationController.basefareTravelerInfantReturn, pInternationController.taxTravelerInfantReturn, search, hasErrorCode, hasErrorMsg, 
-				pInternationController.traceId);
+				traceIdReturn);
 		} else {
 			orderService.bookingDetails(order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
 					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discountReturn, 
@@ -1370,6 +1372,5 @@ public class OrderInternationalController {
 		exporter.export(order, response, city1, city2, logoLink, travellers, faviconLink, brand); 
 
 	}
-	
 	
 }

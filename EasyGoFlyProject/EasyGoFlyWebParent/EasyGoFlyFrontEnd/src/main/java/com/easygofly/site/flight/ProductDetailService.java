@@ -356,6 +356,10 @@ public class ProductDetailService {
 		return travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 	}
 	
+	public List<TravellerDetail> findTravellerByOrderANDProductDetailANDCount(ProductDetail productDetail, Order order, Integer travelerCountSerial) {
+		return travellerRepo.findTravellerByProductDetailOrderAndCount(productDetail, order, travelerCountSerial);
+	}
+	
 	public void methodLCC(ProductDetail flight, boolean lcc) {
 		flight.setLcc(lcc);
 		flightRepo.save(flight);

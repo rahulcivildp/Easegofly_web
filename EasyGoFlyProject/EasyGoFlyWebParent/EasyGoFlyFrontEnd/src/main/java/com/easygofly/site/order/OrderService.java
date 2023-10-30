@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.CartItem;
@@ -880,10 +881,10 @@ public class OrderService {
 
 	public void ticketDetailsInternational(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
 			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, Integer hasErrorCode, String hasErrorMsg, String traceId ) throws MalformedURLException, IOException {
-		List<String> travelerDetailsArray = new ArrayList<String>();
-		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
-		
 		if (!productDetail.getTraceId().equals("offline")) {
+			
+			List<String> travelerDetailsArray = new ArrayList<String>();
+			List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 			
 			String[] airlineNoArray = productDetail.getFlightNum().split("-");
 			String isLeadPax = "false";
@@ -893,165 +894,165 @@ public class OrderService {
 				BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
 				MealsOnline mealsOnline = travellerDetail.getMealOnline();
 				SeatsOnline seatsOnline = travellerDetail.getSeatsOnline();
-				
-   			Date getDOB = travellerDetail.getDob();
-   			Integer genNum = 0;
-   			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
-   				genNum = 1;
-   			} else {
-   				genNum = 2;
-   			}
-   			String baseFare = "";
-   			String tax = "";
-   			
-   			//baggage information
-   			String bagCode = baggageOnline.getCode(), bagWeight = baggageOnline.getWeight(), bagPrice = baggageOnline.getPrice();
-   			
-   			//meal information
-   			String mealCode = mealsOnline.getCode(), mealName = mealsOnline.getName(), mealQuantity = mealsOnline.getQuantity(), mealPrice = mealsOnline.getPrice();
-   			
-   			//seat information
-   			@SuppressWarnings("unused")
-				String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
-   					seatNo = seatsOnline.getSeatNo(), seatType = seatsOnline.getSeatType().toString(), seatDeck = seatsOnline.getDeck().toString(), seatCompartment = seatsOnline.getCompartment().toString(), 
-   					seatPrice = seatsOnline.getPrice(), seatCraftType = seatsOnline.getCraftType();
-   			String baggageDetailsString = "";
-   			String mealDetailsString = "";
-   			String seatDetailsString = "";
-   			
-   			if (!bagCode.equals("NoBaggage")) {
-				baggageDetailsString = "		\"Baggage\":[\r\n"
-   					+ "            {\r\n"
-   					+ "                \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
-   					+ "                \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
-   					+ "                \"WayType\": 2,\r\n"
-   					+ "                \"Code\": \"" + bagCode + "\",\r\n"
-   					+ "                \"Description\": 2,\r\n"
-   					+ "                \"Weight\": " + bagWeight + ",\r\n"
-   					+ "                \"Currency\": \"INR\",\r\n"
-   					+ "                 \"Price\": " + bagPrice + ",\r\n"
-   					+ "                 \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
-   					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
-   					+ "				}\r\n"
-   					+ "			],\r\n";
-			}
-   			
-   			if (!mealCode.equals("NoMeal")) {
-				mealDetailsString = "     \"MealDynamic\": [\r\n"
-   					+ "        {\r\n"
-   					+ "          \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
-   					+ "          \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
-   					+ "          \"WayType\": 2,\r\n"
-   					+ "          \"Code\": \"" + mealCode + "\",\r\n"
-   					+ "          \"Description\": 2,\r\n"
-   					+ "          \"AirlineDescription\": \"" + mealName + "\",\r\n"
-   					+ "          \"Quantity\": " + mealQuantity + ",\r\n"
-   					+ "          \"Currency\": \"INR\",\r\n"
-   					+ "          \"Price\": " + mealPrice + ",\r\n"
-   					+ "          \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
-   					+ "          \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
-   					+ "        }],\r\n";
-			}
-   			
-   			if (!seatCode.equals("NoSeat")) {
-				seatDetailsString = "		\"SeatDynamic\": [\r\n"
-   					+ "        {\r\n"
-   					+ "	    \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
-   					+ "             \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
-   					+ "              \"CraftType\": \"" + productDetail.getCraftType() + "\",\r\n"
-   					+ "               \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
-   					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\",\r\n"
-   					+ "                \"AvailablityType\": " + seatAvailabilityType + ",\r\n"
-   					+ "                \"Description\": 2,\r\n"
-   					+ "                \"Code\": \"" + seatCode + "\",\r\n"
-   					+ "                \"RowNo\": \"" + seatRowNo + "\",\r\n"
-   					+ "                \"SeatNo\": \"" + seatNo + "\",\r\n"
-   					+ "                \"SeatType\": " + seatType + ",\r\n"
-   					+ "                \"SeatWayType\": 2,\r\n"
-   					+ "                \"Compartment\": " + seatCompartment + ",\r\n"
-   					+ "                \"Deck\": " + seatDeck + ",\r\n"
-   					+ "                \"Currency\": \"INR\",\r\n"
-   					+ "                \"Price\": " + seatPrice + "                                                                                                                                                                                                      \r\n"
-   					+ "			\r\n"
-   					+ "		}],\r\n";
-			}
-   			
-   			
-   			String baggageDetails = baggageDetailsString;
-   			String mealDetails = mealDetailsString;
-   			String seatDetails = seatDetailsString;
-   			
-   			if (travellerDetail.getPaxType().equals("1")) {
-   				Integer fareInt = Integer.parseInt(basefareTravelerAdult) / searchId.getAdultNum();
-   				Double taxInt = Double.parseDouble(taxTravelerAdult) / searchId.getAdultNum();
-   				baseFare = "" + fareInt;
-   				tax = "" + taxInt;
-   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
-   				
-   				if (countAdult == 0) {
-						isLeadPax = "true";
+					
+	   			Date getDOB = travellerDetail.getDob();
+	   			Integer genNum = 0;
+	   			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
+	   				genNum = 1;
+	   			} else {
+	   				genNum = 2;
+	   			}
+	   			String baseFare = "";
+	   			String tax = "";
+	   			
+	   			//baggage information
+	   			String bagCode = baggageOnline.getCode(), bagWeight = baggageOnline.getWeight(), bagPrice = baggageOnline.getPrice();
+	   			
+	   			//meal information
+	   			String mealCode = mealsOnline.getCode(), mealName = mealsOnline.getName(), mealQuantity = mealsOnline.getQuantity(), mealPrice = mealsOnline.getPrice();
+	   			
+	   			//seat information
+	   			@SuppressWarnings("unused")
+					String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
+	   					seatNo = seatsOnline.getSeatNo(), seatType = seatsOnline.getSeatType().toString(), seatDeck = seatsOnline.getDeck().toString(), seatCompartment = seatsOnline.getCompartment().toString(), 
+	   					seatPrice = seatsOnline.getPrice(), seatCraftType = seatsOnline.getCraftType();
+	   			String baggageDetailsString = "";
+	   			String mealDetailsString = "";
+	   			String seatDetailsString = "";
+	   			
+	   			if (!bagCode.equals("NoBaggage")) {
+					baggageDetailsString = "		\"Baggage\":[\r\n"
+	   					+ "            {\r\n"
+	   					+ "                \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "                \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ "                \"WayType\": 2,\r\n"
+	   					+ "                \"Code\": \"" + bagCode + "\",\r\n"
+	   					+ "                \"Description\": 2,\r\n"
+	   					+ "                \"Weight\": " + bagWeight + ",\r\n"
+	   					+ "                \"Currency\": \"INR\",\r\n"
+	   					+ "                 \"Price\": " + bagPrice + ",\r\n"
+	   					+ "                 \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+	   					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
+	   					+ "				}\r\n"
+	   					+ "			],\r\n";
+				}
+	   			
+	   			if (!mealCode.equals("NoMeal")) {
+					mealDetailsString = "     \"MealDynamic\": [\r\n"
+	   					+ "        {\r\n"
+	   					+ "          \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "          \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ "          \"WayType\": 2,\r\n"
+	   					+ "          \"Code\": \"" + mealCode + "\",\r\n"
+	   					+ "          \"Description\": 2,\r\n"
+	   					+ "          \"AirlineDescription\": \"" + mealName + "\",\r\n"
+	   					+ "          \"Quantity\": " + mealQuantity + ",\r\n"
+	   					+ "          \"Currency\": \"INR\",\r\n"
+	   					+ "          \"Price\": " + mealPrice + ",\r\n"
+	   					+ "          \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+	   					+ "          \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
+	   					+ "        }],\r\n";
+				}
+	   			
+	   			if (!seatCode.equals("NoSeat")) {
+					seatDetailsString = "		\"SeatDynamic\": [\r\n"
+	   					+ "        {\r\n"
+	   					+ "	    \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "             \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ "              \"CraftType\": \"" + productDetail.getCraftType() + "\",\r\n"
+	   					+ "               \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+	   					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\",\r\n"
+	   					+ "                \"AvailablityType\": " + seatAvailabilityType + ",\r\n"
+	   					+ "                \"Description\": 2,\r\n"
+	   					+ "                \"Code\": \"" + seatCode + "\",\r\n"
+	   					+ "                \"RowNo\": \"" + seatRowNo + "\",\r\n"
+	   					+ "                \"SeatNo\": \"" + seatNo + "\",\r\n"
+	   					+ "                \"SeatType\": " + seatType + ",\r\n"
+	   					+ "                \"SeatWayType\": 2,\r\n"
+	   					+ "                \"Compartment\": " + seatCompartment + ",\r\n"
+	   					+ "                \"Deck\": " + seatDeck + ",\r\n"
+	   					+ "                \"Currency\": \"INR\",\r\n"
+	   					+ "                \"Price\": " + seatPrice + "                                                                                                                                                                                                      \r\n"
+	   					+ "			\r\n"
+	   					+ "		}],\r\n";
+				}
+	   			
+	   			
+	   			String baggageDetails = baggageDetailsString;
+	   			String mealDetails = mealDetailsString;
+	   			String seatDetails = seatDetailsString;
+	   			
+	   			if (travellerDetail.getPaxType().equals("1")) {
+	   				Integer fareInt = Integer.parseInt(basefareTravelerAdult) / searchId.getAdultNum();
+	   				Double taxInt = Double.parseDouble(taxTravelerAdult) / searchId.getAdultNum();
+	   				baseFare = "" + fareInt;
+	   				tax = "" + taxInt;
+	   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+	   				
+	   				if (countAdult == 0) {
+							isLeadPax = "true";
+						} else {
+							isLeadPax = "false";
+						}
+	   				countAdult++;
+	   				System.out.println(countAdult);
+					} else if (travellerDetail.getPaxType().equals("2")) {
+	   				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
+	   				Double taxInt = Double.parseDouble(taxTravelerChild) / searchId.getChildNum();
+	   				baseFare = "" + fareInt;
+	   				tax = "" + taxInt;
+	   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+						isLeadPax = "false";
 					} else {
+	   				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
+	   				Double taxInt = Double.parseDouble(taxTravelerInfant) / searchId.getInfantNum();
+	   				baseFare = "" + fareInt;
+	   				tax = "" + taxInt;
+	   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
 						isLeadPax = "false";
 					}
-   				countAdult++;
-   				System.out.println(countAdult);
-				} else if (travellerDetail.getPaxType().equals("2")) {
-   				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
-   				Double taxInt = Double.parseDouble(taxTravelerChild) / searchId.getChildNum();
-   				baseFare = "" + fareInt;
-   				tax = "" + taxInt;
-   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
-					isLeadPax = "false";
-				} else {
-   				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
-   				Double taxInt = Double.parseDouble(taxTravelerInfant) / searchId.getInfantNum();
-   				baseFare = "" + fareInt;
-   				tax = "" + taxInt;
-   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
-					isLeadPax = "false";
-				}
-   			
-   			String details = "{\r\n"
-   					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
-   					+ "		\"FirstName\": \"" + travellerDetail.getFirstName() + "\",\r\n"
-   					+ "		\"LastName\": \"" + travellerDetail.getLastName() + "\",\r\n"
-   					+ "		\"PaxType\": " + travellerDetail.getPaxType() + ",\r\n"
-   					+ "		\"DateOfBirth\": \"" + getDOB + "T00:00:00\",\r\n"
-   					+ "		\"Gender\": " + genNum + ",\r\n"
-   					+ "		\"PassportNo\": \"" + travellerDetail.getPassportNo() + "\",\r\n"
-   					+ "		\"PassportExpiry\": \"" + travellerDetail.getPassportExpiry() + "T00:00:00\",\r\n"
-   					+ "		\"AddressLine1\": \"123, Test\",\r\n"
-   					+ "		\"AddressLine2\": \"\",\r\n"
-   					+ "		\"Fare\": {\r\n"
-   					+ "			\"BaseFare\": " + baseFare + ",\r\n"
-   					+ "			\"Tax\": " + tax + ",\r\n"
-   					+ "			\"YQTax\": 0.0,\r\n"
-   					+ "			\"AdditionalTxnFeePub\": 0.0,\r\n"
-   					+ "			\"AdditionalTxnFeeOfrd\": 0.0,\r\n"
-   					+ "			\"OtherCharges\": 0.0\r\n"
-   					+ "		},\r\n"
-   					+ "		\"City\": \"Gurgaon\",\r\n"
-   					+ "		\"CountryCode\": \"IN\",\r\n"
-   					+ "		\"CountryName\": \"India\",      \r\n"
-   					+ "     \"Nationality\": \"IN\",\r\n"
-   					+ "		\"ContactNo\": \"" + order.getPhoneNumber() + "\",\r\n"
-   					+ "		\"Email\": \"" + order.getContactEmail() + "\",\r\n"
-   					+ "		\"IsLeadPax\": " + isLeadPax + ",\r\n"
-   					+ "		\"FFAirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
-   					+ "		\"FFNumber\": \"" + airlineNoArray[1] + "\",\r\n"
-   					+ baggageDetails
-   					+ mealDetails
-   					+ seatDetails
-   					+ "		\"GSTCompanyAddress\": \"\",\r\n"
-   					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
-   					+ "		\"GSTCompanyName\": \"\",\r\n"
-   					+ "		\"GSTNumber\": \"\",\r\n"
-   					+ "		\"GSTCompanyEmail\": \"\"\r\n"
-   					+ "}";
-   			
-   			travelerDetailsArray.add(details);
-
-				
+	   			
+	   			String details = "{\r\n"
+	   					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
+	   					+ "		\"FirstName\": \"" + travellerDetail.getFirstName() + "\",\r\n"
+	   					+ "		\"LastName\": \"" + travellerDetail.getLastName() + "\",\r\n"
+	   					+ "		\"PaxType\": " + travellerDetail.getPaxType() + ",\r\n"
+	   					+ "		\"DateOfBirth\": \"" + getDOB + "T00:00:00\",\r\n"
+	   					+ "		\"Gender\": " + genNum + ",\r\n"
+	   					+ "		\"PassportNo\": \"" + travellerDetail.getPassportNo() + "\",\r\n"
+	   					+ "		\"PassportExpiry\": \"" + travellerDetail.getPassportExpiry() + "T00:00:00\",\r\n"
+	   					+ "		\"AddressLine1\": \"123, Test\",\r\n"
+	   					+ "		\"AddressLine2\": \"\",\r\n"
+	   					+ "		\"Fare\": {\r\n"
+	   					+ "			\"BaseFare\": " + baseFare + ",\r\n"
+	   					+ "			\"Tax\": " + tax + ",\r\n"
+	   					+ "			\"YQTax\": 0.0,\r\n"
+	   					+ "			\"AdditionalTxnFeePub\": 0.0,\r\n"
+	   					+ "			\"AdditionalTxnFeeOfrd\": 0.0,\r\n"
+	   					+ "			\"OtherCharges\": 0.0\r\n"
+	   					+ "		},\r\n"
+	   					+ "		\"City\": \"Gurgaon\",\r\n"
+	   					+ "		\"CountryCode\": \"IN\",\r\n"
+	   					+ "		\"CountryName\": \"India\",      \r\n"
+	   					+ "     \"Nationality\": \"IN\",\r\n"
+	   					+ "		\"ContactNo\": \"" + order.getPhoneNumber() + "\",\r\n"
+	   					+ "		\"Email\": \"" + order.getContactEmail() + "\",\r\n"
+	   					+ "		\"IsLeadPax\": " + isLeadPax + ",\r\n"
+	   					+ "		\"FFAirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "		\"FFNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ baggageDetails
+	   					+ mealDetails
+	   					+ seatDetails
+	   					+ "		\"GSTCompanyAddress\": \"\",\r\n"
+	   					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
+	   					+ "		\"GSTCompanyName\": \"\",\r\n"
+	   					+ "		\"GSTNumber\": \"\",\r\n"
+	   					+ "		\"GSTCompanyEmail\": \"\"\r\n"
+	   					+ "}";
+	   			
+	   			travelerDetailsArray.add(details);
+	
+					
    		}
        	
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
@@ -1113,5 +1114,50 @@ public class OrderService {
 
 		}
 	}
-	
+
+	public String searchReturnInternationalFlightAPIOnlyTraceId(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
+			Date returnDate, String traceIdReturn) throws MalformedURLException, IOException {
+		// Create URL object with the API end-point
+        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+
+        // Open a connection
+        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+        
+        StringBuilder responseBodySearch = new StringBuilder();
+        
+        onlineFlightService.apiOnlineSearchModReturn(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
+		
+        JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
+        System.out.println(jsonObjSearch);
+//        logService.generateLog(jsonObjSearch.toString());
+        try {
+    		traceIdReturn = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
+            
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+        // Close the connection
+        connectionSearch.disconnect();
+
+        return traceIdReturn;
+	}
+
+	public void fareqouteAPI(ProductDetail flight, String traceId) throws IOException {
+
+		if (!flight.getTraceId().equals("offline")) {
+			/* Fare-quote details */
+        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+            // Open a connection
+            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
+            
+            StringBuilder responseBodyFarequote = new StringBuilder();
+            
+        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+
+        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarequote.toString());
+        	System.out.println(jsonObjFarerules);
+            logService.generateLog(jsonObjFarerules.toString());
+		}
+	}
 }
