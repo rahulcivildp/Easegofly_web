@@ -216,7 +216,7 @@
 	        <div class="container">
 	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
 	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
-	                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
+	                <span id="timer" style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;"></span>
 	            </div>
 	        </div>
 	    </div>
@@ -766,6 +766,12 @@
 	};
  	
  	</script>
+<script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = parseInt("[[${timeRemainingPro}]]");
+</script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 
 
 </html>

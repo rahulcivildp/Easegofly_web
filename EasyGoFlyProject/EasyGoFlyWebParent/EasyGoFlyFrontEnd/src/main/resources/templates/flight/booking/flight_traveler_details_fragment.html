@@ -200,7 +200,7 @@
 	        <div class="container">
 	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
 	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
-	                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
+	                <span id="timer" style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;"></span>
 	            </div>
 	        </div>
 	    </div>
@@ -900,6 +900,7 @@
 						            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
 						            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
 									<input type="hidden" name="item_id" id="item_id" th:value="${item.id}">
+          							<input type="hidden" name="timeRemaining" id="timeRemaining">
                                 
                                 <div class="row" style="margin-bottom: 20px;">
 		                            <div class="col-md-9" style="border: 1px solid #a7a7a794; padding: 0; width: 100% !important;">
@@ -1146,5 +1147,11 @@
 	};
 </script>
 
+<script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = parseInt("[[${timeRemainingPro}]]");
+</script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 
 </html>

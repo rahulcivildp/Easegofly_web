@@ -619,30 +619,30 @@
 										<div class="col-md-7 col-12" style=" float: left;">
 			
 											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
+												<label for="floatingInputInter"><i class="fa fa-circle-o-notch fa-spin"></i>
 													Departure</label>
 												<input type="date" class="form-control input_calender" name="date"
-													id="floatingInputDepurtureReturn" required>
+													id="floatingInputInter" required>
 			
 											</div>
 											<div class="col-md-4 col-6 aligner" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="1" id="return_international">
 												<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
 													Return</label>
 												<input type="date" class="form-control input_calender" name="return_date"
-													id="floatingInputReturnReturn" disabled>
+												 disabled>
 			
 											</div>
 											<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
 												<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
 													<div class="dropdown">
-														<div class="" type="button" id="drop_button_inter"
+														<div class="drop_button_inter" type="button"
 															style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
 															onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
 															<span id="resultInter2"></span>
 															<span id="resultInter1"></span>
 															<h1 class="n-text">Travelers</h1>
 														</div>
-														<ul class="dropdownMenu deactive" onmouseover="dropdownOpen(this)" id="dropdownExpand"
+														<ul class="dropdownMenu dropdownExpand deactive" onmouseover="dropdownOpen(this)"
 															onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
 															<li>
 																<b>Class</b>
@@ -757,31 +757,31 @@
 										<div class="col-md-7 col-12" style=" float: left;">
 			
 											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
+												<label for="floatingInter"><i class="fa fa-circle-o-notch fa-spin"></i>
 													Departure</label>
 												<input type="date" class="form-control input_calender" name="date"
-													id="floatingInputDepurtureReturn" required>
+													id="floatingInter" required>
 			
 											</div>
 											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
+												<label for="floatingReturnInter"><i class="fa fa-circle-o-notch fa-spin"></i>
 													Return</label>
 												<input type="date" class="form-control input_calender" name="return_date"
-													id="floatingInputReturnReturn" required>
+													id="floatingReturnInter" required>
 			
 											</div>
 											<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
 												<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
 													<div class="dropdown">
-														<div class="" type="button" id="drop_button_inter_return"
+														<div class="drop_button_inter" type="button"
 															style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
 															onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
 															<span id="result4"></span>
 															<span id="result1"></span>
 															<h1 class="n-text">Travelers</h1>
 														</div>
-														<ul class="dropdownMenu deactive" onmouseover="dropdownOpen(this)"
-															onmouseleave="dropdownClose(this)">
+														<ul class="dropdownMenu dropdownExpand deactive" onmouseover="dropdownOpen(this)"
+															onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
 															<li>
 																<b>Class</b>
 																<select class="pass_list-2 form-control" name="journeyClass"
@@ -1030,7 +1030,7 @@
 	})
 </script>
 <script>
-	$("#drop_button_inter").hover(
+	$(".drop_button_inter").hover(
 		() => { //hover
 			$("#searchBox").css("height", "236px");
 	  	}, 
@@ -1039,7 +1039,7 @@
 	  	}
 	);
 	
-	$("#dropdownExpand").hover(
+	$(".dropdownExpand").hover(
 		() => { //hover
 			$("#searchBox").css("height", "236px");
 	  	}, 
@@ -1047,7 +1047,6 @@
 			$("#searchBox").css("height", "auto");
 	  	}
 	);
-	
 </script>
 <script type="text/javascript">
 
@@ -1063,12 +1062,29 @@
 		$("#floatingInputReturnReturn").click(function () {
 			calenderViewReturnDestination($("#floatingInputDepurtureReturn"), "floatingInputReturnReturn");
 		});
+		
+		$("#floatingInputInter").click(function () {
+			calenderViewInter("floatingInputInter");
+		});
+
+		$("#floatingInter").click(function () {
+			calenderViewReturn("floatingInter");
+		});
+
+		$("#floatingReturnInter").click(function () {
+			calenderViewReturnDestination($("#floatingInter"), "floatingReturnInter");
+		});
 	})
 
 	function calenderView(input) {
 		name = input.attr("name");
 		var today = new Date().toISOString().split('T')[0];
 		document.getElementsByName(name)[0].setAttribute('min', today);
+	}
+
+	function calenderViewInter(input) {
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementById(input).setAttribute('min', today);
 	}
 
 	function calenderViewReturn(input) {

@@ -739,7 +739,7 @@ public class SearchHistoryInternationalController {
     			String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
     			
     			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-                		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+                		stringDepTime, stringArrTime, intTotalAdultChildPrice/2, intTotalInfantPrice/2, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
                 		airlineName, depTimeFloat, arrTimeFloat, pInternationController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
     			
     			pInternationController.listProductDetailsOnline.add(productDetail[i]);
@@ -865,7 +865,7 @@ public class SearchHistoryInternationalController {
         			String craftTypeTwo = mainObjSegmentTwo.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
         			
         			productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailableTwo, noOfSeatAvailableTwo, flightNumberTwo, date, 
-                    		stringDepTimeTwo, stringArrTimeTwo, intTotalAdultChildPriceTwo, intTotalInfantPriceTwo, 0, 0, depAirportCodeTwo, arrAirportCodeTwo, true, true, stopNumberTwo, durationTwo, 
+                    		stringDepTimeTwo, stringArrTimeTwo, intTotalAdultChildPriceTwo/2, intTotalInfantPriceTwo/2, 0, 0, depAirportCodeTwo, arrAirportCodeTwo, true, true, stopNumberTwo, durationTwo, 
                     		airlineNameTwo, depTimeFloatTwo, arrTimeFloatTwo, pInternationController.traceId, resultIndexTwo, airlineRemarkTwo, modeTwo, "2", depTerminalTwo, arrTerminalTwo, 15, 7, null, craftTypeTwo);
         			
         			pInternationController.listProductDetailsOnlineReturn.add(productDetailTwo[i]);

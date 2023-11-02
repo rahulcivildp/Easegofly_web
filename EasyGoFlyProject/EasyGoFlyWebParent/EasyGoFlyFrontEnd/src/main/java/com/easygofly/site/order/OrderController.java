@@ -106,6 +106,7 @@ public class OrderController {
 	
 	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
 			@RequestParam(name = "couponCode") String couponCode,
@@ -114,6 +115,8 @@ public class OrderController {
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
+			productDetailsController.timeRemainingProOne = timeRemaining;
+			
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
 			CartItem item = cartRepo.findById(item_id).get();
@@ -236,6 +239,7 @@ public class OrderController {
 		model.addAttribute("search_id", search_id);
 		model.addAttribute("item_id", item_id);
 		model.addAttribute("coupon", coupon);
+		model.addAttribute("timeRemainingPro", productDetailsController.timeRemainingProOne);
 		
 		return "order/flight_order";
 	}
@@ -378,10 +382,10 @@ public class OrderController {
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
-		if (hasErrorCode != null && hasErrorCode != 0) {
-			model.addAttribute("paymentCancelled", hasErrorMsg);
+		if (hasErrorCode != 0) {
 			orderService.walletPayOrderCancel(customer, order, "");
 			System.out.println(hasErrorCode);
+			model.addAttribute("paymentCancelled", hasErrorMsg);
 		} else {
 			model.addAttribute("paymentSuccess", "successfull");
 		}
@@ -585,9 +589,10 @@ public class OrderController {
 		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
-			if (hasErrorCode != null && hasErrorCode != 0) {
-				model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+			if (hasErrorCode != 0) {
+				orderService.walletPayOrderCancel(customer, order, "");
 				System.out.println(hasErrorCode);
+				model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
 			} else {
 				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			}
@@ -615,6 +620,7 @@ public class OrderController {
 	
 	@PostMapping("/flight_order_return_save")
 	public String createNewOrderReturn(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flightOne_id") Integer flightOne_id, 
 			@RequestParam(name = "itemOne_id") Integer itemOne_id, 
 			@RequestParam(name = "flightTwo_id") Integer flightTwo_id, 
@@ -626,6 +632,7 @@ public class OrderController {
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
+			productDetailsController.timeRemainingPro = timeRemaining;
 			
 			SearchHistory search = searchRepo.findById(searchId).get();
 			ProductDetail flightOne = flightRepo.findById(flightOne_id).get();
@@ -762,6 +769,7 @@ public class OrderController {
 		model.addAttribute("flightTwo", flight2);
 		model.addAttribute("itemTwo_id", itemTwo_id);
 		model.addAttribute("coupon2", coupon2);
+		model.addAttribute("timeRemainingPro", productDetailsController.timeRemainingPro);
 		
 		return "order/return/flight_order";
 	}

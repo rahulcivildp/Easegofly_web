@@ -143,7 +143,7 @@
 	        <div class="container">
 	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
 	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
-	                <span style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;">00:00:00</span>
+	                <span id="timer" style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;"></span>
 	            </div>
 	        </div>
 	    </div>
@@ -176,6 +176,7 @@
                     <div class="row">
                     	<div class="col-md-9" style="padding: 0;">
                     	<form th:action="@{/traveller_details}" method="post">
+          					<input type="hidden" name="timeRemaining" id="timeRemaining">
                             <div id="flight_details" class="booking_tiles back_white shadow">
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="accordion-item" style="background-color: #969393;">
@@ -650,4 +651,10 @@
      
     </script>
     <link th:href="@{css/custom.css}" rel="stylesheet">
+<script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = parseInt("[[${timeRemainingPro}]]");
+</script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 </html>

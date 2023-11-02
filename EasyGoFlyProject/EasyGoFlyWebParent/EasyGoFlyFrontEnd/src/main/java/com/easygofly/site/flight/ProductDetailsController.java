@@ -95,6 +95,8 @@ public class ProductDetailsController {
 	public boolean lcc = true;
 	public boolean lccReturn = true;
 
+	public Integer timeRemainingPro = 0;
+	public Integer timeRemainingProOne = 0;
 	////Flight one-way segment
 
 	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")
@@ -139,6 +141,7 @@ public class ProductDetailsController {
 		model.addAttribute("flight", flight);
 		model.addAttribute("falied", "Please provide a correct coupon code!!!");
 		model.addAttribute("success", "The coupon is verified!");
+		model.addAttribute("timeRemainingPro", timeRemainingProOne);
 		
 		
 		return "flight/booking/flight_traveler_details";
@@ -146,6 +149,7 @@ public class ProductDetailsController {
 
 	@PostMapping("/traveller_details")
 	public String saveTravellerDetails(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,  
@@ -170,6 +174,7 @@ public class ProductDetailsController {
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
+			timeRemainingProOne = timeRemaining;
 			
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
@@ -214,6 +219,7 @@ public class ProductDetailsController {
 	
 	@PostMapping("/flight_booking_save")
 	public String filghtBookingSave(@RequestParam(name = "search_id") float searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId, 
 			@RequestParam(name = "adultNum") Integer adultNum,
 			@RequestParam(name = "childNum") Integer childNum,
@@ -229,6 +235,7 @@ public class ProductDetailsController {
 		CartItem cartItem = new CartItem();
 		Integer searchIdInt = 0;
 		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -339,6 +346,7 @@ public class ProductDetailsController {
 		model.addAttribute("item", item);
 		model.addAttribute("search", search);
 		model.addAttribute("flight", flight);
+		model.addAttribute("timeRemainingPro", timeRemainingProOne);
 		
 		return "flight/booking/flight_booking";
 	}
@@ -671,6 +679,7 @@ public class ProductDetailsController {
 
 	@PostMapping("/flight_booking_return_save")
 	public String filghtBookingReturnSave(@RequestParam(name = "search_id") float searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flightOne_id") Integer flightOneId, 
 			@RequestParam(name = "flightTwo_id") Integer flightTwoId, 
 			@RequestParam(name = "adultNum") Integer adultNum,
@@ -688,6 +697,7 @@ public class ProductDetailsController {
 		Integer searchIdInt = 0;
 		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		Date returnDateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(retunDate);
+		timeRemainingPro = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -904,12 +914,14 @@ public class ProductDetailsController {
 		model.addAttribute("search", search);
 		model.addAttribute("flightOne", flightOne);
 		model.addAttribute("flightTwo", flightTwo);
+		model.addAttribute("timeRemainingPro", timeRemainingPro);
 		
 		return "flight/booking_return/flight_booking_return";
 	}
 	
 	@PostMapping("/traveller_details_return")
 	public String saveTravellerDetailsReturn(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flightOne_id") Integer flightOneId,
 			@RequestParam(name = "itemOne_id") Integer itemOne_id,
 			@RequestParam(name = "flightTwo_id") Integer flightTwoId,
@@ -936,6 +948,7 @@ public class ProductDetailsController {
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
+			timeRemainingPro = timeRemaining;
 			
 			ProductDetail flightOne = flightRepo.findById(flightOneId).get();
 			ProductDetail flightTwo = flightRepo.findById(flightTwoId).get();
@@ -1068,6 +1081,7 @@ public class ProductDetailsController {
 		model.addAttribute("seatsOnlineListReturn", seatsOnlineListReturn);
 		model.addAttribute("mealsOnlineListReturn", mealsOnlineListReturn);
 		model.addAttribute("baggageOnlineListReturn", baggageOnlineListReturn);
+		model.addAttribute("timeRemainingPro", timeRemainingPro);
 		
 		return "flight/booking_return/flight_traveler_details_return";
 	}

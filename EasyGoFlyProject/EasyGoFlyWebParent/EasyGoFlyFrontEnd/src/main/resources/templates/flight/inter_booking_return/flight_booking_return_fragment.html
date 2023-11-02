@@ -185,6 +185,7 @@
                     <div class="row">
                     	<div class="col-md-9" style="padding: 0;">
                     	<form th:action="@{/traveller_details_international_return}" method="post">
+          					<input type="hidden" name="timeRemaining" id="timeRemaining">
                             <div id="flight_details" class="booking_tiles back_white shadow">
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="accordion-item" style="background-color: #969393;">
@@ -525,7 +526,7 @@
 										                    <div id="passportExpiryIdentify` + i + `" class="form-floating mb-4 d-flex">
 										                        <input 
 										                                type="date"
-										                                class="datepicker form-control border-2"
+										                                class="datepicker form-control border-2 floatingInput"
 										                                id="passportExpiryDatepicker` + i + `"
 										                                name="passportExpiry"
 										                                required>
@@ -789,11 +790,30 @@
         $("#c1").addClass("circles_active");
      
     </script>
+    
+    <script>
+	$(document).ready(function () {
+		$(".floatingInput").click(function () {
+			calenderView($(".floatingInput"));
+		});
+	})
+
+	function calenderView(input) {
+		name = input.attr("name");
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementsByName(name)[0].setAttribute('min', today);
+	}
+	</script>
     <link th:href="@{css/custom.css}" rel="stylesheet">
-     <script>
-	   moduleURL = '[[@{/}]]';
-	   timeInSec = parseInt("[[${timeRemainingPro}]]");
-	  </script>
+    <script>
+		if(location.reload()){
+			alert("Reload");
+		}
+	</script>
+ <script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = parseInt("[[${timeRemainingPro}]]");
+ </script>
 
 <script type="text/javascript" th:src="@{/js/timer.js}"></script>
 </html>

@@ -64,7 +64,6 @@ public class OrderService {
 	@Autowired OrderRepository orderRepo;
 	@Autowired TravellerRepository travellerRepo;
 	@Autowired private CustomerService customerService;
-	@Autowired private OrderService orderService;
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private CartItemService cartService;
 	@Autowired private CartItemRepository cartRepo;
@@ -102,8 +101,8 @@ public class OrderService {
 		newOrder.setAdultNum(searchHistory.getAdultNum());
 		newOrder.setChildNum(searchHistory.getChildNum());
 		newOrder.setInfantNum(searchHistory.getInfantNum());
-		newOrder.setCityOne(searchHistory.getCityOne());
-		newOrder.setCityTwo(searchHistory.getCityTwo());
+		newOrder.setCityOne(productDetail.getCityOne());
+		newOrder.setCityTwo(productDetail.getCityTwo());
 		newOrder.setJourneyClass(searchHistory.getJourneyClass());
 		newOrder.setPassengerNum(searchHistory.getPassengerNum());
 		newOrder.setTripType(searchHistory.getTripType());
@@ -259,49 +258,49 @@ public class OrderService {
 			if (coupon1 != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
 				if (order != null) {
-					orderService.updateOrderPrice(order, checkoutInfo1);
-					orderService.addCouponCode(order, couponCode1);
+					 updateOrderPrice(order, checkoutInfo1);
+					 addCouponCode(order, couponCode1);
 				}
 				
 				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				orderService.addCouponCode(order2, couponCode1);
+				 addCouponCode(order2, couponCode1);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					 updateTravelersOrderId(travellerDetail.getId(), order2);
 				}
 			} else if (coupon != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
 				if (order != null) {
-					orderService.updateOrderPrice(order, checkoutInfo1);
-					orderService.addCouponCode(order, couponCode);
+					 updateOrderPrice(order, checkoutInfo1);
+					 addCouponCode(order, couponCode);
 				}
 				
 				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				orderService.addCouponCode(order2, couponCode);
+				 addCouponCode(order2, couponCode);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					 updateTravelersOrderId(travellerDetail.getId(), order2);
 				}
 			} else if (order != null) {
 				if (flight.getTraceId().equals("offline")) {
-					orderService.updateOrderPrice(order, checkoutInfo);
-					orderService.deleteCouponCode(order);
+					 updateOrderPrice(order, checkoutInfo);
+					 deleteCouponCode(order);
 				} else {
-					orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
-					orderService.deleteCouponCode(order);
+					 updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
+					deleteCouponCode(order);
 				}
 				
 			} else {
 				if (flight.getTraceId().equals("offline")) {
 					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
 					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						 updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
-					orderService.deleteCouponCode(order2);
+					 deleteCouponCode(order2);
 				} else {
-					Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+					Order order2 =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
 					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						 updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
-					orderService.deleteCouponCode(order2);
+					 deleteCouponCode(order2);
 				}	
 			}
 			
@@ -311,48 +310,48 @@ public class OrderService {
 			if (coupon1 != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
 				if (order != null) {
-					orderService.updateOrderPrice(order, checkoutInfo1);
-					orderService.addCouponCode(order, couponCode1);
+					 updateOrderPrice(order, checkoutInfo1);
+					 addCouponCode(order, couponCode1);
 				}
 				
 				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				orderService.addCouponCode(order2, couponCode1);
+				 addCouponCode(order2, couponCode1);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					 updateTravelersOrderId(travellerDetail.getId(), order2);
 				}
 			} else if (coupon != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
 				if (order != null) {
-					orderService.updateOrderPrice(order, checkoutInfo1);
-					orderService.addCouponCode(order, couponCode);
+					 updateOrderPrice(order, checkoutInfo1);
+					 addCouponCode(order, couponCode);
 				}
 				
 				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				orderService.addCouponCode(order2, couponCode);
+				 addCouponCode(order2, couponCode);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+					 updateTravelersOrderId(travellerDetail.getId(), order2);
 				}
 			} else if (order != null) {
 				if (flight.getTraceId().equals("offline")) {
-					orderService.updateOrderPrice(order, checkoutInfo);
-					orderService.deleteCouponCode(order);
+					 updateOrderPrice(order, checkoutInfo);
+					 deleteCouponCode(order);
 				} else {
-					orderService.updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
-					orderService.deleteCouponCode(order);
+					 updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
+					 deleteCouponCode(order);
 				}
 			} else {
 				if (flight.getTraceId().equals("offline")) {
 					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
 					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						 updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
-					orderService.deleteCouponCode(order2);
+					 deleteCouponCode(order2);
 				} else {
-					Order order2 = orderService.createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+					Order order2 =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
 					for (TravellerDetail travellerDetail : travellerDetails) {
-						orderService.updateTravelersOrderId(travellerDetail.getId(), order2);
+						 updateTravelersOrderId(travellerDetail.getId(), order2);
 					}
-					orderService.deleteCouponCode(order2);
+					 deleteCouponCode(order2);
 				}	
 			}
 		}
@@ -361,9 +360,9 @@ public class OrderService {
 	public Order saveOrderCreate(ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod,
 			CheckoutInfo checkoutInfo, String orderName, Order order, Customer customer, List<TravellerDetail> travellerDetails) {
 		if (order == null) {
-			return orderService.createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
+			return  createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
 		}else if (item.getId() != order.getCartId()) {
-			return orderService.createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
+			return  createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
 		} else {
 			return null;
 		}
@@ -384,7 +383,7 @@ public class OrderService {
 
 		cartService.updateCartItemOrdered(item);
 
-		orderService.loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
+		 loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
 				paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
 		
 	}
@@ -407,13 +406,13 @@ public class OrderService {
 		ProductDetail productDetail = order.getProductDetail();
 		
 		if (productDetail.getPnr().equals(null) || productDetail.getPnr().equals("")) {
-			orderService.updateOrder(order, OrderStatus.PENDING);
+			 updateOrder(order, OrderStatus.PENDING);
 		} else {
-			orderService.updateOrder(order, OrderStatus.SUCCESSFULL);
+			 updateOrder(order, OrderStatus.SUCCESSFULL);
 		}
 		
 		Integer totalSeatRemaining = Integer.parseInt(productDetail.getTotalSeats()) - order.getPassengerNum();
-		orderService.updateTotalPassenger(order, totalSeatRemaining);
+		 updateTotalPassenger(order, totalSeatRemaining);
 		
 		try {
 			CartItem cartItem = cartRepo.findById(order.getCartId()).get();
@@ -679,7 +678,7 @@ public class OrderService {
 				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
 				productService.updatePNROnline(productDetail, onlinePNR);
 				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-				orderService.updateBookingId(order, onlineBookingId);
+				 updateBookingId(order, onlineBookingId);
 				
 				/* Get Booking Details */
 				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
@@ -692,11 +691,15 @@ public class OrderService {
 				
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+				
 			} catch (JSONException json) {
+				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				
 				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				if (hasErrorCode != 0) {
+					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				}
 				
 			} 
 
@@ -866,14 +869,16 @@ public class OrderService {
 				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
 				productService.updatePNROnline(productDetail, onlinePNR);
 				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-				orderService.updateBookingId(order, onlineBookingId);
-				
+				 updateBookingId(order, onlineBookingId);
+
 			} catch (JSONException json) {
+				 //Error response
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				
 				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
-				
+				if (hasErrorCode != 0) {
+					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				}
 			} 
 
 		}
@@ -1091,7 +1096,7 @@ public class OrderService {
 				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
 				productService.updatePNROnline(productDetail, onlinePNR);
 				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-				orderService.updateBookingId(order, onlineBookingId);
+				updateBookingId(order, onlineBookingId);
 				
 				/* Get Booking Details */
 				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
@@ -1104,12 +1109,261 @@ public class OrderService {
 				
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+				
+				
 			} catch (JSONException json) {
+				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				
 				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				if (hasErrorCode != 0) {
+					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				}
+			} 
+
+		}
+	}
+
+	public void ticketDetailsInternationalReturn(Order order, ProductDetail productDetail, Order orderTwo, ProductDetail productDetailTwo, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, Integer hasErrorCode, String hasErrorMsg, String traceId ) throws MalformedURLException, IOException {
+		if (!productDetail.getTraceId().equals("offline")) {
+			
+			List<String> travelerDetailsArray = new ArrayList<String>();
+			List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
+			
+			String[] airlineNoArray = productDetail.getFlightNum().split("-");
+			String isLeadPax = "false";
+			Integer countAdult = 0;
+		
+			for (TravellerDetail travellerDetail : travelers) {
+				BaggageOnline baggageOnline = travellerDetail.getBaggageOnline();
+				MealsOnline mealsOnline = travellerDetail.getMealOnline();
+				SeatsOnline seatsOnline = travellerDetail.getSeatsOnline();
+					
+	   			Date getDOB = travellerDetail.getDob();
+	   			Integer genNum = 0;
+	   			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
+	   				genNum = 1;
+	   			} else {
+	   				genNum = 2;
+	   			}
+	   			String baseFare = "";
+	   			String tax = "";
+	   			
+	   			//baggage information
+	   			String bagCode = baggageOnline.getCode(), bagWeight = baggageOnline.getWeight(), bagPrice = baggageOnline.getPrice();
+	   			
+	   			//meal information
+	   			String mealCode = mealsOnline.getCode(), mealName = mealsOnline.getName(), mealQuantity = mealsOnline.getQuantity(), mealPrice = mealsOnline.getPrice();
+	   			
+	   			//seat information
+	   			@SuppressWarnings("unused")
+					String seatAvailabilityType = seatsOnline.getAvailablityType().toString(), seatCode = seatsOnline.getCode(), seatRowNo = seatsOnline.getRowNo(), 
+	   					seatNo = seatsOnline.getSeatNo(), seatType = seatsOnline.getSeatType().toString(), seatDeck = seatsOnline.getDeck().toString(), seatCompartment = seatsOnline.getCompartment().toString(), 
+	   					seatPrice = seatsOnline.getPrice(), seatCraftType = seatsOnline.getCraftType();
+	   			String baggageDetailsString = "";
+	   			String mealDetailsString = "";
+	   			String seatDetailsString = "";
+	   			
+	   			if (!bagCode.equals("NoBaggage")) {
+					baggageDetailsString = "		\"Baggage\":[\r\n"
+	   					+ "            {\r\n"
+	   					+ "                \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "                \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ "                \"WayType\": 2,\r\n"
+	   					+ "                \"Code\": \"" + bagCode + "\",\r\n"
+	   					+ "                \"Description\": 2,\r\n"
+	   					+ "                \"Weight\": " + bagWeight + ",\r\n"
+	   					+ "                \"Currency\": \"INR\",\r\n"
+	   					+ "                 \"Price\": " + bagPrice + ",\r\n"
+	   					+ "                 \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+	   					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
+	   					+ "				}\r\n"
+	   					+ "			],\r\n";
+				}
+	   			
+	   			if (!mealCode.equals("NoMeal")) {
+					mealDetailsString = "     \"MealDynamic\": [\r\n"
+	   					+ "        {\r\n"
+	   					+ "          \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "          \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ "          \"WayType\": 2,\r\n"
+	   					+ "          \"Code\": \"" + mealCode + "\",\r\n"
+	   					+ "          \"Description\": 2,\r\n"
+	   					+ "          \"AirlineDescription\": \"" + mealName + "\",\r\n"
+	   					+ "          \"Quantity\": " + mealQuantity + ",\r\n"
+	   					+ "          \"Currency\": \"INR\",\r\n"
+	   					+ "          \"Price\": " + mealPrice + ",\r\n"
+	   					+ "          \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+	   					+ "          \"Destination\": \"" + productDetail.getCityTwo() + "\"\r\n"
+	   					+ "        }],\r\n";
+				}
+	   			
+	   			if (!seatCode.equals("NoSeat")) {
+					seatDetailsString = "		\"SeatDynamic\": [\r\n"
+	   					+ "        {\r\n"
+	   					+ "	    \"AirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "             \"FlightNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ "              \"CraftType\": \"" + productDetail.getCraftType() + "\",\r\n"
+	   					+ "               \"Origin\": \"" + productDetail.getCityOne() + "\",\r\n"
+	   					+ "                \"Destination\": \"" + productDetail.getCityTwo() + "\",\r\n"
+	   					+ "                \"AvailablityType\": " + seatAvailabilityType + ",\r\n"
+	   					+ "                \"Description\": 2,\r\n"
+	   					+ "                \"Code\": \"" + seatCode + "\",\r\n"
+	   					+ "                \"RowNo\": \"" + seatRowNo + "\",\r\n"
+	   					+ "                \"SeatNo\": \"" + seatNo + "\",\r\n"
+	   					+ "                \"SeatType\": " + seatType + ",\r\n"
+	   					+ "                \"SeatWayType\": 2,\r\n"
+	   					+ "                \"Compartment\": " + seatCompartment + ",\r\n"
+	   					+ "                \"Deck\": " + seatDeck + ",\r\n"
+	   					+ "                \"Currency\": \"INR\",\r\n"
+	   					+ "                \"Price\": " + seatPrice + "                                                                                                                                                                                                      \r\n"
+	   					+ "			\r\n"
+	   					+ "		}],\r\n";
+				}
+	   			
+	   			
+	   			String baggageDetails = baggageDetailsString;
+	   			String mealDetails = mealDetailsString;
+	   			String seatDetails = seatDetailsString;
+	   			
+	   			if (travellerDetail.getPaxType().equals("1")) {
+	   				Integer fareInt = Integer.parseInt(basefareTravelerAdult) / searchId.getAdultNum();
+	   				Double taxInt = Double.parseDouble(taxTravelerAdult) / searchId.getAdultNum();
+	   				baseFare = "" + fareInt;
+	   				tax = "" + taxInt;
+	   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+	   				
+	   				if (countAdult == 0) {
+							isLeadPax = "true";
+						} else {
+							isLeadPax = "false";
+						}
+	   				countAdult++;
+	   				System.out.println(countAdult);
+					} else if (travellerDetail.getPaxType().equals("2")) {
+	   				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
+	   				Double taxInt = Double.parseDouble(taxTravelerChild) / searchId.getChildNum();
+	   				baseFare = "" + fareInt;
+	   				tax = "" + taxInt;
+	   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+						isLeadPax = "false";
+					} else {
+	   				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
+	   				Double taxInt = Double.parseDouble(taxTravelerInfant) / searchId.getInfantNum();
+	   				baseFare = "" + fareInt;
+	   				tax = "" + taxInt;
+	   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+						isLeadPax = "false";
+					}
+	   			
+	   			String details = "{\r\n"
+	   					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
+	   					+ "		\"FirstName\": \"" + travellerDetail.getFirstName() + "\",\r\n"
+	   					+ "		\"LastName\": \"" + travellerDetail.getLastName() + "\",\r\n"
+	   					+ "		\"PaxType\": " + travellerDetail.getPaxType() + ",\r\n"
+	   					+ "		\"DateOfBirth\": \"" + getDOB + "T00:00:00\",\r\n"
+	   					+ "		\"Gender\": " + genNum + ",\r\n"
+	   					+ "		\"PassportNo\": \"" + travellerDetail.getPassportNo() + "\",\r\n"
+	   					+ "		\"PassportExpiry\": \"" + travellerDetail.getPassportExpiry() + "T00:00:00\",\r\n"
+	   					+ "		\"AddressLine1\": \"123, Test\",\r\n"
+	   					+ "		\"AddressLine2\": \"\",\r\n"
+	   					+ "		\"Fare\": {\r\n"
+	   					+ "			\"BaseFare\": " + baseFare + ",\r\n"
+	   					+ "			\"Tax\": " + tax + ",\r\n"
+	   					+ "			\"YQTax\": 0.0,\r\n"
+	   					+ "			\"AdditionalTxnFeePub\": 0.0,\r\n"
+	   					+ "			\"AdditionalTxnFeeOfrd\": 0.0,\r\n"
+	   					+ "			\"OtherCharges\": 0.0\r\n"
+	   					+ "		},\r\n"
+	   					+ "		\"City\": \"Gurgaon\",\r\n"
+	   					+ "		\"CountryCode\": \"IN\",\r\n"
+	   					+ "		\"CountryName\": \"India\",      \r\n"
+	   					+ "     \"Nationality\": \"IN\",\r\n"
+	   					+ "		\"ContactNo\": \"" + order.getPhoneNumber() + "\",\r\n"
+	   					+ "		\"Email\": \"" + order.getContactEmail() + "\",\r\n"
+	   					+ "		\"IsLeadPax\": " + isLeadPax + ",\r\n"
+	   					+ "		\"FFAirlineCode\": \"" + airlineNoArray[0] + "\",\r\n"
+	   					+ "		\"FFNumber\": \"" + airlineNoArray[1] + "\",\r\n"
+	   					+ baggageDetails
+	   					+ mealDetails
+	   					+ seatDetails
+	   					+ "		\"GSTCompanyAddress\": \"\",\r\n"
+	   					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
+	   					+ "		\"GSTCompanyName\": \"\",\r\n"
+	   					+ "		\"GSTNumber\": \"\",\r\n"
+	   					+ "		\"GSTCompanyEmail\": \"\"\r\n"
+	   					+ "}";
+	   			
+	   			travelerDetailsArray.add(details);
+	
+					
+   		}
+       	
+       	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+
+       	/* Ticket details */
+       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+           // Open a connection
+           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
+           
+           StringBuilder responseBodyTicket = new StringBuilder();
+           
+       	onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, traceId, productDetail.getResultIndex(), arrayTraveler);
+       	
+       	
+       	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
+       	System.out.println(jsonObjTicket);
+       	logService.generateLog(jsonObjTicket.toString());
+       	try {
+				JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+				JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
 				
+				String terminalDep = "", terminalArr = "";
+				for (int i = 0; i < jsonArraySegment.length(); i++) {
+					JSONObject jsonObjectSegments = jsonArraySegment.getJSONObject(i);
+					if (i == 0) {
+						terminalDep = jsonObjectSegments.getJSONObject("Origin").getJSONObject("Airport").get("Terminal").toString();
+					}
+					if (i == (jsonArraySegment.length() - 1)) {
+						terminalArr = jsonObjectSegments.getJSONObject("Destination").getJSONObject("Airport").get("Terminal").toString();
+					}
+				}
+				
+				String onlinePNR = jsonObjTicketResponse.get("PNR").toString();
+				String onlineBookingId = jsonObjTicketResponse.get("BookingId").toString();
+
+				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
+				productService.updatePNROnline(productDetail, onlinePNR);
+				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
+				updateBookingId(order, onlineBookingId);
+
+				productService.updateOtherDetails(productDetailTwo, terminalDep, terminalArr);
+				productService.updatePNROnline(productDetailTwo, onlinePNR);
+				productService.setTotalSeatOnline(productDetailTwo, productDetailTwo.getUploadSeats());
+				updateBookingId(orderTwo, onlineBookingId);
+				
+				/* Get Booking Details */
+				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
+				// Open a connection
+				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
+				
+				StringBuilder responseBodyGetBookingDetails = new StringBuilder();
+				
+				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, traceId, onlinePNR, onlineBookingId);
+				
+				@SuppressWarnings("unused")
+				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+				
+				
+			} catch (JSONException json) {
+				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				
+				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
+				if (hasErrorCode != 0) {
+					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				}
 			} 
 
 		}

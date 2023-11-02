@@ -470,6 +470,7 @@
 	      				<input type="hidden" name="returnDate" th:value="${strReturnDate}">
 	      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
 	          			<input type="hidden" name="search_id" th:value="1.5">
+          				<input type="hidden" name="timeRemaining" class="timeRemain">
 			                    <div class="row">
 			                    	<div class="col-md-10 displayChange">
 										<th:block th:each="flightOne : ${listProducts}" th:if="${flightMap.flightIdOne} == ${flightOne.id}">

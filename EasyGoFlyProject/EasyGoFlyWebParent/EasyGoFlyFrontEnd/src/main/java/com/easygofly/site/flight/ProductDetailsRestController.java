@@ -150,4 +150,18 @@ public class ProductDetailsRestController {
 		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
 	}
 
+	
+	@GetMapping("/show_timer")
+	public Integer timer(@Param("timer") Integer timer) {
+		pInternationController.timeRemainingProOne = timer;
+		
+		return pInternationController.timeRemainingProOne;
+	}
+	
+	@GetMapping("/show_timer_return")
+	public Integer timerReturn(@Param("timer") Integer timer) {
+		pInternationController.timeRemainingProOne = timer;
+		
+		return pInternationController.timeRemainingProOne;
+	}
 }

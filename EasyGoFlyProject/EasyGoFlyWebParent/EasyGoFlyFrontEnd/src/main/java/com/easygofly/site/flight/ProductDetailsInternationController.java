@@ -97,10 +97,12 @@ public class ProductDetailsInternationController {
 	public String discountReturn ="" , tdsOnIncentiveReturn ="", tdsOnCommissionReturn ="", tdsOnPLBReturn ="", otherChargesReturn ="", publishedFareReturn ="", offeredFareReturn ="", serviceFeeReturn ="";
 
 	public Integer timeRemainingPro = 0;
+	public Integer timeRemainingProOne = 0;
 	////International flight one-way segment
 
 	@PostMapping("/flight_international_booking_save")
 	public String filghtBookingSave(@RequestParam(name = "search_id") float searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId, 
 			@RequestParam(name = "adultNum") Integer adultNum,
 			@RequestParam(name = "childNum") Integer childNum,
@@ -116,6 +118,7 @@ public class ProductDetailsInternationController {
 		CartItem cartItem = new CartItem();
 		Integer searchIdInt = 0;
 		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -225,12 +228,14 @@ public class ProductDetailsInternationController {
 		model.addAttribute("item", item);
 		model.addAttribute("search", search);
 		model.addAttribute("flight", flight);
+		model.addAttribute("timeRemainingPro", timeRemainingProOne);
 		
 		return "flight/inter_booking/flight_booking";
 	}
 	
 	@PostMapping("/traveller_international_details")
 	public String saveTravellerDetails(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
 			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,  
@@ -257,6 +262,7 @@ public class ProductDetailsInternationController {
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
+			timeRemainingProOne = timeRemaining;
 			
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
@@ -351,6 +357,7 @@ public class ProductDetailsInternationController {
 		model.addAttribute("flight", flight);
 		model.addAttribute("falied", "Please provide a correct coupon code!!!");
 		model.addAttribute("success", "The coupon is verified!");
+		model.addAttribute("timeRemainingPro", timeRemainingProOne);
 		
 		
 		return "flight/inter_booking/flight_traveler_details";
@@ -843,6 +850,7 @@ public class ProductDetailsInternationController {
 	
 	@PostMapping("/traveller_details_international_return")
 	public String saveInternationalTravellerDetailsReturn(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flightOne_id") Integer flightOneId,
 			@RequestParam(name = "itemOne_id") Integer itemOne_id,
 			@RequestParam(name = "flightTwo_id") Integer flightTwoId,
@@ -871,6 +879,8 @@ public class ProductDetailsInternationController {
 				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
+
+			timeRemainingPro = timeRemaining;
 			
 			ProductDetail flightOne = flightRepo.findById(flightOneId).get();
 			ProductDetail flightTwo = flightRepo.findById(flightTwoId).get();
@@ -974,6 +984,7 @@ public class ProductDetailsInternationController {
 		model.addAttribute("seatsOnlineListReturn", seatsOnlineListReturn);
 		model.addAttribute("mealsOnlineListReturn", mealsOnlineListReturn);
 		model.addAttribute("baggageOnlineListReturn", baggageOnlineListReturn);
+		model.addAttribute("timeRemainingPro", timeRemainingPro);
 		
 		return "flight/inter_booking_return/flight_traveler_details_return";
 		

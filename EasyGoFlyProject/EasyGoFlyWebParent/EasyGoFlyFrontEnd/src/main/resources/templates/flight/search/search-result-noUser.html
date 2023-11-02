@@ -417,6 +417,7 @@
 		          	<div class="col-md-12 shadow rounded" style=" border: 1px solid #e0e0e0; background-color: white; margin: 15px 0;">
 		            	<form th:action="@{/flight_booking_save}" method="post" >
 		          			<input type="hidden" th:id="'inputSeatNum_offline-' + ${flight.id}" th:value="${flight.totalSeats}">
+          					<input type="hidden" name="timeRemaining" class="timeRemain">
 			          		<div th:id="'flightSearchResultOffline' + ${flight.id}"></div>
 		          		</form>
 		          	</div>
@@ -873,28 +874,11 @@
 
 </script>
 <script>
-	    // Set the date and time to count down to (in this example, it's set to 10 minutes from the current time)
-	    var countDownDate = new Date().getTime() + 6 * 60 * 1000;
-	
-	    // Update the countdown every second
-	    var x = setInterval(function() {
-	      var now = new Date().getTime();
-	      var distance = countDownDate - now;
-	
-	      // Calculate remaining time
-	      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-	      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-	
-	      // Display the countdown timer in the "timer" div
-	      document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
-	
-	      // When the countdown timer reaches zero, display a message
-	      if (distance < 2) {
-	        clearInterval(x);
-	        document.location.href = '[[@{/}]]';
-	      }
-	    }, 0);
-	  </script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = 6 * 60 * 1000;
+  </script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>
