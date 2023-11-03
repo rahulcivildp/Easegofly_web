@@ -475,10 +475,11 @@ public class OrderService {
 		return walletService.updateWalletBalanceByOrderReturn(customer, order1, order2, orderString, "");
 	}
 
-	public void ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
-			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, Integer hasErrorCode, String hasErrorMsg, String traceId ) throws MalformedURLException, IOException {
+	public String[] ticketDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, String traceId ) throws MalformedURLException, IOException {
 		List<String> travelerDetailsArray = new ArrayList<String>();
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
+		String[] hasErrorArr = new String[2];
 		
 		if (!productDetail.getTraceId().equals("offline")) {
 			
@@ -692,25 +693,28 @@ public class OrderService {
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
 				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
 			} catch (JSONException json) {
 				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
-				
-				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				if (hasErrorCode != 0) {
-					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
-				}
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 				
 			} 
-
 		}
+		
+		return hasErrorArr;
 	}
 	
-	public void bookingDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+	public String[] bookingDetails(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
 			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, String discount, String tdsOnIncentive, String tdsOnCommission, String tdsOnPLB, String otherCharges, 
-			 String publishedFare, String offeredFare, String serviceFee, Integer hasErrorCode, String hasErrorMsg, String traceId) throws IOException {
+			 String publishedFare, String offeredFare, String serviceFee, String traceId) throws IOException {
 		List<String> travelerDetailsArray = new ArrayList<String>();
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
+		String[] hasErrorArr = new String[2];
 		
 		if (!productDetail.getTraceId().equals("offline")) {
 			
@@ -850,7 +854,7 @@ public class OrderService {
        	try {
 				JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
 				JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
-//       	JSONObject jsonObjectSegments = new JSONObject();
+//       		JSONObject jsonObjectSegments = new JSONObject();
 				
 				String terminalDep = "", terminalArr = "";
 				for (int i = 0; i < jsonArraySegment.length(); i++) {
@@ -869,23 +873,27 @@ public class OrderService {
 				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
 				productService.updatePNROnline(productDetail, onlinePNR);
 				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-				 updateBookingId(order, onlineBookingId);
-
+				updateBookingId(order, onlineBookingId);
+				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+						
 			} catch (JSONException json) {
 				 //Error response
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
-				
-				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				if (hasErrorCode != 0) {
-					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
-				}
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			} 
 
 		}
+		return hasErrorArr;
 	}
 
-	public void ticketDetailsInternational(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
-			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, Integer hasErrorCode, String hasErrorMsg, String traceId ) throws MalformedURLException, IOException {
+	public String[] ticketDetailsInternational(Order order, ProductDetail productDetail, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, String traceId ) throws MalformedURLException, IOException {
+		String[] hasErrorArr = new String[2];
+		
 		if (!productDetail.getTraceId().equals("offline")) {
 			
 			List<String> travelerDetailsArray = new ArrayList<String>();
@@ -1110,22 +1118,26 @@ public class OrderService {
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
 				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
 				
 			} catch (JSONException json) {
 				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
-				
-				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				if (hasErrorCode != 0) {
-					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
-				}
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			} 
 
 		}
+		return hasErrorArr;
 	}
 
-	public void ticketDetailsInternationalReturn(Order order, ProductDetail productDetail, Order orderTwo, ProductDetail productDetailTwo, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
-			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, Integer hasErrorCode, String hasErrorMsg, String traceId ) throws MalformedURLException, IOException {
+	public String[] ticketDetailsInternationalReturn(Order order, ProductDetail productDetail, Order orderTwo, ProductDetail productDetailTwo, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, String traceId ) throws MalformedURLException, IOException {
+		String[] hasErrorArr = new String[2];
+		
 		if (!productDetail.getTraceId().equals("offline")) {
 			
 			List<String> travelerDetailsArray = new ArrayList<String>();
@@ -1355,18 +1367,20 @@ public class OrderService {
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
 				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
 				
 			} catch (JSONException json) {
 				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
-				
-				hasErrorCode = Integer.parseInt(jsonObjTicketResponseError.get("ErrorCode").toString());
-				if (hasErrorCode != 0) {
-					hasErrorMsg = jsonObjTicketResponseError.get("ErrorMessage").toString();
-				}
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			} 
 
 		}
+		return hasErrorArr;
 	}
 
 	public String searchReturnInternationalFlightAPIOnlyTraceId(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 

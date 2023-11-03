@@ -97,7 +97,7 @@ public class OrderController {
 	private Integer updatedOrderReturnId1;
 	private Integer updatedOrderReturnId2;
 	private Integer hasErrorCode;
-	private String hasErrorMsg;
+	private Integer hasErrorCodeTwo;
 	
 	Integer search_id_inner = 0;
 	Integer searchReturn_id_inner = 0;
@@ -302,16 +302,17 @@ public class OrderController {
 		orderService.methodSSR(productDetail);
 
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
+		String[] hasErrorArr = new String[2];
 		
 		if (productDetail.isLcc() == true) {
-			orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, hasErrorCode, hasErrorMsg, 
+			hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, 
 				productDetailsController.traceId);
 		} else {
-			orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+			hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
 				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
-				productDetailsController.offeredFare, productDetailsController.serviceFee, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+				productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 		}
 		
 		String pnr = productDetail.getPnr();
@@ -382,10 +383,11 @@ public class OrderController {
 		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
+		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
 		if (hasErrorCode != 0) {
 			orderService.walletPayOrderCancel(customer, order, "");
 			System.out.println(hasErrorCode);
-			model.addAttribute("paymentCancelled", hasErrorMsg);
+			model.addAttribute("paymentCancelled", hasErrorArr[1]);
 		} else {
 			model.addAttribute("paymentSuccess", "successfull");
 		}
@@ -509,16 +511,17 @@ public class OrderController {
 		
 		orderService.methodSSR(productDetail);
 		
-		SearchHistory search = searchRepo.findById(search_id_inner).get();		
+		SearchHistory search = searchRepo.findById(search_id_inner).get();	
+		String[] hasErrorArr = new String[2];	
 		
 		if (productDetail.isLcc() == true) {
-			orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+			hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
 		} else {
-			orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+			hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
 				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
-				productDetailsController.offeredFare, productDetailsController.serviceFee, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+				productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 		}
 		
 		String pnr = productDetail.getPnr();
@@ -589,10 +592,11 @@ public class OrderController {
 		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
+			hasErrorCode = Integer.parseInt(hasErrorArr[0]);
 			if (hasErrorCode != 0) {
 				orderService.walletPayOrderCancel(customer, order, "");
 				System.out.println(hasErrorCode);
-				model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 			} else {
 				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			}
@@ -814,7 +818,7 @@ public class OrderController {
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
 		String email; 
-		Customer customer; 
+		Customer customer = new Customer(); 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByEmail(email);
@@ -838,26 +842,28 @@ public class OrderController {
 		orderService.methodSSR(productDetail2);
 
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
+		String[] hasErrorArr = new String[2];
+		String[] hasErrorArrTwo = new String[2];
 		
 		if (productDetail1.isLcc() == true) {
-			orderService.ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+			hasErrorArr = orderService.ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
 		} else {
-			orderService.bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+			hasErrorArr = orderService.bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
 					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
-					productDetailsController.offeredFare, productDetailsController.serviceFee, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 		}
 		
 		if (productDetail2.isLcc() == true) {
-			orderService.ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
-				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search, hasErrorCode, hasErrorMsg, 
+			hasErrorArrTwo = orderService.ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search, 
 				productDetailsController.traceId);
 		} else {
-			orderService.bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+			hasErrorArrTwo = orderService.bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discountReturn, 
 					productDetailsController.tdsOnIncentiveReturn, productDetailsController.tdsOnCommissionReturn, productDetailsController.tdsOnPLBReturn, productDetailsController.otherChargesReturn, 
-					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn, productDetailsController.traceId);
 		}
 		
 		// Departure ticket segment ............................*****.....................
@@ -995,6 +1001,31 @@ public class OrderController {
 		
 		orderService.orderUpdateWallet(order1);
 		orderService.orderUpdateWallet(order2);
+		
+		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
+		hasErrorCodeTwo = Integer.parseInt(hasErrorArrTwo[0]);
+		
+		if (hasErrorCode != 0 && hasErrorCodeTwo != 0) {
+			orderService.walletPayOrderCancel(customer, order1, "");
+			orderService.walletPayOrderCancel(customer, order2, "");
+			System.out.println(hasErrorCode);
+			System.out.println(hasErrorCodeTwo);
+			
+			model.addAttribute("paymentCancelled", hasErrorArr[1] + " " + hasErrorArrTwo[1]);
+			
+		} else if (hasErrorCode != 0 ) {
+			orderService.walletPayOrderCancel(customer, order1, "");
+			System.out.println(hasErrorCode);
+			model.addAttribute("paymentCancelled", hasErrorArr[1]);
+			
+		} else if (hasErrorCodeTwo != 0) {
+			orderService.walletPayOrderCancel(customer, order2, "");
+			System.out.println(hasErrorCodeTwo);
+			model.addAttribute("paymentCancelled", hasErrorArrTwo[1]);
+			
+		} else {
+			model.addAttribute("paymentSuccess", "successfull");
+		}
 		
 		return "wallet/return/response";
 	}
@@ -1171,25 +1202,28 @@ public class OrderController {
 		orderService.methodSSR(productDetail2);
 
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
+		String[] hasErrorArr = new String[2];
+		String[] hasErrorArrTwo = new String[2];
+		
 		if (productDetail1.isLcc() == true) {
-			orderService.ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+			hasErrorArr = orderService.ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
 		} else {
-			orderService.bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+			hasErrorArr = orderService.bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
 				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
-				productDetailsController.offeredFare, productDetailsController.serviceFee, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+				productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 		}
 		
 		if (productDetail2.isLcc() == true) {
-			orderService.ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
-				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search, hasErrorCode, hasErrorMsg, 
+			hasErrorArrTwo = orderService.ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search, 
 				productDetailsController.traceId);
 		} else {
-			orderService.bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+			hasErrorArrTwo = orderService.bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
 					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discountReturn, 
 					productDetailsController.tdsOnIncentiveReturn, productDetailsController.tdsOnCommissionReturn, productDetailsController.tdsOnPLBReturn, productDetailsController.otherChargesReturn, 
-					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn, hasErrorCode, hasErrorMsg, productDetailsController.traceId);
+					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn, productDetailsController.traceId);
 		}
 		
 		// Departure ticket segment ............................*****.....................
@@ -1331,9 +1365,28 @@ public class OrderController {
 		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
-			if (hasErrorCode != null && hasErrorCode != 0) {
-				model.addAttribute("paymentCancelled", OrderStatus.CANCELLED);
+			
+			hasErrorCode = Integer.parseInt(hasErrorArr[0]);
+			hasErrorCodeTwo = Integer.parseInt(hasErrorArrTwo[0]);
+			
+			if (hasErrorCode != 0 && hasErrorCodeTwo != 0) {
+				orderService.walletPayOrderCancel(customer, order1, "");
+				orderService.walletPayOrderCancel(customer, order2, "");
 				System.out.println(hasErrorCode);
+				System.out.println(hasErrorCodeTwo);
+				
+				model.addAttribute("paymentCancelled", hasErrorArr[1] + " " + hasErrorArrTwo[1]);
+				
+			} else if (hasErrorCode != 0 ) {
+				orderService.walletPayOrderCancel(customer, order1, "");
+				System.out.println(hasErrorCode);
+				model.addAttribute("paymentCancelled", hasErrorArr[1]);
+				
+			} else if (hasErrorCodeTwo != 0) {
+				orderService.walletPayOrderCancel(customer, order2, "");
+				System.out.println(hasErrorCodeTwo);
+				model.addAttribute("paymentCancelled", hasErrorArrTwo[1]);
+				
 			} else {
 				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			}
