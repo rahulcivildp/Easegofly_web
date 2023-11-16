@@ -241,12 +241,11 @@
                             <div class="col-md-10" style=" font-size: 18px; padding: 10px 0;"> 
                                 <div class="row">
                                     <div>
-                                            <p class="tile-align" style="padding-right: 6px;">Destination </p>
-                                            <p class="tile-align" style="color: #f1c043;"> : [[${cityOne}]]</p>
-                                            <p class="tile-align">&nbsp; - &nbsp;</p>
-                                            <p class="tile-align" style="padding-right: 6px;">Destination </p>
-                                            <p class="tile-align" style="color: #f1c043;"> : [[${cityTwo}]]</p>
-                                            
+                                        <p class="tile-align" style="padding-right: 6px;">Destination </p>
+                                        <p class="tile-align" style="color: #f1c043;"> : [[${cityOne}]]</p>
+                                        <p class="tile-align">&nbsp; - &nbsp;</p>
+                                        <p class="tile-align" style="padding-right: 6px;">Destination </p>
+                                        <p class="tile-align" style="color: #f1c043;"> : [[${cityTwo}]]</p>
                                     </div>
                                 </div>
                                 <div>
@@ -793,6 +792,11 @@
 					</script>
 					</th:block>
 	          </th:block> 
+	          <th:block th:if="${errorMsg} != null">
+				  <div class="container" style="display: flex; align-items: center; justify-content: center; padding: 50px;">
+					  <b>[[${errorMsg}]] For Online API Search !!!</b>
+				  </div> 
+			  </th:block>
 		</div>
 		</div>
     </div>

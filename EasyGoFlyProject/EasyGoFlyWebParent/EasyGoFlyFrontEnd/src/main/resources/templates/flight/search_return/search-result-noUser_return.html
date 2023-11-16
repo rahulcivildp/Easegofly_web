@@ -770,6 +770,11 @@
 
 				</script>
            </th:block>
+	          <th:block th:if="${errorMsg} != null">
+				  <div class="container" style="display: flex; align-items: center; justify-content: center; padding: 50px;">
+					  <b>[[${errorMsg}]] For Online API Search !!!</b>
+				  </div> 
+			  </th:block>
 		</div>
 		</div>
     </div>

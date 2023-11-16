@@ -609,7 +609,7 @@
 			                                    </div>
 			                                    <div class="col-6" style="font-size: 15px;">
 			                                        <b> [[${flightTwo.brand}]] </b>
-			                                        <p id="pnr_id" style="margin: 0;">[[${flightTwo.flightNum}]]</p> [[${flightTwo.priceADT}]]
+			                                        <p id="pnr_id" style="margin: 0;">[[${flightTwo.flightNum}]]</p> [[${flightTwo.priceADT}]] 
 			                                    </div>
 		                                    </div>
 				                    	</div>
@@ -769,6 +769,11 @@
 
 				</script>
            </th:block>
+	          <th:block th:if="${errorMsg} != null">
+				  <div class="container" style="display: flex; align-items: center; justify-content: center; padding: 50px;">
+					  <b>[[${errorMsg}]] For Online API Search !!!</b>
+				  </div> 
+			  </th:block>
 		</div>
 		</div>
     </div>

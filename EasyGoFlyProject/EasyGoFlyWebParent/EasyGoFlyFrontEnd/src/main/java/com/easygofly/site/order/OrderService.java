@@ -144,8 +144,8 @@ public class OrderService {
 		newOrder.setAdultNum(searchHistory.getAdultNum());
 		newOrder.setChildNum(searchHistory.getChildNum());
 		newOrder.setInfantNum(searchHistory.getInfantNum());
-		newOrder.setCityOne(searchHistory.getCityOne());
-		newOrder.setCityTwo(searchHistory.getCityTwo());
+		newOrder.setCityOne(productDetail.getCityOne());
+		newOrder.setCityTwo(productDetail.getCityTwo());
 		newOrder.setJourneyClass(searchHistory.getJourneyClass());
 		newOrder.setPassengerNum(searchHistory.getPassengerNum());
 		newOrder.setTripType(searchHistory.getTripType());
@@ -679,26 +679,14 @@ public class OrderService {
 				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
 				productService.updatePNROnline(productDetail, onlinePNR);
 				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-				 updateBookingId(order, onlineBookingId);
-				
-				/* Get Booking Details */
-				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
-				// Open a connection
-				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
-				
-				StringBuilder responseBodyGetBookingDetails = new StringBuilder();
-				
-				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, traceId, onlinePNR, onlineBookingId);
-				
-				@SuppressWarnings("unused")
-				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+				updateBookingId(order, onlineBookingId);
 				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 				
 			} catch (JSONException json) {
-				
+//				json.printStackTrace();
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
@@ -1374,6 +1362,192 @@ public class OrderService {
 				
 			} catch (JSONException json) {
 				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+			} 
+
+		}
+		return hasErrorArr;
+	}
+
+	public String[] bookingDetailsInternationalReturn(Order order, ProductDetail productDetail, Order orderTwo, ProductDetail productDetailTwo, String basefareTravelerAdult, String taxTravelerAdult, String basefareTravelerChild, String taxTravelerChild, 
+			 String basefareTravelerInfant, String taxTravelerInfant, SearchHistory searchId, String discount, String tdsOnIncentive, String tdsOnCommission, String tdsOnPLB, String otherCharges, 
+			 String publishedFare, String offeredFare, String serviceFee, String traceId) throws IOException {
+		List<String> travelerDetailsArray = new ArrayList<String>();
+		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
+		String[] hasErrorArr = new String[2];
+		
+		if (!productDetail.getTraceId().equals("offline")) {
+			
+			String isLeadPax = "false";
+			Integer countAdult = 0;
+		
+			for (TravellerDetail travellerDetail : travelers) {
+				
+   			Date getDOB = travellerDetail.getDob();
+   			Integer genNum = 0;
+   			if (travellerDetail.getSalutation().equals("Mr") || travellerDetail.getSalutation().equals("Mstr")) {
+   				genNum = 1;
+   			} else {
+   				genNum = 2;
+   			}
+   			String baseFare = "";
+   			String tax = "";
+   			
+   			if (travellerDetail.getPaxType().equals("1")) {
+   				Integer fareInt = Integer.parseInt(basefareTravelerAdult) / searchId.getAdultNum();
+   				Integer taxInt = Integer.parseInt(taxTravelerAdult) / searchId.getAdultNum();
+   				baseFare = "" + fareInt;
+   				tax = "" + taxInt;
+   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+   				
+   				if (countAdult == 0) {
+						isLeadPax = "true";
+					} else {
+						isLeadPax = "false";
+					}
+   				countAdult++;
+   				System.out.println(countAdult);
+				} else if (travellerDetail.getPaxType().equals("2")) {
+   				Integer fareInt = Integer.parseInt(basefareTravelerChild) / searchId.getChildNum();
+   				Integer taxInt = Integer.parseInt(taxTravelerChild) / searchId.getChildNum();
+   				baseFare = "" + fareInt;
+   				tax = "" + taxInt;
+   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+					isLeadPax = "false";
+				} else {
+   				Integer fareInt = Integer.parseInt(basefareTravelerInfant) / searchId.getInfantNum();
+   				Integer taxInt = Integer.parseInt(taxTravelerInfant) / searchId.getInfantNum();
+   				baseFare = "" + fareInt;
+   				tax = "" + taxInt;
+   				travelerService.updateBasefareTax(travellerDetail, baseFare, tax);
+					isLeadPax = "false";
+				}
+   			
+   			String details = "{\r\n"
+   					+ "		\"Title\": \"" + travellerDetail.getSalutation() + "\",\r\n"
+   					+ "		\"FirstName\": \"" + travellerDetail.getFirstName() + "\",\r\n"
+   					+ "		\"LastName\": \"" + travellerDetail.getLastName() + "\",\r\n"
+   					+ "		\"PaxType\": " + travellerDetail.getPaxType() + ",\r\n"
+   					+ "		\"DateOfBirth\": \"" + getDOB + "T00:00:00\",\r\n"
+   					+ "		\"Gender\": " + genNum + ",\r\n"
+   					+ "		\"PassportNo\": \"" + travellerDetail.getPassportNo() + "\",\r\n"
+   					+ "		\"PassportExpiry\": \"" + travellerDetail.getPassportExpiry() + "T00:00:00\",\r\n"
+   					+ "		\"AddressLine1\": \"123, Test\",\r\n"
+   					+ "		\"AddressLine2\": \"\",\r\n"
+   					+ "		\"Fare\": {\r\n"
+   					+ "			\"BaseFare\": " + baseFare + ",\r\n"
+   					+ "			\"Tax\": " + tax + ",\r\n"
+   					+ "			\"YQTax\": 0.0,\r\n"
+   					+ "			\"AdditionalTxnFeePub\": 0.0,\r\n"
+   					+ "			\"AdditionalTxnFeeOfrd\": 0.0,\r\n"
+   					+ "			\"OtherCharges\": " + otherCharges + ",\r\n"
+   					+ "			\"Discount\": " + discount + ",\r\n"
+   					+ "			\"PublishedFare\": " + publishedFare + ",\r\n"
+   					+ "			\"OfferedFare\": " + offeredFare + ",\r\n"
+   					+ "			\"TdsOnCommission\": " + tdsOnCommission + ",\r\n"
+   					+ "			\"TdsOnPLB\": " + tdsOnPLB + ",\r\n"
+   					+ "			\"TdsOnIncentive\": " + tdsOnIncentive + ",\r\n"
+   					+ "			\"ServiceFee\": " + serviceFee + "\r\n"
+   					+ "		},\r\n"
+   					+ "		\"City\": \"Gurgaon\",\r\n"
+   					+ "		\"CountryCode\": \"IN\",\r\n"
+   					+ "		\"CountryName\": \"India\",      \r\n"
+   					+ "     \"Nationality\": \"IN\",\r\n"
+   					+ "		\"ContactNo\": \"" + order.getPhoneNumber() + "\",\r\n"
+   					+ "		\"Email\": \"" + order.getContactEmail() + "\",\r\n"
+   					+ "		\"IsLeadPax\": " + isLeadPax + ",\r\n"
+   					+ "		\"FFAirlineCode\": \"" + productDetailsController.airlineCOde + "\",\r\n"
+   					+ "		\"FFNumber\": \"" + productDetailsController.flightNumber + "\",\r\n"
+   					+ "		\"GSTCompanyAddress\": \"\",\r\n"
+   					+ "		\"GSTCompanyContactNumber\": \"\",\r\n"
+   					+ "		\"GSTCompanyName\": \"\",\r\n"
+   					+ "		\"GSTNumber\": \"\",\r\n"
+   					+ "		\"GSTCompanyEmail\": \"\"\r\n"
+   					+ "}";
+   			
+   			travelerDetailsArray.add(details);
+
+				
+   		}
+       	
+       	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+
+       	/* Ticket details */
+       	URL urlBook = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Book");
+           // Open a connection
+           HttpURLConnection connectionBook = (HttpURLConnection) urlBook.openConnection();
+           
+           StringBuilder responseBodyBook = new StringBuilder();
+           
+       	onlineFlightService.apiOnlineBookingNonLCC(connectionBook, responseBodyBook, traceId, productDetail.getResultIndex(), arrayTraveler);
+       	
+       	JSONObject jsonObjBooking = new JSONObject(responseBodyBook.toString()); 
+       	System.out.println(jsonObjBooking);
+       	logService.generateLog(jsonObjBooking.toString());
+       	
+       	String bookingId = "", pnrBooking = "";
+       	Integer bookingIdInt = 0;
+       	
+       	try {
+				JSONObject jsonObjBookingResponse = jsonObjBooking.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+					pnrBooking = jsonObjBookingResponse.get("PNR").toString();
+					bookingId  = jsonObjBookingResponse.get("BookingId").toString();
+					bookingIdInt = Integer.parseInt(bookingId);
+				
+			} catch (Exception e) {
+				System.out.println("Not found!!");
+			}
+       	
+       	
+       	/* Ticket details */
+       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+           // Open a connection
+           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
+           
+           StringBuilder responseBodyTicket = new StringBuilder();
+           
+       	onlineFlightService.apiOnlineTicketNonLcc(connectionTicket, responseBodyTicket, traceId, pnrBooking, bookingIdInt);
+       	
+       	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
+       	System.out.println(jsonObjTicket);
+       	logService.generateLog(jsonObjTicket.toString());
+       	try {
+				JSONObject jsonObjTicketResponse = jsonObjTicket.getJSONObject("Response").getJSONObject("Response").getJSONObject("FlightItinerary");
+				JSONArray jsonArraySegment = jsonObjTicketResponse.getJSONArray("Segments");
+//       		JSONObject jsonObjectSegments = new JSONObject();
+				
+				String terminalDep = "", terminalArr = "";
+				for (int i = 0; i < jsonArraySegment.length(); i++) {
+					JSONObject jsonObjectSegments = jsonArraySegment.getJSONObject(i);
+					if (i == 0) {
+						terminalDep = jsonObjectSegments.getJSONObject("Origin").getJSONObject("Airport").get("Terminal").toString();
+					}
+					if (i == (jsonArraySegment.length() - 1)) {
+						terminalArr = jsonObjectSegments.getJSONObject("Destination").getJSONObject("Airport").get("Terminal").toString();
+					}
+				}
+				
+				String onlinePNR = jsonObjTicketResponse.get("PNR").toString();
+				String onlineBookingId = jsonObjTicketResponse.get("BookingId").toString();
+
+				productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
+				productService.updatePNROnline(productDetail, onlinePNR);
+				productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
+				updateBookingId(order, onlineBookingId);
+
+				productService.updateOtherDetails(productDetailTwo, terminalDep, terminalArr);
+				productService.updatePNROnline(productDetailTwo, onlinePNR);
+				productService.setTotalSeatOnline(productDetailTwo, productDetailTwo.getUploadSeats());
+				updateBookingId(orderTwo, onlineBookingId);
+				
+				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
+				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+						
+			} catch (JSONException json) {
+				 //Error response
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();

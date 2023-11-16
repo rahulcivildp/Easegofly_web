@@ -126,8 +126,6 @@ public class TravellerDetail {
 		this.travelerCountSerial = travelerCountSerial;
 	}
 	
-	
-
 	public TravellerDetail(String salutation, String firstName, String lastName, String paxType, Integer cabinBaggage,
 			Integer baggageWT, Integer travelerCountSerial, String passportNo, Date passportExpiry, Date dob,
 			ProductDetail productDetail, CartItem cartItem) {

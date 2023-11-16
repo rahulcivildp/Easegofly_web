@@ -34,6 +34,7 @@ public class ProductDetailService {
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private TravellerRepository travellerRepo;
 	@Autowired private SearchHistoryRepository searchRepo;
+	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	
 	public Product searchFlights(Integer id, String cityOne, String cityTwo) {
 		Product productBycity = productRepo.findProductByCity(cityOne, cityTwo);
@@ -382,4 +383,43 @@ public class ProductDetailService {
 		return searchRepo.save(history);
 	}
 	
+	public ProductDetail saveReturnFlight(ProductDetail productDetail) {
+		
+		ProductDetail saveFlight = new ProductDetail();
+		saveFlight.setPnr(productDetail.getPnr());
+		saveFlight.setTotalSeats(productDetail.getTotalSeats());
+		saveFlight.setUploadSeats(productDetail.getUploadSeats());
+		saveFlight.setFlightNum(productDetail.getFlightNum());
+		saveFlight.setDate(productDetail.getDate());
+		saveFlight.setDepTime(productDetail.getDepTime());
+		saveFlight.setArrTime(productDetail.getArrTime());
+		saveFlight.setPriceADT(productDetail.getPriceADT());
+		saveFlight.setPriceINF(productDetail.getPriceINF());
+		saveFlight.setMarkupADT(productDetail.getMarkupADT());
+		saveFlight.setMarkupADT(productDetail.getMarkupADT());
+		saveFlight.setCityOne(productDetail.getCityOne());
+		saveFlight.setCityTwo(productDetail.getCityTwo());
+		saveFlight.setInStock(productDetail.isInStock());
+		saveFlight.setEnabled(productDetail.isEnabled());
+		saveFlight.setStopNum(productDetail.getStopNum());
+		saveFlight.setDuration(productDetail.getDuration());
+		saveFlight.setBrand(productDetail.getBrand());
+		saveFlight.setDepTimeInteger(productDetail.getDepTimeInteger());
+		saveFlight.setArrTimeInteger(productDetail.getArrTimeInteger());
+		saveFlight.setTraceId(productDetail.getTraceId());
+		saveFlight.setResultIndex(productDetail.getResultIndex());
+		saveFlight.setAirlineRemarks(productDetail.getAirlineRemarks());
+		saveFlight.setMode(productDetail.getMode());
+		saveFlight.setJourneyClass(productDetail.getJourneyClass());
+		saveFlight.setTerminalDep(productDetail.getTerminalDep());
+		saveFlight.setTerminalArr(productDetail.getTerminalArr());
+		saveFlight.setBaggage(productDetail.getBaggage());
+		saveFlight.setCabinBaggage(productDetail.getCabinBaggage());
+		saveFlight.setProduct(productDetail.getProduct());
+		saveFlight.setCraftType(productDetail.getCraftType());
+		
+		ProductDetail savedFlight = productDetailCrudRepo.save(saveFlight);
+		
+		return savedFlight;
+	}
 }

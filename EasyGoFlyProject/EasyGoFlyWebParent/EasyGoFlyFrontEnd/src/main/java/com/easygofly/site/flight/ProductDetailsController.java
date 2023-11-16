@@ -8,6 +8,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
@@ -175,17 +176,22 @@ public class ProductDetailsController {
 				model.addAttribute("customer", customer);
 			}
 			timeRemainingProOne = timeRemaining;
+			Date newDate = new Date();
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.YEAR, 2);
+			
+			newDate = c.getTime();
+			
+			System.out.println(newDate);
 			
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
 			CartItem item = cartRepo.findById(item_id).get();
 			
 			cartService.updateCartItem(item, cartItem.getEmail(), cartItem.getPhoneNum(), search.getPassengerNum(), false); 
-			
-			
 				
 			for (int i = 0; i < search.getPassengerNum(); i++) {
-				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, paxType[i], flight.getBaggage(), flight.getCabinBaggage(), i);
+				ProductSaveHelper.setTravellerDetail(salutation[i], firstName[i], lastName[i], dob[i], flight, item, paxType[i], flight.getBaggage(), flight.getCabinBaggage(), i, "KJHHJKHKJH", newDate);
 				productService.saveFlightPassengerDetails(flight);
 				ProductDetail flightDetails = productService.saveFlightPassengerDetails(flight);
 				model.addAttribute("flightDetails", flightDetails);
@@ -984,7 +990,13 @@ public class ProductDetailsController {
 
 	private ProductDetail travelerSaveMethod(Model model, String[] salutation, String[] firstName, String[] lastName, Date[] dob,
 			String[] paxType, ProductDetail flightOne, CartItem itemOne, int i) {
-		ProductSaveHelper.setTravellerDetailReturn(salutation[i], firstName[i], lastName[i], dob[i], flightOne, itemOne, paxType[i], flightOne.getBaggage(), flightOne.getCabinBaggage(), i);
+		Date newDate = new Date();
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.YEAR, 2);
+		
+		newDate = c.getTime();
+		
+		ProductSaveHelper.setTravellerDetailReturn(salutation[i], firstName[i], lastName[i], dob[i], flightOne, itemOne, paxType[i], flightOne.getBaggage(), flightOne.getCabinBaggage(), i, "KJHHJKHKJH", newDate);
 		productService.saveFlightPassengerDetails(flightOne);
 		ProductDetail flightDetailsOne = productService.saveFlightPassengerDetails(flightOne);
 		return flightDetailsOne;

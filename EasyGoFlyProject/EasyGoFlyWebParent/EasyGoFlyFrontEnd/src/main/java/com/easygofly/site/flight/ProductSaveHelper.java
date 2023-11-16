@@ -68,11 +68,18 @@ public class ProductSaveHelper {
 		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial);
 	}
 	
-	public static void setTravellerDetailReturn(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage,
-			Integer travelerCountSerial) {
+	public static void setTravellerDetail(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, 
+			Integer travelerCountSerial, String passportNo, Date passportExpiry) {
 		if(firstName == null || lastName == null) return;
 		
-		flight.addTravellerDetailsReturn(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial);
+		flight.addTravellerDetails(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial, passportNo, passportExpiry);
+	}
+	
+	public static void setTravellerDetailReturn(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage,
+			Integer travelerCountSerial, String passportNo, Date passportExpiry) {
+		if(firstName == null || lastName == null) return;
+		
+		flight.addTravellerDetailsReturn(salutation, firstName, lastName, dob, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial, passportNo, passportExpiry);
 	}
 	
 	public static void setTravellerDetailInternational(String salutation, String firstName, String lastName, Date dob, ProductDetail flight, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, 

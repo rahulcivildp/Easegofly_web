@@ -562,8 +562,8 @@ public class ProductDetail {
 		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, paxType, cabinBaggage, baggageWT, travelerCountSerial, passportNo, passportExpiry, dob, this, cartItem));
 	}
 	
-	public void addTravellerDetailsReturn(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial) {
-		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem, paxType, baggageWT, cabinBaggage, travelerCountSerial));
+	public void addTravellerDetailsReturn(String salutation, String firstName, String lastName, Date dob, CartItem cartItem, String paxType, Integer baggageWT, Integer cabinBaggage, Integer travelerCountSerial, String passportNo, Date passportExpiry) {
+		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, paxType, cabinBaggage, baggageWT, travelerCountSerial, passportNo, passportExpiry, dob, this, cartItem));
 	}
 	
 	public void addStopDetails(String cityName, String depTime, String arrTime, String totalTime) {

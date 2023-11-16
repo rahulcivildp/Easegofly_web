@@ -295,19 +295,25 @@ public class OrderInternationalController {
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
 
-		orderService.methodSSR(productDetail);
-
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		String[] hasErrorArr = new String[2];
 		
-		if (productDetail.isLcc() == true) {
-			hasErrorArr = orderService.ticketDetailsInternational(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+		if (productDetail.getResultIndex() != null) {
+			orderService.methodSSR(productDetail);
+			
+			if (productDetail.isLcc() == true) {
+				hasErrorArr = orderService.ticketDetailsInternational(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
+					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+			} else {
+				hasErrorArr = orderService.bookingDetails(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
+					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
+					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
+					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
+			}
+			
 		} else {
-			hasErrorArr = orderService.bookingDetails(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-				pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-				pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		}
 		
 		String pnr = productDetail.getPnr();
@@ -506,19 +512,26 @@ public class OrderInternationalController {
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
 		
-		orderService.methodSSR(productDetail);
-		
 		SearchHistory search = searchRepo.findById(search_id_inner).get();	
 		String[] hasErrorArr = new String[2];	
 		
-		if (productDetail.isLcc() == true) {
-			hasErrorArr = orderService.ticketDetailsInternational(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+		if (productDetail.getResultIndex() != null) {
+			orderService.methodSSR(productDetail);
+			
+			if (productDetail.isLcc() == true) {
+				hasErrorArr = orderService.ticketDetailsInternational(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
+					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+			} else {
+				hasErrorArr = orderService.bookingDetails(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
+					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
+					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
+					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
+			}
+			
+			
 		} else {
-			hasErrorArr = orderService.bookingDetails(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-				pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-				pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		}
 		
 		String pnr = productDetail.getPnr();
@@ -846,23 +859,19 @@ public class OrderInternationalController {
 
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
 		String[] hasErrorArr = new String[2];
-		String[] hasErrorArrTwo = new String[2];
+		
 		
 		if (productDetail1.isLcc() == true) {
+
 			hasErrorArr = orderService.ticketDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
 				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
 		} else {
-			hasErrorArr = orderService.bookingDetails(order1, productDetail1, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
+
+			hasErrorArr = orderService.bookingDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
 					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
 					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
 					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
-			if (productDetail2.isLcc() != true) {
-				
-				hasErrorArrTwo = orderService.bookingDetails(order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
-			}
+			
 		}
 		
 		// Departure ticket segment ............................*****.....................
@@ -1006,26 +1015,12 @@ public class OrderInternationalController {
 		orderService.orderUpdateWallet(order2);
 		
 		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
-		hasErrorCodeTwo = Integer.parseInt(hasErrorArrTwo[0]);
 		
-		if (hasErrorCode != 0 && hasErrorCodeTwo != 0) {
-			orderService.walletPayOrderCancel(customer, order1, "");
+		if (hasErrorCode != 0) {
+			System.out.println(hasErrorCode);
+			orderService.walletPayOrderCancel(customer, order1, "INTER");
 			orderService.walletPayOrderCancel(customer, order2, "");
-			System.out.println(hasErrorCode);
-			System.out.println(hasErrorCodeTwo);
-			
-			model.addAttribute("paymentCancelled", hasErrorArr[1] + " " + hasErrorArrTwo[1]);
-			
-		} else if (hasErrorCode != 0 ) {
-			orderService.walletPayOrderCancel(customer, order1, "");
-			System.out.println(hasErrorCode);
 			model.addAttribute("paymentCancelled", hasErrorArr[1]);
-			
-		} else if (hasErrorCodeTwo != 0) {
-			orderService.walletPayOrderCancel(customer, order2, "");
-			System.out.println(hasErrorCodeTwo);
-			model.addAttribute("paymentCancelled", hasErrorArrTwo[1]);
-			
 		} else {
 			model.addAttribute("paymentSuccess", "successfull");
 		}
@@ -1209,20 +1204,16 @@ public class OrderInternationalController {
 		String[] hasErrorArrTwo = new String[2];
 		
 		if (productDetail1.isLcc() == true) {
+			
 			orderService.ticketDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
 				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
 		} else {
-			orderService.bookingDetails(order1, productDetail1, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
+			
+			orderService.bookingDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
 				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
 				pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
 				pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
 			
-			if (productDetail2.isLcc() != true) {
-				orderService.bookingDetails(order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-						pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-						pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-						pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
-			}
 		}
 		
 		// Departure ticket segment ............................*****.....................

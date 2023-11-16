@@ -298,22 +298,29 @@ public class OrderController {
 		Order order = orderRepo.findById(updatedOrderId).get();
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
-
-		orderService.methodSSR(productDetail);
-
+		
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		String[] hasErrorArr = new String[2];
 		
-		if (productDetail.isLcc() == true) {
-			hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, 
-				productDetailsController.traceId);
+		if (productDetail.getResultIndex() != null) {
+			orderService.methodSSR(productDetail);
+			
+			if (productDetail.isLcc() == true) {
+				hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, 
+					productDetailsController.traceId);
+			} else {
+				hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
+			}
+			
 		} else {
-			hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
-				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
-				productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		}
+		
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -509,19 +516,25 @@ public class OrderController {
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
 		
-		orderService.methodSSR(productDetail);
-		
 		SearchHistory search = searchRepo.findById(search_id_inner).get();	
 		String[] hasErrorArr = new String[2];	
 		
-		if (productDetail.isLcc() == true) {
-			hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
+		if (productDetail.getResultIndex() != null) {
+			orderService.methodSSR(productDetail);
+			
+			if (productDetail.isLcc() == true) {
+				hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
+			} else {
+				hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
+			}
+			
 		} else {
-			hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
-				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
-				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
-				productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		}
 		
 		String pnr = productDetail.getPnr();
