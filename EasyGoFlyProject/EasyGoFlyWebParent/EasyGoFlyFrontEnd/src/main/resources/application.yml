@@ -7,18 +7,22 @@ server:
         same-site: none
 spring:
   datasource:
+    type: com.zaxxer.hikari.HikariDataSource
     password: tanmay@311
     url: jdbc:mysql://127.0.0.1:3306/easygofly
     username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
-        globally_quoted_identifiers: true
-    show-sql: false
+        format-sql: true
+        globally-quoted-identifiers: true
+        use-sql-comments: true
+    show-sql: true
   mvc:
     view:
       prefix: /WEB-INF/jsp/
@@ -27,7 +31,6 @@ spring:
       matching-strategy: ant-path-matcher
   main:
     allow-circular-references: true
- 
   security:
     oauth2:
       client:

@@ -41,7 +41,7 @@ import com.easygofly.site.flight.ProductDetailsController;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.ProductSaveHelper;
 import com.easygofly.site.flightAPI.OnlineFlightService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
 
@@ -67,7 +67,7 @@ public class SearchHistoryController {
 			
 	@GetMapping("/flight_search_{id}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSingles(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@PathVariable(name = "sortName") String sortName,
 			@PathVariable(name = "activeTime") String[] activeTime,
@@ -79,11 +79,11 @@ public class SearchHistoryController {
 		Customer customer;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -172,7 +172,7 @@ public class SearchHistoryController {
 	}
 
 	@GetMapping("/flight_search_save")	
-	public String searchHistorySave(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String searchHistorySave(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
 			@RequestParam(name = "cityTwo", required = false) String cityTwo, 
@@ -200,7 +200,7 @@ public class SearchHistoryController {
 		    
             if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
@@ -208,7 +208,7 @@ public class SearchHistoryController {
 				return "redirect:/loading_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
@@ -224,7 +224,7 @@ public class SearchHistoryController {
 	
 	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
@@ -242,7 +242,7 @@ public class SearchHistoryController {
 			pController.listProductDetailsOnline.add(productDetailOffline);
 		}
 		
-        ProductDetail[] productDetail = new ProductDetail[500];
+//        ProductDetail[] productDetail = new ProductDetail[500];
         
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
@@ -367,13 +367,13 @@ public class SearchHistoryController {
 
 				String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
 				
-				productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+				ProductDetail productDetail = new ProductDetail(i + 1, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
 			    		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, null, craftType);
+			    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
 				
-				pController.listProductDetailsOnline.add(productDetail[i]);
+				pController.listProductDetailsOnline.add(productDetail);
 				
-				pController.listProductDetailsInSearch.add(productDetail[i]);
+				pController.listProductDetailsInSearch.add(productDetail);
 			}
 			
 			JSONObject jsonObjTicketResponseError = jsonObjSearch.getJSONObject("Response").getJSONObject("Error");
@@ -382,6 +382,8 @@ public class SearchHistoryController {
 			
 			model.addAttribute("listProducts", pController.listProductDetailsOnline);
 			model.addAttribute("responseCode", responseCode);
+			
+			System.out.println("Length: " + pController.listProductDetailsOnline.size());
 			
 		} catch (JSONException e) {
 			JSONObject jsonObjTicketResponseError = jsonObjSearch.getJSONObject("Response").getJSONObject("Error");
@@ -424,7 +426,7 @@ public class SearchHistoryController {
 	
 	@GetMapping("/flight_return_search_{id}_{sortName}_{brand}_{stop}_{activeTime}")
 	public String searchFlightDetailsSinglesReturn(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@PathVariable(name = "sortName") String sortName,
 			@PathVariable(name = "activeTime") String[] activeTime,
@@ -435,11 +437,11 @@ public class SearchHistoryController {
 		Customer customer;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 
@@ -532,7 +534,7 @@ public class SearchHistoryController {
 	}
 	
 	@GetMapping("/flight_search_return_save")
-	public String searchHistorySaveReturn(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String searchHistorySaveReturn(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
 			@RequestParam(name = "cityTwo", required = false) String cityTwo, 
@@ -561,7 +563,7 @@ public class SearchHistoryController {
 		    
             if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 
@@ -569,7 +571,7 @@ public class SearchHistoryController {
 				return "redirect:/loading_return_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 				searchReturnURL = "/flight_return_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
@@ -591,7 +593,7 @@ public class SearchHistoryController {
 	public String[] searchReturnFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
@@ -609,7 +611,7 @@ public class SearchHistoryController {
 			pController.listProductDetailsOnline.add(productDetailOffline);
 		}
 		
-        ProductDetail[] productDetail = new ProductDetail[500];
+//        ProductDetail[] productDetail = new ProductDetail[500];
         
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
@@ -734,13 +736,13 @@ public class SearchHistoryController {
     			
     			String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
     			
-    			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+    			ProductDetail productDetail = new ProductDetail(i + 1, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
                 		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-                		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
+                		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
     			
-    			pController.listProductDetailsOnline.add(productDetail[i]);
+    			pController.listProductDetailsOnline.add(productDetail);
     			
-    			pController.listProductDetailsInSearch.add(productDetail[i]);
+    			pController.listProductDetailsInSearch.add(productDetail);
     		}
 			model.addAttribute("success", jsonObjSearch.getJSONObject("Response").get("ResponseStatus").toString());
 			
@@ -769,7 +771,7 @@ public class SearchHistoryController {
 	        JSONArray jsonObjSegmentReturn = new JSONArray();
 
 
-	        ProductDetail[] productDetailTwo = new ProductDetail[500];
+//	        ProductDetail[] productDetailTwo = new ProductDetail[500];
 	        
 			for (int i = 0; i < jsonArraysReturn.length(); i++) {
 				JSONObject mainObjOriginList = new JSONObject();
@@ -879,14 +881,14 @@ public class SearchHistoryController {
 				String mode = "Online-data";
 				
 				
-				productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, returnDate, 
+				ProductDetail productDetailTwo = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, returnDate, 
 	            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-	            		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
+	            		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
 				
 				
-				pController.listProductDetailsOnlineReturn.add(productDetailTwo[i]);
+				pController.listProductDetailsOnlineReturn.add(productDetailTwo);
 
-				String resultStrTwo = productDetailTwo[i].getResultIndex();
+				String resultStrTwo = productDetailTwo.getResultIndex();
 				String[] arrayResultTwo = resultStrTwo.split("B");
 
 				FlightMap flightMap = new FlightMap();
@@ -896,7 +898,7 @@ public class SearchHistoryController {
 					String[] arrayResult = resultStr.split("B");
 					if (arrayResultTwo[1].equals(arrayResult[1])) {
 						flightMap.setId(i);
-						flightMap.setFlightIdOne(productDetailTwo[i].getId());
+						flightMap.setFlightIdOne(productDetailTwo.getId());
 						flightMap.setFlightIdTwo(productDetail2.getId());
 						pController.flightMaps.add(flightMap);
 					}
@@ -1088,7 +1090,7 @@ public class SearchHistoryController {
     			
     			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
                 		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-                		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
+                		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
     			
     			listProductDetailsOnline.add(productDetail[i]);
     			
@@ -1213,7 +1215,7 @@ public class SearchHistoryController {
         			
         			productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailableTwo, noOfSeatAvailableTwo, flightNumberTwo, date, 
                     		stringDepTimeTwo, stringArrTimeTwo, intTotalAdultChildPriceTwo, intTotalInfantPriceTwo, 0, 0, depAirportCodeTwo, arrAirportCodeTwo, true, true, stopNumberTwo, durationTwo, 
-                    		airlineNameTwo, depTimeFloatTwo, arrTimeFloatTwo, pController.traceId, resultIndexTwo, airlineRemarkTwo, modeTwo, "2", depTerminalTwo, arrTerminalTwo, 15, 7, null, craftTypeTwo);
+                    		airlineNameTwo, depTimeFloatTwo, arrTimeFloatTwo, pController.traceId, resultIndexTwo, airlineRemarkTwo, modeTwo, "2", depTerminalTwo, arrTerminalTwo, 15, 7, "", "", null, craftTypeTwo);
         			
         			listProductDetailsOnlineReturn.add(productDetailTwo[i]);
     				

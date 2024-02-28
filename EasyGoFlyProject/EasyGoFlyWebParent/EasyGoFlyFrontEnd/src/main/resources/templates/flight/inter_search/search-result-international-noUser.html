@@ -37,6 +37,13 @@
 	<!-- Template Main CSS File -->
 	<link th:href="@{assets/css/style.css}" rel="stylesheet">
 	
+
+<script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = 8 * 60 * 1000;
+  </script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 	
 <style>
     /* width */
@@ -438,6 +445,8 @@
 		      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
 		          			<input type="hidden" name="search_id" value="1.5">
 				            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
+				            <input type="hidden" name="device" class="device">
+				            <input type="hidden" name="deviceInfo" class="deviceInfo">
 				                    <div class="row">
 				                    	<div class="col-md-10 col">
 				                    		<div class="row seacrh_margin">
@@ -628,6 +637,8 @@
 		      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
 		          			<input type="hidden" name="search_id" value="1.5">
 				            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
+				            <input type="hidden" name="device" class="device">
+				            <input type="hidden" name="deviceInfo" class="deviceInfo">
 				                    <div class="row">
 				                    	<div class="col-md-10 col">
 				                    		<div class="row seacrh_margin">
@@ -879,12 +890,7 @@
 
 </script>
 
-<link th:href="@{css/custom.css}" rel="stylesheet"> 
-<script>
-   moduleURL = '[[@{/}]]';
-   timeInSec = 8 * 60 * 1000;
-  </script>
+<script type="text/javascript" th:src="@{/js/checkBrowser.js}"></script>
 
-<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>

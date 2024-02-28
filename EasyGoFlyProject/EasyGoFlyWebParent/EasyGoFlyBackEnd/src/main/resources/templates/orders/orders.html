@@ -71,7 +71,7 @@
 						<th>Destination</th>
 						<th>Passenger No.</th>
 						<th>Price</th>
-						<th>Save as</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -85,17 +85,47 @@
 						<td>[[${order.cityOne}]] - [[${order.cityTwo}]]</td>
 						<td>[[${order.passengerNum}]]</td>
 						<td>[[${CURRENCY_SYMBOL}]][[${order.price}]]</td>
-						<td>	
-					    	<a th:href="@{'/order/export_pdf/' + ${order.id}}" class="fa fa-solid fa-file-pdf fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download PDF file"></a>
+						<td style="display: flex; justify-content: space-evenly;">	
 					    	<form th:action="@{/orders/successful}" method="post" id="successful">
 					    		<input type="hidden" name="order_id" th:value="${order.id}">
-					    	<button type="submit" th:if="${order.orderStatus} == ${pending}" class="styleLink styleLinkButton float-right margin-both_side" title="Make the order successful." aria-hidden="true" style=" color: green; border: 2px solid green; ">Successful</button>
+					    	<button type="submit" th:if="${order.orderStatus} == ${pending}" class="styleLink styleLinkButton margin-both_side" title="Make the order successful." aria-hidden="true" style=" color: green; border: 2px solid green; ">Successful</button>
 					    	</form>
 					    	<form th:action="@{/orders/pending}" method="post" id="pending">
 					    		<input type="hidden" name="order_id" th:value="${order.id}">
-					    			<button type="submit" th:if="${order.orderStatus} == ${successful}" class="styleLink styleLinkButton float-right margin-both_side" title="Make the order pending." aria-hidden="true" style=" color: #ffc107; border: 2px solid #ffc107; ">Pending</button>
-					    	
+					    		<button type="submit" th:if="${order.orderStatus} == ${successful}" class="styleLink styleLinkButton margin-both_side" title="Make the order pending." aria-hidden="true" style=" color: #ffc107; border: 2px solid #ffc107; ">Pending</button>
 					    	</form>
+					    	<!-- Button trigger modal -->
+							<button type="button" class="btn btn-primary margin-both_side" data-bs-toggle="modal" th:id="'buttonModal-' + ${order.id}">
+							  Launch
+							</button>
+							
+					    	<a th:href="@{'/order/export_pdf/' + ${order.id}}" class="fa fa-solid fa-file-pdf fa-2x styleLink styleLinkButton margin-both_side" title="Download PDF file"></a>
+							
+							<!-- Modal -->
+							<div class="modal fade" th:id="'staticBackdrop-' + ${order.id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+							  <div class="modal-dialog">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <h5 class="modal-title" id="staticBackdropLabel">Device Information</h5>
+							        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							      </div>
+							      <div class="modal-body">
+									 <b>Machine: </b><th:block th:utext="${order.device}"></th:block><br><br>
+							         <b>Device Information: </b><br>
+							         <th:block th:utext="${order.deviceDescription}"></th:block>
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+							
+							<script>
+								$(document).ready(function(){
+									$("#buttonModal-" + [[${order.id}]]).attr("data-bs-target", "#staticBackdrop-" +  [[${order.id}]]);
+								});
+							</script>
 						</td>
 					</tr>
 					
@@ -207,8 +237,6 @@
 		
 		<div th:replace="fragments :: footer"></div>
 	</div>
-	
-
 
 </body>
 </html>

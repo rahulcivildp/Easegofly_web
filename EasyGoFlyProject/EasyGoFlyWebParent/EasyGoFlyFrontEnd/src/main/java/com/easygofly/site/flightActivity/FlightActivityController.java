@@ -24,7 +24,7 @@ import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsRepository;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 
 @Controller
@@ -36,7 +36,7 @@ public class FlightActivityController {
 	@Autowired BrandRepositoy brandRepo;
 	
 	@PostMapping("/flight_activity_search")
-	public String searchHistorySave(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String searchHistorySave(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = true) String cityOne, 
 			@RequestParam(name = "cityTwo", required = true) String cityTwo,  
@@ -62,12 +62,12 @@ public class FlightActivityController {
 		    
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 			}
 
@@ -131,7 +131,7 @@ public class FlightActivityController {
 	}
 
 	@PostMapping("/flight_activity_filter")
-	public String flightActivityFilter(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String flightActivityFilter(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = true) String cityOne, 
 			@RequestParam(name = "cityTwo", required = true) String cityTwo,  
@@ -157,12 +157,12 @@ public class FlightActivityController {
 	    
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 

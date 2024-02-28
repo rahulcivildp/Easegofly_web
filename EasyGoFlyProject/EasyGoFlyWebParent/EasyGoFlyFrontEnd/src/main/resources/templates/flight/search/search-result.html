@@ -37,6 +37,12 @@
 	<link th:href="@{assets/css/style.css}" rel="stylesheet">
 	
 	
+<script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = 6 * 60 * 1000;
+  </script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 <style>
     /* width */
 ::-webkit-scrollbar {
@@ -435,6 +441,8 @@
   					<input type="hidden" name="infantNum" value="[[${search.infantNum}]]">
 		            <input type="hidden" name="search_id" value="[[${search.id}]]">
 		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
+		            <input type="hidden" name="device" class="device">
+		            <input type="hidden" name="deviceInfo" class="deviceInfo">
 		                    <div class="row">
 		                    	<div class="col-md-10 col">
 		                    		<div class="row seacrh_margin">
@@ -632,6 +640,8 @@
   					<input type="hidden" name="infantNum" value="[[${search.infantNum}]]">
 		            <input type="hidden" name="search_id" value="[[${search.id}]]">
 		            <input type="hidden" name="flight_id" value="[[${flight.id}]]">
+		            <input type="hidden" name="device" class="device">
+		            <input type="hidden" name="deviceInfo" class="deviceInfo">
 		                    <div class="row">
 		                    	<div class="col-md-10 col">
 		                    		<div class="row seacrh_margin">
@@ -885,11 +895,8 @@
 
 </script>
 
-<script>
-   moduleURL = '[[@{/}]]';
-   timeInSec = 6 * 60 * 1000;
-  </script>
 
-<script type="text/javascript" th:src="@{/js/timer.js}"></script>
+<script type="text/javascript" th:src="@{/js/checkBrowser.js}"></script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
+
 </html>

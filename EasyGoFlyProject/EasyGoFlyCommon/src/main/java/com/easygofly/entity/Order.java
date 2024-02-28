@@ -122,7 +122,17 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<TravellerDetail> travellerDetails = new ArrayList<>();
-	 
+	
+	@Column(name = "device", length = 100)
+	private String device;
+
+	@Column(name = "device_description", length = 5000)
+	private String deviceDescription;
+
+	@Column(name = "device_type", length = 5000)
+	private String deviceType;
+	
+	
 	
 	public Order() {}
 
@@ -200,6 +210,22 @@ public class Order {
 
 	public void setJourneyClass(String journeyClass) {
 		this.journeyClass = journeyClass;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
+	}
+
+	public String getDeviceDescription() {
+		return deviceDescription;
+	}
+
+	public void setDeviceDescription(String deviceDescription) {
+		this.deviceDescription = deviceDescription;
 	}
 
 	public Integer getAdultNum() {
@@ -316,6 +342,14 @@ public class Order {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 
 	public BigInteger getPhoneNumber() {

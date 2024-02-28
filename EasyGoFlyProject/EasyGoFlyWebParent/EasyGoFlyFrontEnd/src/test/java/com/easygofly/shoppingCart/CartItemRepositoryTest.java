@@ -166,7 +166,7 @@ public class CartItemRepositoryTest {
 
 		JSONObject customerRequest = new JSONObject();
 		customerRequest.put("name",getCustomer.getFullName());
-		customerRequest.put("contact",getCustomer.getPhoneNumber());
+		customerRequest.put("contact",getCustomer.getPhone());
 		customerRequest.put("email",getCustomer.getEmail());
 		customerRequest.put("fail_existing","0");
 		//customerRequest.put("gstin","29XAbbA4369J1PA");

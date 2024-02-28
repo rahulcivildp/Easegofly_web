@@ -41,7 +41,7 @@ import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.search.SearchHistoryController;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
@@ -104,19 +104,19 @@ public class ProductDetailsController {
 	public String filghtTravelerDetailsSave(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id, 
 			@PathVariable(name = "item_id") Integer item_id, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, CartItem cartItem) throws IOException {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -127,9 +127,8 @@ public class ProductDetailsController {
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
 		
-		
 		try {
-			fareQuoteMethod(model, flight);
+			fareQuoteSSRMethod(model, flight);
 			
 		}  catch (IOException e) {
 			return "redirect:/flight_booking" + search.getId() + "&" + flight.getId() + "&" + item.getId();
@@ -153,7 +152,7 @@ public class ProductDetailsController {
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,  
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,  
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model,
 			@RequestParam(name = "salutation", required = false) String[] salutation, 
@@ -167,12 +166,12 @@ public class ProductDetailsController {
 			Customer customer; 
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 			}
 			timeRemainingProOne = timeRemaining;
@@ -234,7 +233,9 @@ public class ProductDetailsController {
 			@RequestParam(name = "cityTwo") String cityTwo,
 			@RequestParam(name = "journeyClass") String journeyClass,
 			@RequestParam(name = "date") String date,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@RequestParam(name = "device") String device,
+			@RequestParam(name = "deviceInfo") String deviceInfo,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
 		String email; 
 		Customer customer; 
@@ -244,7 +245,7 @@ public class ProductDetailsController {
 		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
 						infantNum, customer);
@@ -254,11 +255,14 @@ public class ProductDetailsController {
 			}
 			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
+			
+			productService.updateDeviceInfo(productDetail, device, deviceInfo);
+			
 			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
 						infantNum, customer);
@@ -268,6 +272,9 @@ public class ProductDetailsController {
 			}
 			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
+			
+			productService.updateDeviceInfo(productDetail, device, deviceInfo);
+			
 			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
 		} else {
 			return "redirect:/";
@@ -278,7 +285,7 @@ public class ProductDetailsController {
 	public String filghtBookingSave(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, 
 			CartItem cartItem ) throws IOException {
@@ -294,12 +301,12 @@ public class ProductDetailsController {
 	    
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		ProductDetail flight = flightRepo.findById(flight_id).get();
@@ -308,7 +315,7 @@ public class ProductDetailsController {
 
 		if (!flight.getTraceId().equals("offline")) {
         	/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
             // Open a connection
             HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
             
@@ -418,28 +425,11 @@ public class ProductDetailsController {
 		return null;
 	}
 
-	public void fareQuoteMethod(Model model, ProductDetail flight) throws MalformedURLException, IOException {
+	public void fareQuoteSSRMethod(Model model, ProductDetail flight) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
-			
-			/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
-
-        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
-        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
-        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
-        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
-        	
-        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
-        	
         	
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
             // Open a connection
             HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
             
@@ -448,9 +438,7 @@ public class ProductDetailsController {
         	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
-        	System.out.println(jsonObjFarerules);
         	System.out.println(jsonObjFareQuotes);
-            logService.generateLog(jsonObjFarerules.toString());
             logService.generateLog(jsonObjFareQuotes.toString());
         	
         	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
@@ -513,7 +501,7 @@ public class ProductDetailsController {
     		
 
     		/* SSR details */
-        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
             // Open a connection
             HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
             
@@ -696,7 +684,9 @@ public class ProductDetailsController {
 			@RequestParam(name = "journeyClass") String journeyClass,
 			@RequestParam(name = "date") String date,
 			@RequestParam(name = "returnDate") String retunDate,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@RequestParam(name = "device") String device,
+			@RequestParam(name = "deviceInfo") String deviceInfo,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws ParseException {
 		String email; 
 		Customer customer; 
@@ -706,7 +696,7 @@ public class ProductDetailsController {
 		timeRemainingPro = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer); 
 				searchIdInt = savedSearchId;
@@ -715,13 +705,17 @@ public class ProductDetailsController {
 			}
 			CartItem cartItemOne = travelerDetailsPart(searchIdInt, flightOneId, customer);
 			ProductDetail productDetailOne = cartItemOne.getProductDetail();
+			productService.updateDeviceInfo(productDetailOne, device, deviceInfo);
+			
 			CartItem cartItemTwo = travelerDetailsPartReturn(searchIdInt, flightTwoId, customer);
 			ProductDetail productDetailTwo = cartItemTwo.getProductDetail();
+			productService.updateDeviceInfo(productDetailTwo, device, deviceInfo);
+			
 			return "redirect:/flight_return_booking" + searchIdInt + "&" + productDetailOne.getId() + "&" + cartItemOne.getId() + "&" + productDetailTwo.getId() + "&" + cartItemTwo.getId();
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer);
 				searchIdInt = savedSearchId;
@@ -730,8 +724,12 @@ public class ProductDetailsController {
 			}
 			CartItem cartItemOne = travelerDetailsPart(searchIdInt, flightOneId, customer);
 			ProductDetail productDetailOne = cartItemOne.getProductDetail();
+			productService.updateDeviceInfo(productDetailOne, device, deviceInfo);
+			
 			CartItem cartItemTwo = travelerDetailsPartReturn(searchIdInt, flightTwoId, customer);
 			ProductDetail productDetailTwo = cartItemTwo.getProductDetail();
+			productService.updateDeviceInfo(productDetailTwo, device, deviceInfo);
+			
 			return "redirect:/flight_return_booking" + searchIdInt + "&" + productDetailOne.getId() + "&" + cartItemOne.getId() + "&" + productDetailTwo.getId() + "&" + cartItemTwo.getId();
 		} else {
 			return "redirect:/";
@@ -808,7 +806,7 @@ public class ProductDetailsController {
 			@PathVariable(name = "itemOne_id") Integer itemOneId, 
 			@PathVariable(name = "flightTwo_id") Integer flightTwoId,
 			@PathVariable(name = "itemTwo_id") Integer itemTwoId, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, 
 			CartItem cartItem ) throws IOException {
@@ -817,12 +815,12 @@ public class ProductDetailsController {
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		ProductDetail flightOne = flightRepo.findById(flightOneId).get();
@@ -833,7 +831,7 @@ public class ProductDetailsController {
 
 		if (!flightOne.getTraceId().equals("offline")) {
         	/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
             // Open a connection
             HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
             
@@ -865,7 +863,7 @@ public class ProductDetailsController {
 		
 		if (!flightTwo.getTraceId().equals("offline")) {
         	/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
+        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
             // Open a connection
             HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
             
@@ -932,7 +930,7 @@ public class ProductDetailsController {
 			@RequestParam(name = "itemOne_id") Integer itemOne_id,
 			@RequestParam(name = "flightTwo_id") Integer flightTwoId,
 			@RequestParam(name = "itemTwo_id") Integer itemTwo_id,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,  
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,  
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model,
 			@RequestParam(name = "salutation", required = false) String[] salutation, 
@@ -946,12 +944,12 @@ public class ProductDetailsController {
 			Customer customer; 
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 			}
 			timeRemainingPro = timeRemaining;
@@ -1035,19 +1033,19 @@ public class ProductDetailsController {
 			@PathVariable(name = "itemOne_id") Integer itemOne_id, 
 			@PathVariable(name = "flightTwo_id") Integer flightTwo_id, 
 			@PathVariable(name = "itemTwo_id") Integer itemTwo_id, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, CartItem cartItem) throws IOException {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 
@@ -1067,9 +1065,9 @@ public class ProductDetailsController {
 		checkoutInfoTwo.setPaymentTotal(itemTwo.getTotalPrice());
 																
 		try {
-			fareQuoteMethodReturn(model, flightOne);
+			fareQuoteSSRMethodReturn(model, flightOne);
 			
-			fareQuoteMethodReturnTwo(model, flightTwo);
+			fareQuoteSSRMethodReturnTwo(model, flightTwo);
 			
 		}  catch (Exception e) {
 			return "redirect:/flight_return_booking" + search.getId() + "&" + flightOne.getId() + "&" + itemOne.getId() + "&" + flightTwo.getId() + "&" + itemTwo.getId();
@@ -1119,28 +1117,11 @@ public class ProductDetailsController {
 		
 	}
 
-	public void fareQuoteMethodReturn(Model model, ProductDetail flight) throws MalformedURLException, IOException {
+	public void fareQuoteSSRMethodReturn(Model model, ProductDetail flight) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
-			
-			/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
-
-        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
-        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
-        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
-        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
-        	
-        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
-        	
         	
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
             // Open a connection
             HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
             
@@ -1149,9 +1130,7 @@ public class ProductDetailsController {
         	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
-        	System.out.println(jsonObjFarerules);
         	System.out.println(jsonObjFareQuotes);
-            logService.generateLog(jsonObjFarerules.toString());
             logService.generateLog(jsonObjFareQuotes.toString());
         	
         	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
@@ -1210,7 +1189,7 @@ public class ProductDetailsController {
     		craftType = mainObjSegment.get("Craft").toString();
     		
     		/* SSR details */
-        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
             // Open a connection
             HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
             
@@ -1354,28 +1333,11 @@ public class ProductDetailsController {
 
 	}
 	
-	public void fareQuoteMethodReturnTwo(Model model, ProductDetail flight) throws MalformedURLException, IOException {
+	public void fareQuoteSSRMethodReturnTwo(Model model, ProductDetail flight) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
-			
-			/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
-
-        	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
-        	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
-        	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
-        	String fareRuleDetail = jsonObjFarerule.get("FareRuleDetail").toString();
-        	
-        	model.addAttribute("jsonObjFarerule", fareRuleDetail);
-        	
         	
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
             // Open a connection
             HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
             
@@ -1384,9 +1346,7 @@ public class ProductDetailsController {
         	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
-        	System.out.println(jsonObjFarerules);
         	System.out.println(jsonObjFareQuotes);
-            logService.generateLog(jsonObjFarerules.toString());
             logService.generateLog(jsonObjFareQuotes.toString());
         	
         	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
@@ -1445,7 +1405,7 @@ public class ProductDetailsController {
     		craftType = mainObjSegment.get("Craft").toString();
     		
     		/* SSR details */
-        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
             // Open a connection
             HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
             
@@ -1604,7 +1564,7 @@ public class ProductDetailsController {
 			@RequestParam(name = "adultNum", required = false) Integer adultNum,
 			@RequestParam(name = "childNum", required = false) Integer childNum,
 			@RequestParam(name = "infantNum", required = false) Integer infantNum,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		ProductDetail productDetail = flightRepo.findById(flightId).get();
 		
@@ -1612,7 +1572,7 @@ public class ProductDetailsController {
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			
 			SearchHistory history = productService.searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
 					childNum, infantNum, customer);
@@ -1621,7 +1581,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			
 			SearchHistory history = productService.searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
 					childNum, infantNum, customer);

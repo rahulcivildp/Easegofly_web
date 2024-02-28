@@ -28,7 +28,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "customers")
 public class Customer {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -45,26 +44,26 @@ public class Customer {
 	@Column(name = "last_name", length = 45, nullable = false)
 	private String lastName;
 	
-	@Column(name = "phone_number", length = 15, nullable = false)
-	private String phoneNumber;
+	@Column(name = "phone", length = 128, nullable = false, unique = true)
+	private String phone;
 	
-	@Column(name = "address_line1", length = 64, nullable = false)
+	@Column(name = "address_line1", length = 64)
 	private String addressLine1;
 	
 	@Column(name = "address_line2", length = 64)
 	private String addressLine2;
 	
-	@Column(name = "city", length = 45, nullable = false)
+	@Column(name = "city", length = 45)
 	private String city;
 	
-	@Column(name = "state", length = 45, nullable = false)
+	@Column(name = "state", length = 45)
 	private String state;
 	
-	@Column(name = "postal_code", length = 10, nullable = false)
+	@Column(name = "postal_code", length = 10)
 	private String postalCode;
 	
-	@Column(name = "Verification_code", length = 64)
-	private String VerificationCode;
+	@Column(name = "verification_code", length = 64)
+	private String verificationCode;
 	
 	@Column(name = "created_time")
 	private Date createdTime;
@@ -79,6 +78,9 @@ public class Customer {
 	private String photos;
 	
 	private boolean enabled;
+	
+	@Column(name = "otp_requested_time")
+	private Date otpRequestedTime;
 	
 	@ManyToOne
 	@JoinColumn(name = "country_id")
@@ -127,7 +129,7 @@ public class Customer {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.phoneNumber = phoneNumber;
+		this.phone = phoneNumber;
 		this.addressLine1 = addressLine1;
 		this.addressLine2 = addressLine2;
 		this.city = city;
@@ -178,12 +180,12 @@ public class Customer {
 		this.lastName = lastName;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getAddressLine1() {
@@ -227,11 +229,11 @@ public class Customer {
 	}
 
 	public String getVerificationCode() {
-		return VerificationCode;
+		return verificationCode;
 	}
 
 	public void setVerificationCode(String verificationCode) {
-		VerificationCode = verificationCode;
+		this.verificationCode = verificationCode;
 	}
 
 	public Date getCreatedTime() {
@@ -256,6 +258,14 @@ public class Customer {
 
 	public void setPhotos(String photos) {
 		this.photos = photos;
+	}
+
+	public Date getOtpRequestedTime() {
+		return otpRequestedTime;
+	}
+
+	public void setOtpRequestedTime(Date otpRequestedTime) {
+		this.otpRequestedTime = otpRequestedTime;
 	}
 
 	public boolean isEnabled() {
@@ -376,6 +386,25 @@ public class Customer {
 		return false;
 	}
 	
+	private static final long OTP_VALID_DURATION = 5 * 60 * 1000;
+
+	@Transient
+    public boolean isOTPRequired() {
+        if (this.getVerificationCode() == null) {
+            return false;
+        }
+         
+        long currentTimeInMillis = System.currentTimeMillis();
+        long otpRequestedTimeInMillis = this.otpRequestedTime.getTime();
+         
+        if (otpRequestedTimeInMillis + OTP_VALID_DURATION < currentTimeInMillis) {
+            // OTP expires
+            return false;
+        }
+         
+        return true;
+    }
+	
 	@Transient
 	public String getFullName() {
 		return firstName + " " + lastName;
@@ -397,7 +426,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", phoneNumber=" + phoneNumber + ", addressLine1=" + addressLine1 + ", addressLine2=" + addressLine2
+				+ ", phoneNumber=" + phone + ", addressLine1=" + addressLine1 + ", addressLine2=" + addressLine2
 				+ ", city=" + city + ", state=" + state + ", postalCode=" + postalCode + ", createdTime=" + createdTime
 				+ ", photos=" + photos + ", enabled=" + enabled + ", country=" + country + ", roles=" + roles + "]";
 	}

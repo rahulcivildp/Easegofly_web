@@ -422,4 +422,14 @@ public class ProductDetailService {
 		
 		return savedFlight;
 	}
+
+	public void updateDeviceInfo(ProductDetail productDetail, String device, String deviceInfo) {
+
+		ProductDetail saveFlight = productDetailCrudRepo.findById(productDetail.getId()).get();
+		saveFlight.setDevice(device);
+		saveFlight.setDeviceDescription(deviceInfo);
+		saveFlight.setDeviceType("web");
+
+		productDetailCrudRepo.save(saveFlight);
+	}
 }

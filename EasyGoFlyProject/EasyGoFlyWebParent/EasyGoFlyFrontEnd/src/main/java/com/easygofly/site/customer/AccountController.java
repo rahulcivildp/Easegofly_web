@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,7 @@ import com.easygofly.site.request.ConversationRepository;
 import com.easygofly.site.request.RequestRepository;
 import com.easygofly.site.request.RequestService;
 import com.easygofly.site.search.SearchHistoryRepository;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.shoppingCart.CartItemService;
 
@@ -49,16 +50,16 @@ public class AccountController {
 	@Autowired private ConversationRepository conversationRepo;
 	
 	@GetMapping("/account")
-	public String viewDetailsCustomer(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+	public String viewDetailsCustomer(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		String email; /*= loggedCustomer.getUsername();*/
-		Customer customer; /*= customerService.getByEmail(email);*/
+		Customer customer; /*= customerService.getByPhone(email);*/
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -74,9 +75,9 @@ public class AccountController {
 	}
 	 
 	@PostMapping("/account/update")
-	public String saveCustomer(Customer customer, 
+	public String saveCustomer(@ModelAttribute Customer customer, 
 			RedirectAttributes redirectAttributes, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
 		
@@ -105,7 +106,7 @@ public class AccountController {
 	}
 	
 	@GetMapping("/account/{pageNum}")
-	public String listByPage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String listByPage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@PathVariable(name = "pageNum") int pageNum, Model model, 
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
@@ -113,14 +114,14 @@ public class AccountController {
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
 			pagingOrder(pageNum, sortField, sortDir, customer, model);
 			pagingRequest(pageNum, sortField, sortDir, customer, model);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
 			pagingOrder(pageNum, sortField, sortDir, customer, model);
 			pagingRequest(pageNum, sortField, sortDir, customer, model);
@@ -237,16 +238,16 @@ public class AccountController {
 			@RequestParam(name = "chatBody") String chatBody,
 			Conversation conversation, 
 			RedirectAttributes redirectAttributes, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			conversation.setRepliedFrom(customer.getEmail());
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			conversation.setRepliedFrom(customer.getEmail());
 		}
 		

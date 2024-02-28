@@ -162,12 +162,37 @@
 	color: green;
 	text-decoration: blink;
 }
+		.empty1 {
+			border-radius: 26px;
+			border: 1px solid gray;
+			margin-top: 10px;
+			padding: 12px 5px;
+		}
+		
+		
+		.togglerClass {
+			display: none;
+		}
+		.toggleWidth {
+			width: 100%;
+		}
+		.containerHeader {
+			max-width: 81%;
+		}
+			
+		@media screen and (max-width: 700px) {
+			.containerHeader {
+	    		width: 100% !important;
+				max-width: 100% !important;
+			}
+		}
 	  </style>
 </head>
 <body>
 
 <!-- ======= Header ======= -->
-<header id="header" class="fixed-top d-flex align-items-center">
+<div id="header" class="fixed-top d-flex align-items-center">
+	
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
 	<script>
@@ -177,49 +202,48 @@
 	
 	  gtag('config', 'G-TNN6EKSPHR');
 	</script>
-    <div class="container d-flex align-items-center justify-content-between">
+    <div class="container d-flex align-items-center justify-content-between containerHeader">
 
-      <h1 class="logo"></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <div class="col">
+      <div class="col media-hide">
       	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; float: left;"></a>
       </div>
       
       
 
-      <nav id="navbar" class="navbar" >
+      <nav id="navbar" class="navbar">
         <ul class="ul_modify">
           <li class="media-hide"></li>
           <li class="media-hide"></li>
-          <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}">
-          	<i class="fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
+          <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
+          	<i class="fa fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li3" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-2}" style="background: none;">
-          	<i class="fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
+          	<i class="fa fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li4" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-3}">
-          	<i class="fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
+          	<i class="fa fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-8}" >
-          	<i class="fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
+          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
           </li>
           <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/flight_activity}" >
-          	<i class="fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
+          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
           </li>
-          <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAuthority(''Customer'')')}" >
+          <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
 	          <a href="#">
 		          <span style="display: flex !important;  justify-content: start;">
-		          	<i class="fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+		          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          </span> 
 		          <i class="bi bi-chevron-down"></i>
 	          </a>
               <li th:replace="user_credential/loginModal :: login('tag')"></li>
           </li>
           
-          	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAuthority(''Customer'')')}" >
+          	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
 	          	<a href="#">
 	          		<span style="display: flex !important;  justify-content: start;">
-		          		<i class="fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+		          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          	</span> 
 		          	<i class="bi bi-chevron-down"></i>
 	          	</a>
@@ -227,13 +251,77 @@
           	</li>
           
         </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
+	  <div class="mobile-nav-toggle" id="imageToggler">
+	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
+        <div id="beforelogIN" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/images/no-user-new.png'} + '); 
+			background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
+        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
+				<i class="fa fa-solid fa-bars"></i>
+			</div>
+		</div>
+      </li>
+      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		  
+        <div id="afterlogIN" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
+        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); 
+			background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
+        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
+				<i class="fa fa-solid fa-bars"></i>
+			</div>
+		</div>
+	  </th:block>
+	  </div>
+	      <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}"></i>-->
+     
+        <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;"></i>-->
       </nav><!-- .navbar -->
-
+	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+	      <div class="col media_status" style="display: none; text-align: center; padding-right: 50px;" >
+	      	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; "></a>
+	      </div>
+      </li>
+      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		    <div class="col float-state" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
+		        <a th:href="@{/}"> <p class="float-state" >Hey, <span sec:authentication="principal.customer.firstName"></span>!</p></a>
+		    </div>
+	  </th:block>
+      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		  	<div style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
+				  <a type="button" style="color: white;"
+				th:href="@{/wallet-home}">
+		    	<i class="fa fa-solid fa-wallet"></i>
+		    	</a>
+		    </div>
+	  </th:block>
+      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		  	<div style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
+		    	<i class="fa fa-solid fa-bell"></i>
+		    </div>
+	  </th:block>
+      <!--<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		  	<div style="color: white; padding: 0 15px 0 12px; font-size: 22px;">
+		    	<i class="fa fa-solid fa-network-wired"></i>
+		    </div>
+	  </th:block>-->
     </div>
-  </header><!-- End Header -->
+    
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#imageToggler").click(function(){
+				$("#beforelogIN").toggleClass("togglerClass");
+			});
+			
+			$("#imageToggler").click(function(){
+				$("#afterlogIN").toggleClass("togglerClass");
+			});
+		});
+	</script>
+	
+  </div>
+  <!-- End Header -->
+  
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
   <!-- Vendor JS Files -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -311,85 +399,61 @@
 			</div>
 		</section>
 			<div class="imgbck login_box1" style="padding: 170px 0 35px 0;">
-			<div class="container">
-				<div class="col-md-5 col-12 registration_box" style="box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;">
-			<form th:action="@{/login}" method="post" >
-				<div th:if="${param.error}">
-					<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
-				</div>
-				<div th:if="${param.logout}">
-					<p class="text-warning">You have logged out.</p>
-				</div>
-				<div>
-					<h1 class="text-center" style="margin-bottom: 24px;">Login</h1>
-					<div class="row mb-3">
-						<div class="col-sm-12">
-							<div class="row">
-								<div class="col-sm-6 col-6">
-									<a th:href="@{/oauth2/authorization/google}" class="" style="margin: 0 5px; width: auto; display: block;">
-										<div class="row google_button" >
-											<img th:src="@{assets/img/google.png}" alt="" class="img-fluid col-3" style="padding: 5px;">
-											<h5  class="col-9">Login with Google</h5>
+				<div class="container">
+					<div class="col-md-5 col-12 registration_box" style="box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;">
+					<form th:action="@{/login}" method="post">
+										<!--<p class="text-center">Please <a th:href="@{/registration}" class="specialButton styleLinkHover styleLink"><span> Sign up</span></a> if you're not registered!</p>-->
+										<div style=" border: 1px solid grey; border-radius: 15px; background-color: rgba(255,255,255,0.4); padding: 10px;">
+											<h1 class="text-center" style="margin-bottom: 24px;">Login</h1>
+											<div class="row mb-3">
+											<div th:if="${param.error}">
+											    <p class="text-success"
+											        th:utext="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">Error message</p>
+											</div>
+											<div th:if="${param.otp}">
+											    <p class="text-primary">
+											        Kindly check [[${param.phone}]] and use the provided OTP to login.<br>
+											        Note: The OTP will expire after 5 minutes.
+											    </p>
+											</div>   
+											<div th:if="${param.logout}">
+											    <p class="text-warning">You have been logged out.</p>
+											</div>
+											 
+											<div th:if="${message != null}">
+											    <p class="text-primary">[[${message}]]</p>
+											</div>
 										</div>
-									</a>
-								</div>
-								<div class="col-sm-6 col-6">
-									<a th:href="@{/oauth2/authorization/facebook}" class="" style="margin: 0 5px; width: auto; display: block;">
-										<div class="row facebook_button" >
-											<img th:src="@{assets/img/facebook.png}" alt="" class="img-fluid col-3" style="padding: 5px;">
-											<h5 class="col-9">Login with Facebook</h5>
+											<div class="row mb-3">
+												<label for="inputEmail3" class="col-sm-6 col-form-label label"><p>
+														Email Or Phone Number:<span class="star_marked"> *</span>
+													</p></label><br>
+												<div class="col-sm-10" style="width: 100%;">
+													<input type="text" name="phone" class="form-control" 
+														placeholder="email or phone" th:value="${param.phone}" required autofocus>
+												</div>
+											</div>
+											<div class="row mb-3">
+												<th:block th:if="${param.otp != null && param.phone != null}">
+													<label for="inputPassword3" class="col-sm-4 col-form-label label"><p>
+															OTP:<span class="star_marked"> *</span>
+														</p></label>
+													<div class="col-sm-10" style="width: 100%;">
+														<input type="password" class="form-control input" name="password"
+															 placeholder="XXXXXX" required>
+													</div>
+												</th:block>
+											</div>
+											
+											<div class="row mb-3" style="width: 40%; margin: 0 auto;">
+												<th:block th:if="${param.otp == null}"><input type="submit" value="Send OTP" class="btn btn-primary button" /></th:block>
+												<th:block th:if="${param.otp != null}"><input type="submit" value="Login" class="btn btn-primary button" /></th:block>
+											</div>
 										</div>
-									</a>
-								</div>
-							
-							</div>
-							
-						</div>
+									</form>
 					</div>
-					<p class="text-center">Please <a th:href="@{/registration}" class="specialButton styleLinkHover styleLink"><span> Sign up</span></a> if you're not registered!</p>
-					<div style=" border: 1px solid grey; border-radius: 15px; background-color: rgba(255,255,255,0.4); padding: 10px;">
-						<input type="hidden" class="input middle" value="0">
-						<div class="row mb-3">
-							<label for="inputEmail3" class="col-sm-3 col-form-label label"><p>
-									Email:<span class="star_marked"> *</span>
-								</p></label><br>
-							<div class="col-sm-10" style="width: 100%;">
-								<input type="email" class="form-control" name="email" 
-									placeholder="username@email.com" required>
-							</div>
-						</div>
-						<div class="row mb-3">
-							<label for="inputPassword3" class="col-sm-4 col-form-label label"><p>
-									Password:<span class="star_marked"> *</span>
-								</p></label>
-							<div class="col-sm-10" style="width: 100%;">
-								<input type="password" class="form-control input" name="password"
-									 placeholder="Password" required>
-							</div>
-						</div>
-						<div class="row mb-3">
-							<div class="col-sm-10">
-								<div class="form-check">
-									<input type="checkbox" id="gridCheck1" name="remember-me">
-									<label class="form-check-label" for="gridCheck1"> Stay logged in! </label>
-								</div>
-							</div>
-						</div>
-						<div class="row mb-3">
-							<div class="col-sm-12">
-								<div class="form-check">
-									<a th:href="@{/forgot_password}" class="forgot_password">Forgot Password?</a>
-								</div>
-							</div>
-						</div>
-						
-						<div class="row mb-3" style="width: 40%; margin: 0 auto;">
-							<input type="submit" name="submit" class="btn btn-primary button"
-								value="Login">
-						</div>
-					</div>
-				</div>
-				</form>
+					
+					
 			</div>
 			</div>
 		</div>
@@ -401,5 +465,19 @@
 	</div>
 
 </body>
+<script>
+	$("#return-next").click(function(){
+		$("#return-next").css("display", "none");
+		$("#return-previous").css("display", "flex");
+	})
+	$("#return-previous").click(function(){
+		$("#return-previous").css("display", "none");
+		$("#return-next").css("display", "flex");
+	})
+	$("#return_international").click(function(){
+		$("#return-next").css("display", "none");
+		$("#return-previous").css("display", "flex");
+	})
+</script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>

@@ -29,83 +29,8 @@
 	<br>
 	<div th:replace="about/about-fragments :: content"></div>
 	
-	<!-- ======= Footer ======= -->
-	  <footer th:fragment="page_footer" id="footer" style=" background: #07162d !important;">
-	    <div class="footer-top" style=" background: #07162d !important;">
-	      <div class="container">
-	        <div class="row">
 	
-	          <div class="col-md-3">
-	            <div class="footer-info">
-	              <h3>[[${SITE_NAME}]]</h3>
-	              <div th:utext="${ADMIN_ADDRESS}"></div>
-	              <div class="social-links mt-3">
-	                <a th:href="@{${TWITTER}}" class="twitter"><i class="bx bxl-twitter"></i></a>
-	                <a th:href="@{${FACEBOOK}}" class="facebook"><i class="bx bxl-facebook"></i></a>
-	                <a th:href="@{${INSTAGRAM}}" class="instagram"><i class="bx bxl-instagram"></i></a>
-	                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-	                <a th:href="@{${LINKEDIN}}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-	              </div>
-	            </div>
-	          </div>
-	
-	          <div class="col-md-2 col-6 footer-links">
-	            <h4>Useful Links</h4>
-	            <ul>
-	              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/}">Home</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-2}">About us</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-9}">Customer Support</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-3}">Contact us</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-6}">User Agreement</a></li>
-	            </ul>
-	          </div>
-	
-	          <div class="col-md-3 col-6 footer-links">
-	            <h4>Our Services</h4>
-	            <ul>
-	              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-8}">Service</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-	            </ul>
-	          </div>
-	
-	          <div class="col-md-4 col-12 footer-newsletter">
-	            <h4>Our Newsletter</h4>
-	            <p>Subscribe to get latest flight updates and deals.</p>
-	            <form action="" method="post">
-	              <input type="email" name="email"><input type="submit" value="Subscribe">
-	            </form>
-				<div class="row" style="padding-top: 25px;">
-	            	<div class="col-3" style="display: flex; justify-content: center; align-items: center;">
-	            		<p>Member of </p>
-	            	</div>
-	            	<div class="col">
-	            		<img alt="IATA" th:src="@{/images/iata1.png}">
-	            	</div>
-	            </div>
-	          </div>
-	
-	        </div>
-	      </div>
-	    </div>
-	
-	    <div class="container row">
-	      <div class="copyright col-12 col-md-6">
-	        <a class="float-left styleLinkHover" th:href="@{/about#no-1}" style="margin-right: 5px;">FAQ</a> 
-	        <a class="float-left styleLinkHover" th:href="@{/about#no-7}" style="margin-right: 5px;">Payment Security</a> 
-	        <a class="float-left styleLinkHover" th:href="@{/about#no-4}" style="margin-right: 5px;">Terms of Use</a> 
-	        <a class="float-left styleLinkHover" th:href="@{/about#no-5}" style="margin-right: 5px;">Privacy & Policy</a> 
-	        
-	      </div>
-	      <div class="credits col-12 col-md-6">
-	      	[[${COPYRIGHT}]]
-	        <!-- All the links in the footer should remain intact. -->
-	        <!-- You can delete the links only if you purchased the pro version. -->
-	        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-	        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/groovin-free-bootstrap-theme/ -->
-	        <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
-	      </div>
-	    </div>
-	  </footer><!-- End Footer -->
+ <footer th:replace="fragments :: page_footer"></footer>
 	
 	  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 	

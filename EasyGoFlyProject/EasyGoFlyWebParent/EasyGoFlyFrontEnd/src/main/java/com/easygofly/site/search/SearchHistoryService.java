@@ -80,15 +80,22 @@ public class SearchHistoryService {
 		return counter;
 	}
 	
-	public Customer getByEmail(String email) {
-		return customerRepo.getCustomerByEmail(email);
+//	public Customer getByEmail(String email) {
+//		return customerRepo.getCustomerByEmail(email);
+//	}
+	
+	public Customer getByPhone(String phone) {
+		return customerRepo.getCustomerByPhone(phone);
 	}
 	
 	public void authenticationFlight(Model model) {
 		try {
         	
         	// Create URL object with the API end-point
-            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
+            
+        	// Create URL object with the API end-point
+//            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
 
             // Open a connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

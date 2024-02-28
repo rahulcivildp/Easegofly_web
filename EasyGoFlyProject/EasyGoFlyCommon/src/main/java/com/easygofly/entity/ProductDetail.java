@@ -128,8 +128,18 @@ public class ProductDetail {
             cascade =  CascadeType.ALL,
             mappedBy = "productDetail")
     private Order order;
+
+	@Column(name = "device", length = 100)
+	private String device;
+
+	@Column(name = "device_description", length = 5000)
+	private String deviceDescription;
+
+	@Column(name = "device_type", length = 10)
+	private String deviceType;
 	
 	
+
 	public ProductDetail() {}
 
 	public ProductDetail(int id) {
@@ -168,7 +178,7 @@ public class ProductDetail {
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
 			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
 			float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, String journeyClass, 
-			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, Product product, String craftType) {
+			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, Product product, String craftType) {
 		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
@@ -201,6 +211,45 @@ public class ProductDetail {
 		this.baggage = baggage;
 		this.cabinBaggage = cabinBaggage;
 		this.craftType = craftType;
+		this.device = device;
+		this.deviceDescription = deviceDescription;
+	}
+	
+	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
+			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
+			float arrTimeInteger, String mode, String journeyClass, String terminalDep, String terminalArr, Integer baggage, 
+			Integer cabinBaggage, String traceId, String device, String deviceDescription, Product product) {
+		this.pnr = pnr;
+		this.totalSeats = totalSeats;
+		this.uploadSeats = uploadSeats;
+		this.flightNum = flightNum;
+		this.date = date;
+		this.depTime = depTime;
+		this.arrTime = arrTime;
+		this.priceADT = priceADT;
+		this.priceINF = priceINF;
+		this.markupADT = markupADT;
+		this.markupINF = markupINF;
+		this.cityOne = cityOne;
+		this.cityTwo = cityTwo;
+		this.enabled = enabled;
+		this.inStock = inStock;
+		this.product = product;
+		this.stopNum = stopNum;
+		this.duration = duration;
+		this.brand = brand;
+		this.arrTimeInteger = arrTimeInteger;
+		this.depTimeInteger = depTimeInteger;
+		this.mode = mode;
+		this.journeyClass = journeyClass;
+		this.terminalDep = terminalDep;
+		this.terminalArr = terminalArr;
+		this.baggage = baggage;
+		this.cabinBaggage = cabinBaggage;
+		this.traceId = traceId;
+		this.device = device;
+		this.deviceDescription = deviceDescription;
 	}
 	
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
@@ -245,7 +294,23 @@ public class ProductDetail {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public String getDevice() {
+		return device;
+	}
 
+	public void setDevice(String device) {
+		this.device = device;
+	}
+
+	public String getDeviceDescription() {
+		return deviceDescription;
+	}
+
+	public void setDeviceDescription(String deviceDescription) {
+		this.deviceDescription = deviceDescription;
+	}
+	
 	public String getPnr() {
 		return pnr;
 	}
@@ -328,6 +393,14 @@ public class ProductDetail {
 
 	public List<Stop> getStops() {
 		return stops;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 
 	public String getMode() {

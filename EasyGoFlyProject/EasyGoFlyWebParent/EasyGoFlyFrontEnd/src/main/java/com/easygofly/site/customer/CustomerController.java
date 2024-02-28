@@ -119,5 +119,13 @@ public class CustomerController {
 		return "user_credential/" + (verified ? "verify_success" : "verify_failure");
 		
 	}
+	
+	@GetMapping("/verify/otp")
+	public String verifyAccountByOTP(@Param("code") String code, @Param("phone")String phone, Model model) {
+		boolean verified = customerService.verifyByOTP(code, phone);
+		
+		return "user_credential/" + (verified ? "verify_success" : "verify_failure");
+		
+	}
 	 
 }

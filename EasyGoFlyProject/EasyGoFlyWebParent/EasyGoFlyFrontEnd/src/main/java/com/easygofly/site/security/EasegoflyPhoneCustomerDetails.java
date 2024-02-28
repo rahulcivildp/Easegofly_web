@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,15 +16,13 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.Role;
 
 
-
 @SuppressWarnings("serial")
 @Component
 @AutoConfiguration
-public class EasyGoFlyCustomerDetails implements UserDetails {
-
-	private Customer customer;
+public class EasegoflyPhoneCustomerDetails implements UserDetails {
+	@Autowired private Customer customer;
 	
-	public EasyGoFlyCustomerDetails(Customer customer) {
+	public EasegoflyPhoneCustomerDetails(Customer customer) {
 		this.customer = customer;
 	}
 
@@ -41,12 +40,19 @@ public class EasyGoFlyCustomerDetails implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return customer.getPassword();
+        if (customer.isOTPRequired()) {
+            System.out.println(customer.getVerificationCode());
+            return customer.getVerificationCode();
+        }
+        
+        System.out.println(customer.getPassword());
+         
+        return customer.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return customer.getEmail();
+		return customer.getPhone();
 	}
 	
 	public void setFirstName(String firstName) {
@@ -89,7 +95,11 @@ public class EasyGoFlyCustomerDetails implements UserDetails {
 		return this.customer;
 	}
 	
-	public String getEmail() {
-		return this.customer.getEmail();
+	public String getPhoto() {
+		return this.customer.getPhotos();
+	}
+	
+	public String getPhone() {
+		return this.customer.getPhone();
 	}
 }

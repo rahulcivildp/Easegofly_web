@@ -29,7 +29,7 @@ import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsController;
 import com.easygofly.site.flight.ProductDetailsRepository;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 
 @Controller
@@ -162,7 +162,7 @@ public class SearchFilterController {
 	
 	@GetMapping("/filter_flight_search_{id}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSingles(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@PathVariable(name = "sortName") String sortName,
 			@PathVariable(name = "activeTime") String[] activeTime,
@@ -174,11 +174,11 @@ public class SearchFilterController {
 		Customer customer;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		

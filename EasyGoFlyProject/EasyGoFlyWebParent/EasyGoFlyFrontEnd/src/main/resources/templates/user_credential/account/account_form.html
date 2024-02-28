@@ -22,7 +22,7 @@
 				<div class="col-md-9">
 					<p>[[${customer.fullName}]] <span></span></p>
 					<p>[[${customer.email}]]</p>
-					<p>[[${customer.phoneNumber}]]</p>
+					<p>[[${customer.phone}]]</p>
 					<p>[[${customer.addressLine1}]]</p>
 					<p>[[${customer.addressLine2}]]</p>
 					<p>Gender: [[${customer.gender}]] &nbsp;&nbsp;&nbsp; Country: [[${customer.country.name}]]</p>
@@ -73,7 +73,7 @@
 						<input type="text" class="form-control" th:field="*{lastName}" minlength="3" maxlength="128">
 					</div>
 					<div class="col-8 margin-bottom-update-account">
-						<input type="text" class="form-control" th:field="*{phoneNumber}" minlength="3" maxlength="128">
+						<input type="text" class="form-control" th:field="*{phone}" minlength="3" maxlength="128">
 					</div>
 					<div class="col-6 margin-bottom-update-account">
 						<input type="password" class="form-control" th:field="*{password}" placeholder="Leave blank if you don't want to change password." minlength="8" maxlength="40" oninput="checkPasswordMatch(document.getElementById('confirmPassword'))">

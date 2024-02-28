@@ -3,10 +3,15 @@ package com.easygofly.site.security;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,27 +23,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-import com.easygofly.site.security.oauth.CustomerOAuth2UserService;
-import com.easygofly.site.security.oauth.OAuth2LoginSuccessHandler;
-
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
-	@Autowired private CustomerOAuth2UserService oAuth2UserService;
-	@Autowired private OAuth2LoginSuccessHandler oAuth2LoginHandler;
-	@Autowired private DatabaseLoginSuccessHandler databaseLoginHandler;
-	
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+    
+    @Autowired  private BeforeAuthenticationFilter beforeLoginFilter;
+//	@Autowired private DatabaseLoginSuccessHandler databaseLoginHandler;
+    @Autowired private LoginSuccessHandler loginSuccessHandler;
+    @Autowired private LoginFailureHandler loginFailureHandler;
+    @Autowired private DataSource datasource;
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
@@ -77,21 +88,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**", 
 					"/flight_search-noUser_filter_**", "/save_meal", "/test", "/save_timer**").permitAll()
 			.anyRequest().authenticated()
+            .and()
+            .addFilterBefore(beforeLoginFilter,
+                    BeforeAuthenticationFilter.class)
+			.formLogin()
+				.loginPage("/login")
+				.usernameParameter("phone")
+                .successHandler(loginSuccessHandler)
+                .failureHandler(loginFailureHandler)
+				.permitAll()
 			.and()
+            .addFilterBefore(beforeLoginFilter,
+                    BeforeAuthenticationFilter.class)
 			.formLogin()
 				.loginPage("/login")
 				.usernameParameter("email")
-				.successHandler(databaseLoginHandler)
-				.permitAll()
-			.and()
-			.oauth2Login()
-				.loginPage("/login")
-				.tokenEndpoint(token -> token
-				        .accessTokenResponseClient(this.accessTokenResponseClient()))
-				.userInfoEndpoint()
-				.userService(oAuth2UserService)
-				.and()
-				.successHandler(oAuth2LoginHandler)
+	            .successHandler(loginSuccessHandler)
+	            .failureHandler(loginFailureHandler)
 				.permitAll()
 			.and()
 			.logout().permitAll()
@@ -104,10 +117,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				.expiredUrl("/login");
 		
 			http.cors();
-	}
-
-	private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
-		return new DefaultAuthorizationCodeTokenResponseClient();
 	}
 	
 	@Override
@@ -124,7 +133,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Bean
 	public UserDetailsService userDetailsService() {
-		return new EasyGoFlyCustomerDetailsService();
+		return new EasegoflyPhoneCustomerDetailsService();
 	}
 	
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -135,6 +144,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		return authProvider;
 	}
 	
-	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+		tokenRepository.setDataSource(datasource);
+		
+		return tokenRepository;
+	}
 	
 }

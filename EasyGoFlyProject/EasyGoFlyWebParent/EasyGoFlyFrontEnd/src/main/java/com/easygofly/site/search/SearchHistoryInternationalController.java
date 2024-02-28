@@ -42,7 +42,7 @@ import com.easygofly.site.flight.ProductDetailsInternationController;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.ProductSaveHelper;
 import com.easygofly.site.flightAPI.OnlineFlightService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
 
@@ -65,7 +65,7 @@ public class SearchHistoryInternationalController {
 	//International one-way segment******
 	
 	@GetMapping("/flight_international_search_save")
-	public String searchHistoryInternationalSave(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String searchHistoryInternationalSave(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
 			@RequestParam(name = "cityTwo", required = false) String cityTwo, 
@@ -93,7 +93,7 @@ public class SearchHistoryInternationalController {
 		    
             if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
@@ -101,7 +101,7 @@ public class SearchHistoryInternationalController {
 				return "redirect:/loading_international_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
@@ -117,7 +117,7 @@ public class SearchHistoryInternationalController {
 	
 	@GetMapping("/flight_search_international_{id}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSingles(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@PathVariable(name = "sortName") String sortName,
 			@PathVariable(name = "activeTime") String[] activeTime,
@@ -129,11 +129,11 @@ public class SearchHistoryInternationalController {
 		Customer customer;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -239,7 +239,7 @@ public class SearchHistoryInternationalController {
 
 	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
@@ -257,7 +257,7 @@ public class SearchHistoryInternationalController {
 			pInternationController.listProductDetailsOnline.add(productDetailOffline);
 		}
 		
-        ProductDetail[] productDetail = new ProductDetail[500];
+//        ProductDetail[] productDetail = new ProductDetail[500];
         
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
@@ -382,13 +382,13 @@ public class SearchHistoryInternationalController {
 
 				String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
 				
-				productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+				ProductDetail productDetail = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
 			    		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, pInternationController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, null, craftType);
+			    		airlineName, depTimeFloat, arrTimeFloat, pInternationController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
 				
-				pInternationController.listProductDetailsOnline.add(productDetail[i]);
+				pInternationController.listProductDetailsOnline.add(productDetail);
 				
-				pInternationController.listProductDetailsInSearch.add(productDetail[i]);
+				pInternationController.listProductDetailsInSearch.add(productDetail);
 			}
 			
 			model.addAttribute("listProducts", pInternationController.listProductDetailsOnline);
@@ -420,7 +420,7 @@ public class SearchHistoryInternationalController {
 	//International return segment******
 	
 	@GetMapping("/flight_international_search_return_save")
-	public String searchHistoryInternationalReturnSave(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String searchHistoryInternationalReturnSave(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
 			@RequestParam(name = "cityTwo", required = false) String cityTwo, 
@@ -449,14 +449,14 @@ public class SearchHistoryInternationalController {
 		    
             if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 				searchReturnURL = "/flight_search_international_return_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
 				return "redirect:/loading_international_return_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 				searchReturnURL = "/flight_search_international_return_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
@@ -471,7 +471,7 @@ public class SearchHistoryInternationalController {
 	
 	@GetMapping("/flight_search_international_return_{id}_{sortName}_{brand}_{stop}_{activeTime}")
 	public String searchFlightDetailsSinglesInter(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@PathVariable(name = "sortName") String sortName,
 			@PathVariable(name = "activeTime") String[] activeTime,
@@ -482,11 +482,11 @@ public class SearchHistoryInternationalController {
 		Customer customer;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -580,7 +580,7 @@ public class SearchHistoryInternationalController {
 	public String[] searchReturnInternationalFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+        URL urlSearch =  new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
@@ -601,8 +601,8 @@ public class SearchHistoryInternationalController {
 		pInternationController.listProductDetailsOnlineReturn = new ArrayList<ProductDetail>(); 
 		pInternationController.flightMaps = new ArrayList<FlightMap>();
 		
-        ProductDetail[] productDetail = new ProductDetail[500];
-        ProductDetail[] productDetailTwo = new ProductDetail[500];
+//        ProductDetail[] productDetail = new ProductDetail[500];
+//        ProductDetail[] productDetailTwo = new ProductDetail[500];
         
         Integer count = 0;
         Integer countTwo = 0;
@@ -746,19 +746,19 @@ public class SearchHistoryInternationalController {
     			
     			String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
     			
-    			productDetail[i] = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+    			ProductDetail productDetail = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
                 		stringDepTime, stringArrTime, intTotalAdultChildPrice/2, intTotalInfantPrice/2, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-                		airlineName, depTimeFloat, arrTimeFloat, pInternationController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, null, craftType);
+                		airlineName, depTimeFloat, arrTimeFloat, pInternationController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
     			
-    			pInternationController.listProductDetailsOnline.add(productDetail[i]);
+    			pInternationController.listProductDetailsOnline.add(productDetail);
     			
-    			pInternationController.listProductDetailsInSearch.add(productDetail[i]);
+    			pInternationController.listProductDetailsInSearch.add(productDetail);
 
     			FlightMap flightMap = new FlightMap();
     			
 				flightMap.setId(i);
-				flightMap.setFlightIdTwo(productDetail[i].getId());
-				flightMap.setFlightIdOne(productDetail[i].getId());
+				flightMap.setFlightIdTwo(productDetail.getId());
+				flightMap.setFlightIdOne(productDetail.getId());
 				pInternationController.flightMaps.add(flightMap);
     			
     			count++;
@@ -879,11 +879,11 @@ public class SearchHistoryInternationalController {
         			
         			String craftTypeTwo = mainObjSegmentTwo.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
         			
-        			productDetailTwo[i] = new ProductDetail(i, "waiting...", noOfSeatAvailableTwo, noOfSeatAvailableTwo, flightNumberTwo, date, 
+        			ProductDetail productDetailTwo = new ProductDetail(i, "waiting...", noOfSeatAvailableTwo, noOfSeatAvailableTwo, flightNumberTwo, date, 
                     		stringDepTimeTwo, stringArrTimeTwo, intTotalAdultChildPriceTwo/2, intTotalInfantPriceTwo/2, 0, 0, depAirportCodeTwo, arrAirportCodeTwo, true, true, stopNumberTwo, durationTwo, 
-                    		airlineNameTwo, depTimeFloatTwo, arrTimeFloatTwo, pInternationController.traceId, resultIndexTwo, airlineRemarkTwo, modeTwo, "2", depTerminalTwo, arrTerminalTwo, 15, 7, null, craftTypeTwo);
+                    		airlineNameTwo, depTimeFloatTwo, arrTimeFloatTwo, pInternationController.traceId, resultIndexTwo, airlineRemarkTwo, modeTwo, "2", depTerminalTwo, arrTerminalTwo, 15, 7, "", "", null, craftTypeTwo);
         			
-        			pInternationController.listProductDetailsOnlineReturn.add(productDetailTwo[i]);
+        			pInternationController.listProductDetailsOnlineReturn.add(productDetailTwo);
     				
         			countTwo++;
 	        	    

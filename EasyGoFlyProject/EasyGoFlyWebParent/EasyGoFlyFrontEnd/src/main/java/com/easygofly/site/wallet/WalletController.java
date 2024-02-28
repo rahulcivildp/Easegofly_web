@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,7 @@ import com.easygofly.entity.RechargeHistory;
 import com.easygofly.entity.RechargeHistoryStatus;
 import com.easygofly.entity.Wallet;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Config;
@@ -47,19 +46,19 @@ public class WalletController {
 	private String[] responseParameters;
 	
 	@GetMapping("/wallet-home")
-	public String walletHome(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String walletHome(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			responseBalance(model, customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			responseBalance(model, customer);
 		} 
@@ -68,24 +67,24 @@ public class WalletController {
 		return "wallet/wallet-home";
 	}
 	
-	@PostMapping("wallet-recharge")
+	@PostMapping("/wallet-recharge")
 	public String rechargeWallet(@RequestParam(name = "recharge-amount") Integer rechargeAmount,
 			@RequestParam(name = "wallet_id") Integer wallet_id,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin ) {
 		
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Integer paisaValue = rechargeAmount * 100;
 			
 			walletService.setTempValue(customer, paisaValue);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Integer paisaValue = rechargeAmount * 100;
 			
 			walletService.setTempValue(customer, paisaValue);
@@ -96,14 +95,14 @@ public class WalletController {
 	
 	@GetMapping("/wallet-confirm")
 	public String rechargeWalletPage(
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request) {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			Integer paisaValueTemp = wallet.getTempValue() / 100;
 			model.addAttribute("temp_value", paisaValueTemp);
@@ -111,7 +110,7 @@ public class WalletController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			Integer paisaValueTemp = wallet.getTempValue() / 100;
 			model.addAttribute("temp_value", paisaValueTemp);
@@ -167,7 +166,7 @@ public class WalletController {
 	@RequestMapping(value = "/zaakpay/recharge",
 			method = {RequestMethod.POST})
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
 		
 		
@@ -194,12 +193,12 @@ public class WalletController {
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			rechargeStatus(customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			rechargeStatus(customer);
 		} 
 		
@@ -224,19 +223,19 @@ public class WalletController {
 	@RequestMapping(value = "/zaakpay/recharge",
 			method = {RequestMethod.GET})
 	public String zaakpayResponseSe (HttpServletRequest request, Model model, HttpServletResponse response, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			responseBalance(model, customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			responseBalance(model, customer);
 		}
@@ -247,9 +246,19 @@ public class WalletController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[11].contains("1017")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
 			model.addAttribute("paymentSuccess", parameter[12]);
 		}
+		
+		System.out.println(parameter);
 		
 		Integer amountIntRech = Integer.parseInt(parameter[0]) / 100;
 		model.addAttribute("amountRecharged", amountIntRech);
@@ -270,13 +279,13 @@ public class WalletController {
 	}
 	
 	@GetMapping("/show-history")
-	public String showHistory(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String showHistory(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
 			model.addAttribute("rechargeHistories", rechargeHistories);
@@ -284,7 +293,7 @@ public class WalletController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
 

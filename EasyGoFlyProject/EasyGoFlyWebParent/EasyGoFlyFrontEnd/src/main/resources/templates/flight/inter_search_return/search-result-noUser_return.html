@@ -37,6 +37,14 @@
 	<!-- Template Main CSS File -->
 	<link th:href="@{assets/css/style.css}" rel="stylesheet">
 	
+
+   
+<script>
+   moduleURL = '[[@{/}]]';
+   timeInSec = 10 * 60 * 1000;
+ </script>
+
+<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 	
 <style>
     /* width */
@@ -471,6 +479,8 @@
 	      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
 	          			<input type="hidden" name="search_id" th:value="1.5">
           				<input type="hidden" name="timeRemaining" class="timeRemain">
+			            <input type="hidden" name="device" class="device">
+			            <input type="hidden" name="deviceInfo" class="deviceInfo">
 			                    <div class="row">
 			                    	<div class="col-md-10 displayChange">
 										<th:block th:each="flightOne : ${listProducts}" th:if="${flightMap.flightIdOne} == ${flightOne.id}">
@@ -869,29 +879,7 @@
 
 </script>
 
-     <script>
-	    // Set the date and time to count down to (in this example, it's set to 10 minutes from the current time)
-	    var countDownDate = new Date().getTime() + 6 * 60 * 1000;
-	
-	    // Update the countdown every second
-	    var x = setInterval(function() {
-	      var now = new Date().getTime();
-	      var distance = countDownDate - now;
-	
-	      // Calculate remaining time
-	      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-	      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-	
-	      // Display the countdown timer in the "timer" div
-	      document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
-	
-	      // When the countdown timer reaches zero, display a message
-	      if (distance < 2) {
-	        clearInterval(x);
-	        document.location.href = '[[@{/}]]';
-	      }
-	    }, 0);
-	  </script>
-
 <link th:href="@{css/custom.css}" rel="stylesheet">
+
+<script type="text/javascript" th:src="@{/js/checkBrowser.js}"></script>
 </html>

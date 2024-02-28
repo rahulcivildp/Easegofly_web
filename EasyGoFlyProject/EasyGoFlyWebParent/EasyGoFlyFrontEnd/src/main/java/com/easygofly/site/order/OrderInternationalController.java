@@ -53,7 +53,7 @@ import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.order.exporter.OrderPDFExporter;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.GeneralSettingBag;
 import com.easygofly.site.setting.SettingService;
@@ -111,7 +111,7 @@ public class OrderInternationalController {
 			@RequestParam(name = "couponCode") String couponCode,
 			@RequestParam(name = "couponCode1") String couponCode1,
 			@RequestParam(name = "totalPayment") String totalPayment,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
 			ProductDetail flight = flightRepo.findById(flightId).get();
@@ -150,14 +150,14 @@ public class OrderInternationalController {
 	public String orderPage(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 		
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			Double doubleAmount = (double) (wallet.getBalance() / 100);
 			model.addAttribute("balance", doubleAmount);
@@ -165,7 +165,7 @@ public class OrderInternationalController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			Double doubleAmount = (double) (wallet.getBalance() / 100);
 			model.addAttribute("balance", doubleAmount);
@@ -243,7 +243,7 @@ public class OrderInternationalController {
 	//Wallet one-way segment
 	
 	@PostMapping("/flight_wallet_inter_check")
-	public String walletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String walletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) {
 		
@@ -252,7 +252,7 @@ public class OrderInternationalController {
 		Order order = orderRepo.findById(savedOrderId).get();
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = orderService.walletPayOrder(customer, order, "INTER");
 			if (wallet != null) {
 				Order updatedOrder = orderService.orderUpdateWallet(order);
@@ -261,7 +261,7 @@ public class OrderInternationalController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = orderService.walletPayOrder(customer, order, "INTER");
 			if (wallet != null) {
 				Order updatedOrder = orderService.orderUpdateWallet(order);
@@ -275,19 +275,19 @@ public class OrderInternationalController {
 	}
 	
 	@GetMapping("/flight_wallet_response_international")
-	public String showWalletPayment(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String showWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
 		String email; 
 		Customer customer = new Customer(); 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -409,7 +409,7 @@ public class OrderInternationalController {
 	@RequestMapping(value = "/zaakpay/international/response",
 			method = {RequestMethod.POST})
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
 		search_id_inner = search_id;
@@ -488,18 +488,18 @@ public class OrderInternationalController {
 	@RequestMapping(value = "/zaakpay/international/response",
 			method = {RequestMethod.GET})
 	public String zaakpayResponseSe (Model model, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 		String email; 
 		Customer customer = new Customer(); 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 
@@ -601,6 +601,14 @@ public class OrderInternationalController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[11].contains("1017")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
 			
 			hasErrorCode = Integer.parseInt(hasErrorArr[0]);
@@ -644,7 +652,7 @@ public class OrderInternationalController {
 			@RequestParam(name = "couponCode1") String couponCode1,
 			@RequestParam(name = "totalPayment1") String totalPayment1,
 			@RequestParam(name = "totalPayment2") String totalPayment2,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
 			pInternationController.timeRemainingPro = timeRemaining;
@@ -684,14 +692,14 @@ public class OrderInternationalController {
 			@PathVariable(name = "itemOne_id") Integer itemOne_id, 
 			@PathVariable(name = "flightTwo_id") Integer flightTwo_id, 
 			@PathVariable(name = "itemTwo_id") Integer itemTwo_id,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 		
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			Double doubleAmount = (double) (wallet.getBalance() / 100);
 			model.addAttribute("balance", doubleAmount);
@@ -699,7 +707,7 @@ public class OrderInternationalController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			Wallet wallet = customer.getWallet();
 			Double doubleAmount = (double) (wallet.getBalance() / 100);
 			model.addAttribute("balance", doubleAmount);
@@ -792,7 +800,7 @@ public class OrderInternationalController {
 	//Wallet return segment
 	
 	@PostMapping("/flight_wallet_international_return_check")
-	public String walletPaymentReturn(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String walletPaymentReturn(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@RequestParam(name = "search_id") Integer search_id) {
 		
@@ -803,7 +811,7 @@ public class OrderInternationalController {
 			Order order2 = orderRepo.findById(savedOrderReturnId2).get();
 			if (loggedCustomer != null) {
 				email = loggedCustomer.getUsername();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				Wallet wallet = orderService.walletPayOrderReturn(customer, order1, order2, "INTER");
 				if (wallet != null) {
 					updatedOrderReturnId1 = order1.getId();
@@ -812,7 +820,7 @@ public class OrderInternationalController {
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByEmail(email);
+				customer = customerService.getByPhone(email);
 				Wallet wallet = orderService.walletPayOrderReturn(customer, order1, order2, "INTER");
 				if (wallet != null) {
 					updatedOrderReturnId1 = order1.getId(); 
@@ -830,7 +838,7 @@ public class OrderInternationalController {
 	}
 	
 	@GetMapping("/flight_wallet_return_response_international")
-	public String showWalletPaymentReturn(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String showWalletPaymentReturn(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
 		String email; 
@@ -839,12 +847,12 @@ public class OrderInternationalController {
 		Order order2 = orderRepo.findById(updatedOrderReturnId2).get();
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -1034,7 +1042,7 @@ public class OrderInternationalController {
 	@RequestMapping(value = "/zaakpay/international/return/response",
 			method = {RequestMethod.POST})
 	public String zaakpayResponseReturn (HttpServletRequest request, HttpServletResponse response,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 		
 		searchReturn_id_inner = search_id;
@@ -1164,18 +1172,18 @@ public class OrderInternationalController {
 	@RequestMapping(value = "/zaakpay/international/return/response",
 			method = {RequestMethod.GET})
 	public String zaakpayResponseSeReturn (Model model, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 		String email; 
 		Customer customer = new Customer(); 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
 
@@ -1354,7 +1362,15 @@ public class OrderInternationalController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
-		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
+		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[11].contains("1017")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		}  else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
 			
 			hasErrorCode = Integer.parseInt(hasErrorArr[0]);
 			hasErrorCodeTwo = Integer.parseInt(hasErrorArrTwo[0]);

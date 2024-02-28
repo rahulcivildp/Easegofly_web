@@ -23,7 +23,7 @@ import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductSaveHelper;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.shoppingCart.CartItemService;
 
@@ -38,7 +38,7 @@ public class FareFinderController {
 	@Autowired private CartItemService cartService;
 	
 	@GetMapping("/search_flight_lowest_fare_{flight_id}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{strDate}")
-	public String searchFlightDetailsSinglesNoUser(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+	public String searchFlightDetailsSinglesNoUser(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@PathVariable(name = "cityOne") String cityOne,
 			@PathVariable(name = "cityTwo") String cityTwo,
@@ -55,7 +55,7 @@ public class FareFinderController {
 		
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			Integer searchId = saveHistoryPart(cityOne, cityTwo, date, journeyClass, tripType, 1, 0,
 					0, customer);
@@ -63,7 +63,7 @@ public class FareFinderController {
 			return "redirect:/flight_booking" + searchId + "&" + flightId + "&" + travelerDetailsPart(searchId, flightId, customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 			Integer searchId = saveHistoryPart(cityOne, cityTwo, date, journeyClass, tripType, 1, 0,
 					0, customer);

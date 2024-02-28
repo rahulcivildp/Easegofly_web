@@ -20,7 +20,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.Request;
 import com.easygofly.site.Utility;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.EmailSettingBag;
 import com.easygofly.site.setting.SettingService;
@@ -36,7 +36,7 @@ public class RequestController {
 	public String saveRequest(Request customerRequest, 
 			RedirectAttributes redirectAttributes, 
 			HttpServletRequest request,
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@RequestParam(name = "conversation", required = false) String conversation) throws UnsupportedEncodingException, MessagingException {
 		
 		System.out.println("Customer Request ID: " + customerRequest.getId());
@@ -45,12 +45,12 @@ public class RequestController {
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			saveRequestPart(customerRequest, redirectAttributes, request, conversation, email, customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			saveRequestPart(customerRequest, redirectAttributes, request, conversation, email, customer);
 		}
 		

@@ -33,8 +33,8 @@ import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
-import com.easygofly.site.security.DatabaseLoginSuccessHandler;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.security.LoginSuccessHandler;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
 import com.easygofly.site.setting.web.WebSettingService;
@@ -57,7 +57,7 @@ public class MainController {
 	private String tokenId = "";
 	
 	@GetMapping("/")
-	public String viewHomePage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, 
+	public String viewHomePage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		Country country = countryRepo.findById(106).get();
 		Iterable<City> cities = cityRepo.getCityByCountry(country);
@@ -65,10 +65,10 @@ public class MainController {
 		
 		Iterable<City> allCities = cityRepo.findAll();
 		model.addAttribute("allCities", allCities);
-		String email; 
+		String phone; 
 		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			Customer customer = searchHistoryService.getByEmail(email);
+			phone = loggedCustomer.getUsername();
+			Customer customer = searchHistoryService.getByPhone(phone);
 			Wallet wallet = customer.getWallet();
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);
@@ -77,8 +77,8 @@ public class MainController {
 			HttpSession session= attr.getRequest().getSession(true);
 			
 		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			Customer customer = searchHistoryService.getByEmail(email);
+			phone = googleLogin.getEmail();
+			Customer customer = searchHistoryService.getByPhone(phone);
 			Wallet wallet = customer.getWallet();
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);	
@@ -222,7 +222,7 @@ public class MainController {
 	@GetMapping("/login")
 	public String viewLoginPage(Principal principal, HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
-		request.getSession().setAttribute(DatabaseLoginSuccessHandler.REDIRECT_URL_SESSION_ATTRIBUTE_NAME, referer);
+		request.getSession().setAttribute(LoginSuccessHandler.REDIRECT_URL_SESSION_ATTRIBUTE_NAME, referer);
 		Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
 			return "user_credential/login";

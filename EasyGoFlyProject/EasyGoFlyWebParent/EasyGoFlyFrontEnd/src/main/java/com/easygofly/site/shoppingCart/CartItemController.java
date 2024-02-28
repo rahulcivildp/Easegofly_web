@@ -29,7 +29,7 @@ import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.order.OrderService;
 import com.easygofly.site.search.SearchHistoryRepository;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
@@ -45,23 +45,23 @@ public class CartItemController {
 	
 
 	@GetMapping("/manage_booking")
-	public String getManageBooking(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model, HttpServletRequest request) {
+	public String getManageBooking(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model, HttpServletRequest request) {
 		return listByPage(loggedCustomer, googleLogin, 1, model, "id", "asc", null, request);
 	}
 	
 	@GetMapping("/manage_booking/{pageNum}")
-	public String listByPage(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, HttpServletRequest request) {
+	public String listByPage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, HttpServletRequest request) {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
 			pagingOrder(1, sortField, sortDir, customer, model, request);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
 			pagingOrder(1, sortField, sortDir, customer, model, request);
 		}
@@ -75,18 +75,18 @@ public class CartItemController {
 	} 
 	
 	@GetMapping("/manage_orders/{pageNum}")
-	public String listByPageOrder(@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, HttpServletRequest request) {
+	public String listByPageOrder(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, @PathVariable(name = "pageNum") int pageNum, Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, HttpServletRequest request) {
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			pagingCartItem(1, sortField, sortDir, keyword, customer, model);
 			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			pagingCartItem(1, sortField, sortDir, keyword, customer, model);
 			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
 		}

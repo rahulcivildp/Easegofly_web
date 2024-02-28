@@ -8,22 +8,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.easygofly.entity.Customer;
 import com.easygofly.site.customer.CustomerRepository;
 
-
-public class EasyGoFlyCustomerDetailsService implements UserDetailsService {
-
-	@Autowired
-	private CustomerRepository repo; 
+public class EasegoflyEmailCustomerDetailsService implements UserDetailsService{
+@Autowired	private CustomerRepository repo; 
 	
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Customer customer = repo.getCustomerByEmail(email);
+		
+//		System.out.println(customer.getPhoneNumber());
+		
 		if(customer != null) {
-			return new EasyGoFlyCustomerDetails(customer);
+			return new EasegoflyEmailCustomerDetails(customer);
 		}
 
 		throw new UsernameNotFoundException("Could not find user with email: " + email);
 		
 	}
-
 }

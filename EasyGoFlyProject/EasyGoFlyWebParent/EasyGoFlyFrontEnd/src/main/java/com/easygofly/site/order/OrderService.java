@@ -50,7 +50,7 @@ import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
@@ -109,6 +109,9 @@ public class OrderService {
 		newOrder.setCartId(cartItem.getId());
 		newOrder.setContactEmail(cartItem.getEmail());
 		newOrder.setTravellerDetails(travellerDetails);
+		newOrder.setDevice(productDetail.getDevice());
+		newOrder.setDeviceDescription(productDetail.getDeviceDescription());
+		newOrder.setDeviceType(productDetail.getDeviceType());
 		
 		String transaction_id = "UIGIK&*^HJAS585789";
 		String transaction_token = "ashdjgh3284270&^%@#*&)asahj31";
@@ -152,6 +155,9 @@ public class OrderService {
 		newOrder.setCartId(cartItem.getId());
 		newOrder.setContactEmail(cartItem.getEmail());
 		newOrder.setTravellerDetails(travellerDetails);
+		newOrder.setDevice(productDetail.getDevice());
+		newOrder.setDeviceDescription(productDetail.getDeviceDescription());
+		newOrder.setDeviceType(productDetail.getDeviceType());
 		
 		String transaction_id = "UIGIK&*^HJAS585789";
 		String transaction_token = "ashdjgh3284270&^%@#*&)asahj31";
@@ -247,14 +253,14 @@ public class OrderService {
 	}
 	
 	public void loginControl(String couponCode, String couponCode1, String totalPayment,
-			EasyGoFlyCustomerDetails loggedCustomer, CustomerOAuth2User googleLogin, ProductDetail flight,
+			EasegoflyPhoneCustomerDetails loggedCustomer, CustomerOAuth2User googleLogin, ProductDetail flight,
 			SearchHistory search, CartItem item, PaymentMethod paymentMethod, String orderName, Order order,
 			List<TravellerDetail> travellerDetails, Coupon coupon, Coupon coupon1, CheckoutInfo checkoutInfo) {
 		String email;
 		Customer customer;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			if (coupon1 != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
 				if (order != null) {
@@ -262,10 +268,10 @@ public class OrderService {
 					 addCouponCode(order, couponCode1);
 				}
 				
-				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				 addCouponCode(order2, couponCode1);
+				Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+				 addCouponCode(orderSaved, couponCode1);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					 updateTravelersOrderId(travellerDetail.getId(), order2);
+					 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
 				}
 			} else if (coupon != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
@@ -274,10 +280,10 @@ public class OrderService {
 					 addCouponCode(order, couponCode);
 				}
 				
-				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				 addCouponCode(order2, couponCode);
+				Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
+				 addCouponCode(orderSaved, couponCode);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					 updateTravelersOrderId(travellerDetail.getId(), order2);
+					 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
 				}
 			} else if (order != null) {
 				if (flight.getTraceId().equals("offline")) {
@@ -290,23 +296,23 @@ public class OrderService {
 				
 			} else {
 				if (flight.getTraceId().equals("offline")) {
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
+					Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
 					for (TravellerDetail travellerDetail : travellerDetails) {
-						 updateTravelersOrderId(travellerDetail.getId(), order2);
+						 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
 					}
-					 deleteCouponCode(order2);
+					 deleteCouponCode(orderSaved);
 				} else {
-					Order order2 =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+					Order orderSaved =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
 					for (TravellerDetail travellerDetail : travellerDetails) {
-						 updateTravelersOrderId(travellerDetail.getId(), order2);
+						 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
 					}
-					 deleteCouponCode(order2);
+					 deleteCouponCode(orderSaved);
 				}	
 			}
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			if (coupon1 != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
 				if (order != null) {
@@ -369,7 +375,7 @@ public class OrderService {
 	}
 
 	public void orderTravelerSaveMethod(SearchHistory search, ProductDetail flight, Date date, CartItem item, String returnType, String couponCode, String couponCode1, String totalPayment, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, PaymentMethod paymentMethod, Coupon coupon, Coupon coupon1,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, PaymentMethod paymentMethod, Coupon coupon, Coupon coupon1,
 			CheckoutInfo checkoutInfo) { 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
 		String dateTime = dateFormat.format(date);
@@ -390,7 +396,7 @@ public class OrderService {
 
 	public void methodSSR(ProductDetail productDetail) throws MalformedURLException, IOException {
 		/* SSR details */
-    	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
+    	URL urlSSR = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
         // Open a connection
         HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
         
@@ -646,7 +652,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
            // Open a connection
            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
            
@@ -684,6 +690,19 @@ public class OrderService {
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
+				/* Get booking details */
+		       	URL urlBooking = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
+		       	// Open a connection
+		       	HttpURLConnection connectionBooking = (HttpURLConnection) urlBooking.openConnection();
+	           
+		       	StringBuilder responseBodyBooking = new StringBuilder();
+		           
+		       	onlineFlightService.apiOnlineGetBookingDetails(connectionBooking, responseBodyBooking, traceId, onlinePNR, onlineBookingId);
+		       	
+		       	JSONObject jsonObjBooking = new JSONObject(responseBodyBooking.toString());
+		       	System.out.println(jsonObjBooking);
+		       	logService.generateLog(jsonObjBooking.toString()); 
 				
 			} catch (JSONException json) {
 //				json.printStackTrace();
@@ -801,7 +820,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlBook = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Book");
+       	URL urlBook = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Book");
            // Open a connection
            HttpURLConnection connectionBook = (HttpURLConnection) urlBook.openConnection();
            
@@ -828,7 +847,7 @@ public class OrderService {
        	
        	
        	/* Ticket details */
-       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
            // Open a connection
            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
            
@@ -866,6 +885,20 @@ public class OrderService {
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+				
+
+				/* Get booking details */
+		       	URL urlBooking = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
+		       	// Open a connection
+		       	HttpURLConnection connectionBooking = (HttpURLConnection) urlBooking.openConnection();
+	           
+		       	StringBuilder responseBodyBooking = new StringBuilder();
+		           
+		       	onlineFlightService.apiOnlineGetBookingDetails(connectionBooking, responseBodyBooking, traceId, onlinePNR, onlineBookingId);
+		       	
+		       	JSONObject jsonObjGetBooking = new JSONObject(responseBodyBooking.toString());
+		       	System.out.println(jsonObjGetBooking);
+		       	logService.generateLog(jsonObjGetBooking.toString()); 
 						
 			} catch (JSONException json) {
 				 //Error response
@@ -1059,7 +1092,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
            // Open a connection
            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
            
@@ -1095,7 +1128,7 @@ public class OrderService {
 				updateBookingId(order, onlineBookingId);
 				
 				/* Get Booking Details */
-				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
+				URL urlGetBookingDetails = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
 				// Open a connection
 				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
 				
@@ -1105,6 +1138,8 @@ public class OrderService {
 				
 				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+		       	System.out.println(jsonObjGetBookingDetails);
+		       	logService.generateLog(jsonObjGetBookingDetails.toString()); 
 				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
@@ -1303,7 +1338,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
            // Open a connection
            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
            
@@ -1344,7 +1379,7 @@ public class OrderService {
 				updateBookingId(orderTwo, onlineBookingId);
 				
 				/* Get Booking Details */
-				URL urlGetBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/GetBookingDetails");
+				URL urlGetBookingDetails = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
 				// Open a connection
 				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
 				
@@ -1352,8 +1387,9 @@ public class OrderService {
 				
 				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, traceId, onlinePNR, onlineBookingId);
 				
-				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
+		       	System.out.println(jsonObjGetBookingDetails);
+		       	logService.generateLog(jsonObjGetBookingDetails.toString()); 
 				
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
@@ -1475,7 +1511,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlBook = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Book");
+       	URL urlBook = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Book");
            // Open a connection
            HttpURLConnection connectionBook = (HttpURLConnection) urlBook.openConnection();
            
@@ -1502,7 +1538,7 @@ public class OrderService {
        	
        	
        	/* Ticket details */
-       	URL urlTicket = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Ticket");
+       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
            // Open a connection
            HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
            
@@ -1545,6 +1581,19 @@ public class OrderService {
 				JSONObject jsonObjTicketResponseError = jsonObjTicket.getJSONObject("Response").getJSONObject("Error");
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+
+				/* Get booking details */
+		       	URL urlBooking = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
+		       	// Open a connection
+		       	HttpURLConnection connectionBooking = (HttpURLConnection) urlBooking.openConnection();
+	           
+		       	StringBuilder responseBodyBooking = new StringBuilder();
+		           
+		       	onlineFlightService.apiOnlineGetBookingDetails(connectionBooking, responseBodyBooking, traceId, onlinePNR, onlineBookingId);
+		       	
+		       	JSONObject jsonObjGetBooking = new JSONObject(responseBodyBooking.toString());
+		       	System.out.println(jsonObjGetBooking);
+		       	logService.generateLog(jsonObjGetBooking.toString()); 
 						
 			} catch (JSONException json) {
 				 //Error response
@@ -1560,7 +1609,7 @@ public class OrderService {
 	public String searchReturnInternationalFlightAPIOnlyTraceId(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate, String traceIdReturn) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+        URL urlSearch = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
@@ -1589,7 +1638,7 @@ public class OrderService {
 
 		if (!flight.getTraceId().equals("offline")) {
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
+        	URL urlFarequote = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
             // Open a connection
             HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
             

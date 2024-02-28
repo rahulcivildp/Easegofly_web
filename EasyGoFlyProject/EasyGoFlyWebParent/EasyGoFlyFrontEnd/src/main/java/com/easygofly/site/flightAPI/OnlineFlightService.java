@@ -39,9 +39,9 @@ public class OnlineFlightService {
 
         // Create the request body
         String requestBody = "{"
-        		+ "\"ClientId\": \"ApiIntegrationNew\", "
-        		+ "\"UserName\": \"aladdin\", "
-        		+ "\"Password\": \"aladdin@1234\", "
+        		+ "\"ClientId\": \"tboprod\", "
+        		+ "\"UserName\": \"CCUA927\", "
+        		+ "\"Password\": \"#API@Air&72\", "
         		+ "\"EndUserIp\": \"89.116.231.35\""
         		+ "}";
         
@@ -447,7 +447,6 @@ public class OnlineFlightService {
 		bufferedReader.close();
 		return responseCode;
 	}
-	
 	
 	public int apiOnlineGetBookingDetails(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, String bookingId)
 			throws IOException {

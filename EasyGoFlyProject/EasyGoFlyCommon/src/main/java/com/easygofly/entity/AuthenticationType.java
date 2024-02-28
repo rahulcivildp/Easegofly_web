@@ -1,5 +1,5 @@
 package com.easygofly.entity;
 
 public enum AuthenticationType {
-	DATABASE, GOOGLE, FACEBOOK
+	DATABASE, GOOGLE, FACEBOOK, OTP, EMAIL, PHONE
 }

@@ -17,7 +17,7 @@ import com.easygofly.entity.Conversation;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Request;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.security.EasyGoFlyCustomerDetails;
+import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 
 @Controller
@@ -38,18 +38,18 @@ public class RequestRestController {
 	public String sendConversation(@RequestBody Conversation conversation,
 			@RequestParam(name = "request_id") Integer request_id, 
 			RedirectAttributes redirectAttributes, 
-			@AuthenticationPrincipal EasyGoFlyCustomerDetails loggedCustomer,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
 		
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			conversation.setRepliedFrom(customer.getEmail());
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
+			customer = customerService.getByPhone(email);
 			conversation.setRepliedFrom(customer.getEmail()); 
 		}
 		Request request = requestRepo.findById(request_id).get();

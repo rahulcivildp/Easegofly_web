@@ -22,8 +22,8 @@ import com.easygofly.entity.AuthenticationType;
 import com.easygofly.entity.Customer;
 import com.easygofly.site.customer.CustomerService;
 
-@Component
-@EntityScan({"com.easygofly.entity", "com.easygofly.site.customer"})
+//@Component
+//@EntityScan({"com.easygofly.entity", "com.easygofly.site.customer"})
 public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler  {
 
 	@Autowired private CustomerService customerService;
@@ -42,7 +42,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 		System.out.println("name: " + name + "email: " + email + "countryCode: " + countryCode + "clientName: " + clientName );
 		AuthenticationType authenticationType = getAuthenticationType(clientName);
 		
-		Customer customer = customerService.getByEmail(email);
+		Customer customer = customerService.getByPhone(email);
 		
 		if (customer == null) {
 			Customer newCustomer = customerService.addNewCustomerUponOAuth2Login(name, email, countryCode, authenticationType); 
