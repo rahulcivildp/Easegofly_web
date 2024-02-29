@@ -22,7 +22,7 @@ spring:
         format-sql: true
         globally-quoted-identifiers: true
         use-sql-comments: true
-    show-sql: true
+    show-sql: false
   mvc:
     view:
       prefix: /WEB-INF/jsp/

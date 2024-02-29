@@ -5,78 +5,94 @@
 <head>
 	<style>
 		@media screen and (max-width: 800px) {
-			.tabss {
-				margin: 2px !important;
-				padding: 3px 10px !important;
+			.radiosMobile {
+				border: 1px solid grey !important;
+				border-radius: 8px !important;
+				text-align: center;
 			}
-
-			#adjusted {
-				width: 100% !important;
+			.radios {
+				margin: 1px !important;
 			}
-
-			#searchBox {
-				width: 95% !important;
-				margin-top: 50px !important;
+			.floatRightMobile {
+				float: right;
 			}
-
-			.aligner {
+			.paddingDate {
+				margin-bottom: 10px;
+			}
+			.empty1 {
+				border-radius: 0px !important;
 				border: none !important;
+				margin-top: 10px;
+				padding: 12px 5px;
+			}
+			.floatingButton {
+			    position: relative;
+			    bottom: -10px;
+			    left: 25%;
+			    width: 50%;
+			}
+			.submit_btns {
+				border-radius: 45px !important;
+				background-color: rgb(86, 67, 239) !important;
+				color: white;
 			}
 
-			.tile_settings {
-				width: 100% !important;
+			.input_styles {    
+				padding: 38px 0px 30px !important;
+				border: none;
+			}
+			.labelSetting {
+				padding: 0 !important;
+			}
+			
+			.input_calender {
+				padding: 0 !important;
+				border: none;
+			}
+		
+			.returnButtonStyle {
+			    text-align: right;
+			    padding: 0 !important;
+			    border: none !important;
+    			background-color: white !important;
 			}
 		}
-
-		@media (min-width: 576px) {
-
-			.container,
-			.container-sm {
-				max-width: 100% !important;
-			}
+		
+		@media ( min-width : 576px) {
+			
 		}
-
-		.tabss {
-			background: white;
-			margin: 12px;
-			padding: 3px 15px;
-			border-radius: 5px;
-			display: inline-block;
+		
+		.returnButtonStyle {
+		    padding: 8.5px 0;
+		    font-size: 23px;
+		    font-weight: 600;
+		    color: #747474;
+		    border: 1px solid #ced4da;
+		    border-radius: 6px;
+		    padding-left: 5px;    
+		    height: 51px;
+    		overflow: hidden;
+    		background-color: #dddddd;
 		}
-
-		.tabss:hover {
-			position: relative;
-			top: -8px;
-			background: #D32F2F;
-			box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
-		}
-
-		.tabss:hover a {
-			color: white;
-		}
-
-		.tabss a {
-			color: black;
-			text-decoration: none;
-		}
-
-		#adjusted {
-			list-style-type: none;
-			width: 70%;
-			margin: 0 auto;
-			text-align: center;
-			height: 48px;
+		.returnButtonStyle p {
+			margin: 0;
 			padding: 0;
 		}
-
-		.activated {
-			background: #D32F2F !important;
+		.floatingResponseDiv {
+			color: #777777;
+			font-size: 12px;
 		}
-
-		.activated a {
-			color: white !important;
+		.floatingResponseDivDate {
+			color: #777777;
+			font-size: 12px;
 		}
-
+		
+		.toggleBox {
+			border: 2px solid rgb(86, 67, 239) !important;
+			border-radius: 8px !important;
+			color: rgb(86, 67, 239);
+			font-weight: 600;
+		}
 		#searchBox {
 			border-radius: 10px;
 			background: white;
@@ -243,6 +259,15 @@
 			font-weight: 600;
 			font-family: 'Open Sans';
 		}
+		
+		.input_styles_mobile {
+			width: 95%;
+			padding: 38px 0px 30px !important;
+			font-size: 22px;
+			font-weight: 600;
+			font-family: 'Open Sans';
+			border: none;
+		}
 
 		.input_calender {
 			width: 95%;
@@ -257,19 +282,22 @@
 		}
 		
 		* {
-  box-sizing: border-box;
-}
-
-#input_roundtrip{
-	cursor: pointer;
-}
-#return_international {
-	cursor: pointer;
-}
-
-#searchBox {
-	height: auto;
-}
+		  box-sizing: border-box;
+		}
+		
+		#input_roundtrip{
+			cursor: pointer;
+		}
+		#input_roundtrip_mobile {
+			cursor: pointer;
+		}
+		#return_international {
+			cursor: pointer;
+		}
+		
+		#searchBox {
+			height: auto;
+		}
 	</style>
 	
 </head>
@@ -277,7 +305,7 @@
 <body>
 	<div class="container" id="searchBox">
 		<div class="row">
-			<div class="radio_sec">
+			<div class="radio_sec media-hide">
 				<div class="radios" id="radio-1">
 					<input type="radio" class="radio" checked="checked" value="One Way">
 
@@ -295,14 +323,38 @@
 				</div>
 
 			</div>
+			<div class="media_status">
+				<div class="row ">
+					<div class="col-4 ">
+						<div class="radiosMobile toggleBox" id="radio-4">
+							<lebel>One Way</lebel>
+						</div>
+					</div>
+					<div class="col-4 ">
+						<div class="radiosMobile" id="radio-5">
+							<lebel>Round Trip </lebel>
+						</div>
+					</div>
+					<div class="col-4 ">
+						<div class="radiosMobile" id="radio-6">
+							<lebel>International</lebel>
+						</div>
+					</div>
+	
+				</div>
+			</div>
+			<div style="height: 10px;"></div>
+			<div class="media_status_flex_CPN" style="width: 100%; justify-content: center;">
+				<hr style="width: 95%;">
+			</div>
 			<div class="radio_search empty1" id="radio_search_1">
-				<form th:action="@{/flight_search_save}" method="get">
+				<form th:action="@{/flight_search_save}" method="get" class="media-hide">
 					<div class="col-12">
 						<input type="hidden" name="tripType" value="oneWay">
 						<div class="col-md-5 col-12" style=" float: left; ">
 
 							<div class="col-md-6 col-6 aligner form-floating" id="aligner3">
-								<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne"
+								<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" autocomplete="off"
 									placeholder="Depurture City" list="cityOneList"
 									oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
 								<datalist id="cityOneList">
@@ -310,39 +362,45 @@
 										<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 									</th:block>
 								</datalist>
-								<label class="labelStyle" for="cityOne"><i class="fa fa-circle-o-notch fa-spin"></i>
+								<label class="labelStyle labelSetting" for="cityOne"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
 									From</label>
 							</div>
-							<div class="col-md-6 col-6 aligner form-floating" id="aligner4">
+							<div class="col-md-6 col-6 aligner form-floating media-hide" id="aligner4">
 								<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo"
-									placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)"
+									placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" style="text-align: end;"
 									required>
 								<datalist id="cityTwoList">
 									<th:block th:each="city : ${cities}">
 										<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 									</th:block>
 								</datalist>
-								<label class="labelStyle" for="cityTwo"><i class="fa fa-circle-o-notch fa-spin"></i>
+								<label class="labelStyle labelSetting" for="cityTwo" style="text-align: end;"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
 									To</label>
 							</div>
-
+							
+							
 						</div>
+			
 						<div class="col-md-7 col-12" style=" float: left;">
 
 							<div class="col-md-4 col-6 aligner">
-								<label for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin"></i>
+								<label class="paddingDate" for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
 									Departure</label>
 								<input type="date" name="date" class="form-control input_calender"
 									id="floatingInputDepurture" required>
-
+								
 							</div>
-							<div class="col-md-4 col-6 aligner" id="input_roundtrip"><!-- id="input_roundtrip" -->
-								<label for="floatingInputCalender"><i class="fa fa-circle-o-notch fa-spin"></i>
+							<div class="col-md-4 col-6 aligner" id="input_roundtrip"><!-- id="input_roundtrip" --> 
+								<label class="floatRightMobile paddingDate" ><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
 									Return</label>
-								<input type="date" class="form-control input_calender" disabled>
-
+								<!--<input type="date" class="form-control input_calender" disabled>-->
+								<div class="returnButtonStyle floatRightMobile"><p>dd-mm-yyyy</p></div>
+								
 							</div>
-							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+							
+							
+			
+							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
 								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
 									<div class="dropdown">
 										<div class="" type="button" id="drop_button"
@@ -421,7 +479,164 @@
 										</ul>
 									</div>
 								</div>
-								<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+								<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
+									<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</form>
+				
+				<form th:action="@{/flight_search_save}" method="get" class="media_status">
+					<div class="col-12">
+						<input type="hidden" name="tripType" value="oneWay">
+						<div class="col-md-5 col-12" style=" float: left; ">
+							<div class="media_status_flex_CPN" style="justify-content: center;">
+								<div class="row" style="width: 98%;">
+									<div class="col-md-5 col-5 aligner form-floating" id="aligner3" style="padding: 0;">
+										<input type="search" class="form-control hill1 input_styles_mobile" name="cityOne" id="cityOneMobile" autocomplete="off"
+											placeholder="Depurture City" list="cityOneListMobile"
+											oninput="checkCityCodeMatch(document.getElementById('cityTwoMobile'))" required>
+										<datalist id="cityOneListMobile">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+										<label class="labelStyle labelSetting" for="cityOneMobile"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+											From</label>
+										<div id="cityOneLabel" class="floatingResponseDiv"></div>
+									</div>
+									<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
+										<div class="">
+											<img th:src="@{/images/returns-.png}" style="width: 100%;">
+										</div>
+									</div>
+									<div class="col-md-5 col-5 aligner form-floating" id="aligner4" style="padding: 0;">
+										<input type="search" class="form-control hill2 input_styles_mobile" name="cityTwo" id="cityTwoMobile"
+											placeholder="Arrival City" list="cityTwoListMobile" oninput="checkCityCodeMatch(this)" style="position: relative; right: -17px; height: 30px; text-align: right; float: right;"
+											required>
+										<datalist id="cityTwoListMobile">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+										<label class="labelStyle labelSetting" for="cityTwoMobile" style="text-align: right; float: right;"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+											To</label>
+										<div id="cityTwoLabel" class="floatingResponseDiv" style="text-align: end; height: 30px;"></div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						
+						<div class="media_status_flex_CPN" style="width: 100%; justify-content: center;">
+							<hr style="width: 95%;">
+						</div>
+						<div class="col-md-7 col-12" style=" float: left;">
+
+							<div class="col-md-4 col-6 aligner">
+								<label class="paddingDate" for="floatingInputDepurtureMobile"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+									Departure</label>
+								<input type="date" name="date" class="form-control input_calender"
+									id="floatingInputDepurtureMobile" required>
+								<div id="dateLabel" class="floatingResponseDivDate media_status_flex_CPN" style="height: 30px;"></div>
+
+							</div>
+							<div class="col-md-4 col-6 aligner" id="input_roundtrip_mobile"><!-- id="input_roundtrip" --> 
+								<label class="floatRightMobile paddingDate" ><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+									Return</label>
+								<!--<input type="date" class="form-control input_calender" disabled>-->
+								<div class="returnButtonStyle floatRightMobile"><p>dd-mm-yyyy</p></div>
+								<div class="floatingResponseDivDate media_status_flex_CPN" style="float: right; height: 30px; margin-top: 7px;">Book return</div>
+
+							</div>
+							
+							
+							<div class="media_status_flex_CPN" style="width: 100%; justify-content: center;">
+								<hr style="width: 95%;">
+							</div>
+			
+							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
+								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+									<div class="dropdown">
+										<div class="" type="button" id="drop_button"
+											style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
+											onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+											<h5 id="resultMobile3"></h5>
+											<h5 id="resultMobile"></h5>
+											<input type="hidden" name="something" id="passengerNum1" value="">
+											<h1 class="n-text">Travelers</h1>
+										</div>
+										<ul class="dropdownMenu deactive" onmouseover="dropdownOpen(this)"
+											onmouseleave="dropdownClose(this)">
+											<li>
+												<b>Class</b>
+												<select class="pass_list-1 form-control" name="journeyClass"
+													required="required">
+													<option value="Economy">Economy</option>
+													<option value="Premium Economy">Premium Economy</option>
+													<option value="Business">Business</option>
+													<option value="Premium Business">Premium Business</option>
+													<option value="First Class">First Class</option>
+												</select>
+											</li>
+											<li>
+												<b>Adult</b>
+												<p>(12+ yrs)</p>
+												<select class="pass_list1 form-control" name="adultNum"
+													required="required">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</li>
+											<li>
+												<b>Children</b>
+												<p>(2-12 yrs)</p>
+												<select class="pass_list2 form-control" name="childNum">
+													<option value="0">0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</li>
+											<li>
+												<b>Infant</b>
+												<p>Under 2yrs</p>
+												<select class="pass_list3 form-control" name="infantNum">
+													<option value="0">0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</li>
+											<li>
+												<button type="button" id="submitMobile"
+													style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
 									<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
 								</div>
 							</div>
@@ -431,7 +646,7 @@
 				</form>
 			</div>
 			<div class="radio_search empty1" id="radio_search_2">
-				<form th:action="@{/flight_search_return_save}" method="get">
+				<form th:action="@{/flight_search_return_save}" method="get" class="media-hide">
 					<div class="col-12">
 						<input type="hidden" name="tripType" value="twoWays">
 						<div class="col-md-5 col-12" style=" float: left;">
@@ -476,7 +691,7 @@
 									id="floatingInputReturnReturn" required>
 
 							</div>
-							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
 								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
 									<div class="dropdown">
 										<div class="" type="button" id="drop_button2"
@@ -555,6 +770,159 @@
 									</div>
 								</div>
 								<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+									<input class="submit_btns" type="submit" id="search" name="search" value="Search">
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</form>
+				
+				<form th:action="@{/flight_search_return_save}" method="get" class="media_status">
+					<div class="col-12">
+						<input type="hidden" name="tripType" value="twoWays">
+						<div class="col-md-5 col-12" style=" float: left; ">
+							<div class="media_status_flex_CPN" style="justify-content: center;">
+								<div class="row" style="width: 98%;">
+									<div class="col-md-5 col-5 aligner form-floating" id="aligner3" style="padding: 0;">
+										<input type="search" class="form-control hill1 input_styles_mobile" name="cityOne" id="cityOne2Mobile" autocomplete="off"
+											placeholder="Depurture City" list="cityOne2ListMobile"
+											oninput="checkCityCodeMatch(document.getElementById('cityTwo2Mobile'))" required>
+										<datalist id="cityOne2ListMobile">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+										<label class="labelStyle labelSetting" for="cityOne2Mobile">
+											From</label>
+										<div id="cityOne2Label" class="floatingResponseDiv"></div>
+									</div>
+									<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
+										<div class="">
+											<img th:src="@{/images/returns-.png}" style="width: 100%;">
+										</div>
+									</div>
+									<div class="col-md-5 col-5 aligner form-floating" id="aligner4" style="padding: 0;">
+										<input type="search" class="form-control hill2 input_styles_mobile" name="cityTwo" id="cityTwo2Mobile"
+											placeholder="Arrival City" list="cityTwo2ListMobile" oninput="checkCityCodeMatch(this)" style="position: relative; right: -17px; height: 30px; text-align: right; float: right;"
+											required>
+										<datalist id="cityTwo2ListMobile">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+										<label class="labelStyle labelSetting" for="cityTwo2Mobile" style="text-align: right; float: right;">
+											To</label>
+										<div id="cityTwo2Label" class="floatingResponseDiv" style="text-align: end; height: 30px;"></div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="media_status_flex_CPN" style="width: 100%; justify-content: center;">
+							<hr style="width: 95%;">
+						</div>
+						
+						<div class="col-md-7 col-12" style=" float: left;">
+
+							<div class="col-md-4 col-6 aligner">
+								<label for="floatingInput">
+									Departure</label>
+								<input type="date" class="form-control input_calender" name="date"
+									id="floatingInputDepurtureReturn" required>
+
+							</div>
+							<div class="col-md-4 col-6 aligner">
+								<label for="floatingInput" style="float: right;"> Return</label>
+								<input type="date" class="form-control input_calender" name="return_date"
+									id="floatingInputReturnReturn" required>
+
+							</div>
+							
+							
+							<div class="media_status_flex_CPN" style="width: 100%; justify-content: center;">
+								<hr style="width: 95%;">
+							</div>
+							
+							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
+								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+									<div class="dropdown">
+										<div class="" type="button" id="drop_button2"
+											style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
+											onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+											<span id="result4"></span>
+											<span id="result1"></span>
+											<h1 class="n-text">Travelers</h1>
+										</div>
+										<ul class="dropdownMenu deactive" onmouseover="dropdownOpen(this)"
+											onmouseleave="dropdownClose(this)">
+											<li>
+												<b>Class</b>
+												<select class="pass_list-2 form-control" name="journeyClass"
+													required="required">
+													<option value="Economy">Economy</option>
+													<option value="Premium Economy">Premium Economy</option>
+													<option value="Business">Business</option>
+													<option value="Premium Business">Premium Business</option>
+													<option value="First Class">First Class</option>
+												</select>
+											</li>
+											<li>
+												<b>Adult</b>
+												<p>(12+ yrs)</p>
+												<select class="pass_list4 form-control" name="adultNum"
+													required="required">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</li>
+											<li>
+												<b>Children</b>
+												<p>(2-12 yrs)</p>
+												<select class="pass_list5 form-control" name="childNum">
+													<option value="0">0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</li>
+											<li>
+												<b>Infant</b>
+												<p>Under 2yrs</p>
+												<select class="pass_list6 form-control" name="infantNum">
+													<option value="0">0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</li>
+											<li>
+												<button type="button" id="submit1"
+													style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
 									<input class="submit_btns" type="submit" id="search" name="search" value="Search">
 								</div>
 							</div>
@@ -938,6 +1306,30 @@
 	})
 </script>
 <script>
+	$(".radiosMobile").click(function () {
+		$(".radiosMobile").removeClass("toggleBox");
+		$(this).addClass("toggleBox");
+	})
+	$("#radio-4").click(function () {
+		$(".radio_search").css("display", "none");
+		$("#radio_search_1").css("display", "block");
+		$("#searchBox").css("padding-bottom", "18px")
+	})
+	$("#radio-5").click(function () {
+		$(".radio_search").css("display", "none");
+		$("#radio_search_2").css("display", "block");
+		$("#searchBox").css("padding-bottom", "18px")
+	})
+	$("#radio-6").click(function () {
+		$(".radio_search").css("display", "none");
+		$("#radio_search_3").css("display", "block");
+		$("#searchBox").css("padding-bottom", "30px")
+	})
+	$(document).ready(function () {
+		$("#radio_search_1").css("display", "block");
+	})
+</script>
+<script>
 	$("#aligner1").click(function () {
 		$("label", this).html("Depurture City");
 	})
@@ -957,6 +1349,14 @@
 		$("input", "#radio-2").prop("checked", true);
 		$(".radio_search").css("display", "none");
 		$("#radio_search_2").css("display", "block");
+		
+	})
+	$("#input_roundtrip_mobile").click(function () {
+		$(".radio_search").css("display", "none");
+		$("#radio_search_2").css("display", "block");
+		$(".radiosMobile").removeClass("toggleBox");
+		$("#radio-5").addClass("toggleBox");
+		
 	})
 </script>
 <script>
@@ -978,6 +1378,29 @@
 			event.stopPropagation();
 			$("#result3").html("<b style='color: red;'>INVALID<br>Max - 9</b>");
 			$("#result").html(" ");
+		}
+
+		$(".dropdowns-menu").toggle();
+		$(".n-text").css("display", "none");
+
+	})
+	$("#submitMobile").click(function () {
+		var d = $(".pass_list-1 option:selected").text();
+		var a = parseInt($(".pass_list1 option:selected").val());
+		var b = parseInt($(".pass_list2 option:selected").val());
+		var c = parseInt($(".pass_list3 option:selected").val());
+
+		var sum = a + b + c;
+
+		if (sum < 10) {
+			event.stopPropagation();
+			$("#resultMobile").html("No: " + Math.round(sum));
+			$("#resultMobile3").html(d);
+		}
+		else {
+			event.stopPropagation();
+			$("#resultMobile3").html("<b style='color: red;'>INVALID<br>Max - 9</b>");
+			$("#resultMobile").html(" ");
 		}
 
 		$(".dropdowns-menu").toggle();
@@ -1051,10 +1474,13 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
+		$("#floatingInputDepurtureMobile").click(function () {
+			calenderView($("#floatingInputDepurtureMobile"));
+		});
+
 		$("#floatingInputDepurture").click(function () {
 			calenderView($("#floatingInputDepurture"));
 		});
-
 		$("#floatingInputDepurtureReturn").click(function () {
 			calenderViewReturn("floatingInputDepurtureReturn");
 		});
@@ -1113,5 +1539,62 @@
 	})
 </script>
 
-
+<script>
+	$("#cityOneMobile").change(function(){
+		//$("#cityOneLabel").html($("#cityOne").val());
+		
+		cityName = $("#cityOneMobile").val();
+		
+		urlCity = "[[@{/find_city_name_}]]" + cityName;
+		
+		$.get(urlCity, function(city) {
+			$("#cityOneLabel").html(city);
+			
+		}).fail(function(){
+			alert("Could not connect to the server.");
+		});
+	})
+	$("#cityTwoMobile").change(function(){
+		//$("#cityOneLabel").html($("#cityOne").val());
+		
+		cityName = $("#cityTwoMobile").val();
+		
+		urlCity = "[[@{/find_city_name_}]]" + cityName;
+		
+		$.get(urlCity, function(city) {
+			$("#cityTwoLabel").html(city);
+			
+		}).fail(function(){
+			alert("Could not connect to the server.");
+		});
+	})
+	$("#cityOne2Mobile").change(function(){
+		//$("#cityOneLabel").html($("#cityOne").val());
+		
+		cityName = $("#cityOne2Mobile").val();
+		
+		urlCity = "[[@{/find_city_name_}]]" + cityName;
+		
+		$.get(urlCity, function(city) {
+			$("#cityOne2Label").html(city);
+			
+		}).fail(function(){
+			alert("Could not connect to the server.");
+		});
+	})
+	$("#cityTwo2Mobile").change(function(){
+		//$("#cityOneLabel").html($("#cityOne").val());
+		
+		cityName = $("#cityTwo2Mobile").val();
+		
+		urlCity = "[[@{/find_city_name_}]]" + cityName;
+		
+		$.get(urlCity, function(city) {
+			$("#cityTwo2Label").html(city);
+			
+		}).fail(function(){
+			alert("Could not connect to the server.");
+		});
+	})
+</script>
 </html>

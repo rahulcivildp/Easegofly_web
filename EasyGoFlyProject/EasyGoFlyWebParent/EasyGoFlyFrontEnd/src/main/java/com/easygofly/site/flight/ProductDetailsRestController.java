@@ -25,7 +25,7 @@ public class ProductDetailsRestController {
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private ProductDetailsInternationController pInternationController;
 	@Autowired private TravellerRepository travellerRepo;
-
+	
 	@PostMapping("/flight_order_check_coupon")
 	public Coupon checkCoupon(@RequestBody Coupon coupon, RedirectAttributes redirectAttributes) throws IOException {
 		Coupon coupon2 =  couponRepo.findByCouponCode(coupon.getCouponCode());
