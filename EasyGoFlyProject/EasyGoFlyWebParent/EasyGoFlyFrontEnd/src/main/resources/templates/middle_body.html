@@ -501,11 +501,11 @@ body {
 </style>
 
 <body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
-<div style="background-color: #00000047;">
+<div style="background-color: #00000047;" id="middleSection" class="paddingForMiddleSection">
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Easy Steps -->
-<div class="Esaysteps" style="background-color:lavender;" >
+<div class="Esaysteps marginAfterLogin" style="background-color:lavender; margin-top: 60px; " >
  	<div class="container media-hide" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
 	    <div class="row" style="margin:0 auto; padding:14px;">
 	       <div class="col-4 text-center">

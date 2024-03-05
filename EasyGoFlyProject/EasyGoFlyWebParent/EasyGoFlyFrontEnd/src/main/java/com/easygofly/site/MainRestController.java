@@ -18,5 +18,12 @@ public class MainRestController {
 		System.out.println(city.getCityName());
 		return city.getCode() + " - " + city.getName();
 	}
+	
+	@GetMapping("/find_city_by_code_{code}")
+	public String findCityNameByCode(@PathVariable(name = "code") String code) {
+		City city =  cityRepo.getCityByCode(code);
+		System.out.println(city.getCityName());
+		return city.getCityName();
+	}
 
 }

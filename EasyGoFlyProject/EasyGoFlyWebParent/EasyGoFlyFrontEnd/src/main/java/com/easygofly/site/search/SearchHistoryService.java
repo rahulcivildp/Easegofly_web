@@ -80,10 +80,6 @@ public class SearchHistoryService {
 		return counter;
 	}
 	
-//	public Customer getByEmail(String email) {
-//		return customerRepo.getCustomerByEmail(email);
-//	}
-	
 	public Customer getByPhone(String phone) {
 		return customerRepo.getCustomerByPhone(phone);
 	}
@@ -121,6 +117,31 @@ public class SearchHistoryService {
             model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
             
             onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
+            System.out.println(jsonObj);
+            logService.generateLog(jsonObj.toString());
+            
+            connection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	public void authenticationFlightAirIQ(Model model) {
+		try {
+        	// Create URL object with the API end-point
+            URL url = new URL("https://omairiq.azurewebsites.net/login");
+
+            // Open a connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+        	StringBuilder responseBody = new StringBuilder();
+        	
+            onlineFlightService.apiAirIQAuthentication(connection, responseBody);
+            
+            JSONObject jsonObj = new JSONObject(responseBody.toString());
+          
+            onlineFlightService.tokenAirIQ = (String) jsonObj.get("token");
             System.out.println(jsonObj);
             logService.generateLog(jsonObj.toString());
             

@@ -26,7 +26,26 @@ th:fragment="category(remove)" th:remove="${remove}">
 	    display: flex !important;
 	    justify-content: center;
 	    align-items: center;
+	    cursor: pointer;
+		position: relative;
+		top: 0;
 	}
+	#flightCol .tabss:hover {
+		position: relative;
+		top: 0;
+		background: white;
+		box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
+	}
+	
+	#flightCol .tabss:active {
+	   transform: translate(0px, -7%);
+	   -webkit-transform: translate(0px, -7%);
+	   -ms-transform: translate(0px, -7%);
+	   transition-timing-function: ease-in;
+	   -webkit-transition-timing-function: ease-in;
+	   -ms-transition-timing-function: ease-in;
+	}
+	
 	.fontSize {
 		font-size: 40px !important;
 	}
@@ -34,8 +53,8 @@ th:fragment="category(remove)" th:remove="${remove}">
 		width: 100% !important;
 	}
 	#searchBox {
-		width: 99% !important;
-		margin-top: 50px !important;
+		width: 96% !important;
+		padding: 18px 12px !important;
 	}
 	.aligner {
 		border: none !important;
@@ -46,9 +65,10 @@ th:fragment="category(remove)" th:remove="${remove}">
 	
 	#imgbck2 {
 		padding: 0 !important;
+		width: 100% !important;
 	}
 	.paddingResize {
-		padding-top: 55px !important;
+		padding-top: 108px !important;
 	}
 }
 
@@ -76,8 +96,8 @@ th:fragment="category(remove)" th:remove="${remove}">
 .tabss:hover {
 	position: relative;
 	top: -8px;
-	background: #D32F2F;
-	box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
+	background: #d28888;
+	box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
 }
 
 .tabss:hover a {
@@ -108,13 +128,9 @@ th:fragment="category(remove)" th:remove="${remove}">
 	padding: 0;
 }
 
-.activated {
-	background: #D32F2F !important;
-}
 
-.activated a {
-	color: white !important;
-}
+
+
 
 #searchBox {
 	border-radius: 10px;
@@ -288,9 +304,10 @@ input:checked+br+label {
 
 </head>
 <body>
-	<div style="height: auto; position: relative;" >
+	<div style="position: fixed; height: 50px; width: 100%; background: transparent;"></div>
+	<div style="height: auto; position: relative;" id="mainHeroStyle" class="">
 		<!-- ======= Hero Section ======= -->
-		<section id="hero">
+		<section id="hero" style="display: none;">
 			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
 					class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -364,41 +381,45 @@ input:checked+br+label {
 			    </div>
 		    </th:block>-->
 		    	
-			<div id="imgbck2" class="div_resizer">
+			<div id="imgbck2" class="">
 	
 				<div id="tabs" class="col-12 media-hide">
 					<ul class="text-center" id="adjusted">
 							<li class="tabss shadow activated" id="flight"><a
-								href="${pageContext.request.contextPath}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
+								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
 						
 							<li class="tabss shadow" id="train"><a
 								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
 						
 							<li class="tabss shadow" id="hotel"><a
-								href="${pageContext.request.contextPath}/hotel"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
+								th:href="@{/hotel}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
 						
 							<li class="tabss shadow" id="holidays"><a
-								href="${pageContext.request.contextPath}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
+								th:href="@{/}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
 						
 					</ul>
 				</div>
-				<div id="tabsMobile" class="col-12 media_status_flex_CPN" style="justify-content: center;">
+				<div id="tabsMobile" class="col-12 media_status_flex_CPN" style="justify-content: center; position: fixed; margin-top: -20px; z-index: 99; ">
+					<div style="z-index: -1; height: 182px; background: #000000b0; width: 100%; position: fixed; display: block; margin-top: -100px;"></div>
 					<div class="row text-center" id="adjusted">
-						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow activated" id="flight"><a
-								href="${pageContext.request.contextPath}"><img th:src="@{/images/front/airplane.png}" style="width: 100%;"><br><b>Flights</b></a></li>
+						<div class="col-3" style="padding: 0 4px !important;" id="flightCol">
+							<li class="tabss shadow " id="flightMobile">
+								<div >
+									<img th:src="@{/images/front/airplane.png}" style="width: 100%;"><br><b>Flights</b>
+								</div>
+							</li>
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="train"><a
+							<li class="tabss shadow" id="hotelMobile"><a
 								th:href="@{/hotel}"><img th:src="@{/images/front/city.png}" style="width: 100%;"><br><strong>Hotels</strong></a></li>
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="hotel"><a
-								href="${pageContext.request.contextPath}/hotel"><img th:src="@{/images/front/bus.png}" style="width: 100%;"><br><strong>Buses</strong></a></li>	
+							<li class="tabss shadow" id="busMobile"><a
+								th:href="@{/}"><img th:src="@{/images/front/bus.png}" style="width: 100%;"><br><strong>Buses</strong></a></li>	
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="holidays"><a
-								href="${pageContext.request.contextPath}"><img th:src="@{/images/front/Holiday.png}" style="width: 100%;"><br><strong>Holidays</strong></a></li>
+							<li class="tabss shadow" id="holidaysMobile"><a
+								th:href="@{/}"><img th:src="@{/images/front/Holiday.png}" style="width: 100%;"><br><strong>Holidays</strong></a></li>
 						</div>
 					</div>
 				</div>
@@ -411,7 +432,15 @@ input:checked+br+label {
 
 
 <script>
-	
+	$("#flightMobile").click(function(){
+		$("#flightMobile").toggleClass("activated");
+		$("#searchBox").toggleClass("displayItemFlex");
+		$("#hero").toggleClass("displayItemBlock");
+		$("#mainHeroStyle").toggleClass("backgroundColorChange");
+		$("#middleSection").toggleClass("paddingForMiddleSection");
+		$("#tabsMobile").toggleClass("marginTopFixedTabs");
+		$(".Esaysteps").toggleClass("marginAfterLogin");
+	});
 </script>
 </html>
 

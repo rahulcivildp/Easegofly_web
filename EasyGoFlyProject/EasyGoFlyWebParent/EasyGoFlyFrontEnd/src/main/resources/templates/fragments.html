@@ -16,6 +16,7 @@
 	<link rel="stylesheet" type="text/css" th:href="@{../css/front_style.css}" >
 	<link rel="stylesheet" type="text/css" th:href="@{../css/NewFile.css}" >
 	<link rel="stylesheet" type="text/css" th:href="@{../css/registration.css}" >
+	<script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
 	<script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 	  <!-- Google Fonts -->
@@ -136,14 +137,23 @@
 		</div>
       </li>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  
-        <div id="afterlogIN" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
-        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); 
-			background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
-        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
-				<i class="fa fa-solid fa-bars"></i>
+		 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
+	        <div id="afterlogIN" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
+	        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); 
+				background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
+	        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
+					<i class="fa fa-solid fa-bars"></i>
+				</div>
 			</div>
-		</div>
+		</th:block>
+		 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
+			 <div id="afterlogINnoPhoto" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/images/no-user-new.png'} + '); 
+				background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
+	        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
+					<i class="fa fa-solid fa-bars"></i>
+				</div>
+			</div>
+		</th:block>
 	  </th:block>
 	  </div>
 	      <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}"></i>-->
@@ -189,6 +199,10 @@
 			
 			$("#imageToggler").click(function(){
 				$("#afterlogIN").toggleClass("togglerClass");
+			});
+			
+			$("#imageToggler").click(function(){
+				$("#afterlogINnoPhoto").toggleClass("togglerClass");
 			});
 		});
 	</script>

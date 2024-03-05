@@ -218,6 +218,46 @@ public class ProductDetail {
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
 			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
+			float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, String journeyClass, 
+			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, Product product, String craftType) {
+		this.pnr = pnr;
+		this.totalSeats = totalSeats;
+		this.uploadSeats = uploadSeats;
+		this.flightNum = flightNum;
+		this.date = date;
+		this.depTime = depTime;
+		this.arrTime = arrTime;
+		this.priceADT = priceADT;
+		this.priceINF = priceINF;
+		this.markupADT = markupADT;
+		this.markupINF = markupINF;
+		this.cityOne = cityOne;
+		this.cityTwo = cityTwo;
+		this.enabled = enabled;
+		this.inStock = inStock;
+		this.product = product;
+		this.stopNum = stopNum;
+		this.duration = duration;
+		this.brand = brand;
+		this.arrTimeInteger = arrTimeInteger;
+		this.depTimeInteger = depTimeInteger;
+		this.traceId = traceId;
+		this.resultIndex = resultIndex;
+		this.airlineRemarks = airlineRemarks;
+		this.mode = mode;
+		this.journeyClass = journeyClass;
+		this.terminalDep = terminalDep;
+		this.terminalArr = terminalArr;
+		this.baggage = baggage;
+		this.cabinBaggage = cabinBaggage;
+		this.craftType = craftType;
+		this.device = device;
+		this.deviceDescription = deviceDescription;
+	}
+	
+	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
+			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
 			float arrTimeInteger, String mode, String journeyClass, String terminalDep, String terminalArr, Integer baggage, 
 			Integer cabinBaggage, String traceId, String device, String deviceDescription, Product product) {
 		this.pnr = pnr;

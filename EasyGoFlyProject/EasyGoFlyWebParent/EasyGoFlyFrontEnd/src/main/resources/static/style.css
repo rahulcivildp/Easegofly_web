@@ -10,6 +10,13 @@
 
 *.font-times { font-family: 'Playfair Display', serif;}
 
+*.activated {
+	background: #D32F2F !important;
+}
+*.activated b {
+	color: white !important;
+}
+
 /* <a> - style properties */
 *.disabledDiv {background-color: #E9ECEF;}
 *.styleLink {text-decoration: none;}
@@ -182,8 +189,22 @@
 	color: #525252eb;
 }
 /* Positioning */
+*.backgroundColorChange {
+	background: #000000bf;
+}
 
-*.displayItem {display: none;}
+*.marginTopFixedTabs {
+	margin-top: -113px !important;
+}
+*.paddingForMiddleSection {
+	padding-top: 61px;
+}
+*.marginAfterLogin {
+	margin-top: 38px !important;
+}
+*.displayItemNone {display: none !important;}
+*.displayItemBlock {display: block !important;}
+*.displayItemFlex {display: flex !important;}
 *.float-left { float: left !important;}
 *.float-right { float: right !important;}
 *.float-state {float: right !important;}
