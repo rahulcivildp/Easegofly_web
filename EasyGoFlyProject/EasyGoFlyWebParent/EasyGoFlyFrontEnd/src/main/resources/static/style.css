@@ -189,22 +189,33 @@
 	color: #525252eb;
 }
 /* Positioning */
-*.backgroundColorChange {
-	background: #000000bf;
+
+
+@media screen and (max-width: 700px) {
+	*.backgroundColorChange {
+		background: #000000bf;
+	}
+	*.marginTopFixedTabs {
+		margin-top: -110px !important;
+	}
+	*.paddingForMiddleSection {
+		padding-top: 61px;
+	}
+	*.marginAfterLogin {
+		margin-top: 38px !important;
+	}	
+	*.displayItemNone {display: none !important;}
+	*.displayItemBlock {display: block !important;}
+	*.displayItemFlex {display: flex !important;}
+	*.heroDIsplay{display: none;}
+	*.searchBoxMargin {
+		margin-top: 90px !important;
+	}
+	*.easyStepsMargin {
+		margin-top: 60px;
+	}
 }
 
-*.marginTopFixedTabs {
-	margin-top: -113px !important;
-}
-*.paddingForMiddleSection {
-	padding-top: 61px;
-}
-*.marginAfterLogin {
-	margin-top: 38px !important;
-}
-*.displayItemNone {display: none !important;}
-*.displayItemBlock {display: block !important;}
-*.displayItemFlex {display: flex !important;}
 *.float-left { float: left !important;}
 *.float-right { float: right !important;}
 *.float-state {float: right !important;}

@@ -55,6 +55,7 @@ th:fragment="category(remove)" th:remove="${remove}">
 	#searchBox {
 		width: 96% !important;
 		padding: 18px 12px !important;
+		display: none;
 	}
 	.aligner {
 		border: none !important;
@@ -69,6 +70,9 @@ th:fragment="category(remove)" th:remove="${remove}">
 	}
 	.paddingResize {
 		padding-top: 108px !important;
+	}
+	#heroCarousel{
+		height: auto !important;
 	}
 }
 
@@ -307,10 +311,10 @@ input:checked+br+label {
 	<div style="position: fixed; height: 50px; width: 100%; background: transparent;"></div>
 	<div style="height: auto; position: relative;" id="mainHeroStyle" class="">
 		<!-- ======= Hero Section ======= -->
-		<section id="hero" style="display: none;">
+		<section id="hero" class="heroDIsplay">
 			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
-					class="carousel slide carousel-fade" data-bs-ride="carousel">
+					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
 
 					<div class="carousel-indicators" id="hero-carousel-indicators">
 						<button type="button" data-bs-target="#carouselExampleIndicators"
