@@ -21,9 +21,9 @@ public class SessionFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         Cookie[] allCookies = req.getCookies();
         if (allCookies != null) {
-            Cookie session = 
-              Arrays.stream(allCookies).filter(x -> x.getName().equals("JSESSIONID"))
+            Cookie session = Arrays.stream(allCookies).filter(x -> x.getName().equals("JSESSIONID"))
                     .findFirst().orElse(null);
+              
 
             if (session != null) {
                 session.setHttpOnly(true);

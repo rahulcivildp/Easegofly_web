@@ -7,8 +7,3 @@
 .regMod {
 	padding: 170px 0 65px 0;;
 }
-
-#hero {
-	position: absolute;
-	z-index: -1;
-}

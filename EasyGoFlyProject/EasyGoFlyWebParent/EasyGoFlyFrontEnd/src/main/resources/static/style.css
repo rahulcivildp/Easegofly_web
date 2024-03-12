@@ -191,31 +191,6 @@
 /* Positioning */
 
 
-@media screen and (max-width: 700px) {
-	*.backgroundColorChange {
-		background: #000000bf;
-	}
-	*.marginTopFixedTabs {
-		margin-top: -110px !important;
-	}
-	*.paddingForMiddleSection {
-		padding-top: 61px;
-	}
-	*.marginAfterLogin {
-		margin-top: 38px !important;
-	}	
-	*.displayItemNone {display: none !important;}
-	*.displayItemBlock {display: block !important;}
-	*.displayItemFlex {display: flex !important;}
-	*.heroDIsplay{display: none;}
-	*.searchBoxMargin {
-		margin-top: 90px !important;
-	}
-	*.easyStepsMargin {
-		margin-top: 60px;
-	}
-}
-
 *.float-left { float: left !important;}
 *.float-right { float: right !important;}
 *.float-state {float: right !important;}
@@ -287,7 +262,7 @@
 		overflow-y: hidden;
 	}
 	*.deal_custom_row {
-		width: 1092px;
+		width: 2320px;
 	}
 	*.deal_custom_row2 {
 		width: 816px;
@@ -324,7 +299,7 @@
 *.back-to-top2 {
 	position: fixed;
     left: 15px;
-    bottom: 15px;
+    bottom: 72px;
     z-index: 996;
     background: #5c9f24;
     width: 43px;
@@ -358,7 +333,6 @@
 *.horiz {
 	display: inline-block !important;
 	zoom: 1;
-	float: left;
 	text-align: center;
 	margin: 8px 0;
     width: 100% !important;

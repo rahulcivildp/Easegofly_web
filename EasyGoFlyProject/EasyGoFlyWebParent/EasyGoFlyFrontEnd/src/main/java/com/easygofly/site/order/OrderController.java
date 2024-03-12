@@ -177,6 +177,8 @@ public class OrderController {
 		
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+	    City cityOneFound = cityRepo.getCityByCode(flight.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByCode(flight.getCityTwo());
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
@@ -239,6 +241,8 @@ public class OrderController {
 		model.addAttribute("search_id", search_id);
 		model.addAttribute("item_id", item_id);
 		model.addAttribute("coupon", coupon);
+		model.addAttribute("cityOneName", cityOneFound.getCityName());
+		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
 		model.addAttribute("timeRemainingPro", productDetailsController.timeRemainingProOne);
 		
 		return "order/flight_order";
@@ -302,7 +306,7 @@ public class OrderController {
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		String[] hasErrorArr = new String[2];
 		
-		if (productDetail.getResultIndex() != null) {
+		if (productDetail.getMode().equals("Online-data")) {
 			
 			if (productDetail.isLcc() == true) {
 				hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
@@ -314,6 +318,11 @@ public class OrderController {
 					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
 					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 			}
+			
+		} else if (productDetail.getMode().equals("AirIQ")) {
+			orderService.ticketDetailsAirIQ(order, productDetail);
+			
+		} else if (productDetail.getMode().equals("Offline-data")) {
 			
 		} else {
 			hasErrorArr[0] = "0";
@@ -518,7 +527,7 @@ public class OrderController {
 		SearchHistory search = searchRepo.findById(search_id_inner).get();	
 		String[] hasErrorArr = new String[2];	
 		
-		if (productDetail.getResultIndex() != null) {
+		if (productDetail.getMode().equals("Online-data")) {
 			
 			if (productDetail.isLcc() == true) {
 				hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
@@ -529,6 +538,11 @@ public class OrderController {
 					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
 					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 			}
+			
+		} else if (productDetail.getMode().equals("AirIQ")) {
+			orderService.ticketDetailsAirIQ(order, productDetail);
+			
+		} else if (productDetail.getMode().equals("Offline-data")) {
 			
 		} else {
 			hasErrorArr[0] = "0";

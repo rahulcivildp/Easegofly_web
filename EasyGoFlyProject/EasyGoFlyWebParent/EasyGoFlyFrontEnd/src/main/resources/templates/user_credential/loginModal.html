@@ -3,7 +3,7 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 	<li th:fragment="login(remove)" th:remove="${remove}" >	
-	<ul class="no-search" id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background: #c6ecff;"> 
+	<ul class="no-search dropdown-menu" id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background:rgb(227 246 255 / 79%); transform: translate3d(-0.8571399999999993px, 32px, 0px) !important;" aria-labelledby="dropdownMenuLink"> 
 		<li class="horiz"><a type="button"
 			class="btn btn-primary btn_style_menu a_center"
 			th:href="@{/login}"
@@ -27,7 +27,7 @@
 	
 	<li th:fragment="loggedin(remove)" th:remove="${remove}">
 		<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		<ul class="nav no-search " id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background: #c6ecff;">
+		<ul class="no-search dropdown-menu" id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background: rgb(227 246 255 / 79%);" aria-labelledby="dropdownMenuLinkLogged">
 			<li class="nav-item horiz">
 				<p class="text_modify" sec:authentication="principal.fullName"><i class="fas fa-user" style="padding-right: 13px;" ></i></p>
 			</li>
@@ -50,8 +50,8 @@
 			<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
 				<input type="submit">
 			</form>
-			<li class="nav-item horiz btn btn-info hover">
-				<a id="logoutLink" class=" a_center" href="" style="font-size: 22px; margin: 0; padding: 0;">Logout!</a>
+			<li class="nav-item horiz btn btn-danger hover">
+				<a id="logoutLink" class=" a_center" href="" style="font-size: 22px; margin: 0; padding: 0; color: white;">Logout!</a>
 			</li>
 	
 		</ul>

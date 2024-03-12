@@ -3,10 +3,15 @@ package com.easygofly.site.search;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -88,10 +93,10 @@ public class SearchHistoryService {
 		try {
         	
         	// Create URL object with the API end-point
-            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
+//            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
             
         	// Create URL object with the API end-point
-//            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
 
             // Open a connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

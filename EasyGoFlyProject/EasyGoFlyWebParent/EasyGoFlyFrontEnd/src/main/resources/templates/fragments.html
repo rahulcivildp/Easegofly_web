@@ -50,13 +50,127 @@
 		.containerHeader {
 			max-width: 81%;
 		}
+		
+		.hide-display {
+			display: none;
+		}
 			
 		@media screen and (max-width: 700px) {
 			.containerHeader {
 	    		width: 100% !important;
 				max-width: 100% !important;
 			}
-		}
+			.hide-display {
+				display: block !important;
+			}
+			 #sideBar {
+			    position: absolute;
+			    z-index: 99;
+				border-radius: 0 10px 10px 0;
+			    height: 100vh;
+			    width: 85%;
+			    translate: -360px 0;
+				transition-property: translate; 
+				transition-duration: 300ms; 
+				transition-timing-function: ease-in;
+			    -webkit-translate: -360px 0;
+			    -ms-translate: -360px 0;
+				-webkit-transition-property: translate; 
+				-webkit-transition-duration: 300ms; 
+				-webkit-transition-timing-function: ease-in;
+				-ms-transition-property: translate; 
+				-ms-transition-duration: 300ms; 
+				-ms-transition-timing-function: ease-in;
+				padding: 30px 30px 40px 45px;/* From https://css.glass */
+			    background: rgb(227 238 255 / 77%);
+			    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+			    backdrop-filter: blur(27.599999999999994px);
+			    -webkit-backdrop-filter: blur(7.6px);
+			    border: 1px solid rgba(255, 255, 255, 0.31);
+			  }
+			  
+		      #sideBar.sideBarActive {
+			    translate: -14px 0;
+			    -webkit-translate: -14px 0;
+			    -ms-translate: -14px 0;
+			    position: absolute;
+			    z-index: 99;
+			  }
+			  
+			  #sidebarMenuDiv.mobileActive {
+				height: auto;
+		    	width: 100%;
+		    	position: fixed;    
+		    	top: 0px;
+		    	z-index: 999
+			  }
+			  
+			  .sidebar_modal {
+				    cursor: pointer;
+				    margin: 20px 0;
+				    width: auto;
+				    color: #2c2c2ceb;
+				    padding: 3px 9px;
+				    border-radius: 5px;
+				    font-weight: 600;
+				    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+				    -webkit-transition: background-color 2s ease-out;
+				    -moz-transition: background-color 2s ease-out;
+				    -o-transition: background-color 2s ease-out;
+				    transition: background-color 2s ease-out;
+				    -webkit-transition: color 0.5s ease-out;
+				    -moz-transition: color 0.5s ease-out;
+				    -o-transition: color 0.5s ease-out;
+				    transition: color 0.5s ease-out;
+				}
+				
+				#header {
+					position: sticky;
+					background: #00012a;
+				}
+			}
+			
+		    .sidebar_modal_dropdown {
+				display: flex;
+			    background: none;
+			    color: black !important;
+			    font-size: 18px;
+			}
+		
+		  
+		  .dropdown-toggle::after {
+			    margin-top: 12px !important;
+			}	
+			.mainDrawerlogo{
+			    height: 50px;
+			    width: 50px;
+			    border-radius: 30px;
+			    margin-left: 4px;
+			    background-position: center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
+			    border: 2px solid white;
+			}
+			.positionedLogo {
+				position: relative;
+			    left: 26px;
+			    top: 25px;
+			    background-color: white;
+			    border-radius: 20px;
+			    height: 25px;
+			    width: 25px;
+			    text-align: center;
+			    font-size: 17px;
+			    color: black;
+			}
+			.sidebarCloseStyle {
+			    font-size: 40px;
+			    position: relative;
+			    right: 0;
+			    top: -24px;
+    			cursor: pointer;
+    			height: 35px;
+			}
 	</style>
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
@@ -79,7 +193,107 @@
 	</script>
 	<!-- End Google Analytics -->
     <div class="container d-flex align-items-center justify-content-between containerHeader">
-
+		
+      <div id="imageTogglerSidebar" class="media_status" style="padding-left: 4px;">
+		  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
+	        <div id="beforelogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new-ch.png'} + ');'">
+	        	<div class="positionedLogo">
+					<i class="fa fa-solid fa-bars"></i>
+				</div>
+			</div>
+	      </li>
+	      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
+		        <div id="afterlogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
+		        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); '">
+		        	<div class="positionedLogo">
+						<i class="fa fa-solid fa-bars"></i>
+					</div>
+				</div>
+			</th:block>
+			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
+				 <div id="afterlogINnoPhoto" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new-ch.png'} + ');'">
+		        	<div class="positionedLogo">
+						<i class="fa fa-solid fa-bars"></i>
+					</div>
+				</div>
+			</th:block>
+		  </th:block>
+	  </div>
+	  
+	<!-- Sidebar Menu -->
+	<div id="sidebarMenuDiv" class="mobileActive hide-display" style="">
+		<div id="sideBar" style="display: flex; flex-direction: column; justify-content: space-between;">
+			<div>
+				<div class="row">
+				<div class="col-10" style="display: flex; justify-content: start;">
+					<img th:src="@{${FAVICON}}" alt="favicon" class="img-fluid" style="width: auto; height: 30px; float: left;">
+					<h1 style="margin: 0;">&nbsp;Easegofly</h1>
+				</div>
+				<div class="col-2">
+				   <div id="sidebarClose" class="sidebarCloseStyle"><i class="fa fa-solid fa-circle-xmark"></i></div>
+			    </div>
+			</div>
+			
+			
+			<div class="media_status_flex_CPN" style="width: 100%; height: 18px">
+				<hr style="width: 100%; height: 2px; background: black;">
+			</div>
+			<p style="font-size: 14px; margin: 0;">&nbsp;&nbsp;&nbsp;<i class="fa fa-solid fa-list"></i>&nbsp;&nbsp; MAIN MENU</p>
+			<div class="" style="width: 100%; height: 4px; margin-top: -15px;">
+				<hr style="width: 100%; height: 2px; background: black;">
+			</div>
+			<ul class="" style="list-style: none; padding: 0;">
+	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown" id="li1" th:href="@{/}" >
+	          	<i class="fa fa-solid fa-house" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Home</span></a>
+	          </li>
+	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li3" th:href="@{/about#no-2}" >
+	          	<i class="fa fa-solid fa-circle-info" style="font-size: 24px;">&nbsp;&nbsp;</i><span>About Us</span></a>
+	          </li>
+	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li4" th:href="@{/about#no-3}">
+	          	<i class="fa fa-solid fa-address-book" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Contact</span></a>
+	          </li>
+	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li2" th:href="@{/about#no-8}" >
+	          	<i class="fa fa-solid fa-bell-concierge" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Services</span></a>
+	          </li>
+	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li2"  th:href="@{/flight_activity}" >
+	          	<i class="fa fa-solid fa-bell-concierge" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
+	          </li>
+	          <li class="dropdown sidebar_modal" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+		          <a class="dropdown-toggle sidebar_modal_dropdown" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content: space-between;">
+			          <span style="display: flex !important;  justify-content: start;">
+			          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+			          </span> 
+		          </a>
+	              <li th:replace="user_credential/loginModal :: login('tag')"></li>
+	          </li>
+	          
+	          	<li class="dropdown sidebar_modal" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
+		          	<a class="dropdown-toggle sidebar_modal_dropdown" href="#" id="dropdownMenuLinkLogged" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content: space-between;">
+		          		<span style="display: flex !important;  justify-content: start;">
+			          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
+			          	</span> 
+		          	</a>
+		          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
+	          	</li>
+	          
+	        </ul>
+			</div>
+	        <div style="margin-bottom: 8px;">
+				<h4>Subscribe for newsletter</h4>
+				<div class="form-floating mb-3">
+				  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" style="background: #0033ff2b;">
+				  <label for="floatingInput">Email address</label>
+				</div>
+				
+				<div class="media_status_flex_CPN" style="width: 100%; height: 18px">
+					<hr style="width: 100%; height: 2px; background: black;">
+				</div>
+				<p>Copyright @2024 All Rights Reserved By Easegofly</p>
+			</div>
+		</div>
+	</div>
+	
       <!-- Uncomment below if you prefer to use an image logo -->
       <div class="col media-hide">
       	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; float: left;"></a>
@@ -89,8 +303,6 @@
 
       <nav id="navbar" class="navbar">
         <ul class="ul_modify">
-          <li class="media-hide"></li>
-          <li class="media-hide"></li>
           <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
           	<i class="fa fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
           </li>
@@ -107,71 +319,48 @@
           	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
           </li>
           <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          <a href="#">
+	          <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="">
 		          <span style="display: flex !important;  justify-content: start;">
 		          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          </span> 
-		          <i class="bi bi-chevron-down"></i>
 	          </a>
               <li th:replace="user_credential/loginModal :: login('tag')"></li>
           </li>
           
           	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          	<a href="#">
+	          	<a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="">
 	          		<span style="display: flex !important;  justify-content: start;">
 		          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          	</span> 
-		          	<i class="bi bi-chevron-down"></i>
 	          	</a>
 	          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
           	</li>
           
         </ul>
-	  <div class="mobile-nav-toggle" id="imageToggler">
-	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
-        <div id="beforelogIN" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/images/no-user-new.png'} + '); 
-			background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
-        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
-				<i class="fa fa-solid fa-bars"></i>
-			</div>
-		</div>
-      </li>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
-	        <div id="afterlogIN" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
-	        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); 
-				background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
-	        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
-					<i class="fa fa-solid fa-bars"></i>
-				</div>
-			</div>
-		</th:block>
-		 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
-			 <div id="afterlogINnoPhoto" th:style="'height: 35px; width: 35px; border-radius: 20px; margin-left: 4px; background-image: url(' + @{'/images/no-user-new.png'} + '); 
-				background-position: center; background-repeat: no-repeat; background-size: cover; border: 2px solid white;'">
-	        	<div style="position: relative; left: 20px; top: 20px; background-color: white; border-radius: 20px;  height: 20px; width: 20px; text-align: center; font-size: 15px; color: black; padding-top: 2px;">
-					<i class="fa fa-solid fa-bars"></i>
-				</div>
-			</div>
-		</th:block>
-	  </th:block>
+	  <div class="mobile-nav-toggle" id="imageToggler" style="display: none !important;">
+		  
 	  </div>
-	      <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}"></i>-->
-     
-        <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;"></i>-->
-      </nav><!-- .navbar -->
-	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
-	      <div class="col media_status" style="display: none; text-align: center; padding-right: 50px;" >
-	      	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; "></a>
+      </nav>
+      <!-- .navbar -->
+      
+	  
+	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
+	      <div class="col media_status" style="display: none; text-align: center; " >
+	      	<a th:href="@{/}" style="position: relative;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 73px; "></a>
+	      </div>
+      </li>
+      <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none; padding-right: 10px;">
+	      <div class="col-2 media_status" style="display: none; text-align: center; color: white; font-size: 22px; " >
+	      	<i class="fa fa-solid fa-share-from-square"></i>
 	      </div>
       </li>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		    <div class="col float-state" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
+		    <div class="col float-state media_status" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
 		        <a th:href="@{/}"> <p class="float-state" >Hey, <span sec:authentication="principal.customer.firstName"></span>!</p></a>
 		    </div>
 	  </th:block>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
+		  	<div class="media_status" style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
 				  <a type="button" style="color: white;"
 				th:href="@{/wallet-home}">
 		    	<i class="fa fa-solid fa-wallet"></i>
@@ -179,15 +368,10 @@
 		    </div>
 	  </th:block>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
+		  	<div class="media_status" style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
 		    	<i class="fa fa-solid fa-bell"></i>
 		    </div>
 	  </th:block>
-      <!--<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div style="color: white; padding: 0 15px 0 12px; font-size: 22px;">
-		    	<i class="fa fa-solid fa-network-wired"></i>
-		    </div>
-	  </th:block>-->
     </div>
     
 	<script type="text/javascript" th:src="@{/js/common.js}"></script>
@@ -204,6 +388,28 @@
 			$("#imageToggler").click(function(){
 				$("#afterlogINnoPhoto").toggleClass("togglerClass");
 			});
+		});
+	</script>
+	<script>
+			$("#imageTogglerSidebar").click(function(){
+				$("#sideBar").toggleClass("sideBarActive");
+				
+			});
+			
+			$("#sidebarClose").click(function(){
+				$("#sideBar").toggleClass("sideBarActive");
+			});
+		
+	</script>
+	<script>
+		
+		$(document).mouseup(function(e) {
+		    var container = $("#sideBar");
+		
+		     // if the target of the click isn't the container nor a descendant of the container
+		    if (!container.is(e.target) && container.has(e.target).length === 0) {
+				$("#sideBar").removeClass("sideBarActive");
+			}
 		});
 	</script>
 	
@@ -234,7 +440,22 @@
 		#mobileFooter {
 			   display: block !important;
 		   }
+		   
+		   #homeFooter {
+			   cursor: pointer;
+		   }
 	    }
+	    
+		@media screen and (max-width: 800px) {
+			
+		}
+		
+		
+.media_status { display: none;}
+@media only screen and (max-width: 600px) {
+	  .media_status { display: block !important;}
+	  }
+	  
 	</style>
 	<div id="footer" style=" background: #07162d !important;">
     <div class="footer-top" style=" background: #07162d !important;">
@@ -317,13 +538,13 @@
 	<div style="display: none;" id="mobileFooter">
 		<div style="height: 50px;"></div>
 		<div style="position: fixed; bottom: 0; width: 100%; background: rgb(36 32 74); z-index: 9; color: white;" >
-	   	   <div class="row" style="height: 80px; ">
-			   <div class="col-6 bottomFooter" style="align-items: center; justify-content: center; display: flex;" id="homeFooter">
+	   	   <div class="row" style="height: 60px; ">
+			   <button class="col-6 bottomFooter" style="align-items: center; justify-content: center; display: flex; background: #24204a; color: white;" id="homeFooter">
 				   <div style="text-align: center;">
 					   <i class="fa fa-solid fa-house fa-2x"></i><br>
 				   		Home
 			   		</div>
-			   	</div>
+			   	</button>
 			   <div class="col-6 bottomFooter" style="align-items: center; justify-content: center; display: flex;" id="categoriesFooter">
 				   <div style="text-align: center;">
 					   <i class="fa fa-solid fa-gears fa-2x"></i><br>
@@ -333,9 +554,19 @@
 		   </div>
 	   </div>
    </div>
+   
+   	<script>
+			$("#homeFooter").click(function(){
+				//alert("clicked");
+				$("#sideBar").toggleClass("sideBarActive");
+			});
+		
+	</script>
+	
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 
 
 

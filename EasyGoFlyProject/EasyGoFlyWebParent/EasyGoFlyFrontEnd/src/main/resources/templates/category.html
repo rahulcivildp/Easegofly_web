@@ -20,9 +20,9 @@ th:fragment="category(remove)" th:remove="${remove}">
 @media screen and (max-width: 800px) {
 	.tabss {
 		width: 100%;
-		height: 104px;
+		height: 90px;
 		margin: 2px !important;
-		padding: 3px 10px !important;
+		padding: 22px !important;
 	    display: flex !important;
 	    justify-content: center;
 	    align-items: center;
@@ -52,9 +52,11 @@ th:fragment="category(remove)" th:remove="${remove}">
 	#adjusted {
 		width: 100% !important;
 	}
-	#searchBox {
+	#searchMain #searchBox {
 		width: 96% !important;
-		padding: 18px 12px !important;
+		padding: 18px 12px ;
+		margin-top: 10px ;
+		margin-bottom: 10px ;
 		display: none;
 	}
 	.aligner {
@@ -65,14 +67,18 @@ th:fragment="category(remove)" th:remove="${remove}">
 	}
 	
 	#imgbck2 {
-		padding: 0 !important;
 		width: 100% !important;
 	}
-	.paddingResize {
-		padding-top: 108px !important;
+	#tabsModalDiv.paddingResize {  
+		padding-top: 0 !important; 
+		width: 100%; 
 	}
+	
 	#heroCarousel{
-		height: auto !important;
+		height: 100vh !important;
+	}
+	.paddingTopDeal {
+		padding-top: 40px !important;
 	}
 }
 
@@ -82,12 +88,67 @@ th:fragment="category(remove)" th:remove="${remove}">
 	}
 }
 
+@media screen and (max-width: 700px) {
+	.displayItemNone {display: none !important;}
+	.displayItemBlock {display: block !important;}
+	.displayItemFlex {display: flex !important;}
+	.heroDIsplay{
+		position: relative;
+		z-index: 1;
+	}
+	body #mainHeroStyle {
+		position: relative;    
+		overflow: hidden;
+		height: 0vh;
+		transition-property: height; 
+		transition-duration: 400ms; 
+		transition-timing-function: ease-in;
+		-webkit-transition-property: height; 
+		-webkit-transition-duration: 400ms; 
+		-webkit-transition-timing-function: ease-in;
+		-ms-transition-property: height; 
+		-ms-transition-duration: 400ms; 
+		-ms-transition-timing-function: ease-in;
+	}
+	body #mainHeroStyle.searchBovMainDivActive {
+		height: 80vh;
+	}
+	
+	.searchBoxMargin {
+		margin-top: 90px !important;
+	}
+	.easyStepsMargin {
+		margin-top: 0px;
+	}
+	.mainHeroStyle {
+		padding-top: 90px !important;
+	}
+	
+	#categorySticky {
+		position: sticky !important;
+		top: 0;
+	}
+	#imgbck2 {
+		padding: 0 !important;
+	}
+	#tabsMobile {
+	    justify-content: center;
+	    padding-top: 7px;
+	}
+}
+
+
+
+#setOfferDeals {
+	padding-top: 0px;
+}
 .fontSize {
 	font-size: 20px;
 }
 
 .paddingResize {
-	padding-top: 81px;
+		width: 90%;
+    	margin: 0 auto;
 }
 .tabss {
 	background: white;
@@ -128,7 +189,7 @@ th:fragment="category(remove)" th:remove="${remove}">
 	width: 70%;
 	margin: 0 auto;
 	text-align: center;
-	height: 48px;
+	height: auto;
 	padding: 0;
 }
 
@@ -285,8 +346,6 @@ input:checked+br+label {
 	color: white;
 }
 
-#hero{height: auto;
-}
 .carousel-inner-cont {
 	height: 527px;
 	position: relative !important;
@@ -294,25 +353,81 @@ input:checked+br+label {
 	overflow: hidden !important;
 }
 @media only screen and (max-width: 600px) {
-.carousel-inner-cont {
-	height: auto !important;
+	.carousel-inner-cont {
+		height: 100vh !important;
+	}
 }
-}
+
 #imgbck2 {
-	padding: 65px 0 30px 0;
+	padding: 90px 0 30px 0;
     margin: 0 auto;
     width: 80%;
-    z-index: 2 !important;
+}
+#mainHeroStyle {
+	height: auto; 
+	position: relative; 
 }
 </style>
 
 </head>
 <body>
-	<div style="position: fixed; height: 50px; width: 100%; background: transparent;"></div>
-	<div style="height: auto; position: relative;" id="mainHeroStyle" class="">
+		<div id="categorySticky"  style="position: fixed; z-index: 99; width: 100%;">
+			<div id="imgbck2" style="margin: 0 auto;" class="">
+	
+				<div id="tabs" class="col-12 media-hide">
+					<ul class="text-center" id="adjusted">
+							<li class="tabss shadow activated" id="flight"><a
+								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
+						
+							<li class="tabss shadow" id="train"><a
+								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
+						
+							<li class="tabss shadow" id="hotel"><a
+								th:href="@{/hotel}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
+						
+							<li class="tabss shadow" id="holidays"><a
+								th:href="@{/}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
+						
+					</ul>
+				</div>
+				<div id="tabsMobile" class="col-12 media_status_flex_CPN">
+					<div class="row text-center" id="adjusted">
+						<div class="col-3" style="padding: 0 4px !important;" id="flightCol">
+							<li class="tabss shadow " id="flightMobile">
+								<div >
+									<img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><b>Flights</b>
+								</div>
+							</li>
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;">
+							<li class="tabss shadow" id="hotelMobile"><a
+								th:href="@{/hotel}"><img th:src="@{/images/front/city1.png}" class="img-fluid" style="width: 50px;"><br><strong>Hotels</strong></a></li>
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;">
+							<li class="tabss shadow" id="busMobile"><a
+								th:href="@{/}"><img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><strong>Buses</strong></a></li>	
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;">
+							<li class="tabss shadow" id="holidaysMobile"><a
+								th:href="@{/}"><img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><strong>Holidays</strong></a></li>
+						</div>
+					</div>
+				</div>
+	
+			</div>
+			
+		</div>
+			
+	<div id="mainHeroStyle" >
+		<div  style="position: absolute; z-index: 2; width: 100%;">
+			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
+					<div th:replace="flight/air-search :: air-search"></div>
+			    
+			</div>
+		</div>
 		<!-- ======= Hero Section ======= -->
-		<section id="hero" class="heroDIsplay">
-			<div class="hero-container">
+		<section id="hero" class="heroDIsplay" style="">
+			<div class="hero-container" style="height: 100vh;">
 				<div id="heroCarousel" data-bs-interval="5000"
 					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
 
@@ -375,62 +490,6 @@ input:checked+br+label {
 		</section>
 		<!-- End Hero -->
 
-		<div class="paddingResize">
-			<div class="col-1 float-right" style="color: white; font-size: 20px; font-weight: 600; margin: 10px;">
-		        <p></p>
-		    </div>
-			<!--<th:block  sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-			    <div class="col float-state" style="color: white; font-size: 20px; font-weight: 600;">
-			        <p class="float-state" >Welcome : <span sec:authentication="principal.fullName"></span></p>
-			    </div>
-		    </th:block>-->
-		    	
-			<div id="imgbck2" class="">
-	
-				<div id="tabs" class="col-12 media-hide">
-					<ul class="text-center" id="adjusted">
-							<li class="tabss shadow activated" id="flight"><a
-								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
-						
-							<li class="tabss shadow" id="train"><a
-								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
-						
-							<li class="tabss shadow" id="hotel"><a
-								th:href="@{/hotel}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
-						
-							<li class="tabss shadow" id="holidays"><a
-								th:href="@{/}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
-						
-					</ul>
-				</div>
-				<div id="tabsMobile" class="col-12 media_status_flex_CPN" style="justify-content: center; position: fixed; margin-top: -20px; z-index: 99; ">
-					<div style="z-index: -1; height: 182px; background: #000000b0; width: 100%; position: fixed; display: block; margin-top: -100px;"></div>
-					<div class="row text-center" id="adjusted">
-						<div class="col-3" style="padding: 0 4px !important;" id="flightCol">
-							<li class="tabss shadow " id="flightMobile">
-								<div >
-									<img th:src="@{/images/front/airplane.png}" style="width: 100%;"><br><b>Flights</b>
-								</div>
-							</li>
-						</div>
-						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="hotelMobile"><a
-								th:href="@{/hotel}"><img th:src="@{/images/front/city.png}" style="width: 100%;"><br><strong>Hotels</strong></a></li>
-						</div>
-						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="busMobile"><a
-								th:href="@{/}"><img th:src="@{/images/front/bus.png}" style="width: 100%;"><br><strong>Buses</strong></a></li>	
-						</div>
-						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="holidaysMobile"><a
-								th:href="@{/}"><img th:src="@{/images/front/Holiday.png}" style="width: 100%;"><br><strong>Holidays</strong></a></li>
-						</div>
-					</div>
-				</div>
-				<div th:replace="flight/air-search :: air-search"></div>
-	
-			</div>
-		</div>
 	</div>
 </body>
 
@@ -438,12 +497,7 @@ input:checked+br+label {
 <script>
 	$("#flightMobile").click(function(){
 		$("#flightMobile").toggleClass("activated");
-		$("#searchBox").toggleClass("displayItemFlex");
-		$("#hero").toggleClass("displayItemBlock");
-		$("#mainHeroStyle").toggleClass("backgroundColorChange");
-		$("#middleSection").toggleClass("paddingForMiddleSection");
-		$("#tabsMobile").toggleClass("marginTopFixedTabs");
-		$(".Esaysteps").toggleClass("marginAfterLogin");
+		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
 	});
 </script>
 </html>

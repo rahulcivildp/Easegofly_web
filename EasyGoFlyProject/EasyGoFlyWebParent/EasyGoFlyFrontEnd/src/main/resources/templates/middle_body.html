@@ -40,7 +40,22 @@ body {
       .cards_margin {
         margin: 10px 0;
       }
+     
     }
+    
+    
+    
+    .sidebar_modal_dropdown {
+		display: flex;
+	    background: none;
+	    color: black !important;
+	    font-size: 18px;
+	}
+
+  
+  .dropdown-toggle::after {
+	    margin-top: 12px !important;
+	}
     .set_offers .card .title{
       color: #1a1a1a;
       text-align: center;
@@ -54,11 +69,11 @@ body {
       overflow: hidden;
     }
     .style_container {
-    	    max-width: 100% !important;
-		    padding: 10px !important;
-		    background: white;
-		    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
-		    border-radius: 0 10px 10px 10px;
+	    max-width: 100% !important;
+	    padding: 10px !important;
+	    background: white;
+	    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
+	    border-radius: 0 10px 10px 10px;
     }
     .content .content-overlay {
       background: rgba(0,0,0,0.7);
@@ -134,6 +149,12 @@ body {
         color: #23527C;
         text-decoration: none;
     }
+    .city_name_mob {
+        font-size: 18px;
+        font-weight: 600;
+        color: #23527C;
+        text-decoration: none;
+    }
     .city_loca {
         text-decoration: none;
     }
@@ -143,9 +164,28 @@ body {
     	padding: 10px 0;
         border-radius: 10px;
     }
+    .card_wrp_mob {
+        background-color: white;
+	    width: 100%;
+	    padding: 10px 0 0 0;
+	    border-radius: 10px;
+	    border: 1px solid #d2d2d2;
+	    flex-direction: column;
+	    justify-content: space-between;
+    }
     .ad_Offers .card {
         float: left;
     }
+    @media screen and (max-width: 700px) {
+		.cards-img {
+	        width: 10%;
+	        height: 20% !important;
+	    }
+	    .cards-dialogue {
+	        left: 15px !important;
+	        margin-right: 0 !important;
+	    }
+	}
     .cards-img {
         background: url("https://images.unsplash.com/photo-1637081182843-f89af4fbe51e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=387&amp;q=80") no-repeat center;
         -webkit-background-size: cover;
@@ -153,17 +193,14 @@ body {
         -o-background-size: cover;
         background-size: cover;
         margin: 10px;
-        width: 126px;
-        height: 293px;
+        width: 10%;
+        height: 50%;
         border-radius: 10px;
-        position: relative;
+        position: absolute;
         z-index: 2;
     }
     .cards-dialogue {
         background: white;
-        width: 289px;
-        height: 300px;
-        bottom: 285px;
         position: relative;
         left: 46px;
         z-index: 1;
@@ -172,39 +209,19 @@ body {
         margin-right: 58px;
     }
     .cards-text h3 {
-        position: relative;
-        top: 45px;
-        right: -8px;
         margin: 0;
-        width: 217px;
     }
-    .cards-dialogue span {
-        position: relative;
-        top: 30px;
-        right: -10px;
-    }
+  
     .cards-text p {
         width: 185px;
         margin: 0;
     }
-    .cards-dialogue a {
-        position: relative;
-        top: 4px;
-        right: -118px;
-        width: 139px;
-    }
-    .contained {
-        height: 375px;
-    }
+
     .carousel_inners {
         width: 80%;
         margin: 0 auto;
     }
-    .cards-text {
-        width: 220px;
-        height: 210px;
-        float: right;
-    }
+    
     .arrow-icons {
         background-image: none !important; 
         color: black; 
@@ -317,8 +334,6 @@ body {
     .content-overlay {
         height: auto !important;
     }
-    .text-box {
-    }
 
     .text-box .btn:link,
     .text-box .btn:visited {
@@ -404,19 +419,40 @@ body {
     
    .fare_finder {
             height: auto !important;
-            margin-bottom: 20px;
         } 
     @media screen and (max-width: 700px) {
-    .container {
+    	.container {
         width: 100% !important;
             }
-    .set_offers {
+    	.set_offers {
            height: auto !important; 
         }
    
-    #more {
+    	#more {
         display: none;
         }
+        
+	    .style_container {
+		    background: white;
+		    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
+		    border-radius: 0;
+	    }
+	    .ad_Offers {
+			padding-top: 10px;
+			background: #dddddd;
+			height: auto !important;
+			margin-top: 0 !important;
+		}
+		.popular_destinations {
+			padding-top: 10px;
+			background: #dddddd;
+			margin-bottom: 0 !important;
+		}
+		.get_inspiratio {
+			padding-top: 10px;
+			background: #dddddd;
+			padding-bottom: 0 !important;
+		}
     }
     .tiles {
         margin: 0;
@@ -498,11 +534,139 @@ body {
 	.historybtn:hover {
 	    color: rgb(78 218 62);
 	}
+	
+	 #slider-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            padding: 7px 0 10px 0;
+            background: white;
+        }
+
+        .sets-wrapper {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+
+        .set {
+            flex: 0 0 100%; /* Two sets visible at a time */
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card_items {
+            flex: 0 0 22%; /* Adjust the width based on your preference */
+            box-sizing: border-box;
+            padding: 6px;
+            text-align: center;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+        .card_items p {
+			margin: 0;
+			font-size: 14px;
+		}
+
+        .slider-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #888;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .indicator-dot.active {
+            background-color: #f00;
+        }
+        #bbuttonAd {
+			width: 28px;
+		    height: 28px;
+		    border-radius: 20px;
+		    border: none;
+		    background: #6252f3;
+		    color: white;
+		    font-size: 18px;
+		    text-align: center;
+		    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px,
+		     rgba(0, 0, 0, 0.07) 0px 2px 4px,
+		      rgba(0, 0, 0, 0.07) 0px 4px 8px,
+		       rgba(0, 0, 0, 0.07) 0px 8px 16px,
+		        rgba(0, 0, 0, 0.07) 0px 16px 32px,
+		         rgba(0, 0, 0, 0.07) 0px 32px 64px;
+		}
 </style>
 
 <body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
 <div style="background-color: #00000047;" id="middleSection" class="paddingForMiddleSection">
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- Small menu tabs -->
+<div class="media_status">
+	<div id="getNewOffer">
+		<div id="slider-container">
+		    <div class="sets-wrapper">
+		        <div class="set">
+		            <div class="card_items" style="margin-left: 8px;">
+						<img th:src="@{/images/front/Train1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Train</p>
+					</div>
+		            <div class="card_items">
+						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Hourly</p>
+						<p >Stays</p>
+					</div>
+		            <div class="card_items">
+						<img th:src="@{/images/front/Insurence.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Travel</p>
+						<p >Insurance</p>
+					</div>
+		            <div class="card_items">
+						<img th:src="@{/images/front/Car1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Cabs</p>
+					</div>
+		        </div>
+		        <div class="set">
+		            <div class="card_items" style="margin-left: 8px;">
+						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Hourly</p>
+						<p >Stays</p>
+					</div>
+		            <div class="card_items">
+						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Hourly</p>
+						<p >Stays</p>
+					</div>
+		            <div class="card_items">
+						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Hourly</p>
+						<p >Stays</p>
+					</div>
+		            <div class="card_items">
+						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
+						<p >Hourly</p>
+						<p >Stays</p>
+					</div>
+		        </div>
+		        <!-- Add more sets of cards as needed -->
+		    </div>
+		
+		    <div class="slider-indicator" id="slider-indicator"></div>
+		</div>
+	
+	</div>
+</div>
+
 
 <!-- Easy Steps -->
 <div class="Esaysteps marginAfterLogin easyStepsMargin" style="background-color:lavender;" >
@@ -570,8 +734,30 @@ body {
 	</th:block>
 </div>
 
+
+<div class="media_status" style="width: 100%; background: #dddddd; padding: 10px;">
+	<div style="background: white; border-radius: 7px;">
+		<div class="row" >
+			<div class="col-4" >
+				<div style="background: #b0c5fe; border-radius: 7px 25px 25px 7px; padding: 4px 4px; height: 100%;">
+					<img th:src="@{/images/front/bigBillion.png}" alt="" class="img-fluid" style="width: 78px; margin-left: 5px;">
+				</div>
+			</div>
+			<div class="col-8" style="padding: 4px 4px 4px 10px; display: flex; align-items: center; justify-content: space-between;">
+				<div>
+					<h4 style="margin: 0; font-size: 16px;">Heavy Discount on Flight.</h4>
+					<p style="margin: 0; font-size: 14px;">Up to 13% OFF | Code: </p>
+					<p style="margin: 0; font-size: 14px;">BOBCHA</p>
+				</div>
+					<button id="bbuttonAd" type="button"><i class="fa fa-solid fa-angle-right"></i></button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+	
 <!-- Set Offers -->
-<div class="text-center" style="padding-top: 40px; margin-bottom: 20px;">  
+<div id="setOfferDeals" class="text-center dealsOffer media-hide" style=" margin-bottom: 20px; position: relative;">  
     <div class="container style_container">
     <h2>Get Today's Top Deals</h2>
     <p>Save your money with our best offers</p>
@@ -624,15 +810,19 @@ body {
         </div>
 </div>
 
+   
+
+
 <!-- Fare Finder -->
 <div class="fare_finder">
-		<div style="width: 80%; margin: 0 auto;">
+		<div class="media-hide" style="width: 80%; margin: 0 auto;">
 	    	<div class="tab folder_style col-sm-3" ><h2 class="headerStyle">Lowest Fare Finder</h2></div>
 		</div>
         <div class="lowest_fare">
-        <div class="container style_container deal_custom" style="padding: 20px !important;">
-            <div class="row deal_custom_row" >
-              <div class="row ">	
+        <div class="container style_container " style="padding: 20px !important;">
+	    	<h2  class="media_status" style="padding: 0; font-size: 18px;">Fare Finder Offline</h2>
+            <div class="row media-hide deal_custom" >
+              	<div class="row ">	
                    <div class="col-md-2 col-2 text-center cards_margin">
                          <a th:href="${PRICE_1_LINK}" style="text-decoration: none;">
 							 <th:block th:if="${PRICE_1_LINK} != ''">
@@ -826,92 +1016,317 @@ body {
                             </th:block>
                        </a>
                    </div>
-            </div>
-        </div>
+            	</div>
+        	</div>
+        	<div class=" media_status_flex_CPN deal_custom" style="width: 100%;">
+				<div class="deal_custom_row">
+				<div class="row " style="width: inherit;">
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a th:href="${PRICE_1_LINK}" style="text-decoration: none;">
+							 <th:block th:if="${PRICE_1_LINK} != ''">
+	                             <div class="card_wrp_mob shadow">
+	                                 <div class="img_card_boxs" style="margin: 2px 10px; border-radius: 7px; display: flex; align-items: center; justify-content: space-between;">
+	                                 	<th:block th:if="${brand1} != null">
+											 <div style="display: flex;">
+		                                 		<img class="shadow" alt="" th:src="@{${brand1.photosImagePath}}" width="35" height="35" style="border-radius: 7px;">
+		                                 		<h5 style="margin: 0; padding-top: 6px;">&nbsp;[[${brand1.name}]]</h5>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+											 <div style="padding-top: 4px;">
+												 <h4 style="margin: 0; color: #455b95;" id="PRICE_1">&#x20B9; [[${PRICE_1}]]</h4>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+		                                 	<h6 style="margin: 0; ">[[${#dates.format(flightDate1, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="row" style="padding: 0 18px 10px 18px;">
+										 <div class="col-5" style="padding: 0; text-align: left;">
+		                                 	<th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_1_CITYONE}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_1_CITYONE}]])</p>
+		                                 	</th:block>
+	                                 	</div>
+										 <div class="col-2" style="padding: 0; text-align: center;"><i class="fa fa-solid fa-plane-departure"></i></div>
+										 <div class="col-5" style="padding: 0; text-align: right;">
+		                                     <th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_1_CITYTWO}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_1_CITYTWO}]])</p>
+		                                 	</th:block>
+		                                 </div>
+									 </div>
+									 <div style="background-color: #e3f8e3; padding: 2px 0; display: flex;">
+										 <i style="padding: 4px 2px 0 4px; " class="fa fa-brands fa-slack"></i> &nbsp;<p style="margin: 0; font-size: 14px;">Rs.500 OFF on BOBCHA, Plus upto 10% on GOABU</p>
+									 </div>
+	                            </div>
+                            </th:block>
+                       </a>
+                   </div>
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a th:href="${PRICE_2_LINK}" style="text-decoration: none;">
+							 <th:block th:if="${PRICE_2_LINK} != ''">
+	                             <div class="card_wrp_mob shadow">
+	                                 <div class="img_card_boxs" style="margin: 2px 10px; border-radius: 7px; display: flex; align-items: center; justify-content: space-between;">
+	                                 	<th:block th:if="${brand2} != null">
+											 <div style="display: flex;">
+		                                 		<img class="shadow" alt="" th:src="@{${brand2.photosImagePath}}" width="35" height="35" style="border-radius: 7px;">
+		                                 		<h5 style="margin: 0; padding-top: 6px;">&nbsp;[[${brand2.name}]]</h5>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+											 <div style="padding-top: 4px;">
+												 <h4 style="margin: 0; color: #455b95;" id="PRICE_2">&#x20B9; [[${PRICE_2}]]</h4>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+		                                 	<h6 style="margin: 0; ">[[${#dates.format(flightDate2, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="row" style="padding: 0 18px 10px 18px;">
+										 <div class="col-5" style="padding: 0; text-align: left;">
+		                                 	<th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_2_CITYONE}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_2_CITYONE}]])</p>
+		                                 	</th:block>
+	                                 	</div>
+										 <div class="col-2" style="padding: 0; text-align: center;"><i class="fa fa-solid fa-plane-departure"></i></div>
+										 <div class="col-5" style="padding: 0; text-align: right;">
+		                                     <th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_2_CITYTWO}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_2_CITYTWO}]])</p>
+		                                 	</th:block>
+		                                 </div>
+									 </div>
+									 <div style="background-color: #e3f8e3; padding: 2px 0; display: flex;">
+										 <i style="padding: 4px 2px 0 4px; " class="fa fa-brands fa-slack"></i> &nbsp;<p style="margin: 0; font-size: 14px;">Rs.500 OFF on BOBCHA, Plus upto 10% on GOABU</p>
+									 </div>
+	                            </div>
+                            </th:block>
+                       </a>
+                   </div>
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a th:href="${PRICE_3_LINK}" style="text-decoration: none;">
+							 <th:block th:if="${PRICE_3_LINK} != ''">
+	                             <div class="card_wrp_mob shadow">
+	                                 <div class="img_card_boxs" style="margin: 2px 10px; border-radius: 7px; display: flex; align-items: center; justify-content: space-between;">
+	                                 	<th:block th:if="${brand3} != null">
+											 <div style="display: flex;">
+		                                 		<img class="shadow" alt="" th:src="@{${brand3.photosImagePath}}" width="35" height="35" style="border-radius: 7px;">
+		                                 		<h5 style="margin: 0; padding-top: 6px;">&nbsp;[[${brand3.name}]]</h5>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+											 <div style="padding-top: 4px;">
+												 <h4 style="margin: 0; color: #455b95;" id="PRICE_3">&#x20B9; [[${PRICE_3}]]</h4>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+		                                 	<h6 style="margin: 0; ">[[${#dates.format(flightDate3, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="row" style="padding: 0 18px 10px 18px;">
+										 <div class="col-5" style="padding: 0; text-align: left;">
+		                                 	<th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_3_CITYONE}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_3_CITYONE}]])</p>
+		                                 	</th:block>
+	                                 	</div>
+										 <div class="col-2" style="padding: 0; text-align: center;"><i class="fa fa-solid fa-plane-departure"></i></div>
+										 <div class="col-5" style="padding: 0; text-align: right;">
+		                                     <th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_3_CITYTWO}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_3_CITYTWO}]])</p>
+		                                 	</th:block>
+		                                 </div>
+									 </div>
+									 <div style="background-color: #e3f8e3; padding: 2px 0; display: flex;">
+										 <i style="padding: 4px 2px 0 4px; " class="fa fa-brands fa-slack"></i> &nbsp;<p style="margin: 0; font-size: 14px;">Rs.500 OFF on BOBCHA, Plus upto 10% on GOABU</p>
+									 </div>
+	                            </div>
+                            </th:block>
+                       </a>
+                   </div>
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a th:href="${PRICE_4_LINK}" style="text-decoration: none;">
+							 <th:block th:if="${PRICE_4_LINK} != ''">
+	                             <div class="card_wrp_mob shadow">
+	                                 <div class="img_card_boxs" style="margin: 2px 10px; border-radius: 7px; display: flex; align-items: center; justify-content: space-between;">
+	                                 	<th:block th:if="${brand4} != null">
+											 <div style="display: flex;">
+		                                 		<img class="shadow" alt="" th:src="@{${brand4.photosImagePath}}" width="35" height="35" style="border-radius: 7px;">
+		                                 		<h5 style="margin: 0; padding-top: 6px;">&nbsp;[[${brand4.name}]]</h5>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+											 <div style="padding-top: 4px;">
+												 <h4 style="margin: 0; color: #455b95;" id="PRICE_4">&#x20B9; [[${PRICE_4}]]</h4>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+		                                 	<h6 style="margin: 0; ">[[${#dates.format(flightDate4, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="row" style="padding: 0 18px 10px 18px;">
+										 <div class="col-5" style="padding: 0; text-align: left;">
+		                                 	<th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_4_CITYONE}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_4_CITYONE}]])</p>
+		                                 	</th:block>
+	                                 	</div>
+										 <div class="col-2" style="padding: 0; text-align: center;"><i class="fa fa-solid fa-plane-departure"></i></div>
+										 <div class="col-5" style="padding: 0; text-align: right;">
+		                                     <th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_4_CITYTWO}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_4_CITYTWO}]])</p>
+		                                 	</th:block>
+		                                 </div>
+									 </div>
+									 <div style="background-color: #e3f8e3; padding: 2px 0; display: flex;">
+										 <i style="padding: 4px 2px 0 4px; " class="fa fa-brands fa-slack"></i> &nbsp;<p style="margin: 0; font-size: 14px;">Rs.500 OFF on BOBCHA, Plus upto 10% on GOABU</p>
+									 </div>
+	                            </div>
+                            </th:block>
+                       </a>
+                   </div>
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a th:href="${PRICE_5_LINK}" style="text-decoration: none;">
+							 <th:block th:if="${PRICE_5_LINK} != ''">
+	                             <div class="card_wrp_mob shadow">
+	                                 <div class="img_card_boxs" style="margin: 2px 10px; border-radius: 7px; display: flex; align-items: center; justify-content: space-between;">
+	                                 	<th:block th:if="${brand5} != null">
+											 <div style="display: flex;">
+		                                 		<img class="shadow" alt="" th:src="@{${brand5.photosImagePath}}" width="35" height="35" style="border-radius: 7px;">
+		                                 		<h5 style="margin: 0; padding-top: 6px;">&nbsp;[[${brand5.name}]]</h5>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+											 <div style="padding-top: 4px;">
+												 <h4 style="margin: 0; color: #455b95;" id="PRICE_5">&#x20B9; [[${PRICE_5}]]</h4>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+		                                 	<h6 style="margin: 0; ">[[${#dates.format(flightDate5, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="row" style="padding: 0 18px 10px 18px;">
+										 <div class="col-5" style="padding: 0; text-align: left;">
+		                                 	<th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_5_CITYONE}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_5_CITYONE}]])</p>
+		                                 	</th:block>
+	                                 	</div>
+										 <div class="col-2" style="padding: 0; text-align: center;"><i class="fa fa-solid fa-plane-departure"></i></div>
+										 <div class="col-5" style="padding: 0; text-align: right;">
+		                                     <th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_5_CITYTWO}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_5_CITYTWO}]])</p>
+		                                 	</th:block>
+		                                 </div>
+									 </div>
+									 <div style="background-color: #e3f8e3; padding: 2px 0; display: flex;">
+										 <i style="padding: 4px 2px 0 4px; " class="fa fa-brands fa-slack"></i> &nbsp;<p style="margin: 0; font-size: 14px;">Rs.500 OFF on BOBCHA, Plus upto 10% on GOABU</p>
+									 </div>
+	                            </div>
+                            </th:block>
+                       </a>
+                   </div>
+                   <div class="col-md-2 col-2 text-center cards_margin">
+                         <a th:href="${PRICE_6_LINK}" style="text-decoration: none;">
+							 <th:block th:if="${PRICE_6_LINK} != ''">
+	                             <div class="card_wrp_mob shadow">
+	                                 <div class="img_card_boxs" style="margin: 2px 10px; border-radius: 7px; display: flex; align-items: center; justify-content: space-between;">
+	                                 	<th:block th:if="${brand6} != null">
+											 <div style="display: flex;">
+		                                 		<img class="shadow" alt="" th:src="@{${brand6.photosImagePath}}" width="35" height="35" style="border-radius: 7px;">
+		                                 		<h5 style="margin: 0; padding-top: 6px;">&nbsp;[[${brand6.name}]]</h5>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+											 <div style="padding-top: 4px;">
+												 <h4 style="margin: 0; color: #455b95;" id="PRICE_6">&#x20B9; [[${PRICE_6}]]</h4>
+											 </div>
+											 <div style="color: grey;"><i class="fa fa-solid fa-arrow-right"></i></div>
+		                                 	<h6 style="margin: 0; ">[[${#dates.format(flightDate6, 'dd MMM, E')}]]</h6>
+		                                 	
+	                                 	</th:block>
+	                                 </div>
+	                                 <div class="row" style="padding: 0 18px 10px 18px;">
+										 <div class="col-5" style="padding: 0; text-align: left;">
+		                                 	<th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_6_CITYONE}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_6_CITYONE}]])</p>
+		                                 	</th:block>
+	                                 	</div>
+										 <div class="col-2" style="padding: 0; text-align: center;"><i class="fa fa-solid fa-plane-departure"></i></div>
+										 <div class="col-5" style="padding: 0; text-align: right;">
+		                                     <th:block th:each="city : ${cities}">
+		                                 	<p th:if="${city.code} == ${PRICE_6_CITYTWO}" style="margin: 0;"><span class="city_name_mob" >[[${city.cityName}]]</span> ([[${PRICE_6_CITYTWO}]])</p>
+		                                 	</th:block>
+		                                 </div>
+									 </div>
+									 <div style="background-color: #e3f8e3; padding: 2px 0; display: flex;">
+										 <i style="padding: 4px 2px 0 4px; " class="fa fa-brands fa-slack"></i> &nbsp;<p style="margin: 0; font-size: 14px;">Rs.500 OFF on BOBCHA, Plus upto 10% on GOABU</p>
+									 </div>
+	                            </div>
+                            </th:block>
+                       </a>
+                   </div>
+                   </div></div>
+			</div>
      </div></div></div>
 
 <!-- Ad Offers -->
-<div class="ad_Offers" style="height: 500px;">
-	<div style="width: 80%; margin: 0 auto;">
+<div class="ad_Offers" style="height: 500px; margin-top: 10px;">
+	<div class="media-hide"  style="width: 80%; margin: 0 auto;">
     	<div class="tab folder_style col-sm-3"><h2 style="box-shadow: none !important;">Exclusive Deals</h2></div>
 	</div>
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleIndicators" class="carousel slide style_container" data-bs-ride="carousel" style="background: white;">
+	   <h2 class="media_status" style="padding: 10px 0 5px 0; font-size: 18px;">Exclusive Deals</h2>
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
   </div>
-  <div class="carousel-inner carousel_inners style_container" style="padding: 0 10px 10px !important;">
-    <div class="carousel-item active contained" data-interval="4000" style="padding: 15px 15px;">
+  <div class="carousel-inner carousel_inners" style="padding: 0 10px 10px !important;">
+    <div class="carousel-item active " data-interval="4000" style="padding: 15px 15px;">
         
         <div class="row">
-	    	<div class="col" style="float: left;">
+	    	<div class="col-md-3 col-6">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 col-6">
             <div class="cards">
                 <div class="cards-box">
                     <div class="cards-img shadow"></div>
                     <div class="cards-dialogue shadow">
                         <div class="cards-text">
-                            <h3>Stop At Nothing</h3><br>
-                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+                            <span><p style="padding-left: 5px;">something to write here...</p></span>
                         </div>
-                        <a class="btn btn-primary">Book Now</a>
+                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
                     </div>
                 </div>
             </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 media-hide">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 media-hide">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        
-	        <div class="col" style="float: left;">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
@@ -920,154 +1335,125 @@ body {
         
     </div>
       
-    <div class="carousel-item contained" data-interval="4000" style="padding: 15px 15px;">
+    <div class="carousel-item " data-interval="4000" style="padding: 15px 15px;">
       <div class="row">
-	    	<div class="col" style="float: left;">
+	    	<div class="col-md-3 col-6">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 col-6">
             <div class="cards">
                 <div class="cards-box">
                     <div class="cards-img shadow"></div>
                     <div class="cards-dialogue shadow">
                         <div class="cards-text">
-                            <h3>Stop At Nothing</h3><br>
-                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+                            <span><p style="padding-left: 5px;">something to write here...</p></span>
                         </div>
-                        <a class="btn btn-primary">Book Now</a>
+                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
                     </div>
                 </div>
             </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 media-hide">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 media-hide">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        
-	        <div class="col" style="float: left;">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
     	</div>
     </div>
-    <div class="carousel-item contained" data-interval="4000" style="padding: 15px 15px;">
+    <div class="carousel-item " data-interval="4000" style="padding: 15px 15px;">
     	<div class="row">
-	    	<div class="col" style="float: left;">
+	    	<div class="col-md-3 col-6">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 col-6">
             <div class="cards">
                 <div class="cards-box">
                     <div class="cards-img shadow"></div>
                     <div class="cards-dialogue shadow">
                         <div class="cards-text">
-                            <h3>Stop At Nothing</h3><br>
-                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+                            <span><p style="padding-left: 5px;">something to write here...</p></span>
                         </div>
-                        <a class="btn btn-primary">Book Now</a>
+                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
                     </div>
                 </div>
             </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 media-hide">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="col" style="float: left;">
+	        <div class="col-md-3 media-hide">
 	            <div class="cards">
 	                <div class="cards-box">
 	                    <div class="cards-img shadow"></div>
 	                    <div class="cards-dialogue shadow">
 	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
+	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
+	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
 	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
+	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
 	        
-	        <div class="col" style="float: left;">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3>Stop At Nothing</h3><br>
-	                            <span><p>something to write here...</p><p>something to write here...</p><p>something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
     	</div>
       
         
@@ -1096,10 +1482,13 @@ body {
 
 <!-- Super Offers -->
 <div class="popular_destinations" style="margin-bottom: 30px;">
-	<div style="width: 80%; margin: 0 auto;">
+	<div  class="media-hide" style="width: 80%; margin: 0 auto;">
 	    <div class="tab folder_style col-sm-3" ><h2 class="headerStyle">Popular <span>Destinations</span></h2></div>
 	</div>
-    <div class="container style_container">
+    <div class="container" id="destinationDiv">
+		<div class="style_container">
+			
+	   <h2 class="media_status" style="padding: 10px 0 5px 10px; font-size: 18px;">Destinations</h2>
         <div class="row">
 	        <span class="choose_your">
 	             
@@ -1187,15 +1576,17 @@ body {
              </div>
              </div>
    		</div>
+		</div>
 	</div>
 
 
 <!-- Get Inspiration -->
 <div class="get_inspiratio" style="padding-bottom: 100px;">
-	<div style="width: 80%; margin: 0 auto;">
+	<div  class="media-hide" style="width: 80%; margin: 0 auto;">
 	    <div class="tab folder_style col-sm-4 "><h2 class="headerStyle font_resizerer">Get inspiration <span>for your next trip</span></h2></div>
 	</div>
       <div class="container style_container" style="padding: 20px 10px !important;">
+	   	<h2 class="media_status" style="padding: 0px 0 5px 10px; font-size: 18px;">Get inspiration</h2>
         <span class="choose_your">
              </span>
           <div class="deal_custom">
@@ -1248,6 +1639,69 @@ body {
       </div> 
 
 
+<!-- Sliding tabs controller-->
+<script>
+    // JavaScript for sliding functionality
+    const setsWrapper = document.querySelector('.sets-wrapper');
+    const indicator = document.getElementById('slider-indicator');
+    const indicatorDots = [];
+
+    let currentIndex = 0;
+
+    function showSets(index) {
+        const offset = -index * 50 + '%';
+        setsWrapper.style.transform = 'translateX(' + offset + ')';
+
+        // Update active indicator dot
+        indicatorDots.forEach(dot => dot.classList.remove('active'));
+        indicatorDots[index / 2].classList.add('active');
+    }
+
+    function updateIndicatorDots() {
+        indicatorDots.forEach(dot => dot.remove());
+        for (let i = 0; i < 4; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('indicator-dot');
+            dot.addEventListener('click', () => showSets(i * 2));
+            indicator.appendChild(dot);
+            indicatorDots.push(dot);
+        }
+        showSets(0);
+    }
+
+    updateIndicatorDots();
+
+    function nextSets() {
+        currentIndex = Math.min(currentIndex + 2, 6);
+        showSets(currentIndex);
+    }
+
+    function prevSets() {
+        currentIndex = Math.max(currentIndex - 2, 0);
+        showSets(currentIndex);
+    }
+
+    // Swipe gestures for mobile
+    let touchStartX;
+
+    function handleTouchStart(event) {
+        touchStartX = event.touches[0].clientX;
+    }
+
+    function handleTouchEnd(event) {
+        const touchEndX = event.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+
+        if (deltaX > 20) {
+            prevSets();
+        } else if (deltaX < -20) {
+            nextSets();
+        }
+    }
+
+    document.getElementById('slider-container').addEventListener('touchstart', handleTouchStart, false);
+    document.getElementById('slider-container').addEventListener('touchend', handleTouchEnd, false);
+</script>
    
 <!-- left to right scroll -->
 <script>

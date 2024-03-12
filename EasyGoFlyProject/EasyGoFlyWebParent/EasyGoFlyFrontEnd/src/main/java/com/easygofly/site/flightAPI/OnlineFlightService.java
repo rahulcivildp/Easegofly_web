@@ -38,20 +38,20 @@ public class OnlineFlightService {
         connection.setDoOutput(true);
 
         // Create the request body
-        String requestBody = "{"
-        		+ "\"ClientId\": \"tboprod\", "
-        		+ "\"UserName\": \"CCUA927\", "
-        		+ "\"Password\": \"#API@Air&72\", "
-        		+ "\"EndUserIp\": \"89.116.231.35\""
-        		+ "}";
+//        String requestBody = "{"
+//        		+ "\"ClientId\": \"tboprod\", "
+//        		+ "\"UserName\": \"CCUA927\", "
+//        		+ "\"Password\": \"#API@Air&72\", "
+//        		+ "\"EndUserIp\": \"89.116.231.35\""
+//        		+ "}";
         
         //Test Credentials
-//      String requestBody = "{"
-//      		+ "\"ClientId\": \"ApiIntegrationNew\", "
-//      		+ "\"UserName\": \"aladdin\", "
-//      		+ "\"Password\": \"aladdin@1234\", "
-//      		+ "\"EndUserIp\": \"89.116.231.35\""
-//      		+ "}";
+      String requestBody = "{"
+      		+ "\"ClientId\": \"ApiIntegrationNew\", "
+      		+ "\"UserName\": \"aladdin\", "
+      		+ "\"Password\": \"aladdin@1234\", "
+      		+ "\"EndUserIp\": \"89.116.231.35\""
+      		+ "}";
         
         System.out.println(requestBody);
         logService.generateLog(requestBody);
@@ -593,4 +593,78 @@ public class OnlineFlightService {
 		bufferedReader.close();
 		return responseCode;
 	}
+
+	public int apiAirIQTicket(HttpURLConnection connection, StringBuilder responseBody, String requestBody, String auth)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        connection.setRequestProperty("api-key", "NTMzNDUwMDpBSVJJUSBURVNUIEFQSToxODkxOTMwMDM1OTk2OlFRYjhLVjNFMW9UV05RY1NWL0Vtcm9UYXFKTSs5dkZvaHo0RzM4WWhwTDhsamNqR3pPN1dJSHhVQ2pCSzNRcW0=");
+        
+        connection.setRequestProperty("Authorization", auth);
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
+	public int apiAirIQTicketDetails(HttpURLConnection connection, StringBuilder responseBody, String auth)
+			throws IOException {
+		
+        // Set the request method to GET
+        connection.setRequestMethod("GET");
+        
+        // Set request headers (if required)
+        
+        connection.setRequestProperty("api-key", "NTMzNDUwMDpBSVJJUSBURVNUIEFQSToxODkxOTMwMDM1OTk2OlFRYjhLVjNFMW9UV05RY1NWL0Vtcm9UYXFKTSs5dkZvaHo0RzM4WWhwTDhsamNqR3pPN1dJSHhVQ2pCSzNRcW0=");
+        
+        connection.setRequestProperty("Authorization", auth);
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
 }

@@ -2,8 +2,13 @@
 <html xmlns:th=http://www.thymeleaf.org>
 
 <head th:replace="fragments :: page_head('About Page ', 'none')"></head>
+<style>
+	@media screen and (max-width: 700px) {
+		
+	}
+</style>
 <body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'" >
-	<div style="background-color: #00000047;">
+	<div id="aboutId" style="background-color: #00000047; height: 100vh;">
 	<!-- ======= Header ======= -->
 	  <header id="header" class="fixed-top d-flex align-items-center" >
 	  	<div th:replace="fragments :: page_header('tag')"></div>
@@ -22,19 +27,19 @@
 	  <script src="assets/js/main.js"></script>
 	  
 	  <div th:replace="whatsapp :: content"></div>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+	<br class="media-hide">
+	<br class="media-hide">
+	<br class="media-hide">
+	<br class="media-hide">
+	<br class="media-hide">
 	<div th:replace="about/about-fragments :: content"></div>
-	
-	
- <footer th:replace="fragments :: page_footer"></footer>
 	
 	  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 	
 	 <script type="text/javascript" th:src="@{/js/login.js}"></script>
 	</div>
+	
+	
+ <footer th:replace="fragments :: page_footer"></footer>
 </body>
 </html>

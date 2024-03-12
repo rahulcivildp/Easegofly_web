@@ -63,9 +63,72 @@
 			}
 		}
 		
-		@media ( min-width : 576px) {
-			
-		}
+@media screen and (max-width: 700px) {
+	#onewayDropdown ul {
+	    bottom: 44px;
+	    height: 30vh;
+	    overflow-y: scroll;
+	}
+	#returnDropdown ul {
+	    bottom: 44px;
+	    height: 30vh;
+	    overflow-y: scroll;
+	}
+	#interReturnDropdown ul {
+	    bottom: 244px;
+	    height: 30vh;
+	    overflow-y: scroll;
+	}
+	#interDropdown ul {
+	    bottom: 244px;
+	    height: 30vh;
+	    overflow-y: scroll;
+	}
+	
+	#onewayDropdown ul::-webkit-scrollbar {
+	  -webkit-appearance: none;
+	  width: 10px;
+	}
+	
+	#onewayDropdown ul::-webkit-scrollbar-thumb {
+	  border-radius: 5px;
+	  background-color:#b7b7b7;
+	  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+	}
+	
+	#returnDropdown ul::-webkit-scrollbar {
+	  -webkit-appearance: none;
+	  width: 10px;
+	}
+	
+	#returnDropdown ul::-webkit-scrollbar-thumb {
+	  border-radius: 5px;
+	  background-color:#b7b7b7;
+	  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+	}
+	
+	#interDropdown ul::-webkit-scrollbar {
+	  -webkit-appearance: none;
+	  width: 10px;
+	}
+	
+	#interDropdown ul::-webkit-scrollbar-thumb {
+	  border-radius: 5px;
+	  background-color:#b7b7b7;
+	  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+	}
+	
+	#interReturnDropdown ul::-webkit-scrollbar {
+	  -webkit-appearance: none;
+	  width: 10px;
+	}
+	
+	#interReturnDropdown ul::-webkit-scrollbar-thumb {
+	  border-radius: 5px;
+	  background-color:#b7b7b7;
+	  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+	}
+}
 		
 /*the container must be positioned relative:*/
 		.autocomplete {
@@ -385,1276 +448,1278 @@
 </th:block>
 
 <body>
-	<div class="container searchBoxMargin" id="searchBox" style="justify-content: center;">
-		<div class="row">
-			<div class="radio_sec media-hide">
-				<div class="radios" id="radio-1">
-					<input type="radio" class="radio" checked="checked" value="One Way">
-
-					<lebel>One Way</lebel>
-				</div>
-				<div class="radios" id="radio-2">
-					<input type="radio" class="radio" value="Round Trip">
-
-					<lebel>Round Trip </lebel>
-				</div>
-				<div class="radios" id="radio-3">
-					<input type="radio" class="radio" value="Multi City">
-
-					<lebel>International</lebel>
-				</div>
-
-			</div>
-			<div class="media_status">
-				<div class="row ">
-					<div class="col-4 ">
-						<div class="radiosMobile toggleBox" id="radio-4">
-							<lebel>One Way</lebel>
-						</div>
+	<div style="width: 100%; " id="searchMain" class="searchBoxTransform">
+		<div class="container topMarginSearch" id="searchBox" style="display: flex; justify-content: center;">
+			<div class="row">
+				<div class="radio_sec media-hide">
+					<div class="radios" id="radio-1">
+						<input type="radio" class="radio" checked="checked" value="One Way">
+	
+						<lebel>One Way</lebel>
 					</div>
-					<div class="col-4 ">
-						<div class="radiosMobile" id="radio-5">
-							<lebel>Round Trip </lebel>
-						</div>
+					<div class="radios" id="radio-2">
+						<input type="radio" class="radio" value="Round Trip">
+	
+						<lebel>Round Trip </lebel>
 					</div>
-					<div class="col-4 ">
-						<div class="radiosMobile" id="radio-6">
-							<lebel>International</lebel>
-						</div>
+					<div class="radios" id="radio-3">
+						<input type="radio" class="radio" value="Multi City">
+	
+						<lebel>International</lebel>
 					</div>
 	
 				</div>
-			</div>
-			<div style="height: 10px;"></div>
-			<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 15px;">
-				<hr style="width: 95%;">
-			</div>
-			<div class="radio_search empty1" id="radio_search_1">
-				<form th:action="@{/flight_search_save}" method="get" class="media-hide">
-					<div class="col-12">
-						<input type="hidden" name="tripType" value="oneWay">
-						<div class="col-md-5 col-12" style=" float: left; ">
-
-							<div class="col-md-6 col-6 aligner form-floating" id="aligner3">
-								<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" 
-									placeholder="Depurture City" list="cityOneList"
-									oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
-								<datalist id="cityOneList">
-									<th:block th:each="city : ${cities}">
-										<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
-									</th:block>
-								</datalist>
-								<label class="labelStyle labelSetting" for="cityOne"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
-									From</label>
-							</div>
-							<div class="col-md-6 col-6 aligner form-floating media-hide" id="aligner4">
-								<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo"
-									placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" style="text-align: end;"
-									required>
-								<datalist id="cityTwoList">
-									<th:block th:each="city : ${cities}">
-										<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
-									</th:block>
-								</datalist>
-								<label class="labelStyle labelSetting" for="cityTwo" style="text-align: end;"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
-									To</label>
-							</div>
-							
-							
-						</div>
-			
-						<div class="col-md-7 col-12" style=" float: left;">
-
-							<div class="col-md-4 col-6 aligner">
-								<label class="paddingDate" for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
-									Departure</label>
-								<input type="date" name="date" class="form-control input_calender"
-									id="floatingInputDepurture" required>
-								
-							</div>
-							<div class="col-md-4 col-6 aligner" id="input_roundtrip"><!-- id="input_roundtrip" --> 
-								<label class="floatRightMobile paddingDate" ><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
-									Return</label>
-								<!--<input type="date" class="form-control input_calender" disabled>-->
-								<div class="returnButtonStyle floatRightMobile"><p>dd-mm-yyyy</p></div>
-								
-							</div>
-							
-							
-			
-							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
-								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-									<div class="dropdown">
-										<div class="" type="button" id="drop_button"
-											style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
-											onmouseover="dropdownOpen(this)" onclick="dropdownToggle(this)" onmouseleave="dropdownClose(this)">
-											<h5 id="result3"></h5>
-											<h5 id="result"></h5>
-											<input type="hidden" name="something" id="passengerNum1" value="">
-											<h1 class="n-text" id="n-text-1">Travelers</h1>
-										</div>
-										<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
-											onmouseleave="dropdownClose(this)">
-											<li>
-												<b>Class</b>
-												<select class="pass_list-1 form-control" name="journeyClass"
-													required="required">
-													<option value="Economy">Economy</option>
-													<option value="Premium Economy">Premium Economy</option>
-													<option value="Business">Business</option>
-													<option value="Premium Business">Premium Business</option>
-													<option value="First Class">First Class</option>
-												</select>
-											</li>
-											<li>
-												<b>Adult</b>
-												<p>(12+ yrs)</p>
-												<select class="pass_list1 form-control" name="adultNum"
-													required="required">
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Children</b>
-												<p>(2-12 yrs)</p>
-												<select class="pass_list2 form-control" name="childNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Infant</b>
-												<p>Under 2yrs</p>
-												<select class="pass_list3 form-control" name="infantNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<button type="button" id="submit"
-													style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
-									<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</form>
-				
-				<form th:action="@{/flight_search_save}" method="get" class="media_status">
-					<div class="col-12">
-						<input type="hidden" name="tripType" value="oneWay">
-						<div class="col-md-5 col-12" style=" float: left; ">
-							<div class="media_status_flex_CPN" style="justify-content: center;">
-								<div class="row" style="width: 98%;">
-									<div class="col-md-5 col-5 form-floating" id="aligner3" style="padding: 0;">
-										<input type="search" class="form-control hill1 input_styles_mobile autocomplete" name="cityOne" id="cityOneMobile"
-											placeholder="Depurture City" 
-											oninput="checkCityCodeMatch(document.getElementById('cityTwoMobile'))" required>
-										<label class="labelStyle labelSetting" for="cityOneMobile">
-											From</label>
-									</div>
-									<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
-										<div class="">
-											<img th:src="@{/images/returns-.png}" style="width: 100%;">
-										</div>
-									</div>
-									<div class="col-md-5 col-5 form-floating " id="aligner4" style="padding: 0;">
-										<input type="search" class="form-control hill2 input_styles_mobile autocomplete" name="cityTwo" id="cityTwoMobile"
-											placeholder="Arrival City" oninput="checkCityCodeMatch(this)" style="direction: rtl;"
-											required>
-										<label class="labelStyle labelSetting" for="cityTwoMobile" style="direction: rtl;">
-											To</label>
-									</div>
-									
-									<div class="col-md-6 col-6 form-floating" id="aligner3" style="padding: 0;">
-										<div id="cityOneLabel" class="floatingResponseDiv"></div>
-									</div>
-									<div class="col-md-6 col-6 form-floating " id="aligner4" style="padding: 0;">
-										<div id="cityTwoLabel" class="floatingResponseDiv" style="text-align: right;"></div>
-									</div>
-								</div>
-							</div>
-							
-						</div>
-						
-						<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
-							<hr style="width: 95%;">
-						</div>
-						<div class="col-md-7 col-12" style=" float: left;">
-
-							<div class="col-md-4 col-6 aligner">
-								<label class="paddingDate" for="floatingInputDepurtureMobile">
-									Departure</label>
-								<input type="date" name="date" class="form-control input_calender"
-									id="floatingInputDepurtureMobile" required>
-								<div id="dateLabel1" class="floatingResponseDivDate media_status_flex_CPN" style="margin-top: 19px; height: 30px;">Selected Day</div>
-
-							</div>
-							<div class="col-md-4 col-6 aligner" id="input_roundtrip_mobile"><!-- id="input_roundtrip" --> 
-								<label class="floatRightMobile paddingDate" >
-									Return</label>
-								<!--<input type="date" class="form-control input_calender" disabled>-->
-								<div class="returnButtonStyle floatRightMobile"><p>dd-mm-yyyy</p></div>
-								<div class="floatingResponseDivDate media_status_flex_CPN" style="float: right; height: 5px; margin-top: 7px;">Book return</div>
-
-							</div>
-							
-							
-							<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 15px;">
-								<hr style="width: 95%;">
-							</div>
-			
-							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
-								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-									<div class="dropdown">
-										<button class="" type="button" id="drop_button"
-											style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
-											onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-											<div class="row" style="padding-top: 6px;">
-												<div class="col-6">
-													<h5 id="resultMobile3"></h5>
-												</div>
-												<div class="col-6">
-													<h5 id="resultMobile"></h5>
-												</div>
-											</div>
-											<input type="hidden" name="something" id="passengerNum1" value="">
-											<h1 class="n-text" id="n-text-2">Travelers</h1>
-										</button>
-										<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
-											onmouseleave="dropdownClose(this)">
-											<li>
-												<b>Class</b>
-												<select class="pass_list-10 form-control" name="journeyClass"
-													required="required">
-													<option value="Economy">Economy</option>
-													<option value="Premium Economy">Premium Economy</option>
-													<option value="Business">Business</option>
-													<option value="Premium Business">Premium Business</option>
-													<option value="First Class">First Class</option>
-												</select>
-											</li>
-											<li>
-												<b>Adult</b>
-												<p>(12+ yrs)</p>
-												<select class="pass_list11 form-control" name="adultNum"
-													required="required">
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Children</b>
-												<p>(2-12 yrs)</p>
-												<select class="pass_list12 form-control" name="childNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Infant</b>
-												<p>Under 2yrs</p>
-												<select class="pass_list13 form-control" name="infantNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<button type="button" id="submitMobile"
-													style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
-									<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="radio_search empty1" id="radio_search_2">
-				<form th:action="@{/flight_search_return_save}" method="get" class="media-hide">
-					<div class="col-12">
-						<input type="hidden" name="tripType" value="twoWays">
-						<div class="col-md-5 col-12" style=" float: left;">
-
-							<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
-								<input type="search" class="form-control hill1 input_styles" name="cityOne"
-									id="cityOne2" placeholder="Depurture City" list="cityOneList2"
-									oninput="checkCityCodeMatch2(document.getElementById('cityTwo2'))">
-								<datalist id="cityOneList2">
-									<th:block th:each="city : ${cities}">
-										<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
-									</th:block>
-								</datalist>
-								<label class="labelStyle" for="floatingInput"><i
-										class="fa fa-circle-o-notch fa-spin"></i> From</label>
-							</div>
-							<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
-								<input type="search" class="form-control hill2 input_styles" name="cityTwo"
-									id="cityTwo2" placeholder="Arrival City" list="cityTwoList2"
-									oninput="checkCityCodeMatch2(this)">
-								<datalist id="cityTwoList2">
-									<th:block th:each="city : ${cities}">
-										<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
-									</th:block>
-								</datalist>
-								<label class="labelStyle" for="floatingInput"><i
-										class="fa fa-circle-o-notch fa-spin"></i> To</label>
+				<div class="media_status">
+					<div class="row ">
+						<div class="col-4 ">
+							<div class="radiosMobile toggleBox" id="radio-4">
+								<lebel>One Way</lebel>
 							</div>
 						</div>
-						<div class="col-md-7 col-12" style=" float: left;">
-
-							<div class="col-md-4 col-6 aligner">
-								<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
-									Departure</label>
-								<input type="date" class="form-control input_calender" name="date"
-									id="floatingInputDepurtureReturn" required>
-
+						<div class="col-4 ">
+							<div class="radiosMobile" id="radio-5">
+								<lebel>Round Trip </lebel>
 							</div>
-							<div class="col-md-4 col-6 aligner">
-								<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
-								<input type="date" class="form-control input_calender" name="return_date"
-									id="floatingInputReturnReturn" required>
-
-							</div>
-							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
-								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-									<div class="dropdown">
-										<div class="" type="button" id="drop_button2"
-											style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
-											onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-											<span id="result4"></span>
-											<span id="result1"></span>
-											<h1 class="n-text" id="n-text-3">Travelers</h1>
-										</div>
-										<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
-											onmouseleave="dropdownClose(this)">
-											<li>
-												<b>Class</b>
-												<select class="pass_list-2 form-control" name="journeyClass"
-													required="required">
-													<option value="Economy">Economy</option>
-													<option value="Premium Economy">Premium Economy</option>
-													<option value="Business">Business</option>
-													<option value="Premium Business">Premium Business</option>
-													<option value="First Class">First Class</option>
-												</select>
-											</li>
-											<li>
-												<b>Adult</b>
-												<p>(12+ yrs)</p>
-												<select class="pass_list4 form-control" name="adultNum"
-													required="required">
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Children</b>
-												<p>(2-12 yrs)</p>
-												<select class="pass_list5 form-control" name="childNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Infant</b>
-												<p>Under 2yrs</p>
-												<select class="pass_list6 form-control" name="infantNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<button type="button" id="submit1"
-													style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
-									<input class="submit_btns" type="submit" id="search" name="search" value="Search">
-								</div>
-							</div>
-
 						</div>
-					</div>
-				</form>
-				
-				<form th:action="@{/flight_search_return_save}" method="get" class="media_status">
-					<div class="col-12">
-						<input type="hidden" name="tripType" value="twoWays">
-						<div class="col-md-5 col-12" style=" float: left; ">
-							<div class="media_status_flex_CPN" style="justify-content: center;">
-								<div class="row" style="width: 98%;">
-									<div class="col-md-5 col-5  form-floating" id="aligner3" style="padding: 0;">
-										<input type="search" class="form-control hill1 input_styles_mobile autocomplete" name="cityOne" id="cityOne2Mobile" 
-											placeholder="Depurture City"
-											oninput="checkCityCodeMatch(document.getElementById('cityTwo2Mobile'))" required>
-										<label class="labelStyle labelSetting" for="cityOne2Mobile">
-											From</label>
-									</div>
-									<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
-										<div class="">
-											<img th:src="@{/images/returns-.png}" style="width: 100%;">
-										</div>
-									</div>
-									<div class="col-md-5 col-5  form-floating" id="aligner4" style="padding: 0;">
-										<input type="search" class="form-control hill2 input_styles_mobile autocomplete" name="cityTwo" id="cityTwo2Mobile"
-											placeholder="Arrival City" oninput="checkCityCodeMatch(this)"  style="direction: rtl;"
-											required>
-										<label class="labelStyle labelSetting" for="cityTwo2Mobile" style="direction: rtl;">
-											To</label>
-									</div>
-									
-									<div class="col-md-6 col-6  form-floating" id="aligner3" style="padding: 0;">
-										<div id="cityOne2Label" class="floatingResponseDiv"></div>
-									</div>
-									<div class="col-md-6 col-6  form-floating " id="aligner4" style="padding: 0;">
-										<div id="cityTwo2Label" class="floatingResponseDiv" style="text-align: right;"></div>
-									</div>
-								</div>
+						<div class="col-4 ">
+							<div class="radiosMobile" id="radio-6">
+								<lebel>International</lebel>
 							</div>
-							
 						</div>
-						<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
-							<hr style="width: 95%;">
-						</div>
-						
-						<div class="col-md-7 col-12" style=" float: left;">
-
-							<div class="col-md-4 col-6 aligner">
-								<label for="floatingInput" style="margin-bottom: 10px;">
-									Departure</label>
-								<input type="date" class="form-control input_calender" name="date"
-									id="floatingInputDepurtureReturn1" required>
-								<div id="dateLabel2" class="floatingResponseDivDate media_status_flex_CPN" style="margin-top: 19px; height: 30px;">Selected Day</div>
-							</div>
-							<div class="col-md-4 col-6 aligner">
-								<label for="floatingInput" style="float: right; margin-bottom: 10px;"> Return</label>
-								<input type="date" class="form-control input_calender" name="return_date" style="float: right;"
-									id="floatingInputReturnReturn1" required>
-								<div id="dateLabel3" class="floatingResponseDivDate media_status_flex_CPN" style="float: right; height: 9px; margin-top: 18px;">Selected Day</div>
-							</div>
-							
-							
-							<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 15px;">
-								<hr style="width: 95%;">
-							</div>
-							
-							<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
-								<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-									<div class="dropdown">
-										<button class="btn" type="button" id="drop_button2"
-											style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
-											onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-											<div class="row" style="padding-top: 6px;">
-												<div class="col-6">
-													<h5 id="result4MobileReturn"></h5>
-												</div>
-												<div class="col-6">
-													<h5 id="result1MobileReturn"></h5>
-												</div>
-											</div>
-											<h1 class="n-text" id="n-text-4">Travelers</h1>
-										</button>
-										<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
-											onmouseleave="dropdownClose(this)">
-											<li>
-												<b>Class</b>
-												<select class="pass_list-20 form-control" name="journeyClass"
-													required="required">
-													<option value="Economy">Economy</option>
-													<option value="Premium Economy">Premium Economy</option>
-													<option value="Business">Business</option>
-													<option value="Premium Business">Premium Business</option>
-													<option value="First Class">First Class</option>
-												</select>
-											</li>
-											<li>
-												<b>Adult</b>
-												<p>(12+ yrs)</p>
-												<select class="pass_list16 form-control" name="adultNum"
-													required="required">
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Children</b>
-												<p>(2-12 yrs)</p>
-												<select class="pass_list17 form-control" name="childNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<b>Infant</b>
-												<p>Under 2yrs</p>
-												<select class="pass_list18 form-control" name="infantNum">
-													<option value="0">0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</li>
-											<li>
-												<button type="button" id="submit1MobileReturn"
-													style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
-									<input class="submit_btns" type="submit" id="search" name="search" value="Search">
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="radio_search " id="radio_search_3">
-				<div class="media-hide" style="display: flex; justify-content: space-between;">
-					<div style="display: flex;">
-						<div id="return-previous" style="cursor: pointer; display: none;" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="0" >
-							<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
-									th:src="@{/images/buttons/Arrow-left-icon.png}" style="width: 100%;"></div>
-							<p style="font-size: 20px; font-weight: 600; margin: 0; padding-left: 5px;">One Way</p>
-						</div>
-					</div>
-					<div style="display: flex;">
-						<div id="return-next" style="cursor: pointer; display: flex;" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="1" >
-							<p style="font-size: 20px; font-weight: 600; margin: 0; padding-right: 5px;">Return Trip</p>
-							<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
-									th:src="@{/images/buttons/Arrow-right-icon.png}" style="width: 100%;"></div>
-						</div>
+		
 					</div>
 				</div>
-				<div class="media-hide" >
-					<div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
-					  <div class="carousel-inner">
-					    <div class="carousel-item active">
-					      <div class="empty1" style="height: 115px;">
-								<form th:action="@{/flight_international_search_save}" method="get">
-									<div class=" col-12">
-										<input type="hidden" name="tripType" value="international">
-										<div class="col-md-5 col-12" style=" float: left;">
-											<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
-												<input type="search" class="form-control hill1 input_styles" name="cityOne"
-													id="cityOne3" placeholder="Depurture City" list="cityOneList3"
-													oninput="checkCityCodeMatch3(document.getElementById('cityTwo3'))">
-												<datalist id="cityOneList3">
-													<th:block th:each="city : ${allCities}">
-														<option th:value="${city.cityName}">[[${city.country.name}]] -
-															[[${city.code}]] - [[${city.name}]]</option>
-													</th:block>
-												</datalist>
-												<label class="labelStyle" for="floatingInput"><i
-														class="fa fa-circle-o-notch fa-spin"></i> From</label>
-											</div>
-											<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
-												<input type="search" class="form-control hill2 input_styles" name="cityTwo"
-													id="cityTwo3" placeholder="Arrival City" list="cityTwoList4"
-													oninput="checkCityCodeMatch3(this)">
-												<datalist id="cityTwoList4">
-													<th:block th:each="city : ${allCities}">
-														<option th:value="${city.cityName}">[[${city.country.name}]] -
-															[[${city.code}]] - [[${city.name}]]</option>
-													</th:block>
-												</datalist>
-												<label class="labelStyle" for="floatingInput"><i
-														class="fa fa-circle-o-notch fa-spin"></i> To</label>
-											</div>
-										</div>
-										<div class="col-md-7 col-12" style=" float: left;">
-			
-											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInputInter"><i class="fa fa-circle-o-notch fa-spin"></i>
-													Departure</label>
-												<input type="date" class="form-control input_calender" name="date"
-													id="floatingInputInter" required>
-			
-											</div>
-											<div class="col-md-4 col-6 aligner" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="1" id="return_international_mobile">
-												<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
-													Return</label>
-												<input type="date" class="form-control input_calender" name="return_date"
-												 disabled>
-			
-											</div>
-											<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
-												<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-													<div class="dropdown">
-														<button class="drop_button_inter" type="button"
-															style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
-															onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-															<span id="resultInter2"></span>
-															<span id="resultInter1"></span>
-															<h1 class="n-text" id="n-text-5">Travelers</h1>
-														</button>
-														<ul class="dropdownMenu dropdowns-menu dropdownExpand deactive" onmouseover="dropdownOpen(this)"
-															onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
-															<li>
-																<b>Class</b>
-																<select class="pass_list-33 form-control" name="journeyClass"
-																	required="required">
-																	<option value="Economy">Economy</option>
-																	<option value="Premium Economy">Premium Economy</option>
-																	<option value="Business">Business</option>
-																	<option value="Premium Business">Premium Business</option>
-																	<option value="First Class">First Class</option>
-																</select>
-															</li>
-															<li>
-																<b>Adult</b>
-																<p>(12+ yrs)</p>
-																<select class="pass_list34 form-control" name="adultNum"
-																	required="required">
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Children</b>
-																<p>(2-12 yrs)</p>
-																<select class="pass_list35 form-control" name="childNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Infant</b>
-																<p>Under 2yrs</p>
-																<select class="pass_list36 form-control" name="infantNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<button type="button" id="submitInter"
-																	style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-															</li>
-														</ul>
-													</div>
-												</div>
-												<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
-													<input class="submit_btns" type="submit" id="search" name="search"
-														value="Search">
-												</div>
-											</div>
-			
-										</div>
-									</div>
-								</form>
-							</div>
-					    </div>
-					    <div class="carousel-item">
-					      <div class="empty1" style="height: 115px;">
-								<form th:action="@{/flight_international_search_return_save}" method="get">
-									<div class=" col-12">
-										<input type="hidden" name="tripType" value="twoWays">
-										<div class="col-md-5 col-12" style=" float: left;">
-											<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
-												<input type="search" class="form-control hill1 input_styles" name="cityOne"
-													id="cityOne4" placeholder="Depurture City" list="cityOneList4"
-													oninput="checkCityCodeMatch4(document.getElementById('cityTwo4'))">
-												<datalist id="cityOneList4">
-													<th:block th:each="city : ${allCities}">
-														<option th:value="${city.cityName}">[[${city.country.name}]] -
-															[[${city.code}]] - [[${city.name}]]</option>
-													</th:block>
-												</datalist>
-												<label class="labelStyle" for="floatingInput"><i
-														class="fa fa-circle-o-notch fa-spin"></i> From</label>
-											</div>
-											<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
-												<input type="search" class="form-control hill2 input_styles" name="cityTwo"
-													id="cityTwo4" placeholder="Arrival City" list="cityTwoList5"
-													oninput="checkCityCodeMatch4(this)">
-												<datalist id="cityTwoList5">
-													<th:block th:each="city : ${allCities}">
-														<option th:value="${city.cityName}">[[${city.country.name}]] -
-															[[${city.code}]] - [[${city.name}]]</option>
-													</th:block>
-												</datalist>
-												<label class="labelStyle" for="floatingInput"><i
-														class="fa fa-circle-o-notch fa-spin"></i> To</label>
-											</div>
-										</div>
-										<div class="col-md-7 col-12" style=" float: left;">
-			
-											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInter"><i class="fa fa-circle-o-notch fa-spin"></i>
-													Departure</label>
-												<input type="date" class="form-control input_calender" name="date"
-													id="floatingInter" required>
-			
-											</div>
-											<div class="col-md-4 col-6 aligner">
-												<label for="floatingReturnInter"><i class="fa fa-circle-o-notch fa-spin"></i>
-													Return</label>
-												<input type="date" class="form-control input_calender" name="return_date"
-													id="floatingReturnInter" required>
-			
-											</div>
-											<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
-												<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-													<div class="dropdown">
-														<button class="drop_button_inter" type="button"
-															style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
-															onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-															<span id="result4123"></span>
-															<span id="result1423"></span>
-															<h1 class="n-text" id="n-text-6">Travelers</h1>
-														</button>
-														<ul class="dropdownMenu dropdowns-menu dropdownExpand deactive" onmouseover="dropdownOpen(this)"
-															onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
-															<li>
-																<b>Class</b>
-																<select class="pass_list-112 form-control" name="journeyClass"
-																	required="required">
-																	<option value="Economy">Economy</option>
-																	<option value="Premium Economy">Premium Economy</option>
-																	<option value="Business">Business</option>
-																	<option value="Premium Business">Premium Business</option>
-																	<option value="First Class">First Class</option>
-																</select>
-															</li>
-															<li>
-																<b>Adult</b>
-																<p>(12+ yrs)</p>
-																<select class="pass_list114 form-control" name="adultNum"
-																	required="required">
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Children</b>
-																<p>(2-12 yrs)</p>
-																<select class="pass_list115 form-control" name="childNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Infant</b>
-																<p>Under 2yrs</p>
-																<select class="pass_list116 form-control" name="infantNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<button type="button" id="submit1123"
-																	style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-															</li>
-														</ul>
-													</div>
-												</div>
-												<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
-													<input class="submit_btns" type="submit" id="search-inter"
-														value="Search">
-												</div>
-											</div>
-			
-										</div>
-									</div>
-								</form>
-							</div>
-					    </div>
-					  </div>
-					</div>
-				</div>
-			
-				
-				<div class="media_status" style="justify-content: space-between;">
-					<div style="display: flex; padding-top: 17px;">
-						<div id="return-previous_mobile" style="cursor: pointer; display: none;" data-bs-target="#carouselExampleControlsNoTouchingMobile" data-bs-slide-to="0" >
-							<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
-									th:src="@{/images/buttons/Arrow-left-icon.png}" style="width: 100%;"></div>
-							<p style="font-size: 20px; font-weight: 600; margin: 0; padding-left: 5px;">One Way</p>
-						</div>
-					</div>
-					<div style="display: flex;">
-						<div id="return-next_mobile" style="cursor: pointer; display: flex;" data-bs-target="#carouselExampleControlsNoTouchingMobile" data-bs-slide-to="1" >
-							<p style="font-size: 20px; font-weight: 600; margin: 0; padding-right: 5px;">Return Trip</p>
-							<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
-									th:src="@{/images/buttons/Arrow-right-icon.png}" style="width: 100%;"></div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+				<div style="height: 10px;"></div>
+				<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 15px;">
 					<hr style="width: 95%;">
 				</div>
-						
-				<div class="media_status" >
-					<div id="carouselExampleControlsNoTouchingMobile" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
-					  <div class="carousel-inner">
-					    <div class="carousel-item active">
-					      <div class="empty1" style="height: 115px;">
-								<form th:action="@{/flight_international_search_save}" method="get">
-									<div class=" col-12">
-										<input type="hidden" name="tripType" value="international">
-										<div class="col-md-5 col-12" style=" float: left;">
-											<div class="media_status_flex_CPN" style="justify-content: center;">
-												<div class="row" style="width: 98%;">
-													<div class="col-md-5 col-5  form-floating" id="aligner1">
-														<input type="search" class="form-control hill1 input_styles input_styles_mobile autocomplete" name="cityOne"
-															id="cityOne5Mobile" placeholder="Depurture City" 
-															oninput="checkCityCodeMatch3(document.getElementById('cityTwo5Mobile'))">
-														<label class="labelStyle" for="floatingInput"> From</label>
-													</div>
-													<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
-														<div class="">
-															<img th:src="@{/images/returns-.png}" style="width: 100%;">
-														</div>
-													</div>
-													<div class="col-md-5 col-5  form-floating" id="aligner2">
-														<input type="search" class="form-control hill2 input_styles input_styles_mobile autocomplete" name="cityTwo"
-															id="cityTwo5Mobile" placeholder="Arrival City"  style="direction: rtl;"
-															oninput="checkCityCodeMatch3(this)">
-														<label class="labelStyle" for="floatingInput"  style="direction: rtl;"> To</label>
-													</div>
-													
-													<div class="col-md-6 col-6  form-floating" id="aligner3" style="padding: 0;">
-														<div id="cityOneLabelInter" class="floatingResponseDiv"></div>
-													</div>
-													<div class="col-md-6 col-6  form-floating " id="aligner4" style="padding: 0;">
-														<div id="cityTwoLabelInter" class="floatingResponseDiv" style="text-align: right;"></div>
-													</div>
-												</div>
+				<div class="radio_search empty1" id="radio_search_1">
+					<form th:action="@{/flight_search_save}" method="get" class="media-hide">
+						<div class="col-12">
+							<input type="hidden" name="tripType" value="oneWay">
+							<div class="col-md-5 col-12" style=" float: left; ">
+	
+								<div class="col-md-6 col-6 aligner form-floating" id="aligner3">
+									<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" 
+										placeholder="Depurture City" list="cityOneList"
+										oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
+									<datalist id="cityOneList">
+										<th:block th:each="city : ${cities}">
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+										</th:block>
+									</datalist>
+									<label class="labelStyle labelSetting" for="cityOne"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+										From</label>
+								</div>
+								<div class="col-md-6 col-6 aligner form-floating media-hide" id="aligner4">
+									<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo"
+										placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" style="text-align: end;"
+										required>
+									<datalist id="cityTwoList">
+										<th:block th:each="city : ${cities}">
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+										</th:block>
+									</datalist>
+									<label class="labelStyle labelSetting" for="cityTwo" style="text-align: end;"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+										To</label>
+								</div>
+								
+								
+							</div>
+				
+							<div class="col-md-7 col-12" style=" float: left;">
+	
+								<div class="col-md-4 col-6 aligner">
+									<label class="paddingDate" for="floatingInputDepurture"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+										Departure</label>
+									<input type="date" name="date" class="form-control input_calender"
+										id="floatingInputDepurture" required>
+									
+								</div>
+								<div class="col-md-4 col-6 aligner" id="input_roundtrip"><!-- id="input_roundtrip" --> 
+									<label class="floatRightMobile paddingDate" ><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+										Return</label>
+									<!--<input type="date" class="form-control input_calender" disabled>-->
+									<div class="returnButtonStyle floatRightMobile"><p>dd-mm-yyyy</p></div>
+									
+								</div>
+								
+								
+				
+								<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
+									<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+										<div class="dropdown">
+											<div class="" type="button" id="drop_button"
+												style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
+												onmouseover="dropdownOpen(this)" onclick="dropdownToggle(this)" onmouseleave="dropdownClose(this)">
+												<h5 id="result3"></h5>
+												<h5 id="result"></h5>
+												<input type="hidden" name="something" id="passengerNum1" value="">
+												<h1 class="n-text" id="n-text-1">Travelers</h1>
 											</div>
-										</div>
-										<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
-											<hr style="width: 95%;">
-										</div>
-										<div class="col-md-7 col-12" style=" float: left;">
-			
-											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInputInter">
-													Departure</label>
-												<input type="date" class="form-control input_calender" name="date"
-													id="floatingInputInterMobile" required>
-			
-											</div>
-											<div class="col-md-4 col-6 aligner" data-bs-target="#carouselExampleControlsNoTouchingMobile" data-bs-slide-to="1" id="return_international_mobile">
-												<label for="floatingInput">
-													Return</label>
-												<input type="date" class="form-control input_calender" name="return_date"
-												 disabled>
-			
-											</div>
-											
-											<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
-												<hr style="width: 95%;">
-											</div>
-						
-											<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
-												<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-													<div class="dropdown">
-														<button class="drop_button_inter_mobile" type="button"
-															style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
-															onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-															<div class="row" style="padding-top: 6px;">
-																<div class="col-6">
-																	<h5 id="resultInter2Mobile"></h5>
-																</div>
-																<div class="col-6">
-																	<h5 id="resultInter1Mobile"></h5>
-																</div>
-															</div>
-															<h1 class="n-text" id="n-text-7">Travelers</h1>
-														</button>
-														<ul class="dropdownMenu dropdowns-menu dropdownExpandMobile deactive" onmouseover="dropdownOpen(this)"
-															onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
-															<li>
-																<b>Class</b>
-																<select class="pass_list-30 form-control" name="journeyClass"
-																	required="required">
-																	<option value="Economy">Economy</option>
-																	<option value="Premium Economy">Premium Economy</option>
-																	<option value="Business">Business</option>
-																	<option value="Premium Business">Premium Business</option>
-																	<option value="First Class">First Class</option>
-																</select>
-															</li>
-															<li>
-																<b>Adult</b>
-																<p>(12+ yrs)</p>
-																<select class="pass_list31 form-control" name="adultNum"
-																	required="required">
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Children</b>
-																<p>(2-12 yrs)</p>
-																<select class="pass_list32 form-control" name="childNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Infant</b>
-																<p>Under 2yrs</p>
-																<select class="pass_list33 form-control" name="infantNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<button type="button" id="submitInterMobile"
-																	style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-															</li>
-														</ul>
-													</div>
-												</div>
-												<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px; margin-top: 6px;">
-													<input class="submit_btns" type="submit" id="search" name="search"
-														value="Search">
-												</div>
-											</div>
-			
+											<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
+												onmouseleave="dropdownClose(this)">
+												<li>
+													<b>Class</b>
+													<select class="pass_list-1 form-control" name="journeyClass"
+														required="required">
+														<option value="Economy">Economy</option>
+														<option value="Premium Economy">Premium Economy</option>
+														<option value="Business">Business</option>
+														<option value="Premium Business">Premium Business</option>
+														<option value="First Class">First Class</option>
+													</select>
+												</li>
+												<li>
+													<b>Adult</b>
+													<p>(12+ yrs)</p>
+													<select class="pass_list1 form-control" name="adultNum"
+														required="required">
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Children</b>
+													<p>(2-12 yrs)</p>
+													<select class="pass_list2 form-control" name="childNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Infant</b>
+													<p>Under 2yrs</p>
+													<select class="pass_list3 form-control" name="infantNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<button type="button" id="submit"
+														style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+												</li>
+											</ul>
 										</div>
 									</div>
-								</form>
+									<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
+										<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
+									</div>
+								</div>
+	
 							</div>
-					    </div>
-					    <div class="carousel-item">
-					      <div class="empty1" style="height: 115px;">
-								<form th:action="@{/flight_international_search_return_save}" method="get">
-									<div class=" col-12">
-										<input type="hidden" name="tripType" value="twoWays">
-										<div class="col-md-5 col-12" style=" float: left;">
-											<div class="media_status_flex_CPN" style="justify-content: center;">
-												<div class="row" style="width: 98%;">
-													<div class="col-md-5 col-5  form-floating" id="aligner1">
-														<input type="search" class="form-control hill1 input_styles" name="cityOne"
-															id="cityOne4MobileInter" placeholder="Depurture City" 
-															oninput="checkCityCodeMatch4(document.getElementById('cityTwo4MobileInter'))">
-														<label class="labelStyle" for="floatingInput"> From</label>
-													</div>
-													<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
-														<div class="">
-															<img th:src="@{/images/returns-.png}" style="width: 100%;">
-														</div>
-													</div>
-													<div class="col-md-5 col-5  form-floating" id="aligner2">
-														<input type="search" class="form-control hill2 input_styles" name="cityTwo" 
-															id="cityTwo4MobileInter" placeholder="Arrival City"  style="direction: rtl;"
-															oninput="checkCityCodeMatch4(this)">
-														
-														<label class="labelStyle" for="floatingInput"  style="direction: rtl;"> To</label>
-													</div>
-													
-													<div class="col-md-6 col-6  form-floating" id="aligner3" style="padding: 0;">
-														<div id="cityOneLabelInterMobileInter" class="floatingResponseDiv"></div>
-													</div>
-													<div class="col-md-6 col-6  form-floating " id="aligner4" style="padding: 0;">
-														<div id="cityTwoLabelInterMobileInter" class="floatingResponseDiv" style="text-align: right;"></div>
-													</div>
-												</div>
+						</div>
+					</form>
+					
+					<form th:action="@{/flight_search_save}" method="get" class="media_status">
+						<div class="col-12">
+							<input type="hidden" name="tripType" value="oneWay">
+							<div class="col-md-5 col-12" style=" float: left; ">
+								<div class="media_status_flex_CPN" style="justify-content: center;">
+									<div class="row" style="width: 98%;">
+										<div class="col-md-5 col-5 form-floating" id="aligner3" style="padding: 0;">
+											<input type="search" class="form-control hill1 input_styles_mobile autocomplete" name="cityOne" id="cityOneMobile"
+												placeholder="Depurture City" 
+												oninput="checkCityCodeMatch(document.getElementById('cityTwoMobile'))" required>
+											<label class="labelStyle labelSetting" for="cityOneMobile">
+												From</label>
+										</div>
+										<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
+											<div class="">
+												<img th:src="@{/images/returns-.png}" style="width: 100%;">
 											</div>
 										</div>
-										<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
-											<hr style="width: 95%;">
+										<div class="col-md-5 col-5 form-floating " id="aligner4" style="padding: 0;">
+											<input type="search" class="form-control hill2 input_styles_mobile autocomplete" name="cityTwo" id="cityTwoMobile"
+												placeholder="Arrival City" oninput="checkCityCodeMatch(this)" style="direction: rtl;"
+												required>
+											<label class="labelStyle labelSetting" for="cityTwoMobile" style="direction: rtl;">
+												To</label>
 										</div>
-						
-										<div class="col-md-7 col-12" style=" float: left;">
-			
-											<div class="col-md-4 col-6 aligner">
-												<label for="floatingInter">
-													Departure</label>
-												<input type="date" class="form-control input_calender" name="date"
-													id="floatingInterMobile" required>
-			
-											</div>
-											<div class="col-md-4 col-6 aligner">
-												<label for="floatingReturnInter">
-													Return</label>
-												<input type="date" class="form-control input_calender" name="return_date"
-													id="floatingReturnInter" required>
-			
-											</div>
-											
-											
-											<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
-												<hr style="width: 95%;">
-											</div>
-						
-											<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
-												<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
-													<div class="dropdown">
-														<button class="drop_button_inter_mobile" type="button"
-															style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
-															onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
-															<div class="row" style="padding-top: 6px;">
-																<div class="col-6">
-																	<h5 id="resultMobileReturn4"></h5>
-																</div>
-																<div class="col-6">
-																	<h5 id="resultMobileReturn1"></h5>
-																</div>
-															</div>
-															<h1 class="n-text" id="n-text-8">Travelers</h1>
-														</button>
-														<ul class="dropdownMenu dropdowns-menu dropdownExpandMobile deactive" onmouseover="dropdownOpen(this)"
-															onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
-															<li>
-																<b>Class</b>
-																<select class="pass_list-40 form-control" name="journeyClass"
-																	required="required">
-																	<option value="Economy">Economy</option>
-																	<option value="Premium Economy">Premium Economy</option>
-																	<option value="Business">Business</option>
-																	<option value="Premium Business">Premium Business</option>
-																	<option value="First Class">First Class</option>
-																</select>
-															</li>
-															<li>
-																<b>Adult</b>
-																<p>(12+ yrs)</p>
-																<select class="pass_list41 form-control" name="adultNum"
-																	required="required">
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Children</b>
-																<p>(2-12 yrs)</p>
-																<select class="pass_list42 form-control" name="childNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<b>Infant</b>
-																<p>Under 2yrs</p>
-																<select class="pass_list43 form-control" name="infantNum">
-																	<option value="0">0</option>
-																	<option value="1">1</option>
-																	<option value="2">2</option>
-																	<option value="3">3</option>
-																	<option value="4">4</option>
-																	<option value="5">5</option>
-																	<option value="6">6</option>
-																	<option value="7">7</option>
-																	<option value="8">8</option>
-																	<option value="9">9</option>
-																</select>
-															</li>
-															<li>
-																<button type="button" id="submit1MobileInterReturn"
-																	style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
-															</li>
-														</ul>
-													</div>
-												</div>
-												<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
-													<input class="submit_btns" type="submit" id="search-inter"
-														value="Search">
-												</div>
-											</div>
-			
+										
+										<div class="col-md-6 col-6 form-floating" id="aligner3" style="padding: 0;">
+											<div id="cityOneLabel" class="floatingResponseDiv"></div>
+										</div>
+										<div class="col-md-6 col-6 form-floating " id="aligner4" style="padding: 0;">
+											<div id="cityTwoLabel" class="floatingResponseDiv" style="text-align: right;"></div>
 										</div>
 									</div>
-								</form>
+								</div>
+								
 							</div>
-					    </div>
-					  </div>
-					</div>
+							
+							<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+								<hr style="width: 95%;">
+							</div>
+							<div class="col-md-7 col-12" style=" float: left;">
+	
+								<div class="col-md-4 col-6 aligner">
+									<label class="paddingDate" for="floatingInputDepurtureMobile">
+										Departure</label>
+									<input type="date" name="date" class="form-control input_calender"
+										id="floatingInputDepurtureMobile" required>
+									<div id="dateLabel1" class="floatingResponseDivDate media_status_flex_CPN" style="margin-top: 19px; height: 30px;">Selected Day</div>
+	
+								</div>
+								<div class="col-md-4 col-6 aligner" id="input_roundtrip_mobile"><!-- id="input_roundtrip" --> 
+									<label class="floatRightMobile paddingDate" >
+										Return</label>
+									<!--<input type="date" class="form-control input_calender" disabled>-->
+									<div class="returnButtonStyle floatRightMobile"><p>dd-mm-yyyy</p></div>
+									<div class="floatingResponseDivDate media_status_flex_CPN" style="float: right; height: 5px; margin-top: 7px;">Book return</div>
+	
+								</div>
+								
+								
+								<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 15px;">
+									<hr style="width: 95%;">
+								</div>
+				
+								<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
+									<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+										<div class="dropdown" id="onewayDropdown">
+											<button class="" type="button" id="drop_button"
+												style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
+												onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+												<div class="row" style="padding-top: 6px;">
+													<div class="col-6">
+														<h5 id="resultMobile3"></h5>
+													</div>
+													<div class="col-6">
+														<h5 id="resultMobile"></h5>
+													</div>
+												</div>
+												<input type="hidden" name="something" id="passengerNum1" value="">
+												<h1 class="n-text" id="n-text-2">Travelers</h1>
+											</button>
+											<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)" id="oneWayDropdown"
+												onmouseleave="dropdownClose(this)">
+												<li>
+													<b>Class</b>
+													<select class="pass_list-10 form-control" name="journeyClass"
+														required="required">
+														<option value="Economy">Economy</option>
+														<option value="Premium Economy">Premium Economy</option>
+														<option value="Business">Business</option>
+														<option value="Premium Business">Premium Business</option>
+														<option value="First Class">First Class</option>
+													</select>
+												</li>
+												<li>
+													<b>Adult</b>
+													<p>(12+ yrs)</p>
+													<select class="pass_list11 form-control" name="adultNum"
+														required="required">
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Children</b>
+													<p>(2-12 yrs)</p>
+													<select class="pass_list12 form-control" name="childNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Infant</b>
+													<p>Under 2yrs</p>
+													<select class="pass_list13 form-control" name="infantNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<button type="button" id="submitMobile"
+														style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
+										<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
+									</div>
+								</div>
+	
+							</div>
+						</div>
+					</form>
 				</div>
-			
+				<div class="radio_search empty1" id="radio_search_2">
+					<form th:action="@{/flight_search_return_save}" method="get" class="media-hide">
+						<div class="col-12">
+							<input type="hidden" name="tripType" value="twoWays">
+							<div class="col-md-5 col-12" style=" float: left;">
+	
+								<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
+									<input type="search" class="form-control hill1 input_styles" name="cityOne"
+										id="cityOne2" placeholder="Depurture City" list="cityOneList2"
+										oninput="checkCityCodeMatch2(document.getElementById('cityTwo2'))">
+									<datalist id="cityOneList2">
+										<th:block th:each="city : ${cities}">
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+										</th:block>
+									</datalist>
+									<label class="labelStyle" for="floatingInput"><i
+											class="fa fa-circle-o-notch fa-spin"></i> From</label>
+								</div>
+								<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
+									<input type="search" class="form-control hill2 input_styles" name="cityTwo"
+										id="cityTwo2" placeholder="Arrival City" list="cityTwoList2"
+										oninput="checkCityCodeMatch2(this)">
+									<datalist id="cityTwoList2">
+										<th:block th:each="city : ${cities}">
+											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+										</th:block>
+									</datalist>
+									<label class="labelStyle" for="floatingInput"><i
+											class="fa fa-circle-o-notch fa-spin"></i> To</label>
+								</div>
+							</div>
+							<div class="col-md-7 col-12" style=" float: left;">
+	
+								<div class="col-md-4 col-6 aligner">
+									<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
+										Departure</label>
+									<input type="date" class="form-control input_calender" name="date"
+										id="floatingInputDepurtureReturn" required>
+	
+								</div>
+								<div class="col-md-4 col-6 aligner">
+									<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i> Return</label>
+									<input type="date" class="form-control input_calender" name="return_date"
+										id="floatingInputReturnReturn" required>
+	
+								</div>
+								<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
+									<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+										<div class="dropdown">
+											<div class="" type="button" id="drop_button2"
+												style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px;"
+												onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+												<span id="result4"></span>
+												<span id="result1"></span>
+												<h1 class="n-text" id="n-text-3">Travelers</h1>
+											</div>
+											<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
+												onmouseleave="dropdownClose(this)">
+												<li>
+													<b>Class</b>
+													<select class="pass_list-2 form-control" name="journeyClass"
+														required="required">
+														<option value="Economy">Economy</option>
+														<option value="Premium Economy">Premium Economy</option>
+														<option value="Business">Business</option>
+														<option value="Premium Business">Premium Business</option>
+														<option value="First Class">First Class</option>
+													</select>
+												</li>
+												<li>
+													<b>Adult</b>
+													<p>(12+ yrs)</p>
+													<select class="pass_list4 form-control" name="adultNum"
+														required="required">
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Children</b>
+													<p>(2-12 yrs)</p>
+													<select class="pass_list5 form-control" name="childNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Infant</b>
+													<p>Under 2yrs</p>
+													<select class="pass_list6 form-control" name="infantNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<button type="button" id="submit1"
+														style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+										<input class="submit_btns" type="submit" id="search" name="search" value="Search">
+									</div>
+								</div>
+	
+							</div>
+						</div>
+					</form>
+					
+					<form th:action="@{/flight_search_return_save}" method="get" class="media_status">
+						<div class="col-12">
+							<input type="hidden" name="tripType" value="twoWays">
+							<div class="col-md-5 col-12" style=" float: left; ">
+								<div class="media_status_flex_CPN" style="justify-content: center;">
+									<div class="row" style="width: 98%;">
+										<div class="col-md-5 col-5  form-floating" id="aligner3" style="padding: 0;">
+											<input type="search" class="form-control hill1 input_styles_mobile autocomplete" name="cityOne" id="cityOne2Mobile" 
+												placeholder="Depurture City"
+												oninput="checkCityCodeMatch(document.getElementById('cityTwo2Mobile'))" required>
+											<label class="labelStyle labelSetting" for="cityOne2Mobile">
+												From</label>
+										</div>
+										<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
+											<div class="">
+												<img th:src="@{/images/returns-.png}" style="width: 100%;">
+											</div>
+										</div>
+										<div class="col-md-5 col-5  form-floating" id="aligner4" style="padding: 0;">
+											<input type="search" class="form-control hill2 input_styles_mobile autocomplete" name="cityTwo" id="cityTwo2Mobile"
+												placeholder="Arrival City" oninput="checkCityCodeMatch(this)"  style="direction: rtl;"
+												required>
+											<label class="labelStyle labelSetting" for="cityTwo2Mobile" style="direction: rtl;">
+												To</label>
+										</div>
+										
+										<div class="col-md-6 col-6  form-floating" id="aligner3" style="padding: 0;">
+											<div id="cityOne2Label" class="floatingResponseDiv"></div>
+										</div>
+										<div class="col-md-6 col-6  form-floating " id="aligner4" style="padding: 0;">
+											<div id="cityTwo2Label" class="floatingResponseDiv" style="text-align: right;"></div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+								<hr style="width: 95%;">
+							</div>
+							
+							<div class="col-md-7 col-12" style=" float: left;">
+	
+								<div class="col-md-4 col-6 aligner">
+									<label for="floatingInput" style="margin-bottom: 10px;">
+										Departure</label>
+									<input type="date" class="form-control input_calender" name="date"
+										id="floatingInputDepurtureReturn1" required>
+									<div id="dateLabel2" class="floatingResponseDivDate media_status_flex_CPN" style="margin-top: 19px; height: 30px;">Selected Day</div>
+								</div>
+								<div class="col-md-4 col-6 aligner">
+									<label for="floatingInput" style="float: right; margin-bottom: 10px;"> Return</label>
+									<input type="date" class="form-control input_calender" name="return_date" style="float: right;"
+										id="floatingInputReturnReturn1" required>
+									<div id="dateLabel3" class="floatingResponseDivDate media_status_flex_CPN" style="float: right; height: 9px; margin-top: 18px;">Selected Day</div>
+								</div>
+								
+								
+								<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 15px;">
+									<hr style="width: 95%;">
+								</div>
+								
+								<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px; height: 72px;">
+									<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+										<div class="dropdown" id="returnDropdown">
+											<button class="btn" type="button" id="drop_button2"
+												style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
+												onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+												<div class="row" style="padding-top: 6px;">
+													<div class="col-6">
+														<h5 id="result4MobileReturn"></h5>
+													</div>
+													<div class="col-6">
+														<h5 id="result1MobileReturn"></h5>
+													</div>
+												</div>
+												<h1 class="n-text" id="n-text-4">Travelers</h1>
+											</button>
+											<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
+												onmouseleave="dropdownClose(this)">
+												<li>
+													<b>Class</b>
+													<select class="pass_list-20 form-control" name="journeyClass"
+														required="required">
+														<option value="Economy">Economy</option>
+														<option value="Premium Economy">Premium Economy</option>
+														<option value="Business">Business</option>
+														<option value="Premium Business">Premium Business</option>
+														<option value="First Class">First Class</option>
+													</select>
+												</li>
+												<li>
+													<b>Adult</b>
+													<p>(12+ yrs)</p>
+													<select class="pass_list16 form-control" name="adultNum"
+														required="required">
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Children</b>
+													<p>(2-12 yrs)</p>
+													<select class="pass_list17 form-control" name="childNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<b>Infant</b>
+													<p>Under 2yrs</p>
+													<select class="pass_list18 form-control" name="infantNum">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+														<option value="5">5</option>
+														<option value="6">6</option>
+														<option value="7">7</option>
+														<option value="8">8</option>
+														<option value="9">9</option>
+													</select>
+												</li>
+												<li>
+													<button type="button" id="submit1MobileReturn"
+														style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
+										<input class="submit_btns" type="submit" id="search" name="search" value="Search">
+									</div>
+								</div>
+	
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="radio_search " id="radio_search_3">
+					<div class="media-hide" style="display: flex; justify-content: space-between;">
+						<div style="display: flex;">
+							<div id="return-previous" style="cursor: pointer; display: none;" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="0" >
+								<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
+										th:src="@{/images/buttons/Arrow-left-icon.png}" style="width: 100%;"></div>
+								<p style="font-size: 20px; font-weight: 600; margin: 0; padding-left: 5px;">One Way</p>
+							</div>
+						</div>
+						<div style="display: flex;">
+							<div id="return-next" style="cursor: pointer; display: flex;" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="1" >
+								<p style="font-size: 20px; font-weight: 600; margin: 0; padding-right: 5px;">Return Trip</p>
+								<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
+										th:src="@{/images/buttons/Arrow-right-icon.png}" style="width: 100%;"></div>
+							</div>
+						</div>
+					</div>
+					<div class="media-hide" >
+						<div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
+						  <div class="carousel-inner">
+						    <div class="carousel-item active">
+						      <div class="empty1" style="height: 115px;">
+									<form th:action="@{/flight_international_search_save}" method="get">
+										<div class=" col-12">
+											<input type="hidden" name="tripType" value="international">
+											<div class="col-md-5 col-12" style=" float: left;">
+												<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
+													<input type="search" class="form-control hill1 input_styles" name="cityOne"
+														id="cityOne3" placeholder="Depurture City" list="cityOneList3"
+														oninput="checkCityCodeMatch3(document.getElementById('cityTwo3'))">
+													<datalist id="cityOneList3">
+														<th:block th:each="city : ${allCities}">
+															<option th:value="${city.cityName}">[[${city.country.name}]] -
+																[[${city.code}]] - [[${city.name}]]</option>
+														</th:block>
+													</datalist>
+													<label class="labelStyle" for="floatingInput"><i
+															class="fa fa-circle-o-notch fa-spin"></i> From</label>
+												</div>
+												<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
+													<input type="search" class="form-control hill2 input_styles" name="cityTwo"
+														id="cityTwo3" placeholder="Arrival City" list="cityTwoList4"
+														oninput="checkCityCodeMatch3(this)">
+													<datalist id="cityTwoList4">
+														<th:block th:each="city : ${allCities}">
+															<option th:value="${city.cityName}">[[${city.country.name}]] -
+																[[${city.code}]] - [[${city.name}]]</option>
+														</th:block>
+													</datalist>
+													<label class="labelStyle" for="floatingInput"><i
+															class="fa fa-circle-o-notch fa-spin"></i> To</label>
+												</div>
+											</div>
+											<div class="col-md-7 col-12" style=" float: left;">
+				
+												<div class="col-md-4 col-6 aligner">
+													<label for="floatingInputInter"><i class="fa fa-circle-o-notch fa-spin"></i>
+														Departure</label>
+													<input type="date" class="form-control input_calender" name="date"
+														id="floatingInputInter" required>
+				
+												</div>
+												<div class="col-md-4 col-6 aligner" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide-to="1" id="return_international_mobile">
+													<label for="floatingInput"><i class="fa fa-circle-o-notch fa-spin"></i>
+														Return</label>
+													<input type="date" class="form-control input_calender" name="return_date"
+													 disabled>
+				
+												</div>
+												<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+													<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+														<div class="dropdown">
+															<button class="drop_button_inter" type="button"
+																style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
+																onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+																<span id="resultInter2"></span>
+																<span id="resultInter1"></span>
+																<h1 class="n-text" id="n-text-5">Travelers</h1>
+															</button>
+															<ul class="dropdownMenu dropdowns-menu dropdownExpand deactive" onmouseover="dropdownOpen(this)"
+																onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
+																<li>
+																	<b>Class</b>
+																	<select class="pass_list-33 form-control" name="journeyClass"
+																		required="required">
+																		<option value="Economy">Economy</option>
+																		<option value="Premium Economy">Premium Economy</option>
+																		<option value="Business">Business</option>
+																		<option value="Premium Business">Premium Business</option>
+																		<option value="First Class">First Class</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Adult</b>
+																	<p>(12+ yrs)</p>
+																	<select class="pass_list34 form-control" name="adultNum"
+																		required="required">
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Children</b>
+																	<p>(2-12 yrs)</p>
+																	<select class="pass_list35 form-control" name="childNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Infant</b>
+																	<p>Under 2yrs</p>
+																	<select class="pass_list36 form-control" name="infantNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<button type="button" id="submitInter"
+																		style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+														<input class="submit_btns" type="submit" id="search" name="search"
+															value="Search">
+													</div>
+												</div>
+				
+											</div>
+										</div>
+									</form>
+								</div>
+						    </div>
+						    <div class="carousel-item">
+						      <div class="empty1" style="height: 115px;">
+									<form th:action="@{/flight_international_search_return_save}" method="get">
+										<div class=" col-12">
+											<input type="hidden" name="tripType" value="twoWays">
+											<div class="col-md-5 col-12" style=" float: left;">
+												<div class="col-md-6 col-6 aligner form-floating" id="aligner1">
+													<input type="search" class="form-control hill1 input_styles" name="cityOne"
+														id="cityOne4" placeholder="Depurture City" list="cityOneList4"
+														oninput="checkCityCodeMatch4(document.getElementById('cityTwo4'))">
+													<datalist id="cityOneList4">
+														<th:block th:each="city : ${allCities}">
+															<option th:value="${city.cityName}">[[${city.country.name}]] -
+																[[${city.code}]] - [[${city.name}]]</option>
+														</th:block>
+													</datalist>
+													<label class="labelStyle" for="floatingInput"><i
+															class="fa fa-circle-o-notch fa-spin"></i> From</label>
+												</div>
+												<div class="col-md-6 col-6 aligner form-floating" id="aligner2">
+													<input type="search" class="form-control hill2 input_styles" name="cityTwo"
+														id="cityTwo4" placeholder="Arrival City" list="cityTwoList5"
+														oninput="checkCityCodeMatch4(this)">
+													<datalist id="cityTwoList5">
+														<th:block th:each="city : ${allCities}">
+															<option th:value="${city.cityName}">[[${city.country.name}]] -
+																[[${city.code}]] - [[${city.name}]]</option>
+														</th:block>
+													</datalist>
+													<label class="labelStyle" for="floatingInput"><i
+															class="fa fa-circle-o-notch fa-spin"></i> To</label>
+												</div>
+											</div>
+											<div class="col-md-7 col-12" style=" float: left;">
+				
+												<div class="col-md-4 col-6 aligner">
+													<label for="floatingInter"><i class="fa fa-circle-o-notch fa-spin"></i>
+														Departure</label>
+													<input type="date" class="form-control input_calender" name="date"
+														id="floatingInter" required>
+				
+												</div>
+												<div class="col-md-4 col-6 aligner">
+													<label for="floatingReturnInter"><i class="fa fa-circle-o-notch fa-spin"></i>
+														Return</label>
+													<input type="date" class="form-control input_calender" name="return_date"
+														id="floatingReturnInter" required>
+				
+												</div>
+												<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+													<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+														<div class="dropdown">
+															<button class="drop_button_inter" type="button"
+																style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
+																onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+																<span id="result4123"></span>
+																<span id="result1423"></span>
+																<h1 class="n-text" id="n-text-6">Travelers</h1>
+															</button>
+															<ul class="dropdownMenu dropdowns-menu dropdownExpand deactive" onmouseover="dropdownOpen(this)"
+																onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
+																<li>
+																	<b>Class</b>
+																	<select class="pass_list-112 form-control" name="journeyClass"
+																		required="required">
+																		<option value="Economy">Economy</option>
+																		<option value="Premium Economy">Premium Economy</option>
+																		<option value="Business">Business</option>
+																		<option value="Premium Business">Premium Business</option>
+																		<option value="First Class">First Class</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Adult</b>
+																	<p>(12+ yrs)</p>
+																	<select class="pass_list114 form-control" name="adultNum"
+																		required="required">
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Children</b>
+																	<p>(2-12 yrs)</p>
+																	<select class="pass_list115 form-control" name="childNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Infant</b>
+																	<p>Under 2yrs</p>
+																	<select class="pass_list116 form-control" name="infantNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<button type="button" id="submit1123"
+																		style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+														<input class="submit_btns" type="submit" id="search-inter"
+															value="Search">
+													</div>
+												</div>
+				
+											</div>
+										</div>
+									</form>
+								</div>
+						    </div>
+						  </div>
+						</div>
+					</div>
+				
+					
+					<div class="media_status" style="justify-content: space-between;">
+						<div style="display: flex; padding-top: 17px;">
+							<div id="return-previous_mobile" style="cursor: pointer; display: none;" data-bs-target="#carouselExampleControlsNoTouchingMobile" data-bs-slide-to="0" >
+								<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
+										th:src="@{/images/buttons/Arrow-left-icon.png}" style="width: 100%;"></div>
+								<p style="font-size: 20px; font-weight: 600; margin: 0; padding-left: 5px;">One Way</p>
+							</div>
+						</div>
+						<div style="display: flex;">
+							<div id="return-next_mobile" style="cursor: pointer; display: flex;" data-bs-target="#carouselExampleControlsNoTouchingMobile" data-bs-slide-to="1" >
+								<p style="font-size: 20px; font-weight: 600; margin: 0; padding-right: 5px;">Return Trip</p>
+								<div style="padding: 0; margin: 0; width: 40px; align-items: center; display: flex;"><img
+										th:src="@{/images/buttons/Arrow-right-icon.png}" style="width: 100%;"></div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+						<hr style="width: 95%;">
+					</div>
+							
+					<div class="media_status" >
+						<div id="carouselExampleControlsNoTouchingMobile" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
+						  <div class="carousel-inner">
+						    <div class="carousel-item active">
+						      <div class="empty1" style="height: 115px;">
+									<form th:action="@{/flight_international_search_save}" method="get">
+										<div class=" col-12">
+											<input type="hidden" name="tripType" value="international">
+											<div class="col-md-5 col-12" style=" float: left;">
+												<div class="media_status_flex_CPN" style="justify-content: center;">
+													<div class="row" style="width: 98%;">
+														<div class="col-md-5 col-5  form-floating" id="aligner1">
+															<input type="search" class="form-control hill1 input_styles input_styles_mobile autocomplete" name="cityOne"
+																id="cityOne5Mobile" placeholder="Depurture City" 
+																oninput="checkCityCodeMatch3(document.getElementById('cityTwo5Mobile'))">
+															<label class="labelStyle" for="floatingInput"> From</label>
+														</div>
+														<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
+															<div class="">
+																<img th:src="@{/images/returns-.png}" style="width: 100%;">
+															</div>
+														</div>
+														<div class="col-md-5 col-5  form-floating" id="aligner2">
+															<input type="search" class="form-control hill2 input_styles input_styles_mobile autocomplete" name="cityTwo"
+																id="cityTwo5Mobile" placeholder="Arrival City"  style="direction: rtl;"
+																oninput="checkCityCodeMatch3(this)">
+															<label class="labelStyle" for="floatingInput"  style="direction: rtl;"> To</label>
+														</div>
+														
+														<div class="col-md-6 col-6  form-floating" id="aligner3" style="padding: 0;">
+															<div id="cityOneLabelInter" class="floatingResponseDiv"></div>
+														</div>
+														<div class="col-md-6 col-6  form-floating " id="aligner4" style="padding: 0;">
+															<div id="cityTwoLabelInter" class="floatingResponseDiv" style="text-align: right;"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+												<hr style="width: 95%;">
+											</div>
+											<div class="col-md-7 col-12" style=" float: left;">
+				
+												<div class="col-md-4 col-6 aligner">
+													<label for="floatingInputInter">
+														Departure</label>
+													<input type="date" class="form-control input_calender" name="date"
+														id="floatingInputInterMobile" required>
+				
+												</div>
+												<div class="col-md-4 col-6 aligner" data-bs-target="#carouselExampleControlsNoTouchingMobile" data-bs-slide-to="1" id="return_international_mobile">
+													<label for="floatingInput">
+														Return</label>
+													<input type="date" class="form-control input_calender" name="return_date"
+													 disabled>
+				
+												</div>
+												
+												<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+													<hr style="width: 95%;">
+												</div>
+							
+												<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+													<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+														<div class="dropdown"  id="interDropdown">
+															<button class="drop_button_inter_mobile" type="button"
+																style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
+																onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+																<div class="row" style="padding-top: 6px;">
+																	<div class="col-6">
+																		<h5 id="resultInter2Mobile"></h5>
+																	</div>
+																	<div class="col-6">
+																		<h5 id="resultInter1Mobile"></h5>
+																	</div>
+																</div>
+																<h1 class="n-text" id="n-text-7">Travelers</h1>
+															</button>
+															<ul class="dropdownMenu dropdowns-menu dropdownExpandMobile deactive" onmouseover="dropdownOpen(this)"
+																onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
+																<li>
+																	<b>Class</b>
+																	<select class="pass_list-30 form-control" name="journeyClass"
+																		required="required">
+																		<option value="Economy">Economy</option>
+																		<option value="Premium Economy">Premium Economy</option>
+																		<option value="Business">Business</option>
+																		<option value="Premium Business">Premium Business</option>
+																		<option value="First Class">First Class</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Adult</b>
+																	<p>(12+ yrs)</p>
+																	<select class="pass_list31 form-control" name="adultNum"
+																		required="required">
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Children</b>
+																	<p>(2-12 yrs)</p>
+																	<select class="pass_list32 form-control" name="childNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Infant</b>
+																	<p>Under 2yrs</p>
+																	<select class="pass_list33 form-control" name="infantNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<button type="button" id="submitInterMobile"
+																		style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px; margin-top: 6px;">
+														<input class="submit_btns" type="submit" id="search" name="search"
+															value="Search">
+													</div>
+												</div>
+				
+											</div>
+										</div>
+									</form>
+								</div>
+						    </div>
+						    <div class="carousel-item">
+						      <div class="empty1" style="height: 115px;">
+									<form th:action="@{/flight_international_search_return_save}" method="get">
+										<div class=" col-12">
+											<input type="hidden" name="tripType" value="twoWays">
+											<div class="col-md-5 col-12" style=" float: left;">
+												<div class="media_status_flex_CPN" style="justify-content: center;">
+													<div class="row" style="width: 98%;">
+														<div class="col-md-5 col-5  form-floating" id="aligner1">
+															<input type="search" class="form-control hill1 input_styles" name="cityOne"
+																id="cityOne4MobileInter" placeholder="Depurture City" 
+																oninput="checkCityCodeMatch4(document.getElementById('cityTwo4MobileInter'))">
+															<label class="labelStyle" for="floatingInput"> From</label>
+														</div>
+														<div class="col-md-2 col-2" style="display: flex; justify-content: center; align-items: center;">
+															<div class="">
+																<img th:src="@{/images/returns-.png}" style="width: 100%;">
+															</div>
+														</div>
+														<div class="col-md-5 col-5  form-floating" id="aligner2">
+															<input type="search" class="form-control hill2 input_styles" name="cityTwo" 
+																id="cityTwo4MobileInter" placeholder="Arrival City"  style="direction: rtl;"
+																oninput="checkCityCodeMatch4(this)">
+															
+															<label class="labelStyle" for="floatingInput"  style="direction: rtl;"> To</label>
+														</div>
+														
+														<div class="col-md-6 col-6  form-floating" id="aligner3" style="padding: 0;">
+															<div id="cityOneLabelInterMobileInter" class="floatingResponseDiv"></div>
+														</div>
+														<div class="col-md-6 col-6  form-floating " id="aligner4" style="padding: 0;">
+															<div id="cityTwoLabelInterMobileInter" class="floatingResponseDiv" style="text-align: right;"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+												<hr style="width: 95%;">
+											</div>
+							
+											<div class="col-md-7 col-12" style=" float: left;">
+				
+												<div class="col-md-4 col-6 aligner">
+													<label for="floatingInter">
+														Departure</label>
+													<input type="date" class="form-control input_calender" name="date"
+														id="floatingInterMobile" required>
+				
+												</div>
+												<div class="col-md-4 col-6 aligner">
+													<label for="floatingReturnInter">
+														Return</label>
+													<input type="date" class="form-control input_calender" name="return_date"
+														id="floatingReturnInter" required>
+				
+												</div>
+												
+												
+												<div class="media_status_flex_CPN" style="width: 100%; justify-content: center; height: 20px;">
+													<hr style="width: 95%;">
+												</div>
+							
+												<div class="col-md-4 col-12 aligner" style=" border: none; margin: 19px 0 6px;">
+													<div class="passanger_detail col-md-6 col-12" style=" float: left; padding: 0 4px;">
+														<div class="dropdown" id="interReturnDropdown">
+															<button class="drop_button_inter_mobile" type="button"
+																style="text-align: center; border: 1px solid grey; width: 100%; height: 62px; border-radius: 9px; background: white;"
+																onmouseover="dropdownOpen(this)" onmouseleave="dropdownClose(this)">
+																<div class="row" style="padding-top: 6px;">
+																	<div class="col-6">
+																		<h5 id="resultMobileReturn4"></h5>
+																	</div>
+																	<div class="col-6">
+																		<h5 id="resultMobileReturn1"></h5>
+																	</div>
+																</div>
+																<h1 class="n-text" id="n-text-8">Travelers</h1>
+															</button>
+															<ul class="dropdownMenu dropdowns-menu dropdownExpandMobile deactive" onmouseover="dropdownOpen(this)"
+																onmouseleave="dropdownClose(this)" style="z-index: 6; position: relative;">
+																<li>
+																	<b>Class</b>
+																	<select class="pass_list-40 form-control" name="journeyClass"
+																		required="required">
+																		<option value="Economy">Economy</option>
+																		<option value="Premium Economy">Premium Economy</option>
+																		<option value="Business">Business</option>
+																		<option value="Premium Business">Premium Business</option>
+																		<option value="First Class">First Class</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Adult</b>
+																	<p>(12+ yrs)</p>
+																	<select class="pass_list41 form-control" name="adultNum"
+																		required="required">
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Children</b>
+																	<p>(2-12 yrs)</p>
+																	<select class="pass_list42 form-control" name="childNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<b>Infant</b>
+																	<p>Under 2yrs</p>
+																	<select class="pass_list43 form-control" name="infantNum">
+																		<option value="0">0</option>
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																	</select>
+																</li>
+																<li>
+																	<button type="button" id="submit1MobileInterReturn"
+																		style=" padding: 2px; margin: 15px 0 5px; width: 100%;">Save</button>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
+														<input class="submit_btns" type="submit" id="search-inter"
+															value="Search">
+													</div>
+												</div>
+				
+											</div>
+										</div>
+									</form>
+								</div>
+						    </div>
+						  </div>
+						</div>
+					</div>
+				
+				</div>
 			</div>
 		</div>
 	</div>

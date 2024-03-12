@@ -135,8 +135,12 @@ public class SearchHistoryController {
 			@PathVariable(name = "totalPrice") Integer[] totalPrice,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 
+		Integer iq = 111;
+		
 		searchService.authenticationFlight(model);
 		searchService.authenticationFlightAirIQ(model);
+		
+		System.out.println();
 		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 
@@ -153,7 +157,8 @@ public class SearchHistoryController {
 		
 		System.out.println(date);
 		System.out.println(strDate);
-		
+
+		model.addAttribute("value_int", iq);
 		model.addAttribute("cities", cities);
 		model.addAttribute("getProductBrand", getProductBrand);
 		model.addAttribute("cityOne", cityOne);
@@ -249,9 +254,9 @@ public class SearchHistoryController {
 		
 		
 		// Create URL object with the API end-point
-         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
+//         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 		
-//		URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+		URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();

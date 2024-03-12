@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.City;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.FlightMap;
 import com.easygofly.entity.MealsOnline;
@@ -62,6 +63,7 @@ public class ProductDetailsController {
 	@Autowired private LogService logService;
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	@Autowired private SearchHistoryController sHistoryController;
+	@Autowired private CityRepository cityRepo;
 
 	public List<ProductDetail> listProductDetails;
 	public List<ProductDetail> listProductDetailsInSearch = new ArrayList<ProductDetail>();
@@ -123,6 +125,8 @@ public class ProductDetailsController {
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+	    City cityOneFound = cityRepo.getCityByCode(search.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
@@ -141,6 +145,8 @@ public class ProductDetailsController {
 		model.addAttribute("flight", flight);
 		model.addAttribute("falied", "Please provide a correct coupon code!!!");
 		model.addAttribute("success", "The coupon is verified!");
+		model.addAttribute("cityOneName", cityOneFound.getCityName());
+		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
 		model.addAttribute("timeRemainingPro", timeRemainingProOne);
 		
 		
@@ -312,6 +318,8 @@ public class ProductDetailsController {
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		SearchHistory search = searchRepo.findById(search_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+	    City cityOneFound = cityRepo.getCityByCode(search.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
 
 		if (flight.getMode().equals("Online-data")) {
         	/* Fare-rule details */
@@ -363,6 +371,8 @@ public class ProductDetailsController {
 		model.addAttribute("item", item);
 		model.addAttribute("search", search);
 		model.addAttribute("flight", flight);
+		model.addAttribute("cityOneName", cityOneFound.getCityName());
+		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
 		model.addAttribute("timeRemainingPro", timeRemainingProOne);
 		
 		return "flight/booking/flight_booking";
@@ -473,7 +483,7 @@ public class ProductDetailsController {
 	}
 
 	public void fareQuoteSSRMethod(Model model, ProductDetail flight) throws MalformedURLException, IOException {
-		if (!flight.getTraceId().equals("offline")) {
+		if (flight.getMode().equals("Online-data")) {
         	
 			/* Fare-quote details */
         	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");

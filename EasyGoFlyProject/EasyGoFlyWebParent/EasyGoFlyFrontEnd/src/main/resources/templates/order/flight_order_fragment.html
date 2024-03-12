@@ -183,42 +183,59 @@
 		}
 		.progress_div_active {
 			background: #75ca7d;
+		}  
+		      
+        @media screen and (max-width: 700px) {
+			.paddingChange {
+				padding: 0 !important;
+				font-size: 12px !important;
+				height: fit-content;
+			}
+			.choosen_request {
+				position: sticky;
+				top: 0;
+				z-index: 6;
+			}
+			.positionSticky {
+				position: sticky;
+				top: 0;
+				z-index: 6;
+			}
+			
 		}
     </style>
 
     <body>
-		<div style="background-color:#061123; padding-top: 120px;"></div>
+		<div class="media-hide" style="background-color:#061123; padding-top: 120px;"></div>
         <div class="choosen_request">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-2 reviews">
+                    <div class="col-md-2 reviews media-hide">
                         <p style="color: red;">Your Selection <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
                     </div>
-                    <div class="col-md-8 reviews">
+                    <div class="col-md-8 col-10 reviews">
                         <div class="row">
-                            <div style="color: white;">
-                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityOne}]]</b></p>
-                                <p class="tile-align">&nbsp; - &nbsp;</p>
-                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityTwo}]]</b></p>
-                                <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
-                                <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
-                                <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
-                            </div>
+                            <div style="display: flex; justify-content: center;">
+                               <p class="tile-align" style="color: #f1c043; margin: 0;" id="destinationFromSearch">[[${cityOneName}]]</p>
+                               <p class="tile-align" style="color: #f1c043; margin: 0;" >&nbsp; <i class="fa fa-solid fa-arrow-right"></i> &nbsp;</p>
+                               <p class="tile-align" style="color: #f1c043; margin: 0;" id="originFromSearch">[[${cityTwoName}]]</p>
+                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 col-2">
                         <a class="styleLinkButton styleLink" th:href="@{'/flight_search_' + ${search.id} + '_pnr__0_0,0_active'}" style="background-color: white; float: right; margin: 6px 0;"> Change Flight</a>
                     </div>
                 </div>
             </div>
-        </div>
+        
         <div id="time-limit">
 	        <div class="container">
-	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
+	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;" class="paddingChange">
 	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
 	                <span id="timer" style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;"></span>
 	            </div>
 	        </div>
+	    </div>
 	    </div>
         <div id="booking_page">
             <div class="container">
@@ -380,20 +397,35 @@
 												</td>
 												<td>[[${traveler.salutation}]] [[${traveler.firstName}]] [[${traveler.lastName}]]</td>
 												<td>
-													<th:block th:if="${traveler.mealOnline.code} == 'NoMeal'">
+													<th:block th:if="${traveler.mealOnline} != null">
+														<th:block th:if="${traveler.mealOnline.code} == 'NoMeal'">
+															No Meal
+														</th:block>
+														<th:block th:if="${traveler.mealOnline.code} != 'NoMeal'">
+															[[${traveler.mealOnline.name}]]
+														</th:block>
+													</th:block>
+													<th:block th:if="${traveler.mealOnline} == null">
 														No Meal
 													</th:block>
-													<th:block th:if="${traveler.mealOnline.code} != 'NoMeal'">
-														[[${traveler.mealOnline.name}]]
+												</td>
+												<td>
+													<th:block th:if="${traveler.baggageOnline} != null">[[${traveler.baggageOnline.weight}]] KG</th:block> 
+													<th:block th:if="${traveler.baggageOnline} == null">
+														No Bag
 													</th:block>
 												</td>
-												<td>[[${traveler.baggageOnline.weight}]] KG</td>
 												<td>
-													<th:block th:if="${traveler.seatsOnline.seatNo} == 'null'">
-														No Seat
+													<th:block th:if="${traveler.seatsOnline} != null">
+														<th:block th:if="${traveler.seatsOnline.seatNo} == 'null'">
+															No Seat
+														</th:block>
+														<th:block th:if="${traveler.seatsOnline.seatNo} != 'null'">
+															[[${traveler.seatsOnline.seatNo}]]
+														</th:block>
 													</th:block>
-													<th:block th:if="${traveler.seatsOnline.seatNo} != 'null'">
-														[[${traveler.seatsOnline.seatNo}]]
+													<th:block th:if="${traveler.seatsOnline} == null">
+														No Seat
 													</th:block>
 												</td>
 											</tr>

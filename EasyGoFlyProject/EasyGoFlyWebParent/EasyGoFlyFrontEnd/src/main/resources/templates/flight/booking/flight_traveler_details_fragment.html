@@ -138,7 +138,24 @@
         	padding: 6px 8px;
         }
         
-        
+        @media screen and (max-width: 700px) {
+			.paddingChange {
+				padding: 0 !important;
+				font-size: 12px !important;
+				height: fit-content;
+			}
+			.choosen_request {
+				position: sticky;
+				top: 0;
+				z-index: 6;
+			}
+			.positionSticky {
+				position: sticky;
+				top: 0;
+				z-index: 6;
+			}
+			
+		}
     </style>
 <script type="text/javascript">
 	totalPaymentAbout = 0.0;
@@ -171,38 +188,43 @@
 	};
 </script>
     <body>
-		<div style="background-color:#061123; padding-top: 120px;"></div>
+		<div class="media-hide"  style="background-color:#061123; padding-top: 120px;"></div>
         <div class="choosen_request">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-2 reviews">
-                        <p style="color: red;">Your Selection <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+                    <div class="col-md-2 reviews media-hide">
+                        <p  style="color: red;">Your Selection <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
                     </div>
-                    <div class="col-md-8 reviews">
+                    <div class="col-md-8 col-10 reviews">
                         <div class="row">
-                            <div style="color: white;">
-                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityOne}]]</b></p>
-                                <p class="tile-align">&nbsp; - &nbsp;</p>
-                                <p class="tile-align" style="padding-right: 6px;">Destination - <b>[[${search.cityTwo}]]</b></p>
-                                <p class="tile-align para_styl" style="padding-right: 10px; color: #ffcb2f !important;"> Date - [[${#dates.format(search.date, 'E, dd MM yyyy')}]]</p>
-                                <p class="tile-align para_styl" style="padding-right: 10px"> 0 Stop</p>
-                                <p class="tile-align" style="padding-left: 40px;"><i class="fa fa-user" aria-hidden="true"></i> Traveller(s) - [[${search.passengerNum}]]</p>
+                            <div style="display: flex; justify-content: center;">
+                               <p class="tile-align" style="color: #f1c043; margin: 0;" id="destinationFromSearch">[[${cityOneName}]]</p>
+                               <p class="tile-align" style="color: #f1c043; margin: 0;" >&nbsp; <i class="fa fa-solid fa-arrow-right"></i> &nbsp;</p>
+                               <p class="tile-align" style="color: #f1c043; margin: 0;" id="originFromSearch">[[${cityTwoName}]]</p>
+                             </div>
+                        </div>
+						<div class="row">
+                            <div style="display: flex; justify-content: center;">
+                                <p class="tile-align para_styl" style="color: #f1c043; padding-right: 10px; font-size: 16px;">[[${#dates.format(search.date, 'dd MMMM, yy')}]] <i class="fa fa-solid fa-circle-plus"></i>
+                               [[${search.passengerNum}]] Pax <i class="fa fa-solid fa-circle-plus"></i>
+                                [[${search.journeyClass}]]</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 col-2">
                         <a class="styleLinkButton styleLink" th:href="@{'/flight_search_' + ${search.id} + '_pnr__0_0,0_active'}" style="background-color: white; float: right; margin: 6px 0;"> Change Flight</a>
                     </div>
                 </div>
             </div>
-        </div>
+        
         <div id="time-limit">
 	        <div class="container">
-	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;">
+	            <div style="margin: 0 auto; padding: 11px 0; display: flex; justify-content: center;" class="paddingChange">
 	                <p style=" margin: 0; float: left;">TIME LEFT TO COMPLETE YOUR BOOKING : </p>
 	                <span id="timer" style="background-color: #c4332f;color:white;padding: 0 6px;border-radius: 5px;margin: 0 6px;"></span>
 	            </div>
 	        </div>
+	    </div>
 	    </div>
         <div id="booking_page">
             <div class="container">
@@ -599,7 +621,7 @@
 														travelerMeal[count] = parseInt(response);
 														
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														consol.log("Could not connect to the server.");
 													});
 													
 													
@@ -617,7 +639,7 @@
 																showTotalPriceFunction();
 																
 															}).fail(function(){
-																alert("Could not connect to the server.");
+																consol.log("Could not connect to the server.");
 															});
 													});
 													
@@ -637,7 +659,7 @@
 											    	$.post(urlComponentsSave, params, function() {
 											    		
 											    	}).fail(function(){
-										    			alert("Something went wrong in the server!");
+										    			consol.log("Something went wrong in the server!");
 											    	});
 											    });
 											    
@@ -650,7 +672,7 @@
 											    	$.post(urlMealChangeSave, params, function() {
 											    		
 											    	}).fail(function(){
-										    			alert("Something went wrong in the server!");
+										    			consol.log("Something went wrong in the server!");
 											    	});
 											    });
 											    
@@ -670,7 +692,7 @@
 													travelerBaggage[count] = parseInt(response);
 													
 												}).fail(function(){
-													alert("Could not connect to the server.");
+													consol.log("Could not connect to the server.");
 												});
 												
 												
@@ -688,7 +710,7 @@
 															showTotalPriceFunction();
 															
 														}).fail(function(){
-															alert("Could not connect to the server.");
+															consol.log("Could not connect to the server.");
 														});
 									    		 });
 										    	
@@ -707,7 +729,7 @@
 										    	$.post(urlBaggageChangeSave, params, function() {
 										    		
 										    	}).fail(function(){
-									    			alert("Something went wrong in the server!");
+									    			consol.log("Something went wrong in the server!");
 										    	});
 										    });
 										    
@@ -727,7 +749,7 @@
 													travelerSeat[count] = parseInt(response);
 													
 												}).fail(function(){
-													alert("Could not connect to the server.");
+													consol.log("Could not connect to the server.");
 												});
 												
 												$("#seatSelet"  + [[${traveler.id}]]).change(function(){
@@ -745,7 +767,7 @@
 														showTotalPriceFunction();
 														
 													}).fail(function(){
-														alert("Could not connect to the server.");
+														consol.log("Could not connect to the server.");
 													});
 													
 									    		 });
@@ -762,12 +784,12 @@
 										    	$.post(urlSeatChangeSave, params, function() {
 										    		
 										    	}).fail(function(){
-									    			alert("Something went wrong in the server!");
+									    			consol.log("Something went wrong in the server!");
 										    	});
 										    });
 										    
 										    count = count + 1;
-										    alert(count);
+										    consol.log(count);
 										    </script>
 		                                </th:block>
 	                                </div>
@@ -1030,7 +1052,7 @@
 			`;
 			$("#brandImage" + [[${flight.id}]]).append(htmlImg);
 		}).fail(function(){
-			alert("Could not connect to the server.");
+			consol.log("Could not connect to the server.");
 		});
 		
 		return false;

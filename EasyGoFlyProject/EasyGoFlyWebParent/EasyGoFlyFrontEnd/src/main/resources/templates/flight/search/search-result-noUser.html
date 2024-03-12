@@ -57,8 +57,10 @@
 			font-size: 12px !important;
 		}
 		.positionTile {
-			position: fixed !important;
+			position: sticky !important;
 			z-index: 6 !important;
+			margin-top: 0 !important;
+			top: 0;
 		}
 		.non_stop {
 			top: -6px !important;
@@ -249,6 +251,17 @@
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
     cursor: pointer
 }
+
+	@media screen and (max-width: 700px) {
+		body #header {
+			position: relative;
+		}
+	}
+	.positionTile {
+		background-color: #00000047; 
+		width: 100%; 
+		margin-top: -30px
+	}
 </style>
 
 
@@ -272,8 +285,8 @@
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
   
-  <div style="background-color: #00000047; width: 100%; margin-top: -30px" class="positionTile">
-	<div style="background-color:#061123; padding-top: 115px;"></div>
+  <div style="" class="positionTile">
+	<div class="media-hide" style="background-color:#061123; padding-top: 115px;"></div>
     <div id="modify-search">
         <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item" style="background-color: #969393;">
@@ -327,7 +340,7 @@
         </div>
     </div>
     
-	<div style="padding-top: 166px;"></div>
+	<div class="media-hide" style="padding-top: 166px;"></div>
     <div id="flight-category" style="background-color: white;" class="media-hide">
         <div class="container" style=" padding: 10px 0;">
             <div class="row">
@@ -393,7 +406,7 @@
                     <div style="background-color: #f93737;">
                         <div class="row">
                             <div class="col-md-4 col-5" style="color: white;">
-                                <div class="tile-align media-hide" style=" margin: 5px;">Previous Day</div>
+                                <div class="tile-align media-hide" style=" margin: 5px;">Previous Day: </div>
                                 <div class="tile-align media_status" style=" margin: 5px;"><i class="fa fa-solid fa-backward"></i></div>
                                 <div class="tile-align" style=" margin: 5px;">|</div>
                                 <div class="tile-align media-hide" style=" margin: 5px;">Next Day</div>
@@ -592,22 +605,22 @@
 				                    </div>
 				                    </div>
 		          					<button type="button" class="btn btnSpecial media_status" data-bs-toggle="modal" data-bs-target="#staticBackdrop[[${flight.id}]]" style="padding: 10px 0;  width: 100%;">
-					                    <div class="row">
+					                    <div class="row" style="padding-left: 10px;">
 											<div class="col-9">
 												<div class="row">
-													<div class="col-1">
+													<div class="col-1" style="padding: 0;">
 						                    			<div id="brandImageMobileOffline[[${flight.id}]]" style="float: left; padding: 0px">
 					                                    </div>
 													</div>
-													<div class="col-6">
+													<div class="col-6" style="padding: 0;">
 														<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
 													</div>
-													<div class="col-4">
-														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;">| [[${flight.flightNum}]]</p> 
+													<div class="col-5" style="padding: 0;">
+														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">E</small>| [[${flight.flightNum}]]</p> 
 													</div>
 												</div>
 	                                    	</div>
-											<div class="col-3">
+											<div class="col-3" style="padding: 0;">
 												<p id="pnr_id" style="font-size: 10px; margin: 0; text-align: right; color: #d41d00;"><i class="fa fa-solid fa-lock" ></i> Lock Price</p>
 											</div>
 										</div>
@@ -649,13 +662,11 @@
 		                          		</div>
 		                          		<div style="width: 100%; padding: 10px 10px 0 10px">
 			                          		<div class="row" style="border-radius: 10px; background: #d8e9fa">
-				                          		<div class="col-5">
+				                          		<div class="col-6">
 			                                		<small>(For [[${passengerNum}]] Passenger/s)</small>
 												</div>
-				                          		<div class="col-2">
-												</div>
-				                          		<div class="col-5">
-				                    				[[${flight.totalSeats}]] seat/s available
+				                          		<div class="col-6">
+			                                		<small>[[${flight.totalSeats}]] seat/s available</small>
 												</div>
 											</div>
 										</div>
@@ -917,22 +928,22 @@
 				                    </div>
 				                    
 				                    <button type="button" class="btn btnSpecial media_status" data-bs-toggle="modal" data-bs-target="#staticBackdrop[[${flight.id}]]" style="padding: 10px 0; width: 100%;">
-					                    <div class="row">
+					                    <div class="row" style="padding-left: 10px;">
 											<div class="col-9">
 												<div class="row">
-													<div class="col-1">
+													<div class="col-1" style="padding: 0;">
 						                    			<div id="brandImageMobile[[${flight.id}]]" style="float: left; padding: 0px">
 					                                    </div>
 													</div>
-													<div class="col-6">
+													<div class="col-6" style="padding: 0;">
 														<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
 													</div>
-													<div class="col-4">
-														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;">| [[${flight.flightNum}]]</p> 
+													<div class="col-5" style="padding: 0;">
+														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">Q</small>| [[${flight.flightNum}]]</p> 
 													</div>
 												</div>
 	                                    	</div>
-											<div class="col-3">
+											<div class="col-3" style="padding: 0;">
 												<p id="pnr_id" style="font-size: 10px; margin: 0; text-align: right; color: #d41d00;"><i class="fa fa-solid fa-lock" ></i> Lock Price</p>
 											</div>
 										</div>
@@ -974,13 +985,11 @@
 		                          		</div>
 		                          		<div style="width: 100%; padding: 10px 10px 0 10px">
 			                          		<div class="row" style="border-radius: 10px; background: #d8e9fa">
-				                          		<div class="col-5">
+				                          		<div class="col-6">
 			                                		<small>(For [[${passengerNum}]] Passenger/s)</small>
 												</div>
-				                          		<div class="col-2">
-												</div>
-				                          		<div class="col-5">
-				                    				[[${flight.totalSeats}]] seat/s available
+				                          		<div class="col-6">
+			                                		<small>[[${flight.totalSeats}]] seat/s available</small>
 												</div>
 											</div>
 										</div>
@@ -1241,25 +1250,25 @@
 				                            </div>
 				                    	</div>
 				                    <div>
-				                       </div> 
+				                    </div>
 				                    </div>
 				                     <button type="button" class="btn btnSpecial media_status" data-bs-toggle="modal" data-bs-target="#staticBackdrop[[${flight.id}]]" style="padding: 10px 0; width: 100%;">
-					                    <div class="row">
+					                    <div class="row" style="padding-left: 10px;">
 											<div class="col-9">
 												<div class="row">
-													<div class="col-1">
+													<div class="col-1" style="padding: 0;">
 						                    			<div id="brandImageMobile[[${flight.id}]]" style="float: left; padding: 0px">
 					                                    </div>
 													</div>
-													<div class="col-6">
+													<div class="col-6" style="padding: 0;">
 														<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
 													</div>
-													<div class="col-4">
-														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;">| [[${flight.flightNum}]]</p> 
+													<div class="col-5" style="padding: 0;">
+														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">T</small>| [[${flight.flightNum}]]</p> 
 													</div>
 												</div>
 	                                    	</div>
-											<div class="col-3">
+											<div class="col-3" style="padding: 0;">
 												<p id="pnr_id" style="font-size: 10px; margin: 0; text-align: right; color: #d41d00;"><i class="fa fa-solid fa-lock" ></i> Lock Price</p>
 											</div>
 										</div>
@@ -1301,13 +1310,11 @@
 		                          		</div>
 		                          		<div style="width: 100%; padding: 10px 10px 0 10px">
 			                          		<div class="row" style="border-radius: 10px; background: #d8e9fa">
-				                          		<div class="col-5">
+				                          		<div class="col-6">
 			                                		<small>(For [[${passengerNum}]] Passenger/s)</small>
 												</div>
-				                          		<div class="col-2">
-												</div>
-				                          		<div class="col-5">
-				                    				[[${flight.totalSeats}]] seat/s available
+				                          		<div class="col-6">
+			                                		<small>[[${flight.totalSeats}]] seat/s available</small>
 												</div>
 											</div>
 										</div>

@@ -32,6 +32,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.PaxAirIQ;
 import com.easygofly.entity.PaymentMethod;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
@@ -487,7 +488,7 @@ public class OrderService {
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 		String[] hasErrorArr = new String[2];
 		
-		if (!productDetail.getTraceId().equals("offline")) {
+		if (productDetail.getMode().equals("Online-data")) {
 			
 			String[] airlineNoArray = productDetail.getFlightNum().split("-");
 			String isLeadPax = "false";
@@ -723,7 +724,7 @@ public class OrderService {
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 		String[] hasErrorArr = new String[2];
 		
-		if (!productDetail.getTraceId().equals("offline")) {
+		if (productDetail.getTraceId().equals("Online-data")) {
 			
 			String isLeadPax = "false";
 			Integer countAdult = 0;
@@ -1606,6 +1607,193 @@ public class OrderService {
 		return hasErrorArr;
 	}
 
+
+	public String[] ticketDetailsAirIQ(Order order, ProductDetail productDetail ) throws MalformedURLException, IOException {
+		List<String> travelerDetailsArrayAdult = new ArrayList<String>();
+		List<String> travelerDetailsArrayChild = new ArrayList<String>();
+		List<String> travelerDetailsArrayInfant = new ArrayList<String>();
+		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
+		String[] hasErrorArr = new String[2];
+		
+		if (productDetail.getTraceId().equals("AirIQ")) {
+			
+			List<PaxAirIQ> adultList = new ArrayList<PaxAirIQ>();
+			List<PaxAirIQ> childList = new ArrayList<PaxAirIQ>();
+			List<PaxAirIQ> infantList = new ArrayList<PaxAirIQ>();
+			Integer countAdult = 1;
+			Integer countChild = 1;
+			Integer countInfant = 1;
+			int totalPax = productDetail.getTravellerDetails().size();
+		
+			for (TravellerDetail travellerDetail : travelers) {
+   			
+   			if (travellerDetail.getPaxType().equals("1")) {
+   				PaxAirIQ adult = new PaxAirIQ();
+   				adult.setId(countAdult);
+   				if (travellerDetail.getSalutation().equals("Miss")) {
+   	   				adult.setTitle(travellerDetail.getSalutation());
+				} else {
+   	   				adult.setTitle(travellerDetail.getSalutation() + ".");
+				}
+   				adult.setFirstName(travellerDetail.getFirstName());
+   				adult.setLastName(travellerDetail.getLastName());
+   				
+   				adultList.add(adult);
+   				countAdult++;
+   				System.out.println(countAdult);
+				} else if (travellerDetail.getPaxType().equals("2")) {
+	   				PaxAirIQ child = new PaxAirIQ();
+	   				child.setId(countChild);
+	   				if (travellerDetail.getSalutation().equals("Miss")) {
+	   					child.setTitle(travellerDetail.getSalutation());
+					} else {
+						child.setTitle(travellerDetail.getSalutation() + ".");
+					}
+	   				child.setFirstName(travellerDetail.getFirstName());
+	   				child.setLastName(travellerDetail.getLastName());
+	   				
+	   				childList.add(child);
+	   				countChild++;
+	   				System.out.println(countChild);
+				} else {
+	   				PaxAirIQ infant = new PaxAirIQ();
+	   				infant.setId(countChild);
+	   				if (travellerDetail.getSalutation().equals("Miss")) {
+	   					infant.setTitle(travellerDetail.getSalutation());
+					} else {
+						infant.setTitle(travellerDetail.getSalutation() + ".");
+					}
+	   				infant.setFirstName(travellerDetail.getFirstName());
+	   				infant.setLastName(travellerDetail.getLastName());
+	   				
+	   				String[] arrDob = travellerDetail.getDob().toString().split("-");
+	   				infant.setDob(arrDob[0] + "/" + arrDob[1] + "/" + arrDob[2]);
+	   				infant.setTravelWith("1");
+	   				
+	   				infantList.add(infant);
+	   				countInfant++;
+	   				System.out.println(countInfant);
+				}
+			}
+			for (PaxAirIQ adult : adultList) {
+				String adultInfo = "{\r\n"
+						+ "            \"title\": \"" + adult.getTitle() + "\",\r\n"
+						+ "            \"first_name\": \"" + adult.getFirstName() + "\",\r\n"
+						+ "            \"last_name\": \"" + adult.getLastName() + "\"\r\n"
+						+ "        }\r\n";
+				
+				travelerDetailsArrayAdult.add(adultInfo);
+			}
+			
+			for (PaxAirIQ child : childList) {
+				String childInfo = "{\r\n"
+						+ "            \"title\": \"" + child.getTitle() + "\",\r\n"
+						+ "            \"first_name\": \"" + child.getFirstName() + "\",\r\n"
+						+ "            \"last_name\": \"" + child.getLastName() + "\"\r\n"
+						+ "        }\r\n";
+				
+				travelerDetailsArrayChild.add(childInfo);
+			}
+			
+			for (PaxAirIQ infant : infantList) {
+				String infantnfo = "{\r\n"
+						+ "            \"title\": \"" + infant.getTitle() + "\",\r\n"
+						+ "            \"first_name\": \"" + infant.getFirstName() + "\",\r\n"
+						+ "            \"last_name\": \"" + infant.getLastName() + "\"\r\n"
+						+ "            \"dob\": \"" + infant.getDob() + "\",\r\n"
+						+ "            \"travel_with\": \"" + infant.getTravelWith() + "\"\r\n"
+						+ "        }\r\n";
+				
+				travelerDetailsArrayInfant.add(infantnfo);
+			}
+
+	       	String arrayTravelerADT = travelerDetailsArrayAdult.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+	       	String arrayTravelerCHD = travelerDetailsArrayChild.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+	       	String arrayTravelerINF = travelerDetailsArrayInfant.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+	       	
+			String details = "{\r\n"
+					+ "    \"ticket_id\": \"" + productDetail.getTraceId() + "\",\r\n"
+					+ "    \"total_pax\": \"" + totalPax + "\",\r\n"
+					+ "    \"adult\": \"" + travelerDetailsArrayAdult.size() + "\",\r\n"
+					+ "    \"child\": \"" + travelerDetailsArrayChild.size() + "\",\r\n"
+					+ "    \"infant\": \"" + travelerDetailsArrayInfant.size() + "\",\r\n"
+					+ "    \"adult_info\": [\r\n"
+					+ 		travelerDetailsArrayAdult
+					+ "    ],\r\n"
+					+ "    \"child_info\": [\r\n"
+					+ 		travelerDetailsArrayChild
+					+ "    ],\r\n"
+					+ "    \"infant_info\": [\r\n"
+					+ 		travelerDetailsArrayInfant
+					+ "    ]\r\n"
+					+ "}";
+   			
+   			
+
+       	/* Ticket  */
+       	URL urlTicket = new URL("https://omairiq.azurewebsites.net/book");
+           // Open a connection
+        HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
+           
+        StringBuilder responseBodyTicket = new StringBuilder();
+           
+       	onlineFlightService.apiAirIQTicket(connectionTicket, responseBodyTicket, details, onlineFlightService.tokenAirIQ);
+       	
+       	
+       	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
+       	System.out.println(jsonObjTicket);
+       	logService.generateLog(jsonObjTicket.toString());
+       	try {
+				String code = jsonObjTicket.get("code").toString();
+				String status = jsonObjTicket.get("status").toString();
+				String message = jsonObjTicket.get("message").toString();
+				String booking_id = jsonObjTicket.get("booking_id").toString();
+				String airline_code = jsonObjTicket.get("airline_code").toString();
+				
+				if (status.equals("success")) {
+
+			       	/* Ticket details */
+			       	URL urlTicketDetails = new URL("https://omairiq.azurewebsites.net/ticket?booking_id=" + booking_id);
+			           // Open a connection
+			        HttpURLConnection connectionTicketDetails = (HttpURLConnection) urlTicketDetails.openConnection();
+			           
+			        StringBuilder responseBodyTicketDetails = new StringBuilder();
+			           
+			       	onlineFlightService.apiAirIQTicketDetails(connectionTicketDetails, responseBodyTicketDetails, onlineFlightService.tokenAirIQ);
+
+			       	JSONObject jsonObjTicketDetails = new JSONObject(responseBodyTicketDetails.toString()); 
+			       	System.out.println(jsonObjTicketDetails);
+			       	logService.generateLog(jsonObjTicketDetails.toString());
+			       	try {
+			       		String bookingId = jsonObjTicketDetails.getJSONObject("data").get("booking_id").toString();
+			       		String pnr = jsonObjTicketDetails.getJSONObject("data").get("pnr").toString();
+						String terminalDep = "", terminalArr = "";
+						
+						productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
+						productService.updatePNROnline(productDetail, pnr);
+						productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
+						updateBookingId(order, bookingId);
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+				}
+				
+				hasErrorArr[0] = code;
+				hasErrorArr[1] = status;
+				
+			} catch (JSONException json) {
+				String code = jsonObjTicket.get("code").toString();
+				String status = jsonObjTicket.get("status").toString();
+				hasErrorArr[0] = code;
+				hasErrorArr[1] = status;
+				
+			} 
+		}
+		
+		return hasErrorArr;
+	}
+	
 	public String searchReturnInternationalFlightAPIOnlyTraceId(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate, String traceIdReturn) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
