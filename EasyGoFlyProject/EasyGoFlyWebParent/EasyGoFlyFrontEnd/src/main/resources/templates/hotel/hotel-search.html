@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:fragment="hotel-search">
+	
+	<head>
+		<style>
+			.categoryStyle {
+				box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    			border-radius: 10px;
+    			background: white;
+    			margin-top: 15px;
+    			position: relative;
+    			z-index: 100;
+    			padding: 5px 0;
+			}
+			.colStyle {
+    			display: flex;
+    			justify-content: space-around;
+			}
+			.borderEnd {
+				border-right: 1px solid #dbdbdb;
+			}
+			.borderMid {
+				border-left: 1px solid #dbdbdb;
+				height: 100%;
+			}
+			.travelerSelection {
+				cursor: pointer;
+				display: flex;
+    			justify-content: start;
+			}
+			.travelerSelection p {
+				margin: 3px 0 0;
+				font-size: 14px;
+				color: #9f9f9f;
+			}
+			.travelerSelection:hover {
+				background: rgb(192, 192, 192);
+				border-radius: 10px;
+			}
+			.cityFIcon {
+				height: 58px; 
+				display: flex; 
+				flex-direction: column; 
+				justify-content: center; 
+				font-size: 24px;
+				margin: 0 17px 0 20px;
+			}
+			#travellerFIcon {
+				height: 58px; 
+				display: flex; 
+				flex-direction: column; 
+				justify-content: center; 
+				font-size: 24px;
+				margin: 0 25px 0 20px;
+			}
+			#categorySubmit {
+				border-radius: 7px;
+				background: rgb(89, 89, 255);
+				color: white;    
+				padding: 10px 15px;
+				font-size: 22px;
+				border: none;
+    			width: -webkit-fill-available;
+				margin: 0 10px;
+			}
+			
+			#categorySubmit:hover {
+				background: blue;
+			}
+			#hotelSearch {
+			    display: flex;
+			    justify-content: center;
+			}
+			.submitDiv {
+				display: flex;
+			    justify-content: center;
+			    align-items: center;
+			}
+			
+			@media screen and (max-width: 800px) {
+				.colStyle {
+    				justify-content: start;
+    				border: none !important;
+				}
+				.form-control {
+					background-color: transparent;
+					width: 100%;
+				}
+				.submitDiv {
+			    	margin-top: 10px;
+				}
+			}
+			
+			@media screen and (max-width: 600px) {
+				.colStyle {
+    				justify-content: start;
+    				border: none !important;
+				}
+				.form-control {
+					background-color: transparent;
+					width: 100%;
+				}
+				body #mainHeroStyle #hero {
+					height: 42vh;
+				}
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="categoryStyle">
+				<form id="hotelSearch">
+					<div class="row" style=" margin-top: 0px; width: -webkit-fill-available;">
+						<div class="col-md-3 col-sm-12 col-12 borderEnd colStyle">
+							<div class="row" style="width: -webkit-fill-available;">
+								<div class="col-md-2  col-sm-2 col-2 ">
+									<div class="cityFIcon">
+										<i class="fa fa-solid fa-magnifying-glass"></i>
+									</div>
+								</div>
+								<div class="col-md-10 col-sm-10 col-10">
+									
+									<div class="form-floating" id="aligner3">
+										<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" 
+											placeholder="City" list="cityList" style="border: none;" required>
+										<datalist id="cityList">
+										</datalist>
+										<label class="labelStyle labelSetting" for="cityOne">
+											City</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-12 col-12 borderEnd colStyle">
+							<div class="row" style="width: -webkit-fill-available;">
+								<div class="col-2 col-md-2 col-sm-2">
+									<div class="cityFIcon">
+										<i class="fa fa-regular fa-calendar"></i>
+									</div>
+								</div>
+								<div class="col-10 col-md-10 col-sm-10">
+									<div class="row">
+										<div class="col-5 col-md-5 col-sm-5">
+											<div class="form-floating" id="aligner3">
+												<input type="date" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" 
+													placeholder="City" style="border: none;" required>
+												
+												<label class="labelStyle labelSetting" for="cityOne">
+													Check-In</label>
+											</div>
+										</div>
+										<div class="col-2 col-md-2 col-sm-2">
+											<div class="borderMid"></div>
+										</div>
+										<div class="col-5 col-md-5 col-sm-5">
+											<div class="form-floating" id="aligner3">
+												<input type="date" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" 
+													placeholder="City" style="border: none;" required>
+												
+												<label class="labelStyle labelSetting" for="cityOne">
+													Check-Out</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-5 col-sm-12 col-12 colStyle">
+							<div class="row" style="width: -webkit-fill-available;">
+								<div class="col-md-8">
+									<div class="travelerSelection">
+										<div id="travellerFIcon" >
+											<i class="fa fa-solid fa-bed"></i>
+										</div>
+										<div>
+											<p>Guests and Rooms</p>
+											<b>2 Guests, 1 Room</b>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 submitDiv">
+									<input id="categorySubmit" type="button" value="Submit">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

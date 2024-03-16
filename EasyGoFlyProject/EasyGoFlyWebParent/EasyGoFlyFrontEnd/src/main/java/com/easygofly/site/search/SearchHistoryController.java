@@ -275,7 +275,7 @@ public class SearchHistoryController {
         
         StringBuilder responseBodySearchAirIQ = new StringBuilder();
         
-        int responseCodeAirIQ = onlineFlightService.apiAirIQSearch(connectionSearchAirIQ, responseBodySearchAirIQ, auth, cityOne, cityTwo, adultNum, childNum, infantNum, date);
+        onlineFlightService.apiAirIQSearch(connectionSearchAirIQ, responseBodySearchAirIQ, auth, cityOne, cityTwo, adultNum, childNum, infantNum, date);
         
 		//AirIQ response.......
 
@@ -513,7 +513,6 @@ public class SearchHistoryController {
         
         return hasErrorArr;
 	}
-
 
 	public Integer saveHistoryPart(String cityOne, String cityTwo, Date date, String journeyClass, String tripType,
 			Integer adultNum, Integer childNum, Integer infantNum, Customer customer) {

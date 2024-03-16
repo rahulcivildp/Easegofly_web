@@ -393,7 +393,7 @@ input:checked+br+label {
 				<div id="tabsMobile" class="col-12 media_status_flex_CPN">
 					<div class="row text-center" id="adjusted">
 						<div class="col-3" style="padding: 0 4px !important;" id="flightCol">
-							<li class="tabss shadow " id="flightMobile">
+							<li class="tabss shadow activated" id="flightMobile">
 								<div >
 									<img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><b>Flights</b>
 								</div>
@@ -418,7 +418,7 @@ input:checked+br+label {
 			
 		</div>
 			
-	<div id="mainHeroStyle" >
+	<div id="mainHeroStyle" class="searchBovMainDivActive">
 		<div  style="position: absolute; z-index: 2; width: 100%;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
 					<div th:replace="flight/air-search :: air-search"></div>

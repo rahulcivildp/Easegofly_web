@@ -18,26 +18,15 @@ th:fragment="category(remove)" th:remove="${remove}">
 
 <style type="text/css">
 @media screen and (max-width: 800px) {
-	.tabss {
-		width: 100%;
-		height: 90px;
-		margin: 2px !important;
-		padding: 22px !important;
-	    display: flex !important;
-	    justify-content: center;
-	    align-items: center;
-	    cursor: pointer;
-		position: relative;
-		top: 0;
-	}
-	#flightCol .tabss:hover {
+
+	#hotelCol .tabss:hover {
 		position: relative;
 		top: 0;
 		background: white;
 		box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
 	}
 	
-	#flightCol .tabss:active {
+	#hotelCol .tabss:active {
 	   transform: translate(0px, -7%);
 	   -webkit-transform: translate(0px, -7%);
 	   -ms-transform: translate(0px, -7%);
@@ -89,6 +78,17 @@ th:fragment="category(remove)" th:remove="${remove}">
 }
 
 @media screen and (max-width: 800px) {
+	.tabss {
+	    display: flex !important;
+	    height: 90px;
+	    margin: 2px !important;
+	    padding: 22px !important;
+	    justify-content: center;
+	    align-items: center;
+	    cursor: pointer;
+	    position: relative;
+	    top: 0;
+	}
 	.displayItemNone {display: none !important;}
 	.displayItemBlock {display: block !important;}
 	.displayItemFlex {display: flex !important;}
@@ -160,7 +160,7 @@ th:fragment="category(remove)" th:remove="${remove}">
 
 .tabss:hover {
 	position: relative;
-	top: -8px;
+	top: 0px;
 	background: #D32F2F;
 	box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
 }
@@ -352,14 +352,14 @@ input:checked+br+label {
 	width: 100% !important;
 	overflow: hidden !important;
 }
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 600px) {
 	.carousel-inner-cont {
 		height: 100vh !important;
 	}
 }
 
 #imgbck2 {
-	padding: 90px 0 30px 0;
+	padding: 90px 0 0px 0;
     margin: 0 auto;
     width: 80%;
 }
@@ -376,14 +376,14 @@ input:checked+br+label {
 	
 				<div id="tabs" class="col-12 media-hide">
 					<ul class="text-center" id="adjusted">
-							<li class="tabss shadow activated" id="flight"><a
+							<li class="tabss shadow" id="flight"><a
 								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
 						
-							<li class="tabss shadow" id="train"><a
+							<li class="tabss shadow activated" id="train"><a
 								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
 						
 							<li class="tabss shadow" id="hotel"><a
-								th:href="@{/hotel}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
+								th:href="@{/}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
 						
 							<li class="tabss shadow" id="holidays"><a
 								th:href="@{/}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
@@ -392,24 +392,27 @@ input:checked+br+label {
 				</div>
 				<div id="tabsMobile" class="col-12 media_status_flex_CPN">
 					<div class="row text-center" id="adjusted">
-						<div class="col-3" style="padding: 0 4px !important;" id="flightCol">
-							<li class="tabss shadow " id="flightMobile">
+						<div class="col-3" style="padding: 0 4px !important;" >
+							<li class="tabss shadow" id="flightMobile">
+								<a th:href="@{/flight}"><img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><strong>Flights</strong></a>
+							</li>
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;" id="hotelCol">
+							<li class="tabss shadow activated" id="hotelMobile">
 								<div >
-									<img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><b>Flights</b>
+									<img th:src="@{/images/front/city1.png}" class="img-fluid" style="width: 50px;"><br><b>Hotels</b>
 								</div>
 							</li>
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="hotelMobile"><a
-								th:href="@{/hotel}"><img th:src="@{/images/front/city1.png}" class="img-fluid" style="width: 50px;"><br><strong>Hotels</strong></a></li>
+							<li class="tabss shadow" id="busMobile">
+								<a th:href="@{/}"><img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><strong>Buses</strong></a>
+							</li>	
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="busMobile"><a
-								th:href="@{/}"><img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><strong>Buses</strong></a></li>	
-						</div>
-						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="holidaysMobile"><a
-								th:href="@{/}"><img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><strong>Holidays</strong></a></li>
+							<li class="tabss shadow" id="holidaysMobile">
+								<a th:href="@{/}"><img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><strong>Holidays</strong></a>
+							</li>
 						</div>
 					</div>
 				</div>
@@ -418,16 +421,16 @@ input:checked+br+label {
 			
 		</div>
 			
-	<div id="mainHeroStyle" >
+	<div id="mainHeroStyle" class="searchBovMainDivActive">
 		<div  style="position: absolute; z-index: 2; width: 100%;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
-					<div th:replace="flight/air-search :: air-search"></div>
+					<div th:replace="hotel/hotel-search :: hotel-search"></div>
 			    
 			</div>
 		</div>
 		<!-- ======= Hero Section ======= -->
-		<section id="hero" class="heroDIsplay" style="">
-			<div class="hero-container" style="height: 100vh;">
+		<section id="hero" class="heroDIsplay">
+			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
 					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
 
@@ -495,8 +498,8 @@ input:checked+br+label {
 
 
 <script>
-	$("#flightMobile").click(function(){
-		$("#flightMobile").toggleClass("activated");
+	$("#hotelMobile").click(function(){
+		$("#hotelMobile").toggleClass("activated");
 		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
 	});
 </script>

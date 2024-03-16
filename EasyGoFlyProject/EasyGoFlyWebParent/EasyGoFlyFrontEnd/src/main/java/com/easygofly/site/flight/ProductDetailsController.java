@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,10 +26,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.easygofly.entity.BaggageOnline;
+import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.City;
+import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.FlightMap;
 import com.easygofly.entity.MealsOnline;
@@ -34,6 +41,8 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
+import com.easygofly.entity.Wallet;
+import com.easygofly.entity.WebDetails;
 import com.easygofly.site.LogService;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
@@ -44,6 +53,8 @@ import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.CountryRepository;
+import com.easygofly.site.setting.web.WebSettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
 
@@ -64,6 +75,10 @@ public class ProductDetailsController {
 	@Autowired private ProductDetailCrudRepository productDetailCrudRepo;
 	@Autowired private SearchHistoryController sHistoryController;
 	@Autowired private CityRepository cityRepo;
+	@Autowired private CountryRepository countryRepo;
+	@Autowired private SearchHistoryService searchHistoryService ;
+	@Autowired private WebSettingService webSettingService;
+	@Autowired private BrandRepositoy brandRepo;
 
 	public List<ProductDetail> listProductDetails;
 	public List<ProductDetail> listProductDetailsInSearch = new ArrayList<ProductDetail>();
@@ -100,6 +115,133 @@ public class ProductDetailsController {
 
 	public Integer timeRemainingPro = 0;
 	public Integer timeRemainingProOne = 0;
+	
+
+	@GetMapping("/flight")
+	public String viewHomePageFlight(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+		Country country = countryRepo.findById(106).get();
+		Iterable<City> cities = cityRepo.getCityByCountry(country);
+		model.addAttribute("cities", cities);
+		
+		Iterable<City> allCities = cityRepo.findAll();
+		model.addAttribute("allCities", allCities);
+		String phone; 
+		if (loggedCustomer != null) {
+			phone = loggedCustomer.getUsername();
+			Customer customer = searchHistoryService.getByPhone(phone);
+			Wallet wallet = customer.getWallet();
+			model.addAttribute("balance", wallet.getBalance());
+			historyPart(model, customer);
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			@SuppressWarnings("unused")
+			HttpSession session= attr.getRequest().getSession(true);
+			
+		} else if (googleLogin != null) {
+			phone = googleLogin.getEmail();
+			Customer customer = searchHistoryService.getByPhone(phone);
+			Wallet wallet = customer.getWallet();
+			model.addAttribute("balance", wallet.getBalance());
+			historyPart(model, customer);	
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			@SuppressWarnings("unused")
+			HttpSession session= attr.getRequest().getSession(true);
+		}
+		
+		List<WebDetails> webDetails = webSettingService.listAllSettings();
+		for (WebDetails detail : webDetails) {
+			model.addAttribute(detail.getKey(), detail.getValue());
+			if (detail.getKey().equals("PRICE_1_LINK")) {
+				ProductDetail flight = flightFareDetails(detail);
+				if (flight != null ) {
+					Brand brand = brandRepo.getBrandByName(flight.getBrand());
+					model.addAttribute("flightDate1", flight.getDate());
+					model.addAttribute("brand1", brand);
+				}
+				
+			} else if (detail.getKey().equals("PRICE_2_LINK")) {
+				ProductDetail flight = flightFareDetails(detail);
+				if (flight != null ) {
+					Brand brand = brandRepo.getBrandByName(flight.getBrand());
+					model.addAttribute("flightDate2", flight.getDate());
+					model.addAttribute("brand2", brand);
+				}
+				
+			} else if (detail.getKey().equals("PRICE_3_LINK")) {
+				ProductDetail flight = flightFareDetails(detail);
+				if (flight != null ) {
+					Brand brand = brandRepo.getBrandByName(flight.getBrand());
+					model.addAttribute("brand3", brand);
+					model.addAttribute("flightDate3", flight.getDate());
+				}
+				
+			} else if (detail.getKey().equals("PRICE_4_LINK")) {
+				ProductDetail flight = flightFareDetails(detail);
+				if (flight != null ) {
+					Brand brand = brandRepo.getBrandByName(flight.getBrand());
+					model.addAttribute("flightDate4", flight.getDate());
+					model.addAttribute("brand4", brand);
+				}
+				
+			} else if (detail.getKey().equals("PRICE_5_LINK")) {
+				ProductDetail flight = flightFareDetails(detail);
+				if (flight != null ) {
+					Brand brand = brandRepo.getBrandByName(flight.getBrand());
+					model.addAttribute("flightDate5", flight.getDate());
+					model.addAttribute("brand5", brand);
+				}
+				
+			} else if (detail.getKey().equals("PRICE_6_LINK")) {
+				ProductDetail flight = flightFareDetails(detail);
+				if (flight != null ) {
+					Brand brand = brandRepo.getBrandByName(flight.getBrand());
+					model.addAttribute("flightDate6", flight.getDate());
+					model.addAttribute("brand6", brand);
+				}
+			}
+		}
+		
+		return "flight/index";
+	}
+	
+	private ProductDetail flightFareDetails(WebDetails detail) {
+		String priceLink1 = detail.getValue();
+		String[] parts = priceLink1.split("_");
+		if (parts.length != 1) {
+			Integer convInteger = Integer.parseInt(parts[4]);
+			ProductDetail flight = flightRepo.findById(convInteger).get();
+			return flight;
+		} else {
+			return null;
+		}
+		
+	}
+
+
+	private void historyPart(Model model, Customer customer) {
+		List<SearchHistory> searches =  customer.getSearchHistory();
+		
+		if (searches.size() != 0) {
+			Integer size = searches.size();
+			
+			if (searches.size() >= 1) {
+				SearchHistory lastValue1 = searches.get(size-1);
+				model.addAttribute("lastValue1", lastValue1);
+			}
+			if (searches.size() >= 2) {
+				SearchHistory lastValue2 = searches.get(size-2);
+				model.addAttribute("lastValue2", lastValue2);
+			}
+			if (searches.size() >= 3) {
+				SearchHistory lastValue3 = searches.get(size-3);
+				model.addAttribute("lastValue3", lastValue3);
+			}
+		}
+		
+		model.addAttribute("customer", customer);
+	}
+	
+	
 	////Flight one-way segment
 
 	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")

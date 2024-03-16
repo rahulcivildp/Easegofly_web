@@ -320,10 +320,11 @@ public class OrderController {
 			}
 			
 		} else if (productDetail.getMode().equals("AirIQ")) {
-			orderService.ticketDetailsAirIQ(order, productDetail);
+			hasErrorArr = orderService.ticketDetailsAirIQ(order, productDetail);
 			
 		} else if (productDetail.getMode().equals("Offline-data")) {
-			
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		} else {
 			hasErrorArr[0] = "0";
 			hasErrorArr[1] = "0";
@@ -399,12 +400,14 @@ public class OrderController {
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
 		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
-		if (hasErrorCode != 0) {
+		if (hasErrorArr[0].equals("0")) {
+			model.addAttribute("paymentSuccess", "successfull");
+		} else if (hasErrorArr[0].equals("200")) {
+			model.addAttribute("paymentSuccess", "successfull");
+		} else {
 			orderService.walletPayOrderCancel(customer, order, "");
 			System.out.println(hasErrorCode);
 			model.addAttribute("paymentCancelled", hasErrorArr[1]);
-		} else {
-			model.addAttribute("paymentSuccess", "successfull");
 		}
 		
 		model.addAttribute("amount", order.getPrice());
@@ -540,10 +543,11 @@ public class OrderController {
 			}
 			
 		} else if (productDetail.getMode().equals("AirIQ")) {
-			orderService.ticketDetailsAirIQ(order, productDetail);
+			hasErrorArr = orderService.ticketDetailsAirIQ(order, productDetail);
 			
 		} else if (productDetail.getMode().equals("Offline-data")) {
-			
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		} else {
 			hasErrorArr[0] = "0";
 			hasErrorArr[1] = "0";
@@ -626,12 +630,14 @@ public class OrderController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
 			hasErrorCode = Integer.parseInt(hasErrorArr[0]);
-			if (hasErrorCode != 0) {
+			if (hasErrorArr[0].equals("0")) {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			} else if (hasErrorArr[0].equals("200")) {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			} else {
 				orderService.walletPayOrderCancel(customer, order, "");
 				System.out.println(hasErrorCode);
 				model.addAttribute("paymentCancelled", hasErrorArr[1]);
-			} else {
-				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			}
 		}
 		

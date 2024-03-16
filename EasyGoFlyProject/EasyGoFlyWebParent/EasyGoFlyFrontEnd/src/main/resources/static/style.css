@@ -207,7 +207,7 @@
 	padding-bottom: 24px;
 }
 /* Responsive */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
 	  *.onwars_responsive { padding: 6px 81px !important;}
 	  *.mobile_account_view { padding: 0 13px;}
 	  *.extra_height { height: 176px;}

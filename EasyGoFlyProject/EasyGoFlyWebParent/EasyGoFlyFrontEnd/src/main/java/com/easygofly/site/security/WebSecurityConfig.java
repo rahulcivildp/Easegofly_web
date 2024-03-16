@@ -86,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 					"/get_value", "/rishikesh_view", "/shimla_view", "/kolkata_view", "/darjeeling_view", "/bangalore_view", "/kerala_view", "/mumbai_view", 
 					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/noUser_search_filter", 
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**", 
-					"/flight_search-noUser_filter_**", "/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**").permitAll()
+					"/flight_search-noUser_filter_**", "/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight").permitAll()
 			.anyRequest().authenticated()
             .and()
             .addFilterBefore(beforeLoginFilter,

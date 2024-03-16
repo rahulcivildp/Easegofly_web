@@ -644,15 +644,6 @@ public class OnlineFlightService {
         connection.setRequestProperty("api-key", "NTMzNDUwMDpBSVJJUSBURVNUIEFQSToxODkxOTMwMDM1OTk2OlFRYjhLVjNFMW9UV05RY1NWL0Vtcm9UYXFKTSs5dkZvaHo0RzM4WWhwTDhsamNqR3pPN1dJSHhVQ2pCSzNRcW0=");
         
         connection.setRequestProperty("Authorization", auth);
-        
-        
-        // Enable writing data to the connection
-        connection.setDoOutput(true);
-        
-		// Write the request body to the connection's output stream
-		OutputStream outputStream = connection.getOutputStream();
-		outputStream.flush();
-		outputStream.close();
 
 		// Get the response
 		int responseCode = connection.getResponseCode();

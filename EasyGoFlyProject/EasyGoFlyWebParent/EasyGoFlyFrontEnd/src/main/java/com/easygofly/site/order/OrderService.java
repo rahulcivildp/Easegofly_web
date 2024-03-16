@@ -1615,7 +1615,7 @@ public class OrderService {
 		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
 		String[] hasErrorArr = new String[2];
 		
-		if (productDetail.getTraceId().equals("AirIQ")) {
+		if (productDetail.getMode().equals("AirIQ")) {
 			
 			List<PaxAirIQ> adultList = new ArrayList<PaxAirIQ>();
 			List<PaxAirIQ> childList = new ArrayList<PaxAirIQ>();
@@ -1711,25 +1711,29 @@ public class OrderService {
 	       	String arrayTravelerCHD = travelerDetailsArrayChild.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 	       	String arrayTravelerINF = travelerDetailsArrayInfant.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 	       	
+	       	String adultinfoList = "    \"adult_info\": "+arrayTravelerADT+"\r\n";
+	       	String childinfoList = "";
+	       	String infantinfoList = "";
+	       	
+	       	if (travelerDetailsArrayChild.size() != 0) {
+	       		childinfoList = "    \"child_info\": "+arrayTravelerCHD+"\r\n";
+			}
+	       	if (travelerDetailsArrayInfant.size() != 0) {
+	       		infantinfoList = "    \"infant_info\": "+arrayTravelerINF+"\r\n";
+			}
+	       	
 			String details = "{\r\n"
 					+ "    \"ticket_id\": \"" + productDetail.getTraceId() + "\",\r\n"
 					+ "    \"total_pax\": \"" + totalPax + "\",\r\n"
 					+ "    \"adult\": \"" + travelerDetailsArrayAdult.size() + "\",\r\n"
 					+ "    \"child\": \"" + travelerDetailsArrayChild.size() + "\",\r\n"
 					+ "    \"infant\": \"" + travelerDetailsArrayInfant.size() + "\",\r\n"
-					+ "    \"adult_info\": [\r\n"
-					+ 		travelerDetailsArrayAdult
-					+ "    ],\r\n"
-					+ "    \"child_info\": [\r\n"
-					+ 		travelerDetailsArrayChild
-					+ "    ],\r\n"
-					+ "    \"infant_info\": [\r\n"
-					+ 		travelerDetailsArrayInfant
-					+ "    ]\r\n"
+					+ 		adultinfoList
+					+ 		childinfoList
+					+ 		infantinfoList
 					+ "}";
    			
    			
-
        	/* Ticket  */
        	URL urlTicket = new URL("https://omairiq.azurewebsites.net/book");
            // Open a connection
@@ -1775,7 +1779,7 @@ public class OrderService {
 						updateBookingId(order, bookingId);
 						
 					} catch (Exception e) {
-						// TODO: handle exception
+						e.printStackTrace();
 					}
 				}
 				
@@ -1783,6 +1787,7 @@ public class OrderService {
 				hasErrorArr[1] = status;
 				
 			} catch (JSONException json) {
+				json.printStackTrace();
 				String code = jsonObjTicket.get("code").toString();
 				String status = jsonObjTicket.get("status").toString();
 				hasErrorArr[0] = code;
