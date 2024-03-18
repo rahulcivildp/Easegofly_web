@@ -24,10 +24,12 @@
 				border-left: 1px solid #dbdbdb;
 				height: 100%;
 			}
-			.travelerSelection {
-				cursor: pointer;
+			.travelerButton {
 				display: flex;
     			justify-content: start;
+			}
+			.travelerSelection {
+				overflow: hidden;
 			}
 			.travelerSelection p {
 				margin: 3px 0 0;
@@ -90,6 +92,9 @@
 				.submitDiv {
 			    	margin-top: 10px;
 				}
+				.dropMenuStyle {
+					width: 90% !important;
+				}
 			}
 			
 			@media screen and (max-width: 600px) {
@@ -105,7 +110,75 @@
 					height: 42vh;
 				}
 			}
-			
+			.autocomplete-active {
+			  background-color: DodgerBlue !important; 
+			  color: #ffffff; 
+			}
+			.autocomplete-items {
+				position: absolute;
+			    top: 57px;
+			    z-index: 100;
+			    background: white;
+			    width: 100%;
+			}
+			.dropDwonCountStyle {
+				display: flex;
+    			justify-content: space-evenly;
+			}
+			input[type=number]::-webkit-inner-spin-button, 
+			input[type=number]::-webkit-outer-spin-button {
+			    -webkit-appearance: none;
+			    -moz-appearance: none;
+			    appearance: none;
+			    margin: 0; 
+			}
+			.inputStylePax {
+				width: 35px;
+			    height: 35px;
+    			text-align: center;
+    			border: 1px solid #c2c2c2;
+    			border-radius: 6px;
+			}
+			.incrementStyle {
+				border: 1.5px solid #c6c6fa;
+			    color: #c6c6fa;
+			    cursor: none;
+			    border-radius: 18px;
+			    width: 35px;
+			    height: 35px;
+			    display: flex;
+			    justify-content: center;
+			    align-items: center;
+			}
+			.incStyle {
+				border: 1.5px solid #5555d4;
+			    color: #5555d4;
+			    cursor: pointer;
+			}
+			.incrementStyle:hover {
+				background: #dbdbdb;
+			}
+			.extraPadding {
+				padding: 19px 14px;;
+			}
+			.dropMenuStyle {
+				width: 30%;
+    			box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+			}
+			.carousel-indicators {
+				z-index: 1 !important;
+			}
+			.displaySetting {
+				display: block;
+			}
+			.borderBottom {
+				border-bottom: 1px solid #c2c2c2;    
+				margin-bottom: 15px;
+			}
+			.centeredDiv {
+				display: flex;
+    			justify-content: center;
+			}
 		</style>
 	</head>
 	<body>
@@ -123,10 +196,9 @@
 								<div class="col-md-10 col-sm-10 col-10">
 									
 									<div class="form-floating" id="aligner3">
-										<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" 
-											placeholder="City" list="cityList" style="border: none;" required>
-										<datalist id="cityList">
-										</datalist>
+										<input type="search" class="form-control hill1 input_styles" name="cityOne" id="hotelCity" 
+											placeholder="City" style="border: none;" required>
+											
 										<label class="labelStyle labelSetting" for="cityOne">
 											City</label>
 									</div>
@@ -144,8 +216,7 @@
 									<div class="row">
 										<div class="col-5 col-md-5 col-sm-5">
 											<div class="form-floating" id="aligner3">
-												<input type="date" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" 
-													placeholder="City" style="border: none;" required>
+												<input type="date" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" style="border: none;" onclick="calenderViewNew(this)" required>
 												
 												<label class="labelStyle labelSetting" for="cityOne">
 													Check-In</label>
@@ -156,8 +227,7 @@
 										</div>
 										<div class="col-5 col-md-5 col-sm-5">
 											<div class="form-floating" id="aligner3">
-												<input type="date" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" 
-													placeholder="City" style="border: none;" required>
+												<input type="date" class="form-control hill1 input_styles" name="checkOutDate" id="checkOutDate" style="border: none;" onclick="calenderViewReturn('#checkInDate', this)" required>
 												
 												<label class="labelStyle labelSetting" for="cityOne">
 													Check-Out</label>
@@ -171,15 +241,44 @@
 						<div class="col-md-5 col-sm-12 col-12 colStyle">
 							<div class="row" style="width: -webkit-fill-available;">
 								<div class="col-md-8">
-									<div class="travelerSelection">
-										<div id="travellerFIcon" >
-											<i class="fa fa-solid fa-bed"></i>
+									
+									
+									  <button type="button" class="btn travelerSelection" id="dropDwonButton" aria-expanded="false">
+									   <div class="travelerButton">
+											<div id="travellerFIcon" >
+												<i class="fa fa-solid fa-bed"></i>
+											</div>
+											<div>
+												<p>Guests and Rooms</p>
+												<b id="guestInfo">2 Guests, 1 Room</b>
+											</div>
 										</div>
-										<div>
-											<p>Guests and Rooms</p>
-											<b>2 Guests, 1 Room</b>
-										</div>
-									</div>
+									  </button>
+									  <div class="dropdown-menu dropdown-menu-end dropMenuStyle" id="dropDownMenu">
+										  <div class="row" style="padding: 5px 20px;">
+											  <div class="col-6 extraPadding"><b>Adults</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decAdult"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input class="inputStylePax" min="0" type="number" id="adultNum" value="1"></div>
+												  <div class="incrementStyle" id="incAdult"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
+											  <div class="col-6 extraPadding"><b>Children</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decChild"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input class="inputStylePax" min="0" type="number" id="childNum" value="0"></div>
+												  <div class="incrementStyle" id="incChild"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
+											  <div class="col-6 extraPadding"><b>Rooms</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decRoom"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input class="inputStylePax" min="0" type="number" id="roomNum" value="1"></div>
+												  <div class="incrementStyle" id="incRoom"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
+											  <div class="col-12 borderBottom"></div>
+											  <div class="col-6 centeredDiv"><button type="button" class="btn btn-secondary" style="width: 80%;" id="resetButton"><b>Reset</b></button></div>
+											  <div class="col-6 centeredDiv"><button type="button" class="btn btn-success" style="width: 80%;" id="applyButton"><b>Apply</b></button></div>
+										  </div>
+									  </div>
 								</div>
 								<div class="col-md-4 submitDiv">
 									<input id="categorySubmit" type="button" value="Submit">
@@ -191,4 +290,120 @@
 			</div>
 		</div>
 	</body>
+	<script>
+		$("#dropDwonButton").click(function(){
+			$("#dropDownMenu").toggleClass('displaySetting')
+		});
+		
+		$(document).mouseup(function(e) {
+		    var container = $("#dropDownMenu");
+		
+		     // if the target of the click isn't the container nor a descendant of the container
+		    if (!container.is(e.target) && container.has(e.target).length === 0) {
+				$("#dropDownMenu").removeClass("displaySetting");
+			}
+		});
+	</script>
+	<script>
+		
+		toggleNumberVal("#decAdult", "#incAdult", "#adultNum");
+		toggleNumberVal("#decChild", "#incChild", "#childNum");
+		toggleNumberVal("#decRoom", "#incRoom", "#roomNum");
+		
+		function toggleNumberVal(minus, plus, input) {
+		
+			if(parseInt($(input).val()) > 0) {
+				$(minus).addClass('incStyle');
+			} else {
+				$(minus).removeClass('incStyle');
+			}
+			
+			
+			if(parseInt($(input).val()) <= 48) {
+				$(plus).addClass('incStyle');
+			} else {
+				$(plus).removeClass('incStyle');
+			}
+			
+			
+			$(minus).click(function(){
+				if(parseInt($(input).val()) >= 1) {
+					var newVal = parseInt($(input).val()) - 1;
+					$(input).attr('value', newVal);
+					if (parseInt($(input).val()) > 0) {
+						$(minus).addClass('incStyle');
+						$(plus).addClass('incStyle');
+					} else {
+						$(minus).removeClass('incStyle');
+					}
+				} else {
+					$(minus).removeClass('incStyle');
+				}
+				
+			});
+			
+			$(plus).click(function(){
+				if(parseInt($(input).val()) <= 48) {
+					var newVal = parseInt($(input).val()) + 1;
+					$(input).attr('value', newVal);
+					if (parseInt($(input).val()) < 48) {
+						$(plus).addClass('incStyle');
+						$(minus).addClass('incStyle');
+					} else {
+						$(plus).removeClass('incStyle');
+					}
+				} else {
+					$(plus).removeClass('incStyle');
+				}
+			});
+		}
+	</script>
+	<script>
+		$("#applyButton").click(function(){
+			var totalGuest = parseInt($("#adultNum").val()) + parseInt($("#childNum").val());
+			var totalRooms = parseInt($("#roomNum").val());
+			var gStr = " Guests, ";
+			var rStr = " Rooms";
+			
+			if (totalGuest == 1) {
+				gStr = " Guest, ";
+			}
+			
+			if (totalRooms == 1) {
+				rStr = " Room";
+			}
+			
+			$("#guestInfo").html(totalGuest + gStr + totalRooms + rStr);
+			$("#dropDownMenu").toggleClass('displaySetting');
+		});
+		
+		
+		$("#resetButton").click(function(){
+			$("#guestInfo").html("2 Guests, 1 Room");
+			$("#adultNum").attr('value', 2);
+			$("#roomNum").attr('value', 1);
+			$("#childNum").attr('value', 0);
+		});
+	</script>
+	<script>
+		function calenderViewNew(input) {
+			var today = new Date().toISOString().split('T')[0];
+			$(input).attr('min', today);
+		};
+		
+		function calenderViewReturn(input, output) {
+			var inputAttr = $(input).val();
+			$(output).attr('min', inputAttr);
+		};
+		
+	</script>
+	<script th:inline="javascript">
+		var cityNames = [[${cityList}]];
+		var cityIds = [[${cityIds}]];
+		var stateProvince = [[${cityStates}]];
+		var country = [[${cityCountries}]];
+		
+		var myInput = document.getElementById("hotelCity");
+	</script>
+<script type="text/javascript" th:src="@{/js/hotelCityAuto.js}"></script>
 </html>

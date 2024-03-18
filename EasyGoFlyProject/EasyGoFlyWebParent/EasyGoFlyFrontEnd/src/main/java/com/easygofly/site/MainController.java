@@ -140,6 +140,7 @@ public class MainController {
 			}
 		}
 		
+	
 		return "index";
 	}
 
@@ -161,7 +162,7 @@ public class MainController {
 		return "loading";
 	}
 
-
+	
 	@GetMapping("/loading___")
 	public String loadingSearchHistory(
 			@RequestParam(name = "searchId", required = false) Integer searchId, Model model) {
@@ -246,8 +247,4 @@ public class MainController {
 		return "about/about";
 	}
 	
-	@GetMapping("/hotel")
-	public String viewHotelPage() {
-		return "hotel/hotel";
-	}
 }

@@ -1,7 +1,7 @@
-2024-03-17 03:59:49.935  INFO 18508 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
-2024-03-17 03:59:49.974  INFO 18508 --- [Thread-23] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2024-03-17 03:59:49.977  INFO 18508 --- [Thread-23] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
-2024-03-17 03:59:50.013  WARN 18508 --- [Thread-23] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-5 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+2024-03-18 00:43:05.305  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 00:43:05.323  INFO 20088 --- [Thread-62] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 00:43:05.323  INFO 20088 --- [Thread-62] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 00:43:05.327  WARN 20088 --- [Thread-62] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-13 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
  java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
  java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
  java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
@@ -11,86 +11,60 @@
  java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
  java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
  java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
-2024-03-17 03:59:50.015  WARN 18508 --- [Thread-23] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [logback-3] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
- java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
- java.base@17.0.7/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
- java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
- java.base@17.0.7/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3463)
- java.base@17.0.7/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3434)
- java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
- java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
- java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
- java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
- java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
- java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
- java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
-2024-03-17 03:59:50.016  WARN 18508 --- [Thread-23] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [logback-4] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
- java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
- java.base@17.0.7/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
- java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
- java.base@17.0.7/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3463)
- java.base@17.0.7/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3434)
- java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
- java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1170)
- java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
- java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
- java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
- java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
- java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
-2024-03-17 03:59:50.038  INFO 18508 --- [Thread-23] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-03-17 03:59:50.044  INFO 18508 --- [Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
-2024-03-17 03:59:50.050  INFO 18508 --- [Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
-2024-03-17 03:59:50.820  INFO 18508 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 18508 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
-2024-03-17 03:59:50.820  INFO 18508 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
-2024-03-17 03:59:53.502  INFO 18508 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-03-17 03:59:53.605  INFO 18508 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 103 ms. Found 25 JPA repository interfaces.
-2024-03-17 03:59:53.991  INFO 18508 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
-2024-03-17 03:59:53.994  INFO 18508 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-03-17 03:59:53.994  INFO 18508 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
-2024-03-17 03:59:54.292  INFO 18508 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
-2024-03-17 03:59:54.296  INFO 18508 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-03-17 03:59:54.296  INFO 18508 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3462 ms
-2024-03-17 03:59:54.472  INFO 18508 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-03-17 03:59:54.536  INFO 18508 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
-2024-03-17 03:59:54.574  INFO 18508 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
-2024-03-17 03:59:54.577  INFO 18508 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2024-03-17 03:59:56.270  INFO 18508 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2024-03-17 03:59:56.271  INFO 18508 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-03-17 03:59:56.545  WARN 18508 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-03-17 03:59:57.439  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.440  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
-2024-03-17 03:59:57.440  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.440  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
-2024-03-17 03:59:57.440  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.440  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
-2024-03-17 03:59:57.440  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.440  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
-2024-03-17 03:59:57.441  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.441  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
-2024-03-17 03:59:57.441  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.441  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
-2024-03-17 03:59:57.441  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.441  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
-2024-03-17 03:59:57.441  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.441  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
-2024-03-17 03:59:57.441  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.441  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
-2024-03-17 03:59:57.441  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 03:59:57.441  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
-2024-03-17 03:59:57.458  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5849c7d3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1869fec1, org.springframework.security.web.context.SecurityContextPersistenceFilter@3f110c5, org.springframework.security.web.header.HeaderWriterFilter@7f085a7e, org.springframework.web.filter.CorsFilter@2125de97, org.springframework.security.web.authentication.logout.LogoutFilter@3d75e649, com.easygofly.site.security.BeforeAuthenticationFilter@58b1507b, com.easygofly.site.security.BeforeAuthenticationFilter@58b1507b, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@2fd74b2c, org.springframework.security.web.session.ConcurrentSessionFilter@2d776f4c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3e17616f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2092a934, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@22625b12, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@d7258cb, org.springframework.security.web.session.SessionManagementFilter@53f9bc4d, org.springframework.security.web.access.ExceptionTranslationFilter@757b6a65, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@50b21a49]
-2024-03-17 03:59:57.613  INFO 18508 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2024-03-17 03:59:58.238  INFO 18508 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
-2024-03-17 03:59:58.275  INFO 18508 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2024-03-17 03:59:58.313  INFO 18508 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
-2024-03-17 03:59:58.323  INFO 18508 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 7.654 seconds (JVM running for 136430.884)
-2024-03-17 03:59:58.328  INFO 18508 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2024-03-17 04:02:05.870  INFO 18508 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-03-17 04:02:05.871  INFO 18508 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2024-03-17 04:02:05.872  INFO 18508 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2024-03-17 04:03:09.215  INFO 18508 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
-2024-03-17 04:03:09.239  INFO 18508 --- [Thread-28] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2024-03-17 04:03:09.240  INFO 18508 --- [Thread-28] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
-2024-03-17 04:03:09.275  WARN 18508 --- [Thread-28] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-6 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+2024-03-18 00:43:05.340  INFO 20088 --- [Thread-62] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:43:05.341  INFO 20088 --- [Thread-62] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2024-03-18 00:43:05.346  INFO 20088 --- [Thread-62] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
+2024-03-18 00:43:05.598  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 00:43:05.599  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 00:43:07.419  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 00:43:07.557  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 135 ms. Found 26 JPA repository interfaces.
+2024-03-18 00:43:07.892  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 00:43:07.895  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 00:43:07.895  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 00:43:08.323  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 00:43:08.333  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 00:43:08.333  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2724 ms
+2024-03-18 00:43:08.575  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 00:43:08.601  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Starting...
+2024-03-18 00:43:08.652  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Start completed.
+2024-03-18 00:43:08.654  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 00:43:09.655  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 00:43:09.656  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:43:09.892  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.385  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 00:43:10.385  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.386  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 00:43:10.386  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.386  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 00:43:10.386  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:10.386  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 00:43:10.397  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4e91eeb4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5abd47f5, org.springframework.security.web.context.SecurityContextPersistenceFilter@6cef3f6e, org.springframework.security.web.header.HeaderWriterFilter@c4d815, org.springframework.web.filter.CorsFilter@52613280, org.springframework.security.web.authentication.logout.LogoutFilter@752407f4, com.easygofly.site.security.BeforeAuthenticationFilter@61895085, com.easygofly.site.security.BeforeAuthenticationFilter@61895085, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@21a72f11, org.springframework.security.web.session.ConcurrentSessionFilter@50a1e1ec, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4a4d4696, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3fd47846, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@51ed43df, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@427a3414, org.springframework.security.web.session.SessionManagementFilter@63b2dbd2, org.springframework.security.web.access.ExceptionTranslationFilter@25432630, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@723cd09b]
+2024-03-18 00:43:10.493  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 00:43:10.971  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 00:43:10.995  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 00:43:11.022  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 00:43:11.030  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 5.544 seconds (JVM running for 14635.408)
+2024-03-18 00:43:11.033  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 00:43:16.191  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 00:43:16.191  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 00:43:16.194  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-03-18 00:43:31.067  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 00:43:31.101  INFO 20088 --- [Thread-67] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 00:43:31.103  INFO 20088 --- [Thread-67] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 00:43:31.145  WARN 20088 --- [Thread-67] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-14 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
  java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
  java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
  java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
@@ -100,60 +74,60 @@
  java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
  java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
  java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
-2024-03-17 04:03:09.300  INFO 18508 --- [Thread-28] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-03-17 04:03:09.302  INFO 18508 --- [Thread-28] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
-2024-03-17 04:03:09.320  INFO 18508 --- [Thread-28] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
-2024-03-17 04:03:09.806  INFO 18508 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 18508 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
-2024-03-17 04:03:09.807  INFO 18508 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
-2024-03-17 04:03:10.533  INFO 18508 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-03-17 04:03:10.618  INFO 18508 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 25 JPA repository interfaces.
-2024-03-17 04:03:10.862  INFO 18508 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
-2024-03-17 04:03:10.863  INFO 18508 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-03-17 04:03:10.863  INFO 18508 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
-2024-03-17 04:03:11.052  INFO 18508 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
-2024-03-17 04:03:11.055  INFO 18508 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-03-17 04:03:11.055  INFO 18508 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1239 ms
-2024-03-17 04:03:11.135  INFO 18508 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-03-17 04:03:11.146  INFO 18508 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
-2024-03-17 04:03:11.178  INFO 18508 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
-2024-03-17 04:03:11.179  INFO 18508 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2024-03-17 04:03:12.542  INFO 18508 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2024-03-17 04:03:12.546  INFO 18508 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-03-17 04:03:13.328  WARN 18508 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-03-17 04:03:14.004  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.005  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
-2024-03-17 04:03:14.005  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.005  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
-2024-03-17 04:03:14.005  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.006  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
-2024-03-17 04:03:14.006  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.006  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
-2024-03-17 04:03:14.006  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.006  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
-2024-03-17 04:03:14.006  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.006  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
-2024-03-17 04:03:14.006  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.007  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
-2024-03-17 04:03:14.007  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.008  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
-2024-03-17 04:03:14.008  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.008  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
-2024-03-17 04:03:14.008  WARN 18508 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2024-03-17 04:03:14.008  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
-2024-03-17 04:03:14.048  INFO 18508 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@62a9648a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@554e6b70, org.springframework.security.web.context.SecurityContextPersistenceFilter@54f8cd5c, org.springframework.security.web.header.HeaderWriterFilter@73cee284, org.springframework.web.filter.CorsFilter@12d2a0f7, org.springframework.security.web.authentication.logout.LogoutFilter@35521a9b, com.easygofly.site.security.BeforeAuthenticationFilter@12b76f02, com.easygofly.site.security.BeforeAuthenticationFilter@12b76f02, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@693ba942, org.springframework.security.web.session.ConcurrentSessionFilter@6b39b346, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5026df85, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@15791ef, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@2f4b3281, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@618ba922, org.springframework.security.web.session.SessionManagementFilter@7404b48a, org.springframework.security.web.access.ExceptionTranslationFilter@37910df0, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6e4b337c]
-2024-03-17 04:03:14.153  INFO 18508 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2024-03-17 04:03:14.784  INFO 18508 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
-2024-03-17 04:03:14.833  INFO 18508 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2024-03-17 04:03:14.875  INFO 18508 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
-2024-03-17 04:03:14.884  INFO 18508 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 5.307 seconds (JVM running for 136627.446)
-2024-03-17 04:03:14.887  INFO 18508 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2024-03-17 04:03:18.309  INFO 18508 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-03-17 04:03:18.309  INFO 18508 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2024-03-17 04:03:18.310  INFO 18508 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2024-03-17 04:08:20.178  INFO 18508 --- [RMI TCP Connection(1810)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
-2024-03-17 04:08:20.187  INFO 18508 --- [RMI TCP Connection(1810)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2024-03-17 04:08:20.187  INFO 18508 --- [RMI TCP Connection(1810)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
-2024-03-17 04:08:20.196  WARN 18508 --- [RMI TCP Connection(1810)-127.0.0.1] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-7 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+2024-03-18 00:43:31.163  INFO 20088 --- [Thread-67] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:43:31.164  INFO 20088 --- [Thread-67] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown initiated...
+2024-03-18 00:43:31.169  INFO 20088 --- [Thread-67] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown completed.
+2024-03-18 00:43:31.386  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 00:43:31.386  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 00:43:32.343  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 00:43:32.586  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 242 ms. Found 26 JPA repository interfaces.
+2024-03-18 00:43:33.003  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 00:43:33.005  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 00:43:33.005  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 00:43:33.164  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 00:43:33.169  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 00:43:33.169  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1779 ms
+2024-03-18 00:43:33.260  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 00:43:33.273  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Starting...
+2024-03-18 00:43:33.298  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Start completed.
+2024-03-18 00:43:33.299  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 00:43:34.571  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 00:43:34.572  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:43:35.571  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 00:43:36.455  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.455  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 00:43:36.455  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.455  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 00:43:36.456  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.456  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 00:43:36.456  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.456  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 00:43:36.456  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.456  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 00:43:36.457  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.457  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 00:43:36.457  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.457  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 00:43:36.457  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.457  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 00:43:36.457  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.457  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 00:43:36.457  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:36.458  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 00:43:36.471  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5c4b781d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@257bda2b, org.springframework.security.web.context.SecurityContextPersistenceFilter@360db563, org.springframework.security.web.header.HeaderWriterFilter@60b5dcf3, org.springframework.web.filter.CorsFilter@68722d50, org.springframework.security.web.authentication.logout.LogoutFilter@3c26f705, com.easygofly.site.security.BeforeAuthenticationFilter@4bc87342, com.easygofly.site.security.BeforeAuthenticationFilter@4bc87342, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@2b0a4e0c, org.springframework.security.web.session.ConcurrentSessionFilter@1ada220e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7891a515, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2cda7df7, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@100c75a3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5cf88aa6, org.springframework.security.web.session.SessionManagementFilter@45a18a8, org.springframework.security.web.access.ExceptionTranslationFilter@21c1a759, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@18f08cf]
+2024-03-18 00:43:36.615  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 00:43:37.195  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 00:43:37.213  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 00:43:37.241  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 00:43:37.250  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 5.918 seconds (JVM running for 14661.628)
+2024-03-18 00:43:37.252  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 00:43:40.255  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 00:43:40.256  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 00:43:40.258  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-03-18 00:43:55.824  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 00:43:55.865  INFO 20088 --- [Thread-72] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 00:43:55.867  INFO 20088 --- [Thread-72] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 00:43:55.877  WARN 20088 --- [Thread-72] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-15 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
  java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
  java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
  java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
@@ -163,6 +137,624 @@
  java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
  java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
  java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
-2024-03-17 04:08:20.205  INFO 18508 --- [RMI TCP Connection(1810)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-03-17 04:08:20.205  INFO 18508 --- [RMI TCP Connection(1810)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
-2024-03-17 04:08:20.210  INFO 18508 --- [RMI TCP Connection(1810)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2024-03-18 00:43:55.901  INFO 20088 --- [Thread-72] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:43:55.903  INFO 20088 --- [Thread-72] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown initiated...
+2024-03-18 00:43:55.937  INFO 20088 --- [Thread-72] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown completed.
+2024-03-18 00:43:56.252  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 00:43:56.252  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 00:43:56.843  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 00:43:56.920  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 76 ms. Found 26 JPA repository interfaces.
+2024-03-18 00:43:57.075  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 00:43:57.075  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 00:43:57.076  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 00:43:57.229  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 00:43:57.234  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 00:43:57.234  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 969 ms
+2024-03-18 00:43:57.313  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 00:43:57.325  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Starting...
+2024-03-18 00:43:57.343  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Start completed.
+2024-03-18 00:43:57.344  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 00:43:58.932  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 00:43:58.933  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:43:59.227  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 00:43:59.809  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.809  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 00:43:59.809  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.809  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 00:43:59.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:43:59.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 00:43:59.825  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@775d871e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4c9ce134, org.springframework.security.web.context.SecurityContextPersistenceFilter@4f91fe23, org.springframework.security.web.header.HeaderWriterFilter@375877d5, org.springframework.web.filter.CorsFilter@6a7be747, org.springframework.security.web.authentication.logout.LogoutFilter@2c9fed74, com.easygofly.site.security.BeforeAuthenticationFilter@6fd3b978, com.easygofly.site.security.BeforeAuthenticationFilter@6fd3b978, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@2652f1d, org.springframework.security.web.session.ConcurrentSessionFilter@2a5e24ba, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3b03dedb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@371fff8b, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@1ab90ba2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@672a327d, org.springframework.security.web.session.SessionManagementFilter@8a09616, org.springframework.security.web.access.ExceptionTranslationFilter@7b43cd27, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5bac1ac3]
+2024-03-18 00:43:59.949  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 00:44:00.488  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 00:44:00.508  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 00:44:00.539  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 00:44:00.549  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.451 seconds (JVM running for 14684.927)
+2024-03-18 00:44:00.554  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 00:44:03.740  INFO 20088 --- [http-nio-443-exec-2] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 00:44:03.740  INFO 20088 --- [http-nio-443-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 00:44:03.741  INFO 20088 --- [http-nio-443-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 00:45:31.912  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 00:45:31.938  INFO 20088 --- [Thread-77] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 00:45:31.939  INFO 20088 --- [Thread-77] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 00:45:31.948  WARN 20088 --- [Thread-77] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-16 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 00:45:31.961  INFO 20088 --- [Thread-77] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:45:31.961  INFO 20088 --- [Thread-77] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Shutdown initiated...
+2024-03-18 00:45:31.965  INFO 20088 --- [Thread-77] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Shutdown completed.
+2024-03-18 00:45:32.291  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 00:45:32.294  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 00:45:33.049  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 00:45:33.131  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 82 ms. Found 26 JPA repository interfaces.
+2024-03-18 00:45:33.290  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 00:45:33.292  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 00:45:33.293  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 00:45:33.505  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 00:45:33.511  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 00:45:33.511  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1202 ms
+2024-03-18 00:45:33.629  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 00:45:33.655  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Starting...
+2024-03-18 00:45:33.701  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Start completed.
+2024-03-18 00:45:33.703  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 00:45:35.378  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 00:45:35.378  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:45:35.673  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 00:45:36.142  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.143  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 00:45:36.143  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.143  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 00:45:36.143  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.143  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 00:45:36.143  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.143  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 00:45:36.143  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.143  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 00:45:36.143  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.143  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 00:45:36.144  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.144  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 00:45:36.144  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.144  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 00:45:36.144  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.144  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 00:45:36.144  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:45:36.144  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 00:45:36.154  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@19ca7ce6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7ac5fbf8, org.springframework.security.web.context.SecurityContextPersistenceFilter@6d8f2fe5, org.springframework.security.web.header.HeaderWriterFilter@bc30a9e, org.springframework.web.filter.CorsFilter@66d3f463, org.springframework.security.web.authentication.logout.LogoutFilter@3dd5f5f7, com.easygofly.site.security.BeforeAuthenticationFilter@4abfabcd, com.easygofly.site.security.BeforeAuthenticationFilter@4abfabcd, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@44bf4410, org.springframework.security.web.session.ConcurrentSessionFilter@e104d72, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7e0b4f30, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2546a534, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7991d186, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4464af74, org.springframework.security.web.session.SessionManagementFilter@210f4336, org.springframework.security.web.access.ExceptionTranslationFilter@5586df5a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@17ee805f]
+2024-03-18 00:45:36.224  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 00:45:36.609  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 00:45:36.625  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 00:45:36.647  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 00:45:36.653  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.497 seconds (JVM running for 14781.031)
+2024-03-18 00:45:36.656  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 00:45:46.143  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 00:45:46.144  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 00:45:46.145  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 00:52:29.725  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 00:52:29.753  INFO 20088 --- [Thread-82] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 00:52:29.754  INFO 20088 --- [Thread-82] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 00:52:29.777  WARN 20088 --- [Thread-82] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-17 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 00:52:29.795  INFO 20088 --- [Thread-82] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:52:29.797  INFO 20088 --- [Thread-82] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Shutdown initiated...
+2024-03-18 00:52:29.811  INFO 20088 --- [Thread-82] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Shutdown completed.
+2024-03-18 00:52:30.190  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 00:52:30.191  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 00:52:30.841  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 00:52:30.949  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 108 ms. Found 26 JPA repository interfaces.
+2024-03-18 00:52:31.180  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 00:52:31.181  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 00:52:31.181  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 00:52:31.359  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 00:52:31.361  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 00:52:31.361  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1158 ms
+2024-03-18 00:52:31.438  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 00:52:31.451  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Starting...
+2024-03-18 00:52:31.466  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Start completed.
+2024-03-18 00:52:31.467  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 00:52:32.446  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 00:52:32.446  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 00:52:33.109  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.813  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 00:52:33.813  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.814  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 00:52:33.814  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 00:52:33.814  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 00:52:33.827  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1c6680ec, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7c5e1fe4, org.springframework.security.web.context.SecurityContextPersistenceFilter@2b2ab17e, org.springframework.security.web.header.HeaderWriterFilter@1c941f25, org.springframework.web.filter.CorsFilter@7b3bd837, org.springframework.security.web.authentication.logout.LogoutFilter@2934a699, com.easygofly.site.security.BeforeAuthenticationFilter@1bcb645c, com.easygofly.site.security.BeforeAuthenticationFilter@1bcb645c, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@7eff1073, org.springframework.security.web.session.ConcurrentSessionFilter@26d3dd97, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@17fbfe09, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6fec0b44, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@50209027, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7a24f494, org.springframework.security.web.session.SessionManagementFilter@2aaa48aa, org.springframework.security.web.access.ExceptionTranslationFilter@2655642f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@32fa5450]
+2024-03-18 00:52:33.918  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 00:52:34.345  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 00:52:34.364  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 00:52:34.389  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 00:52:34.395  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.346 seconds (JVM running for 15198.773)
+2024-03-18 00:52:34.398  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 00:52:57.393  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 00:52:57.393  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 00:52:57.394  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 01:15:05.957  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 01:15:05.983  INFO 20088 --- [Thread-87] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 01:15:05.984  INFO 20088 --- [Thread-87] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 01:15:06.013  WARN 20088 --- [Thread-87] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-18 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 01:15:06.030  INFO 20088 --- [Thread-87] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 01:15:06.032  INFO 20088 --- [Thread-87] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Shutdown initiated...
+2024-03-18 01:15:06.057  INFO 20088 --- [Thread-87] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Shutdown completed.
+2024-03-18 01:15:06.424  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 01:15:06.425  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 01:15:07.158  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 01:15:07.272  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 113 ms. Found 26 JPA repository interfaces.
+2024-03-18 01:15:07.459  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 01:15:07.460  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 01:15:07.460  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 01:15:07.629  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 01:15:07.631  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 01:15:07.631  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1197 ms
+2024-03-18 01:15:07.711  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 01:15:07.722  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Starting...
+2024-03-18 01:15:07.739  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Start completed.
+2024-03-18 01:15:07.739  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 01:15:08.811  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 01:15:08.812  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 01:15:09.512  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 01:15:10.410  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.410  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 01:15:10.410  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.410  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 01:15:10.410  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 01:15:10.411  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:10.411  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 01:15:10.426  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7f0b036e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@18b9c8d3, org.springframework.security.web.context.SecurityContextPersistenceFilter@6d26d3bd, org.springframework.security.web.header.HeaderWriterFilter@ccae6ce, org.springframework.web.filter.CorsFilter@2ac01d55, org.springframework.security.web.authentication.logout.LogoutFilter@4da0e9c5, com.easygofly.site.security.BeforeAuthenticationFilter@25efafc7, com.easygofly.site.security.BeforeAuthenticationFilter@25efafc7, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@be15cbd, org.springframework.security.web.session.ConcurrentSessionFilter@6a3d042d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3601a441, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@14de1941, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7c6bb002, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@193c6bcd, org.springframework.security.web.session.SessionManagementFilter@69497686, org.springframework.security.web.access.ExceptionTranslationFilter@61ecde01, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@189fe95d]
+2024-03-18 01:15:10.537  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 01:15:11.058  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 01:15:11.079  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 01:15:11.127  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 01:15:11.143  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.872 seconds (JVM running for 16555.521)
+2024-03-18 01:15:11.156  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 01:15:16.070  INFO 20088 --- [http-nio-443-exec-3] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 01:15:16.071  INFO 20088 --- [http-nio-443-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 01:15:16.072  INFO 20088 --- [http-nio-443-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 01:15:37.059  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 01:15:37.086  INFO 20088 --- [Thread-92] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 01:15:37.087  INFO 20088 --- [Thread-92] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 01:15:37.106  WARN 20088 --- [Thread-92] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-19 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 01:15:37.127  INFO 20088 --- [Thread-92] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 01:15:37.129  INFO 20088 --- [Thread-92] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Shutdown initiated...
+2024-03-18 01:15:37.145  INFO 20088 --- [Thread-92] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Shutdown completed.
+2024-03-18 01:15:37.520  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 01:15:37.521  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 01:15:38.275  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 01:15:38.380  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 104 ms. Found 26 JPA repository interfaces.
+2024-03-18 01:15:38.563  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 01:15:38.564  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 01:15:38.564  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 01:15:38.725  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 01:15:38.728  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 01:15:38.728  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1184 ms
+2024-03-18 01:15:38.919  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 01:15:38.971  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Starting...
+2024-03-18 01:15:39.028  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Start completed.
+2024-03-18 01:15:39.029  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 01:15:40.602  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 01:15:40.602  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 01:15:40.867  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 01:15:41.335  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 01:15:41.336  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 01:15:41.336  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 01:15:41.347  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@f98e461, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e028a4b, org.springframework.security.web.context.SecurityContextPersistenceFilter@622eb35a, org.springframework.security.web.header.HeaderWriterFilter@73b69982, org.springframework.web.filter.CorsFilter@225eab6a, org.springframework.security.web.authentication.logout.LogoutFilter@1d807505, com.easygofly.site.security.BeforeAuthenticationFilter@7fe5f926, com.easygofly.site.security.BeforeAuthenticationFilter@7fe5f926, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@742f631d, org.springframework.security.web.session.ConcurrentSessionFilter@30e2f641, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@25934c14, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2d54086d, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@2e0770a7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@31ba211d, org.springframework.security.web.session.SessionManagementFilter@5b1bfd4, org.springframework.security.web.access.ExceptionTranslationFilter@52f00dda, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6c4bbc0d]
+2024-03-18 01:15:41.429  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 01:15:41.920  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 01:15:41.939  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 01:15:41.961  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 01:15:41.967  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.582 seconds (JVM running for 16586.345)
+2024-03-18 01:15:41.969  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 01:15:52.978  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 01:15:52.979  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 01:15:52.980  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 02:03:02.196  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 02:03:02.213  INFO 20088 --- [Thread-97] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 02:03:02.213  INFO 20088 --- [Thread-97] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 02:03:02.227  WARN 20088 --- [Thread-97] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-20 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 02:03:02.243  INFO 20088 --- [Thread-97] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 02:03:02.244  INFO 20088 --- [Thread-97] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Shutdown initiated...
+2024-03-18 02:03:02.253  INFO 20088 --- [Thread-97] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Shutdown completed.
+2024-03-18 02:03:02.499  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 02:03:02.500  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 02:03:03.717  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 02:03:03.995  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 277 ms. Found 26 JPA repository interfaces.
+2024-03-18 02:03:04.290  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 02:03:04.291  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 02:03:04.291  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 02:03:04.484  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 02:03:04.486  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 02:03:04.487  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1981 ms
+2024-03-18 02:03:04.570  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 02:03:04.582  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Starting...
+2024-03-18 02:03:04.597  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Start completed.
+2024-03-18 02:03:04.598  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 02:03:05.386  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 02:03:05.386  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 02:03:05.800  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 02:03:06.904  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.904  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 02:03:06.905  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:03:06.905  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 02:03:06.918  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1b97971, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7813ff4a, org.springframework.security.web.context.SecurityContextPersistenceFilter@b848c40, org.springframework.security.web.header.HeaderWriterFilter@23b54915, org.springframework.web.filter.CorsFilter@5d41c86e, org.springframework.security.web.authentication.logout.LogoutFilter@75ef9ee9, com.easygofly.site.security.BeforeAuthenticationFilter@12b3ad88, com.easygofly.site.security.BeforeAuthenticationFilter@12b3ad88, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@166eb583, org.springframework.security.web.session.ConcurrentSessionFilter@1aad75e7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2f091c4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2b55b5a1, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@231081ec, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1b329f66, org.springframework.security.web.session.SessionManagementFilter@480c2003, org.springframework.security.web.access.ExceptionTranslationFilter@5b294230, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@35399d59]
+2024-03-18 02:03:07.015  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 02:03:07.510  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 02:03:07.533  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 02:03:07.558  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 02:03:07.565  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 5.144 seconds (JVM running for 19431.943)
+2024-03-18 02:03:07.567  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 02:07:40.788  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 02:07:40.789  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 02:07:40.790  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 02:45:33.508  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 02:45:33.538  INFO 20088 --- [Thread-102] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 02:45:33.539  INFO 20088 --- [Thread-102] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 02:45:33.565  WARN 20088 --- [Thread-102] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-21 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 02:45:33.587  INFO 20088 --- [Thread-102] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 02:45:33.589  INFO 20088 --- [Thread-102] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Shutdown initiated...
+2024-03-18 02:45:33.597  INFO 20088 --- [Thread-102] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Shutdown completed.
+2024-03-18 02:45:33.918  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 02:45:33.919  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 02:45:34.407  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 02:45:34.488  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 81 ms. Found 26 JPA repository interfaces.
+2024-03-18 02:45:34.708  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 02:45:34.708  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 02:45:34.709  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 02:45:34.847  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 02:45:34.850  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 02:45:34.850  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 919 ms
+2024-03-18 02:45:34.927  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 02:45:34.938  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-22 - Starting...
+2024-03-18 02:45:34.952  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-22 - Start completed.
+2024-03-18 02:45:34.953  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 02:45:35.978  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 02:45:35.980  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 02:45:36.948  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.594  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 02:45:37.594  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 02:45:37.595  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 02:45:37.607  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2182b626, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7543601e, org.springframework.security.web.context.SecurityContextPersistenceFilter@518beffd, org.springframework.security.web.header.HeaderWriterFilter@239ee883, org.springframework.web.filter.CorsFilter@fef1808, org.springframework.security.web.authentication.logout.LogoutFilter@72cb4cff, com.easygofly.site.security.BeforeAuthenticationFilter@6b8e2a00, com.easygofly.site.security.BeforeAuthenticationFilter@6b8e2a00, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3026755e, org.springframework.security.web.session.ConcurrentSessionFilter@469f7acb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@585dfbf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@41c5d342, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@72ae0e9a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@76cc676d, org.springframework.security.web.session.SessionManagementFilter@5182a0c5, org.springframework.security.web.access.ExceptionTranslationFilter@11b0d66b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@d6b2fdf]
+2024-03-18 02:45:37.693  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 02:45:38.080  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 02:45:38.098  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 02:45:38.120  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 02:45:38.126  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.355 seconds (JVM running for 21982.504)
+2024-03-18 02:45:38.128  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 02:45:47.508  INFO 20088 --- [http-nio-443-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18 02:45:47.508  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18 02:45:47.510  INFO 20088 --- [http-nio-443-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18 09:56:49.062  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2024-03-18 09:56:49.083  INFO 20088 --- [Thread-107] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 09:56:49.084  INFO 20088 --- [Thread-107] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-03-18 09:56:49.090  WARN 20088 --- [Thread-107] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-22 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 09:56:49.106  INFO 20088 --- [Thread-107] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 09:56:49.107  INFO 20088 --- [Thread-107] com.zaxxer.hikari.HikariDataSource       : HikariPool-22 - Shutdown initiated...
+2024-03-18 09:56:49.113  INFO 20088 --- [Thread-107] com.zaxxer.hikari.HikariDataSource       : HikariPool-22 - Shutdown completed.
+2024-03-18 09:56:49.359  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 09:56:49.360  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 09:56:50.486  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 09:56:50.723  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 235 ms. Found 26 JPA repository interfaces.
+2024-03-18 09:56:51.004  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 09:56:51.005  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 09:56:51.005  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 09:56:51.252  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 09:56:51.255  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 09:56:51.255  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1891 ms
+2024-03-18 09:56:51.341  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 09:56:51.359  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-23 - Starting...
+2024-03-18 09:56:51.385  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-23 - Start completed.
+2024-03-18 09:56:51.387  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 09:56:52.812  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 09:56:52.813  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 09:56:53.262  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 09:56:53.807  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.807  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 09:56:53.808  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 09:56:53.808  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 09:56:53.821  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@162ea682, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@40068a39, org.springframework.security.web.context.SecurityContextPersistenceFilter@51560b12, org.springframework.security.web.header.HeaderWriterFilter@29e5a90f, org.springframework.web.filter.CorsFilter@214b1acd, org.springframework.security.web.authentication.logout.LogoutFilter@6ebd24b3, com.easygofly.site.security.BeforeAuthenticationFilter@76960cee, com.easygofly.site.security.BeforeAuthenticationFilter@76960cee, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@53abfa43, org.springframework.security.web.session.ConcurrentSessionFilter@73527fc, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@557f6de6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@217669d5, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7beb1e6c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4cf31998, org.springframework.security.web.session.SessionManagementFilter@40a68b6f, org.springframework.security.web.access.ExceptionTranslationFilter@1e391191, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@f7b30be]
+2024-03-18 09:56:53.905  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 09:56:54.378  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 09:56:54.399  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 09:56:54.424  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 09:56:54.432  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 5.136 seconds (JVM running for 47857.037)
+2024-03-18 09:56:54.435  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 10:00:54.410  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 10:00:54.426  INFO 20088 --- [Thread-112] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 10:00:54.431  WARN 20088 --- [Thread-112] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-23 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 10:00:54.451  INFO 20088 --- [Thread-112] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 10:00:54.453  INFO 20088 --- [Thread-112] com.zaxxer.hikari.HikariDataSource       : HikariPool-23 - Shutdown initiated...
+2024-03-18 10:00:54.461  INFO 20088 --- [Thread-112] com.zaxxer.hikari.HikariDataSource       : HikariPool-23 - Shutdown completed.
+2024-03-18 10:00:54.673  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 10:00:54.673  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 10:00:55.453  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 10:00:55.654  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 200 ms. Found 26 JPA repository interfaces.
+2024-03-18 10:00:56.072  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 10:00:56.072  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 10:00:56.073  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 10:00:56.263  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 10:00:56.267  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 10:00:56.267  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1588 ms
+2024-03-18 10:00:56.351  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 10:00:56.363  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-24 - Starting...
+2024-03-18 10:00:56.377  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-24 - Start completed.
+2024-03-18 10:00:56.377  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 10:00:57.355  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 10:00:57.356  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 10:00:58.106  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 10:00:59.044  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.045  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 10:00:59.045  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.045  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 10:00:59.045  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.045  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 10:00:59.045  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.045  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 10:00:59.045  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.045  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 10:00:59.046  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.046  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 10:00:59.046  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.046  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 10:00:59.046  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.046  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 10:00:59.046  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.046  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 10:00:59.046  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:00:59.046  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 10:00:59.084  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7d424d88, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@451dbd4, org.springframework.security.web.context.SecurityContextPersistenceFilter@41d61847, org.springframework.security.web.header.HeaderWriterFilter@5e633d5c, org.springframework.web.filter.CorsFilter@17376af8, org.springframework.security.web.authentication.logout.LogoutFilter@79306dc2, com.easygofly.site.security.BeforeAuthenticationFilter@72ff1ef8, com.easygofly.site.security.BeforeAuthenticationFilter@72ff1ef8, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@63131a81, org.springframework.security.web.session.ConcurrentSessionFilter@4d98579f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@69854fc, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7fec360, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@58c9ecd8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7fed0ecd, org.springframework.security.web.session.SessionManagementFilter@112208bf, org.springframework.security.web.access.ExceptionTranslationFilter@2325fcef, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4f36db97]
+2024-03-18 10:00:59.206  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 10:00:59.668  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 10:00:59.689  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 10:00:59.720  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 10:00:59.727  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 5.115 seconds (JVM running for 48102.332)
+2024-03-18 10:00:59.729  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 10:01:14.054  INFO 20088 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18 10:01:14.084  INFO 20088 --- [Thread-117] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 10:01:14.122  WARN 20088 --- [Thread-117] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-24 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 10:01:14.143  INFO 20088 --- [Thread-117] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 10:01:14.145  INFO 20088 --- [Thread-117] com.zaxxer.hikari.HikariDataSource       : HikariPool-24 - Shutdown initiated...
+2024-03-18 10:01:14.166  INFO 20088 --- [Thread-117] com.zaxxer.hikari.HikariDataSource       : HikariPool-24 - Shutdown completed.
+2024-03-18 10:01:14.544  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Starting EasyGoFlyFrontEndApplication using Java 17.0.7 on DESKTOP-2QI24SN with PID 20088 (G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd\target\classes started by Rahul in G:\Web Project\EasyGoFly\EasyGoFlyProject\EasyGoFlyWebParent\EasyGoFlyFrontEnd)
+2024-03-18 10:01:14.545  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-03-18 10:01:15.084  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-18 10:01:15.164  INFO 20088 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 79 ms. Found 26 JPA repository interfaces.
+2024-03-18 10:01:15.324  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 443 (http)
+2024-03-18 10:01:15.325  INFO 20088 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18 10:01:15.325  INFO 20088 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2024-03-18 10:01:15.485  INFO 20088 --- [restartedMain] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2024-03-18 10:01:15.488  INFO 20088 --- [restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2024-03-18 10:01:15.488  INFO 20088 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 935 ms
+2024-03-18 10:01:15.569  INFO 20088 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-18 10:01:15.580  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-25 - Starting...
+2024-03-18 10:01:15.603  INFO 20088 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-25 - Start completed.
+2024-03-18 10:01:15.603  INFO 20088 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-03-18 10:01:16.871  INFO 20088 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-03-18 10:01:16.872  INFO 20088 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 10:01:17.327  WARN 20088 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-18 10:01:17.809  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.809  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/assets/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/assets/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/css/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/style.css']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/style.css']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/fontawesome/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/fontawesome/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../brand-logos/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../brand-logos/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../site-logo/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../site-logo/**']
+2024-03-18 10:01:17.810  WARN 20088 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='../favicon/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-18 10:01:17.810  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='../favicon/**']
+2024-03-18 10:01:17.820  INFO 20088 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@12623d78, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2d27b9f9, org.springframework.security.web.context.SecurityContextPersistenceFilter@72188086, org.springframework.security.web.header.HeaderWriterFilter@7566bf32, org.springframework.web.filter.CorsFilter@540706c1, org.springframework.security.web.authentication.logout.LogoutFilter@1791c212, com.easygofly.site.security.BeforeAuthenticationFilter@6034aa6b, com.easygofly.site.security.BeforeAuthenticationFilter@6034aa6b, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@4b433f13, org.springframework.security.web.session.ConcurrentSessionFilter@7660c27, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32472ed8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@160b4bc1, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@49516132, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7fceb0e9, org.springframework.security.web.session.SessionManagementFilter@16365bda, org.springframework.security.web.access.ExceptionTranslationFilter@5f3547da, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@405ff4b1]
+2024-03-18 10:01:17.891  INFO 20088 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-03-18 10:01:18.414  INFO 20088 --- [restartedMain] o.s.l.c.support.AbstractContextSource    : Property 'userDn' not set - anonymous context will be used for read-write operations
+2024-03-18 10:01:18.445  INFO 20088 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18 10:01:18.474  INFO 20088 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 443 (http) with context path ''
+2024-03-18 10:01:18.482  INFO 20088 --- [restartedMain] c.e.site.EasyGoFlyFrontEndApplication    : Started EasyGoFlyFrontEndApplication in 4.059 seconds (JVM running for 48121.088)
+2024-03-18 10:01:18.485  INFO 20088 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18 10:03:57.077  INFO 20088 --- [RMI TCP Connection(990)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-03-18 10:03:57.085  INFO 20088 --- [RMI TCP Connection(990)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-03-18 10:03:57.087  WARN 20088 --- [RMI TCP Connection(990)-127.0.0.1] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-25 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.7/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.7/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.7/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.7/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.7/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.7/java.lang.Thread.run(Thread.java:833)
+2024-03-18 10:03:57.096  INFO 20088 --- [RMI TCP Connection(990)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-18 10:03:57.096  INFO 20088 --- [RMI TCP Connection(990)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-25 - Shutdown initiated...
+2024-03-18 10:03:57.099  INFO 20088 --- [RMI TCP Connection(990)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-25 - Shutdown completed.

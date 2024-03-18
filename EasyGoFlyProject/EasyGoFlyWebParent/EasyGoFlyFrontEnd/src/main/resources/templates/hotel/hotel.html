@@ -7,6 +7,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
@@ -33,7 +35,10 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 			background: transparent;
 		}
 	}
-	
+	gmp-map {
+		width: 50vh;
+        height: 50vh;
+      }
 </style>
 <body>
 <!-- Small svg tabs #6252f3-->
@@ -72,6 +77,12 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   <div th:replace="whatsapp :: content"></div>
   
   <div th:replace="hotel/category :: category('none')"></div>
+  
+  <!--<div>
+	 <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
+      <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
+    </gmp-map>
+  </div>-->
  
  <footer th:replace="fragments :: page_footer"></footer>
  

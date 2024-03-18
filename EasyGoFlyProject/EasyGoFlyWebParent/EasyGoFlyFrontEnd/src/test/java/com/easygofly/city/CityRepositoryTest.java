@@ -1,5 +1,7 @@
 package com.easygofly.city;
 
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,9 +14,15 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.easygofly.entity.City;
 import com.easygofly.entity.Country;
+import com.easygofly.entity.TBOCity;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.CityRepository;
+import com.easygofly.site.flightAPI.TBOCityRepository;
 import com.easygofly.site.setting.CountryRepository;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -24,6 +32,7 @@ public class CityRepositoryTest {
 
 	@Autowired private CityRepository cityRepo;
 	@Autowired private CountryRepository countryRepo ;
+	@Autowired private TBOCityRepository tboRepo ;
 	
 	@Test
 	public void testUpdateCity() {
@@ -108,5 +117,69 @@ public class CityRepositoryTest {
 			city.setCountry(country);
 		}
 	}
+
+	@Test
+	public void testSaveTBOCity() {
+//		TBOCity city = new TBOCity();
+//		city.setCityId(122379);
+//		city.setDestination("Kabul");
+//		city.setCountry("Afghanistan");
+//		city.setCountryCode("AF");
+//		
+//		tboRepo.save(city);
+		
+		readDataFromCustomSeparator("G:\\Web Project\\EasyGoFly\\EasyGoFlyProject\\EasyGoFlyWebParent\\xml-data\\NewCityListHotel.csv");
+		
+	}
+	
+	public void readDataFromCustomSeparator(String file) { 
+        try { 
+            // Create object of filereader 
+            // class with csv file as parameter. 
+            FileReader filereader = new FileReader(file); 
+  
+            // create csvParser object with 
+            // custom separator semi-colon 
+            CSVParser parser = new CSVParserBuilder().withSeparator(';').build(); 
+  
+            // create csvReader object with 
+            // parameter filereader and parser 
+            CSVReader csvReader = new CSVReaderBuilder(filereader) 
+                                      .withCSVParser(parser) 
+                                      .build(); 
+  
+            // Read all data at once 
+            List<String[]> allData = csvReader.readAll(); 
+            
+            //Create TBO City list
+            List<TBOCity> cities = new ArrayList<TBOCity>();
+  
+            // print Data 
+            for (String[] row : allData) { 
+                for (String cell : row) { 
+                	TBOCity city = new TBOCity();
+                	String[] cellSplit = cell.split(",");
+                	city.setCityId(Integer.parseInt(cellSplit[0]));
+                	city.setDestination(cellSplit[1]);
+                	city.setStateProvince(cellSplit[2]);
+                	city.setStateProvinceCode(cellSplit[3]);
+                	city.setCountry(cellSplit[4]);
+                	city.setCountryCode(cellSplit[5]);
+                	
+                	
+//                    System.out.print(city.getCityId() + " - " + city.getDestination() + " - " + city.getStateProvince() + " - " + city.getStateProvinceCode() + " - " + city.getCountry() 
+//                    + " - " + city.getCountryCode() + "\t"); 
+                    
+                    cities.add(city);
+                } 
+            } 
+            
+            System.out.println(cities.size());
+            tboRepo.saveAll(cities);
+        } 
+        catch (Exception e) { 
+            e.printStackTrace(); 
+        } 
+    } 
 	
 }
