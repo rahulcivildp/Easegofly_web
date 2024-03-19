@@ -1,0 +1,71 @@
+package com.easygofly.site.hotel;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
+import com.easygofly.entity.Customer;
+import com.easygofly.entity.HotelHistory;
+import com.easygofly.site.LogService;
+
+@Service
+public class HotelService {
+	@Autowired private OnlineHotelService onlineHotelService;
+	@Autowired private LogService logService;
+	@Autowired private HotelHistoryRepository hotelHistoryRepo;
+
+	public void authenticationFlight(Model model) {
+		try {
+        	
+        	// Create URL object with the API end-point
+//            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
+            
+        	// Create URL object with the API end-point
+            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+
+            // Open a connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+        	StringBuilder responseBody = new StringBuilder();
+        	
+            int authCode = onlineHotelService.apiAuthenticationHotel(connection, responseBody);
+            
+            JSONObject jsonObj = new JSONObject(responseBody.toString());
+            JSONObject jsonObjInnerError = jsonObj.getJSONObject("Error");
+            JSONObject jsonObjInnerMember = jsonObj.getJSONObject("Member");
+             
+            model.addAttribute("authCode", authCode);
+            model.addAttribute("responseBody", jsonObj);
+            model.addAttribute("memberName", jsonObjInnerMember.get("FirstName") + " " + jsonObjInnerMember.get("LastName"));
+            model.addAttribute("memberEmail", jsonObjInnerMember.get("Email"));
+            model.addAttribute("memberId", jsonObjInnerMember.get("MemberId"));
+            model.addAttribute("memberAgencyId", jsonObjInnerMember.get("AgencyId"));
+            model.addAttribute("memberLoginName", jsonObjInnerMember.get("LoginName"));
+            model.addAttribute("memberLoginDetails", jsonObjInnerMember.get("LoginDetails"));
+            model.addAttribute("memberIsPrimaryAgent", jsonObjInnerMember.get("isPrimaryAgent"));
+            model.addAttribute("errorCode", jsonObjInnerError.get("ErrorCode"));
+            model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
+            
+            onlineHotelService.tokenId = (String) jsonObj.get("TokenId");
+            System.out.println(jsonObj);
+            logService.generateLog(jsonObj.toString());
+            
+            connection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+
+	public void saveHotelHistory(HotelHistory history, Customer customer) {
+		HotelHistory newHistory = new HotelHistory(history.getCheckInDate(), history.getCheckOutDate(), history.getCountryCode(), history.getCityId(), history.getNoOfRooms(), history.getNoOfAdults(), 
+						history.getNoOfChild(), history.getChildrenAge(), history.isNearBySearchAllowed(), customer);
+		
+		hotelHistoryRepo.save(newHistory); 
+	}
+}

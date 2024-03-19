@@ -138,7 +138,7 @@ public class SearchHistoryController {
 		Integer iq = 111;
 		
 		searchService.authenticationFlight(model);
-		searchService.authenticationFlightAirIQ(model);
+//		searchService.authenticationFlightAirIQ(model);
 		
 		System.out.println();
 		
@@ -254,9 +254,9 @@ public class SearchHistoryController {
 		
 		
 		// Create URL object with the API end-point
-//         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
+         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 		
-		URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+//		URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
@@ -268,93 +268,93 @@ public class SearchHistoryController {
         
         //AirIQ ......
         
-		URL urlSearchAirIQ = new URL("https://omairiq.azurewebsites.net/search");
+		//URL urlSearchAirIQ = new URL("https://omairiq.azurewebsites.net/search");
 
         // Open a connection
-        HttpURLConnection connectionSearchAirIQ = (HttpURLConnection) urlSearchAirIQ.openConnection();
+       // HttpURLConnection connectionSearchAirIQ = (HttpURLConnection) urlSearchAirIQ.openConnection();
         
-        StringBuilder responseBodySearchAirIQ = new StringBuilder();
+        //StringBuilder responseBodySearchAirIQ = new StringBuilder();
         
-        onlineFlightService.apiAirIQSearch(connectionSearchAirIQ, responseBodySearchAirIQ, auth, cityOne, cityTwo, adultNum, childNum, infantNum, date);
+        //onlineFlightService.apiAirIQSearch(connectionSearchAirIQ, responseBodySearchAirIQ, auth, cityOne, cityTwo, adultNum, childNum, infantNum, date);
         
 		//AirIQ response.......
 
-        JSONObject jsonObjSearchAirIQ = new JSONObject(responseBodySearchAirIQ.toString());
-        System.out.println(jsonObjSearchAirIQ);
-        logService.generateLog(jsonObjSearchAirIQ.toString());
-		
-		try {
-			JSONArray jsonArraysAirIQ = jsonObjSearchAirIQ.getJSONArray("data");
-			JSONObject mainObjAirIQ = new JSONObject();
-			
-			System.out.println("JSON data: " + jsonObjSearchAirIQ);
-			
-			for (int i = 0; i < jsonArraysAirIQ.length(); i++) {
-				mainObjAirIQ.put("data-" + i, jsonArraysAirIQ.getJSONObject(i));
-				
-				System.out.println(mainObjAirIQ);
-		        logService.generateLog("Main : " + mainObjAirIQ.toString());
-				
-				String noOfSeatAvailable = mainObjAirIQ.getJSONObject("data-" + i).get("pax").toString();
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-		        
-				String flightNumber = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
-				String stringDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString();
-				String stringArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString();
-				double parsePriceADT = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("price").toString());
-				double parsePriceINF = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("infant_price").toString());
-				float intTotalAdultChildPrice = (float) (parsePriceADT * (adultNum + childNum));
-				float intTotalInfantPrice = (float) (parsePriceINF * infantNum);
-				String depAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("origin").toString();
-				String arrAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("destination").toString();
-				int stopNumber = 0;
-				if (mainObjAirIQ.getJSONObject("data-" + i).get("flight_route").toString() == "Non - Stop") {
-					stopNumber = 0;
-				}
-				String[] arrayDepDate = mainObjAirIQ.getJSONObject("data-" + i).get("departure_date").toString().split("/");
-				String[] arrayArrDate = mainObjAirIQ.getJSONObject("data-" + i).get("arival_date").toString().split("/");
-				String[] arrayDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString().split(":");
-				String[] arrayArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString().split(":");
-				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
-				int totalArrinMin = 0;
-				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
-					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
-				} else {
-					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
-				}
-				int duration = totalArrinMin - totalDepinMin;
-				String airlineName = mainObjAirIQ.getJSONObject("data-" + i).get("airline").toString();
-				float depTimeFloat = 0;
-				float arrTimeFloat = 0;
-				String resultIndex = "" + i;
-				String airlineRemark = "";
-				String mode = "AirIQ";
-				String depTerminal = "T1";
-				String arrTerminal = "T1";
-				String craftType = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
-				String ticketId = mainObjAirIQ.getJSONObject("data-" + i).get("ticket_id").toString();
-				
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-				
-				ProductDetail productDetail = new ProductDetail(i + 10000, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-			    		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, ticketId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
-				
-
-				System.out.println(productDetail);
-				
-				pController.listProductDetailsOnline.add(productDetail);
-				
-				pController.listProductDetailsInSearch.add(productDetail);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-        // Close the connection
-		connectionSearchAirIQ.disconnect();
+//        JSONObject jsonObjSearchAirIQ = new JSONObject(responseBodySearchAirIQ.toString());
+//        System.out.println(jsonObjSearchAirIQ);
+//        logService.generateLog(jsonObjSearchAirIQ.toString());
+//		
+//		try {
+//			JSONArray jsonArraysAirIQ = jsonObjSearchAirIQ.getJSONArray("data");
+//			JSONObject mainObjAirIQ = new JSONObject();
+//			
+//			System.out.println("JSON data: " + jsonObjSearchAirIQ);
+//			
+//			for (int i = 0; i < jsonArraysAirIQ.length(); i++) {
+//				mainObjAirIQ.put("data-" + i, jsonArraysAirIQ.getJSONObject(i));
+//				
+//				System.out.println(mainObjAirIQ);
+//		        logService.generateLog("Main : " + mainObjAirIQ.toString());
+//				
+//				String noOfSeatAvailable = mainObjAirIQ.getJSONObject("data-" + i).get("pax").toString();
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//		        
+//				String flightNumber = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
+//				String stringDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString();
+//				String stringArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString();
+//				double parsePriceADT = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("price").toString());
+//				double parsePriceINF = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("infant_price").toString());
+//				float intTotalAdultChildPrice = (float) (parsePriceADT * (adultNum + childNum));
+//				float intTotalInfantPrice = (float) (parsePriceINF * infantNum);
+//				String depAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("origin").toString();
+//				String arrAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("destination").toString();
+//				int stopNumber = 0;
+//				if (mainObjAirIQ.getJSONObject("data-" + i).get("flight_route").toString() == "Non - Stop") {
+//					stopNumber = 0;
+//				}
+//				String[] arrayDepDate = mainObjAirIQ.getJSONObject("data-" + i).get("departure_date").toString().split("/");
+//				String[] arrayArrDate = mainObjAirIQ.getJSONObject("data-" + i).get("arival_date").toString().split("/");
+//				String[] arrayDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString().split(":");
+//				String[] arrayArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString().split(":");
+//				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
+//				int totalArrinMin = 0;
+//				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
+//					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
+//				} else {
+//					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
+//				}
+//				int duration = totalArrinMin - totalDepinMin;
+//				String airlineName = mainObjAirIQ.getJSONObject("data-" + i).get("airline").toString();
+//				float depTimeFloat = 0;
+//				float arrTimeFloat = 0;
+//				String resultIndex = "" + i;
+//				String airlineRemark = "";
+//				String mode = "AirIQ";
+//				String depTerminal = "T1";
+//				String arrTerminal = "T1";
+//				String craftType = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
+//				String ticketId = mainObjAirIQ.getJSONObject("data-" + i).get("ticket_id").toString();
+//				
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//				
+//				ProductDetail productDetail = new ProductDetail(i + 10000, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+//			    		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+//			    		airlineName, depTimeFloat, arrTimeFloat, ticketId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
+//				
+//
+//				System.out.println(productDetail);
+//				
+//				pController.listProductDetailsOnline.add(productDetail);
+//				
+//				pController.listProductDetailsInSearch.add(productDetail);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//        // Close the connection
+//		connectionSearchAirIQ.disconnect();
 		
 		//TBO response.......
         

@@ -35,6 +35,7 @@
 				margin: 3px 0 0;
 				font-size: 14px;
 				color: #9f9f9f;
+				text-align: left;
 			}
 			.travelerSelection:hover {
 				background: rgb(192, 192, 192);
@@ -54,7 +55,7 @@
 				flex-direction: column; 
 				justify-content: center; 
 				font-size: 24px;
-				margin: 0 25px 0 20px;
+				margin: 0 36px 0 7px;
 			}
 			#categorySubmit {
 				border-radius: 7px;
@@ -179,14 +180,21 @@
 				display: flex;
     			justify-content: center;
 			}
+			.checkInMiddleIcon {
+				height: 58px;
+			    display: flex;
+			    flex-direction: column;
+			    justify-content: center;
+			    font-size: 18px;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
 			<div class="categoryStyle">
-				<form id="hotelSearch">
+				<form id="hotelSearch" th:action="@{/hotel/saveSearchHotel}" method="post">
 					<div class="row" style=" margin-top: 0px; width: -webkit-fill-available;">
-						<div class="col-md-3 col-sm-12 col-12 borderEnd colStyle">
+						<div class="col-md-3 col-sm-12 col-12 borderEnd colStyle" style="margin-top: 4px;">
 							<div class="row" style="width: -webkit-fill-available;">
 								<div class="col-md-2  col-sm-2 col-2 ">
 									<div class="cityFIcon">
@@ -196,7 +204,7 @@
 								<div class="col-md-10 col-sm-10 col-10">
 									
 									<div class="form-floating" id="aligner3">
-										<input type="search" class="form-control hill1 input_styles" name="cityOne" id="hotelCity" 
+										<input type="search" class="form-control hill1 input_styles" name="hotelCity" id="hotelCity" 
 											placeholder="City" style="border: none;" required>
 											
 										<label class="labelStyle labelSetting" for="cityOne">
@@ -205,7 +213,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 col-12 borderEnd colStyle">
+						<div class="col-md-4 col-sm-12 col-12 borderEnd colStyle" style="margin-top: 4px;">
 							<div class="row" style="width: -webkit-fill-available;">
 								<div class="col-2 col-md-2 col-sm-2">
 									<div class="cityFIcon">
@@ -216,18 +224,20 @@
 									<div class="row">
 										<div class="col-5 col-md-5 col-sm-5">
 											<div class="form-floating" id="aligner3">
-												<input type="date" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" style="border: none;" onclick="calenderViewNew(this)" required>
+												<input type="text" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate" th:placeholder="${#dates.format(today, 'dd MMMM, yy')}" 
+												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" onclick="calenderViewNew(this)" required>
 												
 												<label class="labelStyle labelSetting" for="cityOne">
 													Check-In</label>
 											</div>
 										</div>
 										<div class="col-2 col-md-2 col-sm-2">
-											<div class="borderMid"></div>
+											<div class="checkInMiddleIcon"><i class="fa fa-solid fa-angles-right"></i></div>
 										</div>
 										<div class="col-5 col-md-5 col-sm-5">
 											<div class="form-floating" id="aligner3">
-												<input type="date" class="form-control hill1 input_styles" name="checkOutDate" id="checkOutDate" style="border: none;" onclick="calenderViewReturn('#checkInDate', this)" required>
+												<input type="text" class="form-control hill1 input_styles" name="checkOutDate" id="checkOutDate" th:placeholder="${#dates.format(today, 'dd MMMM, yy')}" 
+												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" onclick="calenderViewReturn('#checkInDate', this)">
 												
 												<label class="labelStyle labelSetting" for="cityOne">
 													Check-Out</label>
@@ -241,9 +251,7 @@
 						<div class="col-md-5 col-sm-12 col-12 colStyle">
 							<div class="row" style="width: -webkit-fill-available;">
 								<div class="col-md-8">
-									
-									
-									  <button type="button" class="btn travelerSelection" id="dropDwonButton" aria-expanded="false">
+									  <button type="button" class="btn travelerSelection" id="dropDwonButton" aria-expanded="false" style="width: 100%;">
 									   <div class="travelerButton">
 											<div id="travellerFIcon" >
 												<i class="fa fa-solid fa-bed"></i>
@@ -259,19 +267,19 @@
 											  <div class="col-6 extraPadding"><b>Adults</b></div>
 											  <div class="col-6 extraPadding dropDwonCountStyle">
 												  <div class="incrementStyle" id="decAdult"><i class="fa fa-solid fa-minus"></i></div>
-												  <div><input class="inputStylePax" min="0" type="number" id="adultNum" value="1"></div>
+												  <div><input name="noOfAdults" class="inputStylePax" min="0" type="number" id="adultNum" value="2"></div>
 												  <div class="incrementStyle" id="incAdult"><i class="fa fa-solid fa-plus"></i></div>
 											   </div>
 											  <div class="col-6 extraPadding"><b>Children</b></div>
 											  <div class="col-6 extraPadding dropDwonCountStyle">
 												  <div class="incrementStyle" id="decChild"><i class="fa fa-solid fa-minus"></i></div>
-												  <div><input class="inputStylePax" min="0" type="number" id="childNum" value="0"></div>
+												  <div><input name="noOfChildren" class="inputStylePax" min="0" type="number" id="childNum" value="0"></div>
 												  <div class="incrementStyle" id="incChild"><i class="fa fa-solid fa-plus"></i></div>
 											   </div>
 											  <div class="col-6 extraPadding"><b>Rooms</b></div>
 											  <div class="col-6 extraPadding dropDwonCountStyle">
 												  <div class="incrementStyle" id="decRoom"><i class="fa fa-solid fa-minus"></i></div>
-												  <div><input class="inputStylePax" min="0" type="number" id="roomNum" value="1"></div>
+												  <div><input name="noOfRooms" class="inputStylePax" min="0" type="number" id="roomNum" value="1"></div>
 												  <div class="incrementStyle" id="incRoom"><i class="fa fa-solid fa-plus"></i></div>
 											   </div>
 											  <div class="col-12 borderBottom"></div>
@@ -281,7 +289,7 @@
 									  </div>
 								</div>
 								<div class="col-md-4 submitDiv">
-									<input id="categorySubmit" type="button" value="Submit">
+									<input id="categorySubmit" type="submit" value="Submit">
 								</div>
 							</div>
 						</div>
@@ -305,13 +313,11 @@
 		});
 	</script>
 	<script>
-		
 		toggleNumberVal("#decAdult", "#incAdult", "#adultNum");
 		toggleNumberVal("#decChild", "#incChild", "#childNum");
 		toggleNumberVal("#decRoom", "#incRoom", "#roomNum");
 		
 		function toggleNumberVal(minus, plus, input) {
-		
 			if(parseInt($(input).val()) > 0) {
 				$(minus).addClass('incStyle');
 			} else {
@@ -330,6 +336,7 @@
 				if(parseInt($(input).val()) >= 1) {
 					var newVal = parseInt($(input).val()) - 1;
 					$(input).attr('value', newVal);
+					
 					if (parseInt($(input).val()) > 0) {
 						$(minus).addClass('incStyle');
 						$(plus).addClass('incStyle');
@@ -346,6 +353,7 @@
 				if(parseInt($(input).val()) <= 48) {
 					var newVal = parseInt($(input).val()) + 1;
 					$(input).attr('value', newVal);
+					
 					if (parseInt($(input).val()) < 48) {
 						$(plus).addClass('incStyle');
 						$(minus).addClass('incStyle');

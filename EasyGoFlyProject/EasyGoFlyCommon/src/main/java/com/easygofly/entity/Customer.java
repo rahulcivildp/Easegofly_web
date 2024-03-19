@@ -117,6 +117,10 @@ public class Customer {
     @JoinColumn(name = "wallet_id")
 	private Wallet wallet;
 	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<HotelHistory> hotelHistory = new ArrayList<>();
+	
+	
 	public Customer() {}
 	
 	public Customer(Integer id) {
@@ -342,6 +346,14 @@ public class Customer {
 
 	public void setAuthenticationType(AuthenticationType authenticationType) {
 		this.authenticationType = authenticationType;
+	}
+
+	public List<HotelHistory> getHotelHistory() {
+		return hotelHistory;
+	}
+
+	public void setHotelHistory(List<HotelHistory> hotelHistory) {
+		this.hotelHistory = hotelHistory;
 	}
 
 	public Wallet getWallet() {

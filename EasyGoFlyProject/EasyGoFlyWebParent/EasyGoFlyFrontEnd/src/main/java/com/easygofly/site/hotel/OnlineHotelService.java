@@ -23,11 +23,62 @@ public class OnlineHotelService {
 	public String resultIndex = "";
 	
 
-	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
+	public int apiAuthenticationHotel(HttpURLConnection connection, StringBuilder responseBody)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+
+        // Create the request body
+//        String requestBody = "{"
+//        		+ "\"ClientId\": \"tboprod\", "
+//        		+ "\"UserName\": \"CCUA927\", "
+//        		+ "\"Password\": \"#API@Air&72\", "
+//        		+ "\"EndUserIp\": \"89.116.231.35\""
+//        		+ "}";
+        
+        //Test Credentials
+      String requestBody = "{"
+      		+ "\"ClientId\": \"ApiIntegrationNew\", "
+      		+ "\"UserName\": \"aladdin\", "
+      		+ "\"Password\": \"aladdin@1234\", "
+      		+ "\"EndUserIp\": \"89.116.231.35\""
+      		+ "}";
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+	 
+	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityId, String noOfNights, String noOfRooms, Integer noOfAdults, Integer noOfChild, Date date, Date childDOB)
 			throws IOException {
 		
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); 
 		String strDate = dateFormat.format(date);
+		String strChlDOB = dateFormat.format(childDOB);
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -42,18 +93,18 @@ public class OnlineHotelService {
      // Create the request body
         String requestBody = "{\r\n"
         		+ "  \"CheckInDate\": \"" + strDate + "\",\r\n"
-        		+ "  \"NoOfNights\": \"1\",\r\n"
+        		+ "  \"NoOfNights\": \"" + noOfNights + "\",\r\n"
         		+ "  \"CountryCode\": \"IN\",\r\n"
-        		+ "  \"CityId\": \"130443\",\r\n"
+        		+ "  \"CityId\": \"" + cityId + "\",\r\n"
         		+ "  \"ResultCount\": null,\r\n"
         		+ "  \"PreferredCurrency\": \"INR\",\r\n"
         		+ "  \"GuestNationality\": \"IN\",\r\n"
-        		+ "  \"NoOfRooms\": \"1\",\r\n"
+        		+ "  \"NoOfRooms\": \"" + noOfRooms + "\",\r\n"
         		+ "  \"RoomGuests\": [\r\n"
         		+ "    {\r\n"
-        		+ "      \"NoOfAdults\": 1,\r\n"
-        		+ "      \"NoOfChild\": 0,\r\n"
-        		+ "      \"ChildAge\": null\r\n"
+        		+ "      \"NoOfAdults\": " + noOfAdults + ",\r\n"
+        		+ "      \"NoOfChild\": " + noOfChild + ",\r\n"
+        		+ "      \"ChildAge\": " + strChlDOB + "\r\n"
         		+ "    }\r\n"
         		+ "  ],\r\n"
         		+ "  \"MaxRating\": 5,\r\n"
@@ -61,7 +112,7 @@ public class OnlineHotelService {
         		+ "  \"ReviewScore\": null,\r\n"
         		+ "  \"IsNearBySearchAllowed\": false,\r\n"
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "  \"TokenId\": \"dd3d4c6e-21eb-43f4-aba5-e251563414cd\"\r\n"
+        		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
         		+ "}";
 
         System.out.println(requestBody);
