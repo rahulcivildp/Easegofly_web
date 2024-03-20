@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class SitemapController {
 
-	private String DOMAIN = "https://www.easegofly.com/";
+	private String DOMAIN = "https://easegofly.com/";
 	
 	  @GetMapping(value = "/sitemap.xml", produces = {"application/xml", "text/xml"})
 	    public ResponseEntity<String> generateSitemap() {

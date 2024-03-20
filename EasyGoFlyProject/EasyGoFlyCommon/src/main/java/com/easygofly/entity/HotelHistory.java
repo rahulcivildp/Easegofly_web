@@ -40,8 +40,8 @@ public class HotelHistory {
 	@Column(nullable = false, name = "no_of_children", length = 10)
 	private String noOfChild;
 
-	@Column(name = "children_age", length = 20)
-	private String childrenAge;
+	@Column(name = "children_age")
+	private Integer[] childrenAge;
 
 	@Column(nullable = false, name = "is_near_by_search_allowed", length = 20)
 	private boolean isNearBySearchAllowed;
@@ -55,7 +55,7 @@ public class HotelHistory {
 	public HotelHistory() {}
 
 	public HotelHistory(Date checkInDate, Date checkOutDate, String countryCode, String cityId, String noOfRooms,
-			String noOfAdults, String noOfChild, String childrenAge, boolean isNearBySearchAllowed, Customer customer) {
+			String noOfAdults, String noOfChild, Integer[] childrenAge, boolean isNearBySearchAllowed, Customer customer) {
 		super();
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
@@ -133,11 +133,11 @@ public class HotelHistory {
 		this.noOfChild = noOfChild;
 	}
 
-	public String getChildrenAge() {
+	public Integer[] getChildrenAge() {
 		return childrenAge;
 	}
 
-	public void setChildrenAge(String childrenAge) {
+	public void setChildrenAge(Integer[] childrenAge) {
 		this.childrenAge = childrenAge;
 	}
 

@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,20 +74,19 @@ public class OnlineHotelService {
 		return responseCode;
 	}
 	 
-	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityId, String noOfNights, String noOfRooms, Integer noOfAdults, Integer noOfChild, Date date, Date childDOB)
+	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityId, String noOfNights, String noOfRooms, String countryId, Integer noOfAdults, 
+			Integer noOfChild, Date date, Integer[] childDOB)
 			throws IOException {
 		
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); 
 		String strDate = dateFormat.format(date);
-		String strChlDOB = dateFormat.format(childDOB);
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
         // Set request headers (if required)
         connection.setRequestProperty("Content-Type", "application/json");
-        
-        
+  
         // Enable writing data to the connection
         connection.setDoOutput(true);
         
@@ -94,7 +94,7 @@ public class OnlineHotelService {
         String requestBody = "{\r\n"
         		+ "  \"CheckInDate\": \"" + strDate + "\",\r\n"
         		+ "  \"NoOfNights\": \"" + noOfNights + "\",\r\n"
-        		+ "  \"CountryCode\": \"IN\",\r\n"
+        		+ "  \"CountryCode\": \"" + countryId + "\",\r\n"
         		+ "  \"CityId\": \"" + cityId + "\",\r\n"
         		+ "  \"ResultCount\": null,\r\n"
         		+ "  \"PreferredCurrency\": \"INR\",\r\n"
@@ -104,7 +104,7 @@ public class OnlineHotelService {
         		+ "    {\r\n"
         		+ "      \"NoOfAdults\": " + noOfAdults + ",\r\n"
         		+ "      \"NoOfChild\": " + noOfChild + ",\r\n"
-        		+ "      \"ChildAge\": " + strChlDOB + "\r\n"
+        		+ "      \"ChildAge\": " + childDOB + "\r\n"
         		+ "    }\r\n"
         		+ "  ],\r\n"
         		+ "  \"MaxRating\": 5,\r\n"

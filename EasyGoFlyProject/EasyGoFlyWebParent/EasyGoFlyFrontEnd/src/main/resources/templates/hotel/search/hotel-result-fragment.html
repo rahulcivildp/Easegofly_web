@@ -5,8 +5,65 @@
 	<head>
 		
 	</head>
+	<style>
+		.hotelRowStyle {
+			padding: 8px 0;
+			margin: 12px 0;
+		    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+		    border-radius: 10px;
+		}
+		.priceRowStyle {
+			padding: 10px;
+		    background: #e8f8e8;
+		    border-radius: 8px;
+		    margin-right: 6px;    
+		    align-items: center;
+		    height: 150px;
+		}
+		.priceRowStyle h4 {
+			margin: 0;
+		}
+	</style>
 	<body>
-		<h1>[[${hotelCity}]]</h1>
+		<div style="height: 65px;"></div>
+		<div th:replace="hotel/hotel-search-tab :: hotel-search"></div>
+            <div class="container" style="margin-bottom: 5px; margin-top: 10px; padding: 0;">
+                <div class="shadow rounded"> 
+                	<a href="https://www.webkoro.com/" title="https://www.webkoro.com/">
+                    	<img th:src="@{/images/advertisement/webkoro add easegofly.png}" style="width: 100%;" class="shadow rounded" > 
+                    </a>
+                </div>
+            </div>
+		<div class="container" style="padding-top: 40px;">
+			<th:block th:each=" hotel : ${hotelList}">
+			<div class="row hotelRowStyle">
+				<div class="col-3">
+					<img th:src="${hotel.hotelPicture}" style="width: 100%; border-radius: 8px;">
+				</div>
+				<div class="col-5">
+					<div class="">
+						<h2>[[${hotel.hotelName}]]</h2>
+						<p>[[${hotel.starRating}]] Star Hotel</p>
+						<p>Code: [[${hotel.hotelCode}]]</p>
+						<b>[[${hotel.hotelAddress}]]</b>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="row">
+						<div class="col-12"><b>[[${hotel.hotelCategory}]]</b></div>
+						<div class="col-12" style="height: 20px;"></div>
+						<div class="col-12">
+							<div class="row priceRowStyle">
+								<div class="col-6"><h4>₹ [[${hotel.publishedPriceRoundedOff}]]</h4></div>
+								<div class="col-6"><button type="button" class="btn btn-success">View Deals <i class="fa fa-solid fa-chevron-right"></i></button></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</th:block>
+		</div>
+		
 	</body>
 	
 </html>
