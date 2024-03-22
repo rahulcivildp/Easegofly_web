@@ -29,7 +29,6 @@ public class MvcConfig implements WebMvcConfigurer {
 		
 		registry.addResourceHandler(logicalPath).addResourceLocations("file://" + absolutePhotoPath + "/");
 	} 
-
 	 
 } 
   

@@ -1,7 +1,6 @@
 package com.easygofly.site.hotel;
 
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,7 +8,6 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -124,25 +122,12 @@ public class HotelController {
 
 		TBOCity city = tboRepo.getCityByCityId(hotelCity);
 		cityFinder(model);
+		hotels = new ArrayList<Hotel>();
 		
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    Date checkIn = dateFormat.parse(checkInDate);
 		
-		String[] arrCheckIn = checkInDate.split("-");
-		String[] arrCheckOut = checkOutDate.split("-");
-		
-		Integer totalDaysCheckIn = Integer.parseInt(arrCheckIn[2]);
-		Integer totalDaysCheckOut = Integer.parseInt(arrCheckOut[2]);
-		
-		for (int i = 0; i < (Integer.parseInt(arrCheckIn[1]) - 1); i++) {
-			totalDaysCheckIn = totalDaysCheckIn + YearMonth.of(Integer.parseInt(arrCheckIn[0]), Integer.parseInt(arrCheckIn[1])).lengthOfMonth();
-		}
-		
-		for (int i = 0; i < (Integer.parseInt(arrCheckIn[1]) - 1); i++) {
-			totalDaysCheckOut = totalDaysCheckOut + YearMonth.of(Integer.parseInt(arrCheckOut[0]), Integer.parseInt(arrCheckOut[1])).lengthOfMonth();
-		}
-		
-		Integer noNights = totalDaysCheckOut - totalDaysCheckIn;
+		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
 		
 		Integer[] arrChildrenAge = null; 
 				
@@ -213,9 +198,36 @@ public class HotelController {
 			e.printStackTrace();
 		}
         
+        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
+        
 		model.addAttribute("hotelCity", hotelCity);
+		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("totalGuests", totalGuests);
+		model.addAttribute("noOfRooms", noOfRooms);
+		model.addAttribute("noNights", noNights);
 		model.addAttribute("hotelList", hotels);
 		return "hotel/search/hotel-search-result";
+	}
+
+
+	private Integer noOfNightsMethod(String checkInDate, String checkOutDate) {
+		String[] arrCheckIn = checkInDate.split("-");
+		String[] arrCheckOut = checkOutDate.split("-");
+		
+		Integer totalDaysCheckIn = Integer.parseInt(arrCheckIn[2]);
+		Integer totalDaysCheckOut = Integer.parseInt(arrCheckOut[2]);
+		
+		for (int i = 0; i < (Integer.parseInt(arrCheckIn[1]) - 1); i++) {
+			totalDaysCheckIn = totalDaysCheckIn + YearMonth.of(Integer.parseInt(arrCheckIn[0]), Integer.parseInt(arrCheckIn[1])).lengthOfMonth();
+		}
+		
+		for (int i = 0; i < (Integer.parseInt(arrCheckIn[1]) - 1); i++) {
+			totalDaysCheckOut = totalDaysCheckOut + YearMonth.of(Integer.parseInt(arrCheckOut[0]), Integer.parseInt(arrCheckOut[1])).lengthOfMonth();
+		}
+		
+		Integer noNights = totalDaysCheckOut - totalDaysCheckIn;
+		
+		return noNights;
 	}
 	
 

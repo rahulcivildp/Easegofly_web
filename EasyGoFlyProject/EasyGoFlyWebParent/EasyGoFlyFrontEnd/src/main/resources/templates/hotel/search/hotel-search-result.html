@@ -32,7 +32,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	@media screen and (max-width: 800px) {
 		body #header {
 			position: relative;
-			background: transparent;
 		}
 	}
 	gmp-map {
@@ -41,24 +40,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       }
 </style>
 <body>
-<!-- Small svg tabs #6252f3-->
-<div class="media_status" style="position: relative;">
-	<div style="position: absolute; width: 100%; background: white;">
-		<div style="height: 80px; background: #00012a;"></div>
-		<svg style="margin-top: -4px;" version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-			<path d="M0 0 C165 0 330 0 500 0 C500 20.13 500 40.26 500 61 C487.13 59.515 487.13 59.515 474 58 C456.00406544 56.0080186 
-			438.10597728 54.39998477 420 54 C418.83404297 53.96712891 418.83404297 53.96712891 417.64453125 53.93359375 C372.85160316 
-			52.76100401 328.86525639 59.89987911 284.86889648 67.33032227 C265.94767358 70.52556128 247.04925793 73.66832449 228 76 
-			C226.73607422 76.16081055 225.47214844 76.32162109 224.16992188 76.48730469 C160.71645002 84.24699552 97.52327843 77.15872824 
-			34.92041016 66.48071289 C31.58923536 65.91293201 28.25749986 65.34870566 24.92539978 64.78639698 C21.69986321 64.24148133 
-			18.47495482 63.69287771 15.25 63.14453125 C14.05963135 62.94350296 12.8692627 62.74247467 11.64282227 62.53535461 C10.54897217 
-			62.34813339 9.45512207 62.16091217 8.328125 61.96801758 C7.3680957 61.80465408 6.40806641 61.64129059 5.41894531 61.47297668 
-			C3 61 3 61 0 60 C0 40.2 0 20.4 0 0 Z " fill="#00012a" transform="translate(0,0)"/>
-		</svg>
-	</div>
-</div>
-<div class="media_status" style="position: absolute; width: 100%; height: 110px; z-index: 99; background: #00012a;">
-</div>
   <header id="header" class="fixed-top d-flex align-items-center" >
   	<div th:replace="fragments :: page_header('tag')"></div>
   </header>

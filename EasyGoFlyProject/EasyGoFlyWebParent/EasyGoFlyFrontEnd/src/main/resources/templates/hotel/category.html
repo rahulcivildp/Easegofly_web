@@ -78,6 +78,17 @@ th:fragment="category(remove)" th:remove="${remove}">
 }
 
 @media screen and (max-width: 800px) {
+	#tabsMobile .translateTabs {
+		transition-property: translate, scale; 
+		transition-duration: 1200ms; 
+		transition-timing-function: ease-in-out;
+		-webkit-transition-property: translate, scale; 
+		-webkit-transition-duration: 1200ms; 
+		-webkit-transition-timing-function: ease-in-out;
+		-ms-transition-property: translate, scale; 
+		-ms-transition-duration: 1200ms; 
+		-ms-transition-timing-function: ease-in-out;
+	}
 	.tabss {
 	    display: flex !important;
 	    height: 90px;
@@ -375,6 +386,39 @@ input:checked+br+label {
 	height: auto; 
 	position: relative; 
 }
+.translateItem {
+	transition-property: translate; 
+	transition-duration: 800ms; 
+	transition-timing-function: ease-in-out;
+	-webkit-transition-property: translate; 
+	-webkit-transition-duration: 800ms; 
+	-webkit-transition-timing-function: ease-in-out;
+	-ms-transition-property: translate; 
+	-ms-transition-duration: 800ms; 
+	-ms-transition-timing-function: ease-in-out;
+}
+.transformedItem {
+    translate: 0 0 !important;
+    -webkit-translate: 0 0 !important;
+    -ms-translate: 0 0 !important;
+}
+.translateTabs {
+	transition-property: translate, scale; 
+	transition-duration: 1300ms; 
+	transition-timing-function: ease-in-out;
+	-webkit-transition-property: translate, scale; 
+	-webkit-transition-duration: 1300ms; 
+	-webkit-transition-timing-function: ease-in-out;
+	-ms-transition-property: translate, scale; 
+	-ms-transition-duration: 1300ms; 
+	-ms-transition-timing-function: ease-in-out;
+}
+.transformedTabs {
+	scale: 1 !important;
+    translate: 0 0 !important;
+    -webkit-translate: 0 0 !important;
+    -ms-translate: 0 0 !important;
+}
 </style>
 
 </head>
@@ -383,7 +427,7 @@ input:checked+br+label {
 			<div id="imgbck2" style="margin: 0 auto;" class="">
 	
 				<div id="tabs" class="col-12 media-hide">
-					<ul class="text-center" id="adjusted">
+					<ul class="text-center translateItem translateTabs" id="adjusted" style="translate: 0 -100%; scale: 0;">
 							<li class="tabss shadow" id="flight"><a
 								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
 						
@@ -399,7 +443,7 @@ input:checked+br+label {
 					</ul>
 				</div>
 				<div id="tabsMobile" class="col-12 media_status_flex_CPN">
-					<div class="row text-center" id="adjusted">
+					<div class="row text-center translateTabs" id="adjusted" style="translate: 0 -100%; scale: 0;">
 						<div class="col-3" style="padding: 0 4px !important;" >
 							<li class="tabss shadow" id="flightMobile">
 								<a th:href="@{/flight}"><img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><strong>Flights</strong></a>
@@ -430,14 +474,14 @@ input:checked+br+label {
 		</div>
 			
 	<div id="mainHeroStyle" class="searchBovMainDivActive">
-		<div  style="position: absolute; z-index: 2; width: 100%;">
+		<div class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
 					<div th:replace="hotel/hotel-search-tab :: hotel-search"></div>
 			    
 			</div>
 		</div>
 		<!-- ======= Hero Section ======= -->
-		<section id="hero" class="heroDIsplay">
+		<section id="hero" class="heroDIsplay translateItem" style="translate: -100% 0;">
 			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
 					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
@@ -504,6 +548,12 @@ input:checked+br+label {
 	</div>
 </body>
 
+<script>
+	$(document).ready(function(){
+		$(".translateItem").addClass("transformedItem");
+		$(".translateTabs").addClass("transformedTabs");
+	});
+</script>
 
 <script>
 	$("#hotelMobile").click(function(){
