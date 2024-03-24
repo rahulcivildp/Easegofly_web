@@ -25,6 +25,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.Hotel;
 import com.easygofly.entity.HotelHistory;
 import com.easygofly.entity.TBOCity;
+import com.easygofly.entity.TourAttraction;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flightAPI.TBOCityRepository;
@@ -46,7 +47,7 @@ public class HotelController {
 	public String viewHotelPage(Model model) {
 		cityFinder(model);
 		
-		hotelService.authenticationFlight(model);
+		hotelService.authenticationHotel(model);
 		
 		return "hotel/hotel";
 	}
@@ -150,6 +151,8 @@ public class HotelController {
 			JSONArray jsonArrays = jsonObjSearch.getJSONObject("HotelSearchResult").getJSONArray("HotelResults");
 			JSONObject mainObj = new JSONObject();
 			
+			onlineHotelService.traceId = jsonObjSearch.getJSONObject("HotelSearchResult").get("TraceId").toString();
+			
 			for (int i = 0; i < jsonArrays.length(); i++) {
 			    mainObj.put("Hotel-" + i, jsonArrays.getJSONObject(i));
 			    
@@ -191,9 +194,9 @@ public class HotelController {
 			}
 			
 		} catch (Exception e) {
-			JSONObject jsonObj = jsonObjSearch.getJSONObject("HotelSearchResult").getJSONObject("Error");
-			String errorCode = jsonObj.get("ErrorCode").toString();
-			String errorMessage = jsonObj.get("ErrorMessage").toString();
+//			JSONObject jsonObj = jsonObjSearch.getJSONObject("HotelSearchResult").getJSONObject("Error");
+//			String errorCode = jsonObj.get("ErrorCode").toString();
+//			String errorMessage = jsonObj.get("ErrorMessage").toString();
 			
 			e.printStackTrace();
 		}
@@ -202,13 +205,16 @@ public class HotelController {
         
 		model.addAttribute("hotelCity", hotelCity);
 		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("checkInDate", checkInDate);
+		model.addAttribute("checkOutDate", checkOutDate);
 		model.addAttribute("totalGuests", totalGuests);
+		model.addAttribute("noOfAdults", noOfAdults);
+		model.addAttribute("noOfChildren", noOfChildren);
 		model.addAttribute("noOfRooms", noOfRooms);
 		model.addAttribute("noNights", noNights);
 		model.addAttribute("hotelList", hotels);
 		return "hotel/search/hotel-search-result";
 	}
-
 
 	private Integer noOfNightsMethod(String checkInDate, String checkOutDate) {
 		String[] arrCheckIn = checkInDate.split("-");
@@ -230,10 +236,157 @@ public class HotelController {
 		return noNights;
 	}
 	
-
 	@GetMapping("/hotel_loading...")
     public String performApiRequest(Model model) {
         model.addAttribute("searchURL", searchURL);
         return "loading/loading";
     }
+	
+	@GetMapping("/hotel/booking_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}_{resultIndex}_{hotelCode}")
+	public String hotelBooking(Model model, 
+			@PathVariable(name = "hotelCity") String hotelCity,
+			@PathVariable(name = "checkInDate") String checkInDate,
+			@PathVariable(name = "checkOutDate") String checkOutDate,
+			@PathVariable(name = "noOfAdults") String noOfAdults,
+			@PathVariable(name = "noOfChildren") String noOfChildren,
+			@PathVariable(name = "noOfRooms") String noOfRooms,
+			@PathVariable(name = "resultIndex") String resultIndex,
+			@PathVariable(name = "hotelCode") String hotelCode) throws Exception {
+
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date checkIn = dateFormat.parse(checkInDate);
+	    
+		// Create URL object with the API end-point
+        URL urlHotelInfo = new URL("http://api.tektravels.com/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelInfo");
+
+        // Open a connection
+        HttpURLConnection connectionHotelInfo = (HttpURLConnection) urlHotelInfo.openConnection();
+       
+        StringBuilder responseBodyHotelInfo = new StringBuilder();
+        
+        onlineHotelService.apiOnlineHotelInfo(connectionHotelInfo, responseBodyHotelInfo, resultIndex, hotelCode);
+	
+        JSONObject jsonObjSearch = new JSONObject(responseBodyHotelInfo.toString());
+        System.out.println(jsonObjSearch);
+        logService.generateLog(jsonObjSearch.toString());
+        
+        try {
+        	JSONObject jsonObj = jsonObjSearch.getJSONObject("HotelInfoResult").getJSONObject("HotelDetails");
+
+			List<TourAttraction> tours = new ArrayList<TourAttraction>();
+			List<String> facilities = new ArrayList<String>();
+			List<String> imageHo = new ArrayList<String>();
+			
+			try {
+				JSONArray jsonArrtr = jsonObj.getJSONArray("Attractions");
+				for (int i = 0; i < jsonArrtr.length(); i++) {
+					String key = jsonArrtr.getJSONObject(i).get("Key").toString();
+					String value = jsonArrtr.getJSONObject(i).get("Value").toString();
+					
+					TourAttraction tour = new TourAttraction();
+					tour.setKey(key);
+					tour.setValue(value); 
+					tours.add(tour);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+
+			try {
+				JSONArray jsonFacil = jsonObj.getJSONArray("HotelFacilities");
+				for (int i = 0; i < jsonFacil.length(); i++) {
+					String facil = jsonFacil.getString(i);
+					
+					facilities.add(facil);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			try {
+				JSONArray jsonImg = jsonObj.getJSONArray("Images");
+				for (int i = 0; i < jsonImg.length(); i++) {
+					String img = jsonImg.getString(i);
+					
+					imageHo.add(img);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+			model.addAttribute("hotelImages", imageHo);
+			model.addAttribute("facilities", facilities);
+			model.addAttribute("tours", tours);
+			model.addAttribute("hotelCode", jsonObj.get("HotelCode").toString());
+			model.addAttribute("hotelName", jsonObj.get("HotelName").toString());
+			model.addAttribute("starRating", jsonObj.get("StarRating").toString());
+			model.addAttribute("description", jsonObj.get("Description").toString());
+			model.addAttribute("hotelURL", jsonObj.get("HotelURL").toString());
+			model.addAttribute("hotelPolicy", jsonObj.get("HotelPolicy").toString());
+			model.addAttribute("specialInstructions", jsonObj.get("SpecialInstructions").toString());
+			model.addAttribute("address", jsonObj.get("Address").toString());
+			model.addAttribute("countryName", jsonObj.get("CountryName").toString());
+			model.addAttribute("pinCode", jsonObj.get("PinCode").toString());
+			model.addAttribute("hotelContactNo", jsonObj.get("HotelContactNo").toString());
+			model.addAttribute("faxNumber", jsonObj.get("FaxNumber").toString());
+			model.addAttribute("email", jsonObj.get("Email").toString());
+			model.addAttribute("latitude", jsonObj.get("Latitude").toString());
+			model.addAttribute("longitude", jsonObj.get("Longitude").toString());
+			model.addAttribute("roomData", jsonObj.get("RoomData").toString());
+			model.addAttribute("roomFacilities", jsonObj.get("RoomFacilities").toString());
+			model.addAttribute("services", jsonObj.get("Services").toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
+		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
+        
+		model.addAttribute("hotelCity", hotelCity);
+		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("checkInDate", checkInDate);
+		model.addAttribute("checkOutDate", checkOutDate);
+		model.addAttribute("totalGuests", totalGuests);
+		model.addAttribute("noOfAdults", noOfAdults);
+		model.addAttribute("noOfChildren", noOfChildren);
+		model.addAttribute("noOfRooms", noOfRooms);
+		model.addAttribute("noNights", noNights);
+        
+		return "hotel/booking/hotel-booking";
+	}
+	
+	@PostMapping("/hotel/saveHotel")
+	public String saveHotel(@RequestParam(name = "resultIndex", required = false) String resultIndex,
+			@RequestParam(name = "hotelCode", required = false) String hotelCode,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+			@RequestParam(name = "hotelCity", required = false) String hotelCity, 
+			@RequestParam(name = "checkInDate", required = false) String checkInDate, 
+			@RequestParam(name = "checkOutDate", required = false) String checkOutDate, 
+			@RequestParam(name = "noOfAdults", required = false) Integer noOfAdults,
+			@RequestParam(name = "noOfChildren", required = false) Integer noOfChildren,
+			@RequestParam(name = "noOfRooms", required = false) Integer noOfRooms) throws Exception {
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date checkIn = dateFormat.parse(checkInDate);
+	    Date checkOut = dateFormat.parse(checkOutDate);
+		TBOCity city = tboRepo.getCityByCityId(hotelCity);
+
+		String email = loggedCustomer.getUsername();
+		Customer customer = customerService.getByPhone(email);
+		HotelHistory history = new HotelHistory();
+		history.setCheckInDate(checkIn);
+		history.setCheckOutDate(checkOut);
+		history.setChildrenAge(null);
+		history.setCityId(city.getCityId().toString());
+		history.setCountryCode(city.getCountryCode());
+		history.setNearBySearchAllowed(false);
+		history.setNoOfAdults(noOfAdults.toString());
+		history.setNoOfChild(noOfChildren.toString());
+		history.setNoOfRooms(noOfRooms.toString());
+		history.setCustomer(customer);
+		
+		hotelService.saveHotelHistory(history, customer); 
+		return "redirect:/hotel/booking_" + hotelCity + "_" + checkInDate + "_" + checkOutDate + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms + "_" + resultIndex + "_" + hotelCode;
+	}
 }

@@ -19,7 +19,7 @@ public class HotelService {
 	@Autowired private LogService logService;
 	@Autowired private HotelHistoryRepository hotelHistoryRepo;
 
-	public void authenticationFlight(Model model) {
+	public void authenticationHotel(Model model) {
 		try {
         	
         	// Create URL object with the API end-point

@@ -136,4 +136,88 @@ public class OnlineHotelService {
 		return responseCode;
 	}
 
+	public int apiOnlineHotelInfo(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+  
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+     // Create the request body
+        String requestBody = "{\r\n"
+        		+ "  \"ResultIndex\": \"" + resultIndex + "\",\r\n"
+        		+ "  \"HotelCode\": \"" + hotelCode + "\",\r\n"
+        		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "  \"TraceId\": \"" + traceId + "\"\r\n"
+        		+ "}";
+
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
+	public int apiOnlineHotelRoom(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+  
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+     // Create the request body
+        String requestBody = "{\r\n"
+        		+ "  \"ResultIndex\": \"" + resultIndex + "\",\r\n"
+        		+ "  \"HotelCode\": \"" + hotelCode + "\",\r\n"
+        		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "  \"TraceId\": \"" + traceId + "\"\r\n"
+        		+ "}";
+
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
 }

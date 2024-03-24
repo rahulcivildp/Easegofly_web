@@ -192,7 +192,16 @@
                 </div>
             </div>
 		<div class="container media-hide" style="padding-top: 40px;">
-			<th:block th:each=" hotel : ${hotelList}">
+			<th:block th:each=" hotel : ${hotelList}" >
+				<form th:action="@{/hotel/saveHotel}" method="post" th:id="'hotelForm-' + ${hotel.hotelCode}">
+					<input type="hidden" th:value="${hotel}" name="hotel">
+					<input type="hidden" th:value="${hotelCity}" name="hotelCity">
+					<input type="hidden" th:value="${checkInDate}" name="checkInDate">
+					<input type="hidden" th:value="${checkOutDate}" name="checkOutDate">
+					<input type="hidden" th:value="${noOfAdults}" name="noOfAdults">
+					<input type="hidden" th:value="${noOfChildren}" name="noOfChildren">
+					<input type="hidden" th:value="${noOfRooms}" name="noOfRooms">
+				</form>
 			   <div class="hotelRowStyle">
 				<div class="row" style="width: 100%;">
 					<div class="col-3" style="height: inherit;">
@@ -243,6 +252,16 @@
 		</div>
 		<div class="container media_status" style="padding-top: 5px;">
 			<th:block th:each=" hotel : ${hotelList}">
+				<form th:action="@{/hotel/saveHotel}" method="post" th:id="'hotelFormMob-' + ${hotel.hotelCode}">
+					<input type="hidden" th:value="${hotel.hotelCode}" name="hotelCode">
+					<input type="hidden" th:value="${hotel.resultIndex}" name="resultIndex">
+					<input type="hidden" th:value="${hotelCity}" name="hotelCity">
+					<input type="hidden" th:value="${checkInDate}" name="checkInDate">
+					<input type="hidden" th:value="${checkOutDate}" name="checkOutDate">
+					<input type="hidden" th:value="${noOfAdults}" name="noOfAdults">
+					<input type="hidden" th:value="${noOfChildren}" name="noOfChildren">
+					<input type="hidden" th:value="${noOfRooms}" name="noOfRooms">
+				</form>
 			   <div class="hotelRowStyle">
 				<div class="row" style="width: 100%;">
 					<div class="col-3" style="height: inherit;">
@@ -275,14 +294,16 @@
 						</div>
 					</div>
 					<div class="col-4" style="display: flex; align-items: center; padding: 0;">
-						<div class="row priceRowStyleMbl">
-							<div class="col-12" style="padding: 0;">
-								<div class="row">
-									<div class="col-12"><h4>₹ [[${hotel.publishedPriceRoundedOff}]]</h4></div>
-									<div class="col-12"><button type="button" class="btn btn-success" style="width: -webkit-fill-available;">View Deals <i class="fa fa-solid fa-chevron-right"></i></button></div>
+						<button type="submit" class="priceRowStyleMbl" th:form="'hotelFormMob-' + ${hotel.hotelCode}" style="width: -webkit-fill-available;">
+							<div class="row ">
+								<div class="col-12" style="padding: 0;">
+									<div class="row">
+										<div class="col-12"><h4>₹ [[${hotel.publishedPriceRoundedOff}]]</h4></div>
+										<div class="col-12"><div class="btn btn-success" style="width: -webkit-fill-available;">View Deals <i class="fa fa-solid fa-chevron-right"></i></div></div>
+									</div>
 								</div>
 							</div>
-						</div>
+						</button>
 					</div>
 				</div>
 				
