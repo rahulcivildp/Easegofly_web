@@ -220,4 +220,81 @@ public class OnlineHotelService {
 		return responseCode;
 	}
 
+	public int apiOnlineHotelBlockRoom(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode, String hotelName, String noOfRooms, 
+			String roomIndex, String roomTypeCode, String roomTypeName, String ratePlanCode, double roomPrice, double tax, double extraGuestCharge, double childCharge, double otherCharges,
+			double discount, double publishedPrice, Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff, double offeredPrice, double agentCommission, double agentMarkUp, 
+			double tds)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+  
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+     // Create the request body
+        String requestBody = "{\r\n"
+        		+ "  \"ResultIndex\": \"" + resultIndex + "\",\r\n"
+        		+ "  \"HotelCode\": \""+hotelCode+"\",\r\n"
+        		+ "  \"HotelName\": \"" + hotelName + "\",\r\n"
+        		+ "  \"GuestNationality\": \"IN\",\r\n"
+        		+ "  \"NoOfRooms\": \"" + noOfRooms + "\",\r\n"
+        		+ "  \"ClientReferenceNo\": \"0\",\r\n"
+        		+ "  \"IsVoucherBooking\": \"true\",\r\n"
+        		+ "  \"HotelRoomsDetails\": [\r\n"
+        		+ "    {\r\n"
+        		+ "      \"RoomIndex\": \"" + roomIndex + "\",\r\n"
+        		+ "      \"RoomTypeCode\": \"" + roomTypeCode + "\",\r\n"
+        		+ "      \"RoomTypeName\": \"" + roomTypeName + "\",\r\n"
+        		+ "      \"RatePlanCode\": \"" + ratePlanCode + "\",\r\n"
+        		+ "      \"BedTypeCode\": null,\r\n"
+        		+ "      \"SmokingPreference\": 0,\r\n"
+        		+ "      \"Supplements\": null,\r\n"
+        		+ "      \"Price\": {\r\n"
+        		+ "        \"CurrencyCode\": \"INR\",\r\n"
+        		+ "        \"RoomPrice\": \"" + roomPrice + "\",\r\n"
+        		+ "        \"Tax\": \"" + tax + "\",\r\n"
+        		+ "        \"ExtraGuestCharge\": \"" + extraGuestCharge + "\",\r\n"
+        		+ "        \"ChildCharge\": \"" + childCharge + "\",\r\n"
+        		+ "        \"OtherCharges\": \"" + otherCharges + "\",\r\n"
+        		+ "        \"Discount\": \"" + discount + "\",\r\n"
+        		+ "        \"PublishedPrice\": \"" + publishedPrice + "\",\r\n"
+        		+ "        \"PublishedPriceRoundedOff\": \"" + publishedPriceRoundedOff + "\",\r\n"
+        		+ "        \"OfferedPrice\": \"" + offeredPrice + "\",\r\n"
+        		+ "        \"OfferedPriceRoundedOff\": \"" + offeredPriceRoundedOff + "\",\r\n"
+        		+ "        \"AgentCommission\": \"" + agentCommission + "\",\r\n"
+        		+ "        \"AgentMarkUp\": \"" + agentMarkUp + "\",\r\n"
+        		+ "        \"TDS\": \"" + tds + "\"\r\n"
+        		+ "      }\r\n"
+        		+ "    }\r\n"
+        		+ "  ],\r\n"
+        		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "  \"TraceId\": \"" + traceId + "\"\r\n"
+        		+ "}";
+
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
 }

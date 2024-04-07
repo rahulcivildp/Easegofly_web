@@ -62,10 +62,15 @@ public class HotelService {
         }
 	}
 
-	public void saveHotelHistory(HotelHistory history, Customer customer) {
+	public HotelHistory saveHotelHistory(HotelHistory history, Customer customer) {
 		HotelHistory newHistory = new HotelHistory(history.getCheckInDate(), history.getCheckOutDate(), history.getCountryCode(), history.getCityId(), history.getNoOfRooms(), history.getNoOfAdults(), 
 						history.getNoOfChild(), history.getChildrenAge(), history.isNearBySearchAllowed(), customer);
 		
-		hotelHistoryRepo.save(newHistory); 
+		return hotelHistoryRepo.save(newHistory); 
+	}
+	
+	public HotelHistory findById(Integer id) {
+		HotelHistory history = hotelHistoryRepo.findById(id).get();
+		return history;
 	}
 }

@@ -259,6 +259,9 @@
 		body #header {
 			position: relative;
 		}
+		body {
+			background-image: none !important;
+		}
 	}
 	.positionTile {
 		background-color: #00000047; 
@@ -477,7 +480,7 @@
 		          		<div th:id="'flightSearchResultOffline' + ${flight.id}"></div>
 	          		</form>
           		</div>
-          	<script type="text/javascript">
+          	<script type="text/javascript" th:inline="javascript">
           	
           	search_passenger_num = [[${search.passengerNum}]];
           	flight_seats = parseInt([[${flight.totalSeats}]]);
@@ -607,70 +610,52 @@
 		                        
 		                    </div></div>
 		          					<button type="button" class="btn btnSpecial media_status" data-bs-toggle="modal" data-bs-target="#staticBackdrop[[${flight.id}]]" style="padding: 10px 0;  width: 100%;">
-					                    <div class="row" style="padding-left: 10px;">
-											<div class="col-9">
-												<div class="row">
-													<div class="col-1" style="padding: 0;">
-						                    			<div id="brandImageMobileOffline[[${flight.id}]]" style="float: left; padding: 0px">
-					                                    </div>
+					                    
+										
+	                                    	
+	                                    <div class="row">
+		                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+	                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.depTime}]]</h2>
+	                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityOne}]]</p>
+	                                        </div>
+	                                        <div class="col">
+	                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; padding-top: 6px;">
+                                            		<b id="duration_mobile_offline-[[${flight.id}]]" style="margin-bottom: -7px;"></b>
+	                                            </div>
+	                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; ">
+	                                            	<div style="padding-top: 5px; width: 100%; display: flex;">
+		                                            	<p style="font-size: 7px; margin: 0; color: #dadada;">
+															<i class="fa fa-solid fa-circle-dot"></i>
+		                                            	</p>
+														<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: #dadada;">
+														<img src="[[@{` + `/images/plane.png` + `}]]" style="width: 25px; height: 25px;">
+														<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: #dadada;">
+		                                            	<p style="font-size: 7px; margin: 0; color: #dadada;">
+															<i class="fa fa-solid fa-circle-dot"></i>
+		                                            	</p>
 													</div>
-													<div class="col-6" style="padding: 0;">
-														<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
-													</div>
-													<div class="col-5" style="padding: 0;">
-														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">E</small>| [[${flight.flightNum}]]</p> 
-													</div>
-												</div>
-	                                    	</div>
-											<div class="col-3" style="padding: 0;">
-												<p id="pnr_id" style="font-size: 10px; margin: 0; text-align: right; color: #d41d00;"><i class="fa fa-solid fa-lock" ></i> Lock Price</p>
+	                                            </div>
+                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; ">
+	                                                <b class="non_stop" id="non_stop_mobile_offf-[[${flight.id}]]">Non-stop</b>
+                                                </div>
+	                                        </div>
+	                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+	                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.arrTime}]]</h2>
+	                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityTwo}]]</p>
+	                                        </div>
+	                                	</div>
+		                          		<div class="row" style="padding-left: 10px;">
+											<div class="col-1" style="padding: 0; display:flex;">
+				                    			<div id="brandImageMobileOffline[[${flight.id}]]" style="float: left; padding: 0px">
+			                                    </div>
+												<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
 											</div>
-										</div>
-										<div class="row">
-			                                <div class="col-9"> 
-			                                    <div class="row">
-				                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-			                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.depTime}]]</h2>
-			                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityOne}]]</p>
-			                                        </div>
-			                                        <div class="col">
-			                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; padding-top: 6px;">
-                                                    		<b id="duration_mobile_offline-[[${flight.id}]]" style="margin-bottom: -7px;"></b>
-			                                            </div>
-			                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; ">
-			                                            	<div style="padding-top: 5px; width: 100%; display: flex;">
-				                                            	<p style="font-size: 7px; margin: 0; color: green;">
-																	<i class="fa fa-solid fa-circle-dot"></i>
-				                                            	</p>
-																<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: green;">
-				                                            	<p style="font-size: 7px; margin: 0; color: green;">
-																	<i class="fa fa-solid fa-circle-dot"></i>
-				                                            	</p>
-															</div>
-			                                            </div>
-		                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; ">
-			                                                <b class="non_stop" id="non_stop_mobile_offf-[[${flight.id}]]">Non-stop</b>
-		                                                </div>
-			                                        </div>
-			                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-			                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.arrTime}]]</h2>
-			                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityTwo}]]</p>
-			                                        </div>
-			                                	</div>
-			                             	</div>
-			                             	<div class="col-3" style="display: flex; align-items: center; justify-content: end;">
-			                                	<p style="font-size: 22px; margin: 0; color: blue;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceMobileOffline[[${flight.id}]]" style="font-weight: 600;"></span> </p>
-                                        	</div>
-		                          		</div>
-		                          		<div style="width: 100%; padding: 10px 10px 0 10px">
-			                          		<div class="row" style="border-radius: 10px; background: #d8e9fa">
-				                          		<div class="col-6">
-			                                		<small>(For [[${passengerNum}]] Passenger/s)</small>
-												</div>
-				                          		<div class="col-6">
-			                                		<small>[[${flight.totalSeats}]] seat/s available</small>
-												</div>
+											<div class="col-6" style="padding: 0;">
+												<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">E</small>| [[${flight.flightNum}]]</p> 
 											</div>
+											<div class="col-5" style="padding: 0;">
+												<p style="font-size: 22px; margin: 0; color: blue;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceMobileOffline[[${flight.id}]]" style="font-weight: 600;"></span> </p>
+                                			</div>
 										</div>
 									</button>
 									
@@ -781,7 +766,7 @@
 							<img src="[[@{` + response + `}]]" width="40" height="45" style="margin-left: 28px;">
 						`;
 						htmlImgMobile = `
-							<img src="[[@{` + response + `}]]" width="30" height="30" style="border-radius: 5px;">
+							<img src="[[@{` + response + `}]]" width="30" height="30" style="border-radius: 18px;">
 						`;
 						$("#brandImage" + [[${flight.id}]]).append(htmlImg);
 						$("#brandImageMobileOffline" + [[${flight.id}]]).append(htmlImgMobile);
@@ -1131,7 +1116,7 @@
 		          		<div th:id="'flightSearchResult' + ${flight.id}"></div>
 	          		</form>
           		</div>
-          	<script type="text/javascript">
+          	<script type="text/javascript" th:inline="javascript">
           	
           	search_passenger_num = [[${search.passengerNum}]];
           	flight_seats = parseInt([[${flight.totalSeats}]]);
@@ -1261,69 +1246,50 @@
 		                        
 		                    </div></div>
 				                     <button type="button" class="btn btnSpecial media_status" data-bs-toggle="modal" data-bs-target="#staticBackdrop[[${flight.id}]]" style="padding: 10px 0; width: 100%;">
-					                    <div class="row" style="padding-left: 10px;">
-											<div class="col-9">
-												<div class="row">
-													<div class="col-1" style="padding: 0;">
-						                    			<div id="brandImageMobile[[${flight.id}]]" style="float: left; padding: 0px">
-					                                    </div>
-													</div>
-													<div class="col-6" style="padding: 0;">
-														<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
-													</div>
-													<div class="col-5" style="padding: 0;">
-														<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">T</small>| [[${flight.flightNum}]]</p> 
-													</div>
-												</div>
-	                                    	</div>
-											<div class="col-3" style="padding: 0;">
-												<p id="pnr_id" style="font-size: 10px; margin: 0; text-align: right; color: #d41d00;"><i class="fa fa-solid fa-lock" ></i> Lock Price</p>
+					                    
+		                                    <div class="row">
+			                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+		                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.depTime}]]</h2>
+		                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityOne}]]</p>
+		                                        </div>
+		                                        <div class="col">
+		                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; padding-top: 6px;">
+                                                		<b id="duration_mobile-[[${flight.id}]]" style="margin-bottom: -7px;"></b>
+		                                            </div>
+		                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; ">
+		                                            	<div style="padding-top: 5px; width: 100%; display: flex;">
+			                                            	<p style="font-size: 7px; margin: 0; color: #dadada;">
+																<i class="fa fa-solid fa-circle-dot"></i>
+			                                            	</p>
+															<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: #dadada;">
+															<img src="[[@{` + `/images/plane.png` + `}]]" style="width: 25px; height: 25px;">
+															<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: #dadada;">
+			                                            	<p style="font-size: 7px; margin: 0; color: #dadada;">
+																<i class="fa fa-solid fa-circle-dot"></i>
+			                                            	</p>
+														</div>
+		                                            </div>
+	                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; ">
+		                                                <b class="non_stop" id="non_stop_mobile-[[${flight.id}]]">Non-stop</b>
+	                                                </div>
+		                                        </div>
+		                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
+		                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.arrTime}]]</h2>
+		                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityTwo}]]</p>
+		                                        </div>
+		                                	</div>
+		                          		
+										<div class="row" style="padding-left: 10px;">
+											<div class="col-4" style="padding: 0;">
+				                    			<div id="brandImageMobile[[${flight.id}]]" style="float: left; padding: 0px">
+			                                    </div>
+												<b style="font-size: 22px; padding-left: 10px;"> [[${flight.brand}]] </b>
 											</div>
-										</div>
-										<div class="row">
-			                                <div class="col-9"> 
-			                                    <div class="row">
-				                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-			                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.depTime}]]</h2>
-			                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityOne}]]</p>
-			                                        </div>
-			                                        <div class="col">
-			                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; padding-top: 6px;">
-                                                    		<b id="duration_mobile-[[${flight.id}]]" style="margin-bottom: -7px;"></b>
-			                                            </div>
-			                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; ">
-			                                            	<div style="padding-top: 5px; width: 100%; display: flex;">
-				                                            	<p style="font-size: 7px; margin: 0; color: green;">
-																	<i class="fa fa-solid fa-circle-dot"></i>
-				                                            	</p>
-																<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: green;">
-				                                            	<p style="font-size: 7px; margin: 0; color: green;">
-																	<i class="fa fa-solid fa-circle-dot"></i>
-				                                            	</p>
-															</div>
-			                                            </div>
-		                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; ">
-			                                                <b class="non_stop" id="non_stop_mobile-[[${flight.id}]]">Non-stop</b>
-		                                                </div>
-			                                        </div>
-			                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-			                                            <h2 style="font-size: 22px; margin: 0;">[[${flight.arrTime}]]</h2>
-			                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">[[${flight.cityTwo}]]</p>
-			                                        </div>
-			                                	</div>
-			                             	</div>
-			                             	<div class="col-3" style="display: flex; align-items: center; justify-content: end;">
+											<div class="col-4" style="padding: 0;">
+												<p id="pnr_id" style="margin: 5px 0 0 0; text-align: right;"><small style="font-size: 12px;">T</small>| [[${flight.flightNum}]]</p> 
+											</div>
+											<div class="col-4" style="padding: 0;">
 			                                	<p style="font-size: 22px; margin: 0; color: blue;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceMobile[[${flight.id}]]" style="font-weight: 600;"></span> </p>
-                                        	</div>
-		                          		</div>
-		                          		<div style="width: 100%; padding: 10px 10px 0 10px">
-			                          		<div class="row" style="border-radius: 10px; background: #d8e9fa">
-				                          		<div class="col-6">
-			                                		<small>(For [[${passengerNum}]] Passenger/s)</small>
-												</div>
-				                          		<div class="col-6">
-			                                		<small>[[${flight.totalSeats}]] seat/s available</small>
-												</div>
 											</div>
 										</div>
 									</button>
@@ -1434,7 +1400,7 @@
 							<img src="[[@{` + response + `}]]" width="40" height="45" style="margin-left: 28px;">
 						`;
 						htmlImgMobile = `
-							<img src="[[@{` + response + `}]]" width="30" height="30" style="border-radius: 5px;">
+							<img src="[[@{` + response + `}]]" width="30" height="30" style="border-radius: 18px;">
 						`;
 						$("#brandImage" + [[${flight.id}]]).append(htmlImg);
 						$("#brandImageMobile" + [[${flight.id}]]).append(htmlImgMobile);

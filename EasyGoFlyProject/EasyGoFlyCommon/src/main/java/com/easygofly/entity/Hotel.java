@@ -1,10 +1,15 @@
 package com.easygofly.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -100,6 +105,12 @@ public class Hotel {
 
 	@Column(nullable = true)
 	private double tds;
+	
+	@OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+	private List<HotelGuest> guests = new ArrayList<>();
+
+	@OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+	private List<HotelRoom> hotelRooms = new ArrayList<>();
 	
 	
 	public Hotel() {}
@@ -381,6 +392,14 @@ public class Hotel {
 
 	public void setTds(double tds) {
 		this.tds = tds;
+	}
+
+	public List<HotelGuest> getGuests() {
+		return guests;
+	}
+
+	public void setGuests(List<HotelGuest> guests) {
+		this.guests = guests;
 	}
 
 	

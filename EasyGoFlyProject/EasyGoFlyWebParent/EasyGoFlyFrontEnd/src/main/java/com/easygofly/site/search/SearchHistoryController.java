@@ -88,7 +88,6 @@ public class SearchHistoryController {
 		}
 		
 		searchService.authenticationFlight(model);
-		searchService.authenticationFlightAirIQ(model);
 		
 		SearchHistory search = searchRepo.findById(id).get();
 		
@@ -138,7 +137,6 @@ public class SearchHistoryController {
 		Integer iq = 111;
 		
 		searchService.authenticationFlight(model);
-//		searchService.authenticationFlightAirIQ(model);
 		
 		System.out.println();
 		
@@ -254,9 +252,9 @@ public class SearchHistoryController {
 		
 		
 		// Create URL object with the API end-point
-         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
+//         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 		
-//		URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
+		URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
 
         // Open a connection
         HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();

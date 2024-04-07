@@ -1,6 +1,8 @@
 package com.easygofly.site.hotel;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,7 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Hotel;
+import com.easygofly.entity.HotelCancelPolicy;
 import com.easygofly.entity.HotelHistory;
+import com.easygofly.entity.HotelRoom;
+import com.easygofly.entity.RoomDayRate;
 import com.easygofly.entity.TBOCity;
 import com.easygofly.entity.TourAttraction;
 import com.easygofly.site.LogService;
@@ -40,8 +45,12 @@ public class HotelController {
 	@Autowired private LogService logService;
 
 	private String searchURL = "";
+	private String bookingURL = "";
 	
 	List<Hotel> hotels = new ArrayList<Hotel>();
+	List<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
+	
+	HotelHistory history = new HotelHistory();
 	
 	@GetMapping("/hotel")
 	public String viewHotelPage(Model model) {
@@ -51,7 +60,6 @@ public class HotelController {
 		
 		return "hotel/hotel";
 	}
-	
 
 	private void cityFinder(Model model) {
 		Iterable<TBOCity> cities = tboRepo.findAll();
@@ -90,20 +98,23 @@ public class HotelController {
 		
 		if (loggedCustomer != null) {
 			String email = loggedCustomer.getUsername();
-			Customer customer = customerService.getByPhone(email);
-			HotelHistory history = new HotelHistory();
-			history.setCheckInDate(checkInDate);
-			history.setCheckOutDate(checkOutDate);
-			history.setChildrenAge(null);
-			history.setCityId(city.getCityId().toString());
-			history.setCountryCode(city.getCountryCode());
-			history.setNearBySearchAllowed(false);
-			history.setNoOfAdults(noOfAdults.toString());
-			history.setNoOfChild(noOfChildren.toString());
-			history.setNoOfRooms(noOfRooms.toString());
-			history.setCustomer(customer);
+			Customer customer = customerService.getByPhone(email);	
+			HotelHistory newHistory = new HotelHistory();
+
+			newHistory = new HotelHistory();
+			newHistory.setCheckInDate(checkInDate);
+			newHistory.setCheckOutDate(checkOutDate);
+			newHistory.setChildrenAge(null);
+			newHistory.setCityId(city.getCityId().toString());
+			newHistory.setCountryCode(city.getCountryCode());
+			newHistory.setNearBySearchAllowed(false);
+			newHistory.setNoOfAdults(noOfAdults.toString());
+			newHistory.setNoOfChild(noOfChildren.toString());
+			newHistory.setNoOfRooms(noOfRooms.toString());
+			newHistory.setCustomer(customer);
 			
-			hotelService.saveHotelHistory(history, customer);
+			history = hotelService.saveHotelHistory(newHistory, customer);
+			
 		} else {
 			
 		}
@@ -242,7 +253,7 @@ public class HotelController {
         return "loading/loading";
     }
 	
-	@GetMapping("/hotel/booking_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}_{resultIndex}_{hotelCode}")
+	@GetMapping("/hotel/booking_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}_{resultIndex}_{hotelCode}_{history_id}")
 	public String hotelBooking(Model model, 
 			@PathVariable(name = "hotelCity") String hotelCity,
 			@PathVariable(name = "checkInDate") String checkInDate,
@@ -251,11 +262,43 @@ public class HotelController {
 			@PathVariable(name = "noOfChildren") String noOfChildren,
 			@PathVariable(name = "noOfRooms") String noOfRooms,
 			@PathVariable(name = "resultIndex") String resultIndex,
+			@PathVariable(name = "history_id") Integer history_id,
 			@PathVariable(name = "hotelCode") String hotelCode) throws Exception {
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    Date checkIn = dateFormat.parse(checkInDate);
 	    
+	    HotelHistory hotelHistory = hotelService.findById(history_id);
+	    
+	    for (Hotel hotel : hotels) {
+			if (hotel.getResultIndex() == Integer.parseInt(resultIndex)) {
+				
+			}
+		}
+	    
+		hotelInfoMethod(model, resultIndex, hotelCode);
+		hotelRoomsMethod(model, resultIndex, hotelCode);
+		
+        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
+		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
+        
+		model.addAttribute("hotelCity", hotelCity);
+		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("checkInDate", checkInDate);
+		model.addAttribute("checkOutDate", checkOutDate);
+		model.addAttribute("totalGuests", totalGuests);
+		model.addAttribute("noOfAdults", noOfAdults);
+		model.addAttribute("noOfChildren", noOfChildren);
+		model.addAttribute("noOfRooms", noOfRooms);
+		model.addAttribute("noNights", noNights);
+		model.addAttribute("hotelHistory", hotelHistory);
+        
+		return "hotel/booking/hotel-booking";
+	}
+
+
+	private void hotelInfoMethod(Model model, String resultIndex, String hotelCode)
+			throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
         URL urlHotelInfo = new URL("http://api.tektravels.com/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelInfo");
 
@@ -340,21 +383,179 @@ public class HotelController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
-		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
+	}
+
+	private void hotelRoomsMethod(Model model, String resultIndex, String hotelCode)
+			throws MalformedURLException, IOException {
+		// Create URL object with the API end-point
+        URL urlHotelRoom = new URL("http://api.tektravels.com/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelRoom");
+
+        // Open a connection
+        HttpURLConnection connectionHotelRoom = (HttpURLConnection) urlHotelRoom.openConnection();
+       
+        StringBuilder responseBodyHotelRoom = new StringBuilder();
         
-		model.addAttribute("hotelCity", hotelCity);
-		model.addAttribute("checkIn", checkIn);
-		model.addAttribute("checkInDate", checkInDate);
-		model.addAttribute("checkOutDate", checkOutDate);
-		model.addAttribute("totalGuests", totalGuests);
-		model.addAttribute("noOfAdults", noOfAdults);
-		model.addAttribute("noOfChildren", noOfChildren);
-		model.addAttribute("noOfRooms", noOfRooms);
-		model.addAttribute("noNights", noNights);
+        onlineHotelService.apiOnlineHotelInfo(connectionHotelRoom, responseBodyHotelRoom, resultIndex, hotelCode);
+	
+        JSONObject jsonObjSearch = new JSONObject(responseBodyHotelRoom.toString());
+        System.out.println(jsonObjSearch);
+        logService.generateLog(jsonObjSearch.toString());
         
-		return "hotel/booking/hotel-booking";
+        try {
+        	JSONArray jsonArr = jsonObjSearch.getJSONObject("GetHotelRoomResult").getJSONArray("HotelRoomsDetails");
+        	JSONObject hotelRoomsObj = new JSONObject();
+        	
+        	for (int i = 0; i < jsonArr.length(); i++) {
+        		hotelRoomsObj.put("RoomDetail-" + i, jsonArr.getJSONObject(i));
+        		
+        		String availabilityType = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("AvailabilityType").toString();
+        		Integer childCount = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("ChildCount").toString());
+        		boolean requireAllPaxDetails = Boolean.parseBoolean(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RequireAllPaxDetails").toString());
+        		boolean isPassportMandatory = Boolean.parseBoolean(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("IsPassportMandatory").toString());
+        		boolean isPANMandatory = Boolean.parseBoolean(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("IsPANMandatory").toString());
+        		Integer roomId = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomId").toString());
+        		Integer roomStatus = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomStatus").toString());
+        		Integer roomIndex = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomIndex").toString());
+        		String roomTypeCode = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomTypeCode").toString();
+        		String roomDescription = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomDescription").toString();
+        		String roomTypeName = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomTypeName").toString();
+        		String ratePlanCode = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RatePlanCode").toString();
+        		Integer ratePlan = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RatePlan").toString());
+        		String ratePlanName = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RatePlanName").toString();
+        		String infoSource = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("InfoSource").toString();
+        		String sequenceNo = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("SequenceNo").toString();
+			    double roomPrice = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("RoomPrice").toString());
+			    double tax = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("Tax").toString());
+			    double extraGuestCharge = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("ExtraGuestCharge").toString());
+			    double childCharge = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("ChildCharge").toString());
+			    double discount = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("Discount").toString());
+			    double publishedPrice = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("PublishedPrice").toString());
+			    double otherCharges = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("OtherCharges").toString());
+			    double offeredPrice = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("OfferedPrice").toString());
+			    Integer publishedPriceRoundedOff = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("PublishedPriceRoundedOff").toString());
+			    Integer offeredPriceRoundedOff = Integer.parseInt(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("OfferedPriceRoundedOff").toString());
+			    double agentCommission = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("AgentCommission").toString());
+			    double agentMarkUp = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("AgentMarkUp").toString());
+			    double serviceTax = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("ServiceTax").toString());
+			    double tds = Double.parseDouble(hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONObject("Price").get("TDS").toString());
+        		String roomPromotion = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("RoomPromotion").toString();
+        		String smokingPreference = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("SmokingPreference").toString();
+        		String lastVoucherDate = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("LastVoucherDate").toString();
+        		String cancellationPolicy = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("CancellationPolicy").toString();
+        		String lastCancellationDate = hotelRoomsObj.getJSONObject("RoomDetail-" + i).get("LastCancellationDate").toString();
+        		String[] amenities = {};
+        		String[] amenity = {};
+        		String[] bedTypes = {};
+        		String[] hotelSupplements = {};
+        		String[] inclusion = {};
+        		List<HotelCancelPolicy> cancelPList = new ArrayList<>();
+        		List<RoomDayRate> rateList = new ArrayList<>();
+        		
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("Amenities");
+    				amenities = new String[jsonFacil.length()];
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					String facil = jsonFacil.getString(j);
+    					amenities[j] = facil;
+    				}
+    			} catch (Exception e) {
+    			}
+    			
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("Amenity");
+    				amenity = new String[jsonFacil.length()];
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					String facil = jsonFacil.getString(j);
+    					amenity[j] = facil;
+    				}
+    			} catch (Exception e) {
+    			}
+    			
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("BedTypes");
+    				bedTypes = new String[jsonFacil.length()];
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					String facil = jsonFacil.getString(j);
+    					bedTypes[j] = facil;
+    				}
+    			} catch (Exception e) {
+    			}
+    			
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("HotelSupplements");
+    				hotelSupplements = new String[jsonFacil.length()];
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					String facil = jsonFacil.getString(j);
+    					hotelSupplements[j] = facil;
+    				}
+    			} catch (Exception e) {
+    			}
+    			
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("Inclusion");
+    				inclusion = new String[jsonFacil.length()];
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					String facil = jsonFacil.getString(j);
+    					inclusion[j] = facil;
+    				}
+    			} catch (Exception e) {
+    			}
+    			
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("CancellationPolicies");
+    	        	JSONObject cancelObj = new JSONObject();
+    				
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					cancelObj.put("Cancel-" + j, jsonFacil.getJSONObject(j));
+    	        		Integer charge = Integer.parseInt(cancelObj.getJSONObject("Cancel-" + j).get("Charge").toString());
+    	        		Integer chargeType = Integer.parseInt(cancelObj.getJSONObject("Cancel-" + j).get("ChargeType").toString());
+    	        		String currency = cancelObj.getJSONObject("Cancel-" + j).get("Currency").toString();
+    	        		String fromDate = cancelObj.getJSONObject("Cancel-" + j).get("FromDate").toString();
+    	        		String toDate = cancelObj.getJSONObject("Cancel-" + j).get("ToDate").toString();
+    					HotelCancelPolicy cancelPolicy = new HotelCancelPolicy(charge, chargeType, currency, fromDate, toDate);
+
+    	        		System.out.println("Cancel Policy: " + charge + " ... " + fromDate);
+    	        		
+    					cancelPList.add(cancelPolicy);
+    				}
+    			} catch (Exception e) {
+    				e.printStackTrace();
+    			}
+    			
+    			try {
+    				JSONArray jsonFacil = hotelRoomsObj.getJSONObject("RoomDetail-" + i).getJSONArray("DayRates");
+    	        	JSONObject rateObj = new JSONObject();
+    				
+    				for (int j = 0; j < jsonFacil.length(); j++) {
+    					rateObj.put("Rate-" + j, jsonFacil.getJSONObject(j));
+    	        		double amount = Double.parseDouble(rateObj.getJSONObject("Rate-" + j).get("Amount").toString());
+    	        		String date = rateObj.getJSONObject("Rate-" + j).get("Date").toString();
+    	        		
+    	        		System.out.println("Day Rate: " + amount + " ... " + date);
+    	        		
+    	        		RoomDayRate dayRate = new RoomDayRate(date, amount);
+    					
+    	        		rateList.add(dayRate);
+    				}
+    			} catch (Exception e) {
+    				e.printStackTrace();
+    			}
+    			
+        		
+    			HotelRoom room = new HotelRoom(roomTypeCode, roomIndex, roomStatus, roomId, requireAllPaxDetails, roomDescription, roomTypeName, ratePlanCode, ratePlan, ratePlanName, infoSource, 
+    					sequenceNo, childCount, roomPromotion, amenities, amenity, smokingPreference, bedTypes, hotelSupplements, lastCancellationDate, cancelPList, roomPrice, tax, extraGuestCharge, 
+    					childCharge, discount, availabilityType, publishedPrice, otherCharges, offeredPrice, publishedPriceRoundedOff, offeredPriceRoundedOff, agentCommission, agentMarkUp, serviceTax, tds, 
+    					lastVoucherDate, cancellationPolicy, inclusion, isPassportMandatory, isPANMandatory, rateList);
+    			
+        		hotelRooms.add(room);
+			}
+			
+
+			model.addAttribute("hotelRoomList", hotelRooms);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@PostMapping("/hotel/saveHotel")
@@ -374,19 +575,32 @@ public class HotelController {
 
 		String email = loggedCustomer.getUsername();
 		Customer customer = customerService.getByPhone(email);
-		HotelHistory history = new HotelHistory();
-		history.setCheckInDate(checkIn);
-		history.setCheckOutDate(checkOut);
-		history.setChildrenAge(null);
-		history.setCityId(city.getCityId().toString());
-		history.setCountryCode(city.getCountryCode());
-		history.setNearBySearchAllowed(false);
-		history.setNoOfAdults(noOfAdults.toString());
-		history.setNoOfChild(noOfChildren.toString());
-		history.setNoOfRooms(noOfRooms.toString());
-		history.setCustomer(customer);
+		if (history == null) {
+			HotelHistory newHistory = new HotelHistory();
+
+			newHistory = new HotelHistory();
+			newHistory.setCheckInDate(checkIn);
+			newHistory.setCheckOutDate(checkOut);
+			newHistory.setChildrenAge(null);
+			newHistory.setCityId(city.getCityId().toString());
+			newHistory.setCountryCode(city.getCountryCode());
+			newHistory.setNearBySearchAllowed(false);
+			newHistory.setNoOfAdults(noOfAdults.toString());
+			newHistory.setNoOfChild(noOfChildren.toString());
+			newHistory.setNoOfRooms(noOfRooms.toString());
+			newHistory.setCustomer(customer);
+			
+			history = hotelService.saveHotelHistory(newHistory, customer);
+		}
+
+		bookingURL = "/hotel/booking_" + hotelCity + "_" + checkInDate + "_" + checkOutDate + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms + "_" + resultIndex + "_" + hotelCode + "_" + history.getId();
 		
-		hotelService.saveHotelHistory(history, customer); 
-		return "redirect:/hotel/booking_" + hotelCity + "_" + checkInDate + "_" + checkOutDate + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms + "_" + resultIndex + "_" + hotelCode;
+		return "redirect:/hotel_booking...";
 	}
+
+	@GetMapping("/hotel_booking...")
+    public String performApiLoadBooking(Model model) {
+        model.addAttribute("searchURL", bookingURL);
+        return "loading/loading";
+    }
 }

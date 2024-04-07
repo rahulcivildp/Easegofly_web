@@ -38,20 +38,20 @@ public class OnlineFlightService {
         connection.setDoOutput(true);
 
         // Create the request body
-        String requestBody = "{"
-        		+ "\"ClientId\": \"tboprod\", "
-        		+ "\"UserName\": \"CCUA927\", "
-        		+ "\"Password\": \"#API@Air&72\", "
-        		+ "\"EndUserIp\": \"89.116.231.35\""
-        		+ "}";
+//        String requestBody = "{"
+//        		+ "\"ClientId\": \"tboprod\", "
+//        		+ "\"UserName\": \"CCUA927\", "
+//        		+ "\"Password\": \"#API@Air&72\", "
+//        		+ "\"EndUserIp\": \"89.116.231.35\""
+//        		+ "}";
         
         //Test Credentials
-//      String requestBody = "{"
-//      		+ "\"ClientId\": \"ApiIntegrationNew\", "
-//      		+ "\"UserName\": \"aladdin\", "
-//      		+ "\"Password\": \"aladdin@1234\", "
-//      		+ "\"EndUserIp\": \"89.116.231.35\""
-//      		+ "}";
+      String requestBody = "{"
+      		+ "\"ClientId\": \"ApiIntegrationNew\", "
+      		+ "\"UserName\": \"aladdin\", "
+      		+ "\"Password\": \"aladdin@1234\", "
+      		+ "\"EndUserIp\": \"89.116.231.35\""
+      		+ "}";
         
         System.out.println(requestBody);
         logService.generateLog(requestBody);

@@ -89,10 +89,10 @@ public class SearchHistoryService {
 		try {
         	
         	// Create URL object with the API end-point
-            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
+//            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
             
         	// Create URL object with the API end-point
-//            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
 
             // Open a connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
