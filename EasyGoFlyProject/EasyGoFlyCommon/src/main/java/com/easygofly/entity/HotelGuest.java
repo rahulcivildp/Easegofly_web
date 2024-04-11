@@ -55,14 +55,18 @@ public class HotelGuest {
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel;
+
+	@ManyToOne
+	@JoinColumn(name = "hotel_room_id")
+	private HotelRoom hotelRoom;
 	
+
 
 	public HotelGuest() {}
 
 	public HotelGuest(String title, String firstName, String lastName, String phoneNo, String email, Integer paxType,
 			Integer age, boolean leadPassenger, String passportNo, String passportExpDate, String passportIssueDate,
 			String pan) {
-		super();
 		this.title = title;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -75,6 +79,25 @@ public class HotelGuest {
 		this.passportExpDate = passportExpDate;
 		this.passportIssueDate = passportIssueDate;
 		this.pan = pan;
+	}
+
+	public HotelGuest(String title, String firstName, String lastName, String phoneNo, String email, Integer paxType,
+			Integer age, boolean leadPassenger, String passportNo, String passportExpDate, String passportIssueDate,
+			String pan, HotelRoom hotelRoom, Hotel hotel) {
+		this.title = title;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNo = phoneNo;
+		this.email = email;
+		this.paxType = paxType;
+		this.age = age;
+		this.leadPassenger = leadPassenger;
+		this.passportNo = passportNo;
+		this.passportExpDate = passportExpDate;
+		this.passportIssueDate = passportIssueDate;
+		this.pan = pan;
+		this.hotelRoom = hotelRoom;
+		this.hotel = hotel;
 	}
 
 	public Integer getId() {
@@ -119,6 +142,14 @@ public class HotelGuest {
 
 	public String getPhoneNo() {
 		return phoneNo;
+	}
+
+	public HotelRoom getHotelRoom() {
+		return hotelRoom;
+	}
+
+	public void setHotelRoom(HotelRoom hotelRoom) {
+		this.hotelRoom = hotelRoom;
 	}
 
 	public void setPhoneNo(String phoneNo) {

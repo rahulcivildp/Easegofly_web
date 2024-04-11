@@ -223,11 +223,12 @@
       .unKnonwnGuestIcon {
 		display: flex;
     	align-items: center;
-    	justify-content: space-around;
+    	justify-content: start;
 	  }
 	  .unKnonwnGuestIcon p {
 		margin: 0; 
     	font-family: cursive;
+    	margin-left: 12px;
 	  }
 		.addUserBtn {
 	    display: flex;
@@ -242,6 +243,117 @@
 		    height: 30px;
 		    width: 30px;
 		    text-align: center;
+	  }
+	  .modifyButtonGuest {
+		    color: green;
+		    border: 2px solid green;
+		    background: #f5fff5;
+		    width: 40px;
+		    height: 40px;
+		    border-radius: 20px;
+		    font-size: 20px;
+		    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	  }
+	  .rowClassModify {
+		padding: 6px 0;
+	    margin: 0;
+	    border: 1px solid #b0c0b0;
+	    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	  }
+	  .gridContainer .form-check-input:focus {
+		border-color: transparent !important;
+		box-shadow: none !important;
+	  }
+	  .gridContainer .form-check-input {
+		  border: none !important;
+	  }
+	  .gridContainer .form-check-input[type=radio] {
+		  border-radius: 10px;;
+	  }
+	  .gridContainer .form-check .form-check-input {
+		  margin-left: 0;
+	  } 
+	  .gridContainer .form-check {
+		  padding: 0 8px;
+	  }   
+	  .gridContainer .gridItem:focus {
+	  	border: 1px solid rgb(0, 255, 128);
+    	background: green;
+    	color: white;
+	    border-radius: 10px;
+	  }
+	  .selected {
+		  display: block;
+	  }
+	  .addedroom p {
+		  	background: #6f7aff;
+		    width: 30px;
+		    color: white;
+		    font-weight: 600;
+		    height: 30px;
+		    padding: 5px;
+		    border-radius: 15px;
+		    font-size: 13px;
+		    margin: 0;
+		    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	  }
+	  .addedroom{
+	      	display: flex;
+    		justify-content: center;
+	  }
+	  .deleteBtnroom {
+		position: absolute;    
+		right: 5px;
+		top: 4px;
+	    z-index: 20;
+	    border: 1px solid red;
+	    background: red;
+	    color: white;
+	    width: 32px;
+	    height: 32px;
+	    border-radius: 20px;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    font-size: 20px;
+		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	  }
+	  .savedRoomstl {
+	    margin-top: 4px;
+	    margin-left: 5px;
+	    display: flex;
+	    justify-content: start;
+	  }
+	  .savedRoomstl p {
+		  	background: #6f7aff;
+		    width: 30px;
+		    color: white;
+		    font-weight: 600;
+		    height: 30px;
+		    padding: 5px;
+		    border-radius: 15px;
+		    font-size: 13px;
+		    margin: 0;
+	  }
+	  .backRed {
+		width: 50%;
+	    height: 40px;
+	    border: 1px solid #e37f7f;
+	    background: #e37f7f;
+	    color: white;
+	    border-radius: 5px;
+	    font-size: 20px;
+    	float: left;
+	  }
+	  .nextBlue {
+		width: 50%;
+	    height: 40px;
+	    border: 1px solid #21a45c;
+	    background: #21a45c;
+	    color: white;
+	    border-radius: 5px;
+	    font-size: 20px;
+    	float: right;
 	  }
 	</style>
 	<body>
@@ -420,19 +532,296 @@
 		
 		<div class="container media_status">
 			<div class="divContainer">
+				<h4>Hotel Room Selection</h4>
+				<small id="hotelRoomIndicator" style="color: #a5a5a5;"></small>
+				<div class="row" id="roomItemsList">
+					
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="guestModalRoomadd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="staticBackdropLabel">Hotel Room Details</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body" style="height: 83vh; overflow: scroll;">
+					<div class="gridContainer">
+						<th:block th:each="room : ${hotelRoomList}">
+					  		<div class="form-check">
+							  <button class="form-check-input gridItem" type="radio" name="flexRadioDefault" id="flexRadioDefault1" style="width: 100%; height: fit-content;" th:value="${room.roomIndex}">
+								  <div class="">
+									<div class="countDiv"><p>[[${room.roomIndex}]]</p></div>
+									<h5>[[${room.roomDescription}]]</h5>
+									<p style="color: #8f8f8f;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> [[${room.ratePlanName}]]</p>
+									<p class="confirmStyle">[[${room.availabilityType}]]</p>
+								  </div>
+							  </button>
+							</div>
+						</th:block>
+					</div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+			        <button type="button" class="btn btn-primary" id="guestSavebtnRoom" data-bs-dismiss="modal">Select & Close</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+		
+		<div class="container media_status">
+			<div class="divContainer">
 				<h4>Guest Details</h4>
+				<small id="hotelGuestIndicator" style="color: #a5a5a5;"></small>
 				<div>
-					<div class="row" style="padding: 6px 0;">
-						<div class="col-6 unKnonwnGuestIcon">
-							<img th:src="@{/images/icons8-user-40.png}" alt='unknown user' class='img-fluid'> <p> Add Guest</p>
+					<div class="row" id="guestListhtml" style="padding: 6px 0;">
+						
+						
+					</div>
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="guestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="staticBackdropLabel">Adult Guest</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+						 <div class="form-floating" style="padding-bottom: 16px;">
+						  <select class="form-select" id="titleGuests" aria-label="Floating label select example">
+						    <option selected>Mr</option>
+						    <option value="1">Mrs</option>
+						    <option value="2">Miss</option>
+						    <option value="3">Ms</option>
+						  </select>
+						  <label for="floatingSelect">Title</label>
 						</div>
-						<div class="col-6 addUserBtn">
-							<div></div>
-							<div style="margin-right: 10px;">
-								<button type="button" id="addGstButton" data-bs-toggle="modal" data-bs-target="#guestModal"><i class="fa fa-solid fa-plus"></i></button>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="firstNameGuests" placeholder="name">
+						  <label for="floatingInput">First Name</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="lastNameGuests" placeholder="name">
+						  <label for="floatingInput">Last Name</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="email" class="form-control" id="emailGuest" placeholder="name@example.com">
+						  <label for="floatingInput">Email</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="tel" class="form-control" id="phoneGuest" placeholder="name@example.com">
+						  <label for="floatingInput">Phone No</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="number" class="form-control" id="ageGuests" placeholder="name@example.com">
+						  <label for="floatingInput">Age in number</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="panGuests" placeholder="name@example.com">
+						  <label for="floatingInput">PAN Number</label>
+						</div>
+						 <div class="form-floating" style="padding-bottom: 16px;">
+						  <select class="form-select" id="floatingSelectroom" aria-label="Floating label select example">
+						  </select>
+						  <label for="floatingSelectroom">Select Room</label>
+						</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				        <button type="button" class="btn btn-primary" id="guestSavebtn" data-bs-dismiss="modal">Save & Close</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container media_status">
+			<div class="">
+				<div class="row">
+					<div class="col-6">
+						<button type="button" class="backRed">Back</button>
+					</div>
+					<div class="col-6">
+						<button type="button" class="nextBlue">Next</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div style="height: 20px;"></div>
+	</body>
+	<script>
+		
+	</script>
+	
+	<script>
+		$("button[name='flexRadioDefault'").click(function(){
+			$("button[name='flexRadioDefault'").removeClass('selected');
+			$(this).addClass('selected');
+		});
+		$("#guestSavebtnRoom").click(function(){
+			saveHotelRoom($(".selected").val());
+		});
+		
+		showHotelRooms();
+		
+		function showHotelRooms() {
+			
+			var hotelIdRoom = [[${hotel_id}]];
+			var paramsRoom = {hotel_id: hotelIdRoom};
+			var urlComponentsSaveRoom = "[[@{/show_hotel_room_rest}]]";
+	    	
+	    	$.post(urlComponentsSaveRoom, paramsRoom, function(elem) {
+				$("#roomItemsList").html("");
+				$("#floatingSelectroom").html("");
+				$("#hotelRoomIndicator").html("");
+				
+				var noOfRooms = [[${noOfRooms}]];
+				
+				var htmlAdd = `
+						<div class="col-6" style=" display: flex; justify-content: center; align-items: center;" >
+							<button style="height: 150px; width: 100%; border-radius: 12px; background: #f3f5ff;" type="button" id="addGstButtonRoom" data-bs-toggle="modal" data-bs-target="#guestModalRoomadd">
+								<i class="fa fa-solid fa-plus"></i>
+							</button>
+						</div>
+					`;
+				
+				var htmlextra = `
+					<option value="0"> None</option>
+					`;
+					
+				var htmlIndcate = `Selected Rooms: ` + elem.length + ` out of ` + noOfRooms + `.`;
+					
+				$("#floatingSelectroom").append(htmlextra);
+				$("#hotelRoomIndicator").html(htmlIndcate);
+				
+				if(noOfRooms > elem.length) {
+					$("#roomItemsList").append(htmlAdd);
+				}
+				
+	    		elem.forEach(function(element){
+					var elemArray = element.split("-");
+					
+					var htmlcode = `
+					<div class="col-6" style="margin: 4px 0;">
+						<div class="gridItem" style="position: relative;">
+							<button type="button" class="deleteBtnroom" onclick="deleteHotelRoom(` + parseInt(elemArray[0]) + `)"><i class="fa fa-solid fa-xmark"></i></button>
+							<input type="hidden" value="` + elemArray[0] + `">
+							<div class="savedRoomstl"><p>` + elemArray[1] + `</p></div>
+							<h5>` + elemArray[2] + `</h5>
+							<p style="color: #8f8f8f; font-size: 14px;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> ` + elemArray[3] + `</p>
+						</div>
+					  </div>
+					`;
+					
+					var htmlnew = `
+					<option value="` + elemArray[0] + `"> ` + elemArray[1] + `. ` + elemArray[2] + `</option>
+					`;
+					
+					$("#floatingSelectroom").append(htmlnew);
+					$("#roomItemsList").append(htmlcode);
+				});
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+		
+		function saveHotelRoom(roomIndex) {
+			
+			var hotelIdRoom = [[${hotel_id}]];
+			var cust_idRoom = [[${cust_id}]];
+			var paramsRoom = {roomIndex: roomIndex, hotel_id: hotelIdRoom, cust_id: cust_idRoom};
+			var urlComponentsSaveRoom = "[[@{/save_hotel_room}]]";
+	    	
+	    	$.post(urlComponentsSaveRoom, paramsRoom, function(elem) {
+				showHotelRooms();
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+		
+		function deleteHotelRoom(room_id) {
+			
+			var paramsRoom = {room_id: room_id};
+			var urlComponentsSaveRoom = "[[@{/delete_hotel_room}]]";
+	    	
+	    	$.post(urlComponentsSaveRoom, paramsRoom, function(elem) {
+				showHotelRooms();
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+		
+		
+	</script>
+	<script>
+		showHotelGuests();
+		
+		function showHotelGuests() {
+			
+			hotelId = [[${hotel_id}]];
+			params = {hotel_id: hotelId};
+			urlComponentsSave = "[[@{/show_hotel_guest}]]";
+	    	
+	    	$.post(urlComponentsSave, params, function(elem) {
+				$("#guestListhtml").html("");
+				$("#hotelGuestIndicator").html("");
+				
+				var totalGuests = [[${totalGuests}]];
+				
+				var htmlElem = `
+					<div class="col-12">
+							<div class="row">
+								<div class="col-6 unKnonwnGuestIcon">
+									<img src="` + "[[@{/images/icons8-user-40.png}]]" +`" alt='unknown user' class='img-fluid'> <p> Add Guest</p>
+								</div>
+								<div class="col-6 addUserBtn">
+									<div></div>
+									<div id="addGuestbtnCover" style="margin-right: 10px; cursor: pointer">
+										<button type="button" id="addGstButton" data-bs-toggle="modal" data-bs-target="#guestModal"><i class="fa fa-solid fa-plus"></i></button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-12" style="height: 10px;"></div>
+				`;
+				
+				var htmlIndcate = `Selected Guests: ` + elem.length + ` out of ` + totalGuests + `.`;
+				
+				$("#hotelGuestIndicator").html(htmlIndcate);
+				
+				if(totalGuests > elem.length) {
+					$("#guestListhtml").append(htmlElem);
+				}
+				
+	    		elem.forEach(function(element){
+					var elemArray = element.split("-");
+					
+					var htmlcode = `
+					<div class="col-12" style="margin: 5px 0;">
+							
+								<div class="row rowClassModify">
+									<div class="col-9 unKnonwnGuestIcon">
+										<img src="` + "[[@{/images/knownuser.png}]]" + `" alt='known user' class='img-fluid'> 
+										<p> ` + elemArray[1] + `&nbsp;`+ elemArray[2] + `&nbsp;`+ elemArray[3] + `</p>
+									</div>
+									<div class="col-3">
+									
+										<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify" class="modifyButtonGuest">
+											<i class="fa fa-solid fa-pen-to-square"></i>
+										</button>
+									</div>
+								</div>
 								
 								<!-- Modal -->
-								<div class="modal fade" id="guestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+								<div class="modal fade" id="guestModalModify" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 								  <div class="modal-dialog modal-dialog-centered">
 								    <div class="modal-content">
 								      <div class="modal-header">
@@ -440,8 +829,9 @@
 								        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								      </div>
 								      <div class="modal-body">
+										 <input type="hidden" class="form-control" id="roomId-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[0] + `">
 										 <div class="form-floating" style="padding-bottom: 16px;">
-										  <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+										  <select class="form-select" id="titleGuestsModify-` + elemArray[0] + `" aria-label="Floating label select example" value="` + elemArray[1] + `">
 										    <option selected>Mr</option>
 										    <option value="1">Mrs</option>
 										    <option value="2">Miss</option>
@@ -450,90 +840,108 @@
 										  <label for="floatingSelect">Title</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+										  <input type="text" class="form-control" id="firstNameGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[2] + `">
 										  <label for="floatingInput">First Name</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+										  <input type="text" class="form-control" id="lastNameGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[3] + `">
 										  <label for="floatingInput">Last Name</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="number" class="form-control" id="floatingInput" placeholder="name@example.com">
+										  <input type="email" class="form-control" id="emailGuestModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[6] + `">
+										  <label for="floatingInput">Email</label>
+										</div>
+								        <div class="form-floating mb-3">
+										  <input type="tel" class="form-control" id="phoneGuestModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[7] + `">
+										  <label for="floatingInput">Phone No</label>
+										</div>
+								        <div class="form-floating mb-3">
+										  <input type="number" class="form-control" id="ageGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[4] + `">
 										  <label for="floatingInput">Age in number</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+										  <input type="text" class="form-control" id="panGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[5] + `">
 										  <label for="floatingInput">PAN Number</label>
+										</div>
+								        <div class="form-floating mb-3">
+										  <input type="text" class="form-control" value="` + elemArray[8] + `. ` + elemArray[9] + `" disabled>
+										  <label for="floatingInput">Selected Room</label>
 										</div>
 								      </div>
 								      <div class="modal-footer">
 								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-								        <button type="button" class="btn btn-primary">Save & Close</button>
+								        <button type="button" class="btn btn-primary" id="guestSavebtnModify-` + elemArray[0] + `" data-bs-dismiss="modal">Save & Close</button>
 								      </div>
 								    </div>
 								  </div>
 								</div>
 
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="container media_status">
-			<div class="divContainer">
-				<h4>Hotel Room Types</h4>
-				<div class="gridContainer">
-					<th:block th:each="room : ${hotelRoomList}">
-						<button class='gridItem' data-bs-toggle="modal" th:data-bs-target="'#staticBackdropRoom' + ${room.roomIndex}">
-							<div class="countDiv"><p>[[${room.roomIndex}]]</p></div>
-							<h5>[[${room.roomDescription}]]</h5>
-							<p style="color: #8f8f8f;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> [[${room.ratePlanName}]]</p>
-							<p class="confirmStyle">[[${room.availabilityType}]]</p>
-						</button>
+					`;
+					
+					$("#guestListhtml").append(htmlcode);
+					
+					
+					$("#guestSavebtnModify-" + elemArray[0]).click(function(){
 						
-						<!-- Modal -->
-						<div class="modal fade" th:id="'staticBackdropRoom' + ${room.roomIndex}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-						  <div class="modal-dialog" style="margin: 3px;">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <h5 class="modal-title" id="staticBackdropLabel">Room Info</h5>
-						        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						      </div>
-						      <div class="modal-body">
-								  <h5>[[${room.roomDescription}]]</h5>
-								  <p>[[${room.ratePlanName}]], [[${room.infoSource}]]</p>
-								  <p>Code: [[${room.ratePlanCode}]]</p>
-								  <br>
-								  <b>Rate Check</b>
-								  <th:block th:each="rate : ${room.roomDayRates}">
-									  <p>Price: [[${rate.amount}]]</p>
-									  <p>Change Date: [[${rate.date}]]</p>
-								  </th:block>
-								  <br>
-								  <b>Cancel Policy</b>
-								  <th:block th:each="policy : ${room.hotelCancelPolicies}">
-									  <p>Charge: [[${policy.charge}]]</p>
-									  <p>From: [[${policy.fromDate}]]</p>
-									  <p>To: [[${policy.toDate}]]</p>
-								  </th:block>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ok</button>
-						      </div>
-						    </div>
-						  </div>
-						</div>
-					</th:block>
-				</div>
-			</div>
-		</div>
-	
-				<div style="height: 20px;"></div>
+						paramsMod = {guest_id: parseInt($("#roomId-" + elemArray[0]).val()), title: $("#titleGuestsModify-" + elemArray[0]).val(), fName: $("#firstNameGuestsModify-" + elemArray[0]).val(), 
+						lName: $("#lastNameGuestsModify-" + elemArray[0]).val(), email: $("#emailGuestModify-" + elemArray[0]).val(), phoneNo: $("#phoneGuestModify-" + elemArray[0]).val(), 
+						age: parseInt($("#ageGuestsModify-" + elemArray[0]).val()), pan: $("#panGuestsModify-" + elemArray[0]).val()};
+						
+						urlComponentsSaveMod = "[[@{/modify_guest}]]";
+						
+						$.post(urlComponentsSaveMod, paramsMod, function() {
+				    		
+				    		showHotelGuests();
+				    	
+				    	}).fail(function(){
+							consol.log("Something went wrong in the server!");
+				    	});
+						
+					});
+				});
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
 		
-	</body>
+		
+	</script>
+	
+	<script>
+		$("#guestSavebtn").click(function(){
+			saveHotelGuest();
+		})
+		
+		function saveHotelGuest() {
+			titleGuests = $("#titleGuests").val();
+			firstNameGuests = $("#firstNameGuests").val();
+			lastNameGuests = $("#lastNameGuests").val();
+			ageGuests = $("#ageGuests").val();
+			panGuests = $("#panGuests").val();
+			emailGuests = $("#emailGuest").val();
+			phoneNoGuests = $("#phoneGuest").val();
+			paxType = 1;
+			hotelId = [[${hotel_id}]];
+			cust_id = [[${cust_id}]];
+			selectorId =  $("#floatingSelectroom").val();
+			
+			urlComponentsSave = "[[@{/save_hotel_guest}]]";
+			
+			params = {title: titleGuests, fName: firstNameGuests, lName: lastNameGuests, email: emailGuests, phoneNo: phoneNoGuests, paxType: 1, age: ageGuests, 
+			pan: panGuests, hotel_id: hotelId, cust_id: cust_id, room_id: selectorId};
+	    	
+	    	$.post(urlComponentsSave, params, function() {
+	    		
+	    		showHotelGuests();
+	    	
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+		
+	</script>
+	
 	<script th:inline="javascript">
 		var pos = [[${latitude}]] + "," + [[${longitude}]];
 		$("#mapWrap").attr('center', pos);

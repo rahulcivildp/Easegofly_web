@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.Hotel;
+import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelHistory;
+import com.easygofly.entity.HotelRoom;
 import com.easygofly.site.LogService;
 
 @Service
@@ -18,6 +21,9 @@ public class HotelService {
 	@Autowired private OnlineHotelService onlineHotelService;
 	@Autowired private LogService logService;
 	@Autowired private HotelHistoryRepository hotelHistoryRepo;
+	@Autowired private HotelRepository hotelRepo;
+	@Autowired private HotelGuestRepository guestRepo;
+	@Autowired private HotelRoomRepository roomRepository;
 
 	public void authenticationHotel(Model model) {
 		try {
@@ -69,8 +75,46 @@ public class HotelService {
 		return hotelHistoryRepo.save(newHistory); 
 	}
 	
-	public HotelHistory findById(Integer id) {
+	public HotelHistory findByIdHistory(Integer id) {
 		HotelHistory history = hotelHistoryRepo.findById(id).get();
 		return history;
 	}
+
+	public Hotel saveHotel(Hotel hotel, Customer customer) {
+		Hotel newHotel = hotel;
+		newHotel.setCustomer(customer);
+		return hotelRepo.save(newHotel); 
+	}
+	
+	public Hotel findByIdHotel(Integer id) {
+		Hotel hotel = hotelRepo.findById(id).get();
+		return hotel; 
+	}
+	
+	
+	public HotelGuest saveGuest(HotelGuest guest) {
+		HotelGuest newGuest = guest;
+		return guestRepo.save(newGuest); 
+	}
+	
+	public HotelGuest findByIdGuest(Integer id) {
+		HotelGuest guest = guestRepo.findById(id).get();
+		return guest; 
+	}
+	
+	public HotelRoom saveRoom(HotelRoom room) {
+		HotelRoom newRoom = room;
+		return roomRepository.save(newRoom); 
+	}
+	
+	public HotelRoom findByIdRoom(Integer id) {
+		HotelRoom room = roomRepository.findById(id).get();
+		return room; 
+	}
+
+	public void deleteRoom(Integer id) {
+		HotelRoom room = roomRepository.findById(id).get();
+		roomRepository.deleteById(room.getId());
+	}
+	
 }

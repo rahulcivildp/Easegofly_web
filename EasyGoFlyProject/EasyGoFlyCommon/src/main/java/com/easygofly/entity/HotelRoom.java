@@ -150,9 +150,68 @@ public class HotelRoom {
 	@ManyToOne
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel;
+
+	@OneToMany(mappedBy = "hotelRoom", cascade = CascadeType.ALL)
+	private List<HotelGuest> guests = new ArrayList<>();
+	
 	
 	
 	public HotelRoom() {}
+	
+	public HotelRoom(String roomTypeCode, Integer roomIndex, Integer roomStatus, Integer roomId,
+			boolean requireAllPaxDetails, String roomDescription, String roomTypeName, String ratePlanCode,
+			Integer ratePlan, String ratePlanName, String infoSource, String sequenceNo, Integer childCount,
+			String roomPromotion, String[] amenities, String[] amenity, String smokingPreference, String[] bedTypes,
+			String[] hotelSupplements, String lastCancellationDate, List<HotelCancelPolicy> hotelCancelPolicies,
+			double roomPrice, double tax, double extraGuestCharge, double childCharge, double discount, String availabilityType,
+			double publishedPrice, double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff,
+			Integer offeredPriceRoundedOff, double agentCommission, double agentMarkUp, double serviceTax, double tds,
+			String lastVoucherDate, String cancellationPolicy, String[] inclusion, boolean isPassportMandatory,
+			boolean isPANMandatory, List<RoomDayRate> roomDayRates, Hotel hotel) {
+		this.roomTypeCode = roomTypeCode;
+		this.roomIndex = roomIndex;
+		this.roomStatus = roomStatus;
+		this.roomId = roomId;
+		this.requireAllPaxDetails = requireAllPaxDetails;
+		this.roomDescription = roomDescription;
+		this.roomTypeName = roomTypeName;
+		this.ratePlanCode = ratePlanCode;
+		this.ratePlan = ratePlan;
+		this.ratePlanName = ratePlanName;
+		this.infoSource = infoSource;
+		this.sequenceNo = sequenceNo;
+		this.roomPromotion = roomPromotion;
+		this.amenities = amenities;
+		this.amenity = amenity;
+		this.smokingPreference = smokingPreference;
+		this.bedTypes = bedTypes;
+		this.hotelSupplements = hotelSupplements;
+		this.lastCancellationDate = lastCancellationDate;
+		this.hotelCancelPolicies = hotelCancelPolicies;
+		this.roomPrice = roomPrice;
+		this.tax = tax;
+		this.extraGuestCharge = extraGuestCharge;
+		this.childCharge = childCharge;
+		this.discount = discount;
+		this.publishedPrice = publishedPrice;
+		this.otherCharges = otherCharges;
+		this.offeredPrice = offeredPrice;
+		this.publishedPriceRoundedOff = publishedPriceRoundedOff;
+		this.offeredPriceRoundedOff = offeredPriceRoundedOff;
+		this.agentCommission = agentCommission;
+		this.agentMarkUp = agentMarkUp;
+		this.serviceTax = serviceTax;
+		this.tds = tds;
+		this.lastVoucherDate = lastVoucherDate;
+		this.cancellationPolicy = cancellationPolicy;
+		this.inclusion = inclusion;
+		this.isPassportMandatory = isPassportMandatory;
+		this.isPANMandatory = isPANMandatory;
+		this.roomDayRates = roomDayRates;
+		this.childCount = childCount;
+		this.availabilityType = availabilityType;
+		this.hotel = hotel;
+	}
 
 	public HotelRoom(String roomTypeCode, Integer roomIndex, Integer roomStatus, Integer roomId,
 			boolean requireAllPaxDetails, String roomDescription, String roomTypeName, String ratePlanCode,
@@ -270,6 +329,14 @@ public class HotelRoom {
 
 	public void setRoomStatus(Integer roomStatus) {
 		this.roomStatus = roomStatus;
+	}
+
+	public List<HotelGuest> getGuests() {
+		return guests;
+	}
+
+	public void setGuests(List<HotelGuest> guests) {
+		this.guests = guests;
 	}
 
 	public boolean isRequireAllPaxDetails() {
@@ -559,6 +626,5 @@ public class HotelRoom {
 	public void setPANMandatory(boolean isPANMandatory) {
 		this.isPANMandatory = isPANMandatory;
 	}
-	
 	
 }

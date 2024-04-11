@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -111,6 +113,10 @@ public class Hotel {
 
 	@OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
 	private List<HotelRoom> hotelRooms = new ArrayList<>();
+
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 	
 	
 	public Hotel() {}
@@ -236,6 +242,22 @@ public class Hotel {
 
 	public String getHotelAddress() {
 		return hotelAddress;
+	}
+
+	public List<HotelRoom> getHotelRooms() {
+		return hotelRooms;
+	}
+
+	public void setHotelRooms(List<HotelRoom> hotelRooms) {
+		this.hotelRooms = hotelRooms;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public void setHotelAddress(String hotelAddress) {
@@ -402,7 +424,29 @@ public class Hotel {
 		this.guests = guests;
 	}
 
-	
+	public void addGuests(String title, String firstName, String lastName, String phoneNo, String email, Integer paxType,
+			Integer age, boolean leadPassenger, String passportNo, String passportExpDate, String passportIssueDate,
+			String pan, HotelRoom room) {
+		this.guests.add(new HotelGuest(title, firstName, lastName, phoneNo, email, paxType, age, leadPassenger, passportNo, passportExpDate, passportIssueDate, pan, room, this));
+	}
+
+	public void addRooms(String roomTypeCode, Integer roomIndex, Integer roomStatus, Integer roomId,
+			boolean requireAllPaxDetails, String roomDescription, String roomTypeName, String ratePlanCode,
+			Integer ratePlan, String ratePlanName, String infoSource, String sequenceNo, Integer childCount,
+			String roomPromotion, String[] amenities, String[] amenity, String smokingPreference, String[] bedTypes,
+			String[] hotelSupplements, String lastCancellationDate, List<HotelCancelPolicy> hotelCancelPolicies,
+			double roomPrice, double tax, double extraGuestCharge, double childCharge, double discount, String availabilityType,
+			double publishedPrice, double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff,
+			Integer offeredPriceRoundedOff, double agentCommission, double agentMarkUp, double serviceTax, double tds,
+			String lastVoucherDate, String cancellationPolicy, String[] inclusion, boolean isPassportMandatory,
+			boolean isPANMandatory, List<RoomDayRate> roomDayRates) {
+		this.hotelRooms.add(new HotelRoom(roomTypeCode, roomIndex, roomStatus, roomId,
+				 requireAllPaxDetails, roomDescription, roomTypeName, ratePlanCode, ratePlan, ratePlanName, infoSource, sequenceNo, childCount,
+				 roomPromotion, amenities, amenity, smokingPreference, bedTypes, hotelSupplements, lastCancellationDate, hotelCancelPolicies,
+				 roomPrice, tax, extraGuestCharge, childCharge, discount, availabilityType, publishedPrice, otherCharges, offeredPrice, publishedPriceRoundedOff,
+				 offeredPriceRoundedOff, agentCommission, agentMarkUp, serviceTax, tds,
+				 lastVoucherDate, cancellationPolicy, inclusion, isPassportMandatory, isPANMandatory, roomDayRates, this));
+	}
 	
 	
 }

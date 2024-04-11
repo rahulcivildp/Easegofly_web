@@ -393,7 +393,7 @@
       </li>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
 		    <div class="col float-state media_status" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
-		        <a th:href="@{/}"> <p class="float-state" >Hey, <span sec:authentication="principal.customer.firstName"></span>!</p></a>
+		        <a th:href="@{/}"> <p class="float-state" style="width: 195px;">Hey, <span sec:authentication="principal.customer.firstName"></span>!</p></a>
 		    </div>
 	  </th:block>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">

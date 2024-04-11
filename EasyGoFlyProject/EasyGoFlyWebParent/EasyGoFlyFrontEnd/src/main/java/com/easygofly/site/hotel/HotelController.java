@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Hotel;
 import com.easygofly.entity.HotelCancelPolicy;
+import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelHistory;
 import com.easygofly.entity.HotelRoom;
 import com.easygofly.entity.RoomDayRate;
@@ -49,6 +50,7 @@ public class HotelController {
 	
 	List<Hotel> hotels = new ArrayList<Hotel>();
 	List<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
+	List<HotelGuest> hotelGuests =  new ArrayList<HotelGuest>();
 	
 	HotelHistory history = new HotelHistory();
 	
@@ -253,7 +255,7 @@ public class HotelController {
         return "loading/loading";
     }
 	
-	@GetMapping("/hotel/booking_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}_{resultIndex}_{hotelCode}_{history_id}")
+	@GetMapping("/hotel/booking_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}_{resultIndex}_{hotelCode}_{hotel_id}_{history_id}")
 	public String hotelBooking(Model model, 
 			@PathVariable(name = "hotelCity") String hotelCity,
 			@PathVariable(name = "checkInDate") String checkInDate,
@@ -263,12 +265,19 @@ public class HotelController {
 			@PathVariable(name = "noOfRooms") String noOfRooms,
 			@PathVariable(name = "resultIndex") String resultIndex,
 			@PathVariable(name = "history_id") Integer history_id,
-			@PathVariable(name = "hotelCode") String hotelCode) throws Exception {
+			@PathVariable(name = "hotelCode") String hotelCode,
+			@PathVariable(name = "hotel_id") Integer hotel_id, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
 
+        hotelRooms = new ArrayList<HotelRoom>();
+        hotelGuests =  new ArrayList<HotelGuest>();
+        Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
+        
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    Date checkIn = dateFormat.parse(checkInDate);
 	    
-	    HotelHistory hotelHistory = hotelService.findById(history_id);
+	    HotelHistory hotelHistory = hotelService.findByIdHistory(history_id);
+//	    Hotel savedHotel = hotelService.findByIdHotel(hotel_id);
 	    
 	    for (Hotel hotel : hotels) {
 			if (hotel.getResultIndex() == Integer.parseInt(resultIndex)) {
@@ -281,6 +290,8 @@ public class HotelController {
 		
         Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
 		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
+		
+		
         
 		model.addAttribute("hotelCity", hotelCity);
 		model.addAttribute("checkIn", checkIn);
@@ -292,6 +303,9 @@ public class HotelController {
 		model.addAttribute("noOfRooms", noOfRooms);
 		model.addAttribute("noNights", noNights);
 		model.addAttribute("hotelHistory", hotelHistory);
+		model.addAttribute("hotelGuests", hotelGuests);
+		model.addAttribute("hotel_id", hotel_id);
+		model.addAttribute("cust_id", customer.getId());
         
 		return "hotel/booking/hotel-booking";
 	}
@@ -514,7 +528,7 @@ public class HotelController {
     	        		String toDate = cancelObj.getJSONObject("Cancel-" + j).get("ToDate").toString();
     					HotelCancelPolicy cancelPolicy = new HotelCancelPolicy(charge, chargeType, currency, fromDate, toDate);
 
-    	        		System.out.println("Cancel Policy: " + charge + " ... " + fromDate);
+//    	        		System.out.println("Cancel Policy: " + charge + " ... " + fromDate);
     	        		
     					cancelPList.add(cancelPolicy);
     				}
@@ -531,7 +545,7 @@ public class HotelController {
     	        		double amount = Double.parseDouble(rateObj.getJSONObject("Rate-" + j).get("Amount").toString());
     	        		String date = rateObj.getJSONObject("Rate-" + j).get("Date").toString();
     	        		
-    	        		System.out.println("Day Rate: " + amount + " ... " + date);
+//    	        		System.out.println("Day Rate: " + amount + " ... " + date);
     	        		
     	        		RoomDayRate dayRate = new RoomDayRate(date, amount);
     					
@@ -592,8 +606,16 @@ public class HotelController {
 			
 			history = hotelService.saveHotelHistory(newHistory, customer);
 		}
+	
+		Hotel savedHotel = new Hotel();
 
-		bookingURL = "/hotel/booking_" + hotelCity + "_" + checkInDate + "_" + checkOutDate + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms + "_" + resultIndex + "_" + hotelCode + "_" + history.getId();
+	    for (Hotel hotel : hotels) {
+			if (hotel.getResultIndex() == Integer.parseInt(resultIndex)) {
+				savedHotel = hotelService.saveHotel(hotel, customer);
+			}
+		}
+	    
+		bookingURL = "/hotel/booking_" + hotelCity + "_" + checkInDate + "_" + checkOutDate + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms + "_" + resultIndex + "_" + hotelCode + "_" + savedHotel.getId() + "_" + history.getId();
 		
 		return "redirect:/hotel_booking...";
 	}

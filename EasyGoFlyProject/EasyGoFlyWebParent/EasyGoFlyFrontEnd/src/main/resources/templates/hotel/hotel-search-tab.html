@@ -400,8 +400,11 @@
 		};
 		
 		function calenderViewReturn(input, output) {
-			var inputAttr = $(input).val();
-			$(output).attr('min', inputAttr);
+			var inputAttrArr = $(input).val().split('-');
+			var days = parseInt(inputAttrArr[2]) + 1;
+			
+			var constVal = inputAttrArr[0] + "-" + inputAttrArr[1] + "-" + days;
+			$(output).attr('min', constVal);
 		};
 		
 	</script>
