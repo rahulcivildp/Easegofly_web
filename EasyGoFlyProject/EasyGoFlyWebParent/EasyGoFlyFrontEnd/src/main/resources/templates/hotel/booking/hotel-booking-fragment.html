@@ -647,7 +647,11 @@
 						<button type="button" class="backRed">Back</button>
 					</div>
 					<div class="col-6">
-						<button type="button" class="nextBlue">Next</button>
+						<form th:action="@{/hotel/save_order}" method="post">
+							<input type="hidden" name="hotel_id" th:value="${hotel_id}">
+							<input type="hidden" name="search_id" th:value="${history_id}">
+							<button type="submit" class="nextBlue">Next</button>
+						</form>
 					</div>
 				</div>
 			</div>

@@ -8,6 +8,9 @@ import com.easygofly.entity.TBOCity;
 public interface TBOCityRepository extends CrudRepository<TBOCity, Integer> {
 
 	@Query("SELECT t FROM TBOCity t WHERE t.destination = :city")
-	public TBOCity getCityByCityId(String city);
+	public TBOCity getCityByCityName(String city);
+	
+	@Query("SELECT t FROM TBOCity t WHERE t.cityId = :cityId")
+	public TBOCity getCityByCityId(Integer cityId);
 	
 }
