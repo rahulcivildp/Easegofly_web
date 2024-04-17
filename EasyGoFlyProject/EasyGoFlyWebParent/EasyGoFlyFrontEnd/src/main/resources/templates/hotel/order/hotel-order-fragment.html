@@ -246,6 +246,45 @@
 		    background-size: cover;
 		    background-position: center;
         }
+        .hotelStyle {
+			padding: 10px;
+    		box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+		}
+		.hotleRoomIndexstyle {
+			height: 30px;
+			width: 44px;
+			border-radius: 18px;
+			border: 1px solid grey;
+			background: green;
+			color: white;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.isLeadPax {
+			width: 20px;
+		    height: 20px;
+		    color: white;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    font-size: 12px;
+		    font-weight: 600;
+		    border-radius: 12px;
+		    margin-right: 10px;
+		}
+		.adultPaxStl {
+			padding: 0 5px;
+		    height: 20px;
+		    color: white;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    font-size: 12px;
+		    font-weight: 600;
+		    border-radius: 12px;
+		    margin-right: 10px;
+		}
 	</style>
 <body>
 <div class="media-hide" style="height: 65px;"></div>
@@ -304,7 +343,7 @@
 						<div class="row priceRowMobStyleDropdown" style="width: 100%;">
 							<div class="col-12">
 								<div class="row">
-									<div class="col-12"><p th:utext="${description}"></p></div>
+									<div class="col-12"><p></p></div>
 								</div>
 							</div>
 							<div class="col-12" style="height: 15px;"></div>
@@ -356,44 +395,168 @@
 				</div>
 			</div>
 		</div>
-    
-                        <div class="container media_status">
-							<div id="payment_selection" class="booking_tiles back_white shadow">
-                                <div style="background-color: #ecf5fd;">
-                                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Choose a Payment Method</p>
-                                </div>
-								 <div class="row" style="padding: 10px;"> 
-									 <div class="col-12">
-										 <div class="form-check " style="display: flex; align-items: center; margin-left: 24px;">
-											 <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-											 <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
-										</div>
-									 </div>
-									 <div class="col-12">
-										<div class="form-check" style="display: flex; align-items: center; margin-left: 24px;">
-										  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-										  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
-										  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
-										  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
-										  </div>
-										  </label>
-										 
-				                        </div>
-									</div>
-									 <div class="col-12">
-				                        <div class="form-check" style="margin: 10px 25px;">
-				                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" form="payment_form" required="required">
-				                            <label class="form-check-label" for="flexCheckDefault">
-				                                i have reviewed and agreed on the Terms and Condition.
-				                            </label>
-				                        </div>
-			                        </div>
-								</div>
+		
+		 <div class="container media_status">
+			 <div class="booking_tiles back_white shadow">
+				<th:block th:each="hotelRoom : ${hotel.hotelRooms}">
+					<div class="hotelStyle">
+						<div style="display: flex;">
+							<div class="hotleRoomIndexstyle" >
+								<p style="margin: 0;">[[${hotelRoom.roomIndex}]]</p>
 							</div>
+							<h3 style="margin-left: 10px;">[[${hotelRoom.roomDescription}]]</h3>
 						</div>
+						<th:block th:each="guest : ${hotel.guests}">
+							<th:block th:if="${guest.hotelRoom.id} == ${hotelRoom.id}">
+								<div style="display: flex;">
+									<th:block th:if="${guest.leadPassenger} == true">	
+										<div class="isLeadPax" style="background: green;">
+											L
+										</div>
+									</th:block>
+									<th:block th:if="${guest.leadPassenger} == false">	
+										<div class="isLeadPax" style="background: #919191;">
+											N
+										</div>
+									</th:block>
+									<th:block th:if="${guest.paxType} == 1">
+										<div class="adultPaxStl" style="background: green;">
+											Adult
+										</div>
+									</th:block>
+									<th:block th:if="${guest.paxType} == 2">	
+										<div class="adultPaxStl" style="background: blue;">
+											Child
+										</div>
+									</th:block>
+									<div>
+										[[${guest.firstName}]] [[${guest.lastName}]]
+									</div>
+								</div>
+							</th:block>
+						</th:block>
+					</div>
+				</th:block>
+			 </div>
+		 </div>
+		
+        <div class="container media_status">
+			<div id="priceSection" class="booking_tiles back_white shadow">
+				<div><h3>Price: [[${totalPrice}]]</h3></div>
+			</div>
+		</div>
+    
+        <div class="container media_status">
+			<div id="payment_selection" class="booking_tiles back_white shadow">
+                <div style="background-color: #ecf5fd;">
+                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Choose a Payment Method</p>
+                </div>
+				 <div class="row" style="padding: 10px;"> 
+					 <div class="col-12">
+						 <div class="form-check " style="display: flex; align-items: center; margin-left: 24px;">
+							 <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+							 <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
+						</div>
+					 </div>
+					 <div class="col-12">
+						<div class="form-check" style="display: flex; align-items: center; margin-left: 24px;">
+						  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+						  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
+						  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
+						  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
+						  </div>
+						  </label>
+						 
+                        </div>
+					</div>
+					 <div class="col-12">
+                        <div class="form-check" style="margin: 10px 25px;">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" form="payment_form" required="required">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                i have reviewed and agreed on the Terms and Condition.
+                            </label>
+                        </div>
                     </div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- ** ZAAKPAY **  --> <!--  -->
+       	<form th:action="@{${requestUrl}}" method="post" id="payment_form">
+       		<input type="hidden" name="JSESSIONID" th:value="${JSESSIONID}">
+       		<th:block th:each="orderInfo : ${entrySet}">
+       			<input type="hidden" th:name="${orderInfo.getKey}" th:value="${orderInfo.getValue}">
+       		</th:block>
+       		<input type="hidden" name="checksum" th:value="${checksum}">
+        	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white; display: block;" type="submit" value="Book Now" id="payButton">
+        </form>
+        
+        <form th:action="@{/hotel/order/wallet_check}" method="post" id="payment_form_wallet" onsubmit="return(checkWalletBalance(this))">
+            <input type="hidden" name="hotel_id" th:value="${hotel.id}">
+            <input type="hidden" name="order_id" th:value="${savedOrder.id}">
+        	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white; display: none;" type="submit" value="Book Now" id="payButtonWallet" data-bs-toggle="modal" data-bs-target="#modalDialogue">
+        </form>
+        
+        <div style="height: 50px;"></div>
+        
+            <div class="modal fade text-center" id="modalDialogue">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle"></h4>
+						<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<span id="modalBody" style="color: red;"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>	
+		</div>
+</div>
 </body>
+	<script type="text/javascript">
+    
+    	$("#flexRadioDefault2").click(function() {
+    		$("#payButton").css("display", "none");
+    		$("#payButtonWallet").css("display", "block");
+    	});
+    	$("#flexRadioDefault1").click(function() {
+    		$("#payButton").css("display", "block");
+    		$("#payButtonWallet").css("display", "none");
+    	});
+    </script>
+ 	<script type="text/javascript">
+ 	
+ 	function checkWalletBalance(form) {
+		orderPrice = $("input[name='flight_price']").val();
+		url = "[[@{/check_wallet_balance}]]"
+		
+		params = {price: orderPrice};
+			
+		$.post(url, params, function(response) {
+			if (response == "insufficient") {
+				showModelDialogue("Alert!!!", "Insufficient balance in your wallet.");
+			} else {
+				showModelDialogue("Processing...", "Please wait while processing your request!");
+				form.submit();
+			}
+		}).fail(function(){
+			showModelDialogue("Error", "Could not connect to the server.");
+		});
+		
+		return false;
+	};
 	
+	function showModelDialogue(title, message) {
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message);
+		$("#modalDialogue").modal();
+	};
+ 	
+ 	</script>
 	<script th:inline="javascript">
 		var pos = [[${latitude}]] + "," + [[${longitude}]];
 		$("#mapWrap").attr('center', pos);

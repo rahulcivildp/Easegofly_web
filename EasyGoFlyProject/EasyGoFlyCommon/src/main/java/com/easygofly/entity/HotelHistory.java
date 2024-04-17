@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -49,6 +50,9 @@ public class HotelHistory {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
+	
+	@OneToOne(mappedBy = "hotelHistory")
+	private HotelOrder hotelOrder;
 	
 	
 	
@@ -155,6 +159,15 @@ public class HotelHistory {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	
+	public HotelOrder getHotelOrder() {
+		return hotelOrder;
+	}
+
+	public void setHotelOrder(HotelOrder hotelOrder) {
+		this.hotelOrder = hotelOrder;
 	}
 	
 	

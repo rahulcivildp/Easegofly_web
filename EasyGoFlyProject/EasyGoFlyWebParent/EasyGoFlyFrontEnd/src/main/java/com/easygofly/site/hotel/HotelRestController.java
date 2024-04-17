@@ -23,11 +23,17 @@ public class HotelRestController {
 	@Autowired private CustomerRepository customerRepository;
 
 	@PostMapping("/save_hotel_guest")
-	public void saveGuest(@Param("title") String title, @Param("fName") String fName, @Param("lName") String lName, @Param("email") String email, @Param("phoneNo") String phoneNo, @Param("paxType") Integer paxType, @Param("age") Integer age, @Param("pan") String pan,
-			@Param("hotel_id") Integer hotel_id, @Param("cust_id") Integer cust_id, @Param("room_id") Integer room_id) {
+	public void saveGuest(@Param("title") String title, @Param("fName") String fName, @Param("lName") String lName, @Param("email") String email, @Param("phoneNo") String phoneNo, 
+			@Param("age") Integer age, @Param("pan") String pan, @Param("hotel_id") Integer hotel_id, @Param("cust_id") Integer cust_id, @Param("room_id") Integer room_id) {
 	    Hotel savedHotel = hotelService.findByIdHotel(hotel_id);
 		HotelRoom savedRoom = hotelService.findByIdRoom(room_id);
-		Hotel hotel = saveHelper.setGuests(title, fName, lName, phoneNo, email, paxType, age, true, null, "0001-01-01T00: 00: 00", "0001-01-01T00: 00: 00", pan, savedRoom, savedHotel);
+		Integer intPaxType = 0;
+		if (age <= 12) {
+			intPaxType = 2;
+		} else {
+			intPaxType = 1;
+		}
+		Hotel hotel = saveHelper.setGuests(title, fName, lName, phoneNo, email, intPaxType, age, true, null, "0001-01-01T00: 00: 00", "0001-01-01T00: 00: 00", pan, savedRoom, savedHotel);
 		Customer customer = customerRepository.findById(cust_id).get();
 		
 		hotelService.saveHotel(hotel, customer);
@@ -49,7 +55,6 @@ public class HotelRestController {
 		return stringList;
 	}
 	
-
 	@PostMapping("/modify_guest")
 	public void modifyHotelGuest(@Param("guest_id") Integer guest_id, @Param("title") String title, @Param("fName") String fName, @Param("lName") String lName, 
 			@Param("email") String email, @Param("phoneNo") String phoneNo, @Param("age") Integer age, @Param("pan") String pan ) {
@@ -66,7 +71,6 @@ public class HotelRestController {
 	    	System.out.println(saveGuest.getEmail());
 	}
 	
-
 	@PostMapping("/save_hotel_room")
 	public void saveRoom(@Param("roomIndex") String roomIndex, @Param("hotel_id") Integer hotel_id, @Param("cust_id") Integer cust_id) {
 	    Hotel savedHotel = hotelService.findByIdHotel(hotel_id);

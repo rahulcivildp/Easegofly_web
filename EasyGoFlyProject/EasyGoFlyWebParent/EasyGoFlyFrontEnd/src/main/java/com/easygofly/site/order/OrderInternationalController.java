@@ -615,7 +615,7 @@ public class OrderInternationalController {
 			
 			if (hasErrorCode != 0) {
 				System.out.println(hasErrorCode);
-				orderService.walletPayOrderCancel(customer, order, "INTER");
+				orderService.updateOrder(order, OrderStatus.FAILED);
 				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 			} else {
 				model.addAttribute("paymentSuccess", "successfull");
@@ -1384,12 +1384,12 @@ public class OrderInternationalController {
 				model.addAttribute("paymentCancelled", hasErrorArr[1] + " " + hasErrorArrTwo[1]);
 				
 			} else if (hasErrorCode != 0 ) {
-				orderService.walletPayOrderCancel(customer, order1, "INTER");
+				orderService.updateOrder(order1, OrderStatus.FAILED);
 				System.out.println(hasErrorCode);
 				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 				
 			} else if (hasErrorCodeTwo != 0) {
-				orderService.walletPayOrderCancel(customer, order2, "INTER");
+				orderService.updateOrder(order2, OrderStatus.FAILED);
 				System.out.println(hasErrorCodeTwo);
 				model.addAttribute("paymentCancelled", hasErrorArrTwo[1]);
 				

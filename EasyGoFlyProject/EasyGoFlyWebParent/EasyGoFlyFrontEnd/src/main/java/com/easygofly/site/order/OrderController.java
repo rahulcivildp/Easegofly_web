@@ -635,7 +635,7 @@ public class OrderController {
 			} else if (hasErrorArr[0].equals("200")) {
 				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			} else {
-				orderService.walletPayOrderCancel(customer, order, "");
+				orderService.updateOrder(order, OrderStatus.FAILED);
 				System.out.println(hasErrorCode);
 				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 			}
@@ -1419,12 +1419,12 @@ public class OrderController {
 				model.addAttribute("paymentCancelled", hasErrorArr[1] + " " + hasErrorArrTwo[1]);
 				
 			} else if (hasErrorCode != 0 ) {
-				orderService.walletPayOrderCancel(customer, order1, "");
+				orderService.updateOrder(order1, OrderStatus.FAILED);
 				System.out.println(hasErrorCode);
 				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 				
 			} else if (hasErrorCodeTwo != 0) {
-				orderService.walletPayOrderCancel(customer, order2, "");
+				orderService.updateOrder(order2, OrderStatus.FAILED);
 				System.out.println(hasErrorCodeTwo);
 				model.addAttribute("paymentCancelled", hasErrorArrTwo[1]);
 				

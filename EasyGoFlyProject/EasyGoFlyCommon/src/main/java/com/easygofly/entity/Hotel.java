@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -117,6 +118,10 @@ public class Hotel {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
+	
+	@OneToOne(mappedBy = "hotel")
+	private HotelOrder hotelOrder;
+	
 	
 	
 	public Hotel() {}
@@ -415,6 +420,14 @@ public class Hotel {
 	public void setTds(double tds) {
 		this.tds = tds;
 	}
+	
+	public HotelOrder getHotelOrder() {
+		return hotelOrder;
+	}
+
+	public void setHotelOrder(HotelOrder hotelOrder) {
+		this.hotelOrder = hotelOrder;
+	}
 
 	public List<HotelGuest> getGuests() {
 		return guests;
@@ -447,6 +460,7 @@ public class Hotel {
 				 offeredPriceRoundedOff, agentCommission, agentMarkUp, serviceTax, tds,
 				 lastVoucherDate, cancellationPolicy, inclusion, isPassportMandatory, isPANMandatory, roomDayRates, this));
 	}
+	
 	
 	
 }

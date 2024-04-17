@@ -122,6 +122,9 @@ public class Customer {
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Hotel> hotels = new ArrayList<>();
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<HotelOrder> hotelOrders = new ArrayList<>();
 	
 	
 	
@@ -306,6 +309,14 @@ public class Customer {
 	
 	public String getGender() {
 		return gender;
+	}
+	
+	public List<HotelOrder> getHotelOrders() {
+		return hotelOrders;
+	}
+
+	public void setHotelOrders(List<HotelOrder> hotelOrders) {
+		this.hotelOrders = hotelOrders;
 	}
 
 	public void setGender(String gender) {

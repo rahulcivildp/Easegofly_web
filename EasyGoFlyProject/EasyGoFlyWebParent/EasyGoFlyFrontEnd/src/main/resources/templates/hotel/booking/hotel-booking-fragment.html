@@ -348,12 +348,16 @@
 	  .nextBlue {
 		width: 50%;
 	    height: 40px;
-	    border: 1px solid #21a45c;
-	    background: #21a45c;
+		background: #c9ecc9;
+	   	border: 1px solid #c9ecc9;
 	    color: white;
 	    border-radius: 5px;
 	    font-size: 20px;
     	float: right;
+	  }
+	  .nextBlueChange {
+	    border: 1px solid #21a45c !important;
+	    background: #21a45c !important;
 	  }
 	</style>
 	<body>
@@ -587,10 +591,11 @@
 				  <div class="modal-dialog modal-dialog-centered">
 				    <div class="modal-content">
 				      <div class="modal-header">
-				        <h5 class="modal-title" id="staticBackdropLabel">Adult Guest</h5>
+				        <h5 class="modal-title" id="staticBackdropLabel">Guest Info</h5>
 				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				      </div>
 				      <div class="modal-body">
+						  <form id="guestSaveId">
 						 <div class="form-floating" style="padding-bottom: 16px;">
 						  <select class="form-select" id="titleGuests" aria-label="Floating label select example">
 						    <option selected>Mr</option>
@@ -601,38 +606,39 @@
 						  <label for="floatingSelect">Title</label>
 						</div>
 				        <div class="form-floating mb-3">
-						  <input type="text" class="form-control" id="firstNameGuests" placeholder="name">
+						  <input type="text" class="form-control" id="firstNameGuests" placeholder="name" required>
 						  <label for="floatingInput">First Name</label>
 						</div>
 				        <div class="form-floating mb-3">
-						  <input type="text" class="form-control" id="lastNameGuests" placeholder="name">
+						  <input type="text" class="form-control" id="lastNameGuests" placeholder="name" required>
 						  <label for="floatingInput">Last Name</label>
 						</div>
 				        <div class="form-floating mb-3">
-						  <input type="email" class="form-control" id="emailGuest" placeholder="name@example.com">
+						  <input type="email" class="form-control" id="emailGuest" placeholder="name@example.com" required>
 						  <label for="floatingInput">Email</label>
 						</div>
 				        <div class="form-floating mb-3">
-						  <input type="tel" class="form-control" id="phoneGuest" placeholder="name@example.com">
+						  <input type="tel" class="form-control" id="phoneGuest" placeholder="name@example.com" required>
 						  <label for="floatingInput">Phone No</label>
 						</div>
 				        <div class="form-floating mb-3">
-						  <input type="number" class="form-control" id="ageGuests" placeholder="name@example.com">
+						  <input type="number" class="form-control" id="ageGuests" placeholder="name@example.com" required>
 						  <label for="floatingInput">Age in number</label>
 						</div>
 				        <div class="form-floating mb-3">
-						  <input type="text" class="form-control" id="panGuests" placeholder="name@example.com">
+						  <input type="text" class="form-control" id="panGuests" placeholder="name@example.com" required>
 						  <label for="floatingInput">PAN Number</label>
 						</div>
 						 <div class="form-floating" style="padding-bottom: 16px;">
-						  <select class="form-select" id="floatingSelectroom" aria-label="Floating label select example">
+						  <select class="form-select" id="floatingSelectroom" aria-label="Floating label select example" required>
 						  </select>
 						  <label for="floatingSelectroom">Select Room</label>
 						</div>
 				      </div>
+				      </form>
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-				        <button type="button" class="btn btn-primary" id="guestSavebtn" data-bs-dismiss="modal">Save & Close</button>
+				        <button type="button" class="btn btn-primary" id="guestSavebtn" data-bs-dismiss="modal" form="guestSaveId">Save & Close</button>
 				      </div>
 				    </div>
 				  </div>
@@ -647,11 +653,11 @@
 						<button type="button" class="backRed">Back</button>
 					</div>
 					<div class="col-6">
-						<form th:action="@{/hotel/save_order}" method="post">
+						<form th:action="@{/hotel/save_order}" method="post" id="saveOrderForm">
 							<input type="hidden" name="hotel_id" th:value="${hotel_id}">
 							<input type="hidden" name="search_id" th:value="${history_id}">
-							<button type="submit" class="nextBlue">Next</button>
 						</form>
+						<button id="saveOrderBTN" type="submit" class="nextBlue">Next</button>
 					</div>
 				</div>
 			</div>
@@ -805,6 +811,11 @@
 					$("#guestListhtml").append(htmlElem);
 				}
 				
+				if (elem.length == totalGuests) {
+					$("#saveOrderBTN").addClass("nextBlueChange");
+					$("#saveOrderBTN").attr("form", "saveOrderForm");
+				}
+				
 	    		elem.forEach(function(element){
 					var elemArray = element.split("-");
 					
@@ -925,14 +936,13 @@
 			panGuests = $("#panGuests").val();
 			emailGuests = $("#emailGuest").val();
 			phoneNoGuests = $("#phoneGuest").val();
-			paxType = 1;
 			hotelId = [[${hotel_id}]];
 			cust_id = [[${cust_id}]];
 			selectorId =  $("#floatingSelectroom").val();
 			
 			urlComponentsSave = "[[@{/save_hotel_guest}]]";
 			
-			params = {title: titleGuests, fName: firstNameGuests, lName: lastNameGuests, email: emailGuests, phoneNo: phoneNoGuests, paxType: 1, age: ageGuests, 
+			params = {title: titleGuests, fName: firstNameGuests, lName: lastNameGuests, email: emailGuests, phoneNo: phoneNoGuests, age: ageGuests, 
 			pan: panGuests, hotel_id: hotelId, cust_id: cust_id, room_id: selectorId};
 	    	
 	    	$.post(urlComponentsSave, params, function() {

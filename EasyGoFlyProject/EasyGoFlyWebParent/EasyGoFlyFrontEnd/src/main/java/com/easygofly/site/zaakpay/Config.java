@@ -24,4 +24,6 @@ public class Config {
 
     public static String RETURN_URL_INTERNATIONAL_RETURN = "https://easegofly.com/zaakpay/international/return/response" ;
 
+    public static String RETURN_URL_HOTEL = "https://easegofly.com/zaakpay/hotel/response" ;
+
 }

@@ -3,6 +3,10 @@ package com.easygofly.site.hotel;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +17,12 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.Hotel;
 import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelHistory;
+import com.easygofly.entity.HotelOrder;
 import com.easygofly.entity.HotelRoom;
+import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
+import com.easygofly.site.wallet.WalletService;
 
 @Service
 public class HotelService {
@@ -24,6 +32,8 @@ public class HotelService {
 	@Autowired private HotelRepository hotelRepo;
 	@Autowired private HotelGuestRepository guestRepo;
 	@Autowired private HotelRoomRepository roomRepository;
+	@Autowired private HotelOrderRepository orderRepository;
+	@Autowired private WalletService walletService;
 
 	public void authenticationHotel(Model model) {
 		try {
@@ -117,4 +127,54 @@ public class HotelService {
 		roomRepository.deleteById(room.getId());
 	}
 	
+	
+	public HotelOrder saveOrder(HotelOrder hotelOrder) {
+		return orderRepository.save(hotelOrder);
+	}
+	
+	public HotelOrder findByIdOrder(Integer id) {
+		return orderRepository.findById(id).get();
+	}
+	
+	public HotelOrder updateOrder(Integer id, OrderStatus orderStatus, double price) {
+		HotelOrder updateOrder = orderRepository.findById(id).get();
+		updateOrder.setOrderStatus(orderStatus);
+		updateOrder.setPrice(price);
+		
+		return orderRepository.save(updateOrder);
+	}
+	
+	public HotelOrder updateOrderStatus(Integer id, OrderStatus orderStatus) {
+		HotelOrder updateOrder = orderRepository.findById(id).get();
+		updateOrder.setOrderStatus(orderStatus);
+		
+		return orderRepository.save(updateOrder);
+	}
+	
+
+	public Wallet hotelWalletPayOrder(Customer customer, HotelOrder order) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "HO"+ order.getId();
+		return walletService.updateWalletBalanceByHotelOrder(customer, order, orderString, "");
+	}
+
+	public Wallet walletPayHotelOrderCancel(Customer customer, HotelOrder order, OrderStatus orderStatus) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "HO"+ order.getId();
+		
+		order.setOrderStatus(orderStatus);
+		orderRepository.save(order);
+		
+		return walletService.cancelWalletBalanceByHotelOrder(customer, order, orderString, "");
+	}
 }

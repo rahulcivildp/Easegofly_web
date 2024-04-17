@@ -1137,7 +1137,6 @@ public class OrderService {
 				
 				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, traceId, onlinePNR, onlineBookingId);
 				
-				@SuppressWarnings("unused")
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
 		       	System.out.println(jsonObjGetBookingDetails);
 		       	logService.generateLog(jsonObjGetBookingDetails.toString()); 
@@ -1750,9 +1749,9 @@ public class OrderService {
        	try {
 				String code = jsonObjTicket.get("code").toString();
 				String status = jsonObjTicket.get("status").toString();
-				String message = jsonObjTicket.get("message").toString();
+//				String message = jsonObjTicket.get("message").toString();
 				String booking_id = jsonObjTicket.get("booking_id").toString();
-				String airline_code = jsonObjTicket.get("airline_code").toString();
+//				String airline_code = jsonObjTicket.get("airline_code").toString();
 				
 				if (status.equals("success")) {
 
