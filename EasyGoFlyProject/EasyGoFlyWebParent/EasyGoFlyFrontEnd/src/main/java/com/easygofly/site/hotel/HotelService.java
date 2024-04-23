@@ -143,6 +143,13 @@ public class HotelService {
 		
 		return orderRepository.save(updateOrder);
 	}
+
+	public HotelOrder updateOrderPrice(Integer id, double price) {
+		HotelOrder updateOrder = orderRepository.findById(id).get();
+		updateOrder.setPrice(price);
+		
+		return orderRepository.save(updateOrder);
+	}
 	
 	public HotelOrder updateOrderStatus(Integer id, OrderStatus orderStatus) {
 		HotelOrder updateOrder = orderRepository.findById(id).get();

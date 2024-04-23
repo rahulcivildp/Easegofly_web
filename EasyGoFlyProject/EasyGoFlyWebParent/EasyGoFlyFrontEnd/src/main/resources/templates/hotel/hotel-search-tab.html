@@ -402,8 +402,14 @@
 		function calenderViewReturn(input, output) {
 			var inputAttrArr = $(input).val().split('-');
 			var days = parseInt(inputAttrArr[2]) + 1;
+			var strDays = "";
+			if(days <= 9) {
+				strDays = "0" + days;
+			} else {
+				strDays = "" + days;
+			}
 			
-			var constVal = inputAttrArr[0] + "-" + inputAttrArr[1] + "-" + days;
+			var constVal = inputAttrArr[0] + "-" + inputAttrArr[1] + "-" + strDays;
 			$(output).attr('min', constVal);
 		};
 		

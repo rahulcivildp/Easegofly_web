@@ -478,6 +478,20 @@ public class HotelController {
     }
 	
 	
+	@PostMapping("/hotel/previousSearchPage")
+	public String previousPageSearch(
+			@RequestParam(name = "history_id", required = false) Integer history_id) {
+		
+		HotelHistory newHistory = hotelService.findByIdHistory(history_id);
+		TBOCity city = tboRepo.getCityByCityId(Integer.parseInt(newHistory.getCityId()));
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		searchURL = "/hotel/search_" + city.getDestination() + "_" + dateFormat.format(newHistory.getCheckInDate()) + "_" + dateFormat.format(newHistory.getCheckOutDate()) + "_" 
+				+ newHistory.getNoOfAdults() + "_" + newHistory.getNoOfChild() + "_" + newHistory.getNoOfRooms();
+		
+		return "redirect:/hotel_loading...";
+	}
+	
 	
 	@PostMapping("/hotel/order/wallet_check")
 	public String hotelWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
@@ -492,17 +506,17 @@ public class HotelController {
 	    for (HotelRoom room : hotel.getHotelRooms()) {
 	    	totalPrice = totalPrice + room.getPublishedPriceRoundedOff();
 		}
+	    HotelOrder updatedOrder = hotelService.updateOrderPrice(order_id, totalPrice);
 	    
 		Wallet wallet = hotelService.hotelWalletPayOrder(customer, hotelOrder);
-		HotelOrder updatedHotelOrder;
 		
 		if (wallet != null) {
-			updatedHotelOrder = hotelService.updateOrder(hotelOrder.getId(), OrderStatus.SUCCESSFULL, totalPrice);
+			updatedOrder = hotelService.updateOrderStatus(hotelOrder.getId(), OrderStatus.SUCCESSFULL);
 		} else {
-			updatedHotelOrder = hotelService.updateOrder(hotelOrder.getId(), OrderStatus.FAILED, totalPrice);
+			updatedOrder = hotelService.updateOrderStatus(hotelOrder.getId(), OrderStatus.FAILED);
 		}
 	
-		return "redirect:/hotel/order/wallet_response_" + updatedHotelOrder.getId();
+		return "redirect:/hotel/order/wallet_response_" + updatedOrder.getId();
 	}
 
 	@GetMapping("/hotel/order/wallet_response_{order_id}")
@@ -514,6 +528,7 @@ public class HotelController {
 		
 		HotelOrder order = hotelService.findByIdOrder(order_id);
 		model.addAttribute("orderId", order.getId());
+		model.addAttribute("order", order);
 		  
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    String checkIn = dateFormat.format(order.getHotelHistory().getCheckInDate());
@@ -527,6 +542,8 @@ public class HotelController {
 		
 		if (hasErrorArr[0].equals("0")) {
 			model.addAttribute("paymentSuccess", "Successfull");
+		} else if (hasErrorArr[0].equals("5")) {
+			model.addAttribute("paymentCancelled", hasErrorArr[0]);
 		} else {
 			hotelService.walletPayHotelOrderCancel(customer, order, OrderStatus.FAILED);
 			model.addAttribute("paymentCancelled", hasErrorArr[1]);
@@ -591,7 +608,7 @@ public class HotelController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
 		
 
-//		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
 
 		String orderParam = parameter[8];
 		model.addAttribute("orderId", orderParam);
@@ -599,6 +616,7 @@ public class HotelController {
 		String part2 = parts[1]; // 034556
 		Integer convert = Integer.parseInt(part2);
 		HotelOrder order= hotelService.findByIdOrder(convert);
+		model.addAttribute("order", order);
 		  
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    String checkIn = dateFormat.format(order.getHotelHistory().getCheckInDate());
@@ -631,7 +649,10 @@ public class HotelController {
 			
 			if (hasErrorArr[0].equals("0")) {
 				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			}  else if (hasErrorArr[0].equals("5")) {
+				model.addAttribute("paymentCancelled", hasErrorArr[0]);
 			} else {
+				hotelService.walletPayHotelOrderCancel(customer, order, OrderStatus.FAILED);
 				hotelService.updateOrderStatus(order.getId(), OrderStatus.FAILED);
 				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 			}
@@ -907,8 +928,8 @@ public class HotelController {
 							+ "\"LeadPassenger\": " + guest.isLeadPassenger() + ",\r\n"
 							+ "\"Age\": " + guest.getAge() + ",\r\n"
 							+ "\"PassportNo\": null,\r\n"
-							+ "\"PassportIssueDate\": “0001-01-01T00: 00: 00”,\r\n"
-							+ "\"PassportExpDate\": “0001-01-01T00: 00: 00”,\r\n"
+							+ "\"PassportIssueDate\": \"0001-01-01T00: 00: 00\",\r\n"
+							+ "\"PassportExpDate\": \"0001-01-01T00: 00: 00\",\r\n"
 							+ "\"PAN\": \"" + guest.getPan() + "\"\r\n"
 							+ "}\r\n";
 					

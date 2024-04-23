@@ -136,8 +136,8 @@ body {
 </style>
 <script>
 		$(document).ready(function() {
-			
-			baseURL = "https://easegofly.com/";
+			urlParse = window.location.href.split("/");
+			baseURL = urlParse[0] + "/" + urlParse[1] + "/" + urlParse[2] + "/";
 			
             if (window.location.href == baseURL + "about#no-1") {
               $("#no-1").addClass("activate");

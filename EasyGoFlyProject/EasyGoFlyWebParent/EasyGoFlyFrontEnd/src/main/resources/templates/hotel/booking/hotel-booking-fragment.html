@@ -359,6 +359,9 @@
 	    border: 1px solid #21a45c !important;
 	    background: #21a45c !important;
 	  }
+	  .nextWihte {
+	    color: white !important;
+	  }
 	</style>
 	<body>
 		<div class="media-hide" style="height: 65px;"></div>
@@ -646,22 +649,30 @@
 			</div>
 		</div>
 		
-		<div class="container media_status">
-			<div class="">
-				<div class="row">
-					<div class="col-6">
-						<button type="button" class="backRed">Back</button>
-					</div>
-					<div class="col-6">
-						<form th:action="@{/hotel/save_order}" method="post" id="saveOrderForm">
-							<input type="hidden" name="hotel_id" th:value="${hotel_id}">
-							<input type="hidden" name="search_id" th:value="${history_id}">
-						</form>
-						<button id="saveOrderBTN" type="submit" class="nextBlue">Next</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		<div class="media_status" id="mobileFooter">
+			<div style="height: 50px;"></div>
+			<div class="footerInner">
+		   	   <div class="row">
+				   <button class="col-6" id="homeFooter" onclick="history.back()">
+					   <div class="footerInnerDiv" style="color: white;">
+						   <i class="fa fa-solid fa-backward"></i><br>
+						   <p>Back</p>
+				   		</div>
+				   	</button>
+				   <button class="col-6" id="saveOrderBTN" type="submit" >
+					   <div id="submitInner" class="footerInnerDiv" style="color: #b1b1b1;">
+						   <i class="fa-solid fa-forward"></i>
+						   <p>Next</p>
+				   		</div>
+				   	</button>
+			   </div>
+				<form th:action="@{/hotel/save_order}" method="post" id="saveOrderForm">
+					<input type="hidden" name="hotel_id" th:value="${hotel_id}">
+					<input type="hidden" name="search_id" th:value="${history_id}">
+				</form>
+		   </div>
+	   </div>
+		
 		
 		<div style="height: 20px;"></div>
 	</body>
@@ -814,6 +825,7 @@
 				if (elem.length == totalGuests) {
 					$("#saveOrderBTN").addClass("nextBlueChange");
 					$("#saveOrderBTN").attr("form", "saveOrderForm");
+					$("#submitInner").addClass("nextWihte");
 				}
 				
 	    		elem.forEach(function(element){
@@ -829,14 +841,14 @@
 									</div>
 									<div class="col-3">
 									
-										<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify" class="modifyButtonGuest">
+										<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify-` + elemArray[0] + `" class="modifyButtonGuest">
 											<i class="fa fa-solid fa-pen-to-square"></i>
 										</button>
 									</div>
 								</div>
 								
 								<!-- Modal -->
-								<div class="modal fade" id="guestModalModify" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+								<div class="modal fade" id="guestModalModify-` + elemArray[0] + `" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 								  <div class="modal-dialog modal-dialog-centered">
 								    <div class="modal-content">
 								      <div class="modal-header">

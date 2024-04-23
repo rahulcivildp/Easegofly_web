@@ -530,3 +530,29 @@
     width: 10%;
     border-radius: 0 20px 20px 0;
 }
+
+.footerInner {
+		  position: fixed; 
+		  bottom: 0; 
+		  width: 100%; 
+		  background: rgb(36 32 74); 
+		  z-index: 1000; 
+		  color: white;
+  }
+  .footerInner button {
+	  align-items: center; 
+	  justify-content: center; 
+	  display: flex; 
+	  background: #24204a; 
+  }
+  .footerInner i {
+	  font-size: 30px;
+  }
+  .footerInner p {
+	  font-size: 18px;
+	  margin: 0;
+  }
+  .footerInnerDiv {
+	  text-align: center; 
+	  padding: 4px 0;
+  }
