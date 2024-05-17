@@ -72,8 +72,7 @@ public class OnlineHotelService {
 		return responseCode;
 	}
 	 
-	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityId, String noOfNights, String noOfRooms, String countryId, Integer noOfAdults, 
-			Integer noOfChild, Date date, Integer[] childDOB)
+	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityId, String noOfNights, String noOfRooms, String countryId, Date date, String roomGuests)
 			throws IOException {
 		
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); 
@@ -95,16 +94,11 @@ public class OnlineHotelService {
         		+ "  \"CountryCode\": \"" + countryId + "\",\r\n"
         		+ "  \"CityId\": \"" + cityId + "\",\r\n"
         		+ "  \"ResultCount\": null,\r\n"
+        		+ "  \"IsTBOMapped\": \"true\",\r\n"
         		+ "  \"PreferredCurrency\": \"INR\",\r\n"
         		+ "  \"GuestNationality\": \"IN\",\r\n"
         		+ "  \"NoOfRooms\": \"" + noOfRooms + "\",\r\n"
-        		+ "  \"RoomGuests\": [\r\n"
-        		+ "    {\r\n"
-        		+ "      \"NoOfAdults\": " + noOfAdults + ",\r\n"
-        		+ "      \"NoOfChild\": " + noOfChild + ",\r\n"
-        		+ "      \"ChildAge\": " + childDOB + "\r\n"
-        		+ "    }\r\n"
-        		+ "  ],\r\n"
+        		+ "  \"RoomGuests\": " + roomGuests + ",\r\n"
         		+ "  \"MaxRating\": 5,\r\n"
         		+ "  \"MinRating\": 0,\r\n"
         		+ "  \"ReviewScore\": null,\r\n"
@@ -134,7 +128,7 @@ public class OnlineHotelService {
 		return responseCode;
 	}
 
-	public int apiOnlineHotelInfo(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode)
+	public int apiOnlineHotelInfo(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode, String categoryId)
 			throws IOException {
 		
         // Set the request method to POST
@@ -152,7 +146,8 @@ public class OnlineHotelService {
         		+ "  \"HotelCode\": \"" + hotelCode + "\",\r\n"
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
-        		+ "  \"TraceId\": \"" + traceId + "\"\r\n"
+        		+ "  \"TraceId\": \"" + traceId + "\",\r\n"
+                + "  \"CategoryId\": \"" + categoryId + "\"\r\n"
         		+ "}";
 
         System.out.println(requestBody);
@@ -219,7 +214,7 @@ public class OnlineHotelService {
 	}
 
 	public int apiOnlineHotelBlockRoom(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode, String hotelName, String noOfRooms, 
-			String arrayRoom)
+			String arrayRoom, String categoryId)
 			throws IOException {
 		
         // Set the request method to POST
@@ -241,6 +236,7 @@ public class OnlineHotelService {
         		+ "  \"NoOfRooms\": \"" + noOfRooms + "\",\r\n"
         		+ "  \"ClientReferenceNo\": \"0\",\r\n"
         		+ "  \"IsVoucherBooking\": \"true\",\r\n"
+        		+ "  \"CategoryId\": \"" + categoryId + "\",\r\n"
         		+ "  \"HotelRoomsDetails\": " + arrayRoom + "  ,\r\n"
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
@@ -269,7 +265,7 @@ public class OnlineHotelService {
 	}
 
 	public int apiOnlineHotelBook(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode, String hotelName, String noOfRooms, 
-			String arrayRoom)
+			String arrayRoom, String categoryId)
 			throws IOException {
 		
         // Set the request method to POST
@@ -291,6 +287,7 @@ public class OnlineHotelService {
         		+ "  \"NoOfRooms\": \"" + noOfRooms + "\",\r\n"
         		+ "  \"ClientReferenceNo\": \"0\",\r\n"
         		+ "  \"IsVoucherBooking\": \"true\",\r\n"
+        		+ "  \"CategoryId\": \"" + categoryId + "\",\r\n"
         		+ "  \"HotelRoomsDetails\": " + arrayRoom + "  ,\r\n"
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
@@ -318,4 +315,131 @@ public class OnlineHotelService {
 		return responseCode;
 	}
 
+	public int apiOnlineHotelGetBookingDetails(HttpURLConnection connection, StringBuilder responseBody, String bookingId)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+  
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        
+     // Create the request body
+        String requestBody = "{\r\n"
+        		+ "  \"BookingId\": \"" + bookingId + "\",\r\n"
+        		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
+        		+ "}";
+
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
+	public int apiSendChangeRequestHotel(HttpURLConnection connection, StringBuilder responseBody, Integer bookingId, String tokenId)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Request body
+        String requestBody = "{\r\n"
+      		+ "  “BookingMode”: 5,\r\n"
+      		+ "  \"RequestType\": 4,\r\n"
+      		+ "  \"Remarks\": \"sds\",\r\n"
+      		+ "  \"BookingId\": " + bookingId + ",\r\n"
+      		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
+      		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
+      		+ "}";
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+
+	public int apiChangeRequestStatusHotel(HttpURLConnection connection, StringBuilder responseBody, Integer changeId, String tokenId)
+			throws IOException {
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+        // Request body
+        String requestBody = "{\r\n"
+        		+ "  “BookingMode”: 5,\r\n"
+        		+ "  \"ChangeRequestId\": " + changeId + ",\r\n"
+        		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
+        		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
+        		+ "}";
+        
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+		return responseCode;
+	}
+	 
 }

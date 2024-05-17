@@ -7,8 +7,7 @@
 		<li class="horiz"><a type="button"
 			class="btn btn-primary btn_style_menu a_center"
 			th:href="@{/login}"
-			id="login_b"> <i class="fas fa-user-cog"
-				style="padding-right: 13px;"></i> <p style="font-size: 22px; margin: 0;">Log in</p>
+			id="login_b"> <i class="fa fa-solid fa-user" style="padding-right: 13px;"></i> <p style="font-size: 22px; margin: 0;">Log in</p>
 		</a></li>
 
 		<li class="horiz"><a type="button"
@@ -29,7 +28,7 @@
 		<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
 		<ul class="no-search dropdown-menu" id="noStyle" style=" width: auto; border: none; box-shadow: none !important; border-radius: 7px; padding: 5px; background: rgb(227 246 255 / 79%);" aria-labelledby="dropdownMenuLinkLogged">
 			<li class="nav-item horiz">
-				<p class="text_modify" sec:authentication="principal.fullName"><i class="fas fa-user" style="padding-right: 13px;" ></i></p>
+				<p class="text_modify" sec:authentication="principal.fullName"><i class="fa fa-solid fa-user" style="padding-right: 13px;"></i></p>
 			</li>
 	
 			<li class="nav-item horiz"><a type="button"

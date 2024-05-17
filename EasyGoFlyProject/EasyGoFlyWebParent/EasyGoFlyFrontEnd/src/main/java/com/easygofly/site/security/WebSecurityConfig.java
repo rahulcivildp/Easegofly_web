@@ -44,7 +44,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
     
     @Autowired  private BeforeAuthenticationFilter beforeLoginFilter;
-//	@Autowired private DatabaseLoginSuccessHandler databaseLoginHandler;
     @Autowired private LoginSuccessHandler loginSuccessHandler;
     @Autowired private LoginFailureHandler loginFailureHandler;
     @Autowired private DataSource datasource;
@@ -88,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/noUser_search_filter", 
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**", 
 					"/flight_search-noUser_filter_**", "/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight",
-					"/hotel/saveSearchHotel", "/hotel/search_**", "/hotel_loading...").permitAll()
+					"/hotel/saveSearchHotel", "/hotel/search_**", "/hotel_loading...", "/bus", "/bus/saveSearchBus", "/bus_loading...", "/bus/search_**", "/holiday").permitAll()
 			.anyRequest().authenticated()
             .and()
             .addFilterBefore(beforeLoginFilter,
@@ -123,7 +122,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "../brand-logos/**", "../site-logo/**", "../favicon/**");
+        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**");
     }
 	
 	public void addCorsMappings(CorsRegistry registry) {

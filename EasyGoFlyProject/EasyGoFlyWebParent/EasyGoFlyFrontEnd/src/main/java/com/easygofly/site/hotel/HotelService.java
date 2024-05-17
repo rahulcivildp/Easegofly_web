@@ -19,6 +19,7 @@ import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelHistory;
 import com.easygofly.entity.HotelOrder;
 import com.easygofly.entity.HotelRoom;
+import com.easygofly.entity.HotelSupplierCode;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
@@ -33,6 +34,7 @@ public class HotelService {
 	@Autowired private HotelGuestRepository guestRepo;
 	@Autowired private HotelRoomRepository roomRepository;
 	@Autowired private HotelOrderRepository orderRepository;
+	@Autowired private HotelSupplierRepository hotelSupplierRepo;
 	@Autowired private WalletService walletService;
 
 	public void authenticationHotel(Model model) {
@@ -93,7 +95,13 @@ public class HotelService {
 	public Hotel saveHotel(Hotel hotel, Customer customer) {
 		Hotel newHotel = hotel;
 		newHotel.setCustomer(customer);
-		return hotelRepo.save(newHotel); 
+		
+		Hotel savedHotel = hotelRepo.save(newHotel); 
+		for (HotelSupplierCode hotelSupplierCode : savedHotel.getHotelSupplierCodes()) {
+			hotelSupplierCode.setHotel(savedHotel);
+			hotelSupplierRepo.save(hotelSupplierCode);
+		}
+		return savedHotel; 
 	}
 	
 	public Hotel findByIdHotel(Integer id) {

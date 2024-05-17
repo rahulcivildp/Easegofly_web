@@ -40,6 +40,7 @@ import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelHistory;
 import com.easygofly.entity.HotelOrder;
 import com.easygofly.entity.HotelRoom;
+import com.easygofly.entity.HotelSupplierCode;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.RoomDayRate;
 import com.easygofly.entity.TBOCity;
@@ -61,7 +62,6 @@ public class HotelController {
 	@Autowired private OnlineHotelService onlineHotelService ;
 	@Autowired private CustomerService customerService;
 	@Autowired private LogService logService;
-	@Autowired private TBOCityRepository tboCityRepository;
 
 	private String searchURL = "";
 	private String bookingURL = "";
@@ -75,6 +75,8 @@ public class HotelController {
 	private String checksum;
 	private Boolean verifiedChecksum;
 	private String[] responseParameters;
+	
+	private String bookingIdMain = "";
 	
 	HotelHistory history = new HotelHistory();
 	
@@ -94,8 +96,13 @@ public class HotelController {
 			@RequestParam(name = "checkOutDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date checkOutDate, 
 			@RequestParam(name = "noOfAdults", required = false) Integer noOfAdults,
 			@RequestParam(name = "noOfChildren", required = false) Integer noOfChildren,
-			@RequestParam(name = "noOfRooms", required = false) Integer noOfRooms) {
-		
+			@RequestParam(name = "noOfAdultsTwo", required = false) Integer noOfAdultsTwo,
+			@RequestParam(name = "noOfChildrenTwo", required = false) Integer noOfChildrenTwo,
+			@RequestParam(name = "noOfRooms", required = false) Integer noOfRooms,
+			@RequestParam(name = "noOfRoomsTwo", required = false) Integer noOfRoomsTwo) {
+		if (noOfRoomsTwo == null) {
+			noOfRoomsTwo = 0;
+		}
 		TBOCity city = tboRepo.getCityByCityName(hotelCity);
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -104,37 +111,61 @@ public class HotelController {
 			Customer customer = customerService.getByPhone(email);	
 			HotelHistory newHistory = new HotelHistory();
 
-			newHistory = new HotelHistory();
+			if (noOfRoomsTwo != 0) {
+				newHistory.setNoOfRooms(noOfRoomsTwo.toString());
+			} else {
+				newHistory.setNoOfRooms(noOfRooms.toString());
+			}
+			if (noOfAdultsTwo == null) {
+				noOfAdultsTwo = 0;
+			}
+			if (noOfChildrenTwo == null) {
+				noOfChildrenTwo = 0;
+			}
+			
+			Integer tot = noOfAdultsTwo + noOfAdults;
+			newHistory.setNoOfAdults(tot.toString());
+			
+			Integer totCh = noOfChildrenTwo + noOfChildren;
+			newHistory.setNoOfChild(totCh.toString());
+			
 			newHistory.setCheckInDate(checkInDate);
 			newHistory.setCheckOutDate(checkOutDate);
 			newHistory.setChildrenAge(null);
 			newHistory.setCityId(city.getCityId().toString());
 			newHistory.setCountryCode(city.getCountryCode());
 			newHistory.setNearBySearchAllowed(false);
-			newHistory.setNoOfAdults(noOfAdults.toString());
-			newHistory.setNoOfChild(noOfChildren.toString());
-			newHistory.setNoOfRooms(noOfRooms.toString());
 			newHistory.setCustomer(customer);
 			
+			history = new HotelHistory();
 			history = hotelService.saveHotelHistory(newHistory, customer);
 			
 		} else {
 			
 		}
-		searchURL = "/hotel/search_" + hotelCity + "_" + dateFormat.format(checkInDate) + "_" + dateFormat.format(checkOutDate) + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms;
+
+		if (noOfRoomsTwo != 0) {
+			searchURL = "/hotel/search_" + hotelCity + "_" + dateFormat.format(checkInDate) + "_" + dateFormat.format(checkOutDate) + "_" + noOfAdults + "_" + noOfChildren + "_" 
+						+ noOfRoomsTwo + "_" + noOfAdultsTwo + "_" + noOfChildrenTwo;
+		} else {
+			searchURL = "/hotel/search_" + hotelCity + "_" + dateFormat.format(checkInDate) + "_" + dateFormat.format(checkOutDate) + "_" + noOfAdults + "_" + noOfChildren + "_" + noOfRooms
+						+ "_" + 0 + "_" + 0;
+		}
 		
 		return "redirect:/hotel_loading...";
 	}
 
-	@GetMapping("/hotel/search_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}")
+	@GetMapping("/hotel/search_{hotelCity}_{checkInDate}_{checkOutDate}_{noOfAdults}_{noOfChildren}_{noOfRooms}_{noOfAdultsTwo}_{noOfChildrenTwo}")
 	public String viewHotelSearchResult(Model model, 
 			@PathVariable(name = "hotelCity") String hotelCity,
 			@PathVariable(name = "checkInDate") String checkInDate,
 			@PathVariable(name = "checkOutDate") String checkOutDate,
 			@PathVariable(name = "noOfAdults") String noOfAdults,
 			@PathVariable(name = "noOfChildren") String noOfChildren,
+			@PathVariable(name = "noOfAdultsTwo") String noOfAdultsTwo,
+			@PathVariable(name = "noOfChildrenTwo") String noOfChildrenTwo,
 			@PathVariable(name = "noOfRooms") String noOfRooms) throws Exception {
-
+		
 		TBOCity city = tboRepo.getCityByCityName(hotelCity);
 		cityFinder(model);
 		hotels = new ArrayList<Hotel>();
@@ -144,7 +175,53 @@ public class HotelController {
 		
 		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
 		
-		Integer[] arrChildrenAge = null; 
+		Integer noOfCh = Integer.parseInt(noOfChildren);
+		Integer noOfroom = Integer.parseInt(noOfRooms);
+		Integer noOfadult = Integer.parseInt(noOfAdults);
+		Integer noOfCh2 = Integer.parseInt(noOfChildrenTwo);
+		Integer noOfadult2 = Integer.parseInt(noOfAdultsTwo);
+		
+		List<String> arrRoomGuest = new ArrayList<String>(); 
+		
+		for (int i = 0; i < noOfroom; i++) {
+			
+			if (i == 0) {
+				List<Integer> arrChildrenAge = new ArrayList<Integer>(); 
+				
+				for (int j = 0; j < noOfCh; j++) {
+					arrChildrenAge.add(11);
+				}
+				
+				String arrayChildAge = arrChildrenAge.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+				
+				String roomGuest = "{\r\n"
+						+ "      \"NoOfAdults\": " + noOfadult + ",\r\n"
+						+ "      \"NoOfChild\": " + noOfCh + ",\r\n"
+						+ "      \"ChildAge\": " + arrayChildAge + "\r\n"
+						+ "    }";
+				
+				arrRoomGuest.add(roomGuest);
+			} else {
+				List<Integer> arrChildrenAge = new ArrayList<Integer>(); 
+
+				for (int j = 0; j < noOfCh2; j++) {
+					arrChildrenAge.add(11);
+				}
+				
+				String arrayChildAge = arrChildrenAge.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+				
+				String roomGuest = "{\r\n"
+						+ "      \"NoOfAdults\": " + noOfadult2 + ",\r\n"
+						+ "      \"NoOfChild\": " + noOfCh2 + ",\r\n"
+						+ "      \"ChildAge\": " + arrayChildAge + "\r\n"
+						+ "    }";
+				
+				arrRoomGuest.add(roomGuest);
+			}
+		
+		}
+		
+		String arrayRoomGuest = arrRoomGuest.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 				
 		// Create URL object with the API end-point
         URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/");
@@ -154,10 +231,8 @@ public class HotelController {
        
         StringBuilder responseBodySearch = new StringBuilder();
        
-		onlineHotelService.apiOnlineSearchHotel(connectionSearch, responseBodySearch, city.getCityId().toString(), noNights.toString(), noOfRooms, city.getCountryCode(), 
-				Integer.parseInt(noOfAdults), Integer.parseInt(noOfChildren), checkIn, arrChildrenAge);
+		onlineHotelService.apiOnlineSearchHotel(connectionSearch, responseBodySearch, city.getCityId().toString(), noNights.toString(), noOfRooms, city.getCountryCode(), checkIn, arrayRoomGuest);
 		
-
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
         logService.generateLog(jsonObjSearch.toString());
@@ -168,6 +243,7 @@ public class HotelController {
 			onlineHotelService.traceId = jsonObjSearch.getJSONObject("HotelSearchResult").get("TraceId").toString();
 			
 			for (int i = 0; i < jsonArrays.length(); i++) {
+				List<HotelSupplierCode> hotelSupplierCodes = new ArrayList<HotelSupplierCode>();
 			    mainObj.put("Hotel-" + i, jsonArrays.getJSONObject(i));
 			    
 			    String hotelCode = mainObj.getJSONObject("Hotel-" + i).get("HotelCode").toString();
@@ -199,10 +275,30 @@ public class HotelController {
 			    double agentMarkUp = Double.parseDouble(mainObj.getJSONObject("Hotel-" + i).getJSONObject("Price").get("AgentMarkUp").toString());
 			    double serviceTax = Double.parseDouble(mainObj.getJSONObject("Hotel-" + i).getJSONObject("Price").get("ServiceTax").toString());
 			    double tds = Double.parseDouble(mainObj.getJSONObject("Hotel-" + i).getJSONObject("Price").get("TDS").toString());
+
+			    try {
+					JSONArray hotelSupplier = mainObj.getJSONObject("Hotel-" + i).getJSONArray("SupplierHotelCodes");
+					for (int j = 0; j < hotelSupplier.length(); j++) {
+						Integer categoryIndex= Integer.parseInt(hotelSupplier.getJSONObject(j).get("CategoryIndex").toString());
+						String categoryId = hotelSupplier.getJSONObject(j).get("CategoryId").toString();
+						
+						HotelSupplierCode hotelSupplierCode = new HotelSupplierCode();
+						hotelSupplierCode.setCategoryId(categoryId);
+						hotelSupplierCode.setCategoryIndex(categoryIndex);
+						
+						System.out.println("Category Id: " + hotelSupplierCode.getCategoryId());
+						System.out.println("Category Index: " + hotelSupplierCode.getCategoryIndex());
+						
+						hotelSupplierCodes.add(hotelSupplierCode);
+					}
+				} catch (Exception e) {
+//					e.printStackTrace();
+				}
+			    
 			    
 			    Hotel newHotel = new Hotel(hotelCode, resultIndex, hotelName, hotelCategory, starRating, hotelDescription, hotelPromotion, hotelPolicy, hotelPicture, hotelAddress, 
 			    		hotelContactNo, hotelMap, latitude, longitude, hotelLocation, roomPrice, tax, extraGuestCharge, childCharge, discount, publishedPrice, otherCharges, offeredPrice, 
-			    		publishedPriceRoundedOff, offeredPriceRoundedOff, agentCommission, agentMarkUp, serviceTax, tds);
+			    		publishedPriceRoundedOff, offeredPriceRoundedOff, agentCommission, agentMarkUp, serviceTax, tds, hotelSupplierCodes);
 			    
 			    hotels.add(newHotel);
 			}
@@ -215,18 +311,21 @@ public class HotelController {
 			e.printStackTrace();
 		}
         
-        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
+        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren) + Integer.parseInt(noOfAdultsTwo) + Integer.parseInt(noOfChildrenTwo);
+        Integer adultCount = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfAdultsTwo);
+        Integer childCount = Integer.parseInt(noOfChildren) + Integer.parseInt(noOfChildrenTwo);
         
 		model.addAttribute("hotelCity", hotelCity);
 		model.addAttribute("checkIn", checkIn);
 		model.addAttribute("checkInDate", checkInDate);
 		model.addAttribute("checkOutDate", checkOutDate);
 		model.addAttribute("totalGuests", totalGuests);
-		model.addAttribute("noOfAdults", noOfAdults);
-		model.addAttribute("noOfChildren", noOfChildren);
+		model.addAttribute("noOfAdults", adultCount);
+		model.addAttribute("noOfChildren", childCount);
 		model.addAttribute("noOfRooms", noOfRooms);
 		model.addAttribute("noNights", noNights);
 		model.addAttribute("hotelList", hotels);
+		
 		return "hotel/search/hotel-search-result";
 	}
 
@@ -250,6 +349,7 @@ public class HotelController {
 			@PathVariable(name = "hotel_id") Integer hotel_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
 
+		Hotel hotel = hotelService.findByIdHotel(hotel_id);
         hotelRooms = new ArrayList<HotelRoom>();
         hotelGuests =  new ArrayList<HotelGuest>();
         Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
@@ -258,20 +358,16 @@ public class HotelController {
 	    Date checkIn = dateFormat.parse(checkInDate);
 	    
 	    HotelHistory hotelHistory = hotelService.findByIdHistory(history_id);
-//	    Hotel savedHotel = hotelService.findByIdHotel(hotel_id);
-	    
-	    for (Hotel hotel : hotels) {
-			if (hotel.getResultIndex() == Integer.parseInt(resultIndex)) {
-				
-			}
+	   
+	    String categoryId = "";
+	    if (hotel.getHotelSupplierCodes().stream().findFirst().get().getCategoryId() != null) {
+	    	categoryId = hotel.getHotelSupplierCodes().stream().findFirst().get().getCategoryId();
 		}
-	    
-		hotelInfoMethod(model, resultIndex, hotelCode);
+		hotelInfoMethod(model, resultIndex, hotelCode, categoryId);
 		hotelRoomsMethod(model, resultIndex, hotelCode);
 		
         Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
 		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
-		
 		
         
 		model.addAttribute("hotelCity", hotelCity);
@@ -368,6 +464,9 @@ public class HotelController {
 						}
 						
 						System.out.println("Guest lead: " + guest.isLeadPassenger());
+					} else {
+						guest.setLeadPassenger(false);
+						hotelService.saveGuest(guest);
 					}
 				}
 			}
@@ -394,7 +493,7 @@ public class HotelController {
 		
 		Hotel hotel = hotelService.findByIdHotel(hotel_id);
 	    HotelHistory hotelHistory = hotelService.findByIdHistory(search_id);
-		TBOCity city = tboCityRepository.getCityByCityId(Integer.parseInt(hotelHistory.getCityId()));
+		TBOCity city = tboRepo.getCityByCityId(Integer.parseInt(hotelHistory.getCityId()));
 	    Date createdDate = new Date();
 	    
 	    String hotelOrdername = hotelHistory.getCheckInDate() + "-" + hotelHistory.getCheckOutDate() + ":(" + city.getDestination() + "):" + createdDate;
@@ -402,8 +501,14 @@ public class HotelController {
 	    HotelOrder hotelOrder = new HotelOrder(hotelOrdername, createdDate, OrderStatus.NEW, customer, hotelHistory, hotel);
 		
 	    HotelOrder savedOrder= hotelService.saveOrder(hotelOrder);
-	    
-		hotelBlockMethod(model, hotel.getResultIndex().toString(), hotel.getHotelCode(), hotel.getHotelName(), hotelHistory.getNoOfRooms(), hotel);
+
+	    String categoryId = "";
+		try {
+			categoryId = hotel.getHotelSupplierCodes().stream().findFirst().get().getCategoryId();
+		} catch (Exception e) {
+			categoryId = "";
+		}
+		hotelBlockMethod(model, hotel.getResultIndex().toString(), hotel.getHotelCode(), hotel.getHotelName(), hotelHistory.getNoOfRooms(), hotel, categoryId);
 
 		String[] checkInArr = hotelHistory.getCheckInDate().toString().split(" ");
 		String[] checkOutArr = hotelHistory.getCheckOutDate().toString().split(" ");
@@ -477,7 +582,6 @@ public class HotelController {
         return "loading/loading";
     }
 	
-	
 	@PostMapping("/hotel/previousSearchPage")
 	public String previousPageSearch(
 			@RequestParam(name = "history_id", required = false) Integer history_id) {
@@ -530,15 +634,23 @@ public class HotelController {
 		model.addAttribute("orderId", order.getId());
 		model.addAttribute("order", order);
 		  
-	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	    String checkIn = dateFormat.format(order.getHotelHistory().getCheckInDate());
-	    String checkOut = dateFormat.format(order.getHotelHistory().getCheckOutDate());
+//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//	    String checkIn = dateFormat.format(order.getHotelHistory().getCheckInDate());
+//	    String checkOut = dateFormat.format(order.getHotelHistory().getCheckOutDate());
 	    
-		Integer noOfNights = noOfNightsMethod(checkIn, checkOut);
+		//Integer noOfNights = noOfNightsMethod(checkIn, checkOut);
+		String rommCOunt = "" + order.getHotel().getHotelRooms().size();
 		
 		String[] hasErrorArr = new String[2];
+		String categoryId = "";
+		try {
+			categoryId = order.getHotel().getHotelSupplierCodes().stream().findFirst().get().getCategoryId();
+		} catch (Exception e) {
+			categoryId = "";
+		}
+		hasErrorArr = hotelBookMethod(model, order.getHotel().getResultIndex().toString(), order.getHotel().getHotelCode(), order.getHotel().getHotelName(), rommCOunt, order.getHotel(), categoryId);
 		
-		hasErrorArr = hotelBookMethod(model, order.getHotel().getResultIndex().toString(), order.getHotel().getHotelCode(), order.getHotel().getHotelName(), noOfNights.toString(), order.getHotel());
+		hotelGetBookingDetails(bookingIdMain);
 		
 		if (hasErrorArr[0].equals("0")) {
 			model.addAttribute("paymentSuccess", "Successfull");
@@ -627,9 +739,15 @@ public class HotelController {
 		model.addAttribute("orderId", order.getId());
 		
 		String[] hasErrorArr = new String[2];	
+		String categoryId = "";
+		try {
+			categoryId = order.getHotel().getHotelSupplierCodes().stream().findFirst().get().getCategoryId();
+		} catch (Exception e) {
+			categoryId = "";
+		}
+		hasErrorArr = hotelBookMethod(model, order.getHotel().getResultIndex().toString(), order.getHotel().getHotelCode(), order.getHotel().getHotelName(), noOfNights.toString(), order.getHotel(), categoryId);
 		
-		hasErrorArr = hotelBookMethod(model, order.getHotel().getResultIndex().toString(), order.getHotel().getHotelCode(), order.getHotel().getHotelName(), noOfNights.toString(), order.getHotel());
-		
+		hotelGetBookingDetails(bookingIdMain);
 		
 		if (parameter[9].contains("Not Found") && parameter[10].contains("unknown") ) {
 			model.addAttribute("paymentCancelled", parameter[12]);
@@ -673,7 +791,24 @@ public class HotelController {
 
 	// private methods
 	
-	private void hotelBlockMethod(Model model, String resultIndex, String hotelCode, String hotelName, String noOfRooms,  Hotel hotel) 
+	private void hotelGetBookingDetails(String bookingId) throws MalformedURLException, IOException  {
+
+		// Create URL object with the API end-point
+        URL urlHotelGetBooking = new URL("http://api.tektravels.com/BookingEngineService_Hotel/HotelService.svc/rest/GetBookingDetail");
+
+        // Open a connection
+        HttpURLConnection connectionHotelGetBooking = (HttpURLConnection) urlHotelGetBooking.openConnection();
+       
+        StringBuilder responseBodyHotelGetBooking = new StringBuilder();
+        
+        onlineHotelService.apiOnlineHotelGetBookingDetails(connectionHotelGetBooking, responseBodyHotelGetBooking, bookingId);
+	
+        JSONObject jsonObjBlock = new JSONObject(responseBodyHotelGetBooking.toString());
+        System.out.println(jsonObjBlock);
+        logService.generateLog(jsonObjBlock.toString());
+	}
+	
+	private void hotelBlockMethod(Model model, String resultIndex, String hotelCode, String hotelName, String noOfRooms,  Hotel hotel, String categoryId) 
 			throws MalformedURLException, IOException {
 		
 		List<String> strRooms = new ArrayList<String>();
@@ -721,7 +856,7 @@ public class HotelController {
        
         StringBuilder responseBodyHotelBlock = new StringBuilder();
         
-        onlineHotelService.apiOnlineHotelBlockRoom(connectionHotelBlock, responseBodyHotelBlock, resultIndex, hotelCode, hotelName, noOfRooms, arrayRoom);
+        onlineHotelService.apiOnlineHotelBlockRoom(connectionHotelBlock, responseBodyHotelBlock, resultIndex, hotelCode, hotelName, noOfRooms, arrayRoom, categoryId);
 	
         JSONObject jsonObjBlock = new JSONObject(responseBodyHotelBlock.toString());
         System.out.println(jsonObjBlock);
@@ -906,7 +1041,7 @@ public class HotelController {
 		}
 	}
 
-	private String[] hotelBookMethod(Model model, String resultIndex, String hotelCode, String hotelName, String noOfRooms,  Hotel hotel) 
+	private String[] hotelBookMethod(Model model, String resultIndex, String hotelCode, String hotelName, String noOfRooms,  Hotel hotel, String categoryId) 
 			throws MalformedURLException, IOException {
 		
 		List<String> strRooms = new ArrayList<String>();
@@ -982,7 +1117,7 @@ public class HotelController {
        
         StringBuilder responseBodyHotelBook = new StringBuilder();
         
-        onlineHotelService.apiOnlineHotelBlockRoom(connectionHotelBook, responseBodyHotelBook, resultIndex, hotelCode, hotelName, noOfRooms, arrayRoom);
+        onlineHotelService.apiOnlineHotelBook(connectionHotelBook, responseBodyHotelBook, resultIndex, hotelCode, hotelName, noOfRooms, arrayRoom, categoryId);
 	
         JSONObject jsonObjBook = new JSONObject(responseBodyHotelBook.toString());
         System.out.println(jsonObjBook);
@@ -999,6 +1134,7 @@ public class HotelController {
         	String bookingId = jsonObj.get("BookingId").toString();
         	String isPriceChanged = jsonObj.get("IsPriceChanged").toString();
         	String isCancellationPolicyChanged = jsonObj.get("IsCancellationPolicyChanged").toString();
+        	bookingIdMain = bookingId;
         	
         	model.addAttribute("hotelBookingStatus", hotelBookingStatus);
         	model.addAttribute("confirmationNo", confirmationNo);
@@ -1184,7 +1320,7 @@ public class HotelController {
 		return noNights;
 	}
 	
-	private void hotelInfoMethod(Model model, String resultIndex, String hotelCode)
+	private void hotelInfoMethod(Model model, String resultIndex, String hotelCode, String categoryId)
 			throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
         URL urlHotelInfo = new URL("http://api.tektravels.com/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelInfo");
@@ -1194,7 +1330,7 @@ public class HotelController {
        
         StringBuilder responseBodyHotelInfo = new StringBuilder();
         
-        onlineHotelService.apiOnlineHotelInfo(connectionHotelInfo, responseBodyHotelInfo, resultIndex, hotelCode);
+        onlineHotelService.apiOnlineHotelInfo(connectionHotelInfo, responseBodyHotelInfo, resultIndex, hotelCode, categoryId);
 	
         JSONObject jsonObjSearch = new JSONObject(responseBodyHotelInfo.toString());
         System.out.println(jsonObjSearch);
@@ -1248,7 +1384,6 @@ public class HotelController {
 			model.addAttribute("hotelImages", imageHo);
 			model.addAttribute("facilities", facilities);
 			model.addAttribute("tours", tours);
-			model.addAttribute("hotelCode", jsonObj.get("HotelCode").toString());
 			model.addAttribute("hotelName", jsonObj.get("HotelName").toString());
 			model.addAttribute("starRating", jsonObj.get("StarRating").toString());
 			model.addAttribute("description", jsonObj.get("Description").toString());
@@ -1267,6 +1402,12 @@ public class HotelController {
 			model.addAttribute("roomFacilities", jsonObj.get("RoomFacilities").toString());
 			model.addAttribute("services", jsonObj.get("Services").toString());
 			
+			try {
+				model.addAttribute("hotelCode", jsonObj.get("HotelCode").toString());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1282,7 +1423,7 @@ public class HotelController {
        
         StringBuilder responseBodyHotelRoom = new StringBuilder();
         
-        onlineHotelService.apiOnlineHotelInfo(connectionHotelRoom, responseBodyHotelRoom, resultIndex, hotelCode);
+        onlineHotelService.apiOnlineHotelRoom(connectionHotelRoom, responseBodyHotelRoom, resultIndex, hotelCode);
 	
         JSONObject jsonObjSearch = new JSONObject(responseBodyHotelRoom.toString());
         System.out.println(jsonObjSearch);

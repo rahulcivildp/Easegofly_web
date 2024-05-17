@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:fragment="bus-search">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+</head>
+<style>
+	.ripple-effect {
+	  position: relative;
+	  overflow: hidden;
+	  -webkit-transform: translate3d(0, 0, 0);
+	}
+	
+	.btn-stle {
+	  padding: 8px 20px;
+	  border-radius: 8px !important;
+	  color: green;
+	  border: 2px solid green;;
+	}
+	.btn-stle:hover{
+		color: white;
+	}
+	
+	.search-div {
+		border-radius: 12px;
+		border-color: rgb(28,28,28);
+		box-shadow: 0px 3px 7px 2px rgb(123 123 123);
+		padding: 15px;
+		 margin: 10px 15px; 
+		 background: white;
+	}
+
+</style>
+
+<body>
+        <div class="search-div">
+			<form method="post" th:action="@{/bus/saveSearchBus}">
+            <div class="row justify-content-between align-items-center">
+                <div class="col col-md-3 col-sm-3 col-lg-3 col-6">
+                    <div class="form-floating"><input type="text" class="form-control" name="busDeparture" placeholder="HGsOFT" id="busDeparture"><label class="form-label" for="floatingInput" required>Departure</label></div>
+                </div>
+                <div class="col col-md-3 col-sm-3 col-lg-3 col-6">
+                    <div class="form-floating"><input type="text" class="form-control" name="busDestination" placeholder="HGsOFT" id="busDestination"><label class="form-label" for="floatingInput" required>Destination</label></div>
+                </div>
+                <div class="col col-md-3 col-sm-3 col-lg-3 col-12">
+					<div class="form-floating" id="aligner3" style="padding: 10px 0;">
+						<input type="text" class="form-control hill1 input_styles" name="deptTime" id="checkInDate" th:placeholder="${#dates.format(today, 'dd MMMM, yy')}" 
+						onfocus="(this.type='date')" onblur="(this.type='text')" onclick="calenderViewNew(this)" required>
+						
+						<label class="labelStyle labelSetting" for="checkInDate">
+							Dept-Time</label>
+					</div>
+				</div>
+                <div class="col col-md-3 col-sm-3 col-lg-3 col-12">
+                    <div>
+                        <div class="text-center"><button class="btn btn-success btn-lg rounded-0 ripple-effect btn-stle" type="submit">Submit</button></div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    <script th:src="@{js/Button-Ripple-Effect-Animation-Wave-Pulse-button-ripple-effect.js}"></script>
+</body>
+<script>
+		function calenderViewNew(input) {
+			var today = new Date().toISOString().split('T')[0];
+			$(input).attr('min', today);
+		};
+		
+	</script>
+	<script th:inline="javascript">
+		var cityNames = [[${cityList}]];
+		var cityIds = [[${cityIds}]];
+		
+		var myInput = document.getElementById("busDeparture");
+		var myInputDestin = document.getElementById("busDestination");
+	</script>
+<script type="text/javascript" th:src="@{js/busCityAuto.js}"></script>
+</html>

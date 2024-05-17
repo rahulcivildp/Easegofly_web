@@ -70,10 +70,10 @@ body {
     }
     .style_container {
 	    max-width: 100% !important;
-	    padding: 10px !important;
+	    padding: 10px;
 	    background: white;
-	    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
 	    border-radius: 0 10px 10px 10px;
+	    border: 1px solid #e2e2e2;
     }
     .content .content-overlay {
       background: rgba(0,0,0,0.7);
@@ -434,22 +434,22 @@ body {
         
 	    .style_container {
 		    background: white;
-		    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
 		    border-radius: 0;
+		    border: none !important;
 	    }
 	    .ad_Offers {
-			padding-top: 10px;
+			padding-top: 5px;
 			background: #dddddd;
 			height: auto !important;
 			margin: 0 !important;
 		}
 		.popular_destinations {
-			padding-top: 10px;
+			padding-top: 5px;
 			background: #dddddd;
 			margin-bottom: 0 !important;
 		}
 		.get_inspiratio {
-			padding-top: 10px;
+			padding-top: 5px;
 			background: #dddddd;
 			padding-bottom: 0 !important;
 		}
@@ -484,13 +484,13 @@ body {
     .folder_style {
 	    background: white;
 	    padding-bottom: 15px;
-	    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
 	    -webkit-border-top-left-radius: 10px;
 		-webkit-border-top-right-radius: 10px;
 		-moz-border-radius-topleft: 10px;
 		-moz-border-radius-topright: 10px;
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
+		text-shadow: 2px 2px 5px #b7b7b7;
     }
     .headerStyle {
     	margin-left: 10px !important;
@@ -606,8 +606,8 @@ body {
 		}
 </style>
 
-<body th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
-<div style="background-color: #00000047;" id="middleSection" class="paddingForMiddleSection">
+<body>
+<div style="background-color: white;" id="middleSection" class="paddingForMiddleSection">
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
@@ -758,8 +758,8 @@ body {
 	
 <!-- Set Offers -->
 <div id="setOfferDeals" class="text-center dealsOffer media-hide" style=" margin-bottom: 20px; position: relative;">  
-    <div class="container style_container">
-    <h2>Get Today's Top Deals</h2>
+    <div class="container style_container" style="padding: 20px 10px;">
+    <h3>Get Today's Top Deals</h3>
     <p>Save your money with our best offers</p>
     <div class="deal_custom">
         <div class="row deal_custom_row">
@@ -816,7 +816,7 @@ body {
 <!-- Fare Finder -->
 <div class="fare_finder">
 		<div class="media-hide" style="width: 80%; margin: 0 auto;">
-	    	<div class="tab folder_style col-sm-3" ><h2 class="headerStyle">Lowest Fare Finder</h2></div>
+	    	<div class="tab folder_style col-sm-3" ><h3 class="headerStyle">Lowest Fare Finder</h3></div>
 		</div>
         <div class="lowest_fare">
         <div class="container style_container " style="padding: 20px !important;">
@@ -1262,17 +1262,17 @@ body {
 <!-- Ad Offers -->
 <div class="ad_Offers" style="margin: 28px 0;">
 	<div class="media-hide"  style="width: 80%; margin: 0 auto;">
-    	<div class="tab folder_style col-sm-3"><h2 style="box-shadow: none !important;">Exclusive Deals</h2></div>
+    	<div class="tab folder_style col-sm-3"><h3 style="margin-left: 20px;">Exclusive Deals</h3></div>
 	</div>
-    <div id="carouselExampleIndicators" class="carousel slide style_container" data-bs-ride="carousel" style="background: white;">
-	   <h2 class="media_status" style="padding: 10px 0 5px 0; font-size: 18px;">Exclusive Deals</h2>
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="background: white;">
+	   <h2 class="media_status" style="padding: 10px 0 5px 10px; font-size: 18px;">Exclusive Deals</h2>
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
   </div>
-  <div class="carousel-inner carousel_inners" style="padding: 0 10px 10px !important;">
-    <div class="carousel-item active " data-interval="4000" style="padding: 15px 15px;">
+  <div class="carousel-inner carousel_inners" style="padding: 0 0 5px !important;">
+    <div class="carousel-item active style_container" data-interval="4000" style="padding: 20px 15px;">
         
         <div class="row">
 	    	<div class="col-md-3 col-6">
@@ -1335,7 +1335,7 @@ body {
         
     </div>
       
-    <div class="carousel-item " data-interval="4000" style="padding: 15px 15px;">
+    <div class="carousel-item style_container" data-interval="4000" style="padding: 20px 15px;">
       <div class="row">
 	    	<div class="col-md-3 col-6">
 	            <div class="cards">
@@ -1395,7 +1395,7 @@ body {
 	        </div>
     	</div>
     </div>
-    <div class="carousel-item " data-interval="4000" style="padding: 15px 15px;">
+    <div class="carousel-item style_container" data-interval="4000" style="padding: 20px 15px;">
     	<div class="row">
 	    	<div class="col-md-3 col-6">
 	            <div class="cards">
@@ -1483,13 +1483,13 @@ body {
 <!-- Super Offers -->
 <div class="popular_destinations" style="margin-bottom: 30px;">
 	<div  class="media-hide" style="width: 80%; margin: 0 auto;">
-	    <div class="tab folder_style col-sm-3" ><h2 class="headerStyle">Popular <span>Destinations</span></h2></div>
+	    <div class="tab folder_style col-sm-3" ><h3 class="headerStyle">Popular <span>Destinations</span></h3></div>
 	</div>
     <div class="container" id="destinationDiv">
 		<div class="style_container">
 			
 	   <h2 class="media_status" style="padding: 10px 0 5px 10px; font-size: 18px;">Destinations</h2>
-        <div class="row">
+        <div class="row" style="padding-bottom: 12px;">
 	        <span class="choose_your">
 	             
 	        </span>
@@ -1540,7 +1540,7 @@ body {
 	        			
 	        		</div>
 	        	</div>
-	        	<div class="row">
+	        	<div class="row media-hide">
 	        		<div class="col-6" style="margin: 10px 0;">
 	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
 	        				<a style="cursor: pointer;" th:href="@{/shimla_view}">
@@ -1583,7 +1583,7 @@ body {
 <!-- Get Inspiration -->
 <div class="get_inspiratio" style="padding-bottom: 100px;">
 	<div  class="media-hide" style="width: 80%; margin: 0 auto;">
-	    <div class="tab folder_style col-sm-4 "><h2 class="headerStyle font_resizerer">Get inspiration <span>for your next trip</span></h2></div>
+	    <div class="tab folder_style col-sm-4 "><h3 class="headerStyle font_resizerer">Get inspiration <span>for your next trip</span></h3></div>
 	</div>
       <div class="container style_container" style="padding: 20px 10px !important;">
 	   	<h2 class="media_status" style="padding: 0px 0 5px 10px; font-size: 18px;">Get inspiration</h2>

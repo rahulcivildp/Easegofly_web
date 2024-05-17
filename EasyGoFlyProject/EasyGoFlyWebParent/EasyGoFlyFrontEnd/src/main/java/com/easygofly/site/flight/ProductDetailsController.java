@@ -466,6 +466,8 @@ public class ProductDetailsController {
 		if (flight.getMode().equals("Online-data")) {
         	/* Fare-rule details */
         	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
+        	/* Fare-rule details */
+//        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
             // Open a connection
             HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
             
@@ -548,77 +550,84 @@ public class ProductDetailsController {
 			return LastItem;
 			
 		} catch (Exception e) {
-			for (ProductDetail flightOnline : listProductDetailsOnline) {
-				if (flightOnline.getId() == flightId) {
-					if (flightOnline.getMode() == "Online-data") {
-						flight = new ProductDetail(flightOnline.getPnr(), flightOnline.getTotalSeats(), flightOnline.getUploadSeats(), flightOnline.getFlightNum(), flightOnline.getDate(), 
-								flightOnline.getDepTime(), flightOnline.getArrTime(), flightOnline.getPriceADT(), flightOnline.getPriceINF(), flightOnline.getMarkupADT(), flightOnline.getMarkupINF(), 
-								flightOnline.getCityOne(), flightOnline.getCityTwo(), flightOnline.isInStock(), flightOnline.isEnabled(), flightOnline.getStopNum(), flightOnline.getDuration(), 
-								flightOnline.getBrand(), flightOnline.getDepTimeInteger(), flightOnline.getArrTimeInteger(), flightOnline.getTraceId(), flightOnline.getResultIndex(), flightOnline.getAirlineRemarks(), 
-								flightOnline.getMode(), flightOnline.getJourneyClass(), flightOnline.getTerminalDep(), flightOnline.getTerminalArr(), flightOnline.getBaggage(), flightOnline.getCabinBaggage(), 
-								flightOnline.getDevice(), flightOnline.getDeviceDescription(), null, flightOnline.getCraftType());
-						
-						ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
-						
-						String modeOnline = "Online-data";
-						ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
-						
-						newFlightOnline.addBooking(customer);
-						productService.saveCartItem(newFlightOnline);
-						
-						ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
-						List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
-						for (CartItem cartItem : savedCartItemProductOnline) {
-							cartItem.setCartMode("online");
-							cartRepo.save(cartItem);
-						}
-						CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
-						float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
-						float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
-						double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
-						
-						cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
-						searchService.updateSearchHistory(search, LastItemOnline);
-						
-						return LastItemOnline;
-					} else if (flightOnline.getMode() == "AirIQ") {
+			try {
+				for (ProductDetail flightOnline : listProductDetailsOnline) {
+					if (flightOnline.getId() == flightId) {
+						if (flightOnline.getMode() == "Online-data") {
+							flight = new ProductDetail(flightOnline.getPnr(), flightOnline.getTotalSeats(), flightOnline.getUploadSeats(), flightOnline.getFlightNum(), flightOnline.getDate(), 
+									flightOnline.getDepTime(), flightOnline.getArrTime(), flightOnline.getPriceADT(), flightOnline.getPriceINF(), flightOnline.getMarkupADT(), flightOnline.getMarkupINF(), 
+									flightOnline.getCityOne(), flightOnline.getCityTwo(), flightOnline.isInStock(), flightOnline.isEnabled(), flightOnline.getStopNum(), flightOnline.getDuration(), 
+									flightOnline.getBrand(), flightOnline.getDepTimeInteger(), flightOnline.getArrTimeInteger(), flightOnline.getTraceId(), flightOnline.getResultIndex(), flightOnline.getAirlineRemarks(), 
+									flightOnline.getMode(), flightOnline.getJourneyClass(), flightOnline.getTerminalDep(), flightOnline.getTerminalArr(), flightOnline.getBaggage(), flightOnline.getCabinBaggage(), 
+									flightOnline.getDevice(), flightOnline.getDeviceDescription(), null, flightOnline.getCraftType());
+							
+							System.out.println("Result Index: " + flightOnline.getResultIndex());
+							
+							ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
+							
+							String modeOnline = "Online-data";
+							ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+							
+							newFlightOnline.addBooking(customer);
+							productService.saveCartItem(newFlightOnline);
+							
+							ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+							List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+							for (CartItem cartItem : savedCartItemProductOnline) {
+								cartItem.setCartMode("online");
+								cartRepo.save(cartItem);
+							}
+							CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+							float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+							float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+							double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+							
+							cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+							searchService.updateSearchHistory(search, LastItemOnline);
+							
+							return LastItemOnline;
+						} else if (flightOnline.getMode() == "AirIQ") {
 
-						flight = new ProductDetail(flightOnline.getPnr(), flightOnline.getTotalSeats(), flightOnline.getUploadSeats(), flightOnline.getFlightNum(), flightOnline.getDate(), 
-								flightOnline.getDepTime(), flightOnline.getArrTime(), flightOnline.getPriceADT(), flightOnline.getPriceINF(), flightOnline.getMarkupADT(), flightOnline.getMarkupINF(), 
-								flightOnline.getCityOne(), flightOnline.getCityTwo(), flightOnline.isInStock(), flightOnline.isEnabled(), flightOnline.getStopNum(), flightOnline.getDuration(), 
-								flightOnline.getBrand(), flightOnline.getDepTimeInteger(), flightOnline.getArrTimeInteger(), flightOnline.getTraceId(), flightOnline.getResultIndex(), flightOnline.getAirlineRemarks(), 
-								flightOnline.getMode(), flightOnline.getJourneyClass(), flightOnline.getTerminalDep(), flightOnline.getTerminalArr(), flightOnline.getBaggage(), flightOnline.getCabinBaggage(), 
-								flightOnline.getDevice(), flightOnline.getDeviceDescription(), null, flightOnline.getCraftType());
-						
-						flight.setId(0);
-						ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
-						
-						String modeOnline = "AirIQ";
-						ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
-						
-						newFlightOnline.addBooking(customer);
-						productService.saveCartItem(newFlightOnline);
-						
-						ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
-						List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
-						for (CartItem cartItem : savedCartItemProductOnline) {
-							cartItem.setCartMode("online");
-							cartRepo.save(cartItem);
+							flight = new ProductDetail(flightOnline.getPnr(), flightOnline.getTotalSeats(), flightOnline.getUploadSeats(), flightOnline.getFlightNum(), flightOnline.getDate(), 
+									flightOnline.getDepTime(), flightOnline.getArrTime(), flightOnline.getPriceADT(), flightOnline.getPriceINF(), flightOnline.getMarkupADT(), flightOnline.getMarkupINF(), 
+									flightOnline.getCityOne(), flightOnline.getCityTwo(), flightOnline.isInStock(), flightOnline.isEnabled(), flightOnline.getStopNum(), flightOnline.getDuration(), 
+									flightOnline.getBrand(), flightOnline.getDepTimeInteger(), flightOnline.getArrTimeInteger(), flightOnline.getTraceId(), flightOnline.getResultIndex(), flightOnline.getAirlineRemarks(), 
+									flightOnline.getMode(), flightOnline.getJourneyClass(), flightOnline.getTerminalDep(), flightOnline.getTerminalArr(), flightOnline.getBaggage(), flightOnline.getCabinBaggage(), 
+									flightOnline.getDevice(), flightOnline.getDeviceDescription(), null, flightOnline.getCraftType());
+							
+							flight.setId(0);
+							ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flight);
+							
+							String modeOnline = "AirIQ";
+							ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+							
+							newFlightOnline.addBooking(customer);
+							productService.saveCartItem(newFlightOnline);
+							
+							ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+							List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+							for (CartItem cartItem : savedCartItemProductOnline) {
+								cartItem.setCartMode("online");
+								cartRepo.save(cartItem);
+							}
+							CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+							float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+							float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+							double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+							
+							cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+							searchService.updateSearchHistory(search, LastItemOnline);
+							
+							return LastItemOnline;
+							
 						}
-						CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
-						float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
-						float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
-						double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
-						
-						cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
-						searchService.updateSearchHistory(search, LastItemOnline);
-						
-						return LastItemOnline;
 						
 					}
-					
 				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
+			
 		}
 		
 		return null;

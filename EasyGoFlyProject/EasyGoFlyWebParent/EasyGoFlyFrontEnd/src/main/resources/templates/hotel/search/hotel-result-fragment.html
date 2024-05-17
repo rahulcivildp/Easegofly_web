@@ -326,6 +326,19 @@
 							</div>
 							<div class="col-12" style="height: 15px;"></div>
 							<div class="col-12"><b>Amenities: </b><p style="color: forestgreen; font-size: 14px; margin: 0;"><i class="fa fa-solid fa-check"></i> Free Cancellation</p></div>
+							<div class="col-12" style="height: 15px;"></div>
+							<div class="col-12">
+								<div class="row">
+									<div class="col-md-6 col-12"><b>Hotel Supplier: </b></div>
+									<div class="col-md-6 col-12">
+										<th:block th:each="hotelSupplier : ${hotel.hotelSupplierCodes}">
+											<br>
+											<p style="margin: 0;">Category Id: [[${hotelSupplier.categoryId}]]</p>
+											<p>Category Index: [[${hotelSupplier.categoryIndex}]]</p>
+										</th:block>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

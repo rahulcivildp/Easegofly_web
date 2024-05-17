@@ -108,7 +108,7 @@
 					width: 100%;
 				}
 				body #mainHeroStyle #hero {
-					height: 42vh;
+					height: 55vh;
 				}
 			}
 			.autocomplete-active {
@@ -187,6 +187,10 @@
 			    justify-content: center;
 			    font-size: 18px;
 			}
+			
+			.over-flow {
+				overflow: unset !important;
+			}
 		</style>
 	</head>
 	<body>
@@ -263,7 +267,13 @@
 										</div>
 									  </button>
 									  <div class="dropdown-menu dropdown-menu-end dropMenuStyle" id="dropDownMenu">
-										  <div class="row" style="padding: 5px 20px;">
+										  <div class="row" style="padding: 5px 20px; overflow-y: scroll; height: 300px;">
+											  <div class="col-6 extraPadding"><b>Rooms</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decRoom"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input name="noOfRooms" class="inputStylePax" min="0" type="number" id="roomNum" value="1"></div>
+												  <div class="incrementStyle incStyle" id="incRoom"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
 											  <div class="col-6 extraPadding"><b>Adults</b></div>
 											  <div class="col-6 extraPadding dropDwonCountStyle">
 												  <div class="incrementStyle" id="decAdult"><i class="fa fa-solid fa-minus"></i></div>
@@ -276,13 +286,10 @@
 												  <div><input name="noOfChildren" class="inputStylePax" min="0" type="number" id="childNum" value="0"></div>
 												  <div class="incrementStyle" id="incChild"><i class="fa fa-solid fa-plus"></i></div>
 											   </div>
-											  <div class="col-6 extraPadding"><b>Rooms</b></div>
-											  <div class="col-6 extraPadding dropDwonCountStyle">
-												  <div class="incrementStyle" id="decRoom"><i class="fa fa-solid fa-minus"></i></div>
-												  <div><input name="noOfRooms" class="inputStylePax" min="0" type="number" id="roomNum" value="1"></div>
-												  <div class="incrementStyle" id="incRoom"><i class="fa fa-solid fa-plus"></i></div>
-											   </div>
 											  <div class="col-12 borderBottom"></div>
+											  <div class="col-12" >
+												  <div class="row" id="append2"></div>
+											  </div>
 											  <div class="col-6 centeredDiv"><button type="button" class="btn btn-secondary" style="width: 80%;" id="resetButton"><b>Reset</b></button></div>
 											  <div class="col-6 centeredDiv"><button type="button" class="btn btn-success" style="width: 80%;" id="applyButton"><b>Apply</b></button></div>
 										  </div>
@@ -299,8 +306,46 @@
 		</div>
 	</body>
 	<script>
+		htmlbody = `
+		  <div class="col-6 extraPadding"><b>Rooms</b></div>
+		  <div class="col-6 extraPadding dropDwonCountStyle">
+			  <div class="incrementStyle incStyle" id="decRoom2"><i class="fa fa-solid fa-minus"></i></div>
+			  <div><input name="noOfRoomsTwo" class="inputStylePax" min="0" type="number" id="roomNum2" value="2"></div>
+			  <div class="incrementStyle" id="incRoom2"><i class="fa fa-solid fa-plus"></i></div>
+		   </div>
+		  <div class="col-6 extraPadding"><b>Adults</b></div>
+		  <div class="col-6 extraPadding dropDwonCountStyle">
+			  <div class="incrementStyle" id="decAdult2"><i class="fa fa-solid fa-minus"></i></div>
+			  <div><input name="noOfAdultsTwo" class="inputStylePax" min="0" type="number" id="adultNum2" value="2"></div>
+			  <div class="incrementStyle" id="incAdult2"><i class="fa fa-solid fa-plus"></i></div>
+		   </div>
+		  <div class="col-6 extraPadding"><b>Children</b></div>
+		  <div class="col-6 extraPadding dropDwonCountStyle">
+			  <div class="incrementStyle" id="decChild2"><i class="fa fa-solid fa-minus"></i></div>
+			  <div><input name="noOfChildrenTwo" class="inputStylePax" min="0" type="number" id="childNum2" value="0"></div>
+			  <div class="incrementStyle" id="incChild2"><i class="fa fa-solid fa-plus"></i></div>
+		   </div>
+		  <div class="col-12 borderBottom"></div>
+		`;
+		
+		htmlbody2 = ``;
+		
+		$("#incRoom").click(function(){
+			$("#append2").html(htmlbody);
+			toggleNumberVal("#decAdult2", "#incAdult2", "#adultNum2");
+			toggleNumberVal("#decChild2", "#incChild2", "#childNum2");
+			
+			$("#decRoom2").click(function(){
+				$("#append2").html(htmlbody2);
+			});
+		});
+		
+		
+	</script>
+	<script>
 		$("#dropDwonButton").click(function(){
-			$("#dropDownMenu").toggleClass('displaySetting')
+			$("#dropDownMenu").toggleClass('displaySetting');
+			$("#mainHeroStyle").addClass('over-flow');
 		});
 		
 		$(document).mouseup(function(e) {
@@ -309,13 +354,13 @@
 		     // if the target of the click isn't the container nor a descendant of the container
 		    if (!container.is(e.target) && container.has(e.target).length === 0) {
 				$("#dropDownMenu").removeClass("displaySetting");
+				$("#mainHeroStyle").removeClass('over-flow');
 			}
 		});
 	</script>
 	<script>
 		toggleNumberVal("#decAdult", "#incAdult", "#adultNum");
 		toggleNumberVal("#decChild", "#incChild", "#childNum");
-		toggleNumberVal("#decRoom", "#incRoom", "#roomNum");
 		
 		function toggleNumberVal(minus, plus, input) {
 			if(parseInt($(input).val()) > 0) {
@@ -370,6 +415,15 @@
 		$("#applyButton").click(function(){
 			var totalGuest = parseInt($("#adultNum").val()) + parseInt($("#childNum").val());
 			var totalRooms = parseInt($("#roomNum").val());
+			
+			if (parseInt($("#roomNum2").val()) == 2) {
+				totalRooms = parseInt($("#roomNum2").val());
+				totalGuest = parseInt($("#adultNum").val()) + parseInt($("#childNum").val()) + parseInt($("#adultNum2").val()) + parseInt($("#childNum2").val());
+			} else {
+				totalGuest = parseInt($("#adultNum").val()) + parseInt($("#childNum").val());
+				totalRooms = parseInt($("#roomNum").val());
+			}
+			
 			var gStr = " Guests, ";
 			var rStr = " Rooms";
 			
@@ -378,11 +432,12 @@
 			}
 			
 			if (totalRooms == 1) {
-				rStr = " Room";
-			}
+			    rStr = " Room";
+			} 
 			
 			$("#guestInfo").html(totalGuest + gStr + totalRooms + rStr);
 			$("#dropDownMenu").toggleClass('displaySetting');
+			$("#mainHeroStyle").removeClass('over-flow');
 		});
 		
 		
@@ -422,5 +477,5 @@
 		
 		var myInput = document.getElementById("hotelCity");
 	</script>
-<script type="text/javascript" th:src="@{/js/hotelCityAuto.js}"></script>
+<script type="text/javascript" th:src="@{js/hotelCityAuto.js}"></script>
 </html>

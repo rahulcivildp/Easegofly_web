@@ -1,9 +1,16 @@
 package com.easygofly.city;
 
+import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.json.CDL;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,7 +22,9 @@ import org.springframework.test.context.ContextConfiguration;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.TBOCity;
+import com.easygofly.entity.TBObusCity;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
+import com.easygofly.site.bus.BusCityRepository;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flightAPI.TBOCityRepository;
 import com.easygofly.site.setting.CountryRepository;
@@ -33,6 +42,7 @@ public class CityRepositoryTest {
 	@Autowired private CityRepository cityRepo;
 	@Autowired private CountryRepository countryRepo ;
 	@Autowired private TBOCityRepository tboRepo ;
+	@Autowired private BusCityRepository busCityRepo;
 	
 	@Test
 	public void testUpdateCity() {
@@ -120,13 +130,6 @@ public class CityRepositoryTest {
 
 	@Test
 	public void testSaveTBOCity() {
-//		TBOCity city = new TBOCity();
-//		city.setCityId(122379);
-//		city.setDestination("Kabul");
-//		city.setCountry("Afghanistan");
-//		city.setCountryCode("AF");
-//		
-//		tboRepo.save(city);
 		
 		readDataFromCustomSeparator("G:\\Web Project\\EasyGoFly\\EasyGoFlyProject\\EasyGoFlyWebParent\\xml-data\\NewCityListHotel.csv");
 		
@@ -182,4 +185,7 @@ public class CityRepositoryTest {
         } 
     } 
 	
+
+
+
 }

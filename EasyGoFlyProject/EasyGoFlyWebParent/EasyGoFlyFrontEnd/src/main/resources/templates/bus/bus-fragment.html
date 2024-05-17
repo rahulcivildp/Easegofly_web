@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:fragment="bus-fragment">
+<body>
+
+<section id="DC_254" class="DC_254_section">
+        <div>
+            <h2 class="DC_254_heading">Bus Booking </h2>
+        </div>
+        <div class="DC_254_body">
+            <p style="
+            display: block;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            unicode-bidi: isolate;
+            ">Don't miss out on these incredible offers, book your bus tickets now and travel with convenience and affordability. Hurry, grab the best bus booking deals before they're gone!</p>
+        </div>
+        <div style="background-image:url(redDeals_bg.webp) ;   padding: 0.75rem 1.5rem;"  class="DC_254_redDealsOffer_container"><i class="DC_254_icon_redBus_logo icon-BUS_Icon_selected"></i>
+            <div class="DC_254_redDealsOffer_content">
+                <p class="DC_254_redDealsOffer_subtext">Unlock Unbeatable Exclusive<!-- --><!-- --> <span>30% OFF</span></p>
+                <p class="DC_254_redDealsOffer_subtext_values"><span class="DC_254_redDealsOffer_value">3080</span>
+                    <!-- -->Deals<span class="DC_254_value_seperator"></span><span class="DC_254_redDealsOffer_value">1318</span> <!-- -->Bus Operators<span class="DC_254_value_seperator"></span><span class="DC_254_redDealsOffer_value">418409</span>
+                    <!-- -->Routes</p>
+            </div>
+            <button class="DC_254_btn scrollTopButton">Book now</button>
+        </div>
+
+        <div style="background-image:url(redDeals_bg.webp);   padding: 0.75rem 1.5rem;" class="DC_254_redDealsOffer_container"><i class="DC_254_icon_redBus_logo icon-BUS_Icon_selected"></i>
+            <div class="DC_254_redDealsOffer_content">
+                <p class="DC_254_redDealsOffer_subtext">Unlock Unbeatable Exclusive<!-- -->  <!-- --> <span>20% OFF</span></p>
+                <p class="DC_254_redDealsOffer_subtext_values"><span class="DC_254_redDealsOffer_value">3080</span>
+                    <!-- -->Deals<span class="DC_254_value_seperator"></span><span class="DC_254_redDealsOffer_value">1318</span> <!-- -->Bus Operators<span class="DC_254_value_seperator"></span><span class="DC_254_redDealsOffer_value">418409</span>
+                    <!-- -->Routes</p>
+            </div>
+            <button class="DC_254_btn scrollTopButton">Book now</button>
+        </div>
+
+        <div style="background-image:url(redDeals_bg.webp);   padding: 0.75rem 1.5rem;" class="DC_254_redDealsOffer_container"><i class="DC_254_icon_redBus_logo icon-BUS_Icon_selected"></i>
+            <div class="DC_254_redDealsOffer_content">
+                <p class="DC_254_redDealsOffer_subtext">Unlock Unbeatable Exclusive<!-- -->  <!-- --> <span>20% OFF</span></p>
+                <p class="DC_254_redDealsOffer_subtext_values"><span class="DC_254_redDealsOffer_value">3080</span>
+                    <!-- -->Deals<span class="DC_254_value_seperator"></span><span class="DC_254_redDealsOffer_value">1318</span> <!-- -->Bus Operators<span class="DC_254_value_seperator"></span><span class="DC_254_redDealsOffer_value">418409</span>
+                    <!-- -->Routes</p>
+            </div>
+            <button class="DC_254_btn scrollTopButton">Book now</button>
+        </div>
+</section>
+
+<div class="container  "
+    style="flex-direction:column;justify-content:center;align-items:normal;align-content:center;flex-wrap:wrap">
+    
+    <div class="container seo-content "
+        style="flex-direction:column;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;background-color:white">
+       
+        <!-- Bus Ticket Booking-->
+        <div class="container srtcs "
+            style="flex-direction:row;justify-content:center;align-items:center;align-content:center;flex-wrap:wrap;background-color:#F6F6F6;position:relative"
+            id="srtc-container">
+            <div class="container srtc-title fixed"
+                style="flex-direction:row;text-align: center; justify-content:space-between;align-items:center;align-content:flex-start;flex-wrap:wrap">
+                <div class=" col">
+                    <h2 class="title h5">State Road Transport Corporation Bus Tickets Booking</h2>
+                </div>
+            </div>
+            <div class="container  "
+                style="flex-direction:row;justify-content:center;align-items:normal;align-content:flex-start;flex-wrap:wrap;column-gap:1em;margin-bottom:2rem"
+                id="operator-container">
+                <div class="scrollable-container rtc-scrollable-container primary "
+                    style="flex-direction:row;justify-content:flex-start;align-items:center;align-content:flex-start;flex-wrap:nowrap;width:100%;scroll-behavior:smooth;overflow-x:scroll">
+                    
+                    <a class="btn  outlined primary sm inactive link" href="#"
+                        target="_blank" style="margin-left: calc(-628px + 50vw);">
+                        <div class=" col auto"><img th:src="@{images/bus/NBSTC_Logo.jpg}"
+                                alt="UPSRTC" title="UPSRTC" width="80" height="80">
+                            <h3>NBSTC</h3>
+                            <p class="text-grey">North Bengal State Transport Corporation</p>
+                        </div>
+                    </a>
+
+                
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank">
+                        <div class=" col auto"><img th:src="@{images/bus/sbstc.webp}"
+                                alt="MSRTC" title="MSRTC" width="80" height="80">
+                            <h3>SBSTC</h3>
+                            <p class="text-grey">SOUTH BENGAL STATE TRANSPORT CORPORATION</p>
+                        </div>
+                    </a>
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank">
+                        <div class=" col auto"><img th:src="@{images/bus/WBSTC.png}"
+                                alt="GSRTC" title="GSRTC" width="80" height="80">
+                            <h3>WBSTC</h3>
+                            <p class="text-grey">West Bengal Transport Corporation</p>
+                        </div>
+                    </a>
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank">
+                        <div class=" col auto"><img src="https://static.abhibus.com/web/media/operators/apsrtc.webp"
+                                alt="APSRTC" title="APSRTC" width="80" height="80">
+                            <h3>APSRTC</h3>
+                            <p class="text-grey">Andhra Pradesh State Road Transport Corporation</p>
+                        </div>
+                    </a>
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank">
+                        <div class=" col auto"><img src="https://static.abhibus.com/web/media/operators/tsrtc.webp"
+                                alt="TSRTC" title="TSRTC" width="80" height="80">
+                            <h3>TSRTC</h3>
+                            <p class="text-grey">Telangana State Road Transport Corporation</p>
+                        </div>
+                    </a>
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank">
+                        <div class=" col auto"><img src="https://static.abhibus.com/web/media/operators/osrtc.webp"
+                                alt="OSRTC" title="OSRTC" width="80" height="80">
+                            <h3>OSRTC</h3>
+                            <p class="text-grey">Odisha State Road Transport Corporation</p>
+                        </div>
+                    </a>
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank">
+                        <div class=" col auto"><img src="https://static.abhibus.com/web/media/operators/ksrtc.png"
+                                alt="Kerala RTC" title="Kerala RTC" width="80" height="80">
+                            <h3 style="white-space:nowrap">Kerala RTC</h3>
+                            <p class="text-grey">Kerela Road Transport Corporation</p>
+                        </div>
+                    </a>
+
+                    <a class="btn  outlined primary sm inactive link"
+                        href="#" target="_blank"
+                        style="margin-right: calc(-620px + 50vw);">
+                        <div class=" col auto"><img th:src="@{images/bus/CSTC.webp}"
+                                alt="CSTC" title="PRTC" width="80" height="80">
+                            <h3>CSTC</h3>
+                            <p class="text-grey">Calcutta State Transport Corporation</p>
+                        </div>
+                    </a>
+
+                    
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container fixed" style="flex-direction:row;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap">
+            <div class="row card-body -content lighter " style="flex-direction:row;width:100% ; padding-left: 10px;">
+              <!-- First div with text content -->
+              <div class="col-md-4 image" style="padding: 5px;">
+                <img th:src="@{images/bus/Easegofly.com.png}" class="img-fluid" style="height: 263px;" alt="Placeholder Image">
+              </div>
+              <!-- Second div with image -->
+              <div class="col-md-4 image" style="padding: 5px;">
+                <img th:src="@{images/bus/Bus.png}" class="img-fluid" style="height: 263px;" alt="Placeholder Image">
+              </div>
+              <div class="col-md-4 image" style="padding: 5px;">
+                <img th:src="@{images/bus/hotel.png}" class="img-fluid" style="height: 263px;" alt="Placeholder Image">
+              </div>
+            </div>
+          </div>
+
+        <!-- Book Your Bus Tickets -->
+        <div class="container  fixed"
+            style="flex-direction:row;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap">
+            <div class="container card seo-content-box   lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="booking-services-card">
+
+                <div class="row card-body -content lighter " style="flex-direction:column;width:100%">
+                    <h2 class="title">Book Your Bus Tickets on easegofly</h2>
+                    <p style="color:#767676">Welcome to easegofly, your one-stop destination for all your bus travel needs
+                        in India! easegofly is here to make your bus travel experience more comfortable, convenient, and
+                        hassle-free.</p>
+                    <p style="color:#767676">Travellers can quickly search for buses and book bus tickets to various
+                        destinations across India by using the easegofly’s user-friendly bus ticketing platform. Powered by
+                        AbhiBus, easegofly now offers a wide range of bus services for online ticket booking. Users can now
+                        choose both government state road transportation buses and private bus services.</p>
+                    <p style="color:#767676">easegofly platform is intended to offer you an easy way to book bus tickets
+                        online. With easegofly, travellers can quickly search for buses based on their travel date,
+                        destination, and preferred bus route. easegofly provides you with detailed information about each
+                        bus operator, including their routes, schedules, amenities, and customer reviews, allowing you
+                        to compare and choose the best option for your journey. easegofly offers a number of bus
+                        alternatives, including premium, semi-luxury, and economy buses, to accommodate your preferences
+                        and affordable budget for your journey.</p>
+                </div>
+            </div>
+
+
+            <div class="container card seo-content-box lowest-price-container  lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="lowest-price-container">
+                <div class="row card-body lowest-price-container-content lighter "
+                    style="flex-direction:column;width:100%">
+                    <h2 class="title">Why Book Bus Tickets Online Through easegofly</h2>
+                    <p style="color:#767676">Being the no.1 platform for Train ticket bookings in India, easegofly is
+                        committed to bring the best booking experience for its users. With bus ticket bookings, easegofly is
+                        now the one stop solution for all your travel needs. Users can choose from trains or flights
+                        along with bus ticket booking. Additionally, easegofly platform enables users to book hotel stays
+                        and cab services making it the best booking platform for all travel needs.</p>
+                </div>
+            </div>
+
+            
+
+            <div class="container card seo-content-box assured-program-body  lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="assured-program-body">
+                <div class="row card-body assured-program-body-content lighter "
+                    style="flex-direction:column;width:100%">
+                    <h2 class="title">Free Cancellation of Bus Tickets Policy</h2>
+                    <p style="color:#767676">easegofly understands that last-minute changes can be challenging, and that's
+                        why we offer flexible cancellation policies. On easegofly platform, it's simple to cancel your bus
+                        reservation, get the instant refund into the wallet and you can re-book your bus ticket
+                        instantly without having to wait for the payment process.<br><br>easegofly offers free cancellations
+                        on all bus tickets starting at Rs.9 per seat. You can choose to cancel your trip for free and
+                        get a refund if you change your travel plans. Either the easegofly website or the Mobile App can be
+                        used to submit a ticket cancellation request.</p>
+                </div>
+            </div>
+
+            <div class="container card seo-content-box   lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="bus-booking-offers-card">
+                <div class="row card-body -content lighter " style="flex-direction:column;width:100%">
+                    <h2 class="title">easegofly 24/7 Customer Support</h2>
+                    <p style="color:#767676">We are dedicated to providing you
+                        with a smooth bus booking experience. easegofly bus ticketing platform is built to meet your needs,
+                        with features like simple payment choices, safe ticket booking online, and 24-hour customer
+                        service. You can use the help section below and chat with us to resolve your queries. easegofly
+                        customer support team is always there to assist you with any questions or concerns you may have
+                        related to bus ticket booking online, and providing a stress-free and pleasurable trip.</p>
+                </div>
+            </div>
+
+            
+
+
+            <div class="container card seo-content-box   lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap">
+                <div class="row card-body -content lighter " style="flex-direction:column;width:100%">
+                    <h2 class="title">Top Pilgrimage Bus Routes</h2>
+                    <p style="color:#767676">India is known for its rich long tradition of spirituality and pilgrimage,
+                        and there are numerous pilgrimage bus routes that cover the religious travelers. Do you want to
+                        visit your preferred pilgrimage destination or any? Then you are at the right place to choose
+                        your destination, select the bus, reserve your favorite seat with easegofly.</p><b>Here are some of
+                        the top pilgrimage bus routes in India:</b>
+                    <div class="container  "
+                        style="flex-direction:row;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap">
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Delhi To Haridwar Bus</a>
+                                </li>
+                                <li><a href="#">Delhi To Rishikesh
+                                        Bus</a></li>
+                                <li><a href="#"> Agra To Jaipur Bus</a></li>
+                            </ul>
+                        </div>
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Delhi To Katra Bus</a>
+                                </li>
+                                <li><a href="#">Bangalore To
+                                        Tirupati Bus</a></li>
+                                <li><a href="#">Delhi To Amritsar Bus</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Delhi To Jammu Bus</a>
+                                </li>
+                                <li><a href="#">Chennai To Tirupati
+                                        Bus</a></li>
+                                <li><a href="#">Jaipur To Bikaner Bus</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Mumbai To Shirdi Bus</a>
+                                </li>
+                                <li><a href="#">Kolkata To Digha Bus</a>
+                                </li>
+                                <li><a href="#">Hyderabad To
+                                        Tirupati Bus</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container card seo-content-box   lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap">
+                <div class="row card-body -content lighter " style="flex-direction:column;width:100%">
+                    <h2 class="title">Popular Bus Routes in India</h2>
+                    <p style="color:#767676">India has a vast network of bus routes that connect various cities, towns
+                        and villages across India. If you are planning to travel popular routes in India, travelers can
+                        find various available buses to book tickets online at easegofly.</p><b>Travellers can find here
+                        some of the most popular bus routes in India are:</b>
+                    <div class="container  "
+                        style="flex-direction:row;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap">
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Bangalore To Chennai
+                                        Bus</a></li>
+                                <li><a href="#">Mumbai To Pune Bus</a></li>
+                                <li><a href="#">Delhi To Jaipur Bus</a></li>
+                            </ul>
+                        </div>
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Chennai To Bangalore
+                                        Bus</a></li>
+                                <li><a href="#">Jaipur To Delhi Bus</a>
+                                </li>
+                                <li><a href="#">Delhi To Chandigarh
+                                        Bus</a></li>
+                            </ul>
+                        </div>
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Mumbai To Goa Bus</a></li>
+                                <li><a href="#">Hyderabad To Goa Bus</a>
+                                </li>
+                                <li><a href="#">Chandigarh To Delhi
+                                        Bus</a></li>
+                            </ul>
+                        </div>
+                        <div class=" col s12 m2 l3">
+                            <ul style="color:#767676">
+                                <li><a href="#">Indore To Bhopal Bus</a>
+                                </li>
+                                <li><a href="#">Hyderabad To Chennai
+                                        Bus</a></li>
+                                <li><a href="#">Pune To Hyderabad Bus</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container card seo-content-box   lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="last-hour-bookings-card">
+                <div class="row card-body -content lighter " style="flex-direction:column;width:100%">
+                    <h2 class="title">Online Bus Booking in India</h2>
+                    <p style="color:#767676">Booking your bus tickets online in India becomes effortless, straightforward, and budget-friendly when you utilize the easegofly platform. Travelers can easily pick their desired bus route, review schedules, select preferred seats, and complete payment using various online payment methods to enjoy discounts. After a successful transaction, easegofly promptly sends a booking confirmation and e-ticket to your registered email and phone number. Remember to carry your e-ticket while boarding the bus.</p>
+                    <p style="color:#767676">easegofly advises to book your tickets in advance to secure the lowest ticket
+                        prices and reserve your bus seat for a trouble-free trip.</p>
+                    <p style="color:#767676">Travelllers can find various types of buses available to book tickets
+                        online using easegofly</p>
+                    <ul style="color:#767676;font-size:0.85rem">
+                        <li>AC Buses</li>
+                        <li>Non-AC Buses</li>
+                        <li>Volvo AC Seater Bus</li>
+                        <li>Volvo AC Bus</li>
+                        <li>AC Sleeper Bus</li>
+                        <li>Sleeper Seater Bus</li>
+                        <li>Super Luxury AC Buses </li>
+                        <li>Deluxe Bus</li>
+                        <li>Sleeper Buses </li>
+                        <li>Express Buses</li>
+                        <li>Electric Buses</li>
+                        <li>Ordinary Buses</li>
+                        <li>Super Luxury (Non-AC Seater)</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="container card seo-content-box bus-routes-container  lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="bus-routes-container">
+                <div class="row card-body bus-routes-container-content lighter "
+                    style="flex-direction:column;width:100%">
+                    <h2 class="title">Bus Ticket Confirmation</h2>
+                    <div>
+                        <ul style="color:#767676;font-size:0.85rem">
+                            <li><b>M-Ticket:</b> M-Ticket is short for Mobile Ticket and is sent as an SMS to your
+                                mobile once you book a bus ticket. It is a confirmation of your reservation and serves
+                                as a ticket. When you board the bus, show your M-ticket to the bus crew.</li>
+                            <li><b>E-Ticket:</b> E-Ticket stands for Electronic Ticket. The E-ticket is issued and sent
+                                to your email after you make an online bus booking. It is a confirmation of your
+                                reservation, and you can show it to the bus staff when you board the bus.</li>
+                            <li><b>Counter Ticket:</b> A counter ticket is a hard copy of your bus ticket which is shown
+                                to the bus staff on boarding the bus. These can be bought physically from ticket booths
+                                or even on the bus right before your journey.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container card seo-content-box bus-routes-container  lg fixed"
+                style="flex-direction:column;justify-content:flex-start;align-items:normal;align-content:flex-start;flex-wrap:wrap"
+                id="bus-routes-container">
+                <div class="row card-body bus-routes-container-content lighter "
+                    style="flex-direction:column;width:100%">
+                    <h2 class="title">Bus Booking Offers</h2>
+                    <p style="color:#767676">Are you seeking ways to cut costs on bus ticket prices while ensuring your online bus seat reservation?
+                         If that's the case, you're headed in the right direction to economize on bus bookings with easegofly. Travelers can
+                          benefit from a range of special bus booking deals and discount codes to lower expenses when booking bus tickets 
+                          online.</p>
+                </div>
+            </div>
+
+            
+            
+        </div>
+
+        
+    </div>
+    
+</div>
+
+
+</body>
+</html>

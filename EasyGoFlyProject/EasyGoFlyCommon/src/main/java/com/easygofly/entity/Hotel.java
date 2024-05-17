@@ -121,6 +121,9 @@ public class Hotel {
 	
 	@OneToOne(mappedBy = "hotel")
 	private HotelOrder hotelOrder;
+
+	@OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+	private List<HotelSupplierCode> hotelSupplierCodes = new ArrayList<>();
 	
 	
 	
@@ -132,7 +135,7 @@ public class Hotel {
 			String hotelLocation, double roomPrice, double tax, double extraGuestCharge, double childCharge,
 			double discount, double publishedPrice, double otherCharges, double offeredPrice,
 			Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff, double agentCommission,
-			double agentMarkUp, double serviceTax, double tds) {
+			double agentMarkUp, double serviceTax, double tds, List<HotelSupplierCode> hotelSupplierCodes) {
 		super();
 		this.hotelCode = hotelCode;
 		this.resultIndex = resultIndex;
@@ -163,6 +166,7 @@ public class Hotel {
 		this.agentMarkUp = agentMarkUp;
 		this.serviceTax = serviceTax;
 		this.tds = tds;
+		this.hotelSupplierCodes = hotelSupplierCodes;
 	}
 
 	public Integer getId() {
@@ -231,6 +235,14 @@ public class Hotel {
 
 	public String getHotelPolicy() {
 		return hotelPolicy;
+	}
+
+	public List<HotelSupplierCode> getHotelSupplierCodes() {
+		return hotelSupplierCodes;
+	}
+
+	public void setHotelSupplierCodes(List<HotelSupplierCode> hotelSupplierCodes) {
+		this.hotelSupplierCodes = hotelSupplierCodes;
 	}
 
 	public void setHotelPolicy(String hotelPolicy) {

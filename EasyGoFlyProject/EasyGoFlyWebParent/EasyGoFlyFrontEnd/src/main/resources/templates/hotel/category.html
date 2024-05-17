@@ -108,9 +108,9 @@ th:fragment="category(remove)" th:remove="${remove}">
 		z-index: 1;
 	}
 	body #mainHeroStyle {
-		position: relative;    
-		overflow: hidden;
+		position: relative; 
 		height: 0vh;
+		overflow: hidden;
 		transition-property: height; 
 		transition-duration: 400ms; 
 		transition-timing-function: ease-in;
@@ -122,7 +122,7 @@ th:fragment="category(remove)" th:remove="${remove}">
 		-ms-transition-timing-function: ease-in;
 	}
 	body #mainHeroStyle.searchBovMainDivActive {
-		height: 80vh;
+		height: 55vh;
 	}
 	
 	.searchBoxMargin {
@@ -431,14 +431,14 @@ input:checked+br+label {
 							<li class="tabss shadow" id="flight"><a
 								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
 						
-							<li class="tabss shadow activated" id="train"><a
+							<li class="tabss shadow activated" id="hotel"><a style="color: white;"
 								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
 						
-							<li class="tabss shadow" id="hotel"><a
-								th:href="@{/}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
+							<li class="tabss shadow" id="bus"><a
+								th:href="@{/bus}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
 						
 							<li class="tabss shadow" id="holidays"><a
-								th:href="@{/}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
+								th:href="@{/holiday}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
 						
 					</ul>
 				</div>
@@ -458,12 +458,12 @@ input:checked+br+label {
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
 							<li class="tabss shadow" id="busMobile">
-								<a th:href="@{/}"><img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><strong>Buses</strong></a>
+								<a th:href="@{/bus}"><img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><strong>Buses</strong></a>
 							</li>	
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
 							<li class="tabss shadow" id="holidaysMobile">
-								<a th:href="@{/}"><img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><strong>Holidays</strong></a>
+								<a th:href="@{/holiday}"><img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><strong>Holidays</strong></a>
 							</li>
 						</div>
 					</div>

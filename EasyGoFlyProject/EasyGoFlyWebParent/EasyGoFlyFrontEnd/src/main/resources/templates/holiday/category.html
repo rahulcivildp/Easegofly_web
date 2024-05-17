@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+th:fragment="category(remove)" th:remove="${remove}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{../style.css}" >
+
+<style type="text/css">
+@media screen and (max-width: 800px) {
+
+	#holidayCol .tabss:hover {
+		position: relative;
+		top: 0;
+		background: white;
+		box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
+	}
+	
+	#holidayCol .tabss:active {
+	   transform: translate(0px, -7%);
+	   -webkit-transform: translate(0px, -7%);
+	   -ms-transform: translate(0px, -7%);
+	   transition-timing-function: ease-in;
+	   -webkit-transition-timing-function: ease-in;
+	   -ms-transition-timing-function: ease-in;
+	}
+	
+	.fontSize {
+		font-size: 40px !important;
+	}
+	#adjusted {
+		width: 100% !important;
+	}
+	#searchMain #searchBox {
+		width: 96% !important;
+		padding: 18px 12px ;
+		margin-top: 10px ;
+		margin-bottom: 10px ;
+		display: none;
+	}
+	.aligner {
+		border: none !important;
+	}
+	.tile_settings {
+		width: 100% !important;
+	}
+	
+	#imgbck2 {
+		width: 100% !important;
+	}
+	#tabsModalDiv.paddingResize {  
+		padding-top: 0 !important; 
+		width: 100%; 
+	}
+	
+	#heroCarousel{
+		height: 100vh !important;
+	}
+	.paddingTopDeal {
+		padding-top: 40px !important;
+	}
+}
+
+@media ( min-width : 576px) {
+	.container, .container-sm {
+		max-width: 100% !important;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	#tabsMobile .translateTabs {
+		transition-property: translate, scale; 
+		transition-duration: 1200ms; 
+		transition-timing-function: ease-in-out;
+		-webkit-transition-property: translate, scale; 
+		-webkit-transition-duration: 1200ms; 
+		-webkit-transition-timing-function: ease-in-out;
+		-ms-transition-property: translate, scale; 
+		-ms-transition-duration: 1200ms; 
+		-ms-transition-timing-function: ease-in-out;
+	}
+	.tabss {
+	    display: flex !important;
+	    height: 90px;
+	    margin: 2px !important;
+	    padding: 22px !important;
+	    justify-content: center;
+	    align-items: center;
+	    cursor: pointer;
+	    position: relative;
+	    top: 0;
+	}
+	.displayItemNone {display: none !important;}
+	.displayItemBlock {display: block !important;}
+	.displayItemFlex {display: flex !important;}
+	.heroDIsplay{
+		position: relative;
+		z-index: 1;
+	}
+	body #mainHeroStyle {
+		position: relative;    
+		overflow: hidden;
+		height: 0vh;
+		transition-property: height; 
+		transition-duration: 400ms; 
+		transition-timing-function: ease-in;
+		-webkit-transition-property: height; 
+		-webkit-transition-duration: 400ms; 
+		-webkit-transition-timing-function: ease-in;
+		-ms-transition-property: height; 
+		-ms-transition-duration: 400ms; 
+		-ms-transition-timing-function: ease-in;
+	}
+	body #mainHeroStyle.searchBovMainDivActive {
+		height: 42vh;
+	}
+	
+	.searchBoxMargin {
+		margin-top: 90px !important;
+	}
+	.easyStepsMargin {
+		margin-top: 0px;
+	}
+	.mainHeroStyle {
+		padding-top: 90px !important;
+	}
+	
+	#categorySticky {
+		position: sticky !important;
+		top: 0;
+		height: auto !important;
+	}
+	#imgbck2 {
+		padding: 0 !important;
+	}
+	#tabsMobile {
+	    justify-content: center;
+	    padding-top: 7px;
+	}
+}
+
+
+
+#categorySticky {
+	position: relative;
+    z-index: 99;
+    width: 100%;
+    height: 0;
+}
+
+#setOfferDeals {
+	padding-top: 0px;
+}
+.fontSize {
+	font-size: 20px;
+}
+
+.paddingResize {
+		width: 90%;
+    	margin: 0 auto;
+}
+.tabss {
+	background: white;
+	margin: 12px;
+	padding: 3px 15px;
+	border-radius: 5px;
+    display: inline-block;
+}
+
+.tabss:hover {
+	position: relative;
+	top: 0px;
+	background: #D32F2F;
+	box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
+}
+
+.tabss:hover a {
+	color: white;
+}
+
+.tabss a {
+	color: black;
+	text-decoration: none;
+}
+
+#imgbck {
+	position: relative;
+    width: 100%;
+    padding-bottom: 30px;
+    margin: 0 auto;
+    width: 80%;
+    z-index: 2 !important;
+    margin-top: -369px;
+}
+
+#adjusted {
+	list-style-type: none;
+	width: 70%;
+	margin: 0 auto;
+	text-align: center;
+	height: auto;
+	padding: 0;
+}
+
+
+
+
+
+#searchBox {
+	border-radius: 10px;
+	background: white;
+	margin: 0 auto;
+	width: 80%;
+	padding: 18px;
+	padding-top: 33px;
+	margin-bottom: 30px;
+}
+
+.empty1 {
+	border-radius: 26px;
+	border: 1px solid gray;
+	margin-top: 10px;
+	padding: 12px 0;
+}
+
+#radio_search_1 {
+	width: 98%;
+	margin: 0 auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#radio_search_2 {
+	width: 98%;
+	margin: 0 auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.radio_search {
+	display: none;
+}
+
+.aligner {
+	float: left;
+	margin: 6px 0px;
+}
+
+.tile_settings {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.tile_settings p {
+	margin-bottom: 6px;
+}
+
+.dropdown ul {
+	list-style: none;
+	padding: 5px 5px;
+	border: 1px solid gray;
+	width: 195px;
+	box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+	position: absolute;
+	background: white;
+}
+
+.pass_list {
+	width: 100%;
+}
+
+.dropdowns-menu p {
+	margin-left: 4px;
+	color: gray;
+	float: left;
+}
+
+.dropdowns-menu {
+	display: none;
+}
+
+.dropdowns-menu b {
+	float: left;
+}
+
+.radios {
+	cursor: pointer;
+	float: left;
+	margin: 0 7px;
+}
+
+.radios input {
+	cursor: pointer;
+}
+
+input:checked+br+label {
+	font-weight: 600;
+}
+
+.pass_list1 {
+	width: 100%;
+}
+
+.pass_list2 {
+	width: 100%;
+}
+
+.pass_list3 {
+	width: 100%;
+}
+
+.pass_list4 {
+	width: 100%;
+}
+
+.pass_list5 {
+	width: 100%;
+}
+
+.pass_list6 {
+	width: 100%;
+}
+
+.pass_list-1 {
+	width: 100%;
+}
+
+.pass_list-2 {
+	width: 100%;
+}
+
+.n-text {
+	display: block;
+	font-size: 18px;
+	margin: 19px 0;
+}
+
+.submit_btns {
+	width: 100%;
+	height: 62px;
+	border-radius: 9px;
+	background-color: #faff69;
+	font-size: 24px;
+	font-weight: 630;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19);
+}
+
+.submit_btns:hover {
+	background-color: #d32f2f;
+	position: relative;
+	top: 2px;
+	box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.2), 0 18px 60px 0
+		rgba(0, 0, 0, 0.19);
+	color: white;
+}
+
+.carousel-inner-cont {
+	height: 527px;
+	position: relative !important;
+	width: 100% !important;
+	overflow: hidden !important;
+}
+@media only screen and (max-width: 600px) {
+	.carousel-inner-cont {
+		height: 100vh !important;
+	}
+}
+
+#imgbck2 {
+	padding: 90px 0 0px 0;
+    margin: 0 auto;
+    width: 80%;
+}
+#mainHeroStyle {
+	height: auto; 
+	position: relative; 
+}
+.translateItem {
+	transition-property: translate; 
+	transition-duration: 800ms; 
+	transition-timing-function: ease-in-out;
+	-webkit-transition-property: translate; 
+	-webkit-transition-duration: 800ms; 
+	-webkit-transition-timing-function: ease-in-out;
+	-ms-transition-property: translate; 
+	-ms-transition-duration: 800ms; 
+	-ms-transition-timing-function: ease-in-out;
+}
+.transformedItem {
+    translate: 0 0 !important;
+    -webkit-translate: 0 0 !important;
+    -ms-translate: 0 0 !important;
+}
+.translateTabs {
+	transition-property: translate, scale; 
+	transition-duration: 1300ms; 
+	transition-timing-function: ease-in-out;
+	-webkit-transition-property: translate, scale; 
+	-webkit-transition-duration: 1300ms; 
+	-webkit-transition-timing-function: ease-in-out;
+	-ms-transition-property: translate, scale; 
+	-ms-transition-duration: 1300ms; 
+	-ms-transition-timing-function: ease-in-out;
+}
+.transformedTabs {
+	scale: 1 !important;
+    translate: 0 0 !important;
+    -webkit-translate: 0 0 !important;
+    -ms-translate: 0 0 !important;
+}
+			
+@media screen and (max-width: 600px) {
+	body #mainHeroStyle #hero {
+		height: 42vh;
+		overflow: hidden;
+	}
+}
+</style>
+
+</head>
+<body>
+		<div id="categorySticky">
+			<div id="imgbck2" style="margin: 0 auto;" class="">
+	
+				<div id="tabs" class="col-12 media-hide">
+					<ul class="text-center translateItem translateTabs" id="adjusted" style="translate: 0 -100%; scale: 0;">
+							<li class="tabss shadow" id="flight"><a
+								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
+						
+							<li class="tabss shadow" id="hotel"><a
+								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
+						
+							<li class="tabss shadow" id="bus"><a style="color: white;"
+								th:href="@{/bus}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
+						
+							<li class="tabss shadow activated" id="holidays"><a
+								th:href="@{/holiday}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
+						
+					</ul>
+				</div>
+				<div id="tabsMobile" class="col-12 media_status_flex_CPN">
+					<div class="row text-center translateTabs" id="adjusted" style="translate: 0 -100%; scale: 0;">
+						<div class="col-3" style="padding: 0 4px !important;" >
+							<li class="tabss shadow" id="flightMobile">
+								<a th:href="@{/flight}"><img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><strong>Flights</strong></a>
+							</li>
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;">
+							<li class="tabss shadow" id="hotelMobile">
+								<a th:href="@{/hotel}"><img th:src="@{/images/front/city1.png}" class="img-fluid" style="width: 50px;"><br><strong>Hotels</strong></a>
+							</li>
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;">
+							<li class="tabss shadow" id="busMobile">
+								<a th:href="@{/bus}"><img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><strong>Buses</strong></a>
+							</li>	
+						</div>
+						<div class="col-3" style="padding: 0 4px !important;" id="holidayCol">
+							<li class="tabss shadow activated" id="holidaysMobile">
+								<div >
+									<img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><b>Holidays</b>
+								</div>
+							</li>	
+						</div>
+					</div>
+				</div>
+	
+			</div>
+			
+		</div>
+			
+	<div id="mainHeroStyle" class="searchBovMainDivActive">
+		<div class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
+			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
+			    
+			</div>
+		</div>
+		<!-- ======= Hero Section ======= -->
+		<section id="hero" class="heroDIsplay translateItem" style="translate: -100% 0;">
+			<div class="hero-container">
+				<div id="heroCarousel" data-bs-interval="5000"
+					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
+
+					<div class="carousel-indicators" id="hero-carousel-indicators">
+						<button type="button" data-bs-target="#carouselExampleIndicators"
+							data-bs-slide-to="0" class="active" aria-current="true"
+							aria-label="Slide 1"></button>
+						<button type="button" data-bs-target="#carouselExampleIndicators"
+							data-bs-slide-to="1" aria-label="Slide 2"></button>
+						<button type="button" data-bs-target="#carouselExampleIndicators"
+							data-bs-slide-to="2" aria-label="Slide 3"></button>
+					</div>
+
+					<div class="carousel-inner carousel-inner-cont" role="listbox">
+
+						<!-- Slide 1 -->
+						<div class="carousel-item active"
+							th:style="'background-image: url(' + @{'/assets/img/slide/slide-1.jpg'} + ');'">
+							<div class="carousel-container">
+								<div class="carousel-content">
+									<div></div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Slide 2 -->
+						<div class="carousel-item"
+							th:style="'background-image: url(' + @{'/assets/img/slide/slide-2.jpg'} + ');'">
+							<div class="carousel-container">
+								<div class="carousel-content">
+									<div></div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Slide 3 -->
+						<div class="carousel-item"
+							th:style="'background-image: url(' + @{'/assets/img/slide/slide-2.jpg'} + ');'">
+							<div class="carousel-container">
+								<div class="carousel-content">
+									<div></div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<a class="carousel-control-prev" href="#heroCarousel" role="button"
+						data-bs-slide="prev"> <span
+						class="carousel-control-prev-icon bi bi-chevron-left"
+						aria-hidden="true"></span>
+					</a> <a class="carousel-control-next" href="#heroCarousel"
+						role="button" data-bs-slide="next"> <span
+						class="carousel-control-next-icon bi bi-chevron-right"
+						aria-hidden="true"></span>
+					</a>
+
+				</div>
+			</div>
+		</section>
+		<!-- End Hero -->
+
+	</div>
+</body>
+
+<script>
+	$(document).ready(function(){
+		$(".translateItem").addClass("transformedItem");
+		$(".translateTabs").addClass("transformedTabs");
+	});
+</script>
+
+<script>
+	$("#holidaysMobile").click(function(){
+		$("#holidaysMobile").toggleClass("activated");
+		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
+	});
+</script>
+</html>
+

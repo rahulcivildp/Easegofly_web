@@ -49,6 +49,7 @@ public class HotelRestController {
 
 			String str =  newGuest.getId() + "-" + newGuest.getTitle() + "-" + newGuest.getFirstName() + "-" + newGuest.getLastName() + "-" + newGuest.getAge() + "-" + newGuest.getPan() 
 			+ "-" + newGuest.getEmail() + "-" + newGuest.getPhoneNo() + "-" + savedRoom.getRoomIndex() + "-" + savedRoom.getRoomDescription();
+			
 			stringList.add(str);
 		}
 		

@@ -954,6 +954,10 @@
 			
 			urlComponentsSave = "[[@{/save_hotel_guest}]]";
 			
+			if(ageGuests <= 12) {
+				panGuests = null;
+			}
+			
 			params = {title: titleGuests, fName: firstNameGuests, lName: lastNameGuests, email: emailGuests, phoneNo: phoneNoGuests, age: ageGuests, 
 			pan: panGuests, hotel_id: hotelId, cust_id: cust_id, room_id: selectorId};
 	    	

@@ -125,7 +125,12 @@ public class Customer {
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<HotelOrder> hotelOrders = new ArrayList<>();
-	
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<BusHistory> busHistories = new ArrayList<>();
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<Bus> buses = new ArrayList<>();
 	
 	
 	public Customer() {}
@@ -181,6 +186,14 @@ public class Customer {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public List<Bus> getBuses() {
+		return buses;
+	}
+
+	public void setBuses(List<Bus> buses) {
+		this.buses = buses;
 	}
 
 	public String getLastName() {
@@ -393,6 +406,14 @@ public class Customer {
 
 	public void setRequests(List<Request> requests) {
 		this.requests = requests;
+	}
+
+	public List<BusHistory> getBusHistories() {
+		return busHistories;
+	}
+
+	public void setBusHistories(List<BusHistory> busHistories) {
+		this.busHistories = busHistories;
 	}
 
 	public void addSerchHistory(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,
