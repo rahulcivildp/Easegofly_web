@@ -1,11 +1,13 @@
 package com.easygofly.site.bus;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -21,9 +23,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easygofly.entity.Bus;
+import com.easygofly.entity.BusBoardingPointDetails;
 import com.easygofly.entity.BusCancelPolicy;
 import com.easygofly.entity.BusHistory;
 import com.easygofly.entity.BusPointDetails;
+import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.TBObusCity;
 import com.easygofly.site.LogService;
@@ -45,6 +49,7 @@ public class BusController {
 	
 	BusHistory history = new BusHistory();
 	List<Bus> buses = new ArrayList<>();
+	List<BusSeat> seatList = new ArrayList<>();
 	
 	@GetMapping("/bus")
 	public String viewBusPage(Model model) {
@@ -261,6 +266,7 @@ public class BusController {
 
 		model.addAttribute("cityTwo", cityTwo);
 		model.addAttribute("cityOne", cityOne);
+		model.addAttribute("deptTime", deptTime);
 		model.addAttribute("busList", buses);
 		
 		return "bus/search/bus-search-result";
@@ -298,7 +304,7 @@ public class BusController {
 			}
 		}
 	    
-		bookingURL = "/bus/booking_" + savedBus.getId() + "_" + busDeparture + "_" + busDestination + "_" + dateFormat.format(deptTime); 
+		bookingURL = "/bus/booking_" + savedBus.getId() + "_" + history.getId() + "_" + busDeparture + "_" + busDestination + "_" + dateFormat.format(deptTime); 
 		
 		return "redirect:/bus_booking...";
 	}
@@ -309,51 +315,40 @@ public class BusController {
         return "loading/loading";
     }
 
-	@GetMapping("/bus/booking_{busId}_{cityIdOne}_{cityIdTwo}_{deptDate}")
+	@GetMapping("/bus/booking_{busId}_{history_id}_{cityIdOne}_{cityIdTwo}_{deptDate}")
 	public String busBooking(Model model, 
 			@PathVariable(name = "busId") Integer busId,
+			@PathVariable(name = "history_id") Integer history_id,
 			@PathVariable(name = "cityIdOne") String cityIdOne,
 			@PathVariable(name = "cityIdTwo") String cityIdTwo,
 			@PathVariable(name = "deptDate") String deptDate,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
 
 		Bus bus = busService.findByIdBus(busId);
-//        hotelRooms = new ArrayList<HotelRoom>();
-//        hotelGuests =  new ArrayList<HotelGuest>();
-//        Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
-//        
-//	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//	    Date checkIn = dateFormat.parse(checkInDate);
-//	    
-//	    HotelHistory hotelHistory = hotelService.findByIdHistory(history_id);
-//	   
-//	    String categoryId = "";
-//	    if (hotel.getHotelSupplierCodes().stream().findFirst().get().getCategoryId() != null) {
-//	    	categoryId = hotel.getHotelSupplierCodes().stream().findFirst().get().getCategoryId();
-//		}
-//		hotelInfoMethod(model, resultIndex, hotelCode, categoryId);
-//		hotelRoomsMethod(model, resultIndex, hotelCode);
-//		
-//        Integer totalGuests = Integer.parseInt(noOfAdults) + Integer.parseInt(noOfChildren);
-//		Integer noNights = noOfNightsMethod(checkInDate, checkOutDate);
-//		
-//        
-//		model.addAttribute("hotelCity", hotelCity);
-//		model.addAttribute("checkIn", checkIn);
-//		model.addAttribute("checkInDate", checkInDate);
-//		model.addAttribute("checkOutDate", checkOutDate);
-//		model.addAttribute("totalGuests", totalGuests);
-//		model.addAttribute("noOfAdults", noOfAdults);
-//		model.addAttribute("noOfChildren", noOfChildren);
-//		model.addAttribute("noOfRooms", noOfRooms);
-//		model.addAttribute("noNights", noNights);
-//		model.addAttribute("hotelHistory", hotelHistory);
-//		model.addAttribute("hotelGuests", hotelGuests);
-//		model.addAttribute("hotel_id", hotel_id);
-//		model.addAttribute("cust_id", customer.getId());
+		TBObusCity cityOne = busCityRepo.getCityByCityName(cityIdOne);
+		TBObusCity cityTwo = busCityRepo.getCityByCityName(cityIdTwo);
+        Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
+       
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date checkIn = dateFormat.parse(deptDate);
+  
+	    BusHistory busHistory = busService.findByIdBusHistory(history_id);
+
+	    busSeatLayout(model, bus.getResultIndex());
+	    busBusBoardingPoint(model, bus.getResultIndex());
+
+		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("cityOne", cityOne);
+		model.addAttribute("cityTwo", cityTwo);
+		model.addAttribute("busHistory", busHistory);
+		model.addAttribute("busId", busId);
+		model.addAttribute("bus", bus);
+		model.addAttribute("custId", customer.getId());
         
 		return "hotel/booking/hotel-booking";
 	}
+	
+	
 	
 	// Private methods
 
@@ -373,4 +368,152 @@ public class BusController {
 		model.addAttribute("cityList", cityList);
 		model.addAttribute("cityIds", cityIds);
 	}
+
+	private void busSeatLayout(Model model, Integer resultIndex) throws IOException {
+
+		// Create URL object with the API end-point
+        URL urlBusSeatLayout = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBusSeatLayOut");
+
+        // Open a connection
+        HttpURLConnection connectionBusSeatLayout = (HttpURLConnection) urlBusSeatLayout.openConnection();
+       
+        StringBuilder responseBodyBusSeatLayout = new StringBuilder();
+        
+        onlineBusService.apiOnlineBusSeatLayout(connectionBusSeatLayout, responseBodyBusSeatLayout, resultIndex);
+
+        JSONObject jsonObjSeatLayout = new JSONObject(responseBodyBusSeatLayout.toString());
+        System.out.println(jsonObjSeatLayout);
+        logService.generateLog(jsonObjSeatLayout.toString());
+        
+        seatList = new ArrayList<BusSeat>();
+        
+        try {
+        	JSONObject jsonObjSeat = jsonObjSeatLayout.getJSONObject("GetBusSeatLayOutResult").getJSONObject("SeatLayoutDetails");
+        	JSONArray jsonArraySeatDetails = jsonObjSeat.getJSONObject("SeatLayout").getJSONArray("SeatDetails");
+			JSONObject mainObj = new JSONObject();
+        	
+        	String availableSeats = jsonObjSeat.get("AvailableSeats").toString();
+        	String hTMLLayout = jsonObjSeat.get("HTMLLayout").toString();
+        	Integer noOfColumns = Integer.parseInt(jsonObjSeat.getJSONObject("SeatLayout").get("NoOfColumns").toString());
+        	Integer noOfRows = Integer.parseInt(jsonObjSeat.getJSONObject("SeatLayout").get("NoOfRows").toString());
+        	
+        	for (int i = 0; i < jsonArraySeatDetails.length(); i++) {
+			    mainObj.put("Seat-" + i, jsonArraySeatDetails.getJSONObject(i));
+				
+			    String columnNo = mainObj.getJSONObject("Seat-" + i).get("ColumnNo").toString();
+			    String rowNo = mainObj.getJSONObject("Seat-" + i).get("RowNo").toString();
+			    String seatName = mainObj.getJSONObject("Seat-" + i).get("SeatName").toString();
+	        	Integer height = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("Height").toString());
+	        	Integer seatIndex = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("SeatIndex").toString());
+	        	Integer seatType = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("NoOfColumns").toString());
+	        	Integer width = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("Width").toString());
+	        	boolean isLadiesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("IsLadiesSeat").toString());
+	        	boolean isMalesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("IsMalesSeat").toString());
+	        	boolean seatStatus = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("SeatStatus").toString());
+	        	double seatFare = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).get("SeatFare").toString());
+	        	double BasePrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("BasePrice").toString());
+			    double tax = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("Tax").toString());
+			    double discount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("Discount").toString());
+			    double publishedPrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("PublishedPrice").toString());
+			    double otherCharges = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("OtherCharges").toString());
+			    double offeredPrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("OfferedPrice").toString());
+			    Integer publishedPriceRoundedOff = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("PublishedPriceRoundedOff").toString());
+			    Integer offeredPriceRoundedOff = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("OfferedPriceRoundedOff").toString());
+			    double agentCommission = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("AgentCommission").toString());
+			    double agentMarkUp = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("AgentMarkUp").toString());
+			    double tds = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("TDS").toString());
+			    double cGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CGSTAmount").toString());
+			    double cGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CGSTRate").toString());
+			    double cessAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CessAmount").toString());
+			    double cessRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CessRate").toString());
+			    double iGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("IGSTAmount").toString());
+			    double iGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("IGSTRate").toString());
+			    double sGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("SGSTAmount").toString());
+			    double sGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("SGSTRate").toString());
+			    double taxableAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("TaxableAmount").toString());
+			    
+			    BusSeat newSeat = new BusSeat(columnNo, rowNo, height, width, seatType, seatName, seatIndex, seatFare, isLadiesSeat, isMalesSeat, seatStatus, 
+					   "INR", tax, discount, BasePrice, publishedPrice, otherCharges, offeredPrice, publishedPriceRoundedOff, offeredPriceRoundedOff, 
+					   agentCommission, agentMarkUp, tds, cGSTAmount, cGSTRate, cessAmount, cessRate, iGSTAmount, iGSTRate, sGSTAmount, sGSTRate, taxableAmount);
+			    
+			    seatList.add(newSeat);
+
+			}
+
+			model.addAttribute("seatList", seatList);
+			model.addAttribute("availableSeats", availableSeats);
+			model.addAttribute("hTMLLayout", hTMLLayout);
+			model.addAttribute("noOfColumns", noOfColumns);
+			model.addAttribute("noOfRows", noOfRows);
+			
+        	
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	private void busBusBoardingPoint(Model model, Integer resultIndex) throws IOException {
+
+		// Create URL object with the API end-point
+        URL urlBusPointDetail = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBoardingPointDetails");
+
+        // Open a connection
+        HttpURLConnection connectionBusPointDetail = (HttpURLConnection) urlBusPointDetail.openConnection();
+       
+        StringBuilder responseBodyBusPointDetail = new StringBuilder();
+        
+        onlineBusService.apiOnlineBusSeatLayout(connectionBusPointDetail, responseBodyBusPointDetail, resultIndex);
+
+        JSONObject jsonObjPointDetail = new JSONObject(responseBodyBusPointDetail.toString());
+        System.out.println(jsonObjPointDetail);
+        logService.generateLog(jsonObjPointDetail.toString());
+        
+        try {
+        	JSONObject jsonObjPoint = jsonObjPointDetail.getJSONObject("GetBusRouteDetailResult");
+        	JSONArray jsonArrayBoarding = jsonObjPoint.getJSONArray("BoardingPointsDetails");
+        	JSONArray jsonArrayDropping = jsonObjPoint.getJSONArray("DroppingPointsDetails");
+			JSONObject mainObjBoarding = new JSONObject();
+			JSONObject mainObjDropping = new JSONObject();
+
+			List<BusPointDetails> busPointDetails = new ArrayList<BusPointDetails>();
+			List<BusBoardingPointDetails> boardingPointDetails = new ArrayList<BusBoardingPointDetails>();
+        	
+        	for (int i = 0; i < jsonArrayBoarding.length(); i++) {
+        		mainObjBoarding.put("Point-" + i, jsonArrayBoarding.getJSONObject(i));
+
+			    String CityPointAddress = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointAddress").toString();
+			    String CityPointContactNumber = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointContactNumber").toString();
+			    Integer CityPointIndex = Integer.parseInt(mainObjBoarding.getJSONObject("Point-" + i).get("CityPointIndex").toString());
+			    String CityPointLandmark = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointLandmark").toString();
+			    String CityPointLocation = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointLocation").toString();
+			    String CityPointName = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointName").toString();
+			    String CityPointTime = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointTime").toString();
+			    
+			    BusBoardingPointDetails newPoint = new BusBoardingPointDetails(CityPointIndex, CityPointLocation, CityPointName, CityPointTime, CityPointLandmark, CityPointContactNumber, CityPointAddress);
+			    boardingPointDetails.add(newPoint);
+			}
+        	
+        	for (int i = 0; i < jsonArrayDropping.length(); i++) {
+        		mainObjDropping.put("Point-" + i, jsonArrayDropping.getJSONObject(i));
+        		
+			    Integer CityPointIndex = Integer.parseInt(mainObjBoarding.getJSONObject("Point-" + i).get("CityPointIndex").toString());
+			    String CityPointLocation = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointLocation").toString();
+			    String CityPointName = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointName").toString();
+			    String CityPointTime = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointTime").toString();
+			    
+			    BusPointDetails newPoint =  new BusPointDetails(CityPointIndex, CityPointLocation, CityPointName, CityPointTime);
+			    busPointDetails.add(newPoint);
+			}
+
+			model.addAttribute("busPointDetails", busPointDetails);
+			model.addAttribute("boardingPointDetails", boardingPointDetails);
+			
+        	
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 }

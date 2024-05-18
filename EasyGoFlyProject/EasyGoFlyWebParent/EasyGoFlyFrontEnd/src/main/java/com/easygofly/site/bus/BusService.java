@@ -68,12 +68,19 @@ public class BusService {
         }
 	}
 
+	
 	public BusHistory saveBusHistory(BusHistory history, Customer customer) {
 		BusHistory newHistory = new BusHistory(history.getDeptDate(), history.getCityIdOne(), history.getCityIdTwo(), customer);
 		
 		return busHistoryRepo.save(newHistory); 
 	}
-
+	
+	public BusHistory findByIdBusHistory(Integer id) {
+		BusHistory savedHistory = busHistoryRepo.findById(id).get();
+		return savedHistory; 
+	}
+	
+	
 	public Bus saveBus(Bus bus, Customer customer) {
 		Bus newBus = bus;
 		newBus.setCustomer(customer);

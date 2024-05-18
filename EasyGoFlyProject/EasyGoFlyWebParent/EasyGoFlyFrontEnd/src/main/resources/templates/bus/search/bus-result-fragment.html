@@ -165,6 +165,7 @@
 					<div class="col-9 col-md-11">
 						<div class="flexStyle">
 							<b>[[${cityOne.cityName}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
+							<b>[[${cityTwo.cityName}]]</b>
 							
 						</div>
 						<div class="flexStyle">
@@ -193,10 +194,16 @@
             </div>
 		<div class="container media-hide" style="padding-top: 40px;">
 			<th:block th:each=" bus : ${busList}" >
+				<form th:action="@{/bus/saveBus}" method="post" th:id="'busFormDesk-' + ${bus.resultIndex}">
+					<input type="hidden" th:value="${bus.resultIndex}" name="resultIndex">
+					<input type="hidden" th:value="${busDeparture}" name="busDeparture">
+					<input type="hidden" th:value="${busDestination}" name="busDestination">
+					<input type="hidden" th:value="${deptTime}" name="deptTime">
+				</form>
 			   <div class="hotelRowStyle">
 				<div class="row" style="width: 100%;">
 					<div class="col-3" style="height: inherit;">
-						<img  class="img-fluid" style="width: 100%; border-radius: 8px; height: 150px;">
+						<img th:src="@{/images/bus/bus-removebg.png}" class="img-fluid" style="width: 100%; border-radius: 8px; height: 150px;">
 					</div>
 					<div class="col-5">
 						<div class="">
@@ -214,7 +221,8 @@
 							<div class="col-12">
 								<div class="row">
 									<div class="col-md-6 col-12"><h4>₹ [[${bus.publishedPriceRoundedOff}]]</h4></div>
-									<div class="col-md-6 col-12"><button type="button" class="btn btn-success">View Deals <i class="fa fa-solid fa-chevron-right"></i></button></div>
+									<div class="col-md-6 col-12"><button type="submit" th:form="'busFormDesk-' + ${bus.resultIndex}" class="btn btn-success">View Deals 
+										<i class="fa fa-solid fa-chevron-right"></i></button></div>
 								</div>
 							</div>
 						</div>
@@ -225,11 +233,16 @@
 		</div>
 		<div class="container media_status" style="padding-top: 5px;">
 			<th:block th:each=" bus : ${busList}">
-				
+				<form th:action="@{/bus/saveBus}" method="post" th:id="'busForm-' + ${bus.resultIndex}">
+					<input type="hidden" th:value="${bus.resultIndex}" name="resultIndex">
+					<input type="hidden" th:value="${busDeparture}" name="busDeparture">
+					<input type="hidden" th:value="${busDestination}" name="busDestination">
+					<input type="hidden" th:value="${deptTime}" name="deptTime">
+				</form>
 			   <div class="hotelRowStyle">
 				<div class="row" style="width: 100%;">
 					<div class="col-3" style="height: inherit;">
-						<img src="" class="img-fluid" style="width: 100%; border-radius: 8px; height: 100px;">
+						<img th:src="@{/images/bus/bus-removebg.png}" class="img-fluid" style="width: 100%; border-radius: 8px; height: 100px;">
 					</div>
 					<div class="col-5">
 						<div class="">
@@ -240,7 +253,7 @@
 						</div>
 					</div>
 					<div class="col-4" style="display: flex; align-items: center; padding: 0;">
-						<button type="submit" class="priceRowStyleMbl"  style="width: -webkit-fill-available;">
+						<button type="submit" class="priceRowStyleMbl" th:form="'busForm-' + ${bus.resultIndex}" style="width: -webkit-fill-available;">
 							<div class="row ">
 								<div class="col-12" style="padding: 0;">
 									<div class="row">

@@ -92,6 +92,7 @@ public class HotelService {
 		return history;
 	}
 
+	
 	public Hotel saveHotel(Hotel hotel, Customer customer) {
 		Hotel newHotel = hotel;
 		newHotel.setCustomer(customer);
