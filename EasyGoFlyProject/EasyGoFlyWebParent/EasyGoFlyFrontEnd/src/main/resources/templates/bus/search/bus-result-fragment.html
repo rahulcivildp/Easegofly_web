@@ -170,6 +170,7 @@
 						</div>
 						<div class="flexStyle">
 							<div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
+							<b>[[${#dates.format(checkIn, 'dd MMMM, yy')}]]</b>
 							<div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
 							
 						</div>
@@ -196,9 +197,9 @@
 			<th:block th:each=" bus : ${busList}" >
 				<form th:action="@{/bus/saveBus}" method="post" th:id="'busFormDesk-' + ${bus.resultIndex}">
 					<input type="hidden" th:value="${bus.resultIndex}" name="resultIndex">
-					<input type="hidden" th:value="${busDeparture}" name="busDeparture">
-					<input type="hidden" th:value="${busDestination}" name="busDestination">
-					<input type="hidden" th:value="${deptTime}" name="deptTime">
+					<input type="hidden" th:value="${cityOne.cityName}" name="busDeparture">
+					<input type="hidden" th:value="${cityTwo.cityName}" name="busDestination">
+					<input type="hidden" th:value="${deptDate}" name="deptTime">
 				</form>
 			   <div class="hotelRowStyle">
 				<div class="row" style="width: 100%;">
@@ -235,9 +236,9 @@
 			<th:block th:each=" bus : ${busList}">
 				<form th:action="@{/bus/saveBus}" method="post" th:id="'busForm-' + ${bus.resultIndex}">
 					<input type="hidden" th:value="${bus.resultIndex}" name="resultIndex">
-					<input type="hidden" th:value="${busDeparture}" name="busDeparture">
-					<input type="hidden" th:value="${busDestination}" name="busDestination">
-					<input type="hidden" th:value="${deptTime}" name="deptTime">
+					<input type="hidden" th:value="${cityOne.cityName}" name="busDeparture">
+					<input type="hidden" th:value="${cityTwo.cityName}" name="busDestination">
+					<input type="hidden" th:value="${deptDate}" name="deptTime">
 				</form>
 			   <div class="hotelRowStyle">
 				<div class="row" style="width: 100%;">

@@ -200,11 +200,20 @@
 	    color: white;
 	    font-weight: 600;
 	}
-	.countDiv p {
+	.priceTag {
+		background: white;
+	    color: black;
+	    margin: 0 10px 7px 10px;
+	    border-radius: 5px;
+	    padding: 2px 4px;
+	    font-weight: 600;
+	}
+	.countDiv b {
 		background: #6f7aff;
 	    width: 30px;
 	    color: white;
 	    font-weight: 600;
+	    font-size: 14px;
 	    height: 30px;
 	    padding: 5px;
 	    border-radius: 15px;
@@ -284,6 +293,14 @@
 	  }
 	  .selected {
 		  display: block;
+	  }
+	  .selected p {
+		background: white !important;
+	    color: black !important;
+	    margin: 0 10px 7px 10px !important;
+	    border-radius: 5px !important;
+	    padding: 2px 4px !important;
+	    font-weight: 600 !important;
 	  }
 	  .addedroom p {
 		  	background: #6f7aff;
@@ -370,13 +387,12 @@
 				<div class="row">
 					<div class="col-9 col-md-11">
 						<div class="flexStyle">
-							<b>[[${hotelCity}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b>[[${#dates.format(checkIn, 'dd MMMM, yy')}]]</b>
+							<b>[[${cityOne.cityName}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
+							<b>[[${cityTwo.cityName}]]</b>
 						</div>
 						<div class="flexStyle">
-							<b>[[${noNights}]] Nights</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b>[[${totalGuests}]] Guests</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b>[[${noOfRooms}]] Rooms</b>
+							<div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
+							<b>[[${#dates.format(checkIn, 'dd MMMM, yy')}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
 						</div>
 					</div>
 					<div class="col-3 col-md-1">
@@ -388,160 +404,59 @@
 			</div>
 			<div class="collapsibleSearch"><div th:replace="bus/bus-search-tab :: bus-search"></div></div>
 		</div>
-		<div class="container media_status">
+		
+		
+		<div class="container media-hide">
 			<div class="hotelInfoDiv">
 				<div>
-					<h4>[[${hotelName}]]</h4>
-					<th:block th:if="${starRating} == '0'">
-						<p><i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"
-						></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i></p>
-					</th:block>
-					<th:block th:if="${starRating} == '1'">
-						<p><i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i></p>
-					</th:block>
-					<th:block th:if="${starRating} == '2'">
-						<p><i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i></p>
-					</th:block>
-					<th:block th:if="${starRating} == '3'">
-						<p><i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i></p>
-					</th:block>
-					<th:block th:if="${starRating} == '4'">
-						<p><i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-regular fa-star colrOff"></i></p>
-					</th:block>
-					<th:block th:if="${starRating} == '5'">
-						<p><i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i>&nbsp;<i class="fa fa-solid fa-star colr"></i></p>
-					</th:block>
-					<small>Code: [[${hotelCode}]]</small><br><br>
-					<b>[[${address}]] [[${countryName}]] [[${pinCode}]]</b>
+					<h4>[[${bus.travelName}]]</h4>
+					<small>[[${bus.busType}]]</small><br><br>
+					<b>[[${bus.arrivalTime}]] - [[${bus.departureTime}]] </b>
 				</div>
 				
 				<div >
-					<div style="display: flex; justify-content: center;"><button class="collapsibleBtn">Hotel Info</button></div> 
+					<div style="display: flex; justify-content: center;"><button class="collapsibleBtn">Bus Info</button></div> 
 					<div class="collapsibleClass">
 						<div class="row priceRowMobStyleDropdown" style="width: 100%;">
-							<div class="col-12">
-								<div class="row">
-									<div class="col-12"><p th:utext="${description}"></p></div>
-								</div>
-							</div>
 							<div class="col-12" style="height: 15px;"></div>
 							<div class="col-12">
 								<div class="row">
-									<div class="col-12"><b>Hotel Amenities: </b></div>
-									<div class="col-12">
-										<th:block th:each="facil : ${facilities}">
-											<span class="badge bg-success">[[${facil}]]</span>
-										</th:block>
-									</div>
-								</div>
-							</div>
-							<div class="col-12" style="height: 15px;"></div>
-							<div class="col-12">
-								<div class="row">
-									<div class="col-12"><b>Tourist Attractions: </b></div>
-									<th:block th:each="tour : ${tours}">
-										<div class="col-12"><b th:utext="${tour.key}"></b><p th:utext="${tour.value}"></p></div>
+									<div class="col-12"><b>Bus Point Details: </b></div>
+									<th:block th:each="boarding : ${bus.boardingPointsDetails}">
+										<div class="col-12">
+											<p><b>[[${boarding.pointType}]]: </b> [[${boarding.cityPointLocation}]], [[${boarding.cityPointName}]] - [[${boarding.cityPointTime}]]</p>
+										</div>
 									</th:block>
 								</div>
 							</div>
 							<div class="col-12" style="height: 15px;"></div>
 							<div class="col-12">
 								<div class="row">
-									<div class="col-12"><b>Hotel Policy: </b></div>
-									<div class="col-12"><p th:utext="${hotelPolicy}"></p></div>
+									<div class="col-12"><b>Cancellation Policy: </b></div>
+									<th:block th:each="cancel : ${bus.busCancelPolicies}">
+										<div class="col-12">
+											<p>Cancel Charge: [[${cancel.cancellationCharge}]]</p>
+											<p>Policy: [[${cancel.policyString}]]</p>
+											<p>Time: [[${cancel.fromDate}]] - [[${cancel.toDate}]]</p> <br>
+										</div>
+									</th:block>
 								</div>
 							</div>
 							<div class="col-12" style="height: 15px;"></div>
-							<div class="col-12">
-								<div class="row">
-									<div class="col-12"><b>Special: </b></div>
-									<div class="col-12"><p th:utext="${specialInstructions}"></p></div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
 				
-				<div style="margin: 15px 0;">
-					<h5>Hotel Images</h5>
-					<div class="row">
-						<div class="col-4" style="padding: 2px;">
-							<div style="overflow: hidden;">
-								<div id="imagesHotel1" class="boxImg"></div>
-							</div>
-						</div>
-						<div class="col-4" style="padding: 2px;">
-							<div style="overflow: hidden;">
-								<div id="imagesHotel2" class="boxImg"></div>
-							</div>
-						 </div>
-						<div class="col-4" style="padding: 2px;">
-							<div style="overflow: hidden;">
-								<div id="imagesHotel3" class="boxImg"></div>
-							</div>
-						</div>
-					</div>
-					<div style="display: flex; justify-content:end; margin: 8px 0;">
-						<!-- Button trigger modal -->
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-						  View all <i class="fa fa-solid fa-angle-right"></i>
-						</button>
-						
-						<!-- Modal -->
-						<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-						  <div class="modal-dialog" style="margin: 3px;">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <h5 class="modal-title" id="staticBackdropLabel">Hotel Images</h5>
-						        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						      </div>
-						      <div class="modal-body">
-								  <div class="grid-container"></div>
-								  
-									<!-- Modal -->
-									<div class="modal fade" id="staticBackdropSecond" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-									  <div class="modal-dialog" style="margin: 3px;">
-									    <div class="modal-content">
-									      <div class="modal-header">
-									        <h5 class="modal-title" id="staticBackdropLabel">Hotel Images</h5>
-									        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-									      </div>
-									      <div class="modal-body">
-											  
-												
-									      </div>
-									      <div class="modal-footer">
-									        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ok</button>
-									      </div>
-									    </div>
-									  </div>
-									</div>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ok</button>
-						      </div>
-						    </div>
-						  </div>
-						</div>
-
-					</div>
-				</div>
 				
-				<div>
-					 <gmp-map  zoom="11" map-id="DEMO_MAP_ID" id="mapWrap">
-				      <gmp-advanced-marker title="My location" id="mapLoc"></gmp-advanced-marker>
-				    </gmp-map>
-				</div>
+				<div style="height: 20px;"></div>
 			</div>
 		</div>
 		
-		<div class="container media_status">
+		<div class="container media-hide">
 			<div class="divContainer">
-				<h4>Hotel Room Selection</h4>
-				<small id="hotelRoomIndicator" style="color: #a5a5a5;"></small>
-				<div class="row" id="roomItemsList">
+				<h4>Seat Selection</h4>
+				<small id="BusSeatIndicator" style="color: #a5a5a5;">Max 6 Seats Per Ticket</small>
+				<div class="row" id="busSeatList">
 					
 				</div>
 			</div>
@@ -551,37 +466,37 @@
 			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content">
 			      <div class="modal-header">
-			        <h5 class="modal-title" id="staticBackdropLabel">Hotel Room Details</h5>
+			        <h5 class="modal-title" id="staticBackdropLabel">Bus Seat Details</h5>
 			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			      </div>
 			      <div class="modal-body" style="height: 83vh; overflow: scroll;">
 					<div class="gridContainer">
-						<!--<th:block th:each="room : ${hotelRoomList}">
+						<th:block th:each="seat : ${seatList}">
 					  		<div class="form-check">
-							  <button class="form-check-input gridItem" type="radio" name="flexRadioDefault" id="flexRadioDefault1" style="width: 100%; height: fit-content;" th:value="${room.roomIndex}">
+							  <button class="form-check-input gridItem" type="radio" name="flexRadioDefault" id="flexRadioDefault1" style="width: 100%; height: fit-content;" th:value="${seat.seatIndex}">
 								  <div class="">
-									<div class="countDiv"><p>[[${room.roomIndex}]]</p></div>
-									<h5>[[${room.roomDescription}]]</h5>
-									<p style="color: #8f8f8f;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> [[${room.ratePlanName}]]</p>
-									<p class="confirmStyle">[[${room.availabilityType}]]</p>
+									<div class="countDiv"><b>[[${seat.seatIndex}]]</b></div>
+									<h5>Seat No: [[${seat.seatName}]]</h5>
+									<small style="color: #8f8f8f; font-size: 12px;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i>Type: [[${seat.seatType}]]</small>
+									<p class="confirmStyle">₹ [[${seat.seatFare}]]</p>
 								  </div>
 							  </button>
 							</div>
-						</th:block>-->
+						</th:block>
 					</div>
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-			        <button type="button" class="btn btn-primary" id="guestSavebtnRoom" data-bs-dismiss="modal">Select & Close</button>
+			        <button type="button" class="btn btn-primary" id="seatSavebtn" data-bs-dismiss="modal">Select & Close</button>
 			      </div>
 			    </div>
 			  </div>
 			</div>
 		</div>
 		
-		<div class="container media_status">
+		<div class="container media-hide">
 			<div class="divContainer">
-				<h4>Guest Details</h4>
+				<h4>Passenger Details</h4>
 				<small id="hotelGuestIndicator" style="color: #a5a5a5;"></small>
 				<div>
 					<div class="row" id="guestListhtml" style="padding: 6px 0;">
@@ -594,7 +509,7 @@
 				  <div class="modal-dialog modal-dialog-centered">
 				    <div class="modal-content">
 				      <div class="modal-header">
-				        <h5 class="modal-title" id="staticBackdropLabel">Guest Info</h5>
+				        <h5 class="modal-title" id="staticBackdropLabel">Passenger Info</h5>
 				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				      </div>
 				      <div class="modal-body">
@@ -629,6 +544,10 @@
 						  <label for="floatingInput">Age in number</label>
 						</div>
 				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="addressGuest" placeholder="name@example.com" required>
+						  <label for="floatingInput">Address</label>
+						</div>
+				        <div class="form-floating mb-3">
 						  <input type="text" class="form-control" id="panGuests" placeholder="name@example.com" required>
 						  <label for="floatingInput">PAN Number</label>
 						</div>
@@ -642,6 +561,169 @@
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 				        <button type="button" class="btn btn-primary" id="guestSavebtn" data-bs-dismiss="modal" form="guestSaveId">Save & Close</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container media_status">
+			<div class="hotelInfoDiv">
+				<div>
+					<h4>[[${bus.travelName}]]</h4>
+					<small>[[${bus.busType}]]</small><br><br>
+					<b>[[${bus.arrivalTime}]] - [[${bus.departureTime}]] </b>
+				</div>
+				
+				<div >
+					<div style="display: flex; justify-content: center;"><button class="collapsibleBtn">Bus Info</button></div> 
+					<div class="collapsibleClass">
+						<div class="row priceRowMobStyleDropdown" style="width: 100%;">
+							<div class="col-12" style="height: 15px;"></div>
+							<div class="col-12">
+								<div class="row">
+									<div class="col-12"><b>Bus Point Details: </b></div>
+									<th:block th:each="boarding : ${bus.boardingPointsDetails}">
+										<div class="col-12">
+											<p><b>[[${boarding.pointType}]]: </b> [[${boarding.cityPointLocation}]], [[${boarding.cityPointName}]] - [[${boarding.cityPointTime}]]</p>
+										</div>
+									</th:block>
+								</div>
+							</div>
+							<div class="col-12" style="height: 15px;"></div>
+							<div class="col-12">
+								<div class="row">
+									<div class="col-12"><b>Cancellation Policy: </b></div>
+									<th:block th:each="cancel : ${bus.busCancelPolicies}">
+										<div class="col-12">
+											<p>Cancel Charge: [[${cancel.cancellationCharge}]]</p>
+											<p>Policy: [[${cancel.policyString}]]</p>
+											<p>Time: [[${cancel.fromDate}]] - [[${cancel.toDate}]]</p> <br>
+										</div>
+									</th:block>
+								</div>
+							</div>
+							<div class="col-12" style="height: 15px;"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+			
+			</div>
+		</div>
+		
+		<div class="container media_status">
+			<div class="divContainer">
+				<h4>Seat Selection</h4>
+				<small id="BusSeatIndicator" style="color: #a5a5a5;">Max 6 Seats Per Ticket</small>
+				<div class="row" id="busSeatListMob">
+					
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="guestModalRoomaddMob" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="staticBackdropLabel">Bus Seat Details</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body" style="height: 83vh; overflow: scroll;">
+					<div class="gridContainer">
+						<th:block th:each="seat : ${seatList}">
+					  		<div class="form-check">
+							  <button class="form-check-input gridItem" type="radio" name="flexRadioDefaultMob" id="flexRadioDefault1" style="width: 100%; height: fit-content;" th:value="${seat.seatIndex}">
+								  <div class="">
+									<div class="countDiv"><b>[[${seat.seatIndex}]]</b></div>
+									<h5>Seat No: [[${seat.seatName}]]</h5>
+									<small style="color: #8f8f8f; font-size: 12px;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i>Type: [[${seat.seatType}]]</small>
+									<p class="confirmStyle">₹ [[${seat.seatFare}]]</p>
+								  </div>
+							  </button>
+							</div>
+						</th:block>
+					</div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+			        <button type="button" class="btn btn-primary" id="seatSavebtnMob" data-bs-dismiss="modal">Select & Close</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+		
+		<div class="container media_status">
+			<div class="divContainer">
+				<h4>Passenger Details</h4>
+				<small id="hotelGuestIndicatorMob" style="color: #a5a5a5;"></small>
+				<div>
+					<div class="row" id="guestListhtmlMob" style="padding: 6px 0;">
+						
+						
+					</div>
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="guestModalMob" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="staticBackdropLabel">Passenger Info</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+						  <form id="guestSaveId">
+						 <div class="form-floating" style="padding-bottom: 16px;">
+						  <select class="form-select" id="titleGuestsMob" aria-label="Floating label select example">
+						    <option selected>Mr</option>
+						    <option value="1">Mrs</option>
+						    <option value="2">Miss</option>
+						    <option value="3">Ms</option>
+						  </select>
+						  <label for="floatingSelect">Title</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="firstNameGuestsMob" placeholder="name" required>
+						  <label for="floatingInput">First Name</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="lastNameGuestsMob" placeholder="name" required>
+						  <label for="floatingInput">Last Name</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="email" class="form-control" id="emailGuestMob" placeholder="name@example.com" required>
+						  <label for="floatingInput">Email</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="tel" class="form-control" id="phoneGuestMob" placeholder="name@example.com" required>
+						  <label for="floatingInput">Phone No</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="number" class="form-control" id="ageGuestsMob" placeholder="name@example.com" required>
+						  <label for="floatingInput">Age in number</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="addressGuestMob" placeholder="name@example.com" required>
+						  <label for="floatingInput">Address</label>
+						</div>
+				        <div class="form-floating mb-3">
+						  <input type="text" class="form-control" id="panGuestsMob" placeholder="name@example.com">
+						  <label for="floatingInput">PAN Number</label>
+						</div>
+						 <div class="form-floating" style="padding-bottom: 16px;">
+						  <select class="form-select" id="floatingSelectroomMob" aria-label="Floating label select example" required>
+						  </select>
+						  <label for="floatingSelectroomMob">Select Room</label>
+						</div>
+				      </div>
+				      </form>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				        <button type="button" class="btn btn-primary" id="guestSavebtnMob" data-bs-dismiss="modal" form="guestSaveId">Save & Close</button>
 				      </div>
 				    </div>
 				  </div>
@@ -667,8 +749,8 @@
 				   	</button>
 			   </div>
 				<form th:action="@{/hotel/save_order}" method="post" id="saveOrderForm">
-					<input type="hidden" name="hotel_id" th:value="${hotel_id}">
-					<input type="hidden" name="search_id" th:value="${history_id}">
+					<input type="hidden" name="hotel_id" >
+					<input type="hidden" name="search_id" >
 				</form>
 		   </div>
 	   </div>
@@ -678,35 +760,34 @@
 	</body>
 	<script>
 		
-	</script>
-	
-	<script>
 		$("button[name='flexRadioDefault'").click(function(){
 			$("button[name='flexRadioDefault'").removeClass('selected');
 			$(this).addClass('selected');
 		});
-		$("#guestSavebtnRoom").click(function(){
-			saveHotelRoom($(".selected").val());
+		
+		$("button[name='flexRadioDefaultMob'").click(function(){
+			$("button[name='flexRadioDefaultMob'").removeClass('selected');
+			$(this).addClass('selected');
 		});
 		
-		showHotelRooms();
+	</script>
+	<script>
+		showBusSeats($("#busSeatList"), $("#floatingSelectroom"), "#guestModalRoomadd", "col-2");
+		showBusSeats($("#busSeatListMob"), $("#floatingSelectroomMob"), "#guestModalRoomaddMob", "col-6");
 		
-		function showHotelRooms() {
+		function showBusSeats(idName, idFloat, modal, col) {
 			
-			var hotelIdRoom = [[${hotel_id}]];
-			var paramsRoom = {hotel_id: hotelIdRoom};
-			var urlComponentsSaveRoom = "[[@{/show_hotel_room_rest}]]";
+			var busId = [[${busId}]];
+			var paramsBus = {bus_id: busId};
+			var urlComponentsSaveSeat = "[[@{/show_bus_seat_rest}]]";
 	    	
-	    	$.post(urlComponentsSaveRoom, paramsRoom, function(elem) {
-				$("#roomItemsList").html("");
-				$("#floatingSelectroom").html("");
-				$("#hotelRoomIndicator").html("");
-				
-				var noOfRooms = [[${noOfRooms}]];
+	    	$.post(urlComponentsSaveSeat, paramsBus, function(elem) {
+				idName.html("");
+				idFloat.html("");
 				
 				var htmlAdd = `
-						<div class="col-6" style=" display: flex; justify-content: center; align-items: center;" >
-							<button style="height: 150px; width: 100%; border-radius: 12px; background: #f3f5ff;" type="button" id="addGstButtonRoom" data-bs-toggle="modal" data-bs-target="#guestModalRoomadd">
+						<div class="` + col + `" style=" display: flex; justify-content: center; align-items: center;" >
+							<button style="height: 150px; width: 100%; border-radius: 12px; background: #f3f5ff;" type="button" id="addGstButtonRoom" data-bs-toggle="modal" data-bs-target="` + modal + `">
 								<i class="fa fa-solid fa-plus"></i>
 							</button>
 						</div>
@@ -716,86 +797,94 @@
 					<option value="0"> None</option>
 					`;
 					
-				var htmlIndcate = `Selected Rooms: ` + elem.length + ` out of ` + noOfRooms + `.`;
-					
-				$("#floatingSelectroom").append(htmlextra);
-				$("#hotelRoomIndicator").html(htmlIndcate);
+				idFloat.append(htmlextra);
+				idName.append(htmlAdd);
 				
-				if(noOfRooms > elem.length) {
-					$("#roomItemsList").append(htmlAdd);
-				}
 				
 	    		elem.forEach(function(element){
 					var elemArray = element.split("-");
 					
 					var htmlcode = `
-					<div class="col-6" style="margin: 4px 0;">
+					<div class="` + col + `" style="margin: 4px 0;">
 						<div class="gridItem" style="position: relative;">
-							<button type="button" class="deleteBtnroom" onclick="deleteHotelRoom(` + parseInt(elemArray[0]) + `)"><i class="fa fa-solid fa-xmark"></i></button>
+							<button type="button" class="deleteBtnroom" onclick="deleteBusSeat(` + parseInt(elemArray[0]) + `)"><i class="fa fa-solid fa-xmark"></i></button>
 							<input type="hidden" value="` + elemArray[0] + `">
 							<div class="savedRoomstl"><p>` + elemArray[1] + `</p></div>
-							<h5>` + elemArray[2] + `</h5>
-							<p style="color: #8f8f8f; font-size: 14px;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> ` + elemArray[3] + `</p>
+							<h5>Seat No: ` + elemArray[2] + `</h5>
+							<p style="color: #8f8f8f; font-size: 14px;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> Type: ` + elemArray[3] + `</p>
+							<p class="confirmStyle">₹ ` + elemArray[4] + `</p>
 						</div>
 					  </div>
 					`;
 					
 					var htmlnew = `
-					<option value="` + elemArray[0] + `"> ` + elemArray[1] + `. ` + elemArray[2] + `</option>
+					<option value="` + elemArray[0] + `"> Seat No: ` + elemArray[2] + `, Price: ₹` + elemArray[4] + `</option>
 					`;
 					
-					$("#floatingSelectroom").append(htmlnew);
-					$("#roomItemsList").append(htmlcode);
+					idFloat.append(htmlnew);
+					idName.append(htmlcode);
 				});
 	    	}).fail(function(){
 				consol.log("Something went wrong in the server!");
 	    	});
 		};
 		
-		function saveHotelRoom(roomIndex) {
-			
-			var hotelIdRoom = [[${hotel_id}]];
-			var cust_idRoom = [[${cust_id}]];
-			var paramsRoom = {roomIndex: roomIndex, hotel_id: hotelIdRoom, cust_id: cust_idRoom};
-			var urlComponentsSaveRoom = "[[@{/save_hotel_room}]]";
-	    	
-	    	$.post(urlComponentsSaveRoom, paramsRoom, function(elem) {
-				showHotelRooms();
-				
-	    	}).fail(function(){
-				consol.log("Something went wrong in the server!");
-	    	});
-		};
-		
-		function deleteHotelRoom(room_id) {
-			
-			var paramsRoom = {room_id: room_id};
-			var urlComponentsSaveRoom = "[[@{/delete_hotel_room}]]";
-	    	
-	    	$.post(urlComponentsSaveRoom, paramsRoom, function(elem) {
-				showHotelRooms();
-				
-	    	}).fail(function(){
-				consol.log("Something went wrong in the server!");
-	    	});
-		};
-		
-		
 	</script>
-	<script>
-		showHotelGuests();
+<script>
+		$("#seatSavebtn").click(function(){
+			saveBusSeat($(".selected").val());
+		});
 		
-		function showHotelGuests() {
+		$("#seatSavebtnMob").click(function(){
+			saveBusSeat($(".selected").val());
+		});
+	
+		function saveBusSeat(seatIndex) {
 			
-			hotelId = [[${hotel_id}]];
-			params = {hotel_id: hotelId};
-			urlComponentsSave = "[[@{/show_hotel_guest}]]";
+			var busId = [[${busId}]];
+			var cust_id = [[${custId}]];
+			var paramsSeat = {seatIndex: seatIndex, bus_id: busId, cust_id: cust_id};
+			var urlComponentsSaveSeat = "[[@{/save_bus_seat}]]";
+	    	
+	    	$.post(urlComponentsSaveSeat, paramsSeat, function(elem) {
+				showBusSeats($("#busSeatList"), $("#floatingSelectroom"), "#guestModalRoomadd", "col-2");
+				showBusSeats($("#busSeatListMob"), $("#floatingSelectroomMob"), "#guestModalRoomaddMob", "col-6");
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+</script>
+
+<script>
+	
+		function deleteBusSeat(seat_id) {
+			
+			var paramsSeat = {seat_id: seat_id};
+			var urlComponentsSaveSeat = "[[@{/delete_bus_seat}]]";
+	    	
+	    	$.post(urlComponentsSaveSeat, paramsSeat, function(elem) {
+				showBusSeats($("#busSeatList"), $("#floatingSelectroom"), "#guestModalRoomadd", "col-2");
+				showBusSeats($("#busSeatListMob"), $("#floatingSelectroomMob"), "#guestModalRoomaddMob", "col-6");
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+</script>
+<script>
+	showBusPax($("#guestListhtml"), $("#hotelGuestIndicator"), "#guestModal", "");
+	showBusPax($("#guestListhtmlMob"), $("#hotelGuestIndicatorMob"), "#guestModalMob", "Mob");
+		
+		function showBusPax(idList, indicate, idModal, idType) {
+			
+			busId = [[${busId}]];
+			params = {bus_id: busId};
+			urlComponentsSave = "[[@{/show_bus_pax}]]";
 	    	
 	    	$.post(urlComponentsSave, params, function(elem) {
-				$("#guestListhtml").html("");
-				$("#hotelGuestIndicator").html("");
-				
-				var totalGuests = [[${totalGuests}]];
+				idList.html("");
+				indicate.html("");
 				
 				var htmlElem = `
 					<div class="col-12">
@@ -806,7 +895,7 @@
 								<div class="col-6 addUserBtn">
 									<div></div>
 									<div id="addGuestbtnCover" style="margin-right: 10px; cursor: pointer">
-										<button type="button" id="addGstButton" data-bs-toggle="modal" data-bs-target="#guestModal"><i class="fa fa-solid fa-plus"></i></button>
+										<button type="button" id="addGstButton" data-bs-toggle="modal" data-bs-target="` + idModal + `"><i class="fa fa-solid fa-plus"></i></button>
 									</div>
 								</div>
 							</div>
@@ -814,19 +903,15 @@
 						<div class="col-12" style="height: 10px;"></div>
 				`;
 				
-				var htmlIndcate = `Selected Guests: ` + elem.length + ` out of ` + totalGuests + `.`;
+				var htmlIndcate = `Selected Guests: ` + elem.length + `.`;
 				
-				$("#hotelGuestIndicator").html(htmlIndcate);
+				indicate.html(htmlIndcate);
+				idList.append(htmlElem);
 				
-				if(totalGuests > elem.length) {
-					$("#guestListhtml").append(htmlElem);
-				}
+				$("#saveOrderBTN").addClass("nextBlueChange");
+				$("#saveOrderBTN").attr("form", "saveOrderForm");
+				$("#submitInner").addClass("nextWihte");
 				
-				if (elem.length == totalGuests) {
-					$("#saveOrderBTN").addClass("nextBlueChange");
-					$("#saveOrderBTN").attr("form", "saveOrderForm");
-					$("#submitInner").addClass("nextWihte");
-				}
 				
 	    		elem.forEach(function(element){
 					var elemArray = element.split("-");
@@ -841,14 +926,14 @@
 									</div>
 									<div class="col-3">
 									
-										<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify-` + elemArray[0] + `" class="modifyButtonGuest">
+										<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify` + idType + `-` + elemArray[0] + `" class="modifyButtonGuest">
 											<i class="fa fa-solid fa-pen-to-square"></i>
 										</button>
 									</div>
 								</div>
 								
 								<!-- Modal -->
-								<div class="modal fade" id="guestModalModify-` + elemArray[0] + `" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+								<div class="modal fade" id="guestModalModify` + idType + `-` + elemArray[0] + `" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 								  <div class="modal-dialog modal-dialog-centered">
 								    <div class="modal-content">
 								      <div class="modal-header">
@@ -867,37 +952,41 @@
 										  <label for="floatingSelect">Title</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="firstNameGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[2] + `">
+										  <input type="text" class="form-control" id="firstNameGuestsModify-` + elemArray[0] + `" value="` + elemArray[2] + `">
 										  <label for="floatingInput">First Name</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="lastNameGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[3] + `">
+										  <input type="text" class="form-control" id="lastNameGuestsModify-` + elemArray[0] + `" value="` + elemArray[3] + `">
 										  <label for="floatingInput">Last Name</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="email" class="form-control" id="emailGuestModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[6] + `">
+										  <input type="email" class="form-control" id="emailGuestModify-` + elemArray[0] + `" value="` + elemArray[6] + `">
 										  <label for="floatingInput">Email</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="tel" class="form-control" id="phoneGuestModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[7] + `">
+										  <input type="tel" class="form-control" id="phoneGuestModify-` + elemArray[0] + `" value="` + elemArray[7] + `">
 										  <label for="floatingInput">Phone No</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="number" class="form-control" id="ageGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[4] + `">
+										  <input type="number" class="form-control" id="ageGuestsModify-` + elemArray[0] + `" value="` + elemArray[4] + `">
 										  <label for="floatingInput">Age in number</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="panGuestsModify-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[5] + `">
+										  <input type="text" class="form-control" id="addressGuestModify-` + elemArray[0] + `" value="` + elemArray[4] + `">
+										  <label for="floatingInput">Address</label>
+										</div>
+								        <div class="form-floating mb-3">
+										  <input type="text" class="form-control" id="panGuestsModify-` + elemArray[0] + `" value="` + elemArray[5] + `">
 										  <label for="floatingInput">PAN Number</label>
 										</div>
 								        <div class="form-floating mb-3">
 										  <input type="text" class="form-control" value="` + elemArray[8] + `. ` + elemArray[9] + `" disabled>
-										  <label for="floatingInput">Selected Room</label>
+										  <label for="floatingInput">Selected Seat</label>
 										</div>
 								      </div>
 								      <div class="modal-footer">
 								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-								        <button type="button" class="btn btn-primary" id="guestSavebtnModify-` + elemArray[0] + `" data-bs-dismiss="modal">Save & Close</button>
+								        <button type="button" class="btn btn-primary" id="guestSavebtnModify` + idType + `-` + elemArray[0] + `" data-bs-dismiss="modal">Save & Close</button>
 								      </div>
 								    </div>
 								  </div>
@@ -906,10 +995,10 @@
 							</div>
 					`;
 					
-					$("#guestListhtml").append(htmlcode);
+					idList.append(htmlcode);
 					
 					
-					$("#guestSavebtnModify-" + elemArray[0]).click(function(){
+					$("#guestSavebtnModify" + idType + "-" + elemArray[0]).click(function(){
 						
 						paramsMod = {guest_id: parseInt($("#roomId-" + elemArray[0]).val()), title: $("#titleGuestsModify-" + elemArray[0]).val(), fName: $("#firstNameGuestsModify-" + elemArray[0]).val(), 
 						lName: $("#lastNameGuestsModify-" + elemArray[0]).val(), email: $("#emailGuestModify-" + elemArray[0]).val(), phoneNo: $("#phoneGuestModify-" + elemArray[0]).val(), 
@@ -932,8 +1021,8 @@
 	    	});
 		};
 		
-		
-	</script>
+</script>
+
 	
 	<script>
 		$("#guestSavebtn").click(function(){
@@ -948,11 +1037,12 @@
 			panGuests = $("#panGuests").val();
 			emailGuests = $("#emailGuest").val();
 			phoneNoGuests = $("#phoneGuest").val();
+			addressGuest = $("#addressGuest").val
 			hotelId = [[${hotel_id}]];
 			cust_id = [[${cust_id}]];
 			selectorId =  $("#floatingSelectroom").val();
 			
-			urlComponentsSave = "[[@{/save_hotel_guest}]]";
+			urlComponentsSave = "[[@{/save_bus_pax}]]";
 			
 			if(ageGuests <= 12) {
 				panGuests = null;
@@ -970,45 +1060,5 @@
 	    	});
 		};
 		
-	</script>
-	
-	<script th:inline="javascript">
-		var pos = [[${latitude}]] + "," + [[${longitude}]];
-		$("#mapWrap").attr('center', pos);
-		$("#mapLoc").attr('position', pos);
-	</script>
-	<script th:inline="javascript">
-		var imgs = [[${hotelImages}]];
-		
-		for (let i = 0; i < imgs.length; i++) {
-			var hmtl = `
-				<button class='grid-item' data-bs-toggle="modal" data-bs-target="#staticBackdropSecond">
-					<img src="` + imgs[i] + `" alt='Hotel Pic' class='img-fluid'>
-				</button>
-			`;
-			$(".grid-container").append(hmtl);
-				
-			if(i == 0) {
-				var hmtl = "<img src=" + imgs[i] + " alt='Hotel Pic' class='img-fluid'>";
-				$("#imagesHotel1").html(hmtl);
-			} else if(i == 1) {
-				var hmtl = "<img src=" + imgs[i] + " alt='Hotel Pic' class='img-fluid'>";
-				$("#imagesHotel2").html(hmtl);
-			} else if(i == 2) {
-				var hmtl = "<img src=" + imgs[i] + " alt='Hotel Pic' class='img-fluid'>";
-				$("#imagesHotel3").html(hmtl);
-			}
-			
-		}
-	</script>
-	<script th:inline="javascript">
-		$(".collapsibleBtn").click(function(){
-			$(this).parent().next().toggleClass("collapsibleToggle");
-		});
-	</script>
-	<script>
-		$("#btnModify").click(function(){
-			$(".collapsibleSearch").toggleClass("collapsibleSearchToggle");
-		});
 	</script>
 </html>

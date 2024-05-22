@@ -286,9 +286,6 @@ public class HotelController {
 						hotelSupplierCode.setCategoryId(categoryId);
 						hotelSupplierCode.setCategoryIndex(categoryIndex);
 						
-						System.out.println("Category Id: " + hotelSupplierCode.getCategoryId());
-						System.out.println("Category Index: " + hotelSupplierCode.getCategoryIndex());
-						
 						hotelSupplierCodes.add(hotelSupplierCode);
 					}
 				} catch (Exception e) {

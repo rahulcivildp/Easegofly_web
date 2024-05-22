@@ -36,7 +36,7 @@ public class BusPassenger {
 	private String idNumber;
 	
 	@Column(name = "id_type")
-	private Integer idType;
+	private String idType;
 	
 	@Column(name = "gender")
 	private Integer gender;
@@ -59,6 +59,24 @@ public class BusPassenger {
 
 	
 	public BusPassenger() {}
+
+	public BusPassenger(String title, String firstName, String lastName, String phoneNo, String email, String idNumber,
+			String idType, Integer gender, Integer age, Integer seatId, boolean leadPassenger, String address,
+			Bus bus) {
+		this.title = title;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNo = phoneNo;
+		this.email = email;
+		this.idNumber = idNumber;
+		this.idType = idType;
+		this.gender = gender;
+		this.age = age;
+		this.seatId = seatId;
+		this.leadPassenger = leadPassenger;
+		this.address = address;
+		this.bus = bus;
+	}
 
 	public Integer getId() {
 		return id;
@@ -124,11 +142,11 @@ public class BusPassenger {
 		this.idNumber = idNumber;
 	}
 
-	public Integer getIdType() {
+	public String getIdType() {
 		return idType;
 	}
 
-	public void setIdType(Integer idType) {
+	public void setIdType(String idType) {
 		this.idType = idType;
 	}
 

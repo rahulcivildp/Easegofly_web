@@ -184,14 +184,13 @@ public class BusController {
 				    JSONArray jsonArrayBoardingPoints = mainObj.getJSONObject("Bus-" + i).getJSONArray("BoardingPointsDetails");
 				    
 					for (int j = 0; j < jsonArrayBoardingPoints.length(); j++) {
-						System.out.println("jsonArrayBoardingPoints.length() " + jsonArrayBoardingPoints.getJSONObject(j).get("CityPointIndex").toString());
 
 						Integer cityPointIndex = Integer.parseInt(jsonArrayBoardingPoints.getJSONObject(j).get("CityPointIndex").toString());
 						String cityPointLocation = jsonArrayBoardingPoints.getJSONObject(j).get("CityPointLocation").toString();
 						String cityPointName = jsonArrayBoardingPoints.getJSONObject(j).get("CityPointName").toString();
 						String cityPointTime = jsonArrayBoardingPoints.getJSONObject(j).get("CityPointTime").toString();
 						
-						BusPointDetails newBording = new BusPointDetails(cityPointIndex, cityPointLocation, cityPointName, cityPointTime);
+						BusPointDetails newBording = new BusPointDetails(cityPointIndex, cityPointLocation, cityPointName, cityPointTime, "Boarding");
 						boardingPointList.add(newBording);
 					}
 					
@@ -209,7 +208,7 @@ public class BusController {
 						String cityPointName = jsonArrayDroppingPoints.getJSONObject(j).get("CityPointName").toString();
 						String cityPointTime = jsonArrayDroppingPoints.getJSONObject(j).get("CityPointTime").toString();
 						
-						BusPointDetails newDropping = new BusPointDetails(cityPointIndex, cityPointLocation, cityPointName, cityPointTime);
+						BusPointDetails newDropping = new BusPointDetails(cityPointIndex, cityPointLocation, cityPointName, cityPointTime, "Dropping");
 						droppingPointList.add(newDropping);
 					
 					} 
@@ -239,8 +238,6 @@ public class BusController {
 					// TODO: handle exception
 //					e.printStackTrace();
 				}
-				
-				
 
 				Bus newBus = new Bus(resultIndex, arrivalTime, departureTime, routeId, busType, serviceName, travelName, "INR", idProofRequired, isDropPointMandatory, 
 						liveTrackingAvailable, mTicketEnabled, partialCancellationAllowed, maxSeatsPerTicket, operatorId, tax, discount, publishedPrice, otherCharges, offeredPrice, 
@@ -267,28 +264,31 @@ public class BusController {
 		model.addAttribute("cityTwo", cityTwo);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("deptTime", deptTime);
+		model.addAttribute("deptDate", deptDate);
+		model.addAttribute("checkIn", deptTime);
 		model.addAttribute("busList", buses);
 		
 		return "bus/search/bus-search-result";
 	}
 
-	@PostMapping("/hotel/saveBus")
+	@PostMapping("/bus/saveBus")
 	public String saveBus(@RequestParam(name = "resultIndex", required = false) String resultIndex,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@RequestParam(name = "busDeparture", required = false) String busDeparture, 
-			@RequestParam(name = "deptTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date deptTime, 
+			@RequestParam(name = "deptTime", required = false) String deptTime, 
 			@RequestParam(name = "busDestination", required = false) String busDestination) throws Exception {
 		
 		TBObusCity cityOne = busCityRepo.getCityByCityName(busDeparture);
 		TBObusCity cityTwo = busCityRepo.getCityByCityName(busDestination);
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date deptDate = dateFormat.parse(deptTime);
 		
 		Customer customer = customerService.getByPhone(loggedCustomer.getUsername());	
 		BusHistory newHistory = new BusHistory();
 		
 		if (history == null) {
 
-			newHistory.setDeptDate(deptTime);
+			newHistory.setDeptDate(deptDate);
 			newHistory.setCityIdOne(cityOne.getCityId().toString());
 			newHistory.setCityIdTwo(cityTwo.getCityId().toString());
 			newHistory.setCustomer(customer);
@@ -304,7 +304,7 @@ public class BusController {
 			}
 		}
 	    
-		bookingURL = "/bus/booking_" + savedBus.getId() + "_" + history.getId() + "_" + busDeparture + "_" + busDestination + "_" + dateFormat.format(deptTime); 
+		bookingURL = "/bus/booking_" + savedBus.getId() + "_" + history.getId() + "_" + busDeparture + "_" + busDestination + "_" + deptTime; 
 		
 		return "redirect:/bus_booking...";
 	}
@@ -327,6 +327,7 @@ public class BusController {
 		Bus bus = busService.findByIdBus(busId);
 		TBObusCity cityOne = busCityRepo.getCityByCityName(cityIdOne);
 		TBObusCity cityTwo = busCityRepo.getCityByCityName(cityIdTwo);
+	
         Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
        
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -345,7 +346,7 @@ public class BusController {
 		model.addAttribute("bus", bus);
 		model.addAttribute("custId", customer.getId());
         
-		return "hotel/booking/hotel-booking";
+		return "bus/booking/bus-booking";
 	}
 	
 	
@@ -398,14 +399,14 @@ public class BusController {
         	Integer noOfRows = Integer.parseInt(jsonObjSeat.getJSONObject("SeatLayout").get("NoOfRows").toString());
         	
         	for (int i = 0; i < jsonArraySeatDetails.length(); i++) {
-			    mainObj.put("Seat-" + i, jsonArraySeatDetails.getJSONObject(i));
+			    mainObj.put("Seat-" + i, jsonArraySeatDetails.getJSONArray(0).getJSONObject(i));
 				
 			    String columnNo = mainObj.getJSONObject("Seat-" + i).get("ColumnNo").toString();
 			    String rowNo = mainObj.getJSONObject("Seat-" + i).get("RowNo").toString();
 			    String seatName = mainObj.getJSONObject("Seat-" + i).get("SeatName").toString();
 	        	Integer height = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("Height").toString());
 	        	Integer seatIndex = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("SeatIndex").toString());
-	        	Integer seatType = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("NoOfColumns").toString());
+	        	Integer seatType = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("SeatType").toString());
 	        	Integer width = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("Width").toString());
 	        	boolean isLadiesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("IsLadiesSeat").toString());
 	        	boolean isMalesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("IsMalesSeat").toString());
@@ -502,7 +503,7 @@ public class BusController {
 			    String CityPointName = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointName").toString();
 			    String CityPointTime = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointTime").toString();
 			    
-			    BusPointDetails newPoint =  new BusPointDetails(CityPointIndex, CityPointLocation, CityPointName, CityPointTime);
+			    BusPointDetails newPoint =  new BusPointDetails(CityPointIndex, CityPointLocation, CityPointName, CityPointTime, "Boarding");
 			    busPointDetails.add(newPoint);
 			}
 

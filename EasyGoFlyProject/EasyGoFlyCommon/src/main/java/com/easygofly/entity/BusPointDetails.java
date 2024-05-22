@@ -28,6 +28,9 @@ public class BusPointDetails {
 	@Column(name = "city_point_time")
 	private String cityPointTime;
 	
+	@Column(name = "point_type")
+	private String pointType;
+	
 	@ManyToOne
 	@JoinColumn(name = "bus_id")
 	private Bus bus;
@@ -37,11 +40,12 @@ public class BusPointDetails {
 	public BusPointDetails() {}
 
 	public BusPointDetails(Integer cityPointIndex, String cityPointLocation, String cityPointName,
-			String cityPointTime) {
+			String cityPointTime, String pointType) {
 		this.cityPointIndex = cityPointIndex;
 		this.cityPointLocation = cityPointLocation;
 		this.cityPointName = cityPointName;
 		this.cityPointTime = cityPointTime;
+		this.pointType = pointType;
 	}
 
 	public Integer getId() {
@@ -90,6 +94,16 @@ public class BusPointDetails {
 
 	public void setBus(Bus bus) {
 		this.bus = bus;
+	}
+
+	
+	public String getPointType() {
+		return pointType;
+	}
+	
+
+	public void setPointType(String pointType) {
+		this.pointType = pointType;
 	}
 	
 

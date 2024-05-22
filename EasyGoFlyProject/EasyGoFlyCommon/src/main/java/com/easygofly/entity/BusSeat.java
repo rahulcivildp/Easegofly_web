@@ -160,6 +160,49 @@ public class BusSeat {
 		this.sGSTRate = sGSTRate;
 		this.taxableAmount = taxableAmount;
 	}
+	
+	public BusSeat(String columnNo, String rowNo, Integer height, Integer width, Integer seatType, String seatName,
+			Integer seatIndex, double seatFare, boolean isLadiesSeat, boolean isMalesSeat, boolean seatStatus,
+			String currencyCode, double tax, double discount, double basePrice, double publishedPrice,
+			double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff,
+			double agentCommission, double agentMarkUp, double tds, double cGSTAmount, double cGSTRate,
+			double cessAmount, double cessRate, double iGSTAmount, double iGSTRate, double sGSTAmount, double sGSTRate,
+			double taxableAmount, Bus bus) {
+		super();
+		this.columnNo = columnNo;
+		this.rowNo = rowNo;
+		this.height = height;
+		this.width = width;
+		this.seatType = seatType;
+		this.seatName = seatName;
+		this.seatIndex = seatIndex;
+		this.seatFare = seatFare;
+		this.isLadiesSeat = isLadiesSeat;
+		this.isMalesSeat = isMalesSeat;
+		this.seatStatus = seatStatus;
+		this.currencyCode = currencyCode;
+		this.tax = tax;
+		this.discount = discount;
+		this.basePrice = basePrice;
+		this.publishedPrice = publishedPrice;
+		this.otherCharges = otherCharges;
+		this.offeredPrice = offeredPrice;
+		this.publishedPriceRoundedOff = publishedPriceRoundedOff;
+		this.offeredPriceRoundedOff = offeredPriceRoundedOff;
+		this.agentCommission = agentCommission;
+		this.agentMarkUp = agentMarkUp;
+		this.tds = tds;
+		this.cGSTAmount = cGSTAmount;
+		this.cGSTRate = cGSTRate;
+		this.cessAmount = cessAmount;
+		this.cessRate = cessRate;
+		this.iGSTAmount = iGSTAmount;
+		this.iGSTRate = iGSTRate;
+		this.sGSTAmount = sGSTAmount;
+		this.sGSTRate = sGSTRate;
+		this.taxableAmount = taxableAmount;
+		this.bus = bus;
+	}
 
 	public Integer getId() {
 		return id;

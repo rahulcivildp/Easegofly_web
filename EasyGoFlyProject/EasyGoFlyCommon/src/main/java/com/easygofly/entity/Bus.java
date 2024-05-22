@@ -549,6 +549,26 @@ public class Bus {
 		this.customer = customer;
 	}
 	
+	public void addSeats(String columnNo, String rowNo, Integer height, Integer width, Integer seatType, String seatName,
+			Integer seatIndex, double seatFare, boolean isLadiesSeat, boolean isMalesSeat, boolean seatStatus,
+			String currencyCode, double tax, double discount, double basePrice, double publishedPrice,
+			double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff,
+			double agentCommission, double agentMarkUp, double tds, double cGSTAmount, double cGSTRate,
+			double cessAmount, double cessRate, double iGSTAmount, double iGSTRate, double sGSTAmount, double sGSTRate,
+			double taxableAmount) {
+		this.busSeats.add(new BusSeat(columnNo, rowNo, height, width, seatType, seatName,
+				 seatIndex, seatFare, isLadiesSeat, isMalesSeat, seatStatus,
+				 currencyCode, tax, discount, basePrice, publishedPrice,
+				 otherCharges, offeredPrice, publishedPriceRoundedOff, offeredPriceRoundedOff,
+				 agentCommission, agentMarkUp, tds, cGSTAmount, cGSTRate,
+				 cessAmount, cessRate, iGSTAmount, iGSTRate, sGSTAmount, sGSTRate,
+				 taxableAmount, this));
+	}
 	
+	public void addPax(String title, String firstName, String lastName, String phoneNo, String email, String idNumber,
+			String idType, Integer gender, Integer age, Integer seatId, boolean leadPassenger, String address) {
+		this.busPassengers.add(new BusPassenger(title, firstName, lastName, phoneNo, email, idNumber,
+				idType, gender, age, seatId, leadPassenger, address, this));
+	}
 	
 }

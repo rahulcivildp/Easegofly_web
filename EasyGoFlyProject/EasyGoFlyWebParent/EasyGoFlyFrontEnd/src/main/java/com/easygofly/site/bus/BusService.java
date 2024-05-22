@@ -13,6 +13,7 @@ import com.easygofly.entity.Bus;
 import com.easygofly.entity.BusCancelPolicy;
 import com.easygofly.entity.BusHistory;
 import com.easygofly.entity.BusPointDetails;
+import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
 import com.easygofly.site.LogService;
 
@@ -24,6 +25,7 @@ public class BusService {
 	@Autowired private BusRepository busRepo;
 	@Autowired private BusPointDetailRepository busPointDetailRepo;
 	@Autowired private BusCancelPolicyRepository busCancelPolicyRepo;
+	@Autowired private BusSeatRepository busSeatRepo;
 
 	public void authenticationBus(Model model) {
 		try {
@@ -108,4 +110,14 @@ public class BusService {
 		return bus; 
 	}
 	
+
+	public BusSeat findByIdSeat(Integer id) {
+		BusSeat savedSeat = busSeatRepo.findById(id).get();
+		return savedSeat; 
+	}
+	
+	public void deleteSeat(Integer id) {
+		BusSeat seat = busSeatRepo.findById(id).get();
+		busSeatRepo.deleteById(seat.getId());
+	}
 }
