@@ -24,15 +24,35 @@ public class BusRestController {
 
 	@PostMapping("/save_bus_pax")
 	public void saveGuest(@Param("title") String title, @Param("fName") String fName, @Param("lName") String lName, @Param("email") String email, @Param("phoneNo") String phoneNo, 
-			@Param("age") Integer age, @Param("gender") Integer gender, @Param("pan") String pan, @Param("bus_id") Integer bus_id, @Param("cust_id") Integer cust_id, @Param("seat_id") Integer seat_id, 
-			@Param("seatId") Integer seatId, @Param("address") String address) {
+			@Param("age") Integer age, @Param("gender") Integer gender, @Param("pan") String pan, @Param("bus_id") Integer bus_id, @Param("cust_id") Integer cust_id, @Param("seat_id") Integer seat_id,
+			@Param("address") String address) {
 	    Bus savedBus = busService.findByIdBus(bus_id);
 		BusSeat savedSeat = busService.findByIdSeat(seat_id);
 	
 		Bus bus = busSaveHelper.setPax(savedBus, title, fName, lName, phoneNo, email, pan, "Pan no", gender, age, savedSeat.getId(), false, address);
 		Customer customer = customerRepository.findById(cust_id).get();
 		
+		System.out.println(bus.getTravelName());
 		busService.saveBus(bus, customer);
+	}
+	
+	@PostMapping("/modify_pax")
+	public void modifyBusPax(@Param("guest_id") Integer guest_id, @Param("title") String title, @Param("fName") String fName, @Param("lName") String lName, 
+			@Param("email") String email, @Param("phoneNo") String phoneNo, @Param("age") Integer age, @Param("pan") String pan, @Param("address") String address, 
+			@Param("gender") Integer gender) {
+	    BusPassenger savedGuest = busService.findByIdPax(guest_id);
+	    savedGuest.setTitle(title);
+	    savedGuest.setFirstName(fName);
+	    savedGuest.setLastName(lName);
+	    savedGuest.setEmail(email);
+	    savedGuest.setPhoneNo(phoneNo);
+	    savedGuest.setAge(age);
+	    savedGuest.setIdNumber(pan);
+	    savedGuest.setAddress(address);
+	    savedGuest.setGender(gender);
+	    
+	    BusPassenger saveGuest = busService.savePax(savedGuest);
+	    	System.out.println(saveGuest.getEmail());
 	}
 	
 	@PostMapping("/show_bus_pax")

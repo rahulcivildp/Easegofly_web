@@ -12,9 +12,11 @@ import org.springframework.ui.Model;
 import com.easygofly.entity.Bus;
 import com.easygofly.entity.BusCancelPolicy;
 import com.easygofly.entity.BusHistory;
+import com.easygofly.entity.BusPassenger;
 import com.easygofly.entity.BusPointDetails;
 import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.HotelGuest;
 import com.easygofly.site.LogService;
 
 @Service
@@ -26,6 +28,7 @@ public class BusService {
 	@Autowired private BusPointDetailRepository busPointDetailRepo;
 	@Autowired private BusCancelPolicyRepository busCancelPolicyRepo;
 	@Autowired private BusSeatRepository busSeatRepo;
+	@Autowired private BusPaxRepository busPaxRepo;
 
 	public void authenticationBus(Model model) {
 		try {
@@ -119,5 +122,16 @@ public class BusService {
 	public void deleteSeat(Integer id) {
 		BusSeat seat = busSeatRepo.findById(id).get();
 		busSeatRepo.deleteById(seat.getId());
+	}
+
+
+	public BusPassenger findByIdPax(Integer id) {
+		BusPassenger savedPax = busPaxRepo.findById(id).get();
+		return savedPax; 
+	}
+
+	public BusPassenger savePax(BusPassenger pax) {
+		BusPassenger newPax = pax;
+		return busPaxRepo.save(newPax); 
 	}
 }
