@@ -1,0 +1,10 @@
+.height-stl {
+	height: 200px;
+}
+
+/* Responsive */
+@media only screen and (max-width: 800px) {
+	.height-stl {
+		height: 150px;
+	}
+}

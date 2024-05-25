@@ -2,13 +2,18 @@ package com.easygofly.site.bus;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,18 +26,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.Bus;
 import com.easygofly.entity.BusBoardingPointDetails;
 import com.easygofly.entity.BusCancelPolicy;
+import com.easygofly.entity.BusDroppingPointDetail;
 import com.easygofly.entity.BusHistory;
+import com.easygofly.entity.BusOrder;
+import com.easygofly.entity.BusPassenger;
 import com.easygofly.entity.BusPointDetails;
 import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.TBObusCity;
+import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.zaakpay.Transaction;
+import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
 @Controller
 public class BusController {
@@ -45,7 +58,7 @@ public class BusController {
 
 	private String searchURL = "";
 	private String bookingURL = "";
-//	private String orderURL = "";
+	private String orderURL = "";
 	
 	BusHistory history = new BusHistory();
 	List<Bus> buses = new ArrayList<>();
@@ -138,8 +151,7 @@ public class BusController {
 			for (int i = 0; i < jsonArrays.length(); i++) {
 			    mainObj.put("Bus-" + i, jsonArrays.getJSONObject(i));
 			    
-			    List<BusPointDetails> boardingPointList = new ArrayList<BusPointDetails>();
-			    List<BusPointDetails> droppingPointList = new ArrayList<BusPointDetails>();
+			    List<BusPointDetails> pointList = new ArrayList<BusPointDetails>();
 			    List<BusCancelPolicy> cancellationPolicieList = new ArrayList<BusCancelPolicy>();
 			    
 				
@@ -191,7 +203,7 @@ public class BusController {
 						String cityPointTime = jsonArrayBoardingPoints.getJSONObject(j).get("CityPointTime").toString();
 						
 						BusPointDetails newBording = new BusPointDetails(cityPointIndex, cityPointLocation, cityPointName, cityPointTime, "Boarding");
-						boardingPointList.add(newBording);
+						pointList.add(newBording);
 					}
 					
 				} catch (Exception e) {
@@ -209,7 +221,7 @@ public class BusController {
 						String cityPointTime = jsonArrayDroppingPoints.getJSONObject(j).get("CityPointTime").toString();
 						
 						BusPointDetails newDropping = new BusPointDetails(cityPointIndex, cityPointLocation, cityPointName, cityPointTime, "Dropping");
-						droppingPointList.add(newDropping);
+						pointList.add(newDropping);
 					
 					} 
 				} catch (Exception e) {
@@ -242,7 +254,7 @@ public class BusController {
 				Bus newBus = new Bus(resultIndex, arrivalTime, departureTime, routeId, busType, serviceName, travelName, "INR", idProofRequired, isDropPointMandatory, 
 						liveTrackingAvailable, mTicketEnabled, partialCancellationAllowed, maxSeatsPerTicket, operatorId, tax, discount, publishedPrice, otherCharges, offeredPrice, 
 						publishedPriceRoundedOff, offeredPriceRoundedOff, agentCommission, agentMarkUp, basePrice, tDS, cGSTAmount, cGSTRate, cessAmount, cessRate, iGSTAmount, iGSTRate, sGSTAmount, sGSTRate, 
-						taxableAmount, availableSeats, null, cancellationPolicieList, boardingPointList, droppingPointList);
+						taxableAmount, availableSeats, null, cancellationPolicieList, pointList);
 				
 				buses.add(newBus);
 			}
@@ -336,8 +348,9 @@ public class BusController {
 	    BusHistory busHistory = busService.findByIdBusHistory(history_id);
 
 	    busSeatLayout(model, bus.getResultIndex());
-	    busBusBoardingPoint(model, bus.getResultIndex());
+	    busBusBoardingPoint(model, bus.getResultIndex(), bus);
 
+		model.addAttribute("checkIn", checkIn);
 		model.addAttribute("checkIn", checkIn);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("cityTwo", cityTwo);
@@ -347,6 +360,133 @@ public class BusController {
 		model.addAttribute("custId", customer.getId());
         
 		return "bus/booking/bus-booking";
+	}
+	
+
+	@PostMapping("/bus/save_order")
+	public String saveBusOrder(@RequestParam(name = "bus_id", required = false) Integer bus_id, 
+			@RequestParam(name = "search_id", required = false) Integer search_id, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) {
+		Bus bus = busService.findByIdBus(bus_id);
+		List<BusSeat> busSeats = bus.getBusSeats();
+		List<BusPassenger> busPaxs = bus.getBusPassengers();
+		
+		for (BusSeat seat : busSeats) {
+			Integer count = 0;
+			for (BusPassenger pax : busPaxs) {
+				if(pax.getSeatId() == seat.getId()) {
+
+					count++;
+					if(count == 1) {
+						pax.setLeadPassenger(true);
+						busService.savePax(pax);
+					} else {
+						pax.setLeadPassenger(false);
+						busService.savePax(pax);
+					}
+				}
+			}
+		}
+	    
+		
+//		Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
+		
+		orderURL = "/bus/order_" + bus_id + "_" + search_id;
+		
+		return "redirect:/bus_order_book...";
+	}
+
+	@GetMapping("/bus_order_book...")
+    public String performApiLoadBusBook(Model model) {
+        model.addAttribute("searchURL", orderURL);
+        return "loading/loading";
+    }
+
+	
+	@GetMapping("/bus/order_{bus_id}_{search_id}")
+	public String busOrder(Model model,
+			@PathVariable(name = "bus_id") Integer bus_id,
+			@PathVariable(name = "search_id") Integer search_id,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			HttpServletRequest request, RedirectAttributes redirectAttributes) throws MalformedURLException, IOException {
+		
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		
+		Bus bus = busService.findByIdBus(bus_id);
+	    BusHistory busHistory = busService.findByIdBusHistory(search_id);
+		TBObusCity cityOne = busCityRepo.getCityByCityId(Integer.parseInt(busHistory.getCityIdOne()));
+		TBObusCity cityTwo = busCityRepo.getCityByCityId(Integer.parseInt(busHistory.getCityIdTwo()));
+	    
+	    Date createdDate = new Date();
+	    
+	    String busOrdername = busHistory.getDeptDate() + ":(" + cityOne.getCityName() + "-" + cityTwo.getCityName() + "):" + createdDate;
+	    
+	    BusOrder busOrder = new BusOrder(busOrdername, 0, createdDate, OrderStatus.NEW, customer, busHistory, bus);
+		
+	    BusOrder savedOrder= busService.saveOrder(busOrder, bus, busHistory);
+
+	    busBlockMethod(model, bus);
+
+		Integer totalGuests = bus.getBusPassengers().size();
+		
+		Wallet wallet = customer.getWallet();
+		Double doubleAmount = (double) (wallet.getBalance() / 100);
+		model.addAttribute("balance", doubleAmount);
+		
+		/* ------ ZAAKPAY -------- */ /**/
+		Date date = Calendar.getInstance().getTime();  
+	    DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+	    DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+	    String strDate1 = dateFormat1.format(date);
+	    String strDate2 = dateFormat2.format(date);
+		
+	    double totalPrice = 0;
+	    
+	    for (BusSeat seat : bus.getBusSeats()) {
+	    	totalPrice = totalPrice + seat.getPublishedPriceRoundedOff();
+		}
+	    
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "BUS" + savedOrder.getId();
+		Integer intAmount = (int) (totalPrice * 100);
+		String amount = "" + intAmount;
+		//String amount = "100";
+
+		//Cookie cookie = request.getCookies().get("JSESSIONID");
+		//String value = cookie.getValue();
+		
+		for (Cookie cookie : request.getCookies()) {
+			if(cookie.getName().equals("JSESSIONID")) {
+				String value = cookie.getValue();
+				model.addAttribute("JSESSIONID", value);
+			}
+		}
+		
+		
+		Transaction transaction = new Transaction();
+		
+		try {
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentHotel(orderString, amount);
+			
+			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
+			model.addAttribute("requestUrl", processPayment.getRequestUrl());
+			model.addAttribute("checksum", processPayment.getChecksum());
+			
+		} catch (Exception e) {
+		}
+		
+		/* ******************************************************************************** */
+		
+		model.addAttribute("busHistory", busHistory);
+		model.addAttribute("bus", bus);
+		model.addAttribute("totalGuests", totalGuests);
+		model.addAttribute("checkIn", busHistory.getDeptDate());
+		model.addAttribute("cityOne", cityOne);
+		model.addAttribute("cityTwo", cityTwo);
+		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("savedOrder", savedOrder);
+		
+        
+		return "bus/order/bus-order";
 	}
 	
 	
@@ -387,6 +527,7 @@ public class BusController {
         logService.generateLog(jsonObjSeatLayout.toString());
         
         seatList = new ArrayList<BusSeat>();
+        List<String> seatListIds = new ArrayList<String>();
         
         try {
         	JSONObject jsonObjSeat = jsonObjSeatLayout.getJSONObject("GetBusSeatLayOutResult").getJSONObject("SeatLayoutDetails");
@@ -438,9 +579,11 @@ public class BusController {
 					   agentCommission, agentMarkUp, tds, cGSTAmount, cGSTRate, cessAmount, cessRate, iGSTAmount, iGSTRate, sGSTAmount, sGSTRate, taxableAmount);
 			    
 			    seatList.add(newSeat);
+			    seatListIds.add(newSeat.getSeatIndex().toString());
 
 			}
 
+			model.addAttribute("seatListIds", seatListIds);
 			model.addAttribute("seatList", seatList);
 			model.addAttribute("availableSeats", availableSeats);
 			model.addAttribute("hTMLLayout", hTMLLayout);
@@ -454,7 +597,7 @@ public class BusController {
 		}
 	}
 
-	private void busBusBoardingPoint(Model model, Integer resultIndex) throws IOException {
+	private void busBusBoardingPoint(Model model, Integer resultIndex, Bus bus) throws IOException {
 
 		// Create URL object with the API end-point
         URL urlBusPointDetail = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBoardingPointDetails");
@@ -477,7 +620,7 @@ public class BusController {
 			JSONObject mainObjBoarding = new JSONObject();
 			JSONObject mainObjDropping = new JSONObject();
 
-			List<BusPointDetails> busPointDetails = new ArrayList<BusPointDetails>();
+			List<BusDroppingPointDetail> droppingPointDetails = new ArrayList<BusDroppingPointDetail>();
 			List<BusBoardingPointDetails> boardingPointDetails = new ArrayList<BusBoardingPointDetails>();
         	
         	for (int i = 0; i < jsonArrayBoarding.length(); i++) {
@@ -492,6 +635,7 @@ public class BusController {
 			    String CityPointTime = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointTime").toString();
 			    
 			    BusBoardingPointDetails newPoint = new BusBoardingPointDetails(CityPointIndex, CityPointLocation, CityPointName, CityPointTime, CityPointLandmark, CityPointContactNumber, CityPointAddress);
+			    newPoint.setBus(bus);
 			    boardingPointDetails.add(newPoint);
 			}
         	
@@ -503,16 +647,303 @@ public class BusController {
 			    String CityPointName = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointName").toString();
 			    String CityPointTime = mainObjBoarding.getJSONObject("Point-" + i).get("CityPointTime").toString();
 			    
-			    BusPointDetails newPoint =  new BusPointDetails(CityPointIndex, CityPointLocation, CityPointName, CityPointTime, "Boarding");
-			    busPointDetails.add(newPoint);
+			    BusDroppingPointDetail newPoint =  new BusDroppingPointDetail(CityPointIndex, CityPointLocation, CityPointName, CityPointTime);
+			    newPoint.setBus(bus);
+			    droppingPointDetails.add(newPoint);
 			}
+        	
+        	bus.setBusBoardingPointDetails(boardingPointDetails);
+        	bus.setBusDroppingPointDetails(droppingPointDetails);
+        	
+        	busService.saveBus(bus);
 
-			model.addAttribute("busPointDetails", busPointDetails);
+			model.addAttribute("busPointDetails", droppingPointDetails);
 			model.addAttribute("boardingPointDetails", boardingPointDetails);
 			
         	
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	private void busBlockMethod(Model model, Bus bus) 
+			throws MalformedURLException, IOException {
+		
+		List<String> strPaxs = new ArrayList<String>();
+		
+		Integer count = 0;
+        
+        for (BusPassenger pax : bus.getBusPassengers()) {
+        	BusSeat seat = busService.findByIdSeat(pax.getSeatId());
+        	count++;
+        	boolean isLead = false;
+        	
+        	if (pax.getAge() >= 18) {
+				if (count == 1) {
+					isLead = true;
+				} else {
+					isLead = false;
+				}
+			} else {
+				isLead = false;
+			}
+        	
+			String busPaxDetail = "    {\r\n"
+	        		+ "      \"LeadPassenger\": " + isLead + ",\r\n"
+	        		+ "      \"PassengerId\": 0,\r\n"
+	        		+ "      \"Title\": \"" + pax.getTitle() + "\",\r\n"
+	        		+ "      \"Address\": \"" + pax.getAddress() + "\",\r\n"
+	        		+ "      \"Age\": " + pax.getAge() + ",\r\n"
+	        		+ "      \"Email\": \"" + pax.getEmail() + "\",\r\n"
+	        		+ "      \"FirstName\": \"" + pax.getFirstName() + "\",\r\n"
+	    	        + "      \"Gender\": " + pax.getGender() + ",\r\n"
+	    	    	+ "      \"IdNumber\": null,\r\n"
+	    	    	+ "      \"IdType\": null,\r\n"
+	    	    	+ "      \"LastName\": \"" + pax.getLastName() + "\",\r\n"
+	    	    	+ "      \"Phoneno\": \"" + pax.getPhoneNo() + "\",\r\n"
+	        		+ "      \"Seat\": {\r\n"
+	        		+ "        \"ColumnNo\": \"" + seat.getColumnNo() + "\",\r\n"
+	        		+ "        \"Height\": " + seat.getHeight() + ",\r\n"
+	        		+ "        \"IsLadiesSeat\": " + seat.isLadiesSeat() + ",\r\n"
+	        		+ "        \"IsMalesSeat\": " + seat.isMalesSeat() + ",\r\n"
+	        		+ "        \"IsUpper\": false,\r\n"
+	        		+ "        \"RowNo\": \"" + seat.getRowNo() + "\",\r\n"
+	        		+ "        \"SeatIndex\": \"" + seat.getSeatIndex() + "\",\r\n"
+	        		+ "        \"SeatName\": \"" + seat.getSeatName() + "\",\r\n"
+	        		+ "        \"SeatStatus\": " + seat.isSeatStatus() + ",\r\n"
+	        		+ "        \"SeatType\": " + seat.getSeatType() + ",\r\n"
+	        		+ "        \"Width\": " + seat.getWidth() + ",\r\n"
+	        		+ "        \"Price\": {\r\n"
+	        		+ "          \"CurrencyCode\": \"INR\",\r\n"
+	        		+ "          \"BasePrice\": " + seat.getBasePrice() + ",\r\n"
+	        		+ "          \"Tax\": " + seat.getTax() + ",\r\n"
+	        		+ "          \"OtherCharges\": " + seat.getOtherCharges() + ",\r\n"
+	        		+ "          \"Discount\": " + seat.getDiscount() + ",\r\n"
+	        		+ "          \"PublishedPrice\": " + seat.getPublishedPrice() + ",\r\n"
+	        		+ "          \"PublishedPriceRoundedOff\": " + seat.getPublishedPriceRoundedOff() + ",\r\n"
+	        		+ "          \"OfferedPrice\": " + seat.getOfferedPrice() + ",\r\n"
+	        		+ "          \"OfferedPriceRoundedOff\": " + seat.getOfferedPriceRoundedOff() + ",\r\n"
+	        		+ "          \"AgentCommission\": " + seat.getAgentCommission() + ",\r\n"
+	        		+ "          \"AgentMarkUp\": " + seat.getAgentMarkUp() + ",\r\n"
+	        		+ "          \"TDS\": " + seat.getTds() + ",\r\n"
+	        		+ "          \"GST\": {\r\n"
+	        		+ "            \"CGSTAmount\": " + seat.getcGSTAmount() + ",\r\n"
+	        		+ "            \"CGSTRate\": " + seat.getcGSTRate() + ",\r\n"
+	        		+ "            \"CessAmount\": " + seat.getCessAmount() + ",\r\n"
+	        		+ "            \"CessRate\": " + seat.getCessRate() + ",\r\n"
+	        		+ "            \"IGSTAmount\": " + seat.getiGSTAmount() + ",\r\n"
+	        		+ "            \"IGSTRate\": " + seat.getiGSTRate() + ",\r\n"
+	        		+ "            \"SGSTAmount\": " + seat.getsGSTAmount() + ",\r\n"
+	        		+ "            \"SGSTRate\": " + seat.getsGSTRate() + ",\r\n"
+	        		+ "            \"TaxableAmount\": " + seat.getTaxableAmount() + "\r\n"
+	        		+ "          }\r\n"
+	        		+ "        }\r\n"
+	        		+ "      }\r\n"
+	        		+ "    }\r\n";
+			
+			strPaxs.add(busPaxDetail);
+		}
+       	
+       	String arraySeat = strPaxs.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+		
+		
+		
+		// Create URL object with the API end-point
+        URL urlBusBlock = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Block/");
+
+        // Open a connection
+        HttpURLConnection connectionBusBlock = (HttpURLConnection) urlBusBlock.openConnection();
+       
+        StringBuilder responseBodyBusBlock = new StringBuilder();
+        
+        onlineBusService.apiOnlineBusBlock(connectionBusBlock, responseBodyBusBlock, arraySeat, bus.getResultIndex(), bus.getBusBoardingPointDetails().get(0).getCityPointIndex(), 
+        		bus.getBusDroppingPointDetails().get(0).getCityPointIndex());
+	
+        JSONObject jsonObjBlock = new JSONObject(responseBodyBusBlock.toString());
+        System.out.println(jsonObjBlock);
+        logService.generateLog(jsonObjBlock.toString());
+        
+        
+        try {
+        	JSONObject jsonObj = jsonObjBlock.getJSONObject("BlockResult");
+        	
+        	String arrivalTime = jsonObj.get("ArrivalTime").toString();
+        	String busType = jsonObj.get("BusType").toString();
+        	String departureTime = jsonObj.get("DepartureTime").toString();
+        	String serviceName = jsonObj.get("ServiceName").toString();
+        	String travelName = jsonObj.get("TravelName").toString();
+
+    		model.addAttribute("arrivalTime", arrivalTime);
+    		model.addAttribute("busType", busType);
+    		model.addAttribute("departureTime", departureTime);
+    		model.addAttribute("serviceName", serviceName);
+    		model.addAttribute("travelName", travelName);
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void busBookkMethodAndBookingDetails(Model model, Bus bus) 
+			throws MalformedURLException, IOException {
+		
+		List<String> strPaxs = new ArrayList<String>();
+		
+		Integer count = 0;
+        
+        for (BusPassenger pax : bus.getBusPassengers()) {
+        	BusSeat seat = busService.findByIdSeat(pax.getSeatId());
+        	count++;
+        	boolean isLead = false;
+        	
+        	if (pax.getAge() >= 18) {
+				if (count == 1) {
+					isLead = true;
+				} else {
+					isLead = false;
+				}
+			} else {
+				isLead = false;
+			}
+        	
+			String busPaxDetail = "    {\r\n"
+	        		+ "      \"LeadPassenger\": " + isLead + ",\r\n"
+	        		+ "      \"PassengerId\": 0,\r\n"
+	        		+ "      \"Title\": \"" + pax.getTitle() + "\",\r\n"
+	        		+ "      \"Address\": \"" + pax.getAddress() + "\",\r\n"
+	        		+ "      \"Age\": " + pax.getAge() + ",\r\n"
+	        		+ "      \"Email\": \"" + pax.getEmail() + "\",\r\n"
+	        		+ "      \"FirstName\": \"" + pax.getFirstName() + "\",\r\n"
+	    	        + "      \"Gender\": " + pax.getGender() + ",\r\n"
+	    	    	+ "      \"IdNumber\": null,\r\n"
+	    	    	+ "      \"IdType\": null,\r\n"
+	    	    	+ "      \"LastName\": \"" + pax.getLastName() + "\",\r\n"
+	    	    	+ "      \"Phoneno\": \"" + pax.getPhoneNo() + "\",\r\n"
+	        		+ "      \"Seat\": {\r\n"
+	        		+ "        \"ColumnNo\": \"" + seat.getColumnNo() + "\",\r\n"
+	        		+ "        \"Height\": " + seat.getHeight() + ",\r\n"
+	        		+ "        \"IsLadiesSeat\": " + seat.isLadiesSeat() + ",\r\n"
+	        		+ "        \"IsMalesSeat\": " + seat.isMalesSeat() + ",\r\n"
+	        		+ "        \"IsUpper\": false,\r\n"
+	        		+ "        \"RowNo\": \"" + seat.getRowNo() + "\",\r\n"
+	        		+ "        \"SeatIndex\": \"" + seat.getSeatIndex() + "\",\r\n"
+	        		+ "        \"SeatName\": \"" + seat.getSeatName() + "\",\r\n"
+	        		+ "        \"SeatStatus\": " + seat.isSeatStatus() + ",\r\n"
+	        		+ "        \"SeatType\": " + seat.getSeatType() + ",\r\n"
+	        		+ "        \"Width\": " + seat.getWidth() + ",\r\n"
+	        		+ "        \"Price\": {\r\n"
+	        		+ "          \"CurrencyCode\": \"INR\",\r\n"
+	        		+ "          \"BasePrice\": " + seat.getBasePrice() + ",\r\n"
+	        		+ "          \"Tax\": " + seat.getTax() + ",\r\n"
+	        		+ "          \"OtherCharges\": " + seat.getOtherCharges() + ",\r\n"
+	        		+ "          \"Discount\": " + seat.getDiscount() + ",\r\n"
+	        		+ "          \"PublishedPrice\": " + seat.getPublishedPrice() + ",\r\n"
+	        		+ "          \"PublishedPriceRoundedOff\": " + seat.getPublishedPriceRoundedOff() + ",\r\n"
+	        		+ "          \"OfferedPrice\": " + seat.getOfferedPrice() + ",\r\n"
+	        		+ "          \"OfferedPriceRoundedOff\": " + seat.getOfferedPriceRoundedOff() + ",\r\n"
+	        		+ "          \"AgentCommission\": " + seat.getAgentCommission() + ",\r\n"
+	        		+ "          \"AgentMarkUp\": " + seat.getAgentMarkUp() + ",\r\n"
+	        		+ "          \"TDS\": " + seat.getTds() + ",\r\n"
+	        		+ "          \"GST\": {\r\n"
+	        		+ "            \"CGSTAmount\": " + seat.getcGSTAmount() + ",\r\n"
+	        		+ "            \"CGSTRate\": " + seat.getcGSTRate() + ",\r\n"
+	        		+ "            \"CessAmount\": " + seat.getCessAmount() + ",\r\n"
+	        		+ "            \"CessRate\": " + seat.getCessRate() + ",\r\n"
+	        		+ "            \"IGSTAmount\": " + seat.getiGSTAmount() + ",\r\n"
+	        		+ "            \"IGSTRate\": " + seat.getiGSTRate() + ",\r\n"
+	        		+ "            \"SGSTAmount\": " + seat.getsGSTAmount() + ",\r\n"
+	        		+ "            \"SGSTRate\": " + seat.getsGSTRate() + ",\r\n"
+	        		+ "            \"TaxableAmount\": " + seat.getTaxableAmount() + "\r\n"
+	        		+ "          }\r\n"
+	        		+ "        }\r\n"
+	        		+ "      }\r\n"
+	        		+ "    }\r\n";
+			
+			strPaxs.add(busPaxDetail);
+		}
+       	
+       	String arraySeat = strPaxs.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+		
+		
+		
+		// Create URL object with the API end-point
+        URL urlBusBook = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
+
+        // Open a connection
+        HttpURLConnection connectionBusBook = (HttpURLConnection) urlBusBook.openConnection();
+       
+        StringBuilder responseBodyBusBook = new StringBuilder();
+        
+        onlineBusService.apiOnlineBusBlock(connectionBusBook, responseBodyBusBook, arraySeat, bus.getResultIndex(), bus.getBusBoardingPointDetails().get(0).getCityPointIndex(), 
+        		bus.getBusDroppingPointDetails().get(0).getCityPointIndex());
+	
+        JSONObject jsonObjBook = new JSONObject(responseBodyBusBook.toString());
+        System.out.println(jsonObjBook);
+        logService.generateLog(jsonObjBook.toString());
+        
+        
+        try {
+        	JSONObject jsonObj = jsonObjBook.getJSONObject("BookResult");
+        	
+        	String busBookingStatus = jsonObj.get("BusBookingStatus").toString();
+        	double invoiceAmount = Double.parseDouble(jsonObj.get("InvoiceAmount").toString());
+        	String invoiceNumber = jsonObj.get("InvoiceNumber").toString();
+        	Integer busId = Integer.parseInt(jsonObj.get("BusId").toString());
+        	String ticketNo = jsonObj.get("TicketNo").toString();
+        	String travelOperatorPNR = jsonObj.get("TravelOperatorPNR").toString();
+
+    		model.addAttribute("busBookingStatus", busBookingStatus);
+    		model.addAttribute("invoiceAmount", invoiceAmount);
+    		model.addAttribute("invoiceNumber", invoiceNumber);
+    		model.addAttribute("busId", busId);
+    		model.addAttribute("ticketNo", ticketNo);
+    		model.addAttribute("travelOperatorPNR", travelOperatorPNR);
+    		
+    		// Create URL object with the API end-point
+            URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
+
+            // Open a connection
+            HttpURLConnection connectionBusBookingDetails = (HttpURLConnection) urlBusBookingDetails.openConnection();
+           
+            StringBuilder responseBodyBusBookingDetails = new StringBuilder();
+            
+            onlineBusService.apiOnlineBusBookingDetails(connectionBusBookingDetails, responseBodyBusBookingDetails, busId);
+            
+            JSONObject jsonObjBookingDetails = new JSONObject(responseBodyBusBookingDetails.toString());
+            System.out.println(jsonObjBookingDetails);
+            logService.generateLog(jsonObjBookingDetails.toString());
+            try {
+            	JSONObject jsonObjBooki = jsonObjBook.getJSONObject("GetBookingDetailResult");
+
+            	Integer errorCode = Integer.parseInt(jsonObjBooki.getJSONObject("Error").get("ErrorCode").toString());
+            	String errorMessage = jsonObjBooki.getJSONObject("Error").get("ErrorMessage").toString();
+
+        		model.addAttribute("errorCode", errorCode);
+        		model.addAttribute("errorMessage", errorMessage);
+				
+			} catch (Exception e) {
+            	JSONObject jsonObjBooki = jsonObjBook.getJSONObject("GetBookingDetailResult");
+
+            	Integer errorCode = Integer.parseInt(jsonObjBooki.getJSONObject("Error").get("ErrorCode").toString());
+            	String errorMessage = jsonObjBooki.getJSONObject("Error").get("ErrorMessage").toString();
+
+        		model.addAttribute("errorCode", errorCode);
+        		model.addAttribute("errorMessage", errorMessage);
+        		
+				e.printStackTrace();
+			}
+    		
+		} catch (Exception e) {
+
+        	JSONObject jsonObj = jsonObjBook.getJSONObject("BookResult");
+
+        	Integer errorCode = Integer.parseInt(jsonObj.getJSONObject("Error").get("ErrorCode").toString());
+        	String errorMessage = jsonObj.getJSONObject("Error").get("ErrorMessage").toString();
+        	
+    		model.addAttribute("errorCodeBook", errorCode);
+    		model.addAttribute("errorMessageBook", errorMessage);
+    		
 			e.printStackTrace();
 		}
 	}

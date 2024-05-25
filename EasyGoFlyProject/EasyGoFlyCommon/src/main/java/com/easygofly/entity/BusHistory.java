@@ -1,7 +1,10 @@
 package com.easygofly.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,6 +36,8 @@ public class BusHistory {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
+	@OneToMany(mappedBy = "busHistory", cascade = CascadeType.ALL)
+	private List<BusOrder> busOrders = new ArrayList<>();
 	
 	
 	public BusHistory() {}
@@ -49,6 +55,14 @@ public class BusHistory {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public List<BusOrder> getBusOrders() {
+		return busOrders;
+	}
+
+	public void setBusOrders(List<BusOrder> busOrders) {
+		this.busOrders = busOrders;
 	}
 
 	public Date getDeptDate() {

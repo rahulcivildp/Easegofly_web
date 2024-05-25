@@ -259,6 +259,16 @@
 		    font-size: 20px;
 		    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 	  }
+	  .deleteButtonGuest {
+		    color: red;
+		    border: 2px solid red;
+		    background: #f5fff5;
+		    width: 40px;
+		    height: 40px;
+		    border-radius: 20px;
+		    font-size: 20px;
+		    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	  }
 	  .rowClassModify {
 		padding: 6px 0;
 	    margin: 0;
@@ -375,6 +385,14 @@
 	  .nextWihte {
 	    color: white !important;
 	  }
+	  .btn-hide {
+		  display: none;
+	  }
+	  .classBtns {
+		  display: flex;
+		  justify-content: space-around;
+		  align-items: center;
+	  }
 	</style>
 	<body>
 		<div class="media-hide" style="height: 65px;"></div>
@@ -418,7 +436,7 @@
 							<div class="col-12">
 								<div class="row">
 									<div class="col-12"><b>Bus Point Details: </b></div>
-									<th:block th:each="boarding : ${bus.boardingPointsDetails}">
+									<th:block th:each="boarding : ${bus.pointsDetails}">
 										<div class="col-12">
 											<p><b>[[${boarding.pointType}]]: </b> [[${boarding.cityPointLocation}]], [[${boarding.cityPointName}]] - [[${boarding.cityPointTime}]]</p>
 										</div>
@@ -587,7 +605,7 @@
 							<div class="col-12">
 								<div class="row">
 									<div class="col-12"><b>Bus Point Details: </b></div>
-									<th:block th:each="boarding : ${bus.boardingPointsDetails}">
+									<th:block th:each="boarding : ${bus.pointsDetails}">
 										<div class="col-12">
 											<p><b>[[${boarding.pointType}]]: </b> [[${boarding.cityPointLocation}]], [[${boarding.cityPointName}]] - [[${boarding.cityPointTime}]]</p>
 										</div>
@@ -639,7 +657,7 @@
 					<div class="gridContainer">
 						<th:block th:each="seat : ${seatList}">
 					  		<div class="form-check">
-							  <button class="form-check-input gridItem" type="radio" name="flexRadioDefaultMob" id="flexRadioDefault1" style="width: 100%; height: fit-content;" th:value="${seat.seatIndex}">
+							  <button class="form-check-input gridItem" type="radio" name="flexRadioDefaultMob" id="flexRadioDefault1Mob" style="width: 100%; height: fit-content;" th:value="${seat.seatIndex}">
 								  <div class="">
 									<div class="countDiv"><b>[[${seat.seatIndex}]]</b></div>
 									<h5>Seat No: [[${seat.seatName}]]</h5>
@@ -751,7 +769,7 @@
 						   <p>Back</p>
 				   		</div>
 				   	</button>
-				   <button class="col-6" id="saveOrderBTNMob" type="submit" >
+				   <button class="col-6" id="saveOrderBTNMob" type="submit">
 					   <div id="submitInnerMob" class="footerInnerDiv" style="color: #b1b1b1;">
 						   <i class="fa-solid fa-forward"></i>
 						   <p>Next</p>
@@ -759,8 +777,8 @@
 				   	</button>
 			   </div>
 				<form th:action="@{/bus/save_order}" method="post" id="saveOrderForm">
-					<input type="hidden" name="hotel_id" >
-					<input type="hidden" name="search_id" >
+					<input type="hidden" name="bus_id" th:value="${busId}">
+					<input type="hidden" name="search_id" th:value="${busHistory.id}">
 				</form>
 		   </div>
 	   </div>
@@ -784,8 +802,8 @@
 					   	</button>
 				   </div>
 					<form th:action="@{/bus/save_order}" method="post" id="saveOrderFormMob">
-						<input type="hidden" name="hotel_id" >
-						<input type="hidden" name="search_id" >
+						<input type="hidden" name="bus_id" th:value="${busId}">
+						<input type="hidden" name="search_id" th:value="${busHistory.id}">
 					</form>
 			   </div>
 		   </div>
@@ -794,7 +812,7 @@
 		<div style="height: 20px;"></div>
 	</body>
 	
-	<script th:inline="javascript">
+	<script>
 		$(".collapsibleBtn").click(function(){
 			$(this).parent().next().toggleClass("collapsibleToggle");
 		});
@@ -818,23 +836,23 @@
 		
 	</script>
 	<script>
-		showBusSeats($("#busSeatList"), $("#floatingSelectroom"), $("#busSeatIndicator"), "#guestModalRoomadd", "col-2");
-		showBusSeats($("#busSeatListMob"), $("#floatingSelectroomMob"), $("#busSeatIndicatorMob"), "#guestModalRoomaddMob", "col-6");
+		showBusSeats("col-2", "");
+		showBusSeats("col-6", "Mob");
 		
-		function showBusSeats(idName, idFloat, idIndicate, modal, col) {
+		function showBusSeats(col, idCode) {
 			
 			var busId = [[${busId}]];
 			var paramsBus = {bus_id: busId};
 			var urlComponentsSaveSeat = "[[@{/show_bus_seat_rest}]]";
 	    	
 	    	$.post(urlComponentsSaveSeat, paramsBus, function(elem) {
-				idName.html("");
-				idFloat.html("");
-				idIndicate.html("");
+				$("#busSeatList" + idCode).html("");
+				$("#floatingSelectroom" + idCode).html("");
+				$("#busSeatIndicator" + idCode).html("");
 				
 				var htmlAdd = `
 						<div class="` + col + `" style=" display: flex; justify-content: center; align-items: center;" >
-							<button style="height: 150px; width: 100%; border-radius: 12px; background: #f3f5ff;" type="button" id="addGstButtonRoom" data-bs-toggle="modal" data-bs-target="` + modal + `">
+							<button style="height: 150px; width: 100%; border-radius: 12px; background: #f3f5ff;" type="button" id="addGstButtonRoom" data-bs-toggle="modal" data-bs-target="#guestModalRoomadd` + idCode + `">
 								<i class="fa fa-solid fa-plus"></i>
 							</button>
 						</div>
@@ -844,28 +862,29 @@
 					<option value="0"> None</option>
 					`;
 					
-				var htmlIndcate = `Max 6 Seats Per Ticket. <b style="color: red;">Duplicate seat number</b> is not allowed. Selected <b style="color: green;">` + elem.length + `</b> seat/s.
+				var htmlIndcate = `Max 6 Seats Per Ticket. Selected <b style="color: green;">` + elem.length + `</b> seat/s.
 				
-				<input type="hidden" name="totalPaxNum" value="` + elem.length + `">
+				<input type="hidden" id="totalPaxNum" value="` + elem.length + `">
 				
 				`;
-					
-				idFloat.append(htmlextra);
-				idIndicate.html(htmlIndcate);
+				
+				$("#floatingSelectroom" + idCode).append(htmlextra);
+				$("#busSeatIndicator" + idCode).html(htmlIndcate);
 				
 				if(6 > elem.length) {
-					idName.append(htmlAdd);
+					$("#busSeatList" + idCode).append(htmlAdd);
 				}
 				
 				
+					
 	    		elem.forEach(function(element){
 					var elemArray = element.split("-");
 					
 					var htmlcode = `
 					<div class="` + col + `" style="margin: 4px 0;">
 						<div class="gridItem" style="position: relative;">
-							<button type="button" class="deleteBtnroom" onclick="deleteBusSeat(` + parseInt(elemArray[0]) + `)"><i class="fa fa-solid fa-xmark"></i></button>
-							<input type="hidden" value="` + elemArray[0] + `">
+							<button type="button" class="deleteBtnroom" onclick="deleteBusSeat(` + parseInt(elemArray[0]) + `, ` + elemArray[1] + `)"><i class="fa fa-solid fa-xmark"></i></button>
+							<input type="hidden" name="seatName" value="` + elemArray[1] + `">
 							<div class="savedRoomstl"><p>` + elemArray[1] + `</p></div>
 							<h5>Seat No: ` + elemArray[2] + `</h5>
 							<p style="color: #8f8f8f; font-size: 14px;"><i style="color: #6f7aff;" class="fa fa-solid fa-puzzle-piece"></i> Type: ` + elemArray[3] + `</p>
@@ -878,16 +897,51 @@
 					<option value="` + elemArray[0] + `"> Seat No: ` + elemArray[2] + `, Price: ₹` + elemArray[4] + `</option>
 					`;
 					
-					idFloat.append(htmlnew);
-					idName.append(htmlcode);
+					//$("#floatingSelectroom" + idCode).append(htmlnew);
+					$("#busSeatList" + idCode).append(htmlcode);
+					
+					$("button[name='flexRadioDefault" + idCode + "']").each(function() {
+					  if(elemArray[1] == $(this).val()) {
+						   $(this).parent().addClass("btn-hide");
+					   }
+					});
+					
 				});
+				
+				
+				var paramsSelect = {bus_id: busId};
+				var urlComponentsSelect = "[[@{/show_option_seats}]]";
+		    	
+		    	$.post(urlComponentsSelect, paramsSelect, function(elem) {
+					
+	    			elem.forEach(function(element){
+						var elemArray = element.split("-");
+						var htmlOption = `
+										<option value="` + elemArray[0] + `"> Seat No: ` + elemArray[1] + `, Price: ₹` + elemArray[2] + `</option>
+										`;
+										
+						$("#floatingSelectroom" + idCode).append(htmlOption);
+					});
+					
+					
+		    	}).fail(function(){
+					consol.log("Something went wrong in the server!");
+		    	});
+				
+				showBusPax("");
+				showBusPax("Mob");
+					
 	    	}).fail(function(){
 				consol.log("Something went wrong in the server!");
 	    	});
+	    	
 		};
 		
 	</script>
-<script>
+	
+	
+<script >
+		
 		$("#seatSavebtn").click(function(){
 			saveBusSeat($(".selected").val());
 		});
@@ -895,6 +949,8 @@
 		$("#seatSavebtnMob").click(function(){
 			saveBusSeat($(".selected").val());
 		});
+				
+		
 	
 		function saveBusSeat(seatIndex) {
 			
@@ -904,8 +960,8 @@
 			var urlComponentsSaveSeat = "[[@{/save_bus_seat}]]";
 	    	
 	    	$.post(urlComponentsSaveSeat, paramsSeat, function(elem) {
-				showBusSeats($("#busSeatList"), $("#floatingSelectroom"), $("#busSeatIndicator"), "#guestModalRoomadd", "col-2");
-				showBusSeats($("#busSeatListMob"), $("#floatingSelectroomMob"), $("#busSeatIndicatorMob"), "#guestModalRoomaddMob", "col-6");
+				showBusSeats("col-2", "");
+				showBusSeats("col-6", "Mob");
 				
 	    	}).fail(function(){
 				consol.log("Something went wrong in the server!");
@@ -914,14 +970,26 @@
 </script>
 
 <script>
-		function deleteBusSeat(seat_id) {
+		function deleteBusSeat(seat_id, index) {
+			
+			$("button[name='flexRadioDefaultMob']").each(function() {
+			  if(index == $(this).val()) {
+				   $(this).parent().removeClass("btn-hide");
+			   }
+			});
+			
+			$("button[name='flexRadioDefault']").each(function() {
+			  if(index == $(this).val()) {
+				   $(this).parent().removeClass("btn-hide");
+			   }
+			});
 			
 			var paramsSeat = {seat_id: seat_id};
 			var urlComponentsSaveSeat = "[[@{/delete_bus_seat}]]";
 	    	
 	    	$.post(urlComponentsSaveSeat, paramsSeat, function(elem) {
-				showBusSeats($("#busSeatList"), $("#floatingSelectroom"), $("#busSeatIndicator"), "#guestModalRoomadd", "col-2");
-				showBusSeats($("#busSeatListMob"), $("#floatingSelectroomMob"), $("#busSeatIndicatorMob"), "#guestModalRoomaddMob", "col-6");
+				showBusSeats("col-2", "");
+				showBusSeats("col-6", "Mob");
 				
 	    	}).fail(function(){
 				consol.log("Something went wrong in the server!");
@@ -932,10 +1000,8 @@
 	<script>
 		$("#guestSavebtn").click(function(){
 			saveBusPax("");
-			//alert("ok");
 		});
 		$("#guestSavebtnMob").click(function(){
-			//alert("ok");
 			saveBusPax("Mob");
 		});
 		
@@ -969,8 +1035,10 @@
 	    	
 	    	$.post(urlComponentsSave, params, function() {
 	    	
-				showBusPax($("#guestListhtml"), $("#hotelGuestIndicator"), "#guestModal", "");
-				showBusPax($("#guestListhtmlMob"), $("#hotelGuestIndicatorMob"), "#guestModalMob", "Mob");
+				showBusPax("");
+				showBusPax("Mob");
+				
+				btnHide();
 	    	
 	    	}).fail(function(){
 				alert("Something went wrong in the server!");
@@ -980,20 +1048,37 @@
 		
 	</script>
 	
+<script>
+		function deleteBusGuest(pax_id) {
+			
+			var paramsPax = {pax_id: pax_id};
+			var urldelete = "[[@{/delete_bus_pax}]]";
+	    	
+	    	$.post(urldelete, paramsPax, function(elem) {
+				showBusPax("");
+				showBusPax("Mob");
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+</script>
+
 	<script>
-	showBusPax($("#guestListhtml"), $("#hotelGuestIndicator"), "#guestModal", "");
-	showBusPax($("#guestListhtmlMob"), $("#hotelGuestIndicatorMob"), "#guestModalMob", "Mob");
+	showBusPax("");
+	showBusPax("Mob");
 		
-		function showBusPax(idList, indicate, idModal, idType) {
+		function showBusPax(idType) {
 			
 			busId = [[${busId}]];
 			params = {bus_id: busId};
 			urlComponentsSave = "[[@{/show_bus_pax}]]";
 	    	
 	    	$.post(urlComponentsSave, params, function(elem) {
-				idList.html("");
-				indicate.html("");
-				totalPax = $('input[name="totalPaxNum"]').val();
+				$("#guestListhtml" + idType).html("");
+				$("#hotelGuestIndicator" + idType).html("");
+				totalPax = $('#totalPaxNum').val();
+				var seenValues = {};
 				
 				var htmlElem = `
 					<div class="col-12">
@@ -1004,7 +1089,7 @@
 								<div class="col-6 addUserBtn">
 									<div></div>
 									<div id="addGuestbtnCover" style="margin-right: 10px; cursor: pointer">
-										<button type="button" id="addGstButton" data-bs-toggle="modal" data-bs-target="` + idModal + `"><i class="fa fa-solid fa-plus"></i></button>
+										<button type="button" id="addGstButton" data-bs-toggle="modal" data-bs-target="#guestModal` + idType + `"><i class="fa fa-solid fa-plus"></i></button>
 									</div>
 								</div>
 							</div>
@@ -1012,19 +1097,23 @@
 						<div class="col-12" style="height: 10px;"></div>
 				`;
 				
-				var htmlIndcate = `Selected Guests: ` + elem.length + `.`;
+				var htmlIndcate = `Selected Guests: ` + elem.length + ` out of ` + totalPax + `.`;
 				
-				indicate.html(htmlIndcate);
+				$("#hotelGuestIndicator" + idType).html(htmlIndcate);
 				
 				if(totalPax > elem.length) {
-					idList.append(htmlElem);
+					$("#guestListhtml" + idType).append(htmlElem);
 				}
 				
 				if (elem.length == totalPax) {
-					$("#saveOrderBTN" + idType).addClass("nextBlueChange");
-					$("#saveOrderBTN" + idType).attr("form", "saveOrderForm");
-					$("#submitInner" + idType).addClass("nextWihte");
+					
+					if(elem.length > 0){
+						$("#saveOrderBTN" + idType).toggleClass("nextBlueChange");
+						$("#saveOrderBTN" + idType).attr("form", "saveOrderForm" + idType);
+						$("#submitInner" + idType).toggleClass("nextWihte");
+					}
 				}
+				
 				
 	    		elem.forEach(function(element){
 					var elemArray = element.split("-");
@@ -1033,15 +1122,22 @@
 					<div class="col-12" style="margin: 5px 0;">
 							
 								<div class="row rowClassModify">
-									<div class="col-9 unKnonwnGuestIcon">
+									<div class="col-8 col-md-10 unKnonwnGuestIcon">
 										<img src="` + "[[@{/images/knownuser.png}]]" + `" alt='known user' class='img-fluid'> 
 										<p> ` + elemArray[1] + `&nbsp;`+ elemArray[2] + `&nbsp;`+ elemArray[3] + `</p>
 									</div>
-									<div class="col-3">
+									<div class="col-4 col-md-2">
+										<div class="classBtns">
+											<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify` + idType + `-` + elemArray[0] + `" class="modifyButtonGuest">
+												<i class="fa fa-solid fa-pen-to-square"></i>
+											</button>
+										
+											<button type="button" id="deleteGuestbtn" data-bs-toggle="modal" onclick="deleteBusGuest(` + parseInt(elemArray[0]) + `)" 
+											data-bs-target="#deleteGuestButton` + idType + `-` + elemArray[0] + `" class="deleteButtonGuest">
+												<i class="fa fa-solid fa-trash"></i>
+											</button>
+										</div>
 									
-										<button type="button" id="modifyGstButton" data-bs-toggle="modal" data-bs-target="#guestModalModify` + idType + `-` + elemArray[0] + `" class="modifyButtonGuest">
-											<i class="fa fa-solid fa-pen-to-square"></i>
-										</button>
 									</div>
 								</div>
 								
@@ -1054,7 +1150,7 @@
 								        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								      </div>
 								      <div class="modal-body">
-										 <input type="hidden" class="form-control" id="roomId` + idType + `-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[0] + `">
+										 <input type="hidden" class="form-control" id="guestId` + idType + `-` + elemArray[0] + `" placeholder="name@example.com" value="` + elemArray[0] + `">
 										 <div class="form-floating" style="padding-bottom: 16px;">
 										  <select class="form-select" id="titleGuestsModify` + idType + `-` + elemArray[0] + `" aria-label="Floating label select example" value="` + elemArray[1] + `">
 										    <option selected>Mr</option>
@@ -1085,16 +1181,16 @@
 										  <label for="floatingInput">Age in number</label>
 										</div>
 								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" id="addressGuestModify` + idType + `-` + elemArray[0] + `" value="` + elemArray[4] + `">
+										  <input type="text" class="form-control" id="addressGuestModify` + idType + `-` + elemArray[0] + `" value="` + elemArray[9] + `">
 										  <label for="floatingInput">Address</label>
 										</div>
 								        <div class="form-floating mb-3">
 										  <input type="text" class="form-control" id="panGuestsModify` + idType + `-` + elemArray[0] + `" value="` + elemArray[5] + `">
 										  <label for="floatingInput">PAN Number</label>
 										</div>
-								        <div class="form-floating mb-3">
-										  <input type="text" class="form-control" value="` + elemArray[8] + `. ` + elemArray[9] + `" disabled>
-										  <label for="floatingInput">Selected Seat</label>
+										 <div class="form-floating" style="padding-bottom: 16px;">
+										  <input type="text" class="form-control" id="floatingSelectroomModify` + idType + `-` + elemArray[0] + `" value="Seat No: ` + elemArray[10] + `, Price: ₹` + elemArray[12] + `" disabled>
+										  <label for="floatingSelectroomMob">Selected Seat</label>
 										</div>
 								      </div>
 								      <div class="modal-footer">
@@ -1108,15 +1204,15 @@
 							</div>
 					`;
 					
-					idList.append(htmlcode);
-					
-					
+					$("#guestListhtml" + idType).append(htmlcode);
+			
 					$("#guestSavebtnModify" + idType + "-" + elemArray[0]).click(function(){
 						
-						paramsMod = {guest_id: parseInt($("#roomId" + idType + "-" + elemArray[0]).val()), title: $("#titleGuestsModify" + idType + "-" + elemArray[0]).val(), 
+						paramsMod = {guest_id: parseInt($("#guestId" + idType + "-" + elemArray[0]).val()), title: $("#titleGuestsModify" + idType + "-" + elemArray[0]).val(), 
 						fName: $("#firstNameGuestsModify" + idType + "-" + elemArray[0]).val(), lName: $("#lastNameGuestsModify" + idType + "-" + elemArray[0]).val(), 
 						email: $("#emailGuestModify" + idType + "-" + elemArray[0]).val(), phoneNo: $("#phoneGuestModify" + idType + "-" + elemArray[0]).val(), 
-						age: parseInt($("#ageGuestsModify" + idType + "-" + elemArray[0]).val()), pan: $("#panGuestsModify" + idType + "-" + elemArray[0]).val()};
+						age: parseInt($("#ageGuestsModify" + idType + "-" + elemArray[0]).val()), pan: $("#panGuestsModify" + idType + "-" + elemArray[0]).val(),
+						address: $("#addressGuestModify" + idType + "-" + elemArray[0]).val(), seat_id: $("#floatingSelectroomModify" + idType + "-" + elemArray[0]).val()};
 						
 						urlComponentsSaveMod = "[[@{/modify_pax}]]";
 						
@@ -1137,5 +1233,4 @@
 		
 </script>
 
-	
 </html>

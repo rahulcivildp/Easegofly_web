@@ -134,13 +134,19 @@ public class Bus {
 	private Customer customer;
 
 	@OneToMany(mappedBy = "bus", cascade = CascadeType.ALL)
+	private List<BusOrder> busOrders = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "bus", cascade = CascadeType.ALL)
 	private List<BusCancelPolicy> busCancelPolicies = new ArrayList<>();
 
 	@OneToMany(mappedBy = "bus", cascade = CascadeType.ALL)
-	private List<BusPointDetails> boardingPointsDetails = new ArrayList<>();
+	private List<BusPointDetails> pointsDetails = new ArrayList<>();
 
 	@OneToMany(mappedBy = "bus", cascade = CascadeType.ALL)
-	private List<BusPointDetails> droppingPointsDetails = new ArrayList<>();
+	private List<BusBoardingPointDetails> busBoardingPointDetails = new ArrayList<>();
+
+	@OneToMany(mappedBy = "bus", cascade = CascadeType.ALL)
+	private List<BusDroppingPointDetail>  busDroppingPointDetails= new ArrayList<>();
 
 	@OneToMany(mappedBy = "bus", cascade = CascadeType.ALL)
 	private List<BusPassenger> busPassengers = new ArrayList<>();
@@ -161,7 +167,7 @@ public class Bus {
 			double agentMarkUp, double basePrice, double tds, double cGSTAmount, double cGSTRate, double cessAmount,
 			double cessRate, double iGSTAmount, double iGSTRate, double sGSTAmount, double sGSTRate,
 			double taxableAmount, Integer availableSeats, Customer customer, List<BusCancelPolicy> busCancelPolicies,
-			List<BusPointDetails> boardingPointsDetails, List<BusPointDetails> droppingPointsDetails) {
+			List<BusPointDetails> pointsDetails) {
 		super();
 		this.resultIndex = resultIndex;
 		this.arrivalTime = arrivalTime;
@@ -200,8 +206,7 @@ public class Bus {
 		this.taxableAmount = taxableAmount;
 		this.customer = customer;
 		this.busCancelPolicies = busCancelPolicies;
-		this.boardingPointsDetails = boardingPointsDetails;
-		this.droppingPointsDetails = droppingPointsDetails;
+		this.pointsDetails = pointsDetails;
 		this.availableSeats = availableSeats;
 	}
 
@@ -229,6 +234,14 @@ public class Bus {
 		this.resultIndex = resultIndex;
 	}
 
+	public List<BusOrder> getBusOrders() {
+		return busOrders;
+	}
+
+	public void setBusOrders(List<BusOrder> busOrders) {
+		this.busOrders = busOrders;
+	}
+
 	public List<BusCancelPolicy> getBusCancelPolicies() {
 		return busCancelPolicies;
 	}
@@ -237,20 +250,20 @@ public class Bus {
 		this.busCancelPolicies = busCancelPolicies;
 	}
  
-	public List<BusPointDetails> getBoardingPointsDetails() {
-		return boardingPointsDetails;
+	public List<BusPointDetails> getPointsDetails() {
+		return pointsDetails;
 	}
 
-	public void setBoardingPointsDetails(List<BusPointDetails> boardingPointsDetails) {
-		this.boardingPointsDetails = boardingPointsDetails;
+	public void setPointsDetails(List<BusPointDetails> pointsDetails) {
+		this.pointsDetails = pointsDetails;
 	}
 
-	public List<BusPointDetails> getDroppingPointsDetails() {
-		return droppingPointsDetails;
+	public List<BusDroppingPointDetail> getBusDroppingPointDetails() {
+		return busDroppingPointDetails;
 	}
 
-	public void setDroppingPointsDetails(List<BusPointDetails> droppingPointsDetails) {
-		this.droppingPointsDetails = droppingPointsDetails;
+	public void setBusDroppingPointDetails(List<BusDroppingPointDetail> busDroppingPointDetails) {
+		this.busDroppingPointDetails = busDroppingPointDetails;
 	}
 
 	public String getArrivalTime() {
@@ -307,6 +320,14 @@ public class Bus {
 
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	public List<BusBoardingPointDetails> getBusBoardingPointDetails() {
+		return busBoardingPointDetails;
+	}
+
+	public void setBusBoardingPointDetails(List<BusBoardingPointDetails> busBoardingPointDetails) {
+		this.busBoardingPointDetails = busBoardingPointDetails;
 	}
 
 	public String getTravelName() {
@@ -552,7 +573,7 @@ public class Bus {
 	public void addSeats(String columnNo, String rowNo, Integer height, Integer width, Integer seatType, String seatName,
 			Integer seatIndex, double seatFare, boolean isLadiesSeat, boolean isMalesSeat, boolean seatStatus,
 			String currencyCode, double tax, double discount, double basePrice, double publishedPrice,
-			double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff,
+			double otherCharges, double offeredPrice, double publishedPriceRoundedOff, double offeredPriceRoundedOff,
 			double agentCommission, double agentMarkUp, double tds, double cGSTAmount, double cGSTRate,
 			double cessAmount, double cessRate, double iGSTAmount, double iGSTRate, double sGSTAmount, double sGSTRate,
 			double taxableAmount) {

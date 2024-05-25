@@ -314,13 +314,12 @@
 				<div class="row">
 					<div class="col-9 col-md-11">
 						<div class="flexStyle">
-							<b></b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b></b>
+							<b>[[${cityOne.cityName}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
+							<b>[[${cityTwo.cityName}]]</b>
 						</div>
 						<div class="flexStyle">
-							<b> Nights</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b> Guests</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b> Rooms</b>
+							<div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
+							<b>[[${#dates.format(checkIn, 'dd MMMM, yy')}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
 						</div>
 					</div>
 					<div class="col-3 col-md-1">
@@ -335,59 +334,47 @@
 		<div class="container media_status">
 			<div class="hotelInfoDiv">
 				<div>
-					<h4></h4>
-					
-					<b></b>
+					<h4>[[${bus.travelName}]]</h4>
+					<small>[[${bus.busType}]]</small><br><br>
+					<b>[[${bus.arrivalTime}]] - [[${bus.departureTime}]] </b>
 				</div>
 				
 				<div >
 					<div style="display: flex; justify-content: center;"><button class="collapsibleBtn">Bus Info</button></div> 
 					<div class="collapsibleClass">
 						<div class="row priceRowMobStyleDropdown" style="width: 100%;">
-							<div class="col-12">
-								<div class="row">
-									<div class="col-12"><p></p></div>
-								</div>
-							</div>
 							<div class="col-12" style="height: 15px;"></div>
 							<div class="col-12">
 								<div class="row">
-									<div class="col-12"><b>Hotel Norms: </b></div>
-									<div class="col-12">
-									</div>
-								</div>
-							</div>
-							<div class="col-12" style="height: 15px;"></div>
-							<div class="col-12">
-								<div class="row">
-									<div class="col-12"><b>Hotel Policy: </b></div>
+									<div class="col-12"><b>Bus Point Details: </b></div>
+									<th:block th:each="boarding : ${bus.pointsDetails}">
+										<div class="col-12">
+											<p><b>[[${boarding.pointType}]]: </b> [[${boarding.cityPointLocation}]], [[${boarding.cityPointName}]] - [[${boarding.cityPointTime}]]</p>
+										</div>
+									</th:block>
 								</div>
 							</div>
 							<div class="col-12" style="height: 15px;"></div>
 							<div class="col-12">
 								<div class="row">
 									<div class="col-12"><b>Cancellation Policy: </b></div>
+									<th:block th:each="cancel : ${bus.busCancelPolicies}">
+										<div class="col-12">
+											<p>Cancel Charge: [[${cancel.cancellationCharge}]]</p>
+											<p>Policy: [[${cancel.policyString}]]</p>
+											<p>Time: [[${cancel.fromDate}]] - [[${cancel.toDate}]]</p> <br>
+										</div>
+									</th:block>
 								</div>
 							</div>
 							<div class="col-12" style="height: 15px;"></div>
-							<div class="col-12">
-								<div class="row">
-									<div class="col-12"><b>Special Data: </b></div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
 				
-				<div style="margin: 15px 0;">
-					
-				</div>
 				
-				<div>
-					 <gmp-map  zoom="11" map-id="DEMO_MAP_ID" id="mapWrap">
-				      <gmp-advanced-marker title="My location" id="mapLoc"></gmp-advanced-marker>
-				    </gmp-map>
-				</div>
+				<div style="height: 20px;"></div>
+				
 			</div>
 		</div>
 		
@@ -402,31 +389,31 @@
 							<h3 style="margin-left: 10px;"></h3>
 						</div>
 						<hr>
-						<!--<th:block th:each="guest : ${hotel.guests}">
-							<th:block th:if="${guest.hotelRoom.id} == ${hotelRoom.id}">
+						<!--<th:block each="guest : hotel.guests">
+							<th:block if="guest.hotelRoom.id == hotelRoom.id">
 								<div style="display: flex; padding: 8px">
-									<th:block th:if="${guest.leadPassenger} == true">	
+									<th:block if="guest.leadPassenger == true">	
 										<div class="isLeadPax" style="background: green;">
 											L
 										</div>
 									</th:block>
-									<th:block th:if="${guest.leadPassenger} == false">	
+									<th:block if="guest.leadPassenger == false">	
 										<div class="isLeadPax" style="background: #919191;">
 											N
 										</div>
 									</th:block>
-									<th:block th:if="${guest.paxType} == 1">
+									<th:block if="guest.paxType == 1">
 										<div class="adultPaxStl" style="background: green;">
 											Adult
 										</div>
 									</th:block>
-									<th:block th:if="${guest.paxType} == 2">	
+									<th:block if="guest.paxType == 2">	
 										<div class="adultPaxStl" style="background: blue;">
 											Child
 										</div>
 									</th:block>
 									<div>
-										[[${guest.firstName}]] [[${guest.lastName}]]
+										guest.firstNameguest.lastName
 									</div>
 								</div>
 							</th:block>

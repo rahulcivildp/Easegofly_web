@@ -101,7 +101,6 @@ public class BusPointDetails {
 		return pointType;
 	}
 	
-
 	public void setPointType(String pointType) {
 		this.pointType = pointType;
 	}

@@ -12,11 +12,11 @@ import org.springframework.ui.Model;
 import com.easygofly.entity.Bus;
 import com.easygofly.entity.BusCancelPolicy;
 import com.easygofly.entity.BusHistory;
+import com.easygofly.entity.BusOrder;
 import com.easygofly.entity.BusPassenger;
 import com.easygofly.entity.BusPointDetails;
 import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
-import com.easygofly.entity.HotelGuest;
 import com.easygofly.site.LogService;
 
 @Service
@@ -29,6 +29,7 @@ public class BusService {
 	@Autowired private BusCancelPolicyRepository busCancelPolicyRepo;
 	@Autowired private BusSeatRepository busSeatRepo;
 	@Autowired private BusPaxRepository busPaxRepo;
+	@Autowired private BusOrderRepository busOrderRepo;
 
 	public void authenticationBus(Model model) {
 		try {
@@ -92,18 +93,22 @@ public class BusService {
 		
 		Bus savedBus = busRepo.save(newBus); 
 		
-		for (BusPointDetails busPointDetails : savedBus.getBoardingPointsDetails()) {
+		for (BusPointDetails busPointDetails : savedBus.getPointsDetails()) {
 			busPointDetails.setBus(savedBus);
 			busPointDetailRepo.save(busPointDetails);
 		}
-		for (BusPointDetails busDropPointDetails : savedBus.getDroppingPointsDetails()) {
-			busDropPointDetails.setBus(savedBus);
-			busPointDetailRepo.save(busDropPointDetails);
-		}
+		
 		for (BusCancelPolicy busCancelPolicy : savedBus.getBusCancelPolicies()) {
 			busCancelPolicy.setBus(savedBus);
 			busCancelPolicyRepo.save(busCancelPolicy);
 		}
+		
+		return savedBus; 
+	}
+	
+	public Bus saveBus(Bus bus) {
+		Bus newBus = busRepo.findById(bus.getId()).get();
+		Bus savedBus = busRepo.save(newBus); 
 		
 		return savedBus; 
 	}
@@ -134,4 +139,34 @@ public class BusService {
 		BusPassenger newPax = pax;
 		return busPaxRepo.save(newPax); 
 	}
+
+	public void deletePax(Integer id) {
+		BusPassenger pax = busPaxRepo.findById(id).get();
+		busPaxRepo.deleteById(pax.getId());
+	}
+
+
+
+	public BusOrder saveOrder(BusOrder busOrder, Bus bus, BusHistory history) {
+		Bus newBus = busRepo.findById(bus.getId()).get();
+		BusHistory newHis = busHistoryRepo.findById(history.getId()).get();
+		
+		busOrder.setBus(newBus);
+		busOrder.setBusHistory(newHis);
+		
+		BusOrder newOrder = busOrderRepo.save(busOrder);
+		
+		newBus.getBusOrders().add(newOrder);
+		busRepo.save(newBus);
+		newHis.getBusOrders().add(newOrder);
+		busHistoryRepo.save(newHis);
+		
+		return busOrderRepo.save(busOrder);
+	}
+	
+	public BusOrder findByIdOrder(Integer id) {
+		return busOrderRepo.findById(id).get();
+	}
+	
+	
 }

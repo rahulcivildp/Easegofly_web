@@ -2,272 +2,277 @@
 <html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 	th:fragment="hotel-middle" >
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="stylesheet" th:href="@{css/hotel-middle.css}">
+    <title>Untitled</title>
+    <link rel="stylesheet" th:href="@{css/hotel/aos.min.css}">
+    <link rel="stylesheet" th:href="@{css/hotel/animate.min.css}">
+    <link rel="stylesheet" th:href="@{css/hotel/accordion-faq-list.css}">
+    <link rel="stylesheet" th:href="@{css/hotel/styles.css}">
 </head>
 
 <body>
-    <div class="container container-stl">
-        <h1 class="text-center"><strong><span style="color: rgb(23, 24, 28);">Exclusive Offers</span></strong></h1>
+    <div class="container" style=" margin-top: 50px;">
+        <h1 class="text-center"><span style="color:rgb(23, 24, 28);">Exclusive Offers</span></h1>
     </div>
-    <div class="container container-stl">
+    <div class="container" style=" margin-top: 50px;">
         <div class="row">
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/hotel/NEW%20DELHI.webp}">
                         <div></div>
                         <h4 class="text-center card-title">New Delhi</h4>
                         <h6 class="card-subtitle mb-2">Delhi</h6>
                     </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
                 </div>
             </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/hotel/Patna.webp}">
+                        <div></div>
+                        <h4 class="text-center card-title">Patna</h4>
+                        <h6 class="card-subtitle mb-2">Patna</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/hotel/Visakhapatnam.webp}">
+                        <div></div>
+                        <h4 class="text-center card-title card-title">Visakhapatnam</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/hotel/Guwahati.webp}">
+                        <div></div>
+                        <h4 class="text-center card-title">Guwahati</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/hotel/Shirdi.webp}">
+                        <div></div>
+                        <h4 class="text-center card-title">Shirdi</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/hotel/Hyderabad.webp}">
+                        <div></div>
+                        <h4 class="text-center card-title">Hyderabad</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="a large building with a clock on the top of it" data-bss-hover-animate="pulse" th:src="@{images/hotel/Bengaluruu.jpg}">
+                        <div></div>
+                        <h4 class="text-center card-title">Bengaluru</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="green trees near mountain during daytime" data-bss-hover-animate="pulse" th:src="@{images/hotel/Shimla.jpg}">
+                        <div></div>
+                        <h4 class="text-center card-title">Shimla</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="grayscale photo of a pyramid" data-bss-hover-animate="pulse" th:src="@{images/hotel/TamilNadu.jpg}">
+                        <div></div>
+                        <h4 class="text-center card-title">Tamil Nadu</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="green palm tree near body of water during daytime" data-bss-hover-animate="pulse" th:src="@{images/hotel/Goa.jpg}">
+                        <div></div>
+                        <h4 class="text-center card-title">Goa</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="chennai to tirupati package, tour package, darshan package" data-bss-hover-animate="pulse" th:src="@{images/hotel/Tirupati.jpg}">
+                        <div></div>
+                        <h4 class="text-center card-title">Tirupati</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="amritsar, golden temple, india" data-bss-hover-animate="pulse" th:src="@{images/hotel/Amritsar.jpg}">
+                        <div></div>
+                        <h4 class="text-center card-title">Amritsar</h4>
+                        <h6 class="card-subtitle mb-2">Delhi</h6>
+                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="brown and gray concrete buildings during daytime" data-bss-hover-animate="pulse" th:src="@{images/hotel/photo-1524652156139-d4005e60449c.jpg}">
                         <div></div>
                         <h4 class="text-center card-title">New Delhi</h4>
                         <h6 class="card-subtitle mb-2">Delhi</h6>
                     </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
                 </div>
             </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="people riding boat on body of water during daytime" data-bss-hover-animate="pulse" th:src="@{images/hotel/Kolkata.jpg}">
                         <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
+                        <h4 class="text-center card-title">Kolkata</h4>
                         <h6 class="card-subtitle mb-2">Delhi</h6>
                     </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
                 </div>
             </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="a small boat is docked on a lake" data-bss-hover-animate="pulse" th:src="@{images/hotel/Ooty.jpg}" style="object-fit: fill;">
                         <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
+                        <h4 class="text-center card-title">Ooty</h4>
                         <h6 class="card-subtitle mb-2">Delhi</h6>
                     </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
                 </div>
             </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
+            <div class="col-6 col-md-3 div-style">
+                <div class="card" data-aos="slide-up">
+                    <div class="card-body text-center"><img class="img-fluid" alt="White and Brown Concrete Building Near Body of Water" data-bss-hover-animate="pulse" th:src="@{images/hotel/Locknow.jpeg}">
                         <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
-                        <h6 class="card-subtitle mb-2">Delhi</h6>
-                    </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
-                </div>
-            </div>
-            <div class="col-md-3 div-style col-6">
-                <div class="card">
-                    <div class="card-body text-center"><img class="img-fluid img-stl" th:src="@{images/hotel/NEW%20DELHI.webp}">
-                        <div></div>
-                        <h4 class="text-center card-title">New Delhi</h4>
+                        <h4 class="text-center card-title">Locknow</h4>
                         <h6 class="card-subtitle mb-2">Delhi</h6>
                     </div><button class="btn btn-primary" type="button">Properties -&gt;</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container container-stl">
-        <h3>Top Destination</h3>
+    <div class="container"  style=" margin-top: 50px;">
+        <h3 data-aos="slide-up">Top Destination</h3>
     </div>
-    <div class="container container-stl">
-        <div class="row">
+    <div class="container" style=" margin-top: 50px;">
+        <div class="row pulse animated">
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
             <div class="col-md-6 d-flex d-md-flex">
-                <div class="d-flex justify-content-between align-items-center clmn-stl">
-                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" type="button">Search Flight</button>
+                <div class="d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse">
+                    <p class="justify-content-between">Kolkata(CCU) - Delhi(DEL)</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Search Flight</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container container-stl">
-        <section class="py-5 bg-light">
-            <h3 class="text-center text-success" style="padding-top: 15px;padding-bottom: 15px;color: #1b6ce5!important;"><strong><span style="color: rgb(34, 34, 34);">Easegofly Hotel Booking FAQs</span></strong></h3>
-            <div class="container container-stl">
+    <div class="container" style=" margin-top: 50px;">
+        <section class="bg-light py-5">
+            <h3 class="text-center text-success" style="padding-top:15px;padding-bottom:15px;color:#1b6ce5;"><span style="color:rgb(34, 34, 34);">Easegofly Hotel Booking FAQs</span></h3>
+            <div class="container">
                 <div class="row d-flex justify-content-center">
-                    <div class="col col-md-10 col-12">
+                    <div class="col-12 col-md-10">
                         <div id="faqlist" class="accordion accordion-flush">
                             <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-1">What is Lorem Ipsum?</button></h2>
+                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" data-aos="slide-up" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-1">What is Lorem Ipsum?</button></h2>
                                 <div id="content-accordion-1" class="accordion-collapse collapse" data-bs-parent="#faqlist">
                                     <p class="accordion-body"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-2">What is Lorem Ipsum?</button></h2>
+                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" data-aos="slide-up" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-2">What is Lorem Ipsum?</button></h2>
                                 <div id="content-accordion-2" class="accordion-collapse collapse" data-bs-parent="#faqlist">
                                     <p class="accordion-body"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-3">What is Lorem Ipsum?</button></h2>
+                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" data-aos="slide-up" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-3">What is Lorem Ipsum?</button></h2>
                                 <div id="content-accordion-3" class="accordion-collapse collapse" data-bs-parent="#faqlist">
                                     <p class="accordion-body"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-4">What is Lorem Ipsum?</button></h2>
+                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" data-aos="slide-up" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-4">What is Lorem Ipsum?</button></h2>
                                 <div id="content-accordion-4" class="accordion-collapse collapse" data-bs-parent="#faqlist">
                                     <p class="accordion-body"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-5">What is Lorem Ipsum?</button></h2>
+                                <h2 class="accordion-header"><button class="btn accordion-button collapsed" data-aos="slide-up" type="button" data-bs-toggle="collapse" data-bs-target="#content-accordion-5">What is Lorem Ipsum?</button></h2>
                                 <div id="content-accordion-5" class="accordion-collapse collapse" data-bs-parent="#faqlist">
                                     <p class="accordion-body"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
                                 </div>
@@ -278,6 +283,8 @@
             </div>
         </section>
     </div>
+    <script th:src="@{js/hotel/aos.min.js}"></script>
+    <script th:src="@{js/hotel/bs-init.js}"></script>
 </body>
 
 </html>

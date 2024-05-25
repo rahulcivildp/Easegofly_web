@@ -131,7 +131,10 @@ public class Customer {
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Bus> buses = new ArrayList<>();
-	
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<BusOrder> busOrders = new ArrayList<>();
+
 	
 	public Customer() {}
 	
@@ -214,6 +217,14 @@ public class Customer {
 
 	public String getAddressLine1() {
 		return addressLine1;
+	}
+
+	public List<BusOrder> getBusOrders() {
+		return busOrders;
+	}
+
+	public void setBusOrders(List<BusOrder> busOrders) {
+		this.busOrders = busOrders;
 	}
 
 	public void setAddressLine1(String addressLine1) {

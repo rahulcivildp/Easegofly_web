@@ -1,23 +1,46 @@
 package com.easygofly.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "bus_boarding_point_details")
 public class BusBoardingPointDetails {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
+	@Column(name = "city_point_index")
 	private Integer cityPointIndex;
-	
+
+	@Column(name = "city_point_location")
 	private String cityPointLocation;
-	
+
+	@Column(name = "city_point_name")
 	private String cityPointName;
-	
+
+	@Column(name = "city_point_time")
 	private String cityPointTime;
-	
+
+	@Column(name = "city_point_landmark")
 	private String CityPointLandmark;
-	
+
+	@Column(name = "city_point_contact_number")
 	private String CityPointContactNumber;
-	
+
+	@Column(name = "city_point_address")
 	private String CityPointAddress;
+	
+	@ManyToOne
+	@JoinColumn(name = "bus_id")
+	private Bus bus;
 
 	
 	public BusBoardingPointDetails() {}
@@ -95,6 +118,15 @@ public class BusBoardingPointDetails {
 
 	public void setCityPointAddress(String cityPointAddress) {
 		CityPointAddress = cityPointAddress;
+	}
+
+	
+	public Bus getBus() {
+		return bus;
+	}
+
+	public void setBus(Bus bus) {
+		this.bus = bus;
 	}
 	
 	

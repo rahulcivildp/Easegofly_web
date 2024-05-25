@@ -71,10 +71,10 @@ public class BusSeat {
 	private double offeredPrice;
 
 	@Column(name = "published_price_rounded_off")
-	private Integer publishedPriceRoundedOff;
+	private double publishedPriceRoundedOff;
 
 	@Column(name = "offered_price_rounded_off")
-	private Integer offeredPriceRoundedOff;
+	private double offeredPriceRoundedOff;
 	
 	@Column(name = "agent_commission")
 	private double agentCommission;
@@ -123,7 +123,7 @@ public class BusSeat {
 	public BusSeat(String columnNo, String rowNo, Integer height, Integer width, Integer seatType, String seatName,
 			Integer seatIndex, double seatFare, boolean isLadiesSeat, boolean isMalesSeat, boolean seatStatus,
 			String currencyCode, double tax, double discount, double basePrice, double publishedPrice,
-			double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff,
+			double otherCharges, double offeredPrice, double publishedPriceRoundedOff, double offeredPriceRoundedOff,
 			double agentCommission, double agentMarkUp, double tds, double cGSTAmount, double cGSTRate,
 			double cessAmount, double cessRate, double iGSTAmount, double iGSTRate, double sGSTAmount, double sGSTRate,
 			double taxableAmount) {
@@ -164,7 +164,7 @@ public class BusSeat {
 	public BusSeat(String columnNo, String rowNo, Integer height, Integer width, Integer seatType, String seatName,
 			Integer seatIndex, double seatFare, boolean isLadiesSeat, boolean isMalesSeat, boolean seatStatus,
 			String currencyCode, double tax, double discount, double basePrice, double publishedPrice,
-			double otherCharges, double offeredPrice, Integer publishedPriceRoundedOff, Integer offeredPriceRoundedOff,
+			double otherCharges, double offeredPrice, double publishedPriceRoundedOff, double offeredPriceRoundedOff,
 			double agentCommission, double agentMarkUp, double tds, double cGSTAmount, double cGSTRate,
 			double cessAmount, double cessRate, double iGSTAmount, double iGSTRate, double sGSTAmount, double sGSTRate,
 			double taxableAmount, Bus bus) {
@@ -356,19 +356,19 @@ public class BusSeat {
 		this.offeredPrice = offeredPrice;
 	}
 
-	public Integer getPublishedPriceRoundedOff() {
+	public double getPublishedPriceRoundedOff() {
 		return publishedPriceRoundedOff;
 	}
 
-	public void setPublishedPriceRoundedOff(Integer publishedPriceRoundedOff) {
+	public void setPublishedPriceRoundedOff(double publishedPriceRoundedOff) {
 		this.publishedPriceRoundedOff = publishedPriceRoundedOff;
 	}
 
-	public Integer getOfferedPriceRoundedOff() {
+	public double getOfferedPriceRoundedOff() {
 		return offeredPriceRoundedOff;
 	}
 
-	public void setOfferedPriceRoundedOff(Integer offeredPriceRoundedOff) {
+	public void setOfferedPriceRoundedOff(double offeredPriceRoundedOff) {
 		this.offeredPriceRoundedOff = offeredPriceRoundedOff;
 	}
 

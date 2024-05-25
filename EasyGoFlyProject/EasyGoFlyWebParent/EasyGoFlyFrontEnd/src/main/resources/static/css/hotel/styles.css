@@ -1,0 +1,59 @@
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 0 5px;
+}
+
+.card-body {
+  padding: 0;
+}
+
+h4 {
+  width: 100%;
+  position: absolute;
+  bottom: 70px;
+  color: white !important;
+}
+
+h6 {
+  width: 100%;
+  position: absolute;
+  bottom: 44px;
+  color: white !important;
+}
+
+.btn {
+  background: white;
+  color: black;
+  border: none;
+}
+
+.row {
+  padding: 10px 0;
+}
+
+img {
+  border-radius: 15px;
+}
+
+p {
+  margin: 0;
+}
+
+.btn-stl {
+  border: 1px solid blue;
+  border-radius: 8px;
+}
+
+.clmn-stl {
+  border-bottom: 1px solid grey;
+  padding-top: 20px;
+  padding-bottom: 8px;
+  width: 100%;
+}
+
+.div-style {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
