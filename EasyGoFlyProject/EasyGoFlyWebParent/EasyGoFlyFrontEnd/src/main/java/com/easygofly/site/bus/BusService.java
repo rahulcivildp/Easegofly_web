@@ -3,6 +3,10 @@ package com.easygofly.site.bus;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,10 @@ import com.easygofly.entity.BusPassenger;
 import com.easygofly.entity.BusPointDetails;
 import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
+import com.easygofly.site.wallet.WalletService;
 
 @Service
 public class BusService {
@@ -30,6 +37,7 @@ public class BusService {
 	@Autowired private BusSeatRepository busSeatRepo;
 	@Autowired private BusPaxRepository busPaxRepo;
 	@Autowired private BusOrderRepository busOrderRepo;
+	@Autowired private WalletService walletService;
 
 	public void authenticationBus(Model model) {
 		try {
@@ -164,9 +172,55 @@ public class BusService {
 		return busOrderRepo.save(busOrder);
 	}
 	
+	public BusOrder saveOrder(BusOrder busOrder) {
+		BusOrder order = busOrderRepo.findById(busOrder.getId()).get();
+		
+		return busOrderRepo.save(order);
+	}
+	
 	public BusOrder findByIdOrder(Integer id) {
 		return busOrderRepo.findById(id).get();
 	}
 	
+	public BusOrder updateOrderPrice(Integer id, double price) {
+		BusOrder updateOrder = busOrderRepo.findById(id).get();
+		updateOrder.setPrice(price);
+		
+		return busOrderRepo.save(updateOrder);
+	}
+	
+	public BusOrder updateOrderStatus(Integer id, OrderStatus orderStatus) {
+		BusOrder updateOrder = busOrderRepo.findById(id).get();
+		updateOrder.setOrderStatus(orderStatus);
+		
+		return busOrderRepo.save(updateOrder);
+	}
+
+	
+	public Wallet busWalletPayOrder(Customer customer, BusOrder order) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "BU"+ order.getId();
+		return walletService.updateWalletBalanceByBusOrder(customer, order, orderString, "");
+	}
+
+	public Wallet walletPayBusOrderCancel(Customer customer, BusOrder order, OrderStatus orderStatus) {
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
+		DateFormat dateFormat2 = new SimpleDateFormat("hhmmss");
+		String strDate1 = dateFormat1.format(date);
+		String strDate2 = dateFormat2.format(date);
+		
+		String orderString = "EGF" + strDate1 + "T" + strDate2 + "BU"+ order.getId();
+		
+		order.setOrderStatus(orderStatus);
+		busOrderRepo.save(order);
+		
+		return walletService.cancelWalletBalanceByBusOrder(customer, order, orderString, "");
+	}
 	
 }

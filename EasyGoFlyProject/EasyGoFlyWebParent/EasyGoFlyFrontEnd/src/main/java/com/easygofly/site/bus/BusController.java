@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,9 +23,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,6 +48,8 @@ import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.zaakpay.ChecksumGenerator;
+import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
@@ -63,6 +69,11 @@ public class BusController {
 	BusHistory history = new BusHistory();
 	List<Bus> buses = new ArrayList<>();
 	List<BusSeat> seatList = new ArrayList<>();
+	
+	private String[] parameter = new String[20];
+	private String checksum;
+	private Boolean verifiedChecksum;
+	private String[] responseParameters;
 	
 	@GetMapping("/bus")
 	public String viewBusPage(Model model) {
@@ -402,7 +413,6 @@ public class BusController {
         return "loading/loading";
     }
 
-	
 	@GetMapping("/bus/order_{bus_id}_{search_id}")
 	public String busOrder(Model model,
 			@PathVariable(name = "bus_id") Integer bus_id,
@@ -425,7 +435,8 @@ public class BusController {
 		
 	    BusOrder savedOrder= busService.saveOrder(busOrder, bus, busHistory);
 
-	    busBlockMethod(model, bus);
+	    String[] urlName = busBlockMethod(model, bus);
+	    
 
 		Integer totalGuests = bus.getBusPassengers().size();
 		
@@ -465,7 +476,7 @@ public class BusController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentHotel(orderString, amount);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentBus(orderString, amount);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -476,6 +487,15 @@ public class BusController {
 		
 		/* ******************************************************************************** */
 		
+		
+
+	    if (Integer.parseInt(urlName[0]) == 3) {
+			return "redirect:/bus_booking...";
+		} else if (Integer.parseInt(urlName[0]) == 2) {
+			return "redirect:/bus_booking...";
+		} 
+	    
+	    
 		model.addAttribute("busHistory", busHistory);
 		model.addAttribute("bus", bus);
 		model.addAttribute("totalGuests", totalGuests);
@@ -489,6 +509,208 @@ public class BusController {
 		return "bus/order/bus-order";
 	}
 	
+	
+	@PostMapping("/bus/order/wallet_check")
+	public String busWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			@RequestParam(name = "order_id") Integer order_id, 
+			@RequestParam(name = "bus_id") Integer bus_id) {
+		
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		Bus bus = busService.findByIdBus(bus_id);
+		BusOrder busOrder = busService.findByIdOrder(order_id);
+		double totalPrice = 0;
+	    
+	    for (BusSeat seat : bus.getBusSeats()) {
+	    	totalPrice = totalPrice + seat.getPublishedPriceRoundedOff();
+		}
+	    BusOrder updatedOrder = busService.updateOrderPrice(order_id, totalPrice);
+	    
+		Wallet wallet = busService.busWalletPayOrder(customer, updatedOrder);
+		
+		if (wallet != null) {
+			updatedOrder = busService.updateOrderStatus(busOrder.getId(), OrderStatus.SUCCESSFULL);
+		} else {
+			updatedOrder = busService.updateOrderStatus(busOrder.getId(), OrderStatus.FAILED);
+		}
+	
+		return "redirect:/bus/order/wallet_response_" + updatedOrder.getId();
+	}
+
+	@GetMapping("/bus/order/wallet_response_{order_id}")
+	public String showBusWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, Model model,
+			@PathVariable(name = "order_id") Integer order_id) throws MalformedURLException, IOException, Exception {
+		
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+
+		BusOrder order = busService.findByIdOrder(order_id);
+		TBObusCity cityOne = busCityRepo.getCityByCityId(Integer.parseInt(order.getBusHistory().getCityIdOne()));
+		TBObusCity cityTwo = busCityRepo.getCityByCityId(Integer.parseInt(order.getBusHistory().getCityIdTwo()));
+		BusBoardingPointDetails boardingPointDetails = order.getBus().getBusBoardingPointDetails().get(0);
+
+	    String cityPointTime = boardingPointDetails.getCityPointTime();
+	    Date date = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss").parse(cityPointTime);
+	    DateFormat dateFormat1 = new SimpleDateFormat("dd MMMM, yyyy");  
+	    DateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
+	    String boardingDate = dateFormat1.format(date);
+	    String boardingTime = dateFormat2.format(date);
+	    
+	    String cityPointName = boardingPointDetails.getCityPointName();
+		
+
+		model.addAttribute("orderId", order.getId());
+		model.addAttribute("order", order);
+		model.addAttribute("cityPointName", cityPointName);
+		model.addAttribute("boardingDate", boardingDate);
+		model.addAttribute("boardingTime", boardingTime);
+		model.addAttribute("cityOne", cityOne);
+		model.addAttribute("cityTwo", cityTwo);
+		
+		String[] hasErrorArr = new String[2];
+
+		hasErrorArr = busBookkMethodAndBookingDetails(model, order);
+		
+		if (hasErrorArr[0].equals("0")) {
+			model.addAttribute("paymentSuccess", "Successfull");
+		} else if (hasErrorArr[0].equals("5")) {
+			model.addAttribute("paymentCancelled", hasErrorArr[0]);
+		} else {
+			busService.walletPayBusOrderCancel(customer, order, OrderStatus.FAILED);
+			model.addAttribute("paymentCancelled", hasErrorArr[1]);
+		}
+		
+		model.addAttribute("amount", order.getPrice());
+		
+		return "wallet/bus/response";
+	}
+	
+	
+	
+	@CrossOrigin(origins = {"https://easegofly.com/"})
+	@RequestMapping(value = "/zaakpay/bus/response",
+			method = {RequestMethod.POST})
+	public String zaakpayHotelResponse (HttpServletRequest request, HttpServletResponse response,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			@RequestParam(name = "search_id") Integer search_id) throws Exception {
+
+//		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		
+		Transaction transaction = new Transaction();
+	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
+	    String checksumString = "" ;
+	    Integer n= 0;
+	    for (String param: transaction.getResponseParameters()) {
+	        checksumString=checksumString+param+"="+request.getParameter(param);
+	        checksumString=checksumString+"&";
+	        //This will create the checksum string against every parameter.
+	        parameter[n] = request.getParameter(param);
+	        n+=1;
+	    }
+	    
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    verifiedChecksum = verifyChecksum;
+	    checksum = request.getParameter("checksum");
+	    responseParameters = transaction.getResponseParameters();
+		
+	    String orderParam = parameter[8];
+		String[] parts = orderParam.split("BU");
+		String part2 = parts[1]; // 034556
+		Integer convert = Integer.parseInt(part2);
+		BusOrder order = busService.findByIdOrder(convert);
+
+		if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+			busService.updateOrderStatus(order.getId(), OrderStatus.CANCELLED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			busService.updateOrderStatus(order.getId(), OrderStatus.FAILED);
+		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			busService.updateOrderStatus(order.getId(), OrderStatus.FAILED);
+		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			busService.updateOrderStatus(order.getId(), OrderStatus.SUCCESSFULL);
+		} 
+		
+		return "redirect:/zaakpay/response";
+	}
+	
+	@CrossOrigin(origins = {"https://easegofly.com/"})
+	@RequestMapping(value = "/zaakpay/bus/response",
+			method = {RequestMethod.GET})
+	public String zaakpayHotelResponseSe (Model model, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
+		
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+
+		String orderParam = parameter[8];
+		model.addAttribute("orderId", orderParam);
+		String[] parts = orderParam.split("BU");
+		String part2 = parts[1]; // 034556
+		Integer convert = Integer.parseInt(part2);
+		BusOrder order = busService.findByIdOrder(convert);
+		TBObusCity cityOne = busCityRepo.getCityByCityId(Integer.parseInt(order.getBusHistory().getCityIdOne()));
+		TBObusCity cityTwo = busCityRepo.getCityByCityId(Integer.parseInt(order.getBusHistory().getCityIdTwo()));
+		BusBoardingPointDetails boardingPointDetails = order.getBus().getBusBoardingPointDetails().get(0);
+
+	    String cityPointTime = boardingPointDetails.getCityPointTime();
+	    Date date = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss").parse(cityPointTime);
+	    DateFormat dateFormat1 = new SimpleDateFormat("dd MMMM, yyyy");  
+	    DateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
+	    String boardingDate = dateFormat1.format(date);
+	    String boardingTime = dateFormat2.format(date);
+	    
+	    String cityPointName = boardingPointDetails.getCityPointName();
+		
+
+		model.addAttribute("order", order);
+		model.addAttribute("orderId", order.getId());
+		model.addAttribute("cityPointName", cityPointName);
+		model.addAttribute("boardingDate", boardingDate);
+		model.addAttribute("boardingTime", boardingTime);
+		model.addAttribute("cityOne", cityOne);
+		model.addAttribute("cityTwo", cityTwo);
+		
+		String[] hasErrorArr = new String[2];	
+		
+		hasErrorArr = busBookkMethodAndBookingDetails(model, order);
+		
+		if (parameter[9].contains("Not Found") && parameter[10].contains("unknown") ) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[11].contains("1017")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
+			
+			if (hasErrorArr[0].equals("0")) {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			}  else if (hasErrorArr[0].equals("5")) {
+				model.addAttribute("paymentCancelled", hasErrorArr[0]);
+			} else {
+				busService.walletPayBusOrderCancel(customer, order, OrderStatus.FAILED);
+				busService.updateOrderStatus(order.getId(), OrderStatus.FAILED);
+				model.addAttribute("paymentCancelled", hasErrorArr[1]);
+			}
+		}
+        
+		Double amount = Double.parseDouble(parameter[0])/100;
+		
+		model.addAttribute("amount", amount);
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
+		
+		return "zaakpay/bus/response";
+		
+		
+	}
+
 	
 	
 	// Private methods
@@ -509,7 +731,7 @@ public class BusController {
 		model.addAttribute("cityList", cityList);
 		model.addAttribute("cityIds", cityIds);
 	}
-
+	
 	private void busSeatLayout(Model model, Integer resultIndex) throws IOException {
 
 		// Create URL object with the API end-point
@@ -667,10 +889,11 @@ public class BusController {
 		}
 	}
 
-	private void busBlockMethod(Model model, Bus bus) 
+	private String[] busBlockMethod(Model model, Bus bus) 
 			throws MalformedURLException, IOException {
 		
 		List<String> strPaxs = new ArrayList<String>();
+		String[] hasErrorArr = new String[2];
 		
 		Integer count = 0;
         
@@ -743,6 +966,9 @@ public class BusController {
 	        		+ "    }\r\n";
 			
 			strPaxs.add(busPaxDetail);
+			
+			pax.setLeadPassenger(isLead);
+			busService.savePax(pax);
 		}
        	
        	String arraySeat = strPaxs.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
@@ -767,6 +993,10 @@ public class BusController {
         
         try {
         	JSONObject jsonObj = jsonObjBlock.getJSONObject("BlockResult");
+
+			JSONObject jsonObjTicketResponseErrorBooking = jsonObj.getJSONObject("Error");
+			hasErrorArr[0] = jsonObjTicketResponseErrorBooking.get("ErrorCode").toString();
+			hasErrorArr[1] = jsonObjTicketResponseErrorBooking.get("ErrorMessage").toString();
         	
         	String arrivalTime = jsonObj.get("ArrivalTime").toString();
         	String busType = jsonObj.get("BusType").toString();
@@ -781,16 +1011,34 @@ public class BusController {
     		model.addAttribute("travelName", travelName);
     		
 		} catch (Exception e) {
+			
+					
+        	JSONObject jsonObj = jsonObjBlock.getJSONObject("BlockResult");
+
+			JSONObject jsonObjTicketResponseErrorBooking = jsonObj.getJSONObject("Error");
+			hasErrorArr[0] = jsonObjTicketResponseErrorBooking.get("ErrorCode").toString();
+			hasErrorArr[1] = jsonObjTicketResponseErrorBooking.get("ErrorMessage").toString();
+
+        	Integer errorCode = Integer.parseInt(jsonObjTicketResponseErrorBooking.get("ErrorCode").toString());
+        	String errorMessage = jsonObjTicketResponseErrorBooking.get("ErrorMessage").toString();
+
+    		model.addAttribute("errorCode", errorCode);
+    		model.addAttribute("errorMessage", errorMessage);
+    		
 			e.printStackTrace();
 		}
+
+		return hasErrorArr;
 	}
 
-	private void busBookkMethodAndBookingDetails(Model model, Bus bus) 
+	private String[] busBookkMethodAndBookingDetails(Model model, BusOrder order) 
 			throws MalformedURLException, IOException {
 		
 		List<String> strPaxs = new ArrayList<String>();
-		
+		String[] hasErrorArr = new String[2];
+		Bus bus = order.getBus();
 		Integer count = 0;
+		
         
         for (BusPassenger pax : bus.getBusPassengers()) {
         	BusSeat seat = busService.findByIdSeat(pax.getSeatId());
@@ -892,13 +1140,19 @@ public class BusController {
         	Integer busId = Integer.parseInt(jsonObj.get("BusId").toString());
         	String ticketNo = jsonObj.get("TicketNo").toString();
         	String travelOperatorPNR = jsonObj.get("TravelOperatorPNR").toString();
+        	
+        	order.setBusBookingStatus(busBookingStatus);
+        	order.setInvoiceAmount("" + invoiceAmount);
+        	order.setInvoiceNumber(invoiceNumber);
+        	order.setTboBookBusId(busId);
+        	order.setTicketNo(ticketNo);
+        	order.setTravelOperatorPNR(travelOperatorPNR);
+        	
+        	busService.saveOrder(order);
 
-    		model.addAttribute("busBookingStatus", busBookingStatus);
-    		model.addAttribute("invoiceAmount", invoiceAmount);
-    		model.addAttribute("invoiceNumber", invoiceNumber);
-    		model.addAttribute("busId", busId);
-    		model.addAttribute("ticketNo", ticketNo);
-    		model.addAttribute("travelOperatorPNR", travelOperatorPNR);
+			JSONObject jsonObjTicketResponseError = jsonObj.getJSONObject("Error");
+			hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
     		
     		// Create URL object with the API end-point
             URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
@@ -925,6 +1179,10 @@ public class BusController {
 			} catch (Exception e) {
             	JSONObject jsonObjBooki = jsonObjBook.getJSONObject("GetBookingDetailResult");
 
+    			JSONObject jsonObjTicketResponseErrorBooking = jsonObjBooki.getJSONObject("Error");
+    			hasErrorArr[0] = jsonObjTicketResponseErrorBooking.get("ErrorCode").toString();
+    			hasErrorArr[1] = jsonObjTicketResponseErrorBooking.get("ErrorMessage").toString();
+
             	Integer errorCode = Integer.parseInt(jsonObjBooki.getJSONObject("Error").get("ErrorCode").toString());
             	String errorMessage = jsonObjBooki.getJSONObject("Error").get("ErrorMessage").toString();
 
@@ -938,6 +1196,10 @@ public class BusController {
 
         	JSONObject jsonObj = jsonObjBook.getJSONObject("BookResult");
 
+			JSONObject jsonObjTicketResponseError = jsonObj.getJSONObject("Error");
+			hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
+
         	Integer errorCode = Integer.parseInt(jsonObj.getJSONObject("Error").get("ErrorCode").toString());
         	String errorMessage = jsonObj.getJSONObject("Error").get("ErrorMessage").toString();
         	
@@ -946,6 +1208,8 @@ public class BusController {
     		
 			e.printStackTrace();
 		}
+        
+        return hasErrorArr;
 	}
 
 }

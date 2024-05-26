@@ -466,6 +466,20 @@
 			</div>
 		</div>
 		
+			<div class="container media-hide"> 
+				<div class="divContainer">
+					<h4>Seat Layout</h4>
+					<small id="busSeatIndicator" style="color: #a5a5a5;"></small>
+					<div class="row" id="busSeatList">
+						
+					</div>
+				</div>
+				
+				<div>
+					<th:block th:utext="${hTMLLayout}"/></th:block>
+				</div>
+			</div>
+		
 		<div class="container media-hide">
 			<div class="divContainer">
 				<h4>Seat Selection</h4>
@@ -636,6 +650,20 @@
 			</div>
 		</div>
 		
+			<div class="container media_status"> 
+				<div class="divContainer">
+					<h4>Seat Layout</h4>
+					<small id="busSeatIndicator" style="color: #a5a5a5;"></small>
+					<div class="row" id="busSeatList">
+						
+					</div>
+				</div>
+				
+				<div>
+					<th:block th:utext="${hTMLLayout}"/></th:block>
+				</div>
+			</div>
+			
 		<div class="container media_status">
 			<div class="divContainer">
 				<h4>Seat Selection</h4>
@@ -788,13 +816,14 @@
 				<div style="height: 50px;"></div>
 				<div class="footerInner" style="position: relative;">
 			   	   <div class="row">
-					   <button class="col-6" id="homeFooter" onclick="history.back()">
+					   <button class="col-sm-3" id="homeFooter" onclick="history.back()">
 						   <div class="footerInnerDiv" style="color: white;">
 							   <i class="fa fa-solid fa-backward"></i><br>
 							   <p>Back</p>
 					   		</div>
 					   	</button>
-					   <button class="col-6" id="saveOrderBTN" type="submit" >
+					   <div class="col-sm-6"></div>
+					   <button class="col-sm-3" id="saveOrderBTN" type="submit" >
 						   <div id="submitInner" class="footerInnerDiv" style="color: #b1b1b1;">
 							   <i class="fa-solid fa-forward"></i>
 							   <p>Next</p>

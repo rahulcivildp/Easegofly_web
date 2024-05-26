@@ -721,7 +721,7 @@ public class HotelController {
 
 		String orderParam = parameter[8];
 		model.addAttribute("orderId", orderParam);
-		String[] parts = orderParam.split("R");
+		String[] parts = orderParam.split("HO");
 		String part2 = parts[1]; // 034556
 		Integer convert = Integer.parseInt(part2);
 		HotelOrder order= hotelService.findByIdOrder(convert);

@@ -24,6 +24,24 @@ public class BusOrder {
 	@Column(nullable = false, length = 256)
 	private String name;
 	
+	@Column(name = "bus_booking_status")
+	private String busBookingStatus;
+	
+	@Column(name = "invoice_amount")
+	private String invoiceAmount;
+	
+	@Column(name = "invoice_number")
+	private String invoiceNumber;
+	
+	@Column(name = "tbo_book_bus_id")
+	private Integer tboBookBusId;
+	
+	@Column(name = "ticket_no")
+	private String ticketNo;
+	
+	@Column(name = "travel_operator_pnr")
+	private String travelOperatorPNR;
+	
 	private double price;
 	
 	@Column(name = "created_time")
@@ -122,6 +140,54 @@ public class BusOrder {
 
 	public void setBus(Bus bus) {
 		this.bus = bus;
+	}
+
+	public String getBusBookingStatus() {
+		return busBookingStatus;
+	}
+
+	public void setBusBookingStatus(String busBookingStatus) {
+		this.busBookingStatus = busBookingStatus;
+	}
+
+	public String getInvoiceAmount() {
+		return invoiceAmount;
+	}
+
+	public void setInvoiceAmount(String invoiceAmount) {
+		this.invoiceAmount = invoiceAmount;
+	}
+
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
+	public Integer getTboBookBusId() {
+		return tboBookBusId;
+	}
+
+	public void setTboBookBusId(Integer tboBookBusId) {
+		this.tboBookBusId = tboBookBusId;
+	}
+
+	public String getTicketNo() {
+		return ticketNo;
+	}
+
+	public void setTicketNo(String ticketNo) {
+		this.ticketNo = ticketNo;
+	}
+
+	public String getTravelOperatorPNR() {
+		return travelOperatorPNR;
+	}
+
+	public void setTravelOperatorPNR(String travelOperatorPNR) {
+		this.travelOperatorPNR = travelOperatorPNR;
 	}
 	
 	

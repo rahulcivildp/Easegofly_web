@@ -331,6 +331,155 @@
 			</div>
 			<div class="collapsibleSearch"><div th:replace="bus/bus-search-tab :: bus-search"></div></div>
 		</div>
+		
+		
+		
+		<div class="container media-hide">
+			<div class="hotelInfoDiv">
+				<div>
+					<h4>[[${bus.travelName}]]</h4>
+					<small>[[${bus.busType}]]</small><br><br>
+					<b>[[${bus.arrivalTime}]] - [[${bus.departureTime}]] </b>
+				</div>
+				
+				<div >
+					<div style="display: flex; justify-content: center;"><button class="collapsibleBtn">Bus Info</button></div> 
+					<div class="collapsibleClass">
+						<div class="row priceRowMobStyleDropdown" style="width: 100%;">
+							<div class="col-12" style="height: 15px;"></div>
+							<div class="col-12">
+								<div class="row">
+									<div class="col-12"><b>Bus Point Details: </b></div>
+									<th:block th:each="boarding : ${bus.pointsDetails}">
+										<div class="col-12">
+											<p><b>[[${boarding.pointType}]]: </b> [[${boarding.cityPointLocation}]], [[${boarding.cityPointName}]] - [[${boarding.cityPointTime}]]</p>
+										</div>
+									</th:block>
+								</div>
+							</div>
+							<div class="col-12" style="height: 15px;"></div>
+							<div class="col-12">
+								<div class="row">
+									<div class="col-12"><b>Cancellation Policy: </b></div>
+									<th:block th:each="cancel : ${bus.busCancelPolicies}">
+										<div class="col-12">
+											<p>Cancel Charge: [[${cancel.cancellationCharge}]]</p>
+											<p>Policy: [[${cancel.policyString}]]</p>
+											<p>Time: [[${cancel.fromDate}]] - [[${cancel.toDate}]]</p> <br>
+										</div>
+									</th:block>
+								</div>
+							</div>
+							<div class="col-12" style="height: 15px;"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div style="height: 20px;"></div>
+				
+			</div>
+		</div>
+		
+		 <div class="container media-hide">
+			 <div class="booking_tiles back_white shadow">
+				<th:block >
+					<div class="hotelStyle">
+						<div style="display: flex;">
+							<div class="hotleRoomIndexstyle" >
+								<p style="margin: 0;">Passenger Details</p>
+							</div>
+							<h3 style="margin-left: 10px;"></h3>
+						</div>
+						<hr>
+						<th:block th:each="guest : ${bus.busPassengers}">
+								<div style="display: flex; padding: 8px">
+									<th:block th:if="${guest.leadPassenger} == true">	
+										<div class="isLeadPax" style="background: green;">
+											L
+										</div>
+									</th:block>
+									<th:block th:if="${guest.leadPassenger} == false">	
+										<div class="isLeadPax" style="background: #919191;">
+											N
+										</div>
+									</th:block>
+									<th:block th:if="${guest.gender} == 1">
+										<div class="adultPaxStl" style="background: green;">
+											Adult
+										</div>
+									</th:block>
+									<th:block th:if="${guest.gender} == 2">	
+										<div class="adultPaxStl" style="background: blue;">
+											Child
+										</div>
+									</th:block>
+									<div>
+										[[${guest.firstName}]] [[${guest.lastName}]]
+									</div>
+									<th:block th:each="seat : ${bus.busSeats}">
+										<th:block th:if="${guest.seatId} == ${seat.id}">	
+											<div class="adultPaxStl" style="background: blue;margin-left: 10px;">
+												SN-[[${seat.seatName}]]
+											</div>
+										</th:block>	
+									</th:block>
+									<th:block th:each="seat : ${bus.busSeats}">
+										<th:block th:if="${guest.seatId} == ${seat.id}">	
+											<div class="adultPaxStl" style="background: blue;">
+												₹[[${seat.seatFare}]]
+											</div>
+										</th:block>	
+									</th:block>
+								</div>
+						</th:block>
+					</div>
+				</th:block>
+			 </div>
+		 </div>
+		
+        <div class="container media-hide">
+			<div id="priceSection" class="booking_tiles back_white shadow">
+				<div><h3>Total Price :</h3></div>
+				<div style="display: flex; align-items: center;"><i class="fa-solid fa-indian-rupee-sign"></i><h3>&nbsp;[[${totalPrice}]]</h3></div>
+			</div>
+		</div>
+    
+        <div class="container media-hide">
+			<div id="payment_selection" class="booking_tiles back_white shadow">
+                <div style="background-color: #ecf5fd;">
+                    <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Choose a Payment Method</p>
+                </div>
+				 <div class="row" style="padding: 10px;"> 
+					 <div class="col-12">
+						 <div class="form-check " style="display: flex; align-items: center; margin-left: 24px;">
+							 <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+							 <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
+						</div>
+					 </div>
+					 <div class="col-12">
+						<div class="form-check" style="display: flex; align-items: center; margin-left: 24px;">
+						  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+						  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
+						  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
+						  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
+						  </div>
+						  </label>
+						 
+                        </div>
+					</div>
+					 <div class="col-12">
+                        <div class="form-check" style="margin: 10px 25px;">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" form="payment_form" required="required">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                i have reviewed and agreed on the Terms and Condition.
+                            </label>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		
 		<div class="container media_status">
 			<div class="hotelInfoDiv">
 				<div>
@@ -383,41 +532,53 @@
 				<th:block >
 					<div class="hotelStyle">
 						<div style="display: flex;">
-							<div class="hotleRoomIndexstyle" >
-								<p style="margin: 0;"></p>
+							<div class="hotleRoomIndexstyle" style="    width: 100%;">
+								<p style="margin: 0;">Passenger Details</p>
 							</div>
 							<h3 style="margin-left: 10px;"></h3>
 						</div>
 						<hr>
-						<!--<th:block each="guest : hotel.guests">
-							<th:block if="guest.hotelRoom.id == hotelRoom.id">
+						<th:block th:each="guest : ${bus.busPassengers}">
 								<div style="display: flex; padding: 8px">
-									<th:block if="guest.leadPassenger == true">	
+									<th:block th:if="${guest.leadPassenger} == true">	
 										<div class="isLeadPax" style="background: green;">
 											L
 										</div>
 									</th:block>
-									<th:block if="guest.leadPassenger == false">	
+									<th:block th:if="${guest.leadPassenger} == false">	
 										<div class="isLeadPax" style="background: #919191;">
 											N
 										</div>
 									</th:block>
-									<th:block if="guest.paxType == 1">
+									<th:block th:if="${guest.gender} == 1">
 										<div class="adultPaxStl" style="background: green;">
 											Adult
 										</div>
 									</th:block>
-									<th:block if="guest.paxType == 2">	
+									<th:block th:if="${guest.gender} == 2">	
 										<div class="adultPaxStl" style="background: blue;">
 											Child
 										</div>
 									</th:block>
 									<div>
-										guest.firstNameguest.lastName
+										[[${guest.firstName}]] [[${guest.lastName}]]
 									</div>
+									<th:block th:each="seat : ${bus.busSeats}">
+										<th:block th:if="${guest.seatId} == ${seat.id}">	
+											<div class="adultPaxStl" style="background: white; margin-left: 10px;">
+												SN-[[${seat.seatName}]]
+											</div>
+										</th:block>	
+									</th:block>
+									<th:block th:each="seat : ${bus.busSeats}">
+										<th:block th:if="${guest.seatId} == ${seat.id}">	
+											<div class="adultPaxStl" style="background: white;">
+												₹[[${seat.seatFare}]]
+											</div>
+										</th:block>	
+									</th:block>
 								</div>
-							</th:block>
-						</th:block>-->
+						</th:block>
 					</div>
 				</th:block>
 			 </div>
@@ -438,14 +599,14 @@
 				 <div class="row" style="padding: 10px;"> 
 					 <div class="col-12">
 						 <div class="form-check " style="display: flex; align-items: center; margin-left: 24px;">
-							 <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-							 <label class="form-check-label payment_zaakpay" for="flexRadioDefault1" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
+							 <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1Mob" checked>
+							 <label class="form-check-label payment_zaakpay" for="flexRadioDefault1Mob" th:style="'background-image: url(' + @{'/images/payment/1600245557487.jpeg'} + ');'"></label>
 						</div>
 					 </div>
 					 <div class="col-12">
 						<div class="form-check" style="display: flex; align-items: center; margin-left: 24px;">
-						  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-						  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
+						  <input class="form-check-input check_input this_radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2Mob">
+						  <label class="form-check-label payment_zaakpay" for="flexRadioDefault2Mob" th:style="'background-image: url(' + @{'/images/payment/easegofly_wallet2.png'} + ');'">
 						  <div style="float: right; color: black; margin-top: 18px; margin-right: -29px;">
 						  	<h1 style="font-size: 18px;">[[${balance}]]</h1>
 						  </div>
@@ -455,8 +616,8 @@
 					</div>
 					 <div class="col-12">
                         <div class="form-check" style="margin: 10px 25px;">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" form="payment_form" required="required">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefaultMob" form="payment_form" required="required">
+                            <label class="form-check-label" for="flexCheckDefaultMob">
                                 i have reviewed and agreed on the Terms and Condition.
                             </label>
                         </div>
@@ -490,6 +651,37 @@
 			   </div>
 		   </div>
 	   </div>
+
+		
+		<div class="container media-hide">
+			<div class="" >
+				<div style="height: 50px;"></div>
+				<div class="footerInner" style="position: relative;">
+			   	   <div class="row">
+					   <button class="col-sm-3" id="homeFooterMD" onclick="history.back()">
+						   <div class="footerInnerDiv" style="color: white;">
+							   <i class="fa fa-solid fa-backward"></i><br>
+							   <p>Back</p>
+					   		</div>
+					   	</button>
+					   <div class="col-sm-6"></div>
+					   <button class="col-sm-3" id="payButtonMob" style="display: block;" type="submit" form="payment_form">
+						   <div id="submitInner" class="footerInnerDiv" style="color: white;">
+							   <i class="fa-solid fa-ticket"></i>
+							   <p>Book Now</p>
+					   		</div>
+					   	</button>
+					   <button class="col-sm-3" id="payButtonWalletMob" style="display: none;" type="submit" data-bs-toggle="modal" data-bs-target="#modalDialogue" form="payment_form_wallet">
+						   <div id="submitInner" class="footerInnerDiv" style="color: white;">
+							  <i class="fa-solid fa-ticket"></i>
+							   <p>Book Now</p>
+					   		</div>
+					   	</button>
+				   </div>
+			   </div>
+		   </div>
+		</div>
+		
 		
 		<!-- ** ZAAKPAY **  --> <!--  -->
        	<form th:action="@{${requestUrl}}" method="post" id="payment_form">
@@ -500,11 +692,10 @@
        		<input type="hidden" name="checksum" th:value="${checksum}">
         </form>
         
-        <!--<form th:action="@{/hotel/order/wallet_check}" method="post" id="payment_form_wallet" onsubmit="return(checkWalletBalance(this))">
-            <input type="hidden" name="flight_price" th:value="${totalPrice}">
-            <input type="hidden" name="hotel_id" th:value="${hotel.id}">
+       <form th:action="@{/bus/order/wallet_check}" method="post" id="payment_form_wallet" onsubmit="return(checkWalletBalance(this))">
+            <input type="hidden" name="bus_id" th:value="${bus.id}">
             <input type="hidden" name="order_id" th:value="${savedOrder.id}">
-        </form>-->
+        </form>
         
         <div style="height: 50px;"></div>
         
@@ -537,6 +728,17 @@
     		$("#payButton").css("display", "block");
     		$("#payButtonWallet").css("display", "none");
     		$("#flexCheckDefault").attr("form", "payment_form");
+    	});
+    
+    	$("#flexRadioDefault2Mob").click(function() {
+    		$("#payButtonMob").css("display", "none");
+    		$("#payButtonWalletMob").css("display", "block");
+    		$("#flexCheckDefaultMob").attr("form", "payment_form_wallet");
+    	});
+    	$("#flexRadioDefault1Mob").click(function() {
+    		$("#payButtonMob").css("display", "block");
+    		$("#payButtonWalletMob").css("display", "none");
+    		$("#flexCheckDefaultMob").attr("form", "payment_form");
     	});
     </script>
  	<script type="text/javascript">

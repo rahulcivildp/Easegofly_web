@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.easygofly.entity.BusOrder;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.HotelOrder;
 import com.easygofly.entity.Order;
@@ -97,6 +98,46 @@ public class WalletService {
 			
 			RechargeHistory rechargeHistory = createRechargeHistoryByZaakpay(customer, transId, zaakpayTransId);
 			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
+			
+			return walletRepo.save(wallet);
+		} else {
+			System.out.println((wallet.getBalance() / 100) + " is SMALLER than " + intOrder);
+			return null;
+		}
+	}
+	
+	public Wallet updateWalletBalanceByBusOrder(Customer customer, BusOrder order, String transId, String zaakpayTransId) {
+		Wallet wallet = customer.getWallet();
+		double dblOrder100 = order.getPrice() * 100;
+		Integer intOrder100 = (int) dblOrder100;
+		Integer intOrder = (int) order.getPrice();
+		if (wallet.getBalance() >= intOrder100) {
+			System.out.println((wallet.getBalance() / 100) + " is BIGGER than " + intOrder);
+			wallet.setBalance(wallet.getBalance() - intOrder100);
+			wallet.setTempValue(intOrder100);
+			
+			RechargeHistory rechargeHistory = createRechargeHistoryByZaakpay(customer, transId, zaakpayTransId);
+			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
+			
+			return walletRepo.save(wallet);
+		} else {
+			System.out.println((wallet.getBalance() / 100) + " is SMALLER than " + intOrder);
+			return null;
+		}
+	}
+	
+	public Wallet cancelWalletBalanceByBusOrder(Customer customer, BusOrder order, String transId, String zaakpayTransId) {
+		Wallet wallet = customer.getWallet();
+		double dblOrder100 = order.getPrice() * 100;
+		Integer intOrder100 = (int) dblOrder100;
+		Integer intOrder = (int) order.getPrice();
+		if (wallet.getBalance() >= intOrder100) {
+			System.out.println((wallet.getBalance() / 100) + " is BIGGER than " + intOrder);
+			wallet.setBalance(wallet.getBalance() + intOrder100);
+			wallet.setTempValue(intOrder100);
+			
+			RechargeHistory rechargeHistory = createRechargeHistoryByZaakpay(customer, transId, zaakpayTransId);
+			updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
 			
 			return walletRepo.save(wallet);
 		} else {
