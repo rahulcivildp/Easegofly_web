@@ -565,14 +565,14 @@
 									</div>
 									<th:block th:each="seat : ${bus.busSeats}">
 										<th:block th:if="${guest.seatId} == ${seat.id}">	
-											<div class="adultPaxStl" style="background: white; margin-left: 10px;">
+											<div class="adultPaxStl" style="background: white; margin-left: 10px; color: black; border: 2px solid green;">
 												SN-[[${seat.seatName}]]
 											</div>
 										</th:block>	
 									</th:block>
 									<th:block th:each="seat : ${bus.busSeats}">
 										<th:block th:if="${guest.seatId} == ${seat.id}">	
-											<div class="adultPaxStl" style="background: white;">
+											<div class="adultPaxStl" style="background: white; color: black; border: 2px solid green;">
 												₹[[${seat.seatFare}]]
 											</div>
 										</th:block>	
@@ -636,13 +636,13 @@
 						   <p>Back</p>
 				   		</div>
 				   	</button>
-				   <button class="col-6" id="payButton" style="display: block;" type="submit" form="payment_form">
+				   <button class="col-6" id="payButtonMob" style="display: block;" type="submit" form="payment_form">
 					   <div id="submitInner" class="footerInnerDiv" style="color: white;">
 						   <i class="fa-solid fa-ticket"></i>
 						   <p>Book Now</p>
 				   		</div>
 				   	</button>
-				   <button class="col-6" id="payButtonWallet" style="display: none;" type="submit" data-bs-toggle="modal" data-bs-target="#modalDialogue" form="payment_form_wallet">
+				   <button class="col-6" id="payButtonWalletMob" style="display: none;" type="submit" data-bs-toggle="modal" data-bs-target="#modalDialogue" form="payment_form_wallet">
 					   <div id="submitInner" class="footerInnerDiv" style="color: white;">
 						  <i class="fa-solid fa-ticket"></i>
 						   <p>Book Now</p>
@@ -665,13 +665,13 @@
 					   		</div>
 					   	</button>
 					   <div class="col-sm-6"></div>
-					   <button class="col-sm-3" id="payButtonMob" style="display: block;" type="submit" form="payment_form">
+					   <button class="col-sm-3" id="payButton" style="display: block;" type="submit" form="payment_form">
 						   <div id="submitInner" class="footerInnerDiv" style="color: white;">
 							   <i class="fa-solid fa-ticket"></i>
 							   <p>Book Now</p>
 					   		</div>
 					   	</button>
-					   <button class="col-sm-3" id="payButtonWalletMob" style="display: none;" type="submit" data-bs-toggle="modal" data-bs-target="#modalDialogue" form="payment_form_wallet">
+					   <button class="col-sm-3" id="payButtonWallet" style="display: none;" type="submit" data-bs-toggle="modal" data-bs-target="#modalDialogue" form="payment_form_wallet">
 						   <div id="submitInner" class="footerInnerDiv" style="color: white;">
 							  <i class="fa-solid fa-ticket"></i>
 							   <p>Book Now</p>
@@ -734,7 +734,7 @@
     		$("#payButtonMob").css("display", "none");
     		$("#payButtonWalletMob").css("display", "block");
     		$("#flexCheckDefaultMob").attr("form", "payment_form_wallet");
-    	});
+    	});	
     	$("#flexRadioDefault1Mob").click(function() {
     		$("#payButtonMob").css("display", "block");
     		$("#payButtonWalletMob").css("display", "none");
@@ -744,7 +744,7 @@
  	<script type="text/javascript">
  	
  	function checkWalletBalance(form) {
-		orderPrice = $("input[name='flight_price']").val();
+		orderPrice = [[${totalPrice}]];
 		url = "[[@{/check_wallet_balance}]]"
 		
 		params = {price: orderPrice};

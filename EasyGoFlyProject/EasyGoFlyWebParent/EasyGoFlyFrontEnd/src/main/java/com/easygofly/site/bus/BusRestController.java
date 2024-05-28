@@ -62,20 +62,28 @@ public class BusRestController {
 		List<String> stringList = new ArrayList<>();
 		Bus savedBus = busService.findByIdBus(bus_id);
 	
-		for (BusPassenger newPax : savedBus.getBusPassengers()) {
-			try {
-				BusSeat savedSeat = busService.findByIdSeat(newPax.getSeatId());
-
-				String str =  newPax.getId() + "-" + newPax.getTitle() + "-" + newPax.getFirstName() + "-" + newPax.getLastName() + "-" + newPax.getAge() + "-" + newPax.getIdNumber() 
-				+ "-" + newPax.getEmail() + "-" + newPax.getPhoneNo() + "-" + newPax.getGender() + "-" + newPax.getAddress() + "-" + savedSeat.getSeatName() + "-" + savedSeat.getId() 
-				+ "-" + savedSeat.getSeatFare();
-				
-				stringList.add(str);
-				
-			} catch (Exception e) {
-				busService.deletePax(newPax.getId());
+		try {
+			for (BusPassenger newPax : savedBus.getBusPassengers()) {
+				try {
+					BusSeat savedSeat = busService.findByIdSeat(newPax.getSeatId());
+	
+					String str =  newPax.getId() + "-" + newPax.getTitle() + "-" + newPax.getFirstName() + "-" + newPax.getLastName() + "-" + newPax.getAge() + "-" + newPax.getIdNumber() 
+					+ "-" + newPax.getEmail() + "-" + newPax.getPhoneNo() + "-" + newPax.getGender() + "-" + newPax.getAddress() + "-" + savedSeat.getSeatName() + "-" + savedSeat.getId() 
+					+ "-" + savedSeat.getSeatFare();
+					
+					stringList.add(str);
+					
+				} catch (Exception e) {
+					newPax.setBus(null);
+					BusPassenger savedPax = busService.savePax(newPax);
+					busService.deletePax(savedPax.getId());
+				}
 			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
 		
 		return stringList;
 	}

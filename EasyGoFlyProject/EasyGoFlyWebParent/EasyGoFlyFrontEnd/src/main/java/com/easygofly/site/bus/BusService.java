@@ -154,7 +154,6 @@ public class BusService {
 	}
 
 
-
 	public BusOrder saveOrder(BusOrder busOrder, Bus bus, BusHistory history) {
 		Bus newBus = busRepo.findById(bus.getId()).get();
 		BusHistory newHis = busHistoryRepo.findById(history.getId()).get();

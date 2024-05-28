@@ -549,7 +549,9 @@ public class BusController {
 		BusBoardingPointDetails boardingPointDetails = order.getBus().getBusBoardingPointDetails().get(0);
 
 	    String cityPointTime = boardingPointDetails.getCityPointTime();
-	    Date date = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss").parse(cityPointTime);
+        // Replace 'T' with a space
+        String dateTimeStringFormatted = cityPointTime.replace('T', ' ');
+	    Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dateTimeStringFormatted);
 	    DateFormat dateFormat1 = new SimpleDateFormat("dd MMMM, yyyy");  
 	    DateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
 	    String boardingDate = dateFormat1.format(date);
@@ -589,7 +591,7 @@ public class BusController {
 	@CrossOrigin(origins = {"https://easegofly.com/"})
 	@RequestMapping(value = "/zaakpay/bus/response",
 			method = {RequestMethod.POST})
-	public String zaakpayHotelResponse (HttpServletRequest request, HttpServletResponse response,
+	public String zaakpayBusResponse (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 
@@ -634,7 +636,7 @@ public class BusController {
 	@CrossOrigin(origins = {"https://easegofly.com/"})
 	@RequestMapping(value = "/zaakpay/bus/response",
 			method = {RequestMethod.GET})
-	public String zaakpayHotelResponseSe (Model model, 
+	public String zaakpayBusResponseSe (Model model, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
 		
 
@@ -651,7 +653,9 @@ public class BusController {
 		BusBoardingPointDetails boardingPointDetails = order.getBus().getBusBoardingPointDetails().get(0);
 
 	    String cityPointTime = boardingPointDetails.getCityPointTime();
-	    Date date = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss").parse(cityPointTime);
+        // Replace 'T' with a space
+        String dateTimeStringFormatted = cityPointTime.replace('T', ' ');
+	    Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dateTimeStringFormatted);
 	    DateFormat dateFormat1 = new SimpleDateFormat("dd MMMM, yyyy");  
 	    DateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
 	    String boardingDate = dateFormat1.format(date);
@@ -1155,7 +1159,7 @@ public class BusController {
 			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
     		
     		// Create URL object with the API end-point
-            URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
+            URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBookingDetail/");
 
             // Open a connection
             HttpURLConnection connectionBusBookingDetails = (HttpURLConnection) urlBusBookingDetails.openConnection();
@@ -1168,7 +1172,9 @@ public class BusController {
             System.out.println(jsonObjBookingDetails);
             logService.generateLog(jsonObjBookingDetails.toString());
             try {
-            	JSONObject jsonObjBooki = jsonObjBook.getJSONObject("GetBookingDetailResult");
+            	JSONObject jsonObjBooki = jsonObjBookingDetails.getJSONObject("GetBookingDetailResult");
+            	
+            	busService.updateOrderStatus(order.getId(), OrderStatus.SUCCESSFULL);
 
             	Integer errorCode = Integer.parseInt(jsonObjBooki.getJSONObject("Error").get("ErrorCode").toString());
             	String errorMessage = jsonObjBooki.getJSONObject("Error").get("ErrorMessage").toString();
@@ -1177,7 +1183,7 @@ public class BusController {
         		model.addAttribute("errorMessage", errorMessage);
 				
 			} catch (Exception e) {
-            	JSONObject jsonObjBooki = jsonObjBook.getJSONObject("GetBookingDetailResult");
+            	JSONObject jsonObjBooki = jsonObjBookingDetails.getJSONObject("GetBookingDetailResult");
 
     			JSONObject jsonObjTicketResponseErrorBooking = jsonObjBooki.getJSONObject("Error");
     			hasErrorArr[0] = jsonObjTicketResponseErrorBooking.get("ErrorCode").toString();

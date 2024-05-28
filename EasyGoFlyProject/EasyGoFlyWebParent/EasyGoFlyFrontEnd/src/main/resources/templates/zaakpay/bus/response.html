@@ -92,7 +92,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 				                <div class="col col-12 col-md-8" style="position: relative;justify-content: center;">
 				                    <div style="position: relative;width: 100%;display: flex;justify-content: center;">
 				                        <div class="logo-pos">
-				                            <div class="col-5 col-md-3 col-lg-2" style="background: white;padding: 2px 5px;"><img class="img-fluid" src="assets/img/easegofly%20logo%20comp%202%20(1).png"></div>
+				                            <div class="col-5 col-md-3 col-lg-2" style="background: white;padding: 2px 5px;"><img class="img-fluid" th:src="@{${FAVICON}}"></div>
 				                        </div>
 				                    </div>
 				                    <div class="inner-dvi">
@@ -113,11 +113,11 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 				                                                <div class="col col-4">
 				                                                    <p>from</p>
 				                                                </div>
-				                                                <div class="col col-8"><strong>[[${cityOne.cityName.}]]</strong></div>
+				                                                <div class="col col-8"><strong>[[${cityOne.cityName}]]</strong></div>
 				                                                <div class="col col-4">
 				                                                    <p>to</p>
 				                                                </div>
-				                                                <div class="col col-8"><strong>[[${cityTwo.cityName.}]]</strong></div>
+				                                                <div class="col col-8"><strong>[[${cityTwo.cityName}]]</strong></div>
 				                                            </div>
 				                                        </div>
 				                                    </div>
@@ -175,7 +175,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 				                                    </div>
 				                                </div>
 				                                <div class="col col-12 col-sm-3">
-				                                    <div><img class="img-fluid" src="assets/img/WhatsApp%20Image%202024-05-26%20at%2003.16.05_b5bea31e.jpg"></div>
+	    											<p style="font-family: 'Libre Barcode 39'; font-size: 80px; margin: 0;">INVOICE:[[${order.invoiceNumber}]];PNR:[[${order.travelOperatorPNR}]];BUS:[[${order.bus.travelName}]]</p>
 				                                </div>
 				                            </div>
 				                        </div>
@@ -197,13 +197,13 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 				                                    <div class="col col-4">
 				                                        <p>from</p>
 				                                    </div>
-				                                    <div class="col col-8"><strong>[[${cityOne.cityName.}]]</strong></div>
+				                                    <div class="col col-8"><strong>[[${cityOne.cityName}]]</strong></div>
 				                                </div>
 				                                <div class="row" style="margin: 0;">
 				                                    <div class="col col-4">
 				                                        <p>to</p>
 				                                    </div>
-				                                    <div class="col col-8"><strong>[[${cityTwo.cityName.}]]</strong></div>
+				                                    <div class="col col-8"><strong>[[${cityTwo.cityName}]]</strong></div>
 				                                </div>
 				                            </div>
 				                        </div>
