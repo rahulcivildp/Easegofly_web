@@ -4,122 +4,236 @@
 	<head>
     	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     	<link rel="stylesheet" th:href="@{css/holidays.css}">
+	    <link rel="stylesheet" th:href="@{css/holiday/bs-theme-overrides.css}">
+	    <link rel="stylesheet" th:href="@{css/holiday/aos.min.css}">
+	    <link rel="stylesheet" th:href="@{css/holiday/animate.min.css}">
+	    <link rel="stylesheet" th:href="@{css/holiday/styles.css}">
+	    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
 	</head>
 	
 <body>
+    <div style="height: 20px;"></div>
     <div class="container container-stle">
-        <h4 style="margin: 0;">Holiday Packages Now On Sale</h4><small style="font-size: 12px;">Get Flat 45% OFF! Use Code: EASEGOFLYT</small>
-        <div class="carousel slide" data-bs-ride="false" id="carousel-1">
+        <h3 class="col-12 text-center text-black d-flex flex-column flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center" style="margin:0;">Holiday Packages Now On Sale</h3><small class="col-12 text-center text-danger" style="font-size:12px; padding-bottom: 8px;">Get Flat 45% OFF! Use Code: EASEGOFLYT</small>
+        <div class="carousel slide" data-bs-ride="carousel" id="carousel-1" style="width: 100%;">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container container-stle">
-                        <div class="row">
-                            <div class="col-6 col-md-2 col-sm-3" style="padding: 10px 12px;">
-                                <div class="new-card-stl"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}" style="position: relative; height: 150px; width: 100%;">
-                                    <div class="floating-siv-stl" style="width: 100%;">
-                                        <h6 style="color: white; text-shadow: 2px 2px 4px black;">Amritsar</h6>
-                                        <p style="font-size: 12px;margin: 0;text-shadow: 2px 2px 4px black;"><span style="color: rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                <div class="carousel-item active" data-bs-interval="5000">
+                    <div class="container-stle">
+                        <div class="row" style="margin: 0;">
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" height="150" th:src="@{images/holidays/Amritsar.jpg}" style="position:relative;height:150px;width:100%;" width="192">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Amritsar</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at ₹5K/p</span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 col-sm-3" style="padding: 10px 12px;">
-                                <div class="new-card-stl"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}" style="position: relative; height: 150px; width: 100%;">
-                                    <div class="floating-siv-stl" style="width: 100%;">
-                                        <h6 style="color: white; text-shadow: 2px 2px 4px black;">Amritsar</h6>
-                                        <p style="font-size: 12px;margin: 0;text-shadow: 2px 2px 4px black;"><span style="color: rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Bengaluruu.jpg}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Bengaluru</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting <strong>₹10K/P</strong></span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 col-sm-3" style="padding: 10px 12px;">
-                                <div class="new-card-stl"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}" style="position: relative; height: 150px; width: 100%;">
-                                    <div class="floating-siv-stl" style="width: 100%;">
-                                        <h6 style="color: white; text-shadow: 2px 2px 4px black;">Amritsar</h6>
-                                        <p style="font-size: 12px;margin: 0;text-shadow: 2px 2px 4px black;"><span style="color: rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Hyderabad.webp}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 class="d-flex justify-content-center align-items-center" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Hyderabad</h4>
+                                        <p data-bss-hover-animate="pulse" style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at&nbsp;<strong>₹5K/p</strong></span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 col-sm-3" style="padding: 10px 12px;">
-                                <div class="new-card-stl"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}" style="position: relative; height: 150px; width: 100%;">
-                                    <div class="floating-siv-stl" style="width: 100%;">
-                                        <h6 style="color: white; text-shadow: 2px 2px 4px black;">Amritsar</h6>
-                                        <p style="font-size: 12px;margin: 0;text-shadow: 2px 2px 4px black;"><span style="color: rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" alt="palm tree near seashore" th:src="@{images/holidays/Goaa.jpg}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Goa</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting&nbsp;<strong>₹12K/P</strong></span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 col-sm-3" style="padding: 10px 12px;">
-                                <div class="new-card-stl"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}" style="position: relative; height: 150px; width: 100%;">
-                                    <div class="floating-siv-stl" style="width: 100%;">
-                                        <h6 style="color: white; text-shadow: 2px 2px 4px black;">Amritsar</h6>
-                                        <p style="font-size: 12px;margin: 0;text-shadow: 2px 2px 4px black;"><span style="color: rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" alt="a view of a mountain range with clouds and trees" height="150" th:src="@{images/holidays/Shimla.jpg}" style="position:relative;height:150px;width:100%;" width="141">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Shimla</h4>
+                                        <p data-bss-hover-animate="pulse" style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" data-aos-once="true" style="color:rgb(123, 123, 123);">Starting at&nbsp;<strong>₹5K/p</strong></span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 col-sm-3" style="padding: 10px 12px;">
-                                <div class="new-card-stl"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}" style="position: relative; height: 150px; width: 100%;">
-                                    <div class="floating-siv-stl" style="width: 100%;">
-                                        <h6 style="color: white; text-shadow: 2px 2px 4px black;">Amritsar</h6>
-                                        <p style="font-size: 12px;margin: 0;text-shadow: 2px 2px 4px black;"><span style="color: rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Kasmir.avif}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Kasmir</h4>
+                                        <p data-bss-hover-animate="pulse" style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at&nbsp;<strong>₹5K/p</strong></span></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item"></div>
-                <div class="carousel-item"></div>
+                <div class="carousel-item" data-bs-interval="5000">
+                    <div class="container-stle">
+                        <div class="row" style="margin: 0;">
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" height="150" th:src="@{images/holidays/Himachal.png}" style="position:relative;height:150px;width:100%;" width="132">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Himachal</h4>
+                                        <p style="font-size:13px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);font-size:x-small;">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/South%20India.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">South India</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/North%20India.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">North India</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Andaman.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Andaman</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Kerala.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Kerala</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Lonavala.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Lonavala</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="5000">
+                    <div class="container-stle">
+                        <div class="row" style="margin: 0;">
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" height="150" th:src="@{images/holidays/Munnar.png}" style="position:relative;height:150px;width:100%;" width="132">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Munnar</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);"><strong>Starting At $999 Per Person</strong></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Rishikesh.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Rishikesh</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/New%20Delhi.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">New Delhi</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Nainital.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Nainital</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Havelock.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Havelock</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3 col-md-2" style="padding:10px 12px;">
+                                <div class="new-card-stl"><img class="img-fluid" data-bss-hover-animate="pulse" th:src="@{images/holidays/Port%20Blair.png}" style="position:relative;height:150px;width:100%;">
+                                    <div class="floating-siv-stl" style="width:100%;">
+                                        <h4 data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:white;text-shadow:2px 2px 4px black;">Port Blair</h4>
+                                        <p style="font-size:12px;margin:0;text-shadow:2px 2px 4px black;"><span class="text-capitalize fs-6 fw-bolder text-info" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500" style="color:rgb(123, 123, 123);">Starting at $999 per person</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-bs-slide="next"><span class="carousel-control-next-icon"></span><span class="visually-hidden">Next</span></a></div>
+            <div><a class="carousel-control-prev link-carousal" href="#carousel-1" role="button" data-bs-slide="prev"><span><i class="fas fa-chevron-left" style="font-size: 70px;"></i></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next link-carousal" href="#carousel-1" role="button" data-bs-slide="next"><span><i class="fas fa-chevron-right" style="font-size: 70px;"></i></span><span class="visually-hidden">Next</span></a></div>
             <div class="carousel-indicators"><button type="button" data-bs-target="#carousel-1" data-bs-slide-to="0" class="active"></button> <button type="button" data-bs-target="#carousel-1" data-bs-slide-to="1"></button> <button type="button" data-bs-target="#carousel-1" data-bs-slide-to="2"></button></div>
         </div>
     </div>
-    <div class="container container-stle" style="margin-top: 20px;">
-        <h4 style="margin: 0;">Top International Destination</h4><small style="font-size: 12px;">Book Now To Grab Best Offers!</small>
-        <div class="row">
-            <div class="col-6 col-md-2 col-sm-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 0; overflow: hidden;"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}">
-                        <h4 class="card-title">Thailand</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Starting at $7000 Per Person</h6>
+    <div class="container text-start container-stle" style="margin-top:20px;color:#24204a;">
+        <h3 class="col-12 text-center text-black" style="margin:0;">Top International Destination</h3><small class="col-12 text-center text-start text-danger" style="font-size:12px;text-align:left; padding-bottom: 8px;">Book Now To Grab Best Offers!</small>
+        <div class="row" style="margin: 0;">
+            <div class="col-6 col-sm-3 col-md-2" data-aos="fade-right" data-aos-duration="500" data-aos-offset="100px" data-aos-delay="400">
+                <div class="card" data-bss-hover-animate="pulse">
+                    <div class="card-body" data-aos="fade-right" data-aos-duration="200" data-aos-offset="100px" data-aos-delay="100" style="padding:0;overflow:hidden;"><img class="img-fluid" th:src="@{images/holidays/clipboard-image-1.png}" width="200" height="100px" style="width:230px;">
+                        <h3 class="text-center text-white card-title">Turkey</h3>
+                        <h6 class=" card-subtitle mb-2">Starting at $7000 Per Person</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-2 col-sm-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 0; overflow: hidden;"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}">
-                        <h4 class="card-title">Thailand</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Starting at $7000 Per Person</h6>
+            <div class="col-6 col-sm-3 col-md-2" data-aos="fade-right" data-aos-duration="750" data-aos-offset="100px" data-aos-delay="550">
+                <div class="card" data-bss-hover-animate="pulse">
+                    <div class="card-body" style="padding:0;overflow:hidden;"><img class="img-fluid" th:src="@{images/holidays/clipboard-image-2.png}" width="164" height="239" style="width:230px;">
+                        <h3 class="text-center text-white card-title">Australia</h3>
+                        <h6 class=" card-subtitle mb-2">Starting at $7000 Per Person</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-2 col-sm-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 0; overflow: hidden;"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}">
-                        <h4 class="card-title">Thailand</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Starting at $7000 Per Person</h6>
+            <div class="col-6 col-sm-3 col-md-2" data-aos="fade-right" data-aos-duration="1000" data-aos-offset="100px" data-aos-delay="750">
+                <div class="card" data-bss-hover-animate="pulse">
+                    <div class="card-body" style="padding:0;overflow:hidden;"><img class="img-fluid" th:src="@{images/holidays/clipboard-image-3.png}" width="164" height="239" style="width:230px;">
+                        <h4 class="text-center text-white card-title">Dubai</h4>
+                        <h6 class=" card-subtitle mb-2">Starting at $7000 Per Person</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-2 col-sm-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 0; overflow: hidden;"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}">
-                        <h4 class="card-title">Thailand</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Starting at $7000 Per Person</h6>
+            <div class="col-6 col-sm-3 col-md-2" data-aos="fade-right" data-aos-duration="1250" data-aos-offset="100px" data-aos-delay="1000">
+                <div class="card" data-bss-hover-animate="pulse">
+                    <div class="card-body" style="padding:0;overflow:hidden;"><img class="img-fluid" th:src="@{images/holidays/clipboard-image-4.png}" width="151" height="233" style="width:230px;color:#24204a;">
+                        <h4 class="text-center text-white card-title">Maldives</h4>
+                        <h6 class=" card-subtitle mb-2">Starting at $7000 Per Person</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-2 col-sm-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 0; overflow: hidden;"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}">
-                        <h4 class="card-title">Thailand</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Starting at $7000 Per Person</h6>
+            <div class="col-6 col-sm-3 col-md-2" data-aos="fade-right" data-aos-duration="1500" data-aos-offset="100px" data-aos-delay="1200">
+                <div class="card" data-bss-hover-animate="pulse">
+                    <div class="card-body" style="padding:0;overflow:hidden;"><img class="img-fluid" th:src="@{images/holidays/clipboard-image-5.png}" width="151" height="219" style="width:230px;">
+                        <h4 class="text-center text-white card-title">Europe</h4>
+                        <h6 class=" card-subtitle mb-2">Starting at $7000 Per Person</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-2 col-sm-3">
-                <div class="card">
-                    <div class="card-body" style="padding: 0; overflow: hidden;"><img class="img-fluid" th:src="@{images/holidays/Amritsar.webp}">
-                        <h4 class="card-title">Thailand</h4>
-                        <h6 class="text-muted card-subtitle mb-2">Starting at $7000 Per Person</h6>
+            <div class="col-6 col-sm-3 col-md-2" data-aos="fade-right" data-aos-duration="1700" data-aos-offset="100px" data-aos-delay="1500">
+                <div class="card" data-bss-hover-animate="pulse">
+                    <div class="card-body" style="padding:0;overflow:hidden;"><img class="img-fluid" th:src="@{images/holidays/clipboard-image-6.png}" width="151" height="219" style="width:230px;">
+                        <h4 class="text-center text-white card-title">Malaysia</h4>
+                        <h6 class=" card-subtitle mb-2">Starting at $7000 Per Person</h6>
                     </div>
                 </div>
             </div>
@@ -128,4 +242,7 @@
     <div style="height: 30px;"></div>
 </body>
 
+    <script th:src="@{js/holiday/aos.min.js}"></script>
+    <script th:src="@{js/holiday/bs-init.js}"></script>
+    
 </html>

@@ -41,5 +41,4 @@ target
 secrets.yml
 .gradletasknamecache
 .sts4-cache
-EasyGoFlyProject/EasyGoFlyWebParent/EasyGoFlyFrontEnd/logs/application.log
-*.log
+application.log

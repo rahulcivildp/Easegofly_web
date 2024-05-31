@@ -1,0 +1,36 @@
+body {
+  background-color: #f2f2f2;
+}
+
+.container-stle {
+  background: white;
+  border-radius: 5px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.new-card-stl {
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.floating-siv-stl {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
+.card-body {
+    background: #4488ff;
+}
+
+.card-body h6 {
+    color: black;
+    padding: 0 8px;
+}
+
+.link-carousal {
+  width: auto !important;
+  padding: 0 10px !important;
+}
+
+

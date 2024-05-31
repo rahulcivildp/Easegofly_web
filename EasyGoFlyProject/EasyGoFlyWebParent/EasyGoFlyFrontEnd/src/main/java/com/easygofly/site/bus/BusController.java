@@ -766,47 +766,50 @@ public class BusController {
         	Integer noOfRows = Integer.parseInt(jsonObjSeat.getJSONObject("SeatLayout").get("NoOfRows").toString());
         	
         	for (int i = 0; i < jsonArraySeatDetails.length(); i++) {
-			    mainObj.put("Seat-" + i, jsonArraySeatDetails.getJSONArray(0).getJSONObject(i));
-				
-			    String columnNo = mainObj.getJSONObject("Seat-" + i).get("ColumnNo").toString();
-			    String rowNo = mainObj.getJSONObject("Seat-" + i).get("RowNo").toString();
-			    String seatName = mainObj.getJSONObject("Seat-" + i).get("SeatName").toString();
-	        	Integer height = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("Height").toString());
-	        	Integer seatIndex = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("SeatIndex").toString());
-	        	Integer seatType = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("SeatType").toString());
-	        	Integer width = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).get("Width").toString());
-	        	boolean isLadiesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("IsLadiesSeat").toString());
-	        	boolean isMalesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("IsMalesSeat").toString());
-	        	boolean seatStatus = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i).get("SeatStatus").toString());
-	        	double seatFare = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).get("SeatFare").toString());
-	        	double BasePrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("BasePrice").toString());
-			    double tax = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("Tax").toString());
-			    double discount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("Discount").toString());
-			    double publishedPrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("PublishedPrice").toString());
-			    double otherCharges = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("OtherCharges").toString());
-			    double offeredPrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("OfferedPrice").toString());
-			    Integer publishedPriceRoundedOff = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("PublishedPriceRoundedOff").toString());
-			    Integer offeredPriceRoundedOff = Integer.parseInt(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("OfferedPriceRoundedOff").toString());
-			    double agentCommission = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("AgentCommission").toString());
-			    double agentMarkUp = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("AgentMarkUp").toString());
-			    double tds = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").get("TDS").toString());
-			    double cGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CGSTAmount").toString());
-			    double cGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CGSTRate").toString());
-			    double cessAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CessAmount").toString());
-			    double cessRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("CessRate").toString());
-			    double iGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("IGSTAmount").toString());
-			    double iGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("IGSTRate").toString());
-			    double sGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("SGSTAmount").toString());
-			    double sGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("SGSTRate").toString());
-			    double taxableAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i).getJSONObject("Price").getJSONObject("GST").get("TaxableAmount").toString());
-			    
-			    BusSeat newSeat = new BusSeat(columnNo, rowNo, height, width, seatType, seatName, seatIndex, seatFare, isLadiesSeat, isMalesSeat, seatStatus, 
-					   "INR", tax, discount, BasePrice, publishedPrice, otherCharges, offeredPrice, publishedPriceRoundedOff, offeredPriceRoundedOff, 
-					   agentCommission, agentMarkUp, tds, cGSTAmount, cGSTRate, cessAmount, cessRate, iGSTAmount, iGSTRate, sGSTAmount, sGSTRate, taxableAmount);
-			    
-			    seatList.add(newSeat);
-			    seatListIds.add(newSeat.getSeatIndex().toString());
-
+        		for (int j = 0; j < jsonArraySeatDetails.getJSONArray(i).length(); j++) {
+        			mainObj.put("Seat-" + i + "-" + j, jsonArraySeatDetails.getJSONArray(i).getJSONObject(j));
+        			
+        			String columnNo = mainObj.getJSONObject("Seat-" + i + "-" + j).get("ColumnNo").toString();
+    			    String rowNo = mainObj.getJSONObject("Seat-" + i + "-" + j).get("RowNo").toString();
+    			    String seatName = mainObj.getJSONObject("Seat-" + i + "-" + j).get("SeatName").toString();
+    	        	Integer height = Integer.parseInt(mainObj.getJSONObject("Seat-" + i + "-" + j).get("Height").toString());
+    	        	Integer seatIndex = Integer.parseInt(mainObj.getJSONObject("Seat-" + i + "-" + j).get("SeatIndex").toString());
+    	        	Integer seatType = Integer.parseInt(mainObj.getJSONObject("Seat-" + i + "-" + j).get("SeatType").toString());
+    	        	Integer width = Integer.parseInt(mainObj.getJSONObject("Seat-" + i + "-" + j).get("Width").toString());
+    	        	boolean isLadiesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i + "-" + j).get("IsLadiesSeat").toString());
+    	        	boolean isMalesSeat = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i + "-" + j).get("IsMalesSeat").toString());
+    	        	boolean seatStatus = Boolean.parseBoolean(mainObj.getJSONObject("Seat-" + i + "-" + j).get("SeatStatus").toString());
+    	        	double seatFare = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).get("SeatFare").toString());
+    	        	double BasePrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("BasePrice").toString());
+    			    double tax = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("Tax").toString());
+    			    double discount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("Discount").toString());
+    			    double publishedPrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("PublishedPrice").toString());
+    			    double otherCharges = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("OtherCharges").toString());
+    			    double offeredPrice = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("OfferedPrice").toString());
+    			    Integer publishedPriceRoundedOff = Integer.parseInt(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("PublishedPriceRoundedOff").toString());
+    			    Integer offeredPriceRoundedOff = Integer.parseInt(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("OfferedPriceRoundedOff").toString());
+    			    double agentCommission = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("AgentCommission").toString());
+    			    double agentMarkUp = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("AgentMarkUp").toString());
+    			    double tds = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").get("TDS").toString());
+    			    double cGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("CGSTAmount").toString());
+    			    double cGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("CGSTRate").toString());
+    			    double cessAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("CessAmount").toString());
+    			    double cessRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("CessRate").toString());
+    			    double iGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("IGSTAmount").toString());
+    			    double iGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("IGSTRate").toString());
+    			    double sGSTAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("SGSTAmount").toString());
+    			    double sGSTRate = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("SGSTRate").toString());
+    			    double taxableAmount = Double.parseDouble(mainObj.getJSONObject("Seat-" + i + "-" + j).getJSONObject("Price").getJSONObject("GST").get("TaxableAmount").toString());
+    			    
+    			    BusSeat newSeat = new BusSeat(columnNo, rowNo, height, width, seatType, seatName, seatIndex, seatFare, isLadiesSeat, isMalesSeat, seatStatus, 
+    					   "INR", tax, discount, BasePrice, publishedPrice, otherCharges, offeredPrice, publishedPriceRoundedOff, offeredPriceRoundedOff, 
+    					   agentCommission, agentMarkUp, tds, cGSTAmount, cGSTRate, cessAmount, cessRate, iGSTAmount, iGSTRate, sGSTAmount, sGSTRate, taxableAmount);
+    			    
+    			    seatList.add(newSeat);
+    			    seatListIds.add(newSeat.getSeatIndex().toString());
+					
+				}
+//			    mainObj.put("Seat-" + i, jsonArraySeatDetails.getJSONArray(0).getJSONObject(i));
 			}
 
 			model.addAttribute("seatListIds", seatListIds);
@@ -1218,4 +1221,31 @@ public class BusController {
         return hasErrorArr;
 	}
 
+	
+	// Test 
+
+	@GetMapping("/bus/test_response")
+	public String testPageResponse(Model model) {
+		
+		BusOrder order = busService.findByIdOrder(34);
+		TBObusCity cityOne = busCityRepo.getCityByCityId(Integer.parseInt(order.getBusHistory().getCityIdOne()));
+		TBObusCity cityTwo = busCityRepo.getCityByCityId(Integer.parseInt(order.getBusHistory().getCityIdTwo()));
+		
+
+		model.addAttribute("paymentSuccess", "Successfull");
+
+		model.addAttribute("checksum", "bxvbcvb");
+		model.addAttribute("verifyChecksum", true);
+		model.addAttribute("orderId", order.getId());
+		model.addAttribute("order", order);
+		model.addAttribute("cityPointName", "Domlur");
+		model.addAttribute("boardingDate", "26 June, 2024");
+		model.addAttribute("boardingTime", "11:00");
+		model.addAttribute("cityOne", cityOne);
+		model.addAttribute("cityTwo", cityTwo);
+		model.addAttribute("amount", order.getPrice());
+		
+		return "zaakpay/bus/response";
+	}
+	
 }

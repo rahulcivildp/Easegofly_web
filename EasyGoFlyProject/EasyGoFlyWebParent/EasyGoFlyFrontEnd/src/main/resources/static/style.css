@@ -208,6 +208,8 @@
 }
 /* Responsive */
 @media only screen and (max-width: 800px) {
+	
+  	   .response-header {width: 90% !important;}
 	  *.onwars_responsive { padding: 6px 81px !important;}
 	  *.mobile_account_view { padding: 0 13px;}
 	  *.extra_height { height: 176px;}
@@ -555,4 +557,15 @@
   .footerInnerDiv {
 	  text-align: center; 
 	  padding: 4px 0;
+  }
+  .response-header {
+	width: 50%;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+  }
+  *.shdw-stl {
+	  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   }

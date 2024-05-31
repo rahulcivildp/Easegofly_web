@@ -70,6 +70,9 @@ th:fragment="category(remove)" th:remove="${remove}">
 		padding-top: 40px !important;
 	}
 }
+#hero {
+	height: 34.5vh;
+}
 
 @media ( min-width : 576px) {
 	.container, .container-sm {
@@ -120,9 +123,6 @@ th:fragment="category(remove)" th:remove="${remove}">
 		-ms-transition-property: height; 
 		-ms-transition-duration: 400ms; 
 		-ms-transition-timing-function: ease-in;
-	}
-	body #mainHeroStyle.searchBovMainDivActive {
-		height: 34vh;
 	}
 	
 	.searchBoxMargin {
@@ -422,10 +422,11 @@ input:checked+br+label {
 			
 @media screen and (max-width: 600px) {
 	body #mainHeroStyle #hero {
-		height: 34vh;
+		height: 32vh;
 		overflow: hidden;
 	}
 }
+.
 </style>
 
 </head>
@@ -435,16 +436,16 @@ input:checked+br+label {
 	
 				<div id="tabs" class="col-12 media-hide">
 					<ul class="text-center translateItem translateTabs" id="adjusted" style="translate: 0 -100%; scale: 0;">
-							<li class="tabss shadow" id="flight"><a
+							<li class="tabss shdw-stl" id="flight"><a
 								th:href="@{/}"><i class="fa fa-solid fa-plane fontSize"></i><br>Flight</a></li>
 						
-							<li class="tabss shadow" id="hotel"><a
+							<li class="tabss shdw-stl" id="hotel"><a
 								th:href="@{/hotel}"><i class="fa fa-solid fa-bed fontSize"></i><br>Hotel</a></li>
 						
-							<li class="tabss shadow activated" id="bus"><a style="color: white;"
+							<li class="tabss shdw-stl activated" id="bus"><a style="color: white;"
 								th:href="@{/bus}"><i class="fa fa-solid fa-bus fontSize"></i><br>Bus</a></li>	
 						
-							<li class="tabss shadow" id="holidays"><a
+							<li class="tabss shdw-stl" id="holidays"><a
 								th:href="@{/holiday}"><i class="fa fa-solid fa-champagne-glasses fontSize"></i><br>Holidays</a></li>
 						
 					</ul>
@@ -452,24 +453,24 @@ input:checked+br+label {
 				<div id="tabsMobile" class="col-12 media_status_flex_CPN">
 					<div class="row text-center translateTabs" id="adjusted" style="translate: 0 -100%; scale: 0;">
 						<div class="col-3" style="padding: 0 4px !important;" >
-							<li class="tabss shadow" id="flightMobile">
+							<li class="tabss shdw-stl" id="flightMobile">
 								<a th:href="@{/flight}"><img th:src="@{/images/front/airplane1.png}" class="img-fluid" style="width: 50px;"><br><strong>Flights</strong></a>
 							</li>
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="hotelMobile">
+							<li class="tabss shdw-stl" id="hotelMobile">
 								<a th:href="@{/hotel}"><img th:src="@{/images/front/city1.png}" class="img-fluid" style="width: 50px;"><br><strong>Hotels</strong></a>
 							</li>
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;" id="busCol">
-							<li class="tabss shadow activated" id="busMobile">
+							<li class="tabss shdw-stl activated" id="busMobile">
 								<div >
 									<img th:src="@{/images/front/bus1.png}" class="img-fluid" style="width: 50px;"><br><b>Buses</b>
 								</div>
 							</li>	
 						</div>
 						<div class="col-3" style="padding: 0 4px !important;">
-							<li class="tabss shadow" id="holidaysMobile">
+							<li class="tabss shdw-stl" id="holidaysMobile">
 								<a th:href="@{/holiday}"><img th:src="@{/images/front/Holiday1.png}" class="img-fluid" style="width: 50px;"><br><strong>Holidays</strong></a>
 							</li>
 						</div>
@@ -480,14 +481,14 @@ input:checked+br+label {
 			
 		</div>
 			
-	<div id="mainHeroStyle" class="searchBovMainDivActive">
-		<div class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
+	<div id="mainHeroStyle" class="">
+		<div id="searchBar" class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
 					<div th:replace="bus/bus-search-tab :: bus-search"></div>
 			</div>
 		</div>
 		<!-- ======= Hero Section ======= -->
-		<section id="hero" class="heroDIsplay translateItem" style="translate: -100% 0;">
+		<section id="hero" class="heroDIsplay translateItem media-hide" style="translate: -100% 0;">
 			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
 					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
@@ -555,6 +556,25 @@ input:checked+br+label {
 </body>
 
 <script>
+	var height = document.getElementById('searchBar').offsetHeight;
+	createCssClass(height);
+	
+	function createCssClass(x) {
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            const css = `
+                .searchActive {
+                    height: ` + x + `px !important;
+                }
+            `;
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+            
+			$("#mainHeroStyle").addClass("searchActive");
+        }
+</script>
+
+<script>
 	$(document).ready(function(){
 		$(".translateItem").addClass("transformedItem");
 		$(".translateTabs").addClass("transformedTabs");
@@ -564,7 +584,7 @@ input:checked+br+label {
 <script>
 	$("#busMobile").click(function(){
 		$("#busMobile").toggleClass("activated");
-		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
+		$("#mainHeroStyle").toggleClass("searchActive");
 	});
 </script>
 </html>
