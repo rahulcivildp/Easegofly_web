@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<head th:replace="fragments :: page_head(': Bus Services - Karnataka State Road Transport Corporation', 'tag')"></head>
+	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
+    <link rel="stylesheet" th:href="@{/css/bus/aos.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bus/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bus/accordion-faq-list.css}">
+    <link rel="stylesheet" th:href="@{/css/bus/styles.css}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-TNN6EKSPHR');
+	</script>
+	<!-- Google Analytics -->
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	
+	ga('create', 'UA-XXXXX-Y', 'auto');
+	ga('send', 'pageview');
+	</script>
+	<!-- End Google Analytics -->
+        
+    
+</head>	
+<style>
+	@media screen and (max-width: 800px) {
+		body #header {
+			position: relative;
+			background: transparent;
+		}
+	}
+	gmp-map {
+		width: 50vh;
+        height: 50vh;
+      }
+</style>
+<body>
+<!-- Small svg tabs #6252f3-->
+<div class="media_status" style="position: relative;">
+	<div style="position: absolute; width: 100%; background: white;">
+		<div style="height: 80px; background: #00012a;"></div>
+		<svg style="margin-top: -4px;" version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+			<path d="M0 0 C165 0 330 0 500 0 C500 20.13 500 40.26 500 61 C487.13 59.515 487.13 59.515 474 58 C456.00406544 56.0080186 
+			438.10597728 54.39998477 420 54 C418.83404297 53.96712891 418.83404297 53.96712891 417.64453125 53.93359375 C372.85160316 
+			52.76100401 328.86525639 59.89987911 284.86889648 67.33032227 C265.94767358 70.52556128 247.04925793 73.66832449 228 76 
+			C226.73607422 76.16081055 225.47214844 76.32162109 224.16992188 76.48730469 C160.71645002 84.24699552 97.52327843 77.15872824 
+			34.92041016 66.48071289 C31.58923536 65.91293201 28.25749986 65.34870566 24.92539978 64.78639698 C21.69986321 64.24148133 
+			18.47495482 63.69287771 15.25 63.14453125 C14.05963135 62.94350296 12.8692627 62.74247467 11.64282227 62.53535461 C10.54897217 
+			62.34813339 9.45512207 62.16091217 8.328125 61.96801758 C7.3680957 61.80465408 6.40806641 61.64129059 5.41894531 61.47297668 
+			C3 61 3 61 0 60 C0 40.2 0 20.4 0 0 Z " fill="#00012a" transform="translate(0,0)"/>
+		</svg>
+	</div>
+</div>
+<div class="media_status" style="position: fixed; width: 100%; height: 110px; z-index: 99; background: #00012a;">
+</div>
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+  
+  <div th:replace="whatsapp :: content"></div>
+  
+<div style="height: 100px;"></div>
+    
+    <div class="container" style="padding: 0;">
+        <div data-aos="fade-right" data-aos-delay="1000" style="background-color: rgba(243,244,191,0.94); margin: 0;">
+			<div style="display: flex; justify-content: space-between; align-items: center;">
+				<div >
+	                <h1 style="padding-left: 20px;">KSRTC</h1>
+	            </div>
+	            <div class="text-end offset-0 d-flex d-md-flex"><img th:src="@{/images/bus/state/APSRTC-bus.png}" style="height: inherit;width: 20vh;" width="100" height="60"><img th:src="@{/images/bus/state/KSRTC.webp}" style="height: inherit;width: 70px;"></div>
+			</div>
+         </div>
+    </div>
+    <div class="container" style="background-color: rgba(252,246,190,0.89);">
+        <div>
+            <hr>
+            <h5 class="text-center container"><br><strong><span style="color: rgb(0, 0, 0);">KSRTC Bus Top Routes &amp; Timings</span></strong><br><br></h5>
+        </div>
+        <div class="row pulse animated">
+            <div class="col-12 col-md-6 offset-0 d-flex d-md-flex align-self-stretch">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(159%);">Trivandrum to Thrissur</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:30 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 305</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Thrissur to Trivandrum</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:20- 23:00&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 310</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Kollam to Trivandrum&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 90</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Ernakulam to Alappuzha&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:45&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 85</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Tirupati to Bangalore</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:30- 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 300</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Thrissur To Ernakulam</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:45</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 100</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Alappuzha To Ernakulam</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 85</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Alappuzha To Trivandrum</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 185</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Ernakulam To Thrissur</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:45</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 85</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Alappuzha To Kollam</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 235</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Ernakulam To Trivandrum</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 235</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Thrissur to Calicut&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 150</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Ernakulam To Kollam&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 167</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Calicut To Thrissur</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 151</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Kollam To Ernakulam</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 167</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex">
+                <div class="text-start d-flex justify-content-between align-items-center clmn-stl" data-bss-hover-animate="pulse" style="border-width: 1px;box-shadow: 0px 0px;transform: scale(1) skew(0deg);">
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">Trivandrum To Kollam&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">00:15 - 23:55&nbsp;</p>
+                    <p class="justify-content-between" style="filter: blur(0px) brightness(102%);">₹ 85</p><button class="btn btn-primary btn-stl" data-bss-hover-animate="pulse" type="button">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+ <footer th:replace="fragments :: page_footer"></footer>
+ 
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bus/aos.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bus/bs-init.js}"></script>
+</body>
+<link th:href="@{css/custom.css}" rel="stylesheet">
+</html>	

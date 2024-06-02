@@ -5,6 +5,8 @@ server:
     session:
       cookie:
         same-site: none
+      tracking-modes: cookie
+
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
