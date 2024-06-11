@@ -121,9 +121,6 @@ th:fragment="category(remove)" th:remove="${remove}">
 		-ms-transition-duration: 400ms; 
 		-ms-transition-timing-function: ease-in;
 	}
-	body #mainHeroStyle.searchBovMainDivActive {
-		height: 55vh;
-	}
 	
 	.searchBoxMargin {
 		margin-top: 90px !important;
@@ -473,8 +470,8 @@ input:checked+br+label {
 			
 		</div>
 			
-	<div id="mainHeroStyle" class="searchBovMainDivActive">
-		<div class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
+	<div id="mainHeroStyle" >
+		<div id="searchBar" class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
 					<div th:replace="hotel/hotel-search-tab :: hotel-search"></div>
 			    
@@ -547,6 +544,27 @@ input:checked+br+label {
 
 	</div>
 </body>
+<script>
+	var height = document.getElementById('searchBar').offsetHeight;
+	createCssClass(height);
+	
+	function createCssClass(x) {
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            
+            var ht = x + 10;
+            
+            const css = `
+                .searchActive {
+                    height: ` + ht + `px !important;
+                }
+            `;
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+            
+			$("#mainHeroStyle").addClass("searchActive");
+        }
+</script>
 
 <script>
 	$(document).ready(function(){
@@ -558,7 +576,7 @@ input:checked+br+label {
 <script>
 	$("#hotelMobile").click(function(){
 		$("#hotelMobile").toggleClass("activated");
-		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
+		$("#mainHeroStyle").toggleClass("searchActive");
 	});
 </script>
 </html>

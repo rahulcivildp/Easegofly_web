@@ -74,6 +74,7 @@
 			#hotelSearch {
 			    display: flex;
 			    justify-content: center;
+			    padding: 12px 0;
 			}
 			.submitDiv {
 				display: flex;
@@ -191,15 +192,28 @@
 			.over-flow {
 				overflow: unset !important;
 			}
+			.row-fixed-stl {
+				width: -webkit-fill-available;
+				margin: 0;
+			    border-radius: 8px;
+			    border: 1px solid grey;
+			}
+			
+			@media screen and (max-width: 600px) {
+				.padding-row {
+					padding-top: 4px;
+				}
+			}
+			
 		</style>
 	</head>
 	<body>
 		<div class="container">
 			<div class="categoryStyle">
 				<form id="hotelSearch" th:action="@{/hotel/saveSearchHotel}" method="post">
-					<div class="row" style=" margin-top: 0px; width: -webkit-fill-available;">
-						<div class="col-md-3 col-sm-12 col-12 borderEnd colStyle" style="margin-top: 4px;">
-							<div class="row" style="width: -webkit-fill-available;">
+					<div class="row" style=" margin: 0px; width: -webkit-fill-available;">
+						<div class="col-md-3 col-sm-12 col-12 borderEnd" style="margin-top: 4px;">
+							<div class="row row-fixed-stl">
 								<div class="col-md-2  col-sm-2 col-2 ">
 									<div class="cityFIcon">
 										<i class="fa fa-solid fa-magnifying-glass"></i>
@@ -217,8 +231,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-12 col-12 borderEnd colStyle" style="margin-top: 4px;">
-							<div class="row" style="width: -webkit-fill-available;">
+						<div class="col-md-4 col-sm-12 col-12 borderEnd" style="margin-top: 4px;">
+							<div class="row row-fixed-stl">
 								<div class="col-2 col-md-2 col-sm-2">
 									<div class="cityFIcon">
 										<i class="fa fa-regular fa-calendar"></i>
@@ -252,10 +266,10 @@
 							</div>
 							
 						</div>
-						<div class="col-md-5 col-sm-12 col-12 colStyle">
-							<div class="row" style="width: -webkit-fill-available;">
-								<div class="col-md-8">
-									  <button type="button" class="btn travelerSelection" id="dropDwonButton" aria-expanded="false" style="width: 100%;">
+						<div class="col-md-5 col-sm-12 col-12">
+							<div class="row padding-row" style="margin: 0; border-radius: 8px;">
+								<div class="col-12 col-md-8" style="padding: 0;">
+									  <button type="button" class="btn travelerSelection" id="dropDwonButton" aria-expanded="false" style="width: 100%; border: 1px solid grey;">
 									   <div class="travelerButton">
 											<div id="travellerFIcon" >
 												<i class="fa fa-solid fa-bed"></i>
@@ -295,7 +309,7 @@
 										  </div>
 									  </div>
 								</div>
-								<div class="col-md-4 submitDiv">
+								<div class="col-12 col-md-4 submitDiv">
 									<input id="categorySubmit" type="submit" value="Submit">
 								</div>
 							</div>

@@ -80,18 +80,17 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 			</div>
 			<div class="col-12 col-md-6">
 				<form th:action="@{/wallet-recharge}" method="post">
+						<input type="hidden" name="wallet_id" th:value="${wallet.id}">
 					<div class="row" style=" padding: 20px; display: flex; justify-content: space-evenly; border: 1px solid grey; border-radius: 7px; box-shadow: rgb(0 0 0 / 25%) 0px 5px 10px, rgb(0 0 0 / 40%) 0px 5px 10px; margin: 10px 0;">
-						<div class="col-1">
-							<input type="hidden" name="wallet_id" th:value="${wallet.id}">
-						</div>
-						<div class="form-floating col-6" style="padding: 0;">
+						
+						<div class="form-floating col-7" style="padding: 0;">
 						  <input type="number" class="form-control" id="floatingInputValue" name="recharge-amount">
 						  <label for="floatingInputValue">Amount</label>
 						</div>
 						<div class="col-1">
 						</div>
-						<button type="submit" class="btn btn-success col-3">Recharge</button>
-						<div class="col-1"></div>
+						<button type="submit" class="btn btn-success col-4">Recharge</button>
+						
 					</div>
 				</form>
 			</div>

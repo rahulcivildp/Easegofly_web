@@ -19,17 +19,11 @@ public class Transaction {
 	@Column(nullable = false)
 	private String orderId;
 	
-	@Column(nullable = false)
-	private String checksum;
-	
 	@Column()
 	private String paymentMode;
 	
 	@Column()
 	private String bank;
-	
-	@Column()
-	private String bankid;
 	
 	@Column()
 	private String paymentMethod;
@@ -45,18 +39,6 @@ public class Transaction {
 	
 	@Column(nullable = false)
 	private String amount;
-	
-	@Column()
-	private String cardToken;
-	
-	@Column()
-	private String cardId;
-	
-	@Column()
-	private String cardScheme;
-	
-	@Column()
-	private String cardhashid;
 	
 	@Column()
 	private String doRedirect;
@@ -89,14 +71,6 @@ public class Transaction {
 		this.orderId = orderId;
 	}
 
-	public String getChecksum() {
-		return checksum;
-	}
-
-	public void setChecksum(String checksum) {
-		this.checksum = checksum;
-	}
-
 	public String getPaymentMode() {
 		return paymentMode;
 	}
@@ -111,14 +85,6 @@ public class Transaction {
 
 	public void setBank(String bank) {
 		this.bank = bank;
-	}
-
-	public String getBankid() {
-		return bankid;
-	}
-
-	public void setBankid(String bankid) {
-		this.bankid = bankid;
 	}
 
 	public String getPaymentMethod() {
@@ -161,14 +127,6 @@ public class Transaction {
 		this.amount = amount;
 	}
 
-	public String getCardToken() {
-		return cardToken;
-	}
-
-	public void setCardToken(String cardToken) {
-		this.cardToken = cardToken;
-	}
-
 	public String getResponseCode() {
 		return responseCode;
 	}
@@ -183,30 +141,6 @@ public class Transaction {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-	}
-
-	public String getCardId() {
-		return cardId;
-	}
-
-	public void setCardId(String cardId) {
-		this.cardId = cardId;
-	}
-
-	public String getCardScheme() {
-		return cardScheme;
-	}
-
-	public void setCardScheme(String cardScheme) {
-		this.cardScheme = cardScheme;
-	}
-
-	public String getCardhashid() {
-		return cardhashid;
-	}
-
-	public void setCardhashid(String cardhashid) {
-		this.cardhashid = cardhashid;
 	}
 
 	public String getDoRedirect() {

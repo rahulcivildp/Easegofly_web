@@ -82,25 +82,37 @@ public class CustomerService {
 	
 	public Customer updateAccount(Customer customerInForm) {
 		Customer userInDB = customerRepo.findById(customerInForm.getId()).get();
-		
-		if (!customerInForm.getPassword().isEmpty()) {
-			customerInForm.setPassword(customerInForm.getPassword());
-			registerCustomer(userInDB);
-		} 
+		Iterable<Customer> usersIndb = customerRepo.findAll();
+		Integer count = 0;
 		
 		if (customerInForm.getPhotos() != null) {
 			userInDB.setPhotos(customerInForm.getPhotos());
 		}
 		
+		for (Customer customer : usersIndb) {
+			if (customer.getPhone() ==  customerInForm.getPhone()) {
+				count++;
+			}
+		}
+		
+		if (count == 0) {
+			try {
+				userInDB.setPhone(customerInForm.getPhone());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
 		userInDB.setFirstName(customerInForm.getFirstName());
 		userInDB.setLastName(customerInForm.getLastName());
-		userInDB.setPhone(customerInForm.getPhone());
 		userInDB.setCity(customerInForm.getCity());
 		userInDB.setState(customerInForm.getState());
+		userInDB.setGender(customerInForm.getGender());
 		userInDB.setPostalCode(customerInForm.getPostalCode());
 		userInDB.setAddressLine1(customerInForm.getAddressLine1());
 		userInDB.setAddressLine2(customerInForm.getAddressLine2());
 		userInDB.setResetPasswordToken(customerInForm.getResetPasswordToken());
+		userInDB.setEnabled(true);
 		
 		return customerRepo.save(userInDB);
 	}
@@ -193,19 +205,42 @@ public class CustomerService {
 			String encodeRandomeCode = passwordEncoder.encode(randomCode);
 			newCust.setVerificationCode(encodeRandomeCode);
 
-			System.out.println("Verification Code: 6666666666666666666666" + newCust.getId());
-//			String encodedPass = passwordEncoder.encode(randomCode);
 			newCust.setPassword(encodeRandomeCode);
 			
 			customerRepo.save(newCust);
 			
 			sendOtpInEmail(newCust, randomCode);
 			
-			System.out.println("Verification Code: " + encodeRandomeCode);
 			System.out.println("OTP Code: " + randomCode);
-			
-			System.out.println("New Customer");
+			System.out.println("OTP getOtpRequestedTime: " + newCust.getOtpRequestedTime());
+	}
+
+	public void registerCustomerByEmail(String email, Customer newCust) throws UnsupportedEncodingException, MessagingException{
 		
+//			
+			newCust.setAuthenticationType(AuthenticationType.EMAIL);
+			newCust.setOtpRequestedTime(new Date());
+
+			Random rnd = new Random(); 
+			int data1 = rnd.nextInt(9); 
+			int data2 = rnd.nextInt(9);
+			int data3 = rnd.nextInt(9);
+			int data4 = rnd.nextInt(9);
+			int data5 = rnd.nextInt(9);
+			int data6 = rnd.nextInt(9); 
+			
+			String randomCode = Integer.toString(data1) + Integer.toString(data2) + Integer.toString(data3) + Integer.toString(data4) + Integer.toString(data5) + Integer.toString(data6); 
+			String encodeRandomeCode = passwordEncoder.encode(randomCode);
+			newCust.setVerificationCode(encodeRandomeCode);
+
+			newCust.setPassword(encodeRandomeCode);
+			
+			customerRepo.save(newCust);
+			
+			sendOtpInEmail(newCust, randomCode);
+			
+			System.out.println("OTP Code: " + randomCode);
+			System.out.println("OTP getOtpRequestedTime: " + newCust.getOtpRequestedTime());
 	}
 	
 	public void updateCustomerByEmail(Customer customer) throws UnsupportedEncodingException, MessagingException{
@@ -436,6 +471,25 @@ public class CustomerService {
 			if (userByEmail != null) return false;
 		} else {
 			if (userByEmail.getId() != id) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+
+	public boolean isPhoneUnique(Integer id, String phone) {
+		Customer userByPhone = customerRepo.getCustomerByPhone(phone);
+		
+		if (userByPhone == null) return true;
+		
+		boolean isCreatingNew = (id == null);
+		
+		if (isCreatingNew) {
+			if (userByPhone != null) return false;
+		} else {
+			if (userByPhone.getId() != id) {
 				return false;
 			}
 		}

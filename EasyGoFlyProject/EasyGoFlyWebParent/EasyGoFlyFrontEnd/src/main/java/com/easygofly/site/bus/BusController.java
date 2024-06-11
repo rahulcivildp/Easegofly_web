@@ -47,7 +47,9 @@ import com.easygofly.entity.TBObusCity;
 import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.order.TransactionService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.wallet.TotalTransactionService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
@@ -61,6 +63,8 @@ public class BusController {
 	@Autowired private CustomerService customerService;
 	@Autowired private OnlineBusService onlineBusService;
 	@Autowired private LogService logService;
+	@Autowired TransactionService transactionService;
+	@Autowired TotalTransactionService totalTransactionService;
 
 	private String searchURL = "";
 	private String bookingURL = "";
@@ -595,8 +599,6 @@ public class BusController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 
-//		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
-		
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
 	    String checksumString = "" ;
@@ -639,8 +641,12 @@ public class BusController {
 	public String zaakpayBusResponseSe (Model model, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
 		
-
 		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		model.addAttribute("customer", customer);
+		
+		System.out.println(parameter);
+	    com.easygofly.entity.Transaction selfTrans = transactionService.createTransaction(customer, parameter); 
+	    totalTransactionService.createTotalTransaction(customer, Double.parseDouble(selfTrans.getAmount()), false, true, null, null, null, selfTrans.getId(), OrderStatus.NEW);
 
 		String orderParam = parameter[8];
 		model.addAttribute("orderId", orderParam);

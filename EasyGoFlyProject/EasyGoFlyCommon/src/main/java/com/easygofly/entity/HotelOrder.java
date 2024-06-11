@@ -46,7 +46,11 @@ public class HotelOrder {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "hotel_id", referencedColumnName = "id")
 	private Hotel hotel;
-
+	
+	@ManyToOne
+	@JoinColumn(name = "total_transaction_id")
+	private TotalTransaction totalTransaction;
+	
 	
 	
 	public HotelOrder() {}
@@ -123,6 +127,15 @@ public class HotelOrder {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	
+	public TotalTransaction getTotalTransaction() {
+		return totalTransaction;
+	}
+
+	public void setTotalTransaction(TotalTransaction totalTransaction) {
+		this.totalTransaction = totalTransaction;
 	}
 	
 	

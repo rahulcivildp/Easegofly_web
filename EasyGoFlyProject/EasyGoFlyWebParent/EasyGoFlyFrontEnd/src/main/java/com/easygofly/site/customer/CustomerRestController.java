@@ -16,4 +16,9 @@ public class CustomerRestController {
 		return service.isEmailUnique(id, email) ? "OK" : "Duplicate Email";
 	}
 	
+	@PostMapping("/customers/check_phone")
+	public String chechDuplicatePhone(@Param("id") Integer id, @Param("phone") String phone) {
+		return service.isPhoneUnique(id, phone) ? "OK" : "Duplicate Phone Number";
+	}
+	
 }

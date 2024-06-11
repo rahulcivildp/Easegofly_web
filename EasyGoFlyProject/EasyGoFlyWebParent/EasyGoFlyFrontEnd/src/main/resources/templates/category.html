@@ -56,7 +56,7 @@ th:fragment="category(remove)" th:remove="${remove}">
 		width: 96% !important;
 		padding: 18px 12px ;
 		margin-top: 10px ;
-		margin-bottom: 10px ;
+		margin-bottom: 38px ;
 		display: none;
 	}
 	.aligner {
@@ -469,7 +469,7 @@ input:checked+br+label {
 		</div>
 			
 	<div id="mainHeroStyle" >
-		<div class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
+		<div id="searchBar" class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
 					<div th:replace="flight/air-search :: air-search"></div>
 			    
@@ -477,7 +477,7 @@ input:checked+br+label {
 		</div>
 		<!-- ======= Hero Section ======= -->
 		<section id="hero" class="heroDIsplay translateItem" style="translate: -100% 0;">
-			<div class="hero-container" style="height: 100vh;">
+			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
 					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
 
@@ -542,6 +542,24 @@ input:checked+br+label {
 
 	</div>
 </body>
+
+<script>
+	$(document).ready(function() {
+		var height = $("#searchBar").height();
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        var y 
+        const css = `
+            .searchActive {
+                height: ` + height + `px !important;
+            }
+        `;
+        style.appendChild(document.createTextNode(css));
+        document.head.appendChild(style);
+	});
+	
+</script>
+
 <script>
 	$(document).ready(function(){
 		$(".translateItem").addClass("transformedItem");
@@ -553,7 +571,7 @@ input:checked+br+label {
 <script>
 	$("#flightMobile").click(function(){
 		$("#flightMobile").toggleClass("activated");
-		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
+		$("#mainHeroStyle").toggleClass("searchActive");
 	});
 </script>
 </html>

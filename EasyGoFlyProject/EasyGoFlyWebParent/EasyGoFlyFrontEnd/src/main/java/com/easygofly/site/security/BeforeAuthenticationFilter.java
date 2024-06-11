@@ -65,8 +65,14 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
    	 		
 	   	 	if (customer != null) {
 	    		if (customer.isOTPRequired()) {
-		    		System.out.println("Attempt Authentication - Email: " + phone);
-	        		return super.attemptAuthentication(request, response);
+	    			try {
+			    		System.out.println("Attempt Authentication - Email: " + phone);
+		        		return super.attemptAuthentication(request, response);
+						
+					} catch (Exception e) {
+						customerService.clearOTP(customer);
+//						e.printStackTrace();
+					}
 	        	}
 	    		
 	    		System.out.println("attemptAuthentication - Email: " + phone);

@@ -7,28 +7,33 @@
 	.class_hide {
 		display: none;
 	}
+	.class_center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0;
+	}
 </style>
 </head>
 <body>
 
 <div id="class_hide">
 	<th:block th:each="customer : ${customer}">
-	<div class="row mobile_account_view">
+	<div class="row">
 		<div class="col-md-4">
 			<img class="img-thumbnail img-fluid" id="thumbnail" th:src="@{${customer.photosImagePath}}" alt="Photo Preview" />
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-8 class_center">
 			<div class="row">
 				<div class="col-md-9">
-					<p>[[${customer.fullName}]] <span></span></p>
-					<p>[[${customer.email}]]</p>
-					<p>[[${customer.phone}]]</p>
-					<p>[[${customer.addressLine1}]]</p>
-					<p>[[${customer.addressLine2}]]</p>
-					<p>Gender: [[${customer.gender}]] &nbsp;&nbsp;&nbsp; Country: [[${customer.country.name}]]</p>
-					<p>City: [[${customer.city}]] &nbsp;&nbsp;&nbsp; State: [[${customer.state}]] - [[${customer.postalCode}]]</p>
+					<p style="margin-top: 10px;">Name: <b>[[${customer.fullName}]]</b></p>
+					<p>Email: <b>[[${customer.email}]]</b></p>
+					<p>Phone: <b>[[${customer.phone}]]</b></p>
+					<p>Address: <b>[[${customer.addressLine1}]] [[${customer.addressLine2}]]</b></p>
+					<p>Gender: <b>[[${customer.gender}]]</b> &nbsp;&nbsp;&nbsp; Country: <b>[[${customer.country.name}]]</b></p>
+					<p>City: <b>[[${customer.city}]]</b> &nbsp;&nbsp;&nbsp; State: <b>[[${customer.state}]] - [[${customer.postalCode}]]</b></p>
 				</div>
-				<div class="col-md-3 ">
+				<div class="col-md-3 class_center">
 					<a class="specialButton" id="profile_update">Update</a>
 				</div>
 			</div>
@@ -37,9 +42,9 @@
 	</th:block>
 	
 	<form th:action="@{/request/save}" th:object="${request}" method="post">
-		<div class="mobile_account_view" style="margin: 20px 0;">
+		<div class="mobile_account_view" style="padding: 15px 0;">
 			<input type="hidden" th:field="*{id}">
-			<h4>Submit your query below</h4>
+			<h4 style="margin-left: 12px;">Submit your query below</h4>
 			<div class="row">
 				<div class="col-12" style="margin-bottom: 10px;">
 					<input class="form-control" th:field="*{subject}" type="text" placeholder="Subject" required>
@@ -56,45 +61,77 @@
 </div>
 
 <form th:action="@{/account/update}" th:object="${customer}" method="post" enctype="multipart/form-data" id="form_hide">
-	<div class="account_update" style="display: none;">
+	<div class="account_update class_center" style="display: none;">
 		<input type="hidden" th:field="*{id}">
-		<div class="row">
+		<input type="hidden" id="custometId" th:value="${customer.id}">
+		<div class="row" style="width: 100%;">
 			<div class="col-md-4">
 				<input type="hidden" th:field="*{photos}">
 				<img class="img-thumbnail img-fluid" id="thumbnail1" th:src="@{${customer.photosImagePath}}" alt="Photo Preview" />
-				<input type="file" name="image" id="fileImage" accept="image/png, image/jpeg" class="mb-2" style="margin-top: 4px;"/>
+				<div style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+					<label for="fileImage">Select: </label>
+					<input type="file" name="image" id="fileImage" accept="image/png, image/jpeg" class="mb-2" style="margin-top: 4px; margin-left: 5px;"/>
+				</div>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-8 class_center">
 				<div class="row">
 					<div class="col-6 margin-bottom-update-account">
-						<input type="text" class="form-control" th:field="*{firstName}" minlength="3" maxlength="128">
+						<div class="form-floating">
+							<input type="text" class="form-control" th:field="*{firstName}" minlength="3" maxlength="128">
+						  	<label for="firstName">First Name</label>
+						</div>
 					</div>
 					<div class="col-6 margin-bottom-update-account">
-						<input type="text" class="form-control" th:field="*{lastName}" minlength="3" maxlength="128">
-					</div>
-					<div class="col-8 margin-bottom-update-account">
-						<input type="text" class="form-control" th:field="*{phone}" minlength="3" maxlength="128">
-					</div>
-					<div class="col-6 margin-bottom-update-account">
-						<input type="password" class="form-control" th:field="*{password}" placeholder="Leave blank if you don't want to change password." minlength="8" maxlength="40" oninput="checkPasswordMatch(document.getElementById('confirmPassword'))">
+						<div class="form-floating">
+							<input type="text" class="form-control" th:field="*{lastName}" minlength="3" maxlength="128">
+						  	<label for="lastName">Last Name</label>
+						</div>
 					</div>
 					<div class="col-6 margin-bottom-update-account">
-						<input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password!" minlength="8" maxlength="40" oninput="checkPasswordMatch(this)">
+						<div class="form-floating">
+							<input type="text" class="form-control" th:field="*{phone}" minlength="3" maxlength="128">
+						  	<label for="phone">Phone</label>
+						</div>
 					</div>
 					<div class="col-6 margin-bottom-update-account">
-						<input class="input form-control" type="text" th:field="*{city}" placeholder="City" />
+						<div class="form-floating">
+						  <select class="form-select" th:field="*{gender}" aria-label="Floating label select example">
+						    <option value="Male" selected>Male</option>
+						    <option value="Female">Female</option>
+						    <option value="Trans">Trans</option>
+						  </select>
+						  <label for="gender">Gender</label>
+						</div>
 					</div>
 					<div class="col-6 margin-bottom-update-account">
-						<input class="input form-control" type="text" th:field="*{state}" placeholder="State" />
+						<div class="form-floating">
+							<input class="input form-control" type="text" th:field="*{city}" placeholder="City" />
+						  	<label for="city">City</label>
+						</div>
 					</div>
 					<div class="col-6 margin-bottom-update-account">
-						<input class="input form-control" type="text" th:field="*{postalCode}" placeholder="PIN" />
+						<div class="form-floating">
+							<input class="input form-control" type="text" th:field="*{state}" placeholder="State" />
+						  	<label for="state">State</label>
+						</div>
 					</div>
 					<div class="col-12 margin-bottom-update-account">
-						<input class="input form-control" type="text" th:field="*{addressLine1}" placeholder="Address Line 1"/>
+						<div class="form-floating">
+							<input class="input form-control" type="text" th:field="*{addressLine1}" placeholder="Address Line 1"/>
+						  	<label for="addressLine1">Address Line 1 </label>
+						</div>
 					</div>
 					<div class="col-12 margin-bottom-update-account">
-						<input class="input form-control" type="text" th:field="*{addressLine2}" placeholder="Address Line 2" />
+						<div class="form-floating">
+							<input class="input form-control" type="text" th:field="*{addressLine2}" placeholder="Address Line 2" />
+						  	<label for="addressLine2">Address Line 2</label>
+						</div>
+					</div>
+					<div class="col-6 margin-bottom-update-account">
+						<div class="form-floating">
+							<input class="input form-control" type="text" th:field="*{postalCode}" placeholder="PIN" />
+						  	<label for="postalCode">PIN</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -105,7 +142,7 @@
 		</div>
 	</div>
 </form>
-
+<button id="checkbtn" class="btn btn-primary" type="button">Check</button>
 </body>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -147,4 +184,31 @@ document.getElementsByName('image')[0].addEventListener('change', function(event
 });
 
 </script>
+
+
+	
+<script>
+		$("#checkbtn").click(function(){
+			checkPhone();
+		})
+	
+		function checkPhone() {
+			var custId = $("#custometId").val();
+			var phone = $("input[name='phone']").val();
+			
+			var params = {id: custId, phone: phone};
+			var urlCheck = "[[@{/customers/check_phone}]]";
+				alert(custId);
+				alert(phone);
+				
+	    	
+	    	$.post(urlCheck, params, function(elem) {
+				alert(elem);
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+</script>
+
 </html>

@@ -50,4 +50,44 @@ public class EmailSettingBag extends SettingBag{
 	public String getCunstomerVerifyContent() {
 		return super.getValue("CUSTOMER_VERIFY_CONTENT");
 	}
+	
+	public String getFlightSuccessContent() {
+		return super.getValue("ORDER_CONFIRMATION_CONTENT");
+	}
+	
+	public String getFlightSuccessSubject() {
+		return super.getValue("ORDER_CONFIRMATION_SUBJECT");
+	}
+	
+	public String getHotelSuccessContent() {
+		return super.getValue("HOTEL_SUCCESS_CONTENT");
+	}
+	
+	public String getHotelSuccessSubject() {
+		return super.getValue("HOTEL_SUCCESS_SUBJECT");
+	}
+	
+	public String getBusSuccessContent() {
+		return super.getValue("BUS_SUCCESS_CONTENT");
+	}
+	
+	public String getBusSuccessSubject() {
+		return super.getValue("BUS_SUCCESS_SUBJECT");
+	}
+	
+	public String getHolidaySuccessContent() {
+		return super.getValue("HOLIDAY_SUCCESS_CONTENT");
+	}
+	
+	public String getHolidaySuccessSubject() {
+		return super.getValue("HOLIDAY_SUCCESS_SUBJECT");
+	}
+	
+	public String getWalletRechargeContent() {
+		return super.getValue("WALLET_RECHARGE_CONTENT");
+	}
+	
+	public String getWalletRechargeSubject() {
+		return super.getValue("WALLET_RECHARGE_SUBJECT");
+	}
 }

@@ -27,6 +27,7 @@ public class Utility {
 		Properties mailProperties = new Properties();
 		mailProperties.setProperty("mail.smtp.auth", emailSettings.getSmtpAuth());
 		mailProperties.setProperty("mail.smtp.starttls.enable", emailSettings.getSmtpSecured());
+		mailProperties.setProperty("mail.smtp.ssl.enable", "true");
 		
 		mailSender.setJavaMailProperties(mailProperties);
 		

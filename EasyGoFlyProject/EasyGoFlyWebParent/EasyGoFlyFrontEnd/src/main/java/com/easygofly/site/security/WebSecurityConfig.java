@@ -88,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**", 
 					"/flight_search-noUser_filter_**", "/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight",
 					"/hotel/saveSearchHotel", "/hotel/search_**", "/hotel_loading...", "/bus", "/bus/saveSearchBus", "/bus_loading...", "/bus/search_**", "/holiday", "/bus/test_response", 
-					"/bus/transport-**").permitAll()
+					"/bus/transport-**", "/test_wallet_send_email").permitAll()
 			.anyRequest().authenticated()
             .and()
             .addFilterBefore(beforeLoginFilter,

@@ -12,6 +12,13 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	display: block;
 	}
 
+	.div-stl {
+		    margin-bottom: 20px;
+		    padding: 15px 0;
+		    border-radius: 9px;
+		    background: white;
+		    border: 1px solid #8080806b;
+	}
 </style>
 </head>
 
@@ -46,8 +53,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 		[[${warning}]]
 	</div>
 		
-	<div class="container contents shadow" style="margin-bottom: 20px; padding: 15px; border-radius: 9px; background: white; border: 1px solid #8080806b;">
-		<div class="row">
+	<div class="container contents shadow">
+		<div class="row div-stl">
 		        <div class="col-md-3 media-hide">
 		            <div id="accordion" >
 		                <h4 class="sections specialButton margin-bottom-account mild_color" id="account" ><i class="fa fa-solid fa-address-card"></i>&nbsp;&nbsp;<span>Account</span></h4>

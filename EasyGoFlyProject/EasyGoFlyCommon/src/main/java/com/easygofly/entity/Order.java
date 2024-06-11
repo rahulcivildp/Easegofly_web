@@ -131,7 +131,10 @@ public class Order {
 
 	@Column(name = "device_type", length = 5000)
 	private String deviceType;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "total_transaction_id")
+	private TotalTransaction totalTransaction;
 	
 	
 	public Order() {}
@@ -210,6 +213,14 @@ public class Order {
 
 	public void setJourneyClass(String journeyClass) {
 		this.journeyClass = journeyClass;
+	}
+
+	public TotalTransaction getTotalTransaction() {
+		return totalTransaction;
+	}
+
+	public void setTotalTransaction(TotalTransaction totalTransaction) {
+		this.totalTransaction = totalTransaction;
 	}
 
 	public String getDevice() {

@@ -49,4 +49,9 @@ spring:
             scope:
             - email
             - public_profile
-           
+  mail:
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<br>
+		<div class="form-group row">
+			<label class="col-sm-1 col-form-label">Email Subject:</label>
+			<div class="col-sm-11">
+				<input type="text" class="form-control" name="HOTEL_SUCCESS_SUBJECT" th:value="${HOTEL_SUCCESS_SUBJECT}" required="required">
+			</div>
+		</div>
+		<br>
+		<div class="form-group row">
+			<label class="col-sm-1 col-form-label">Email Content:</label>
+			<div class="col-sm-11">
+				<textarea rows="5" class="form-control" name="HOTEL_SUCCESS_CONTENT" id="HOTEL_SUCCESS_CONTENT" required="required">[[${HOTEL_SUCCESS_CONTENT}]]</textarea>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -121,9 +121,6 @@ th:fragment="category(remove)" th:remove="${remove}">
 		-ms-transition-duration: 400ms; 
 		-ms-transition-timing-function: ease-in;
 	}
-	body #mainHeroStyle.searchBovMainDivActive {
-		height: 42vh;
-	}
 	
 	.searchBoxMargin {
 		margin-top: 90px !important;
@@ -480,10 +477,10 @@ input:checked+br+label {
 			
 		</div>
 			
-	<div id="mainHeroStyle" class="searchBovMainDivActive">
-		<div class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
+	<div id="mainHeroStyle">
+		<div id="searchBar" class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
 			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
-			    
+					<div th:replace="holiday/holiday-search-tab :: holiday-search"></div>
 			</div>
 		</div>
 		<!-- ======= Hero Section ======= -->
@@ -555,6 +552,32 @@ input:checked+br+label {
 </body>
 
 <script>
+	
+	$(document).ready(function() {
+		var height = $("#searchBar").height();
+		createCssClass(height);
+	});
+	
+	function createCssClass(x) {
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            
+            var ht = x + 10;
+            
+            const css = `
+                .searchActive {
+                    height: ` + ht + `px !important;
+                }
+            `;
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+            
+			$("#mainHeroStyle").addClass("searchActive");
+			$("#hero").addClass("searchActive");
+        }
+</script>
+
+<script>
 	$(document).ready(function(){
 		$(".translateItem").addClass("transformedItem");
 		$(".translateTabs").addClass("transformedTabs");
@@ -564,7 +587,7 @@ input:checked+br+label {
 <script>
 	$("#holidaysMobile").click(function(){
 		$("#holidaysMobile").toggleClass("activated");
-		$("#mainHeroStyle").toggleClass("searchBovMainDivActive");
+		$("#mainHeroStyle").toggleClass("searchActive");
 	});
 </script>
 </html>

@@ -71,7 +71,7 @@ th:fragment="category(remove)" th:remove="${remove}">
 	}
 }
 #hero {
-	height: 34.5vh;
+	 height: 100%;
 }
 
 @media ( min-width : 576px) {
@@ -426,7 +426,7 @@ input:checked+br+label {
 		overflow: hidden;
 	}
 }
-.
+
 </style>
 
 </head>
@@ -481,9 +481,9 @@ input:checked+br+label {
 			
 		</div>
 			
-	<div id="mainHeroStyle" class="">
+	<div id="mainHeroStyle">
 		<div id="searchBar" class="translateItem" style="position: absolute; z-index: 2; width: 100%; translate: 100% 0;">
-			<div id="tabsModalDiv" class="paddingResize" style="padding-top: 150px; ">
+			<div id="tabsModalDiv" class="paddingResize container" style="padding-top: 150px; ">
 					<div th:replace="bus/bus-search-tab :: bus-search"></div>
 			</div>
 		</div>
@@ -556,8 +556,10 @@ input:checked+br+label {
 </body>
 
 <script>
-	var height = document.getElementById('searchBar').offsetHeight;
-	createCssClass(height);
+	$(document).ready(function() {
+		var height = $("#searchBar").height();
+		createCssClass(height);
+	});
 	
 	function createCssClass(x) {
             const style = document.createElement('style');

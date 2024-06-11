@@ -190,6 +190,9 @@
 				max-width: 100% !important;
 			}
 		}
+		#hero {
+			height: auto !important;
+		}
 	  </style>
 </head>
 <body>
@@ -311,6 +314,18 @@
     			cursor: pointer;
     			height: 35px;
 			}
+			.modal-content-stl {
+	            display: flex;
+	            justify-content: center;
+	            align-items: center;
+	            background: transparent;
+	        }
+	        .spinner-border {    
+				--bs-spinner-width: 100px;
+			    --bs-spinner-height: 100px;
+			    --bs-spinner-border-width: 7px;
+				
+			}
 	</style>
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
@@ -362,7 +377,7 @@
 	  </div>
 	  
 	<!-- Sidebar Menu -->
-	<div id="sidebarMenuDiv" class="mobileActive hide-display" style="">
+	<div id="sidebarMenuDiv" class="mobileActive hide-display">
 		<div id="sideBar" style="display: flex; flex-direction: column; justify-content: space-between;">
 			<div>
 				<div class="row">
@@ -685,20 +700,32 @@
 											</div>
 											
 											<div class="row mb-3" style="width: 40%; margin: 0 auto;">
-												<th:block th:if="${param.otp == null}"><input type="submit" value="Send OTP" class="btn btn-primary button" /></th:block>
+												<th:block th:if="${param.otp == null}"><input type="submit" value="Send OTP" class="btn btn-primary button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/></th:block>
 												<th:block th:if="${param.otp != null}"><input type="submit" value="Login" class="btn btn-primary button" /></th:block>
 											</div>
 										</div>
 									</form>
+									
 					</div>
 					
 					
+					
 			</div>
 			</div>
 		</div>
 		</div>
 		
-		
+			<!-- Modal -->
+			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content modal-content-stl">
+		            <div class="spinner-border text-primary" role="status">
+		                <span class="sr-only">Loading...</span>
+		            </div>
+			    </div>
+			  </div>
+			</div>
+
 
 		<footer th:replace="fragments :: page_footer"></footer>
 	</div>

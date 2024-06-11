@@ -27,9 +27,8 @@
 			}
 			.floatingButton {
 			    position: relative;
-			    bottom: -10px;
-			    left: 25%;
-			    width: 50%;
+				display: flex;
+				justify-content: center;
 			}
 			.submit_btns {
 				border-radius: 45px !important;
@@ -127,6 +126,11 @@
 	  border-radius: 5px;
 	  background-color:#b7b7b7;
 	  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+	}
+	.submit_btns {
+		position: absolute;
+		width: 50% !important;
+		top: 15px;
 	}
 }
 		
@@ -625,7 +629,7 @@
 											</ul>
 										</div>
 									</div>
-									<div class="col-md-6 col-12 insert_padding floatingButton" style=" float: left; padding: 0 4px;">
+									<div class="col-md-6 col-12 insert_padding" style=" float: left; padding: 0 4px;">
 										<input class="submit_btns" type="submit" id="search1" name="search1" value="Search">
 									</div>
 								</div>

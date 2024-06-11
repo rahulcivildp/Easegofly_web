@@ -59,6 +59,7 @@ import com.easygofly.site.setting.GeneralSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
+import com.easygofly.site.wallet.TotalTransactionService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
@@ -85,6 +86,8 @@ public class OrderController {
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private EntityManager entityManager;
+	@Autowired TransactionService transactionService;
+	@Autowired TotalTransactionService totalTransactionService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -286,22 +289,15 @@ public class OrderController {
 	public String showWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
-		String email; 
-		Customer customer = new Customer(); 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		}
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		model.addAttribute("customer", customer);
 		
 		Order order = orderRepo.findById(updatedOrderId).get();
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
+		
+	    totalTransactionService.createTotalTransaction(customer, order.getPrice(), true, false, null, null, null, null, OrderStatus.NEW);
 		
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		String[] hasErrorArr = new String[2];
@@ -394,14 +390,13 @@ public class OrderController {
 		model.addAttribute("demoTicketPath", demoTicketPath);
 		model.addAttribute("thumbLogoPath", thumbLogoPath);
 		
-//		User user = product.getUser();
-//		model.addAttribute("user", user);
-		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
 		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
 		if (hasErrorArr[0].equals("0")) {
 			model.addAttribute("paymentSuccess", "successfull");
+//			customer.getTransactions();
+//			orderService.sendSuccessEmail(customer, pnr, photoImagePath);
 		} else if (hasErrorArr[0].equals("200")) {
 			model.addAttribute("paymentSuccess", "successfull");
 		} else {
@@ -426,7 +421,7 @@ public class OrderController {
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
-		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
+
 		search_id_inner = search_id;
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
@@ -444,7 +439,7 @@ public class OrderController {
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();
-		
+	    
 	    String orderParam = parameter[8];
 		String[] parts = orderParam.split("R");
 		String part2 = parts[1]; // 034556
@@ -504,19 +499,13 @@ public class OrderController {
 			method = {RequestMethod.GET})
 	public String zaakpayResponseSe (Model model, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		model.addAttribute("customer", customer);
 		
-		String email; 
-		Customer customer = new Customer(); 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		}
+		System.out.println(parameter);
+	    com.easygofly.entity.Transaction selfTrans = transactionService.createTransaction(customer, parameter);
+	    totalTransactionService.createTotalTransaction(customer, Double.parseDouble(selfTrans.getAmount()), false, true, null, null, null, selfTrans.getId(), OrderStatus.NEW);
 
 		String orderParam = parameter[8];
 		model.addAttribute("orderId", orderParam);

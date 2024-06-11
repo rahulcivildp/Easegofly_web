@@ -17,6 +17,9 @@
 	color: white !important;
 }
 
+.row {
+	margin: 0;
+}
 /* <a> - style properties */
 *.disabledDiv {background-color: #E9ECEF;}
 *.styleLink {text-decoration: none;}
@@ -208,10 +211,10 @@
 }
 /* Responsive */
 @media only screen and (max-width: 800px) {
-	
+		.ghfghgfh {margin-bottom: 0px !important;}
+		.img-hover-zoom {margin-bottom: 0px !important;}
   	   .response-header {width: 90% !important;}
 	  *.onwars_responsive { padding: 6px 81px !important;}
-	  *.mobile_account_view { padding: 0 13px;}
 	  *.extra_height { height: 176px;}
 	  *.insert_padding { padding-top: 8px !important;}
 	  *.auto_width { width: 280px !important;}
@@ -287,9 +290,7 @@
 	*.seacrh_margin {
 		margin-top: 0px !important;
 	}
-	.img-hover-zoom {
-		height: 154px;
-	}
+	
 }
 *.modify_link_navigation {
 	justify-content: unset !important;

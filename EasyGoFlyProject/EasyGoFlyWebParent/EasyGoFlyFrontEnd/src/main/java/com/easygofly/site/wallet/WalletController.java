@@ -1,11 +1,13 @@
 package com.easygofly.site.wallet;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,10 +25,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.easygofly.entity.Customer;
+import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.RechargeHistory;
 import com.easygofly.entity.RechargeHistoryStatus;
 import com.easygofly.entity.Wallet;
+import com.easygofly.site.customer.CustomerRepository;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.order.TransactionRepository;
+import com.easygofly.site.order.TransactionService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
@@ -38,7 +44,11 @@ import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 public class WalletController {
 
 	@Autowired CustomerService customerService;
+	@Autowired CustomerRepository customerRepository;
 	@Autowired WalletService walletService ;
+	@Autowired TransactionService transactionService;
+	@Autowired TransactionRepository transactionRepository;
+	@Autowired TotalTransactionService totalTransactionService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -167,8 +177,9 @@ public class WalletController {
 			method = {RequestMethod.POST})
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
-		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
 		
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
 		
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
@@ -184,23 +195,14 @@ public class WalletController {
 	    for (String string : parameter) {
 	        System.out.println("Array Parameters: " + string);
 		}
+	    
+	    
 	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();
-	    
-	    String email; 
-		Customer customer; 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			rechargeStatus(customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			rechargeStatus(customer);
-		} 
+	     
+		rechargeStatus(customer);
 		
 		return "redirect:/zaakpay/recharge";
 	}
@@ -225,42 +227,47 @@ public class WalletController {
 	public String zaakpayResponseSe (HttpServletRequest request, Model model, HttpServletResponse response, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
-		String email; 
-		Customer customer; 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-			responseBalance(model, customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-			responseBalance(model, customer);
-		}
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		double balance = responseBalance(model, customer);
+		boolean isProcessed = true;
+		System.out.println(parameter);
+	    com.easygofly.entity.Transaction selfTrans = transactionService.createTransaction(customer, parameter);
+
+		double amountIntRech = Double.parseDouble(parameter[0]) / 100;
 		
 		if (parameter[9].equals("Not Found") && parameter[10].equals("unknown") ) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[11].contains("1017")) {
+			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			isProcessed = true;
 			model.addAttribute("paymentSuccess", parameter[12]);
 		}
-		
+
+	    totalTransactionService.createTotalTransaction(customer, Double.parseDouble(selfTrans.getAmount()), false, true, null, null, null, selfTrans.getId(), OrderStatus.NEW);
+		walletService.sendSuccessEmail(customer, selfTrans.getPgTransId(), "" + amountIntRech, "" + balance, isProcessed);
+	    
 		System.out.println(parameter);
-		
-		Integer amountIntRech = Integer.parseInt(parameter[0]) / 100;
+
+		model.addAttribute("customer", customer);
 		model.addAttribute("amountRecharged", amountIntRech);
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);
@@ -270,12 +277,28 @@ public class WalletController {
 		
 		
 	}
+	
+	
+	// Test Method
+	@GetMapping("/test_wallet_send_email")
+	public void testSendEmail() throws UnsupportedEncodingException, MessagingException {
+		Customer cux = customerRepository.findById(59).get();
+		com.easygofly.entity.Transaction selfTrans = transactionRepository.findById(1).get();
+		
+		walletService.sendSuccessEmail(cux, selfTrans.getPgTransId(), "2" , "100", false);
+	}
+	
+	
+	// Private Methods
 
-	private void responseBalance(Model model, Customer customer) {
+
+	private double responseBalance(Model model, Customer customer) {
 		Wallet wallet = customer.getWallet();
-		Integer INRbalance = wallet.getBalance() / 100;
+		double INRbalance = wallet.getBalance() / 100;
 		model.addAttribute("wallet", wallet);
 		model.addAttribute("balance", INRbalance);
+		
+		return INRbalance;
 	}
 	
 	@GetMapping("/show-history")

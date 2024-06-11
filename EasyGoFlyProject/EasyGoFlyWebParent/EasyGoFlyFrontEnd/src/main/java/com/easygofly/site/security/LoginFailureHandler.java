@@ -22,8 +22,7 @@ import com.easygofly.site.customer.CustomerService;
 @EntityScan({"com.easygofly.entity", "com.easygofly.site.customer"})
 @Transactional
 public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
-	@Autowired
-    private CustomerService customerService;
+	@Autowired private CustomerService customerService;
      
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -46,8 +45,8 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     		} catch (UnsupportedEncodingException | MessagingException e) {
     			e.printStackTrace();
     		}
-    	  }
-      }else {
+    	  } 
+      } else {
     	  Customer customerCheck = customerService.getCustomerByPhone(phone);
           if (customerCheck == null) {
     		customerService.registerCustomerByPhone(phone);

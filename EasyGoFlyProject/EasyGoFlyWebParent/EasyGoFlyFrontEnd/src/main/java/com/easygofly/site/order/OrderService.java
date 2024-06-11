@@ -1,6 +1,7 @@
 package com.easygofly.site.order;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,6 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +24,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -41,6 +47,7 @@ import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.Wallet;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.LogService;
+import com.easygofly.site.Utility;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
@@ -53,6 +60,8 @@ import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.EmailSettingBag;
+import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
 import com.easygofly.site.wallet.WalletService;
@@ -76,6 +85,7 @@ public class OrderService {
 	@Autowired private OnlineFlightService onlineFlightService;
 	@Autowired private TravelerService travelerService;
 	@Autowired private LogService logService;
+	@Autowired private SettingService settingService;
 
 	public Order createOrder(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo, SearchHistory searchHistory, String orderName, List<TravellerDetail> travellerDetails) {
 		Order newOrder = new Order();
@@ -1842,5 +1852,38 @@ public class OrderService {
         	System.out.println(jsonObjFarerules);
             logService.generateLog(jsonObjFarerules.toString());
 		}
+	}
+
+	
+	// Email Service
+	
+	public void sendSuccessEmail (Customer customer, String pnr, String trn) throws UnsupportedEncodingException, MessagingException {
+		
+		EmailSettingBag emailSettings = settingService.getEmailSettings();
+		JavaMailSenderImpl mailSender = Utility.prepareMailSender(emailSettings);
+		
+		String toAddress = customer.getEmail();
+		String subject = emailSettings.getFlightSuccessSubject();
+		String content = emailSettings.getFlightSuccessContent();
+		
+		MimeMessage message= mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		
+		helper.setFrom(emailSettings.getFromAddress(), emailSettings.getSenderName());
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+		
+		subject = subject.replace("[[PNR]]", pnr);
+		
+		content = content.replace("[[name]]", customer.getFullName());
+		
+		content = content.replace("[[TRN]]", trn);
+		
+		helper.setText(content, true);
+		
+		mailSender.send(message);
+		
+		System.out.println("To Address: " + toAddress);
+		    
 	}
 }

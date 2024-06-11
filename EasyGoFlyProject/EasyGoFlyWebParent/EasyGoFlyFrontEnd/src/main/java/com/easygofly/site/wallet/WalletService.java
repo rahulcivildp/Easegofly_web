@@ -1,10 +1,18 @@
 package com.easygofly.site.wallet;
 
+import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.BusOrder;
@@ -14,12 +22,16 @@ import com.easygofly.entity.Order;
 import com.easygofly.entity.RechargeHistory;
 import com.easygofly.entity.RechargeHistoryStatus;
 import com.easygofly.entity.Wallet;
+import com.easygofly.site.Utility;
+import com.easygofly.site.setting.EmailSettingBag;
+import com.easygofly.site.setting.SettingService;
 
 @Service
 public class WalletService {
 
 	@Autowired WalletRepository walletRepo;
 	@Autowired RechargeHistoryRepository rechargeHistoryRepo;
+	@Autowired private SettingService settingService;
 	
 	public Wallet findbyCustomer(Customer customer) {
 		Wallet wallet = walletRepo.findByCustomer(customer);
@@ -204,4 +216,53 @@ public class WalletService {
 			return null;
 		}
 	}
+
+	
+	// Email Service
+	
+	public void sendSuccessEmail (Customer customer, String trn, String amount, String balance, boolean isProcessed) throws UnsupportedEncodingException, MessagingException {
+
+		EmailSettingBag emailSettings = settingService.getEmailSettings();
+		JavaMailSenderImpl mailSender = Utility.prepareMailSender(emailSettings);
+
+		String toAddress = customer.getEmail();
+		String subject = emailSettings.getWalletRechargeSubject();
+		String content = emailSettings.getWalletRechargeContent();
+
+		MimeMessage message= mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom(emailSettings.getFromAddress(), emailSettings.getSenderName());
+
+		Date date = new Date();
+	    DateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy - hh:mm");
+	    String formatedDate = dateFormat.format(date);
+	    
+	    if (isProcessed) {
+	    	subject = subject.replace("[[SSS]]", "successful");
+			content = content.replace("[[SSS]]", "successful");
+		} else {
+	    	subject = subject.replace("[[SSS]]", "failure");
+			content = content.replace("[[SSS]]", "failure");
+		}
+
+		subject = subject.replace("[[DDD]]", formatedDate);
+		
+		content = content.replace("[[NAME]]", customer.getFullName());
+	
+		content = content.replace("[[AMT]]", amount);
+		
+		content = content.replace("[[BLC]]", balance);
+		
+		content = content.replace("[[TRN]]", trn);
+	    
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		
+		mailSender.send(message);
+		
+		System.out.println("To Address: " + toAddress);
+	}
+
 }

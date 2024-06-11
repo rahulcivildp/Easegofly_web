@@ -511,15 +511,18 @@ body {
 	}
 	/* The Image container */
 	.img-hover-zoom {
+		margin-bottom: 10px;
 	  overflow: hidden; /* Removing this will break the effects */
 	  border-radius: 8px;
 	}
+	.ghfghgfh {
+		margin-bottom: 10px;
+	}
 	.specialoffer_next {
-		    margin-top: -102px;
-		    position: relative;
-		    z-index: 2;
-		    margin-left: 20px;
-		    color: white;
+		position: absolute;
+	    top: 60px;
+	    z-index: 2;
+	    color: white;
 	}
 	.displ {
 		display: none;
@@ -535,6 +538,11 @@ body {
 	    color: rgb(78 218 62);
 	}
 	
+	/* Responsive */
+@media only screen and (max-width: 800px) {
+		.img-hover-zoom {margin-bottom: 0px !important; height: auto !important;}
+}
+
 	 #slider-container {
             overflow: hidden;
             white-space: nowrap;
@@ -603,6 +611,12 @@ body {
 		       rgba(0, 0, 0, 0.07) 0px 8px 16px,
 		        rgba(0, 0, 0, 0.07) 0px 16px 32px,
 		         rgba(0, 0, 0, 0.07) 0px 32px 64px;
+		}
+		.destination-link {
+			cursor: pointer;
+		    position: relative;
+		    display: flex;
+		    justify-content: center;
 		}
 </style>
 
@@ -1511,10 +1525,10 @@ body {
 	        </div>
 	        <div class="col-sm-6">
 	        	<div class="row">
-	        		<div class="col-6" style="margin-bottom: 10px;">
-	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-	        				<a style="cursor: pointer;" th:href="@{/jaipur_view}">
-							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
+	        		<div class="col-6 ghfghgfh">
+	        			<div >
+	        				<a class="destination-link" th:href="@{/jaipur_view}">
+							    <div class="img-hover-zoom img-hover-zoom--brightness">
 		                                      <img th:src="@{/images/deals/india-best-places-to-visit-rajasthan.jpg}" style="width: 100%;">
 							    </div>
 							    <div class="specialoffer_next">
@@ -1525,10 +1539,10 @@ body {
 						 </div>
 		        		
                   </div>
-	        		<div class="col-6" style="margin-bottom: 10px;">
-	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-	        				<a style="cursor: pointer;" th:href="@{/rishikesh_view}">
-							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin-bottom: 10px;">
+	        		<div class="col-6 ghfghgfh">
+	        			<div >
+	        				<a class="destination-link" th:href="@{/rishikesh_view}">
+							    <div class="img-hover-zoom img-hover-zoom--brightness">
 	                                    <img th:src="@{/images/deals/kasdal.jpg}" style="width: 100%;">
 							    </div>
 							    <div class="specialoffer_next">
@@ -1542,8 +1556,8 @@ body {
 	        	</div>
 	        	<div class="row media-hide">
 	        		<div class="col-6" style="margin: 10px 0;">
-	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-	        				<a style="cursor: pointer;" th:href="@{/shimla_view}">
+	        			<div >
+	        				<a class="destination-link" th:href="@{/shimla_view}">
 							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
 							      <img th:src="@{/images/deals/lakshay-saini-5lpFn4a3qaQ222.jpg}" style="width: 100%;">
 							    </div>
@@ -1555,8 +1569,8 @@ body {
 						  </div>
 	        		</div>
 	        		<div class="col-6" style="margin: 10px 0;">
-	        			<div class="lab-grid-cell w-third--d w-half--t w-full--m" >
-	        				<a style="cursor: pointer;" th:href="@{/kolkata_view}">
+	        			<div >
+	        				<a class="destination-link" th:href="@{/kolkata_view}">
 							    <div class="img-hover-zoom img-hover-zoom--brightness" style="margin: 10px 0;">
 	                                    <img th:src="@{/images/deals/1883866ssd.jpg}" style="width: 100%;">
 							    </div>

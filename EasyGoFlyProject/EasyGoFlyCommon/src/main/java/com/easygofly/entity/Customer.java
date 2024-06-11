@@ -135,6 +135,9 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<BusOrder> busOrders = new ArrayList<>();
 
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<TotalTransaction> totalTransactions = new ArrayList<>();
+
 	
 	public Customer() {}
 	
@@ -369,6 +372,14 @@ public class Customer {
 
 	public List<Transaction> getTransactions() {
 		return transactions;
+	}
+
+	public List<TotalTransaction> getTotalTransactions() {
+		return totalTransactions;
+	}
+
+	public void setTotalTransactions(List<TotalTransaction> totalTransactions) {
+		this.totalTransactions = totalTransactions;
 	}
 
 	public List<Hotel> getHotels() {

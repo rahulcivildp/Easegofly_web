@@ -63,6 +63,9 @@ public class BusOrder {
 	@JoinColumn(name = "bus_id")
 	private Bus bus;
 
+	@ManyToOne
+	@JoinColumn(name = "total_transaction_id")
+	private TotalTransaction totalTransaction;
 	
 	
 	public BusOrder() {}
@@ -188,6 +191,15 @@ public class BusOrder {
 
 	public void setTravelOperatorPNR(String travelOperatorPNR) {
 		this.travelOperatorPNR = travelOperatorPNR;
+	}
+
+	
+	public TotalTransaction getTotalTransaction() {
+		return totalTransaction;
+	}
+
+	public void setTotalTransaction(TotalTransaction totalTransaction) {
+		this.totalTransaction = totalTransaction;
 	}
 	
 	
