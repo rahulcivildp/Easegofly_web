@@ -63,6 +63,7 @@ public class MainController {
 		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		model.addAttribute("cities", cities);
 		
+		
 		Iterable<City> allCities = cityRepo.findAll();
 		model.addAttribute("allCities", allCities);
 		String phone; 

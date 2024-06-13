@@ -87,7 +87,6 @@ public class SearchHistoryController {
 			model.addAttribute("customer", customer);
 		}
 		
-		searchService.authenticationFlight(model);
 		
 		SearchHistory search = searchRepo.findById(id).get();
 		
@@ -136,7 +135,7 @@ public class SearchHistoryController {
 
 		Integer iq = 111;
 		
-		searchService.authenticationFlight(model);
+//		
 		
 		System.out.println();
 		
@@ -558,8 +557,6 @@ public class SearchHistoryController {
 			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
-
-		searchService.authenticationFlight(model);
 		
 		SearchHistory search = searchRepo.findById(id).get();
 		Integer passengerNum = search.getAdultNum() + search.getChildNum() + search.getInfantNum();
@@ -603,7 +600,7 @@ public class SearchHistoryController {
 			@PathVariable(name = "stop") Integer[] stops,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 
-		searchService.authenticationFlight(model);
+		
 		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 		 

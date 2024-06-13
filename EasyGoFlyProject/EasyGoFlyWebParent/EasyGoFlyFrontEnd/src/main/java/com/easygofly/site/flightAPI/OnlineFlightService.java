@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.easygofly.site.LogService;
 import com.easygofly.site.setting.APIServiceSettingBag;
+import com.easygofly.site.setting.APITokenSettingBag;
 import com.easygofly.site.setting.SettingService;
 
 @Service
@@ -21,7 +22,6 @@ public class OnlineFlightService {
 	@Autowired private LogService logService;
 	@Autowired private SettingService settingService;
 	
-	public String tokenId = "";
 	public String traceId = "";
 	public String resultIndex = "";
 	public String airlineRemark = "";
@@ -82,7 +82,8 @@ public class OnlineFlightService {
 	
 	public int apiOnlineSearchMod(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
 		String strDate = dateFormat.format(date);
 		
@@ -99,7 +100,7 @@ public class OnlineFlightService {
      // Create the request body
         String requestBody = "{"
         		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + tokenId + "\", "
+        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
         		+ "\"AdultCount\": \"" + adultNum + "\", "
         		+ "\"ChildCount\": \"" + childNum + "\", "
         		+ "\"InfantCount\": \"" + infantNum + "\", "
@@ -140,7 +141,8 @@ public class OnlineFlightService {
 	
 	public int apiOnlineSearchModReturn(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date, Date returnDate)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
 		String strDate = dateFormat.format(date);
 		String strReturnDate = dateFormat.format(returnDate);
@@ -158,7 +160,7 @@ public class OnlineFlightService {
      // Create the request body
         String requestBody = "{"
         		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + tokenId + "\", "
+        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
         		+ "\"AdultCount\": \"" + adultNum + "\", "
         		+ "\"ChildCount\": \"" + childNum + "\", "
         		+ "\"InfantCount\": \"" + infantNum + "\", "
@@ -206,7 +208,8 @@ public class OnlineFlightService {
 	
 	public int apiOnlineFarerule_quote(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -220,7 +223,7 @@ public class OnlineFlightService {
      // Create the request body
         String requestBody = "{"
         		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + tokenId + "\", "
+        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
         		+ "}";
@@ -248,7 +251,8 @@ public class OnlineFlightService {
 	
 	public int apiOnlineTicket(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -266,7 +270,7 @@ public class OnlineFlightService {
         		+ "	\"AgentReferenceNo\": \"sonam1234567890\",\r\n"
         		+ "	\"Passengers\": " + arrayTraveler + "	,\r\n"
         		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
         		+ "}";
         
@@ -294,6 +298,7 @@ public class OnlineFlightService {
 
 	public int apiOnlineBookingNonLCC(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -309,7 +314,7 @@ public class OnlineFlightService {
         		+ "	\"ResultIndex\": \"" + resultIndex + "\",\r\n"
         		+ "	\"Passengers\": " + arrayTraveler + "	,\r\n"
         		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
         		+ "}";
         
@@ -336,6 +341,7 @@ public class OnlineFlightService {
 	}
 	
 	public int apiOnlineTicketNonLcc(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, Integer bookingId) throws IOException {
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		// Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -349,7 +355,7 @@ public class OnlineFlightService {
         // Create the request body
         String requestBody = "{\r\n"
         		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\",\r\n"
                 + "	\"PNR\": \"" + pnr + "\",\r\n"
                 + "	\"BookingId\": " + bookingId + "\r\n"
@@ -378,6 +384,7 @@ public class OnlineFlightService {
 	}
 	
 	public int apiOnlineTicketNonLccPassport(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, Integer bookingId, String arrayPassportList) throws IOException {
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		// Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -391,7 +398,7 @@ public class OnlineFlightService {
         // Create the request body
         String requestBody = "{\r\n"
         		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\",\r\n"
                 + "\"Passport\": " + arrayPassportList + ",\r\n"
                 + "	\"PNR\": \"" + pnr + "\",\r\n"
@@ -422,6 +429,7 @@ public class OnlineFlightService {
 	
 	public int apiOnlineSSR(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -436,7 +444,7 @@ public class OnlineFlightService {
         // Create the request body
         String requestBody = "{"
         		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + tokenId + "\", "
+        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
         		+ "}";
@@ -464,6 +472,7 @@ public class OnlineFlightService {
 	
 	public int apiOnlineGetBookingDetails(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, String bookingId)
 			throws IOException {
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -478,7 +487,7 @@ public class OnlineFlightService {
         // Create the request body
         String requestBody = "{\r\n"
         		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"PNR\": \"" + pnr + "\",\r\n"
         		+ "	\"BookingId\": \"" + bookingId + "\"\r\n"
         		+ "}";

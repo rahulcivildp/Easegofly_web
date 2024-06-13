@@ -49,6 +49,25 @@ public class SettingService {
 		List<Setting> settings = settingRepo.findByCategory(SettingCategory.API_SERVICE);
 		return new APIServiceSettingBag(settings);
 	}
+
+	public APITokenSettingBag getAPITokenSettings() {
+		List<Setting> settings = settingRepo.findByCategory(SettingCategory.API_TOKEN);
+		return new APITokenSettingBag(settings);
+	}
+
+	public List<Setting> getAPITokenSettingsList() {
+		return settingRepo.findByCategory(SettingCategory.API_TOKEN);
+	}
 	
+	public void saveAll(Iterable<Setting> settings) {
+		settingRepo.saveAll(settings);
+	}
 	
+	public Setting saveSetting(Setting settings) {
+		return settingRepo.save(settings);
+	}
+	
+	public Setting findByKey(String key) {
+		return settingRepo.findByKey(key);
+	}
 }

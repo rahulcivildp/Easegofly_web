@@ -31,6 +31,8 @@ import com.easygofly.site.order.OrderService;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.PaymentSettingBag;
+import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
@@ -42,6 +44,7 @@ public class CartItemController {
 	@Autowired private OrderService orderService;
 	@Autowired private SearchHistoryRepository searchRepo;
 	@Autowired private CustomerService customerService;
+	@Autowired private SettingService settingService;
 	
 
 	@GetMapping("/manage_booking")
@@ -101,6 +104,7 @@ public class CartItemController {
 	
 	private Page<Order> pagingOrder(int pageNum, String sortField, String sortDir, Customer customer, Model model, HttpServletRequest request) {
 		Page<Order> pageOrder = orderService.listByPageOrder(customer, pageNum, sortField, sortDir);
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		List<Order> listOrders = pageOrder.getContent();
 
@@ -140,7 +144,7 @@ public class CartItemController {
 				Transaction transaction = new Transaction();
 				
 				try {
-					ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount);
+					ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount, paymentSettingBag);
 					
 					model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 					model.addAttribute("requestUrl", processPayment.getRequestUrl());

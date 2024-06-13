@@ -27,8 +27,7 @@ import com.easygofly.entity.Setting;
 @Controller
 public class SettingController {
 
-	@Autowired
-	private SettingService service; 
+	@Autowired private SettingService service; 
 	
 	@Autowired
 	private CurrencyRepository currencyRepo;

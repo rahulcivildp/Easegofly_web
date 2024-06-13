@@ -85,49 +85,6 @@ public class SearchHistoryService {
 		return customerRepo.getCustomerByPhone(phone);
 	}
 	
-	public void authenticationFlight(Model model) {
-		try {
-        	
-        	// Create URL object with the API end-point
-            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
-            
-        	// Create URL object with the API end-point
-//            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
-
-            // Open a connection
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-        	StringBuilder responseBody = new StringBuilder();
-        	
-            int authCode = onlineFlightService.apiAuthentication(connection, responseBody);
-            
-            JSONObject jsonObj = new JSONObject(responseBody.toString());
-            JSONObject jsonObjInnerError = jsonObj.getJSONObject("Error");
-            JSONObject jsonObjInnerMember = jsonObj.getJSONObject("Member");
-             
-            model.addAttribute("authCode", authCode);
-            model.addAttribute("responseBody", jsonObj);
-            model.addAttribute("memberName", jsonObjInnerMember.get("FirstName") + " " + jsonObjInnerMember.get("LastName"));
-            model.addAttribute("memberEmail", jsonObjInnerMember.get("Email"));
-            model.addAttribute("memberId", jsonObjInnerMember.get("MemberId"));
-            model.addAttribute("memberAgencyId", jsonObjInnerMember.get("AgencyId"));
-            model.addAttribute("memberLoginName", jsonObjInnerMember.get("LoginName"));
-            model.addAttribute("memberLoginDetails", jsonObjInnerMember.get("LoginDetails"));
-            model.addAttribute("memberIsPrimaryAgent", jsonObjInnerMember.get("isPrimaryAgent"));
-            model.addAttribute("errorCode", jsonObjInnerError.get("ErrorCode"));
-            model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
-            
-            onlineFlightService.tokenId = (String) jsonObj.get("TokenId");
-            System.out.println(jsonObj);
-            logService.generateLog(jsonObj.toString());
-            
-            connection.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
-	
 	public void authenticationFlightAirIQ(Model model) {
 		try {
         	// Create URL object with the API end-point
