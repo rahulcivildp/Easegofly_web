@@ -44,4 +44,11 @@ public class SettingService {
 		List<Setting> settings = settingRepo.findByCategory(SettingCategory.PAYMENT);
 		return new PaymentSettingBag(settings);
 	}
+	
+	public APIServiceSettingBag getAPIServiceSettings() {
+		List<Setting> settings = settingRepo.findByCategory(SettingCategory.API_SERVICE);
+		return new APIServiceSettingBag(settings);
+	}
+	
+	
 }

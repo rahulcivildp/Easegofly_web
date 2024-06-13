@@ -49,9 +49,10 @@ import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.order.TransactionService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.setting.PaymentSettingBag;
+import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.wallet.TotalTransactionService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
-import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
@@ -65,6 +66,7 @@ public class BusController {
 	@Autowired private LogService logService;
 	@Autowired TransactionService transactionService;
 	@Autowired TotalTransactionService totalTransactionService;
+	@Autowired private SettingService settingService;
 
 	private String searchURL = "";
 	private String bookingURL = "";
@@ -425,6 +427,7 @@ public class BusController {
 			HttpServletRequest request, RedirectAttributes redirectAttributes) throws MalformedURLException, IOException {
 		
 		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		Bus bus = busService.findByIdBus(bus_id);
 	    BusHistory busHistory = busService.findByIdBusHistory(search_id);
@@ -480,7 +483,7 @@ public class BusController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentBus(orderString, amount);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentBus(orderString, amount, paymentSettingBag);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -599,6 +602,7 @@ public class BusController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
 	    String checksumString = "" ;
@@ -611,7 +615,7 @@ public class BusController {
 	        n+=1;
 	    }
 	    
-	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(paymentSettingBag.getSecretKey(),checksumString,request.getParameter("checksum")) ;
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();

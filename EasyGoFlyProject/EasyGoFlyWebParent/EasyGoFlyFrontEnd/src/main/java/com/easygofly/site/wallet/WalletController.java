@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
@@ -35,8 +36,9 @@ import com.easygofly.site.order.TransactionRepository;
 import com.easygofly.site.order.TransactionService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
+import com.easygofly.site.setting.PaymentSettingBag;
+import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
-import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
@@ -49,6 +51,7 @@ public class WalletController {
 	@Autowired TransactionService transactionService;
 	@Autowired TransactionRepository transactionRepository;
 	@Autowired TotalTransactionService totalTransactionService;
+	@Autowired private SettingService settingService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -131,6 +134,9 @@ public class WalletController {
 	}
 
 	private void zaakpayPayment(Model model, HttpServletRequest request, Wallet wallet) {
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
+		
+		
 		/* ------ ZAAKPAY -------- */ /**/
 		Date date = Calendar.getInstance().getTime();  
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");  
@@ -160,7 +166,7 @@ public class WalletController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentRecharge(orderString, amount);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentRecharge(orderString, amount, paymentSettingBag);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -180,6 +186,7 @@ public class WalletController {
 		
 
 		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
@@ -197,7 +204,7 @@ public class WalletController {
 		}
 	    
 	    
-	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(paymentSettingBag.getSecretKey(),checksumString,request.getParameter("checksum")) ;
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();
@@ -282,7 +289,7 @@ public class WalletController {
 	// Test Method
 	@GetMapping("/test_wallet_send_email")
 	public void testSendEmail() throws UnsupportedEncodingException, MessagingException {
-		Customer cux = customerRepository.findById(59).get();
+		Customer cux = customerRepository.findById(69).get();
 		com.easygofly.entity.Transaction selfTrans = transactionRepository.findById(1).get();
 		
 		walletService.sendSuccessEmail(cux, selfTrans.getPgTransId(), "2" , "100", false);

@@ -6,23 +6,37 @@
 	<div th:fragment="content" th:remove="tag">
 		<form th:action="@{/settings/save_payments}" method="post">
 			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Payment API Base URL:</label>
+				<label class="col-sm-2 col-form-label">Zaakpay Buyer Email:</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" name="PAYMENT_API_BASE_URL" th:value="${PAYMENT_API_BASE_URL}" required="required">
+					<input type="text" class="form-control" name="BUYEREMAIL" th:value="${BUYEREMAIL}" required="required">
 				</div>
 			</div>
 			<br>
 			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Payment Client ID:</label>
+				<label class="col-sm-2 col-form-label">Zaakpay Client ID:</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" name="PAYMENT_CLIENT_ID" th:value="${PAYMENT_CLIENT_ID}" required="required">
+					<input type="text" class="form-control" name="ZAAKPAY_MERCHANT_IDENTIFIER" th:value="${ZAAKPAY_MERCHANT_IDENTIFIER}" required="required">
 				</div>
 			</div>
 			<br>
 			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Payment Client Secret Key:</label>
+				<label class="col-sm-2 col-form-label">Zaakpay Secret Key:</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" name="PAYMENT_CLIENT_SECRET_KEY" th:value="${PAYMENT_CLIENT_SECRET_KEY}" required="required">
+					<input type="text" class="form-control" name="ZAAKPAY_SECRET_KEY" th:value="${ZAAKPAY_SECRET_KEY}" required="required">
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Zaakpay API Base URL:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="API_ENVIRONMENT" th:value="${API_ENVIRONMENT}" required="required">
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Zaakpay Transaction URL:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="TRANSACTION_API_URL" th:value="${TRANSACTION_API_URL}" required="required">
 				</div>
 			</div>
 			<div class="text-center">

@@ -8,8 +8,8 @@ public class RequestParameters {
 
     //You can use Getter/Setter function to set these values dynamically
     String amount ; //In Paisa
-    String buyerEmail = "info.aaladin@gmail.com" ;
-    String currency = "INR" ;
+    String buyerEmail; // info.aaladin@gmail.com
+    String currency; // INR ;
     String mode = "0";
 
     String orderId ;
@@ -22,11 +22,13 @@ public class RequestParameters {
 
 
     //For Initiating Payment
-    public RequestParameters(String merchantIdentifier, String returnUrl,String orderId,String amount) {
+    public RequestParameters(String merchantIdentifier, String returnUrl, String orderId, String amount, String buyerEmail, String currency) {
         this.merchantIdentifier = merchantIdentifier;
         this.returnUrl = returnUrl;
         this.orderId = orderId;
-        this.amount = amount ;
+        this.amount = amount;
+        this.buyerEmail = buyerEmail;
+        this.currency = currency;
     }
 
     //For Checking Payment Status

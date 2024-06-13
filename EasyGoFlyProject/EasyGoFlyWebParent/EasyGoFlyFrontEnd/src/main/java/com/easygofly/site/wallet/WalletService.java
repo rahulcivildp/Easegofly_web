@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -235,8 +236,15 @@ public class WalletService {
 		helper.setFrom(emailSettings.getFromAddress(), emailSettings.getSenderName());
 
 		Date date = new Date();
-	    DateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy - hh:mm");
+	    DateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy - hh:mm a");
+	    dateFormat.setTimeZone(TimeZone.getTimeZone("IST"));
 	    String formatedDate = dateFormat.format(date);
+	    
+	    if (formatedDate.contains("am")) {
+		    formatedDate = formatedDate.replace("am", "AM");
+		} else if (formatedDate.contains("pm")) {
+		    formatedDate = formatedDate.replace("pm", "PM");
+		}
 	    
 	    if (isProcessed) {
 	    	subject = subject.replace("[[SSS]]", "successful");

@@ -56,7 +56,7 @@ public class SettingController {
 		saveCurrencySymbol(request, generalSetting);
 		updateSettingValueInForm(request, generalSetting.list());
 		
-		ra.addFlashAttribute("message", "General settings have been updated.");
+		ra.addFlashAttribute("message", "General Settings have been updated.");
 		
 		return "redirect:/settings";
 	}
@@ -67,7 +67,7 @@ public class SettingController {
 
 		updateSettingValueInForm(request, mailServerSetting);
 		
-		ra.addFlashAttribute("message", "Mail Server settings have been updated.");
+		ra.addFlashAttribute("message", "Mail Server Settings have been updated.");
 		
 		return "redirect:/settings";
 	}
@@ -78,7 +78,7 @@ public class SettingController {
 
 		updateSettingValueInForm(request, mailTemplateSetting);
 		
-		ra.addFlashAttribute("message", "Mail Template settings have been updated.");
+		ra.addFlashAttribute("message", "Mail Template Settings have been updated.");
 		
 		return "redirect:/settings";
 	}
@@ -89,7 +89,18 @@ public class SettingController {
 
 		updateSettingValueInForm(request, paymentSetting);
 		
-		ra.addFlashAttribute("message", "Payment settings have been updated.");
+		ra.addFlashAttribute("message", "Payment Settings have been updated.");
+		
+		return "redirect:/settings";
+	}
+	
+	@PostMapping("/settings/save_api_service")
+	public String saveAPIServiceSettings(HttpServletRequest request, RedirectAttributes ra) throws IOException {
+		List<Setting> apiServiceSetting = service.getAPIServiceSettings();
+
+		updateSettingValueInForm(request, apiServiceSetting);
+		
+		ra.addFlashAttribute("message", "API Service Settings have been updated.");
 		
 		return "redirect:/settings";
 	}

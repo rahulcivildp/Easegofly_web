@@ -13,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.site.LogService;
+import com.easygofly.site.setting.APIServiceSettingBag;
+import com.easygofly.site.setting.SettingService;
 
 @Service
 public class OnlineBusService {
 	@Autowired private LogService logService;
+//	@Autowired private SettingService settingService;
 	
 	public String tokenId = "";
 	public String traceId = "";
@@ -25,6 +28,8 @@ public class OnlineBusService {
 
 	public int apiAuthenticationBus(HttpURLConnection connection, StringBuilder responseBody)
 			throws IOException {
+        // Get API details from Settings.
+		//APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -38,10 +43,10 @@ public class OnlineBusService {
 
         // Create the request body
 //        String requestBody = "{"
-//        		+ "\"ClientId\": \"tboprod\", "
-//        		+ "\"UserName\": \"CCUA927\", "
-//        		+ "\"Password\": \"#API@Air&72\", "
-//        		+ "\"EndUserIp\": \"89.116.231.35\""
+//        		+ "\"ClientId\": \"" + apiServiceSettingBag.getClientId() + "\", "
+//        		+ "\"UserName\": \"" + apiServiceSettingBag.getUsername() + "\", "
+//        		+ "\"Password\": \"" + apiServiceSettingBag.getPassword() + "\", "
+//        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\""
 //        		+ "}";
         
         //Test Credentials

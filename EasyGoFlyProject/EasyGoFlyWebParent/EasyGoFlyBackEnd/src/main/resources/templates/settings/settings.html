@@ -37,6 +37,9 @@
 				<li class="nav-item">
 					<a class="nav-link" data-bs-toggle="tab" href="#paymentGateway" role="tab">Payment Gateway</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#apiService" role="tab">API Service</a>
+				</li>
 			</ul>
 			
 			<div class="tab-content">
@@ -57,6 +60,9 @@
 				</div>
 				<div class="tab-pane p-3" id="paymentGateway" role="tabpanel">
 					<div th:replace="settings/payment-fragments :: content"></div>
+				</div>
+				<div class="tab-pane p-3" id="apiService" role="tabpanel">
+					<div th:replace="settings/api-service-fragments :: content"></div>
 				</div>
 			</div>
 		</div>

@@ -11,15 +11,23 @@ public class PaymentSettingBag extends SettingBag{
 		super(listSettings);
 	}
 
-	public String getURL() {
-		return super.getValue("PAYMENT_API_BASE_URL");
+	public String getAPIEnvironment() {
+		return super.getValue("API_ENVIRONMENT");
 	}
 	
-	public String getKeyId() {
-		return super.getValue("PAYMENT_CLIENT_ID");
+	public String getMarchentKey() {
+		return super.getValue("ZAAKPAY_MERCHANT_IDENTIFIER");
 	}
 	
 	public String getSecretKey() {
-		return super.getValue("PAYMENT_CLIENT_SECRET_KEY");
+		return super.getValue("ZAAKPAY_SECRET_KEY");
+	}
+	
+	public String getTransactionURL() {
+		return super.getValue("TRANSACTION_API_URL");
+	}
+	
+	public String getBuyerEmail() {
+		return super.getValue("BUYEREMAIL");
 	}
 }

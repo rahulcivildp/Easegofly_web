@@ -1,14 +1,15 @@
 package com.easygofly.site.zaakpay;
 
+
 public class Config {
 
-    public static String ZAAKPAY_SECRET_KEY = "5eca8d6445324ba4b37c345bb7c94d82" ;
+//    public static String ZAAKPAY_SECRET_KEY = "5eca8d6445324ba4b37c345bb7c94d82" ;
 
     public static String ENVIRONMENT = "https://api.zaakpay.com" ;
 
-    public static String ZAAKPAY_MERCHANT_IDENTIFIER = "74ea6846304c49559e823f018bbbc46a" ;
+//    public static String ZAAKPAY_MERCHANT_IDENTIFIER = "74ea6846304c49559e823f018bbbc46a" ;
 
-    public static String TRANSACTION_API_URL = "/api/paymentTransact/V8" ;
+//    public static String TRANSACTION_API_URL = "/api/paymentTransact/V8" ;
 
     public static String UPDATE_API_URL = "/updatetransaction" ;
 

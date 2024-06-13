@@ -56,11 +56,11 @@ import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.GeneralSettingBag;
+import com.easygofly.site.setting.PaymentSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
-import com.easygofly.site.zaakpay.Config;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
@@ -152,7 +152,8 @@ public class OrderInternationalController {
 			@PathVariable(name = "item_id") Integer item_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
-		
+
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
@@ -214,7 +215,7 @@ public class OrderInternationalController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentInternational(orderString, amount);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentInternational(orderString, amount, paymentSettingBag);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -412,6 +413,7 @@ public class OrderInternationalController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		search_id_inner = search_id;
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
@@ -425,7 +427,7 @@ public class OrderInternationalController {
 	        n+=1;
 	    }
 	    
-	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(paymentSettingBag.getSecretKey(),checksumString,request.getParameter("checksum")) ;
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();
@@ -694,7 +696,8 @@ public class OrderInternationalController {
 			@PathVariable(name = "itemTwo_id") Integer itemTwo_id,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
-		
+
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
@@ -760,7 +763,7 @@ public class OrderInternationalController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentInternationalReturn(orderString, amount);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentInternationalReturn(orderString, amount, paymentSettingBag);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -1044,7 +1047,8 @@ public class OrderInternationalController {
 	public String zaakpayResponseReturn (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
-		
+
+    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		searchReturn_id_inner = search_id;
 		Transaction transaction = new Transaction();
 	    ChecksumGenerator checksumGenerator = new ChecksumGenerator();
@@ -1058,7 +1062,7 @@ public class OrderInternationalController {
 	        n+=1;
 	    }
 	    
-	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(Config.ZAAKPAY_SECRET_KEY,checksumString,request.getParameter("checksum")) ;
+	    Boolean verifyChecksum = checksumGenerator.verifyChecksum(paymentSettingBag.getSecretKey(),checksumString,request.getParameter("checksum")) ;
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();

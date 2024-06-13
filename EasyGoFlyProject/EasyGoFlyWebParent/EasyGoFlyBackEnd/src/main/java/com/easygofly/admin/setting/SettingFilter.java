@@ -18,8 +18,7 @@ import com.easygofly.entity.Setting;
 @Component
 public class SettingFilter implements Filter {
 
-	@Autowired
-	private SettingService service;
+	@Autowired private SettingService service;
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

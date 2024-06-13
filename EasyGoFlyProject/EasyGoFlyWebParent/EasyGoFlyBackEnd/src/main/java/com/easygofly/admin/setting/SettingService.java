@@ -13,8 +13,7 @@ import com.easygofly.entity.SettingCategory;
 @Service
 public class SettingService {
 	
-	@Autowired
-	private SettingRepository settingRepo;
+	@Autowired private SettingRepository settingRepo;
 	
 	public List<Setting> listAllSettings() {
 		return (List<Setting>) settingRepo.findAll();
@@ -50,5 +49,13 @@ public class SettingService {
 	
 	public List<Setting> getMailTemplateSettings() {
 		return settingRepo.findByCategory(SettingCategory.MAIL_TEMPLATES);
+	}
+	
+	public List<Setting> getAPIServiceSettings() {
+		return settingRepo.findByCategory(SettingCategory.API_SERVICE);
+	}
+	
+	public List<Setting> getAPITokenSettings() {
+		return settingRepo.findByCategory(SettingCategory.API_TOKEN);
 	}
 }
