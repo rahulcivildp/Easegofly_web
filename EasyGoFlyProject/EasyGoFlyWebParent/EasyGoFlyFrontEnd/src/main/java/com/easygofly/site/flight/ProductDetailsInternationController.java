@@ -36,7 +36,6 @@ import com.easygofly.site.LogService;
 import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.search.SearchHistoryInternationalController;
 import com.easygofly.site.search.SearchHistoryRepository;
 import com.easygofly.site.search.SearchHistoryService;

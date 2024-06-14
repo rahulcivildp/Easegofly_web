@@ -37,11 +37,11 @@ import com.easygofly.entity.exception.ProductNotFoundException;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.CityRepository;
+import com.easygofly.site.flight.OnlineFlightService;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsInternationController;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.ProductSaveHelper;
-import com.easygofly.site.flightAPI.OnlineFlightService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
@@ -137,8 +137,6 @@ public class SearchHistoryInternationalController {
 			model.addAttribute("customer", customer);
 		}
 		
-		searchService.authenticationFlight(model);
-		
 		SearchHistory search = searchRepo.findById(id).get();
 		
 		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
@@ -178,8 +176,6 @@ public class SearchHistoryInternationalController {
 			@PathVariable(name = "totalPrice") Integer[] totalPrice,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 
-		searchService.authenticationFlight(model);
-		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 
 	    searchSort(cityOne, cityTwo, sortName, model, date);
@@ -489,9 +485,7 @@ public class SearchHistoryInternationalController {
 			customer = customerService.getByPhone(email);
 			model.addAttribute("customer", customer);
 		}
-		
-		searchService.authenticationFlight(model);
-		
+	
 		SearchHistory search = searchRepo.findById(id).get();
 		
 		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
@@ -532,8 +526,6 @@ public class SearchHistoryInternationalController {
 			@PathVariable(name = "stop") Integer[] stops,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 
-		searchService.authenticationFlight(model);
-		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 		 
 	    Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(strReturnDate);

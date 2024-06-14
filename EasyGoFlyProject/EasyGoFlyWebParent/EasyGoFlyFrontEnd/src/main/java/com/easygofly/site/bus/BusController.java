@@ -1,9 +1,7 @@
 package com.easygofly.site.bus;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,8 +83,6 @@ public class BusController {
 	public String viewBusPage(Model model) {
 		cityFinder(model);
 		
-		busService.authenticationBus(model);
-		
 		return "bus/bus";
 	}
 	
@@ -142,16 +138,12 @@ public class BusController {
 		
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    Date deptTime = dateFormat.parse(deptDate);
-			
-		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Search");
-
-        // Open a connection
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
        
         StringBuilder responseBodySearch = new StringBuilder();
+		String errorCode = "";
+		String errorMessage = "";
        
-        onlineBusService.apiOnlineSearchBus(connectionSearch, responseBodySearch, cityOne.getCityId().toString(), cityTwo.getCityId().toString(), deptTime);
+        onlineBusService.apiOnlineSearchBus(responseBodySearch, cityOne.getCityId().toString(), cityTwo.getCityId().toString(), deptTime);
 		
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
@@ -283,13 +275,15 @@ public class BusController {
 			
 			
 		} catch (Exception e) {
-//			JSONObject jsonObj = jsonObjSearch.getJSONObject("BusSearchResult").getJSONObject("Error");
-//			String errorCode = jsonObj.get("ErrorCode").toString();
-//			String errorMessage = jsonObj.get("ErrorMessage").toString();
+			JSONObject jsonObj = jsonObjSearch.getJSONObject("BusSearchResult").getJSONObject("Error");
+			errorCode = jsonObj.get("ErrorCode").toString();
+			errorMessage = jsonObj.get("ErrorMessage").toString();
 			
 			e.printStackTrace();
 		}
 
+		model.addAttribute("errorMessage", errorMessage);
+		model.addAttribute("errorCode", errorCode); 
 		model.addAttribute("cityTwo", cityTwo);
 		model.addAttribute("cityOne", cityOne);
 		model.addAttribute("deptTime", deptTime);
@@ -748,15 +742,10 @@ public class BusController {
 	
 	private void busSeatLayout(Model model, Integer resultIndex) throws IOException {
 
-		// Create URL object with the API end-point
-        URL urlBusSeatLayout = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBusSeatLayOut");
-
-        // Open a connection
-        HttpURLConnection connectionBusSeatLayout = (HttpURLConnection) urlBusSeatLayout.openConnection();
        
         StringBuilder responseBodyBusSeatLayout = new StringBuilder();
         
-        onlineBusService.apiOnlineBusSeatLayout(connectionBusSeatLayout, responseBodyBusSeatLayout, resultIndex);
+        onlineBusService.apiOnlineBusSeatLayout(responseBodyBusSeatLayout, resultIndex);
 
         JSONObject jsonObjSeatLayout = new JSONObject(responseBodyBusSeatLayout.toString());
         System.out.println(jsonObjSeatLayout);
@@ -838,15 +827,10 @@ public class BusController {
 
 	private void busBusBoardingPoint(Model model, Integer resultIndex, Bus bus) throws IOException {
 
-		// Create URL object with the API end-point
-        URL urlBusPointDetail = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBoardingPointDetails");
-
-        // Open a connection
-        HttpURLConnection connectionBusPointDetail = (HttpURLConnection) urlBusPointDetail.openConnection();
        
         StringBuilder responseBodyBusPointDetail = new StringBuilder();
         
-        onlineBusService.apiOnlineBusSeatLayout(connectionBusPointDetail, responseBodyBusPointDetail, resultIndex);
+        onlineBusService.apiOnlineBusBoardingPoint(responseBodyBusPointDetail, resultIndex);
 
         JSONObject jsonObjPointDetail = new JSONObject(responseBodyBusPointDetail.toString());
         System.out.println(jsonObjPointDetail);
@@ -992,15 +976,10 @@ public class BusController {
 		
 		
 		
-		// Create URL object with the API end-point
-        URL urlBusBlock = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Block/");
-
-        // Open a connection
-        HttpURLConnection connectionBusBlock = (HttpURLConnection) urlBusBlock.openConnection();
        
         StringBuilder responseBodyBusBlock = new StringBuilder();
         
-        onlineBusService.apiOnlineBusBlock(connectionBusBlock, responseBodyBusBlock, arraySeat, bus.getResultIndex(), bus.getBusBoardingPointDetails().get(0).getCityPointIndex(), 
+        onlineBusService.apiOnlineBusBlock(responseBodyBusBlock, arraySeat, bus.getResultIndex(), bus.getBusBoardingPointDetails().get(0).getCityPointIndex(), 
         		bus.getBusDroppingPointDetails().get(0).getCityPointIndex());
 	
         JSONObject jsonObjBlock = new JSONObject(responseBodyBusBlock.toString());
@@ -1132,15 +1111,10 @@ public class BusController {
 		
 		
 		
-		// Create URL object with the API end-point
-        URL urlBusBook = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
-
-        // Open a connection
-        HttpURLConnection connectionBusBook = (HttpURLConnection) urlBusBook.openConnection();
        
         StringBuilder responseBodyBusBook = new StringBuilder();
         
-        onlineBusService.apiOnlineBusBlock(connectionBusBook, responseBodyBusBook, arraySeat, bus.getResultIndex(), bus.getBusBoardingPointDetails().get(0).getCityPointIndex(), 
+        onlineBusService.apiOnlineBusBook(responseBodyBusBook, arraySeat, bus.getResultIndex(), bus.getBusBoardingPointDetails().get(0).getCityPointIndex(), 
         		bus.getBusDroppingPointDetails().get(0).getCityPointIndex());
 	
         JSONObject jsonObjBook = new JSONObject(responseBodyBusBook.toString());
@@ -1171,15 +1145,10 @@ public class BusController {
 			hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
     		
-    		// Create URL object with the API end-point
-            URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBookingDetail/");
-
-            // Open a connection
-            HttpURLConnection connectionBusBookingDetails = (HttpURLConnection) urlBusBookingDetails.openConnection();
            
             StringBuilder responseBodyBusBookingDetails = new StringBuilder();
             
-            onlineBusService.apiOnlineBusBookingDetails(connectionBusBookingDetails, responseBodyBusBookingDetails, busId);
+            onlineBusService.apiOnlineBusBookingDetails(responseBodyBusBookingDetails, busId);
             
             JSONObject jsonObjBookingDetails = new JSONObject(responseBodyBusBookingDetails.toString());
             System.out.println(jsonObjBookingDetails);

@@ -16,7 +16,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerRepository;
-import com.easygofly.site.flightAPI.OnlineFlightService;
+import com.easygofly.site.flight.OnlineFlightService;
 
 @Service
 @Transactional

@@ -48,7 +48,7 @@ import com.easygofly.entity.TourAttraction;
 import com.easygofly.entity.Wallet;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.flightAPI.TBOCityRepository;
+import com.easygofly.site.flight.TBOCityRepository;
 import com.easygofly.site.order.TransactionService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.setting.PaymentSettingBag;

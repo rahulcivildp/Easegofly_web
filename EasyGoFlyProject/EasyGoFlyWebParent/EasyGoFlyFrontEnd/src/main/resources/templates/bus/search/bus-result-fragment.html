@@ -231,6 +231,11 @@
 				</div>
 			</div>
 			</th:block>
+			<th:block th:if="${errorCode} == '25'">
+				<div class="text-center" style="margin-top: 15px;">
+					<h4>[[${errorMessage}]]</h4>
+				</div>
+			</th:block>
 		</div>
 		<div class="container media_status" style="padding-top: 5px;">
 			<th:block th:each=" bus : ${busList}">
@@ -297,6 +302,11 @@
 				</div>
 			</div>
 		  	
+			</th:block>
+			<th:block th:if="${errorCode} == '25'">
+				<div class="text-center" style="margin-top: 15px;">
+					<h4>[[${errorMessage}]]</h4>
+				</div>
 			</th:block>
 		</div>
 		

@@ -1,4 +1,4 @@
-package com.easygofly.site.flightAPI;
+package com.easygofly.site.flight;
 
 import java.io.BufferedReader;
 import java.io.IOException;

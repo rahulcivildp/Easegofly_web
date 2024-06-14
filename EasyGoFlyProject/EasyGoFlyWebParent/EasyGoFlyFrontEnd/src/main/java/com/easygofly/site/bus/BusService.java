@@ -1,17 +1,13 @@
 package com.easygofly.site.bus;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.easygofly.entity.Bus;
 import com.easygofly.entity.BusCancelPolicy;
@@ -23,13 +19,10 @@ import com.easygofly.entity.BusSeat;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.Wallet;
-import com.easygofly.site.LogService;
 import com.easygofly.site.wallet.WalletService;
 
 @Service
 public class BusService {
-	@Autowired private OnlineBusService onlineBusService;
-	@Autowired private LogService logService;
 	@Autowired private BusHistoryRepository busHistoryRepo;
 	@Autowired private BusRepository busRepo;
 	@Autowired private BusPointDetailRepository busPointDetailRepo;
@@ -39,50 +32,6 @@ public class BusService {
 	@Autowired private BusOrderRepository busOrderRepo;
 	@Autowired private WalletService walletService;
 
-	public void authenticationBus(Model model) {
-		try {
-        	
-        	// Create URL object with the API end-point
-//            URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
-            
-        	// Create URL object with the API end-point
-            URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
-
-            // Open a connection
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-        	StringBuilder responseBody = new StringBuilder();
-        	
-            int authCode = onlineBusService.apiAuthenticationBus(connection, responseBody);
-            
-            JSONObject jsonObj = new JSONObject(responseBody.toString());
-            JSONObject jsonObjInnerError = jsonObj.getJSONObject("Error");
-            JSONObject jsonObjInnerMember = jsonObj.getJSONObject("Member");
-             
-            model.addAttribute("authCode", authCode);
-            model.addAttribute("responseBody", jsonObj);
-            model.addAttribute("memberName", jsonObjInnerMember.get("FirstName") + " " + jsonObjInnerMember.get("LastName"));
-            model.addAttribute("memberEmail", jsonObjInnerMember.get("Email"));
-            model.addAttribute("memberId", jsonObjInnerMember.get("MemberId"));
-            model.addAttribute("memberAgencyId", jsonObjInnerMember.get("AgencyId"));
-            model.addAttribute("memberLoginName", jsonObjInnerMember.get("LoginName"));
-            model.addAttribute("memberLoginDetails", jsonObjInnerMember.get("LoginDetails"));
-            model.addAttribute("memberIsPrimaryAgent", jsonObjInnerMember.get("isPrimaryAgent"));
-            model.addAttribute("errorCode", jsonObjInnerError.get("ErrorCode"));
-            model.addAttribute("errorMessage", jsonObjInnerError.get("ErrorMessage"));
-            
-            onlineBusService.tokenId = (String) jsonObj.get("TokenId");
-            System.out.println(jsonObj);
-            logService.generateLog(jsonObj.toString());
-            
-            connection.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
-
-	
 	public BusHistory saveBusHistory(BusHistory history, Customer customer) {
 		BusHistory newHistory = new BusHistory(history.getDeptDate(), history.getCityIdOne(), history.getCityIdTwo(), customer);
 		

@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.easygofly.entity.Setting;
-import com.easygofly.site.flightAPI.OnlineFlightService;
+import com.easygofly.site.flight.OnlineFlightService;
 import com.easygofly.site.setting.SettingService;
 
 @Component
@@ -19,7 +19,7 @@ public class ScheduledTasks {
 	@Autowired private LogService logService;
 	@Autowired private SettingService settingService ;
 	
-	@Scheduled(fixedRate = 2000000000)
+	@Scheduled(fixedRate = 43200000)
     public void taskFetchFlightToken() {
 try {
         	

@@ -26,7 +26,7 @@ import com.easygofly.entity.TBObusCity;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.bus.BusCityRepository;
 import com.easygofly.site.flight.CityRepository;
-import com.easygofly.site.flightAPI.TBOCityRepository;
+import com.easygofly.site.flight.TBOCityRepository;
 import com.easygofly.site.setting.CountryRepository;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;

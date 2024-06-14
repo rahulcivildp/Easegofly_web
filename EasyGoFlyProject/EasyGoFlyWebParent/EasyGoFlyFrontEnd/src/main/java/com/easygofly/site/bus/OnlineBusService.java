@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,77 +14,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.site.LogService;
-import com.easygofly.site.setting.APIServiceSettingBag;
+import com.easygofly.site.setting.APITokenSettingBag;
 import com.easygofly.site.setting.SettingService;
 
 @Service
 public class OnlineBusService {
 	@Autowired private LogService logService;
-//	@Autowired private SettingService settingService;
+	@Autowired private SettingService settingService;
 	
-	public String tokenId = "";
 	public String traceId = "";
 	public String resultIndex = "";
 
-
-	public int apiAuthenticationBus(HttpURLConnection connection, StringBuilder responseBody)
+	public int apiOnlineSearchBus(StringBuilder responseBody, String cityId1, String cityId2, Date date)
 			throws IOException {
-        // Get API details from Settings.
-		//APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
-		
-        // Set the request method to POST
-        connection.setRequestMethod("POST");
-        
-        // Set request headers (if required)
-        connection.setRequestProperty("Content-Type", "application/json");
-        
-        
-        // Enable writing data to the connection
-        connection.setDoOutput(true);
 
-        // Create the request body
-//        String requestBody = "{"
-//        		+ "\"ClientId\": \"" + apiServiceSettingBag.getClientId() + "\", "
-//        		+ "\"UserName\": \"" + apiServiceSettingBag.getUsername() + "\", "
-//        		+ "\"Password\": \"" + apiServiceSettingBag.getPassword() + "\", "
-//        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\""
-//        		+ "}";
-        
-        //Test Credentials
-      String requestBody = "{"
-      		+ "\"ClientId\": \"ApiIntegrationNew\", "
-      		+ "\"UserName\": \"aladdin\", "
-      		+ "\"Password\": \"aladdin@1234\", "
-      		+ "\"EndUserIp\": \"89.116.231.35\""
-      		+ "}";
-        
-        System.out.println(requestBody);
-        logService.generateLog(requestBody);
-		// Write the request body to the connection's output stream
-		OutputStream outputStream = connection.getOutputStream();
-		outputStream.write(requestBody.getBytes());
-		outputStream.flush();
-		outputStream.close();
-
-		// Get the response
-		int responseCode = connection.getResponseCode();
-
-		// Read the response body
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String line;
-		while ((line = bufferedReader.readLine()) != null) {
-		    responseBody.append(line);
-		}
-		bufferedReader.close();
-		return responseCode;
-	}
-	 
-	public int apiOnlineSearchBus(HttpURLConnection connection, StringBuilder responseBody, String cityId1, String cityId2, Date date)
-			throws IOException {
-		
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
 		String strDate = dateFormat.format(date);
-		
+
+		// Create URL object with the API end-point
+        URL urlSearch = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Search/");
+
+//        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Search");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) urlSearch.openConnection();
+        
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -99,7 +55,7 @@ public class OnlineBusService {
         		+ "\"DestinationId\": \"" + cityId1 + "\",\r\n"
         		+ "\"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "\"OriginId\": \"" + cityId2 + "\",\r\n"
-        		+ "\"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "\"PreferredCurrency\": \"INR\"\r\n"
         		+ "}";
 
@@ -124,9 +80,17 @@ public class OnlineBusService {
 		return responseCode;
 	}
 
-	public int apiOnlineBusSeatLayout(HttpURLConnection connection, StringBuilder responseBody, Integer resultIndex)
+	public int apiOnlineBusSeatLayout(StringBuilder responseBody, Integer resultIndex)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+		// Create URL object with the API end-point
+        URL urlBusSeatLayout = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/GetBusSeatLayOut/");
+
+//        URL urlBusSeatLayout = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBusSeatLayOut");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) urlBusSeatLayout.openConnection();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -141,7 +105,7 @@ public class OnlineBusService {
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"ResultIndex\": " + resultIndex + ",\r\n"
         		+ "  \"TraceId\": \"" + traceId + "\",\r\n"
-        		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
+        		+ "  \"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\"\r\n"
         		+ "}";
 
         System.out.println(requestBody);
@@ -165,9 +129,18 @@ public class OnlineBusService {
 		return responseCode;
 	}
 
-	public int apiOnlineBusBoardingPoint(HttpURLConnection connection, StringBuilder responseBody, Integer resultIndex)
+	public int apiOnlineBusBoardingPoint(StringBuilder responseBody, Integer resultIndex)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+		// Create URL object with the API end-point
+        URL urlBusPointDetail = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/GetBoardingPointDetails/");
+
+//        URL urlBusPointDetail = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBoardingPointDetails");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) urlBusPointDetail.openConnection();
+        
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -182,7 +155,7 @@ public class OnlineBusService {
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"ResultIndex\": " + resultIndex + ",\r\n"
         		+ "  \"TraceId\": \"" + traceId + "\",\r\n"
-        		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
+        		+ "  \"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\"\r\n"
         		+ "}";
 
         System.out.println(requestBody);
@@ -206,9 +179,18 @@ public class OnlineBusService {
 		return responseCode;
 	}
 
-	public int apiOnlineBusBlock(HttpURLConnection connection, StringBuilder responseBody, String paxs, Integer resultIndex, Integer boarding, Integer dropping)
+	public int apiOnlineBusBlock(StringBuilder responseBody, String paxs, Integer resultIndex, Integer boarding, Integer dropping)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+		// Create URL object with the API end-point
+        URL urlBusBlock = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Block/");
+
+//        URL urlBusBlock = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Block/");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) urlBusBlock.openConnection();
+        
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -223,7 +205,7 @@ public class OnlineBusService {
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"ResultIndex\": \"" + resultIndex + "\",\r\n"
         		+ "  \"TraceId\": \"" + traceId + "\",\r\n"
-        		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "  \"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "  \"BoardingPointId\": " + boarding + ",\r\n"
         		+ "  \"DroppingPointId\": " + dropping + ","
                 + "  \"Passenger\": " + paxs + "\r\n"
@@ -250,9 +232,18 @@ public class OnlineBusService {
 		return responseCode;
 	}
 
-	public int apiOnlineBusBook(HttpURLConnection connection, StringBuilder responseBody, String paxs, Integer resultIndex, Integer boarding, Integer dropping)
+	public int apiOnlineBusBook(StringBuilder responseBody, String paxs, Integer resultIndex, Integer boarding, Integer dropping)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+		// Create URL object with the API end-point
+        URL urlBusBook = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Book/");
+
+//        URL urlBusBook = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
+        
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) urlBusBook.openConnection();
+        
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -267,7 +258,7 @@ public class OnlineBusService {
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"ResultIndex\": \"" + resultIndex + "\",\r\n"
         		+ "  \"TraceId\": \"" + traceId + "\",\r\n"
-        		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "  \"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "  \"BoardingPointId\": " + boarding + ",\r\n"
         		+ "  \"DroppingPointId\": " + dropping + ","
                 + "  \"Passenger\": " + paxs + "\r\n"
@@ -294,9 +285,18 @@ public class OnlineBusService {
 		return responseCode;
 	}
 
-	public int apiOnlineBusBookingDetails(HttpURLConnection connection, StringBuilder responseBody, Integer busId)
+	public int apiOnlineBusBookingDetails(StringBuilder responseBody, Integer busId)
 			throws IOException {
-		
+
+		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+		// Create URL object with the API end-point
+        URL urlBusBookingDetails = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/GetBookingDetail/");
+        
+//        URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBookingDetail/");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) urlBusBookingDetails.openConnection();
+        
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -310,7 +310,7 @@ public class OnlineBusService {
         String requestBody = "{\r\n"
         		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
         		+ "  \"TraceId\": \"" + traceId + "\",\r\n"
-        		+ "  \"TokenId\": \"" + tokenId + "\",\r\n"
+        		+ "  \"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "  \"BusId\": " + busId + ",\r\n"
         		+ "  \"IsBaseCurrencyRequired\": false,"
                 + "  \"SeatId\": 0\r\n"

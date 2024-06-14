@@ -1,4 +1,4 @@
-package com.easygofly.site.flightAPI;
+package com.easygofly.site.flight;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
