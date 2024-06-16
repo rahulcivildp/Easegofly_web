@@ -1,4 +1,4 @@
-package com.easygofly.site.search;
+package com.easygofly.site.flight;
 
 import java.util.List;
 

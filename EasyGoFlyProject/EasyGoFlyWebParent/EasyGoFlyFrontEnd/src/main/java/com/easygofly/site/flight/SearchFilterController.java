@@ -1,4 +1,4 @@
-package com.easygofly.site.search;
+package com.easygofly.site.flight;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -25,10 +25,6 @@ import com.easygofly.entity.Product;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.flight.CityRepository;
-import com.easygofly.site.flight.ProductDetailService;
-import com.easygofly.site.flight.ProductDetailsController;
-import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 

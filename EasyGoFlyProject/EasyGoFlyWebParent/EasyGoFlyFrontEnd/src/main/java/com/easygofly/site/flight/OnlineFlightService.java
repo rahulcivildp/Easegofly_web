@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,8 +28,16 @@ public class OnlineFlightService {
 	public String airlineRemark = "";
 	public String tokenAirIQ = "";
 
-	public int apiAuthentication(HttpURLConnection connection, StringBuilder responseBody)
+	public int apiAuthentication(StringBuilder responseBody)
 			throws IOException {
+    	// Create URL object with the API end-point
+        URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
+        
+    	// Create URL object with the API end-point
+//        URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         // Get API details from Settings.
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
@@ -77,13 +86,17 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineSearchMod(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
 			throws IOException {
 
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
 		String strDate = dateFormat.format(date);
 		
@@ -99,8 +112,8 @@ public class OnlineFlightService {
         
      // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
+        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\", "
+        		+ "\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\", "
         		+ "\"AdultCount\": \"" + adultNum + "\", "
         		+ "\"ChildCount\": \"" + childNum + "\", "
         		+ "\"InfantCount\": \"" + infantNum + "\", "
@@ -136,13 +149,17 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineSearchModReturn(HttpURLConnection connection, StringBuilder responseBody, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date, Date returnDate)
 			throws IOException {
 
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
 		String strDate = dateFormat.format(date);
 		String strReturnDate = dateFormat.format(returnDate);
@@ -159,8 +176,8 @@ public class OnlineFlightService {
         
      // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
+        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\", "
+        		+ "\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\", "
         		+ "\"AdultCount\": \"" + adultNum + "\", "
         		+ "\"ChildCount\": \"" + childNum + "\", "
         		+ "\"InfantCount\": \"" + infantNum + "\", "
@@ -203,13 +220,17 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineFarerule_quote(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex)
 			throws IOException {
 
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -222,8 +243,8 @@ public class OnlineFlightService {
         
      // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
+        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\", "
+        		+ "\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\", "
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
         		+ "}";
@@ -246,13 +267,17 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineTicket(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
 
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -269,8 +294,8 @@ public class OnlineFlightService {
         		+ "	\"ResultIndex\": \"" + resultIndex + "\",\r\n"
         		+ "	\"AgentReferenceNo\": \"sonam1234567890\",\r\n"
         		+ "	\"Passengers\": " + arrayTraveler + "	,\r\n"
-        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
+        		+ "	\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
         		+ "}";
         
@@ -293,12 +318,16 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 
 	public int apiOnlineBookingNonLCC(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
         // Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -313,8 +342,8 @@ public class OnlineFlightService {
         String requestBody = "{\r\n"
         		+ "	\"ResultIndex\": \"" + resultIndex + "\",\r\n"
         		+ "	\"Passengers\": " + arrayTraveler + "	,\r\n"
-        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
+        		+ "	\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\"\r\n"
         		+ "}";
         
@@ -337,11 +366,15 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineTicketNonLcc(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, Integer bookingId) throws IOException {
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -354,8 +387,8 @@ public class OnlineFlightService {
         
         // Create the request body
         String requestBody = "{\r\n"
-        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
+        		+ "	\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\",\r\n"
                 + "	\"PNR\": \"" + pnr + "\",\r\n"
                 + "	\"BookingId\": " + bookingId + "\r\n"
@@ -380,11 +413,15 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineTicketNonLccPassport(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, Integer bookingId, String arrayPassportList) throws IOException {
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Set the request method to POST
         connection.setRequestMethod("POST");
         
@@ -397,8 +434,8 @@ public class OnlineFlightService {
         
         // Create the request body
         String requestBody = "{\r\n"
-        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
+        		+ "	\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"TraceId\": \"" + traceId + "\",\r\n"
                 + "\"Passport\": " + arrayPassportList + ",\r\n"
                 + "	\"PNR\": \"" + pnr + "\",\r\n"
@@ -424,12 +461,16 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineSSR(HttpURLConnection connection, StringBuilder responseBody, String traceId, String resultIndex, String arrayTraveler)
 			throws IOException {
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -443,8 +484,8 @@ public class OnlineFlightService {
         
         // Create the request body
         String requestBody = "{"
-        		+ "\"EndUserIp\": \"89.116.231.35\", "
-        		+ "\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\", "
+        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\", "
+        		+ "\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\", "
         		+ "\"TraceId\": \"" + traceId + "\", "
         		+ "\"ResultIndex\": \"" + resultIndex + "\""
         		+ "}";
@@ -467,12 +508,16 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 	
 	public int apiOnlineGetBookingDetails(HttpURLConnection connection, StringBuilder responseBody, String traceId, String pnr, String bookingId)
 			throws IOException {
-		APITokenSettingBag apiServiceSettingBag = settingService.getAPITokenSettings();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -486,8 +531,8 @@ public class OnlineFlightService {
         
         // Create the request body
         String requestBody = "{\r\n"
-        		+ "	\"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "	\"TokenId\": \"" + apiServiceSettingBag.getFlightTokenNo() + "\",\r\n"
+        		+ "	\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\",\r\n"
+        		+ "	\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\",\r\n"
         		+ "	\"PNR\": \"" + pnr + "\",\r\n"
         		+ "	\"BookingId\": \"" + bookingId + "\"\r\n"
         		+ "}";
@@ -510,6 +555,8 @@ public class OnlineFlightService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
+        connection.disconnect();
+        
 		return responseCode;
 	}
 

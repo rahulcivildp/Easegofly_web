@@ -1,4 +1,4 @@
-package com.easygofly.site.order;
+package com.easygofly.site.flight.order;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

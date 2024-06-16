@@ -21,7 +21,6 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
-import com.easygofly.site.search.SearchHistoryRepository;
 
 @Service
 @Transactional

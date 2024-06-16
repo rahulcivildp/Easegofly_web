@@ -1,4 +1,4 @@
-package com.easygofly.site.search;
+package com.easygofly.site.flight;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -16,7 +16,6 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerRepository;
-import com.easygofly.site.flight.OnlineFlightService;
 
 @Service
 @Transactional

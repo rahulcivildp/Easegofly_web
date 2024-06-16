@@ -1,4 +1,4 @@
-package com.easygofly.site.order;
+package com.easygofly.site.flight.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

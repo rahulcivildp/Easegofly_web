@@ -1,4 +1,4 @@
-package com.easygofly.site.order;
+package com.easygofly.site.flight.order;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -56,8 +56,8 @@ import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsController;
 import com.easygofly.site.flight.TravelerService;
 import com.easygofly.site.flight.TravellerRepository;
-import com.easygofly.site.search.SearchHistoryRepository;
-import com.easygofly.site.search.SearchHistoryService;
+import com.easygofly.site.flight.SearchHistoryRepository;
+import com.easygofly.site.flight.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.EmailSettingBag;

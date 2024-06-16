@@ -1,4 +1,4 @@
-package com.easygofly.site.search;
+package com.easygofly.site.flight;
 
 
 import java.io.IOException;
@@ -36,12 +36,6 @@ import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.exception.ProductNotFoundException;
 import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.flight.CityRepository;
-import com.easygofly.site.flight.OnlineFlightService;
-import com.easygofly.site.flight.ProductDetailService;
-import com.easygofly.site.flight.ProductDetailsInternationController;
-import com.easygofly.site.flight.ProductDetailsRepository;
-import com.easygofly.site.flight.ProductSaveHelper;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;

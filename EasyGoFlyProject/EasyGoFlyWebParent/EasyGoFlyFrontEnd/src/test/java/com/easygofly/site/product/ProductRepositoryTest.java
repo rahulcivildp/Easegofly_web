@@ -30,7 +30,7 @@ import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.ProductDetailsRepository;
 import com.easygofly.site.flight.TravellerRepository;
-import com.easygofly.site.order.OrderRepository;
+import com.easygofly.site.flight.order.OrderRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

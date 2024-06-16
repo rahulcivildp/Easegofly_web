@@ -1,6 +1,5 @@
-package com.easygofly.site.order;
+package com.easygofly.site.flight.order;
 
-import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,11 +48,11 @@ import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.CityService;
 import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.ProductDetailService;
-import com.easygofly.site.flight.ProductDetailsInternationController;
+import com.easygofly.site.flight.ProductDetailsController;
+import com.easygofly.site.flight.SearchHistoryRepository;
+import com.easygofly.site.flight.SearchHistoryService;
 import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.order.exporter.OrderPDFExporter;
-import com.easygofly.site.search.SearchHistoryRepository;
-import com.easygofly.site.search.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.GeneralSettingBag;
@@ -60,12 +60,13 @@ import com.easygofly.site.setting.PaymentSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
 import com.easygofly.site.shoppingCart.CartItemService;
+import com.easygofly.site.wallet.TotalTransactionService;
 import com.easygofly.site.zaakpay.ChecksumGenerator;
 import com.easygofly.site.zaakpay.Transaction;
 import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 
 @Controller
-public class OrderInternationalController {
+public class OrderController {
 	
 	@Autowired private CustomerService customerService;
 	@Autowired private FlightRepository flightRepo;
@@ -77,14 +78,16 @@ public class OrderInternationalController {
 	@Autowired private OrderRepository orderRepo;
 	@Autowired private CheckoutService checkoutService;
 	@Autowired private ProductDetailService productService;
+	@Autowired private SettingService settingService;
 	@Autowired private CityRepository cityRepo;
+	@Autowired private CityService cityService;
 	@Autowired private TravellerRepository travellerRepo;
 	@Autowired private CouponService couponService ;
-	@Autowired private ProductDetailsInternationController pInternationController;
+	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private BrandRepositoy brandRepo;
-	@Autowired private CityService cityService;
-	@Autowired private SettingService settingService;
 	@Autowired private EntityManager entityManager;
+	@Autowired TransactionService transactionService;
+	@Autowired TotalTransactionService totalTransactionService;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -104,8 +107,9 @@ public class OrderInternationalController {
 
 	////Flight one-way Segment
 	
-	@PostMapping("/flight_international_order_save")
+	@PostMapping("/flight_order_save")
 	public String createNewOrder(@RequestParam(name = "search_id") Integer searchId, 
+			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
 			@RequestParam(name = "couponCode") String couponCode,
@@ -114,6 +118,8 @@ public class OrderInternationalController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
+			productDetailsController.timeRemainingProOne = timeRemaining;
+			
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
 			CartItem item = cartRepo.findById(item_id).get();
@@ -140,13 +146,13 @@ public class OrderInternationalController {
 			orderService.loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
 					paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
 			
-			return "redirect:/flight_international_order_" + search.getId() + "&" + flightId + "&" + item_id;
+			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id;
 		} catch (Exception e) {
-			return "redirect:/flight_international_order_" + searchId + "&" + flightId + "&" + item_id;
+			return "redirect:/flight_order_" + searchId + "&" + flightId + "&" + item_id;
 		}
 	}
-	
-	@GetMapping("/flight_international_order_{search_id}&{flight_id}&{item_id}")
+
+	@GetMapping("/flight_order_{search_id}&{flight_id}&{item_id}")
 	public String orderPage(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
@@ -175,6 +181,8 @@ public class OrderInternationalController {
 		
 		ProductDetail flight = flightRepo.findById(flight_id).get();
 		CartItem item = cartRepo.findById(item_id).get();
+	    City cityOneFound = cityRepo.getCityByCode(flight.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByCode(flight.getCityTwo());
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
@@ -215,7 +223,7 @@ public class OrderInternationalController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentInternational(orderString, amount, paymentSettingBag);
+			ZaakpayApiRequestParameters processPayment = transaction.processPayment(orderString, amount, paymentSettingBag);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -237,13 +245,16 @@ public class OrderInternationalController {
 		model.addAttribute("search_id", search_id);
 		model.addAttribute("item_id", item_id);
 		model.addAttribute("coupon", coupon);
+		model.addAttribute("cityOneName", cityOneFound.getCityName());
+		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
+		model.addAttribute("timeRemainingPro", productDetailsController.timeRemainingProOne);
 		
-		return "order/international/flight_order";
+		return "order/flight_order";
 	}
-
+	
 	//Wallet one-way segment
 	
-	@PostMapping("/flight_wallet_inter_check")
+	@PostMapping("/flight_wallet_check")
 	public String walletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) {
@@ -254,7 +265,7 @@ public class OrderInternationalController {
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByPhone(email);
-			Wallet wallet = orderService.walletPayOrder(customer, order, "INTER");
+			Wallet wallet = orderService.walletPayOrder(customer, order, "");
 			if (wallet != null) {
 				Order updatedOrder = orderService.orderUpdateWallet(order);
 				updatedOrderId = updatedOrder.getId();
@@ -263,7 +274,7 @@ public class OrderInternationalController {
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByPhone(email);
-			Wallet wallet = orderService.walletPayOrder(customer, order, "INTER");
+			Wallet wallet = orderService.walletPayOrder(customer, order, "");
 			if (wallet != null) {
 				Order updatedOrder = orderService.orderUpdateWallet(order);
 				updatedOrderId = updatedOrder.getId();
@@ -272,50 +283,50 @@ public class OrderInternationalController {
 		
 		search_id_inner = search_id;
 		
-		return "redirect:/flight_wallet_response_international";
+		return "redirect:/flight_wallet_response";
 	}
-	
-	@GetMapping("/flight_wallet_response_international")
+
+	@GetMapping("/flight_wallet_response")
 	public String showWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
-		String email; 
-		Customer customer = new Customer(); 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		}
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		model.addAttribute("customer", customer);
 		
 		Order order = orderRepo.findById(updatedOrderId).get();
 		model.addAttribute("orderId", order.getId());
 		ProductDetail productDetail = order.getProductDetail();
-
+		
+	    totalTransactionService.createTotalTransaction(customer, order.getPrice(), true, false, null, null, null, null, OrderStatus.NEW);
+		
 		SearchHistory search = searchRepo.findById(search_id_inner).get();
 		String[] hasErrorArr = new String[2];
 		
-		if (productDetail.getResultIndex() != null) {
-			orderService.methodSSR(productDetail);
+		if (productDetail.getMode().equals("Online-data")) {
 			
 			if (productDetail.isLcc() == true) {
-				hasErrorArr = orderService.ticketDetailsInternational(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+				hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, 
+					productDetailsController.traceId);
 			} else {
-				hasErrorArr = orderService.bookingDetails(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
+				hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 			}
 			
+		} else if (productDetail.getMode().equals("AirIQ")) {
+			hasErrorArr = orderService.ticketDetailsAirIQ(order, productDetail);
+			
+		} else if (productDetail.getMode().equals("Offline-data")) {
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		} else {
 			hasErrorArr[0] = "0";
 			hasErrorArr[1] = "0";
 		}
+		
 		
 		String pnr = productDetail.getPnr();
 		model.addAttribute("pnrBarcode", pnr);
@@ -380,20 +391,19 @@ public class OrderInternationalController {
 		model.addAttribute("demoTicketPath", demoTicketPath);
 		model.addAttribute("thumbLogoPath", thumbLogoPath);
 		
-//		User user = product.getUser();
-//		model.addAttribute("user", user);
-		
 		List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByProductDetailAndOrder(productDetail, order);
 		model.addAttribute("travellerDetails", travellerDetails);
-		
 		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
-		
-		if (hasErrorCode != 0) {
-			System.out.println(hasErrorCode);
-			orderService.walletPayOrderCancel(customer, order, "INTER");
-			model.addAttribute("paymentCancelled", hasErrorArr[1]);
-		} else {
+		if (hasErrorArr[0].equals("0")) {
 			model.addAttribute("paymentSuccess", "successfull");
+//			customer.getTransactions();
+//			orderService.sendSuccessEmail(customer, pnr, photoImagePath);
+		} else if (hasErrorArr[0].equals("200")) {
+			model.addAttribute("paymentSuccess", "successfull");
+		} else {
+			orderService.walletPayOrderCancel(customer, order, "");
+			System.out.println(hasErrorCode);
+			model.addAttribute("paymentCancelled", hasErrorArr[1]);
 		}
 		
 		model.addAttribute("amount", order.getPrice());
@@ -401,18 +411,18 @@ public class OrderInternationalController {
 		model.addAttribute("verifyChecksum", verifiedChecksum);
 		model.addAttribute("responseParameters", responseParameters);
 		
-		return "wallet/inter/response";
+		return "wallet/response";
 	}
 	
 	/*payment one-way*/
 	
 	@CrossOrigin(origins = {"https://easegofly.com/"})
-	@RequestMapping(value = "/zaakpay/international/response",
+	@RequestMapping(value = "/zaakpay/response",
 			method = {RequestMethod.POST})
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
-		//com.easygofly.entity.Transaction transactions = new com.easygofly.entity.Transaction();
+
     	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		search_id_inner = search_id;
 		Transaction transaction = new Transaction();
@@ -431,7 +441,7 @@ public class OrderInternationalController {
 	    verifiedChecksum = verifyChecksum;
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();
-		
+	    
 	    String orderParam = parameter[8];
 		String[] parts = orderParam.split("R");
 		String part2 = parts[1]; // 034556
@@ -487,23 +497,17 @@ public class OrderInternationalController {
 	}
 	
 	@CrossOrigin(origins = {"https://easegofly.com/"})
-	@RequestMapping(value = "/zaakpay/international/response",
+	@RequestMapping(value = "/zaakpay/response",
 			method = {RequestMethod.GET})
 	public String zaakpayResponseSe (Model model, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
+
+		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		model.addAttribute("customer", customer);
 		
-		String email; 
-		Customer customer = new Customer(); 
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		}
+		System.out.println(parameter);
+	    com.easygofly.entity.Transaction selfTrans = transactionService.createTransaction(customer, parameter);
+	    totalTransactionService.createTotalTransaction(customer, Double.parseDouble(selfTrans.getAmount()), false, true, null, null, null, selfTrans.getId(), OrderStatus.NEW);
 
 		String orderParam = parameter[8];
 		model.addAttribute("orderId", orderParam);
@@ -517,20 +521,24 @@ public class OrderInternationalController {
 		SearchHistory search = searchRepo.findById(search_id_inner).get();	
 		String[] hasErrorArr = new String[2];	
 		
-		if (productDetail.getResultIndex() != null) {
-			orderService.methodSSR(productDetail);
+		if (productDetail.getMode().equals("Online-data")) {
 			
 			if (productDetail.isLcc() == true) {
-				hasErrorArr = orderService.ticketDetailsInternational(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+				hasErrorArr = orderService.ticketDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
 			} else {
-				hasErrorArr = orderService.bookingDetails(order, productDetail, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
+				hasErrorArr = orderService.bookingDetails(order, productDetail, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 			}
 			
+		} else if (productDetail.getMode().equals("AirIQ")) {
+			hasErrorArr = orderService.ticketDetailsAirIQ(order, productDetail);
 			
+		} else if (productDetail.getMode().equals("Offline-data")) {
+			hasErrorArr[0] = "0";
+			hasErrorArr[1] = "0";
 		} else {
 			hasErrorArr[0] = "0";
 			hasErrorArr[1] = "0";
@@ -612,15 +620,15 @@ public class OrderInternationalController {
 		} else if (parameter[11].contains("1017")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
-			
 			hasErrorCode = Integer.parseInt(hasErrorArr[0]);
-			
-			if (hasErrorCode != 0) {
-				System.out.println(hasErrorCode);
-				orderService.updateOrder(order, OrderStatus.FAILED);
-				model.addAttribute("paymentCancelled", hasErrorArr[1]);
+			if (hasErrorArr[0].equals("0")) {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
+			} else if (hasErrorArr[0].equals("200")) {
+				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			} else {
-				model.addAttribute("paymentSuccess", "successfull");
+				orderService.updateOrder(order, OrderStatus.FAILED);
+				System.out.println(hasErrorCode);
+				model.addAttribute("paymentCancelled", hasErrorArr[1]);
 			}
 		}
 		
@@ -635,15 +643,16 @@ public class OrderInternationalController {
 		model.addAttribute("verifyChecksum", verifiedChecksum);
 		model.addAttribute("responseParameters", responseParameters);
 		
-		return "zaakpay/inter/response";
+		return "zaakpay/response";
+		
 		
 	}
 
-	
+
 	
 	////Flight Return Segment
 	
-	@PostMapping("/flight_international_order_return_save")
+	@PostMapping("/flight_order_return_save")
 	public String createNewOrderReturn(@RequestParam(name = "search_id") Integer searchId, 
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flightOne_id") Integer flightOne_id, 
@@ -657,7 +666,7 @@ public class OrderInternationalController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
-			pInternationController.timeRemainingPro = timeRemaining;
+			productDetailsController.timeRemainingPro = timeRemaining;
 			
 			SearchHistory search = searchRepo.findById(searchId).get();
 			ProductDetail flightOne = flightRepo.findById(flightOne_id).get();
@@ -682,13 +691,13 @@ public class OrderInternationalController {
 			
 			checkoutService.prepareCheckoutReturn(itemOne, itemTwo);
 			
-			return "redirect:/flight_international_return_order_" + search.getId() + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
+			return "redirect:/flight_return_order_" + search.getId() + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
 		} catch (Exception e) {
-			return "redirect:/flight_international_return_order_" + searchId + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
+			return "redirect:/flight_return_order_" + searchId + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
 		}
 	}
 
-	@GetMapping("/flight_international_return_order_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}")
+	@GetMapping("/flight_return_order_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}")
 	public String orderReturnPage(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flightOne_id") Integer flightOne_id, 
 			@PathVariable(name = "itemOne_id") Integer itemOne_id, 
@@ -763,7 +772,7 @@ public class OrderInternationalController {
 		Transaction transaction = new Transaction();
 		
 		try {
-			ZaakpayApiRequestParameters processPayment = transaction.processPaymentInternationalReturn(orderString, amount, paymentSettingBag);
+			ZaakpayApiRequestParameters processPayment = transaction.processPaymentReturn(orderString, amount, paymentSettingBag);
 			
 			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
 			model.addAttribute("requestUrl", processPayment.getRequestUrl());
@@ -795,59 +804,52 @@ public class OrderInternationalController {
 		model.addAttribute("flightTwo", flight2);
 		model.addAttribute("itemTwo_id", itemTwo_id);
 		model.addAttribute("coupon2", coupon2);
-		model.addAttribute("timeRemainingPro", pInternationController.timeRemainingPro);
+		model.addAttribute("timeRemainingPro", productDetailsController.timeRemainingPro);
 		
-		return "order/international/return/flight_order";
+		return "order/return/flight_order";
 	}
 	
 	//Wallet return segment
 	
-	@PostMapping("/flight_wallet_international_return_check")
+	@PostMapping("/flight_wallet_return_check")
 	public String walletPaymentReturn(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			@RequestParam(name = "search_id") Integer search_id) {
 		
-		try {
-			String email; 
-			Customer customer; 
-			Order order1 = orderRepo.findById(savedOrderReturnId1).get();
-			Order order2 = orderRepo.findById(savedOrderReturnId2).get();
-			if (loggedCustomer != null) {
-				email = loggedCustomer.getUsername();
-				customer = customerService.getByPhone(email);
-				Wallet wallet = orderService.walletPayOrderReturn(customer, order1, order2, "INTER");
-				if (wallet != null) {
-					updatedOrderReturnId1 = order1.getId();
-					updatedOrderReturnId2 = order2.getId();
-				}
-				
-			} else if (googleLogin != null) {
-				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
-				Wallet wallet = orderService.walletPayOrderReturn(customer, order1, order2, "INTER");
-				if (wallet != null) {
-					updatedOrderReturnId1 = order1.getId(); 
-					updatedOrderReturnId2 = order2.getId();
-				}
+		String email; 
+		Customer customer; 
+		Order order1 = orderRepo.findById(savedOrderReturnId1).get();
+		Order order2 = orderRepo.findById(savedOrderReturnId2).get();
+		if (loggedCustomer != null) {
+			email = loggedCustomer.getUsername();
+			customer = customerService.getByPhone(email);
+			Wallet wallet = orderService.walletPayOrderReturn(customer, order1, order2, "");
+			if (wallet != null) {
+				updatedOrderReturnId1 = order1.getId();
+				updatedOrderReturnId2 = order2.getId();
 			}
 			
-			searchReturn_id_inner = search_id;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else if (googleLogin != null) {
+			email = googleLogin.getEmail();
+			customer = customerService.getByPhone(email);
+			Wallet wallet = orderService.walletPayOrderReturn(customer, order1, order2, "");
+			if (wallet != null) {
+				updatedOrderReturnId1 = order1.getId(); 
+				updatedOrderReturnId2 = order2.getId();
+			}
 		}
 		
-		return "redirect:/flight_wallet_return_response_international";
+		searchReturn_id_inner = search_id;
+		
+		return "redirect:/flight_wallet_return_response";
 	}
 	
-	@GetMapping("/flight_wallet_return_response_international")
+	@GetMapping("/flight_wallet_return_response")
 	public String showWalletPaymentReturn(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) throws MalformedURLException, IOException {
 		
 		String email; 
 		Customer customer = new Customer(); 
-		Order order1 = orderRepo.findById(updatedOrderReturnId1).get();
-		Order order2 = orderRepo.findById(updatedOrderReturnId2).get();
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByPhone(email);
@@ -859,30 +861,37 @@ public class OrderInternationalController {
 			model.addAttribute("customer", customer);
 		}
 		
+		Order order1 = orderRepo.findById(updatedOrderReturnId1).get();
+		Order order2 = orderRepo.findById(updatedOrderReturnId2).get();
 		
 		model.addAttribute("orderId1", order1.getId());
 		model.addAttribute("orderId2", order2.getId());
 		ProductDetail productDetail1 = order1.getProductDetail();
 		ProductDetail productDetail2 = order2.getProductDetail();
 
-		orderService.methodSSR(productDetail1);
-		orderService.methodSSR(productDetail2);
-
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
 		String[] hasErrorArr = new String[2];
-		
+		String[] hasErrorArrTwo = new String[2];
 		
 		if (productDetail1.isLcc() == true) {
-
-			hasErrorArr = orderService.ticketDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+			hasErrorArr = orderService.ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
 		} else {
-
-			hasErrorArr = orderService.bookingDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-					pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-					pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-					pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
-			
+			hasErrorArr = orderService.bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+					productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
+		}
+		
+		if (productDetail2.isLcc() == true) {
+			hasErrorArrTwo = orderService.ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search, 
+				productDetailsController.traceId);
+		} else {
+			hasErrorArrTwo = orderService.bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discountReturn, 
+					productDetailsController.tdsOnIncentiveReturn, productDetailsController.tdsOnCommissionReturn, productDetailsController.tdsOnPLBReturn, productDetailsController.otherChargesReturn, 
+					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn, productDetailsController.traceId);
 		}
 		
 		// Departure ticket segment ............................*****.....................
@@ -998,15 +1007,13 @@ public class OrderInternationalController {
 		model.addAttribute("travellerDetailsTwo", travellerDetails2);
         model.addAttribute("amountTwo", order2.getPrice());
 
-		
+		model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 		model.addAttribute("productDetailTwo", productDetail2);
 		model.addAttribute("originTerminalTwo", productDetail2.getTerminalDep());
 		model.addAttribute("destinationTerminalTwo", productDetail2.getTerminalArr());
 		model.addAttribute("baggageTwo", productDetail2.getBaggage());
 		model.addAttribute("cabinBaggageTwo", productDetail2.getCabinBaggage());
 		//.............................******........................................
-		
-		
 		
 		Path flightUpPath = Paths.get("../pdf-images/flight-up.png");
 		Path flightDownPath = Paths.get("../pdf-images/flight-down.png");
@@ -1020,29 +1027,41 @@ public class OrderInternationalController {
 		model.addAttribute("verifyChecksum", verifiedChecksum);
 		model.addAttribute("responseParameters", responseParameters);
 		
-		
-		
 		orderService.orderUpdateWallet(order1);
 		orderService.orderUpdateWallet(order2);
 		
 		hasErrorCode = Integer.parseInt(hasErrorArr[0]);
+		hasErrorCodeTwo = Integer.parseInt(hasErrorArrTwo[0]);
 		
-		if (hasErrorCode != 0) {
-			System.out.println(hasErrorCode);
-			orderService.walletPayOrderCancel(customer, order1, "INTER");
+		if (hasErrorCode != 0 && hasErrorCodeTwo != 0) {
+			orderService.walletPayOrderCancel(customer, order1, "");
 			orderService.walletPayOrderCancel(customer, order2, "");
+			System.out.println(hasErrorCode);
+			System.out.println(hasErrorCodeTwo);
+			
+			model.addAttribute("paymentCancelled", hasErrorArr[1] + " " + hasErrorArrTwo[1]);
+			
+		} else if (hasErrorCode != 0 ) {
+			orderService.walletPayOrderCancel(customer, order1, "");
+			System.out.println(hasErrorCode);
 			model.addAttribute("paymentCancelled", hasErrorArr[1]);
+			
+		} else if (hasErrorCodeTwo != 0) {
+			orderService.walletPayOrderCancel(customer, order2, "");
+			System.out.println(hasErrorCodeTwo);
+			model.addAttribute("paymentCancelled", hasErrorArrTwo[1]);
+			
 		} else {
 			model.addAttribute("paymentSuccess", "successfull");
 		}
 		
-		return "wallet/inter/return/response";
+		return "wallet/return/response";
 	}
 	
 	/*payment return*/
 	
 	@CrossOrigin(origins = {"https://easegofly.com/"})
-	@RequestMapping(value = "/zaakpay/international/return/response",
+	@RequestMapping(value = "/zaakpay/return/response",
 			method = {RequestMethod.POST})
 	public String zaakpayResponseReturn (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, 
@@ -1173,7 +1192,7 @@ public class OrderInternationalController {
 	}
 	
 	@CrossOrigin(origins = {"https://easegofly.com/"})
-	@RequestMapping(value = "/zaakpay/international/return/response",
+	@RequestMapping(value = "/zaakpay/return/response",
 			method = {RequestMethod.GET})
 	public String zaakpayResponseSeReturn (Model model, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
@@ -1207,25 +1226,30 @@ public class OrderInternationalController {
 		
 		ProductDetail productDetail1 = order1.getProductDetail();
 		ProductDetail productDetail2 = order2.getProductDetail();
-		
-		orderService.methodSSR(productDetail1);
-		orderService.methodSSR(productDetail2);
 
 		SearchHistory search = searchRepo.findById(searchReturn_id_inner).get();
 		String[] hasErrorArr = new String[2];
 		String[] hasErrorArrTwo = new String[2];
 		
 		if (productDetail1.isLcc() == true) {
-			
-			orderService.ticketDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.traceId);
+			hasErrorArr = orderService.ticketDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.traceId);
 		} else {
-			
-			orderService.bookingDetailsInternationalReturn(order1, productDetail1, order2, productDetail2, pInternationController.basefareTravelerAdult, pInternationController.taxTravelerAdult, pInternationController.basefareTravelerChild, 
-				pInternationController.taxTravelerChild, pInternationController.basefareTravelerInfant, pInternationController.taxTravelerInfant, search, pInternationController.discount, 
-				pInternationController.tdsOnIncentive, pInternationController.tdsOnCommission, pInternationController.tdsOnPLB, pInternationController.otherCharges, pInternationController.publishedFare, 
-				pInternationController.offeredFare, pInternationController.serviceFee, pInternationController.traceId);
-			
+			hasErrorArr = orderService.bookingDetails(order1, productDetail1, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+				productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discount, 
+				productDetailsController.tdsOnIncentive, productDetailsController.tdsOnCommission, productDetailsController.tdsOnPLB, productDetailsController.otherCharges, productDetailsController.publishedFare, 
+				productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
+		}
+		
+		if (productDetail2.isLcc() == true) {
+			hasErrorArrTwo = orderService.ticketDetails(order2, productDetail2, productDetailsController.basefareTravelerAdultReturn, productDetailsController.taxTravelerAdultReturn, productDetailsController.basefareTravelerChildReturn, 
+				productDetailsController.taxTravelerChildReturn, productDetailsController.basefareTravelerInfantReturn, productDetailsController.taxTravelerInfantReturn, search, 
+				productDetailsController.traceId);
+		} else {
+			hasErrorArrTwo = orderService.bookingDetails(order2, productDetail2, productDetailsController.basefareTravelerAdult, productDetailsController.taxTravelerAdult, productDetailsController.basefareTravelerChild, 
+					productDetailsController.taxTravelerChild, productDetailsController.basefareTravelerInfant, productDetailsController.taxTravelerInfant, search, productDetailsController.discountReturn, 
+					productDetailsController.tdsOnIncentiveReturn, productDetailsController.tdsOnCommissionReturn, productDetailsController.tdsOnPLBReturn, productDetailsController.otherChargesReturn, 
+					productDetailsController.publishedFareReturn, productDetailsController.offeredFareReturn, productDetailsController.serviceFeeReturn, productDetailsController.traceId);
 		}
 		
 		// Departure ticket segment ............................*****.....................
@@ -1380,8 +1404,8 @@ public class OrderInternationalController {
 			hasErrorCodeTwo = Integer.parseInt(hasErrorArrTwo[0]);
 			
 			if (hasErrorCode != 0 && hasErrorCodeTwo != 0) {
-				orderService.walletPayOrderCancel(customer, order1, "INTER");
-				orderService.walletPayOrderCancel(customer, order2, "INTER");
+				orderService.walletPayOrderCancel(customer, order1, "");
+				orderService.walletPayOrderCancel(customer, order2, "");
 				System.out.println(hasErrorCode);
 				System.out.println(hasErrorCodeTwo);
 				
@@ -1400,14 +1424,13 @@ public class OrderInternationalController {
 			} else {
 				model.addAttribute("paymentSuccess", OrderStatus.SUCCESSFULL);
 			}
-			
 		}
 		
 		model.addAttribute("checksum", checksum);
 		model.addAttribute("verifyChecksum", verifiedChecksum);
 		model.addAttribute("responseParameters", responseParameters);
 		
-		return "zaakpay/inter/response-twoway";
+		return "zaakpay/response-twoway";
 		
 		
 	}
@@ -1415,7 +1438,7 @@ public class OrderInternationalController {
 	
 	////Export to PDF
 
-	@GetMapping("/order_international/export_pdf/{id}")
+	@GetMapping("/order/export_pdf/{id}")
 	public void exportToPDF(HttpServletResponse response, @PathVariable("id") Integer id) throws Exception {
 		Order order = orderRepo.findById(id).get();
 		ProductDetail productDetail = order.getProductDetail();

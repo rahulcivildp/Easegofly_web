@@ -1,6 +1,8 @@
 package com.easygofly.site.flight;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -13,8 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.Coupon;
+import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
-import com.easygofly.site.order.CouponRepository;
+import com.easygofly.site.flight.order.CouponRepository;
 
 @RestController
 public class ProductDetailsRestController {
@@ -150,6 +153,18 @@ public class ProductDetailsRestController {
 		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
 	}
 
+	// Sorting methods  
+
+	@GetMapping("/sort_by_brand")
+	public void sortByBrand() {
+		List<ProductDetail> flights = productDetailsController.listProductDetails;
+		
+		// Sort the objects in ascending order by the element
+        Collections.sort(flights, (o1, o2) -> o1.getBrand().compareTo(o2.getBrand()));
+
+	}
+	
+	//Timer Method
 	
 	@GetMapping("/show_timer")
 	public Integer timer(@Param("timer") Integer timer) {

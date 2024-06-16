@@ -23,7 +23,7 @@ import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.EasyGoFlyFrontEndApplication;
 import com.easygofly.site.flight.MealRepository;
 import com.easygofly.site.flight.TravellerRepository;
-import com.easygofly.site.search.SearchHistoryRepository;
+import com.easygofly.site.flight.SearchHistoryRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
