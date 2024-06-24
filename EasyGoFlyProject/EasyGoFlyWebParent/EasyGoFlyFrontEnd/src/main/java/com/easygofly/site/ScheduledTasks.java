@@ -19,7 +19,7 @@ public class ScheduledTasks {
 	
 	@Scheduled(fixedRate = 43200000)
     public void taskFetchFlightToken() {
-try {
+		try {
         	StringBuilder responseBody = new StringBuilder();
         	
             onlineFlightService.apiAuthentication(responseBody);

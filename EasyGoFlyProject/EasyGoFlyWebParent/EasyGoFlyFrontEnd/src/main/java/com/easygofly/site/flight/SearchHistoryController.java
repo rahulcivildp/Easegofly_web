@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
@@ -52,65 +54,13 @@ public class SearchHistoryController {
 	@Autowired private ProductDetailService productService;
 	@Autowired private OnlineFlightService onlineFlightService;
 	@Autowired private LogService logService;
+	@Autowired private BrandRepositoy brandRepo;
 	
 	private String searchURL = "";
 	private String searchReturnURL = "";
+	private List<Object> searchObj = new ArrayList<>();
 
-	
-	////Flight one-way segment.
-			
-	@GetMapping("/flight_search_{id}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
-	public String searchFlightDetailsSingles(@PathVariable(name = "id") Integer id, SearchHistory searchHistory, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
-			@PathVariable(name = "sortName") String sortName,
-			@PathVariable(name = "activeTime") String[] activeTime,
-			@PathVariable(name = "brand") String[] brands,
-			@PathVariable(name = "stop") Integer[] stops,
-			@PathVariable(name = "totalPrice") Integer[] totalPrice, 
-			Model model, RedirectAttributes redirectAttributes) throws MalformedURLException, IOException {
-		String email; 
-		Customer customer;
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		}
-		
-		
-		SearchHistory search = searchRepo.findById(id).get();
-		
-		searchSort(search.getCityOne(), search.getCityTwo(), sortName, model, search.getDate());
-		
-	    City cityOneFound = cityRepo.getCityByCode(search.getCityOne());
-	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
-
-		List<Product> getProductBrand = productRepo.findProductByCity(search.getCityOne(), search.getCityTwo(), Sort.by("name").ascending());
-		
-		Country country = countryRepo.findById(106).get();
-		Iterable<City> cities = cityRepo.getCityByCountry(country);
-		
-		model.addAttribute("cities", cities);
-		model.addAttribute("getProductBrand", getProductBrand);
-		model.addAttribute("search", search);
-		model.addAttribute("cityOneName", cityOneFound.getCityName());
-		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
-		
-		String[] responseCode = searchFlightAPI(search.getCityOne(), search.getCityTwo(), search.getAdultNum(), search.getChildNum(), 
-				search.getInfantNum(), sortName, model, search.getDate(), onlineFlightService.tokenAirIQ);
-		
-		if (Integer.parseInt(responseCode[0]) != 0) {
-			model.addAttribute("errorMsg", responseCode[1]);
-		}
-		
-		return "flight/search/search-result";
-	}
-	
-	@GetMapping("/flight_search-noUser_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
+	@GetMapping("/flight_search_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{sortName}_{brand}_{stop}_{totalPrice}_{activeTime}")
 	public String searchFlightDetailsSinglesNoUser(
 			@PathVariable(name = "cityOne") String cityOne,
 			@PathVariable(name = "cityTwo") String cityTwo,
@@ -134,7 +84,12 @@ public class SearchHistoryController {
 		System.out.println();
 		
 	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-
+	    Date currentDate = new Date();
+	    Calendar c = Calendar.getInstance();
+	    Calendar ca = Calendar.getInstance();
+	    c.setTime(date);
+	    ca.setTime(currentDate);
+	    
 	    searchSort(cityOne, cityTwo, sortName, model, date);
 	    
 	    City cityOneFound = cityRepo.getCityByCode(cityOne);
@@ -148,6 +103,7 @@ public class SearchHistoryController {
 		
 		System.out.println(date);
 		System.out.println(strDate);
+		System.out.println(c.get(Calendar.DAY_OF_YEAR));
 
 		model.addAttribute("value_int", iq);
 		model.addAttribute("cities", cities);
@@ -167,16 +123,16 @@ public class SearchHistoryController {
 		model.addAttribute("brands", brands);
 		model.addAttribute("stops", stops);
 		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("currentDay", ca.get(Calendar.DAY_OF_YEAR));
+		model.addAttribute("searchedDay", c.get(Calendar.DAY_OF_YEAR));
 		
-		
-		String[] responseCode = searchFlightAPI(cityOne, cityTwo, adultNum, childNum, infantNum, sortName, model, date, onlineFlightService.tokenAirIQ);
-		
-		System.out.println(onlineFlightService.tokenAirIQ);
-
-		if (Integer.parseInt(responseCode[0]) != 0) {
-			model.addAttribute("errorMsg", responseCode[1]);
+		try {
+			model.addAttribute("listSize", pController.listProductDetailsOnline.size());
+		} catch (Exception e) {
+			model.addAttribute("listSize", 0);
 		}
 		
+
 		return "flight/search/search-result-noUser";
 		
 	}
@@ -193,8 +149,7 @@ public class SearchHistoryController {
 			@RequestParam(name = "childNum", required = false) Integer childNum,
 			@RequestParam(name = "infantNum", required = false) Integer infantNum,
 			Model model) throws ProductNotFoundException {
-		
-			String email; 
+		 
 			Customer customer;
 			City city1 = cityRepo.getCityByName(cityOne);
 		    City city2 = cityRepo.getCityByName(cityTwo);
@@ -207,32 +162,34 @@ public class SearchHistoryController {
 		    String activeTime = "active";
 		    String arrayPrice = "0,0";
 		    
+
+			searchObj = new ArrayList<>();
+			searchObj.add(city1.getCode());
+			searchObj.add(city2.getCode());
+			searchObj.add(adultNum);
+			searchObj.add(childNum);
+			searchObj.add(infantNum);
+			searchObj.add(sort);
+			searchObj.add(date);
+			searchObj.add(onlineFlightService.tokenAirIQ);
 		    
             if (loggedCustomer != null) {
-				email = loggedCustomer.getUsername();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByPhone(loggedCustomer.getUsername());
 				model.addAttribute("customer", customer);
-				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
+				pController.searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
-				searchURL = "/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
-				return "redirect:/loading_";
-			} else if (googleLogin != null) {
-				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
-				model.addAttribute("customer", customer);
-				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
-						infantNum, customer);
-				searchURL = "/flight_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
-				return "redirect:/loading_";
-			}else {
-				searchURL = "/flight_search-noUser_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
-						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
-				return "redirect:/loading_";
+				
+			} else {
+				pController.searchId = 1.5f;
 			}
+            
+			searchURL = "/flight_search_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+					+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+			return "redirect:/loading_";
             
 	}
 	
-	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, String auth) throws MalformedURLException, IOException {
+	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Date date, String auth) throws MalformedURLException, IOException {
 
 		String traceIdStr = "offline";
 		String[] hasErrorArr = new String[2];
@@ -254,7 +211,7 @@ public class SearchHistoryController {
         
         StringBuilder responseBodySearch = new StringBuilder();
         
-        int responseCode = onlineFlightService.apiOnlineSearchMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
+        onlineFlightService.apiOnlineSearchMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
         
         
         //AirIQ ......
@@ -474,9 +431,18 @@ public class SearchHistoryController {
 
 				String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
 				
+				String brandImage = "";
+				Brand brand =  brandRepo.getBrandByName(airlineName);
+				if ( brand == null ) {
+					brandImage = "/images/no-image.png";
+				} else {
+					brandImage = brand.getPhotosImagePath();
+				}
+				 
 				ProductDetail productDetail = new ProductDetail(i + 1, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
 			    		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
+			    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage);
+
 				
 				pController.listProductDetailsOnline.add(productDetail);
 				
@@ -487,8 +453,8 @@ public class SearchHistoryController {
 			hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			
-			model.addAttribute("listProducts", pController.listProductDetailsOnline);
-			model.addAttribute("responseCode", responseCode);
+//			model.addAttribute("listProducts", pController.listProductDetailsOnline);
+//			model.addAttribute("responseCode", responseCode);
 			
 			System.out.println("Length: " + pController.listProductDetailsOnline.size());
 			
@@ -523,11 +489,148 @@ public class SearchHistoryController {
 	}
 
 	@GetMapping("/loading_")
-    public String performApiRequest(Model model) {
+    public String performApiRequest(Model model) throws Exception, IOException {
+        model.addAttribute("searchURL", "/listing_flights");
+        return "loading/loading";
+    }
+	
+	@GetMapping("/listing_flights")
+    public String performApiRequestSecond(Model model) throws Exception, IOException {
+		
+		String cityOne = searchObj.get(0).toString();
+		String cityTwo = searchObj.get(1).toString();
+		Integer adultNum = (Integer) searchObj.get(2);
+		Integer childNum = (Integer) searchObj.get(3);
+		Integer infantNum = (Integer) searchObj.get(4);
+		String sortName = searchObj.get(5).toString();
+		Date date = (Date) searchObj.get(6);
+		String tokenAiriq = searchObj.get(7).toString();
+		
+		searchFlightAPI(cityOne, cityTwo, adultNum, childNum, infantNum, sortName, date, tokenAiriq);
+		
         model.addAttribute("searchURL", searchURL);
         return "loading/loading";
     }
 
+	
+	//Previous day and next day
+	
+	@GetMapping("/get_previous_day_flight")
+    public String getResultPreviousDay(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@RequestParam(name = "cityOne", required = false) String cityOne, 
+			@RequestParam(name = "cityTwo", required = false) String cityTwo, 
+			@RequestParam(name = "date", required = false) String stringDate, 
+			@RequestParam(name = "journeyClass", required = false) String journeyClass,
+			@RequestParam(name = "tripType", required = false) String tripType,
+			@RequestParam(name = "adultNum", required = false) Integer adultNum,
+			@RequestParam(name = "childNum", required = false) Integer childNum,
+			@RequestParam(name = "infantNum", required = false) Integer infantNum,
+			Model model) throws ProductNotFoundException, ParseException {
+		 
+			Customer customer;
+
+		    City city1 = cityRepo.getCityByCode(cityOne);
+		    City city2 = cityRepo.getCityByCode(cityTwo);
+
+		    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.DATE, -1);  // number of days to add
+		    String strDate = sdf.format(c.getTime());
+		    String sort = "pnr";
+		    String brand = "";
+		    Integer stop = 0;
+		    String activeTime = "active";
+		    String arrayPrice = "0,0";
+		    
+			searchObj = new ArrayList<>();
+			searchObj.add(city1.getCode());
+			searchObj.add(city2.getCode());
+			searchObj.add(adultNum);
+			searchObj.add(childNum);
+			searchObj.add(infantNum);
+			searchObj.add(sort);
+			searchObj.add(c.getTime());
+			searchObj.add(onlineFlightService.tokenAirIQ);
+		    
+            if (loggedCustomer != null) {
+				customer = customerService.getByPhone(loggedCustomer.getUsername());
+				model.addAttribute("customer", customer);
+				pController.searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
+						infantNum, customer);
+				
+			} else {
+				pController.searchId = 1.5f;
+			}
+            
+			searchURL = "/flight_search_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+					+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+			return "redirect:/loading_";
+    }
+
+	@GetMapping("/get_next_day_flight")
+    public String getResultNextDay(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+			@RequestParam(name = "cityOne", required = false) String cityOne, 
+			@RequestParam(name = "cityTwo", required = false) String cityTwo, 
+			@RequestParam(name = "date", required = false) String stringDate, 
+			@RequestParam(name = "journeyClass", required = false) String journeyClass,
+			@RequestParam(name = "tripType", required = false) String tripType,
+			@RequestParam(name = "adultNum", required = false) Integer adultNum,
+			@RequestParam(name = "childNum", required = false) Integer childNum,
+			@RequestParam(name = "infantNum", required = false) Integer infantNum,
+			Model model) throws ProductNotFoundException, ParseException {
+		 
+			Customer customer;
+		    City city1 = cityRepo.getCityByCode(cityOne);
+		    City city2 = cityRepo.getCityByCode(cityTwo);
+
+		    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.DATE, 1);  // number of days to add
+		    String strDate = sdf.format(c.getTime());
+		    String sort = "pnr";
+		    String brand = "";
+		    Integer stop = 0;
+		    String activeTime = "active";
+		    String arrayPrice = "0,0";
+		    
+
+			searchObj = new ArrayList<>();
+			searchObj.add(city1.getCode());
+			searchObj.add(city2.getCode());
+			searchObj.add(adultNum);
+			searchObj.add(childNum);
+			searchObj.add(infantNum);
+			searchObj.add(sort);
+			searchObj.add(c.getTime());
+			searchObj.add(onlineFlightService.tokenAirIQ);
+		    
+            if (loggedCustomer != null) {
+				customer = customerService.getByPhone(loggedCustomer.getUsername());
+				model.addAttribute("customer", customer);
+				pController.searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
+						infantNum, customer);
+				
+			} else {
+				pController.searchId = 1.5f;
+			}
+            
+			searchURL = "/flight_search_"+ city1.getCode() +"_"+ city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+					+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
+			return "redirect:/loading_";
+    }
+	
+	
+	
+	
+	
+	
+	
 	
 	////Flight return segment.
 	

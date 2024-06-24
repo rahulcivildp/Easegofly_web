@@ -1,7 +1,11 @@
 package com.easygofly.site.flight;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,9 @@ public class ProductDetailsRestController {
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private ProductDetailsInternationController pInternationController;
 	@Autowired private TravellerRepository travellerRepo;
+	@Autowired private FlightRepository productDetailsRepo;
+	
+	List<ProductDetail> testflights = new ArrayList<>();
 	
 	@PostMapping("/flight_order_check_coupon")
 	public Coupon checkCoupon(@RequestBody Coupon coupon, RedirectAttributes redirectAttributes) throws IOException {
@@ -153,16 +160,101 @@ public class ProductDetailsRestController {
 		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
 	}
 
+	// Flight List
+
+	@GetMapping("/get_flight_list")
+	public List<ProductDetail> getFlightList() {
+		return productDetailsController.listProductDetailsOnline;
+	} 
+
+	@GetMapping("/get_least_fare_by_brand")
+	public List<ProductDetail> getleastFareByBrand() {
+		List<ProductDetail> flights = productDetailsController.listProductDetailsOnline;
+		List<ProductDetail> newFligtList = new ArrayList<ProductDetail>();
+		List<String> listBrand = new ArrayList<String>();
+        
+		for (ProductDetail flight : flights) {
+			listBrand.add(flight.getBrand());
+		}
+		HashSet<String> set = new HashSet<>(listBrand);
+		List<String> listWithoutDuplicates = new ArrayList<>(set);
+		for (int i = 0; i < listWithoutDuplicates.size(); i++) {
+			 // Step 3: Find the minimum price
+	        double minPrice = Double.MAX_VALUE;
+	        int count = 0;
+	        
+			for (ProductDetail flight : flights) {
+				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
+					if (flight.getPriceADT() < minPrice) {
+		                minPrice = flight.getPriceADT();
+		            }
+				}
+			}
+
+			for (ProductDetail flight : flights) {
+				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
+					if (count == 0) {
+						if (minPrice == flight.getPriceADT()) {
+							newFligtList.add(flight);
+							count++;
+						}
+					}
+				}
+			}
+		}
+		
+		newFligtList.sort(Comparator.comparingDouble(ProductDetail::getPriceADT));
+		
+		return newFligtList;
+	} 
+
 	// Sorting methods  
 
-	@GetMapping("/sort_by_brand")
-	public void sortByBrand() {
-		List<ProductDetail> flights = productDetailsController.listProductDetails;
-		
-		// Sort the objects in ascending order by the element
-        Collections.sort(flights, (o1, o2) -> o1.getBrand().compareTo(o2.getBrand()));
+	@GetMapping("/sort_flights_by_price")
+	public void sortByPrice() {
+		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getPriceADT));
+		System.out.println(testflights.size());
+	} 
 
+	@GetMapping("/sort_flights_by_duration")
+	public void sortByDuration() {
+		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getDuration));
+		System.out.println(testflights.size());
+	} 
+
+	@GetMapping("/sort_flights_by_arrival")
+	public void sortByArrival() {
+		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getArrTimeInteger));
+		System.out.println(testflights.size());
+	} 
+
+	@GetMapping("/sort_flights_by_departure")
+	public void sortByDeparture() {
+		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getDepTimeInteger));
+		System.out.println(testflights.size());
+	} 
+
+	@GetMapping("/sort_flights_by_brand")
+	public void sortByBrand() {
+		productDetailsController.listProductDetailsOnline.sort(Comparator.comparing(ProductDetail::getBrand));
+		System.out.println(testflights.size());
 	}
+	
+	
+	//Test Methods
+	
+	@GetMapping("/get_flight_all_list_test")
+	public void getFlightAllListsadasdassdadsa() {
+		testflights = productDetailsRepo.findFlightsByDuration(210);
+		System.out.println(testflights.size());
+	}
+	
+	@GetMapping("/get_flight_all_list")
+	public List<ProductDetail> getFlightAllListsadasdas() {
+		return testflights;
+	}
+	
+
 	
 	//Timer Method
 	

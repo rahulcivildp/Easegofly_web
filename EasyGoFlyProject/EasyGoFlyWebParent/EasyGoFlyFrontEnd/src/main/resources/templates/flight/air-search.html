@@ -665,7 +665,7 @@
 										</div>
 										
 										<div class="col-md-6 col-6 form-floating" id="aligner3" style="padding: 0;">
-											<div id="cityOneLabel" class="floatingResponseDiv"></div>
+											<div id="cityOneLabel" class="floatingResponseDiv" onchange="alertgj()"></div>
 										</div>
 										<div class="col-md-6 col-6 form-floating " id="aligner4" style="padding: 0;">
 											<div id="cityTwoLabel" class="floatingResponseDiv" style="text-align: right;"></div>
@@ -1953,7 +1953,7 @@
 
 	$(document).ready(function () {
 		$("#floatingInputDepurtureMobile").click(function () {
-			calenderView($("#floatingInputDepurtureMobile"));
+			calenderViewInter("floatingInputDepurtureMobile");
 		});
 
 		$("#floatingInputDepurture").click(function () {
@@ -2037,7 +2037,11 @@
 		$("#return-previous_mobile").css("display", "flex");
 	})
 </script>
-
+<script>
+	function alertgj(){
+		alert("changed");
+	}
+</script>
 <script>
 	var modURL = "[[@{/find_city_name_}]]";
 	

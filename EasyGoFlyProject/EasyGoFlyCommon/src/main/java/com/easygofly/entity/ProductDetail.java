@@ -21,6 +21,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "product_details")
 public class ProductDetail {
@@ -94,6 +96,12 @@ public class ProductDetail {
 	private Integer duration;
 	
 	private String brand;
+
+	@Column(name = "brand_image", length = 1000)
+	private String brandImage;
+	
+	@Column(name = "airline_logo", length = 1000)
+	private String airlineLogo;
 	
 	private int stopNum;
 	
@@ -113,20 +121,25 @@ public class ProductDetail {
 	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
+	@JsonIgnore
 	private Product product;
 	
 	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Stop> stops = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<CartItem> cartItems = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<TravellerDetail> travellerDetails = new ArrayList<>();
 	
 	@OneToOne(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "productDetail")
+	@JsonIgnore
     private Order order;
 
 	@Column(name = "device", length = 100)
@@ -213,6 +226,49 @@ public class ProductDetail {
 		this.craftType = craftType;
 		this.device = device;
 		this.deviceDescription = deviceDescription;
+	}
+	
+
+	public ProductDetail(int id, String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
+			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
+			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
+			float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, String journeyClass, 
+			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, Product product, String craftType, String airlineLogo) {
+		this.id = id;
+		this.pnr = pnr;
+		this.totalSeats = totalSeats;
+		this.uploadSeats = uploadSeats;
+		this.flightNum = flightNum;
+		this.date = date;
+		this.depTime = depTime;
+		this.arrTime = arrTime;
+		this.priceADT = priceADT;
+		this.priceINF = priceINF;
+		this.markupADT = markupADT;
+		this.markupINF = markupINF;
+		this.cityOne = cityOne;
+		this.cityTwo = cityTwo;
+		this.enabled = enabled;
+		this.inStock = inStock;
+		this.product = product;
+		this.stopNum = stopNum;
+		this.duration = duration;
+		this.brand = brand;
+		this.arrTimeInteger = arrTimeInteger;
+		this.depTimeInteger = depTimeInteger;
+		this.traceId = traceId;
+		this.resultIndex = resultIndex;
+		this.airlineRemarks = airlineRemarks;
+		this.mode = mode;
+		this.journeyClass = journeyClass;
+		this.terminalDep = terminalDep;
+		this.terminalArr = terminalArr;
+		this.baggage = baggage;
+		this.cabinBaggage = cabinBaggage;
+		this.craftType = craftType;
+		this.device = device;
+		this.deviceDescription = deviceDescription;
+		this.airlineLogo = airlineLogo;
 	}
 	
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
@@ -335,6 +391,14 @@ public class ProductDetail {
 		this.id = id;
 	}
 	
+	public String getBrandImage() {
+		return brandImage;
+	}
+
+	public void setBrandImage(String brandImage) {
+		this.brandImage = brandImage;
+	}
+
 	public String getDevice() {
 		return device;
 	}
@@ -345,6 +409,14 @@ public class ProductDetail {
 
 	public String getDeviceDescription() {
 		return deviceDescription;
+	}
+
+	public String getAirlineLogo() {
+		return airlineLogo;
+	}
+
+	public void setAirlineLogo(String airlineLogo) {
+		this.airlineLogo = airlineLogo;
 	}
 
 	public void setDeviceDescription(String deviceDescription) {
@@ -692,19 +764,25 @@ public class ProductDetail {
 		return cityOne + " " + cityTwo;
 	}
 
+
 	@Override
 	public String toString() {
-		return "ProductDetail [id=" + id + ", pnr=" + pnr + ", totalSeats=" + totalSeats + ", uploadSeats="
-				+ uploadSeats + ", flightNum=" + flightNum + ", date=" + date + ", depTime=" + depTime + ", arrTime="
-				+ arrTime + ", depTimeInteger=" + depTimeInteger + ", arrTimeInteger=" + arrTimeInteger + ", priceADT="
-				+ priceADT + ", priceINF=" + priceINF + ", markupADT=" + markupADT + ", markupINF=" + markupINF
-				+ ", cityOne=" + cityOne + ", cityTwo=" + cityTwo + ", journeyClass=" + journeyClass + ", terminalDep="
-				+ terminalDep + ", terminalArr=" + terminalArr + ", baggage=" + baggage + ", cabinBaggage="
-				+ cabinBaggage + ", duration=" + duration + ", brand=" + brand + ", stopNum=" + stopNum + ", enabled="
-				+ enabled + ", inStock=" + inStock + ", traceId=" + traceId + ", resultIndex=" + resultIndex
-				+ ", airlineRemarks=" + airlineRemarks + ", mode=" + mode + ", product=" + product + ", stops=" + stops
-				+ ", cartItems=" + cartItems + ", travellerDetails=" + travellerDetails + ", order=" + order + "]";
+		return id + ", " + pnr + ", " + totalSeats + ", "
+				+ uploadSeats + ", " + flightNum + ", " + date + ", " + depTime + ", "
+				+ arrTime + ", " + depTimeInteger + ", " + arrTimeInteger + ", "
+				+ priceADT + ", " + priceINF + ", " + markupADT + ", " + markupINF
+				+ ", " + cityOne + ", " + cityTwo + ", journeyClass" + journeyClass + ", "
+				+ terminalDep + ", " + terminalArr + ", " + baggage + ", "
+				+ cabinBaggage + ", " + craftType + ", " + duration + ", " + brand
+				+ ", " + brandImage + ", " + stopNum + ", " + enabled + ", "
+				+ inStock + ", " + traceId + ", " + resultIndex + ", "
+				+ airlineRemarks + ", " + mode + ", " + lcc + ", " + stops
+				+ ", " + device + ", " + deviceDescription + ", " + deviceType;
 	}
 
+	@Transient
+	public String getPhotosImagePath() {
+		return  this.brandImage;
+	}
 	
 }

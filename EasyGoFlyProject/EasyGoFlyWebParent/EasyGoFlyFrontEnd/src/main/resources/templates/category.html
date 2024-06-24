@@ -545,19 +545,25 @@ input:checked+br+label {
 
 <script>
 	$(document).ready(function() {
-		var height = $("#searchBar").height();
-        const style = document.createElement('style');
-        style.type = 'text/css';
-        var y 
-        const css = `
-            .searchActive {
-                height: ` + height + `px !important;
-            }
-        `;
-        style.appendChild(document.createTextNode(css));
-        document.head.appendChild(style);
+        createCssClass(10);
 	});
 	
+	
+	
+	function createCssClass(x) {
+			var height = $("#searchBar").height();
+            const style = document.createElement('style');
+            style.type = 'text/css';
+        	var y = height + x;
+        	
+            const css = `
+                .searchActive {
+                    height: ` + y + `px !important;
+                }
+            `;
+        style.appendChild(document.createTextNode(css));
+        document.head.appendChild(style);
+        }
 </script>
 
 <script>

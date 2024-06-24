@@ -550,16 +550,18 @@ input:checked+br+label {
 
 <script>
 	$(document).ready(function() {
-		var height = $("#searchBar").height();
-		createCssClass(height);
+		createCssClass(10);
 	});
 	
 	function createCssClass(x) {
+			var height = $("#searchBar").height();
             const style = document.createElement('style');
             style.type = 'text/css';
+        	var y = height + x;
+        	
             const css = `
                 .searchActive {
-                    height: ` + x + `px !important;
+                    height: ` + y + `px !important;
                 }
             `;
             style.appendChild(document.createTextNode(css));

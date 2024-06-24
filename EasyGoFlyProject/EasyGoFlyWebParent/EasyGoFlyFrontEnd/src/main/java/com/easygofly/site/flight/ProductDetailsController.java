@@ -111,6 +111,7 @@ public class ProductDetailsController {
 
 	public Integer timeRemainingPro = 0;
 	public Integer timeRemainingProOne = 0;
+	public double searchId = 0;
 	
 
 	@GetMapping("/flight")
@@ -367,7 +368,7 @@ public class ProductDetailsController {
 	}
 	
 	@PostMapping("/flight_booking_save")
-	public String filghtBookingSave(@RequestParam(name = "search_id") float searchId, 
+	public String filghtBookingSave(
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId, 
 			@RequestParam(name = "adultNum") Integer adultNum,

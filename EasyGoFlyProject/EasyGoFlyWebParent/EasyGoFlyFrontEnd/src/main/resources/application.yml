@@ -1,23 +1,30 @@
+logging:
+  file:
+    name: logs/application.log
+  level:
+    root: INFO
 server:
   port: 443
   servlet:
     context-path: /
     session:
       cookie:
+        http-only: true
         same-site: none
+        secure: true
+      timeout: 60m
       tracking-modes: cookie
-
 spring:
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
     password: tanmay@311
+    type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://127.0.0.1:3306/easygofly
     username: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -25,33 +32,8 @@ spring:
         globally-quoted-identifiers: true
         use-sql-comments: true
     show-sql: false
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
-    pathmatch:
-      matching-strategy: ant-path-matcher
   main:
     allow-circular-references: true
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 640385530645-tm9e2fcnn119k38pr7ovuibab4fndbnq.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-            - email
-            - profile
-          facebook:
-            client-id: 1216865285686303
-            client-secret: 7d899a7c513366f83cb64f496b8d03f1
-            scope:
-            - email
-            - public_profile
-  mail:
-    properties:
-      mail:
-        smtp:
-          ssl:
-            enable: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher

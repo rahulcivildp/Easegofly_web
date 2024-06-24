@@ -556,8 +556,32 @@
 	  margin: 0;
   }
   .footerInnerDiv {
-	  text-align: center; 
-	  padding: 4px 0;
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+	padding: 4px 0;
+  }
+  .footerInnerDiv p{
+	  font-size: 20px;
+	  margin: 0;
+  }
+  .footerInnerDiv i{
+	  font-size: 20px;
+  }
+  .footerFragInnerDiv {
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+	padding: 4px 0;
+  }
+  .footerFragInnerDiv p{
+	  font-size: 20px;
+	  margin: 0;
+  }
+  .footerFragInnerDiv i{
+	  font-size: 20px;
   }
   .response-header {
 	width: 50%;
