@@ -111,7 +111,6 @@ public class ProductDetailsController {
 
 	public Integer timeRemainingPro = 0;
 	public Integer timeRemainingProOne = 0;
-	public double searchId = 0;
 	
 
 	@GetMapping("/flight")
@@ -370,7 +369,8 @@ public class ProductDetailsController {
 	@PostMapping("/flight_booking_save")
 	public String filghtBookingSave(
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
-			@RequestParam(name = "flight_id") Integer flightId, 
+			@RequestParam(name = "flight_id") Integer flightId,
+			@RequestParam(name = "search_id") String searchId, 
 			@RequestParam(name = "adultNum") Integer adultNum,
 			@RequestParam(name = "childNum") Integer childNum,
 			@RequestParam(name = "infantNum") Integer infantNum,
@@ -386,17 +386,18 @@ public class ProductDetailsController {
 		Customer customer; 
 		CartItem cartItem = new CartItem();
 		Integer searchIdInt = 0;
+		double searchIddbl = Double.parseDouble(searchId);
 		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByPhone(email);
-			if (searchId == 1.5f) {
+			if (searchIddbl == 1.5) {
 				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
 						infantNum, customer);
 				searchIdInt = savedSearchId;
 			} else {
-				searchIdInt = (int)searchId;
+				searchIdInt = (int)searchIddbl;
 			}
 			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
@@ -408,12 +409,12 @@ public class ProductDetailsController {
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByPhone(email);
-			if (searchId == 1.5f) {
+			if (searchIddbl == 1.5f) {
 				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
 						infantNum, customer);
 				searchIdInt = savedSearchId;
 			} else {
-				searchIdInt = (int)searchId;
+				searchIdInt = (int)searchIddbl;
 			}
 			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();

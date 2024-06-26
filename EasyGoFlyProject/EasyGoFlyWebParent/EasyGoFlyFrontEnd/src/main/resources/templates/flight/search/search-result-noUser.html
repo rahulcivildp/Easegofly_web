@@ -136,18 +136,7 @@
     margin: 18px 0;
     border-radius: 5px !important;
 }
-.accordion-body > div > div > div {
-    border: none !important;
-    color: white !important;
-}
-.accordion-body > div {
-    margin-bottom: 0 !important;
-    background-color: #15457c !important;
-}
-.accordion-body {
-    padding: 0;
-    background-color: #15457c !important;
-}
+
 .nav-item a {
     font-size: 14px;
     padding: 10px !important;
@@ -335,6 +324,22 @@
 		border-radius: 3px; 
 		margin-left: 3px;
 	}
+	.btnSorting {
+		border-radius: 8px;
+	    border: 2px solid #8989ec;
+	    width: 100%;
+	    padding: 2px 0;
+	    margin: 4px 0;
+	    background: #f7fbff;
+	}
+	.btnSortingActive {
+		background: #8989ec !important;
+    	color: white !important;
+	}
+	#searchMain {
+		background: #2b4f78;
+    	padding: 2px 0;
+	}
 </style>
 
 
@@ -357,20 +362,6 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script>
-	  
-		//$(document).ready(function(){
-	       // var search_passeber = [[${passengerNum}]];
-			//var urldd = "/get_flight_all_list_test";
-			
-			//$.get(urldd, function() {
-			//}).done(function() {
-				//getFlightList(search_passeber);
-			//}).fail(function() {
-				//console.log("ERROR: Could not connect to the server.");
-			//});
-		//});
-  </script>
   <div class="positionTile">
 	<div class="media-hide" style="background-color:#061123; padding-top: 115px;"></div>
     <div id="modify-search">
@@ -426,109 +417,6 @@
         </div>
     </div>
     
-    <script>
-		$(document).ready(function(){
-			searchPassengerNo = [[${passengerNum}]];
-			getLeastFareByBrand(searchPassengerNo);
-		});
-		
-		
-		function getLeastFareByBrand(paxNo) {
-			
-			var urlLeastFare = "/get_least_fare_by_brand" ;
-			
-			$.get(urlLeastFare, function(elem) {
-			}).done(function(elem) {
-				for (let i = 0; i < elem.length; i++) {
-		          	
-		          	totalAdultPrice = (elem[i].priceADT + elem[i].markupADT) * ([[${adultNum}]] + [[${childNum}]]);
-	          		totalInfantPrice = (elem[i].priceINF + elem[i].markupINF) * [[${infantNum}]];
-	          		
-	          		totalPrice = totalAdultPrice + totalInfantPrice;
-	          		
-		          	flightTotalSeat = parseInt(elem[i].totalSeats); 
-		          	
-					htmlLeastFare = `
-					<div class="col-md-1 col-1">
-						<form action="[[@{/flight_booking_save}]]" method="post" id="booking_least_fare` + elem[i].id + `">
-		          				<input type="hidden" name="timeRemaining" class="timeRemain">
-			      				<input type="hidden" name="adultNum" value="[[${adultNum}]]">
-			      				<input type="hidden" name="childNum" value="[[${childNum}]]">
-			      				<input type="hidden" name="infantNum" value="[[${infantNum}]]">
-			      				<input type="hidden" name="cityOne" value="[[${cityOne}]]">
-			      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
-			      				<input type="hidden" name="date" value="[[${strDate}]]">
-			      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
-			          			<input type="hidden" name="search_id" value="1.5">
-					            <input type="hidden" name="flight_id" value="` + elem[i].id + `">
-					            <input type="hidden" name="device" class="device">
-					            <input type="hidden" name="deviceInfo" class="deviceInfo">
-					            
-	                    
-							<button class="leastFareBtn" type="submit" form="booking_least_fare` + elem[i].id + `">
-						        <div class="tile-align" id="brandLeastFareImg` + elem[i].id + `">
-						        </div>
-						        <div class="tile-align">
-						            <span><i class="fa fa-inr" aria-hidden="true"></i>` + totalPrice + `</span>
-						        </div>
-							</button>
-	                    
-	                 </form>
-	                 <div>
-					`;
-					
-					
-					htmlLeastFareOnline = `
-					<div class="col-md-1 col-1">
-						<form action="[[@{/flight_booking_save}]]" method="post" id="booking_least_fare` + elem[i].id + `">
-		          				<input type="hidden" name="timeRemaining" class="timeRemain">
-			      				<input type="hidden" name="adultNum" value="[[${adultNum}]]">
-			      				<input type="hidden" name="childNum" value="[[${childNum}]]">
-			      				<input type="hidden" name="infantNum" value="[[${infantNum}]]">
-			      				<input type="hidden" name="cityOne" value="[[${cityOne}]]">
-			      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
-			      				<input type="hidden" name="date" value="[[${strDate}]]">
-			      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
-			          			<input type="hidden" name="search_id" value="1.5">
-					            <input type="hidden" name="flight_id" value="` + elem[i].id + `">
-					            <input type="hidden" name="device" class="device">
-					            <input type="hidden" name="deviceInfo" class="deviceInfo">
-					            
-	                    
-							<button class="leastFareBtn" type="submit" form="booking_least_fare` + elem[i].id + `">
-						        <div class="tile-align">
-						            <img src="[[@{` + elem[i].airlineLogo + `}]]" class="img-fluid" alt="` + elem[i].brand + `">
-						        </div>
-						        <div class="tile-align">
-						            <span style="font-size: 18px; font-weight: 600;"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;` + totalPrice + `</span>
-						        </div>
-							</button>
-	                    
-	                 </form>
-	                 <div>
-					`;
-					
-		          	if (elem[i].traceId == "offline") {
-			          	if (paxNo <= flightTotalSeat) {
-			          		console.log("Flight Total Seat same/below searched seats: " + flightTotalSeat + " flight id: " + elem[i].id);
-			          		$("#leastFare").append(htmlLeastFare);
-			          		checkLeastFareBrand(elem[i].brand, elem[i].id, elem[i].brand);
-			          	}
-		          		
-		          	} else if (elem[i].mode == "Online-data") {
-			          	if (paxNo <= flightTotalSeat) {
-			          		console.log("Flight Total Seat same/below searched seats: " + flightTotalSeat + " flight id: " + elem[i].id);
-			          		$("#leastFare").append(htmlLeastFareOnline);
-			          	}
-					}
-					
-				}
-			}).fail(function() {
-				console.log("ERROR: Could not connect to the server.");
-			});
-		};
-
-	</script>
 	
     <div id="flight-category" style="background-color: white;">
         <div class="container" style=" padding: 10px 0;">
@@ -547,9 +435,11 @@
     </div>
     <div class="container" style="height: 150%; margin-top: 20px;">
     	<div class="row">
-    		<div class="col-md-3 tile-align media-hide">
-    			<div th:replace="flight/search/search_filter :: search_filter('tag')"></div>
-    		</div>
+		<div class="col-md-3 tile-align media-hide">
+			 <form method="POST" th:action="@{/noUser_search_filter}" id="searchFilterForm">
+				<div th:replace="flight/search/search_filter :: search_filter('tag')"></div>
+			 </form>
+		</div>
         	
         <div class="col-md-9">
         <div class="row">
@@ -563,28 +453,6 @@
 									</div>
 								</div>
 								
-								<!-- Modal -->
-								<div class="modal fade" id="sortingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								  <div class="modal-dialog modal-dialog-centered">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <h5 class="modal-title" id="exampleModalLabel">Sort Flight</h5>
-								        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								      </div>
-								      <div class="modal-body">
-								        <button >Price</button>
-								        <button >Arrival</button>
-								        <button >Departure</button>
-								        <button >Duration</button>
-								        <button >Airline</button>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								        <button type="button" class="btn btn-primary">Ok</button>
-								      </div>
-								    </div>
-								  </div>
-								</div>
 
 							</div>
                             <div class="col-md-4 col-6" style="color: white; display: flex; justify-content: start; align-items: center;">
@@ -715,11 +583,367 @@
                     </a>
                 </div>
             </div>
-            
+    		
 			</div>
              <div id="listDiv" class="row">
             </div>
             
+  
+		</div>
+    </div>
+    </div>
+    
+    <div class="media_status" id="mobileFooter">
+		<div class="footerInner">
+	   	   <div class="row">
+			   <button class="col-6" id="homeFooter" onclick="history.back()">
+				   <div class="footerInnerDiv" style="color: white;">
+					   <i class="fa fa-solid fa-backward"></i><br>
+					   <p>Back</p>
+			   		</div>
+			   	</button>
+			   <button id="homeFooterNext" type="button" class="col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
+				   <div class="footerInnerDiv" style="color: white;">
+					   <p>Filter</p>
+					   <i class="fas fa-filter"></i>
+			   		</div>
+			   	</button>
+		   </div>
+	   </div>
+   </div>
+    
+
+	<!-- Modal Sorting-->
+	<div class="modal fade" id="sortingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Sort Flight</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+			<div class="row">
+				<div class="col-4">
+	        		<button class="btnSorting" onclick="sortByPriceFlight()" data-bs-dismiss="modal">Price</button>
+				</div>
+				<div class="col-4">
+					<button class="btnSorting" onclick="sortByArrivalFlight()" data-bs-dismiss="modal">Arrival</button>
+				</div>
+				<div class="col-4">
+					<button class="btnSorting" onclick="sortByDepartureFlight()" data-bs-dismiss="modal">Departure</button>
+				</div>
+				<div class="col-4">
+					<button class="btnSorting" onclick="sortByDurationFlight()" data-bs-dismiss="modal">Duration</button>
+				</div>
+				<div class="col-4">
+					<button class="btnSorting" onclick="sortByBrandFlight()" data-bs-dismiss="modal">Airline</button>
+				</div>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+			<form method="POST" th:action="@{/noUser_search_filter}" id="searchFilterForm">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Filter Flight</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body" id="modal_body_button" style="scrollbar-width: 1px; overflow-y: scroll; height: 83vh;">
+		        		<div th:replace="flight/search/search_filter :: search_filter('tag')"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Reset</button>
+		        <button type="submit" class="btn btn-primary" >Filter</button>
+		      </div>
+			</form>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Loading-->
+	<div class="modal fade" id="loadingBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content" style="background: transparent; border: none;">
+	      <div class="modal-body" style="display: flex; justify-content: center; align-items: center;">
+	        <div class="spinner-border" role="status" style="border-color: blue; border-right-color: transparent; box-shadow: rgb(3 74 252 / 44%) -5px 0px 18px;">
+			  <span class="visually-hidden">Loading...</span>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+        	
+    <div class="media-hide">
+     	<footer th:replace="fragments :: page_footer"></footer>
+	</div>
+	
+	</div>
+</body>
+
+<script>
+	$(".btnSorting").click(function(){
+		$(".btnSorting").removeClass('btnSortingActive');
+		$(this).addClass('btnSortingActive');
+	});
+</script>
+
+<script>
+	
+	function sortByPriceFlight() {
+		$("#loadingBackdrop").modal('show');
+		
+        var search_passenger_number = [[${passengerNum}]];
+		var url = "/sort_flights_by_price";
+		
+		$.get(url, function() {
+		}).done(function() {
+			getFlightList(search_passenger_number);
+			
+			 $(this).delay(2000).queue(function() {
+				$("#loadingBackdrop").modal('hide');
+			     $(this).dequeue();
+			  });
+			  
+		}).fail(function() {
+			console.log("ERROR: Could not connect to the server.");
+		});
+	};
+	
+	function sortByDurationFlight() {
+		$("#loadingBackdrop").modal('show');
+		
+        var search_passenger_number = [[${passengerNum}]];
+		var url = "/sort_flights_by_duration";
+		
+		$.get(url, function() {
+		}).done(function() {
+			getFlightList(search_passenger_number);
+			
+			 $(this).delay(2000).queue(function() {
+				$("#loadingBackdrop").modal('hide');
+			     $(this).dequeue();
+			  });
+		}).fail(function() {
+			console.log("ERROR: Could not connect to the server.");
+		});
+	};
+	
+	function sortByArrivalFlight() {
+		$("#loadingBackdrop").modal('show');
+		
+        var search_passenger_number = [[${passengerNum}]];
+		var url = "/sort_flights_by_arrival";
+		
+		$.get(url, function() {
+		}).done(function() {
+			getFlightList(search_passenger_number);
+			
+			 $(this).delay(2000).queue(function() {
+				$("#loadingBackdrop").modal('hide');
+			     $(this).dequeue();
+			  });
+		}).fail(function() {
+			console.log("ERROR: Could not connect to the server.");
+		});
+	};
+	
+	function sortByDepartureFlight() {
+		$("#loadingBackdrop").modal('show');
+		
+        var search_passenger_number = [[${passengerNum}]];
+		var url = "/sort_flights_by_departure";
+		
+		$.get(url, function() {
+		}).done(function() {
+			getFlightList(search_passenger_number);
+			
+			 $(this).delay(2000).queue(function() {
+				$("#loadingBackdrop").modal('hide');
+			     $(this).dequeue();
+			  });
+		}).fail(function() {
+			console.log("ERROR: Could not connect to the server.");
+		});
+	};
+	
+	function sortByBrandFlight() {
+		$("#loadingBackdrop").modal('show');
+		
+        var search_passenger_number = [[${passengerNum}]];
+		var url = "/sort_flights_by_brand";
+		
+		$.get(url, function() {
+		}).done(function() {
+			getFlightList(search_passenger_number);
+			
+			 $(this).delay(2000).queue(function() {
+				$("#loadingBackdrop").modal('hide');
+			     $(this).dequeue();
+			  });
+		}).fail(function() {
+			console.log("ERROR: Could not connect to the server.");
+		});
+	};
+</script>
+	
+	<script type="text/javascript">
+		
+		function checkBrand(brandName, id) {
+			$("#brandImage" + id).empty();
+			$("#brandImageMobile" + id).empty();
+			var urlBrand = "[[@{/find_brand_}]]" + brandName;
+			
+			$.get(urlBrand, function(response) {
+				htmlImg = `
+					<img src="[[@{` + response + `}]]" width="40" height="45" style="margin-left: 28px;">
+				`;
+				htmlImgMobile = `
+					<img src="[[@{` + response + `}]]" width="40" height="38" style="margin-left: 28px; border-radius: 4px; alt="` + brandName + `"">
+				`;
+				$("#brandImage" + id).append(htmlImg);
+				$("#brandImageMobile" + id).append(htmlImgMobile);
+			}).fail(function(){
+				alert("Could not connect to the server.");
+			});
+			
+			return false;
+		};
+	</script>
+
+  
+	<script type="text/javascript">
+		
+		function checkLeastFareBrand(brandName, id, brand) {
+			url = "[[@{/find_brand_}]]" + brandName;
+			
+			$.get(url, function(response) {
+				htmlImg = `
+					<img src="[[@{` + response + `}]]" class="img-fluid" alt="` + brand + `">
+				`;
+				
+				$("#brandLeastFareImg" + id).append(htmlImg);
+			}).fail(function(){
+				alert("Could not connect to the server.");
+			});
+			
+			return false;
+		};
+	</script>		
+		
+		
+    <script>
+		$(document).ready(function(){
+			searchPassengerNo = [[${passengerNum}]];
+			getLeastFareByBrand(searchPassengerNo);
+		});
+		
+		
+		function getLeastFareByBrand(paxNo) {
+			
+			var urlLeastFare = "/get_least_fare_by_brand" ;
+			
+			$.get(urlLeastFare, function(elem) {
+			}).done(function(elem) {
+				for (let i = 0; i < elem.length; i++) {
+		          	
+		          	totalAdultPrice = (elem[i].priceADT + elem[i].markupADT) * ([[${adultNum}]] + [[${childNum}]]);
+	          		totalInfantPrice = (elem[i].priceINF + elem[i].markupINF) * [[${infantNum}]];
+	          		
+	          		totalPrice = totalAdultPrice + totalInfantPrice;
+	          		
+		          	flightTotalSeat = parseInt(elem[i].totalSeats); 
+		          	
+					htmlLeastFare = `
+					<div class="col-md-1 col-1">
+						<form action="[[@{/flight_booking_save}]]" method="post" id="booking_least_fare` + elem[i].id + `">
+		          				<input type="hidden" name="timeRemaining" class="timeRemain">
+			      				<input type="hidden" name="adultNum" value="[[${adultNum}]]">
+			      				<input type="hidden" name="childNum" value="[[${childNum}]]">
+			      				<input type="hidden" name="infantNum" value="[[${infantNum}]]">
+			      				<input type="hidden" name="cityOne" value="[[${cityOne}]]">
+			      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
+			      				<input type="hidden" name="date" value="[[${strDate}]]">
+			      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
+		          				<input type="hidden" name="search_id" value="[[${searchId}]]">
+					            <input type="hidden" name="flight_id" value="` + elem[i].id + `">
+					            <input type="hidden" name="device" class="device">
+					            <input type="hidden" name="deviceInfo" class="deviceInfo">
+					            
+	                    
+							<button class="leastFareBtn" type="submit" form="booking_least_fare` + elem[i].id + `">
+						        <div class="tile-align" id="brandLeastFareImg` + elem[i].id + `">
+						        </div>
+						        <div class="tile-align">
+						            <span><i class="fa fa-inr" aria-hidden="true"></i>` + totalPrice + `</span>
+						        </div>
+							</button>
+	                    
+	                 </form>
+	                 <div>
+					`;
+					
+					
+					htmlLeastFareOnline = `
+					<div class="col-md-1 col-1">
+						<form action="[[@{/flight_booking_save}]]" method="post" id="booking_least_fare` + elem[i].id + `">
+		          				<input type="hidden" name="timeRemaining" class="timeRemain">
+			      				<input type="hidden" name="adultNum" value="[[${adultNum}]]">
+			      				<input type="hidden" name="childNum" value="[[${childNum}]]">
+			      				<input type="hidden" name="infantNum" value="[[${infantNum}]]">
+			      				<input type="hidden" name="cityOne" value="[[${cityOne}]]">
+			      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
+			      				<input type="hidden" name="date" value="[[${strDate}]]">
+			      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
+		          				<input type="hidden" name="search_id" value="[[${searchId}]]">
+					            <input type="hidden" name="flight_id" value="` + elem[i].id + `">
+					            <input type="hidden" name="device" class="device">
+					            <input type="hidden" name="deviceInfo" class="deviceInfo">
+					            
+	                    
+							<button class="leastFareBtn" type="submit" form="booking_least_fare` + elem[i].id + `">
+						        <div class="tile-align">
+						            <img src="[[@{` + elem[i].airlineLogo + `}]]" class="img-fluid" alt="` + elem[i].brand + `">
+						        </div>
+						        <div class="tile-align">
+						            <span style="font-size: 18px; font-weight: 600;"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;` + totalPrice + `</span>
+						        </div>
+							</button>
+	                    
+	                 </form>
+	                 <div>
+					`;
+					
+		          	if (elem[i].traceId == "offline") {
+			          	if (paxNo <= flightTotalSeat) {
+			          		console.log("Flight Total Seat same/below searched seats: " + flightTotalSeat + " flight id: " + elem[i].id);
+			          		$("#leastFare").append(htmlLeastFare);
+			          		checkLeastFareBrand(elem[i].brand, elem[i].id, elem[i].brand);
+			          	}
+		          		
+		          	} else if (elem[i].mode == "Online-data") {
+			          	if (paxNo <= flightTotalSeat) {
+			          		console.log("Flight Total Seat same/below searched seats: " + flightTotalSeat + " flight id: " + elem[i].id);
+			          		$("#leastFare").append(htmlLeastFareOnline);
+			          	}
+					}
+					
+				}
+			}).fail(function() {
+				console.log("ERROR: Could not connect to the server.");
+			});
+		};
+
+	</script>
+		
             <script>
 				$(document).ready(function(){
 					var searchPassengerNo = [[${passengerNum}]];
@@ -738,245 +962,13 @@
 						for (let i = 0; i < elem.length; i++) {
 		          			flight_seats = parseInt(elem[i].totalSeats);
 							//var str = elem[i];
-							htmlCodeBlock = `
 							
-						
-				          	<div class="col-md-12 shadow rounded marginSetDiv" style=" border: 1px solid #e0e0e0; background-color: white; margin: 5px 0;">
-								<form action="[[@{/flight_booking_save}]]" method="post" id="booking_form_offline` + elem[i].id + `">
-				          			<input type="hidden" id="inputSeatNum_offline-` + elem[i].id + `" value="` + elem[i].totalSeats + `">
-		          					<input type="hidden" name="timeRemaining" class="timeRemain">
-					          		<div id="flightSearchResultOffline` + elem[i].id + `">
-										  
-									  
-			      				<input type="hidden" name="adultNum" value="[[${adultNum}]]">
-			      				<input type="hidden" name="childNum" value="[[${childNum}]]">
-			      				<input type="hidden" name="infantNum" value="[[${infantNum}]]">
-			      				<input type="hidden" name="cityOne" value="[[${cityOne}]]">
-			      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
-			      				<input type="hidden" name="date" value="[[${strDate}]]">
-			      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
-			          			<input type="hidden" name="search_id" value="1.5">
-					            <input type="hidden" name="flight_id" value="` + elem[i].id + `">
-					            <input type="hidden" name="device" class="device">
-					            <input type="hidden" name="deviceInfo" class="deviceInfo">
-					                    <div class="row media-hide">
-					                    	<div class="col-md-10 col">
-					                    		<div class="row seacrh_margin">
-					                    			<div class="col-3" style="padding: 0;">
-						                    			<div id="brandImageOffline` + elem[i].id + `" style="float: left; padding: 0px">
-					                                    </div>
-					                                    <div style="float: left; font-size: 15px; padding: 10px 25px;">
-					                                       ` + elem[i].brand + ` </b>
-					                                        <p id="pnr_id" style="margin: 0;">` + elem[i].flightNum + `</p> 
-					                                    </div>
-							                    	</div>
-							                    	<div class="col-7" style="padding-top: 48px;">
-							                            <div class="row">
-							                                <div class="col"> 
-							                                    <div class="row">
-								                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-							                                            <h2 style="font-size: 24px; margin: 0;">` + elem[i].depTime + `</h2>
-							                                            <p style="margin: 0;">` + elem[i].cityOne + `</p>
-							                                        </div>
-							                                        <div class="col">
-							                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0;">
-							                                                <b class="non_stop" id="non_stop_offline-` + elem[i].id + `"></b>
-							                                            </div>
-							                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0;">
-							                                            	<img src="[[@{/images/pngwingcomffe.png}]]" width="100%" height="25">
-							                                            </div>
-							                                        </div>
-							                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-							                                            <h2 style="font-size: 24px; margin: 0;">` + elem[i].arrTime + `</h2>
-							                                            <p style="margin: 0;">` + elem[i].cityTwo + `</p>
-							                                        </div>
-							                                	</div>
-							                             	</div>
-							                             	<div class="row">
-				                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; margin-top: -15px;">
-				                                                    <i class="fa fa-clock-o" aria-hidden="true" style=" margin-right: 4px;"></i><b id="duration_offline-` + elem[i].id + `"></b>
-				                                                </div>
-			                                            	</div>
-						                          		</div>
-						                          </div>
-					                    			<div class="col-2 media-hide">
-							                    		<p style="font-size: 12px; color: red; background: #d2cfcfc7; padding: 5px; float: right;">Non-refundable</p> 
-													</div>
-					                    			<div class="col-2 media_status" >
-								                    	<div class="col-md-10" style=" text-align: center; background-color: #ffffeb; border: 1px dashed #e8d685;">
-							                                <p style="margin: 0; color: #9d8d44;"><i class="fa fa-check-circle" aria-hidden="true"></i> CPN</p>
-							                            </div>
-							                            <div class="col-md-2 col" style="padding: 0;">
-						                                    <input type="checkbox" id="send_quote" name="send_quote" value="send_quote">
-						                                    <label for="send_quote" style="padding-left: 2px;"><i class="fa fa-envelope" aria-hidden="true"></i></label>
-						                                </div>
-							                    	</div>
-							                    	<div class="col-12 media_status" style="display: none;">
-							                    		<div class="row">
-									                    	<div class="col" >
-							                                	<p style="font-size: 28px; margin: 0;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceDeskOffline` + elem[i].id + `" style="font-weight: 600;"></span> </p>
-							                                	<small>(For [[${passengerNum}]] Passenger/s)</small>
-							                                </div>
-									                    	<div class="col">
-								                                 <button type="submit" class="btn btn-primary submit_btn_stl" style="float: right; font-size: 26px;" id="book_now" name="book_now">Book Now</button>
-								                            </div>
-							                            </div>
-							                    	</div>
-						                    		<div class="col-12 media-hide">
-							                         <div class="row">
-							                            <div class="col-md-1"></div>
-							                            <div class="col-md-10" style=" text-align: center; background-color: #ffffeb; border: 1px dashed #e8d685;">
-							                                <p style="margin: 0; color: #9d8d44;"><i class="fa fa-check-circle" aria-hidden="true"></i> CPN</p>
-							                            </div>
-							                            <div class="col-md-1"></div>
-							                        </div>
-						                          </div>
-						                          <div class="col-12">
-							                          <div style="background-color: #d6e6f3; border-radius: 8px 8px 0 0;">
-							                            <div class="row" style="padding: 5px 0;">
-							                                <div class="col-md-4 col media-hide" style="padding: 0 25px;">
-							                                    <input type="checkbox" id="send_quote" name="send_quote" value="send_quote">
-							                                    <label for="send_quote"><i class="fa fa-envelope" aria-hidden="true"></i> Send Quote</label>
-							                                </div>
-							                                <div class="col-7 media_status" style="padding: 0 0 0 13px; display: none;">
-							                                	` + elem[i].totalSeats + ` seat/s available
-							                                </div>
-							                                <div class="col-md-4 col media-hide"></div>
-							                                <div class="col-md-4 col-5 padding_zero" style="padding: 0 25px;">
-							                                    <a class="float-state" href="" style="text-decoration: none; float: right;"><i class="fa fa-plane" aria-hidden="true"></i> Flight Details</a>
-							                                </div>
-							                            </div>
-							                        </div>
-						                          </div>
-						                       </div>
-					                    	</div>
-					                    	
-					                    	<div class="col-md-2  text-center media-hide" style="padding: 0 0 8px; border-left: 4px solid #d6e6f3; ">
-					                    		<div class="col-8 float-right" style="background: #d2cfcfc7; padding: 0;">
-					                    			` + elem[i].totalSeats + ` seat/s available
-					                    		</div>
-				                                <div  style="margin: 28px 0 15px 0; padding: 0 30px;">
-				                                	<p style="font-size: 28px; margin: 0;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceOffline` + elem[i].id + `" style="font-weight: 600;"></span> </p>
-				                                	<small>(For [[${passengerNum}]] Passenger/s)</small>
-				                                </div>
-					                            <div style="display: flex; justify-content: center;">
-				                                 	<button type="submit" class="btn btn-primary submit_btn_stl" id="book_now" name="book_now">Book Now</button>
-					                            </div>
-					                    	</div>
-					                    <div>
-					                    </div>
-					                    </div>
-			          					<button type="button" class="btn btnSpecial media_status" data-bs-toggle="modal" data-bs-target="#staticBackdrop` + elem[i].id + `" style="display:none; padding: 10px 0;  width: 100%;">
-						                   
-													
-		                                    	
-		                                    <div class="row">
-			                                    <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-		                                            <h2 style="font-size: 22px; margin: 0;">` + elem[i].depTime + `</h2>
-		                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">` + elem[i].cityOne + `</p>
-		                                        </div>
-		                                        <div class="col">
-		                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; padding-top: 6px;">
-	                                            		<b id="duration_mobile_offline-` + elem[i].id + `" style="margin-bottom: -7px;"></b>
-		                                            </div>
-		                                            <div class="col-12" style="display: flex; justify-content: center; padding: 0; ">
-		                                            	<div style="padding-top: 5px; width: 100%; display: flex;">
-			                                            	<p style="font-size: 7px; margin: 0; color: #dadada;">
-																<i class="fa fa-solid fa-circle-dot"></i>
-			                                            	</p>
-															<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: #dadada;">
-															<img src="[[@{` + `/images/plane.png` + `}]]" style="width: 25px; height: 25px;">
-															<hr size="5" style="width: 100%; margin-top: 4px; margin: 4px 0 0 0; color: #dadada;">
-			                                            	<p style="font-size: 7px; margin: 0; color: #dadada;">
-																<i class="fa fa-solid fa-circle-dot"></i>
-			                                            	</p>
-														</div>
-		                                            </div>
-	                                                <div class="col" style="font-size: 16px; padding: 0; text-align: center; ">
-		                                                <b class="non_stop" id="non_stop_mobile_offf-` + elem[i].id + `">Non-stop</b>
-	                                                </div>
-		                                        </div>
-		                                        <div class="col" style="padding: 7px 0 0 0; text-align:center;">
-		                                            <h2 style="font-size: 22px; margin: 0;">` + elem[i].arrTime + `</h2>
-		                                            <p style="margin: 0; font-weight: 600; color: #7f7f7f; font-size: 20px;">` + elem[i].cityTwo + `</p>
-		                                        </div>
-		                                	</div>
-			                          		<div class="row" style="padding-left: 10px;">
-												<div class="col-4" style="padding: 0 display: flex;;">
-					                    			<div id="brandImageMobileOffline` + elem[i].id + `" style="float: left; padding: 0px">
-				                                    </div>
-												</div>
-												<div class="col-4" style="padding: 0;">
-													<p id="pnr_id" style="margin: 5px 0 0 0; text-align: left;"><small style="font-size: 12px;">E</small>| ` + elem[i].flightNum + `</p> 
-												</div>
-												<div class="col-4" style="padding: 0;">
-													<p style="font-size: 22px; margin: 0; color: blue;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceMobileOffline` + elem[i].id + `" style="font-weight: 600;"></span> </p>
-	                                        	</div>
-											</div>
-										</button>
-										
-										<!-- Modal -->
-										<div class="modal fade" id="staticBackdrop` + elem[i].id + `" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-										  <div class="modal-dialog">
-										    <div class="modal-content" style="height: 98vh;">
-										      <div class="modal-header">
-										        <h5 class="modal-title" id="staticBackdropLabel">Please select a fare</h5>
-										        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-										      </div>
-										      <div class="modal-body">
-												<div class="form-check" style="padding: 10px 8px 0 8px; border-radius: 7px; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
-												  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" style="margin-left: 0;" checked>
-												  <label class="form-check-label" for="flexRadioDefault2" id="totalPriceMobileOfflineModal` + elem[i].id + `" style="width: 100%;">
-												    
-												  </label>
-												  <div class="row">
-													  <div class="col-5">
-														  <i class="fa fa-solid fa-chair"></i> Seat
-													  </div>
-													  <div class="col-7" style="text-align: right;">
-														  <p style="color: green;">FREE</p>
-													  </div>
-												  </div>
-												</div>
-												<div style="padding: 8px; text-align: center;"> ALL FARES INCLUDE</div>
-												  <div class="row">
-													  <div class="col-8">
-														  <i class="fa fa-solid fa-cart-flatbed-suitcase"></i> Cabin Baggage
-													  </div>
-													  <div class="col-4" style="text-align: right;">
-														  <p style="color: green;">` + elem[i].cabinBaggage + ` KGS</p>
-													  </div>
-												  </div>
-												  <div class="row">
-													  <div class="col-8">
-														  <i class="fa fa-solid fa-suitcase"></i> Check-in baggage
-													  </div>
-													  <div class="col-4" style="text-align: right;">
-														  <p style="color: green;">` + elem[i].baggage + ` KGS</p>
-													  </div>
-												  </div>
-	
-										      </div>
-										      </div>
-										      <div class="modal-footer">
-										        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="float: left;">Close</button>
-				                                <button type="submit" class="btn btn-primary submit_btn_stl" id="book_now" name="book_now" form="booking_form_offline` + elem[i].id + `" style="float: right;">Book Now</button>
-										      </div>
-										    </div>
-										  </div>
-									</div>
-				          		</form>
-				          	</div>
-							
-				            	
-
-		          	`;
 		          	
 		          	htmlCodeBlockOnline = `
 		          			
 				          	<div class="col-md-12 shadow rounded marginSetDiv" style=" border: 1px solid #e0e0e0; background-color: white; margin: 5px 0;">
 							
-							<form th:action="[[@{/flight_booking_save}]]" method="post" id="booking_form` + elem[i].id + `">
+							<form action="[[@{/flight_booking_save}]]" method="post" id="booking_form` + elem[i].id + `">
 				          			<input type="hidden" id="inputSeatNum-` + elem[i].id + `" value="` + elem[i].totalSeats + `">
 		          					<input type="hidden" name="timeRemaining" class="timeRemain">
 					          		<div id="flightSearchResult` + elem[i].id + `">
@@ -990,7 +982,7 @@
 		      				<input type="hidden" name="cityTwo" value="[[${cityTwo}]]">
 		      				<input type="hidden" name="date" value="[[${strDate}]]">
 		      				<input type="hidden" name="journeyClass" value="[[${journeyClass}]]">
-		          			<input type="hidden" name="search_id" value="1.5">
+		          			<input type="hidden" name="search_id" value="[[${searchId}]]">
 				            <input type="hidden" name="flight_id" value="` + elem[i].id + `">
 				            <input type="hidden" name="device" class="device">
 				            <input type="hidden" name="deviceInfo" class="deviceInfo">
@@ -1144,7 +1136,7 @@
 			                                    </div>
 											</div>
 											<div class="col-4" style="padding: 0;">
-												<p id="pnr_id" style="margin: 5px 0 0 0; text-align: left;"><small style="font-size: 12px;">T</small>| ` + elem[i].flightNum + `</p> 
+												<p id="pnr_id" style="margin: 5px 0 0 0; text-align: left;"><small id="agencyCode-` + elem[i].id + `" style="font-size: 12px;"></small>| ` + elem[i].flightNum + `</p> 
 											</div>
 											<div class="col-4" style="padding: 0;">
 	                                			<p style="font-size: 22px; margin: 0; color: blue;">[[${CURRENCY_SYMBOL}]]&nbsp;<span id="totalPriceMobile` + elem[i].id + `" style="font-weight: 600;"></span> </p>
@@ -1212,20 +1204,16 @@
 		          	
 		    		
 		          	
-		          	
-		          	if (elem[i].traceId == "offline") {
-			          	if (paxNo <= flight_seats) {
-			          		console.log("Flight Total Seat same/below searched seats: " + flight_seats + " flight id: " + elem[i].id);
-			          		$("#listDiv").append(htmlCodeBlock);
+		          	if (paxNo <= flight_seats) {
+		          		$("#listDiv").append(htmlCodeBlockOnline);
+		          		if (elem[i].traceId == "offline") {
+							$("#agencyCode-" + elem[i].id).text("O")
 			          		checkBrand(elem[i].brand, elem[i].id);
-			          	}
-		          		
-		          	} else if (elem[i].mode == "Online-data") {
-			          	if (paxNo <= flight_seats) {
-			          		console.log("Flight Total Seat same/below searched seats: " + flight_seats + " flight id: " + elem[i].id);
-			          		$("#listDiv").append(htmlCodeBlockOnline);
-			          	}
-					}
+						} else if (elem[i].mode == "Online-data") {
+							$("#agencyCode-" + elem[i].id).text("T")
+						} 
+						
+		          	}
 		    		
 		          	if (elem[i].stopNum == 0) {
 		          		$("#non_stop_offline-" + elem[i].id).text("Non-Stop");
@@ -1284,238 +1272,18 @@
 							
 						}
 						consol.log("Successfull gjghjg!");
+						$("#loadingBackdrop").modal('toggle');
 					}).fail(function() {
 						consol.log("Something went wrong in the server!");
 					});
 				};
 			</script>
-  
-  			<script type="text/javascript">
-				
-				function checkBrand(brandName, id) {
-					var urlBrand = "[[@{/find_brand_}]]" + brandName;
-					
-					$.get(urlBrand, function(response) {
-						htmlImg = `
-							<img src="[[@{` + response + `}]]" width="40" height="45" style="margin-left: 28px;">
-						`;
-						htmlImgMobile = `
-							<img src="[[@{` + response + `}]]" width="40" height="38" style="margin-left: 28px; border-radius: 4px; alt="` + brandName + `"">
-						`;
-						$("#brandImageOffline" + id).append(htmlImg);
-						$("#brandImageMobileOffline" + id).append(htmlImgMobile);
-					}).fail(function(){
-						alert("Could not connect to the server.");
-					});
-					
-					return false;
-				};
-			</script>
-  
-  			<script type="text/javascript">
-				
-				function checkLeastFareBrand(brandName, id, brand) {
-					url = "[[@{/find_brand_}]]" + brandName;
-					
-					$.get(url, function(response) {
-						htmlImg = `
-							<img src="[[@{` + response + `}]]" class="img-fluid" alt="` + brand + `">
-						`;
-						
-						$("#brandLeastFareImg" + id).append(htmlImg);
-					}).fail(function(){
-						alert("Could not connect to the server.");
-					});
-					
-					return false;
-				};
-			</script>
-
-		</div>
-    </div>
-    </div>
-    
-    <div class="media_status" id="mobileFooter">
-		<div class="footerInner">
-	   	   <div class="row">
-			   <button class="col-6" id="homeFooter" onclick="history.back()">
-				   <div class="footerInnerDiv" style="color: white;">
-					   <i class="fa fa-solid fa-backward"></i><br>
-					   <p>Back</p>
-			   		</div>
-			   	</button>
-			   <button id="homeFooterNext" type="button" class="col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
-				   <div class="footerInnerDiv" style="color: white;">
-					   <p>Filter</p>
-					   <i class="fas fa-filter"></i>
-			   		</div>
-			   	</button>
-		   </div>
-	   </div>
-   </div>
-    
-
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">Filter Flight</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	      </div>
-	      <div class="modal-body" id="modal_body_button">
-	        <div th:replace="flight/search/search_filter :: search_filter('tag')"></div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-
-        	
-    <div class="media-hide">
-     	<footer th:replace="fragments :: page_footer"></footer>
-	</div>
-	
-	</div>
-</body>
-
-<script>
-	
-	function sortByPriceFlight() {
-        var search_passenger_number = [[${passengerNum}]];
-		var url = "/sort_flights_by_price";
-		
-		$.get(url, function() {
-		}).done(function() {
-			getFlightList(search_passenger_number);
-		}).fail(function() {
-			console.log("ERROR: Could not connect to the server.");
-		});
-	};
-	
-	function sortByDurationFlight() {
-        var search_passenger_number = [[${passengerNum}]];
-		var url = "/sort_flights_by_duration";
-		
-		$.get(url, function() {
-		}).done(function() {
-			getFlightList(search_passenger_number);
-		}).fail(function() {
-			console.log("ERROR: Could not connect to the server.");
-		});
-	};
-	
-	function sortByArrivalFlight() {
-        var search_passenger_number = [[${passengerNum}]];
-		var url = "/sort_flights_by_arrival";
-		
-		$.get(url, function() {
-		}).done(function() {
-			getFlightList(search_passenger_number);
-		}).fail(function() {
-			console.log("ERROR: Could not connect to the server.");
-		});
-	};
-	
-	function sortByDepartureFlight() {
-        var search_passenger_number = [[${passengerNum}]];
-		var url = "/sort_flights_by_departure";
-		
-		$.get(url, function() {
-		}).done(function() {
-			getFlightList(search_passenger_number);
-		}).fail(function() {
-			console.log("ERROR: Could not connect to the server.");
-		});
-	};
-	
-	function sortByBrandFlight() {
-        var search_passenger_number = [[${passengerNum}]];
-		var url = "/sort_flights_by_brand";
-		
-		$.get(url, function() {
-		}).done(function() {
-			getFlightList(search_passenger_number);
-		}).fail(function() {
-			console.log("ERROR: Could not connect to the server.");
-		});
-	};
-</script>
-					
+			
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".dropdownMenu ").css("color", "black");
 		$(".labelStyle ").css("color", "black");
 	})
-</script>
-
-<script type="text/javascript">
-  $("#searchboxess").bind('keydown', function(e){
-       var targetValue = $(this).val();
-       if (e.which ===8 || e.which === 13 || e.which === 37 || e.which === 39 || e.which === 46) { return; }
-
-       if (e.which > 47 &&  e.which < 58  && targetValue.length < 2) {
-          var c = String.fromCharCode(e.which);
-          var val = parseInt(c);
-          var textVal = parseInt(targetValue || "0");
-          var result = textVal + val;
-
-          if (result < 0 || result > 99) {
-             e.preventDefault();
-          }
-
-          if (targetValue === "0") {
-            $(this).val(val);
-            e.preventDefault();
-          }
-       }
-       else {
-           e.preventDefault();
-       }
-    });
-</script>
-<script>
-    $(document).ready(function(){
-        if ($("#searchboxess").val() <= 2){
-            var dec = parseFloat($("#searchboxess").val(),10).toFixed(2);
-        }
-    })
-</script>
-<script>
-    $(document).ready(function(){
-        $(".accordion-item > h2 > div").addClass("container");
-    })
-</script>
-<script>
-
-    var slider = document.getElementById("myRange");
-    var output = document.getElementById("searchboes");
-    output.value = slider.value;
-    
-    slider.oninput = function() {
-    output.value = this.value;
-    var value = (this.value-this.min)/(this.max-this.min)*100
-    this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #cccccc ' + value + '%, #cccccc 100%)'
-    }
-
-    /* alert($("input[name = 'brand']").val());
-    alert($("input[name = 'stop']").val()); */
-</script>
-<script>
-
-    var searchPrice = document.getElementById("myRange");
-    var priceSelector = document.getElementById("searchboes");
-    var searchbutton = document.getElementById("searchbutton");
-
-    searchbutton.onclick = function() {
-    searchPrice.value = priceSelector.value;
-    var value = (priceSelector.value-searchPrice.min)/(searchPrice.max-searchPrice.min)*100
-    searchPrice.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #cccccc ' + value + '%, #cccccc 100%)'
-    }
-
 </script>
 
 <script type="text/javascript" th:src="@{/js/checkBrowser.js}"></script>

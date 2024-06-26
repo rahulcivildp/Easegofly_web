@@ -4,7 +4,169 @@
 
 <head>
 	<style>
+		
+#searchBox {
+	border-radius: 10px;
+	background: white;
+	margin: 0 auto;
+	width: 80%;
+	padding: 18px;
+	padding-top: 33px;
+	margin-bottom: 30px;
+}
+
+.empty1 {
+	border-radius: 26px;
+	border: 1px solid gray;
+	margin-top: 10px;
+	padding: 12px 0;
+}
+
+#radio_search_1 {
+	width: 98%;
+	margin: 0 auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#radio_search_2 {
+	width: 98%;
+	margin: 0 auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.radio_search {
+	display: none;
+}
+
+.aligner {
+	float: left;
+	margin: 6px 0px;
+}
+
+.tile_settings {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.tile_settings p {
+	margin-bottom: 6px;
+}
+
+.dropdown ul {
+	list-style: none;
+	padding: 5px 5px;
+	border: 1px solid gray;
+	width: 195px;
+	box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+	position: absolute;
+	background: white;
+}
+
+.pass_list {
+	width: 100%;
+}
+
+.dropdowns-menu p {
+	margin-left: 4px;
+	color: gray;
+	float: left;
+}
+
+.dropdowns-menu {
+	display: none;
+}
+
+.dropdowns-menu b {
+	float: left;
+}
+
+.radios {
+	cursor: pointer;
+	float: left;
+	margin: 0 7px;
+}
+
+.radios input {
+	cursor: pointer;
+}
+
+input:checked+br+label {
+	font-weight: 600;
+}
+
+.pass_list1 {
+	width: 100%;
+}
+
+.pass_list2 {
+	width: 100%;
+}
+
+.pass_list3 {
+	width: 100%;
+}
+
+.pass_list4 {
+	width: 100%;
+}
+
+.pass_list5 {
+	width: 100%;
+}
+
+.pass_list6 {
+	width: 100%;
+}
+
+.pass_list-1 {
+	width: 100%;
+}
+
+.pass_list-2 {
+	width: 100%;
+}
+
+.n-text {
+	display: block;
+	font-size: 18px;
+	margin: 19px 0;
+}
+
+.submit_btns {
+	width: 100%;
+	height: 62px;
+	border-radius: 9px;
+	background-color: #faff69;
+	font-size: 24px;
+	font-weight: 630;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19);
+}
+
+.submit_btns:hover {
+	background-color: #d32f2f;
+	position: relative;
+	top: 2px;
+	box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.2), 0 18px 60px 0
+		rgba(0, 0, 0, 0.19);
+	color: white;
+}
+
+
+
+
+
 		@media screen and (max-width: 800px) {
+			
+	#searchMain #searchBox {
+		width: 96% !important;
+		padding: 18px 2px ;
+		margin-top: 10px ;
+		margin-bottom: 38px ;
+		display: none;
+	}
 			.radiosMobile {
 				border: 1px solid grey !important;
 				border-radius: 8px !important;
@@ -23,7 +185,7 @@
 				border-radius: 0px !important;
 				border: none !important;
 				margin-top: 10px;
-				padding: 12px 5px;
+				padding: 0 !important;
 			}
 			.floatingButton {
 			    position: relative;
@@ -132,6 +294,14 @@
 		width: 50% !important;
 		top: 15px;
 	}
+	
+		#radio_search_1 {
+			width: 100% !important;
+		}
+
+		#radio_search_2 {
+			width: 100% !important;
+		}
 }
 		
 /*the container must be positioned relative:*/
@@ -517,14 +687,14 @@
 								</div>
 								<div class="col-md-6 col-6 aligner form-floating media-hide" id="aligner4">
 									<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo"
-										placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" style="text-align: end;"
+										placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" 
 										required>
 									<datalist id="cityTwoList">
 										<th:block th:each="city : ${cities}">
 											<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
 										</th:block>
 									</datalist>
-									<label class="labelStyle labelSetting" for="cityTwo" style="text-align: end;"><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
+									<label class="labelStyle labelSetting" for="cityTwo" ><i class="fa fa-circle-o-notch fa-spin media-hide"></i>
 										To</label>
 								</div>
 								
@@ -639,11 +809,11 @@
 					</form>
 					
 					<form th:action="@{/flight_search_save}" method="get" class="media_status">
-						<div class="col-12">
+						<div class="row">
 							<input type="hidden" name="tripType" value="oneWay">
 							<div class="col-md-5 col-12" style=" float: left; ">
-								<div class="media_status_flex_CPN" style="justify-content: center;">
-									<div class="row" style="width: 98%;">
+								<div class="container media_status_flex_CPN" style="justify-content: center;">
+									<div class="row" style="width: 100%;">
 										<div class="col-md-5 col-5 form-floating" id="aligner3" style="padding: 0;">
 											<input type="search" class="form-control hill1 input_styles_mobile autocomplete" name="cityOne" id="cityOneMobile"
 												placeholder="Depurture City" 
@@ -930,7 +1100,7 @@
 					</form>
 					
 					<form th:action="@{/flight_search_return_save}" method="get" class="media_status">
-						<div class="col-12">
+						<div class="row">
 							<input type="hidden" name="tripType" value="twoWays">
 							<div class="col-md-5 col-12" style=" float: left; ">
 								<div class="media_status_flex_CPN" style="justify-content: center;">

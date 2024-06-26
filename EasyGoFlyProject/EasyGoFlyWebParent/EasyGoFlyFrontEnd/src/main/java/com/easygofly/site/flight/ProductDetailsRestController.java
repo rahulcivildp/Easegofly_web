@@ -2,10 +2,8 @@ package com.easygofly.site.flight;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +30,6 @@ public class ProductDetailsRestController {
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private ProductDetailsInternationController pInternationController;
 	@Autowired private TravellerRepository travellerRepo;
-	@Autowired private FlightRepository productDetailsRepo;
 	
 	List<ProductDetail> testflights = new ArrayList<>();
 	
@@ -164,7 +161,7 @@ public class ProductDetailsRestController {
 
 	@GetMapping("/get_flight_list")
 	public List<ProductDetail> getFlightList() {
-		return productDetailsController.listProductDetailsOnline;
+		return productDetailsController.listProductDetailsInSearch;
 	} 
 
 	@GetMapping("/get_least_fare_by_brand")
@@ -212,49 +209,29 @@ public class ProductDetailsRestController {
 
 	@GetMapping("/sort_flights_by_price")
 	public void sortByPrice() {
-		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getPriceADT));
-		System.out.println(testflights.size());
+		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getPriceADT).thenComparing(ProductDetail::getMarkupADT));
 	} 
 
 	@GetMapping("/sort_flights_by_duration")
 	public void sortByDuration() {
-		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getDuration));
-		System.out.println(testflights.size());
+		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDuration));
 	} 
 
 	@GetMapping("/sort_flights_by_arrival")
 	public void sortByArrival() {
-		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getArrTimeInteger));
-		System.out.println(testflights.size());
+		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getArrTimeInteger));
 	} 
 
 	@GetMapping("/sort_flights_by_departure")
 	public void sortByDeparture() {
-		productDetailsController.listProductDetailsOnline.sort(Comparator.comparingDouble(ProductDetail::getDepTimeInteger));
-		System.out.println(testflights.size());
+		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDepTimeInteger));
 	} 
 
 	@GetMapping("/sort_flights_by_brand")
 	public void sortByBrand() {
-		productDetailsController.listProductDetailsOnline.sort(Comparator.comparing(ProductDetail::getBrand));
-		System.out.println(testflights.size());
+		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparing(ProductDetail::getBrand));
 	}
 	
-	
-	//Test Methods
-	
-	@GetMapping("/get_flight_all_list_test")
-	public void getFlightAllListsadasdassdadsa() {
-		testflights = productDetailsRepo.findFlightsByDuration(210);
-		System.out.println(testflights.size());
-	}
-	
-	@GetMapping("/get_flight_all_list")
-	public List<ProductDetail> getFlightAllListsadasdas() {
-		return testflights;
-	}
-	
-
 	
 	//Timer Method
 	
