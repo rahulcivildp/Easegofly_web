@@ -148,14 +148,23 @@ public class MainController {
 	private ProductDetail flightFareDetails(WebDetails detail) {
 		String priceLink1 = detail.getValue();
 		String[] parts = priceLink1.split("_");
-		if (parts.length != 1) {
-			Integer convInteger = Integer.parseInt(parts[4]);
-			ProductDetail flight = flightRepo.findById(convInteger).get();
-			return flight;
+		if (parts.length != 0) {
+			if (parts.length == 5) {
+				Integer convInteger = Integer.parseInt(parts[4]);
+				ProductDetail flight;
+				try {
+					flight = flightRepo.findById(convInteger).get();
+					return flight;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			} else {
+				return null;
+			}
 		} else {
 			return null;
 		}
-		
 	}
 
 	@GetMapping("/loading")

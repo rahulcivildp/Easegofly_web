@@ -56,11 +56,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 			Map<String, String> roleTargetUrlMap = new HashMap<>();
 			
-	        if(redirectURLObject != null) {
-	        	roleTargetUrlMap.put("Customer", redirectURLObject.toString());
-	        } else{
-	        	roleTargetUrlMap.put("Customer", "/");
-	        }
+			System.out.println(redirectURLObject);
+
+        	roleTargetUrlMap.put("Customer", "/");
 	        
 		    request.getSession().removeAttribute(REDIRECT_URL_SESSION_ATTRIBUTE_NAME);
 		    

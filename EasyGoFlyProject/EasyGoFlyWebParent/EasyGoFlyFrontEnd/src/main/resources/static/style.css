@@ -10,15 +10,27 @@
 
 *.font-times { font-family: 'Playfair Display', serif;}
 
+			
+input {
+	background: white !important;
+}
 *.activated {
 	background: #D32F2F !important;
 }
 *.activated b {
 	color: white !important;
 }
+*.activated a {
+	color: white !important;
+}
+
+a:hover {
+	color: white !important;
+}
 
 .row {
 	margin: 0;
+	width: 100%;
 }
 /* <a> - style properties */
 *.disabledDiv {background-color: #E9ECEF;}
@@ -334,6 +346,7 @@
 	display: block;
 }
 *.horiz {
+	min-width: 100% !important;
 	display: inline-block !important;
 	zoom: 1;
 	text-align: center;

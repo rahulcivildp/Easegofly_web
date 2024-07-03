@@ -1,32 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th=http://www.thymeleaf.org
 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
 <head>
-	<head th:replace="fragments :: page_head(': Book Flight, Hotel, Bus & Tour Packages', 'tag')"></head>
-	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
-    </script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'G-TNN6EKSPHR');
-	</script>
-	<!-- Google Analytics -->
-	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	
-	ga('create', 'UA-XXXXX-Y', 'auto');
-	ga('send', 'pageview');
-	</script>
-	<!-- End Google Analytics -->
+	<head th:replace="fragments :: page_head(': Hotel Search Page', 'tag')"></head>
+
 </head>	
 <style>
 	@media screen and (max-width: 800px) {
@@ -43,17 +21,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   <header id="header" class="fixed-top d-flex align-items-center" >
   	<div th:replace="fragments :: page_header('tag')"></div>
   </header>
-
-  <!-- Vendor JS Files -->
-  <script th:src="@{/assets/vendor/purecounter/purecounter_vanilla.js}"></script>
-  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/assets/vendor/glightbox/js/glightbox.min.js}"></script>
-  <script th:src="@{/assets/vendor/isotope-layout/isotope.pkgd.min.js}"></script>
-  <script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
-  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
-
-  <!-- Template Main JS File -->
-  <script th:src="@{/assets/js/main.js}"></script>
   
   <div th:replace="whatsapp :: content"></div>
   

@@ -4,17 +4,9 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 th:fragment="category(remove)" th:remove="${remove}">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-<link rel="stylesheet" type="text/css" th:href="@{../style.css}" >
 
 <style type="text/css">
 @media screen and (max-width: 800px) {
@@ -583,6 +575,11 @@ input:checked+br+label {
 		$("#flightMobile").toggleClass("activated");
 		$("#mainHeroStyle").toggleClass("searchActive");
 	});
+	
+	$("#flight").click(function(){
+		$("#flightMobile").toggleClass("activated");
+	});
+	
 </script>
 </html>
 

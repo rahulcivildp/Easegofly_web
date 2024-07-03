@@ -1,36 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
 <head>
-<link rel="icon" th:href="@{${FAVICON}}" type="image/png">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
-	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
-	<meta name="google-adsense-account" content="ca-pub-7204019255437462">
-	<title>Login Page - [[${SITE_NAME}]]</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}">
-	<script type="text/javascript" th:src="@{/webjars/jquery/3.6.1/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js}"></script>
-	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
- 	 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}" >
-	<script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-	  <!-- Google Fonts -->
-	  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-	
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7204019255437462"
-     crossorigin="anonymous"></script>
-     
-	  <!-- Vendor CSS Files -->
-	  <link type="text/css" th:href="@{assets/vendor/animate.css/animate.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
-	
-	  <!-- Template Main CSS File -->
-	  <link type="text/css" th:href="@{assets/css/style.css}" rel="stylesheet">
+	<head th:replace="fragments :: page_head(': Login Page', 'tag')"></head>
+
 	  
 	  <style type="text/css">
 	  	*.specialButton {
@@ -193,399 +167,21 @@
 		#hero {
 			height: auto !important;
 		}
+		.modal-content-stl {
+			background: transparent;
+			border: none;	
+			justify-content: center;
+			align-items: center;
+		}
 	  </style>
 </head>
 <body>
 
-<!-- ======= Header ======= -->
-<div id="header" class="fixed-top d-flex align-items-center">
-	<style>
-		.togglerClass {
-			display: none;
-		}
-		.toggleWidth {
-			width: 100%;
-		}
-		.containerHeader {
-			max-width: 81%;
-		}
-		
-		.hide-display {
-			display: none;
-		}
-			
-		@media screen and (max-width: 700px) {
-			.containerHeader {
-	    		width: 100% !important;
-				max-width: 100% !important;
-			}
-			.hide-display {
-				display: block !important;
-			}
-			 #sideBar {
-			    position: absolute;
-			    z-index: 99;
-				border-radius: 0 10px 10px 0;
-			    height: 100vh;
-			    width: 85%;
-			    translate: -360px 0;
-				transition-property: translate; 
-				transition-duration: 300ms; 
-				transition-timing-function: ease-in;
-				padding: 30px 30px 40px 45px;/* From https://css.glass */
-			    background: rgb(227 238 255 / 77%);
-			    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-			    backdrop-filter: blur(27.599999999999994px);
-			    -webkit-backdrop-filter: blur(7.6px);
-			    border: 1px solid rgba(255, 255, 255, 0.31);
-			  }
-			  
-		      #sideBar.sideBarActive {
-			    translate: -18px 0;
-			    position: absolute;
-			    z-index: 99;
-			  }
-			  
-			  #sidebarMenuDiv.mobileActive {
-				height: auto;
-		    	width: 100%;
-		    	position: fixed;    
-		    	top: 0px;
-			  }
-			  
-			  .sidebar_modal {
-				    cursor: pointer;
-				    margin: 20px 0;
-				    width: auto;
-				    color: #2c2c2ceb;
-				    padding: 3px 9px;
-				    border-radius: 5px;
-				    font-weight: 600;
-				    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
-				    -webkit-transition: background-color 2s ease-out;
-				    -moz-transition: background-color 2s ease-out;
-				    -o-transition: background-color 2s ease-out;
-				    transition: background-color 2s ease-out;
-				    -webkit-transition: color 0.5s ease-out;
-				    -moz-transition: color 0.5s ease-out;
-				    -o-transition: color 0.5s ease-out;
-				    transition: color 0.5s ease-out;
-				}
-			}
-			
-		    .sidebar_modal_dropdown {
-				display: flex;
-			    background: none;
-			    color: black !important;
-			    font-size: 18px;
-			}
-		
-		  
-		  .dropdown-toggle::after {
-			    margin-top: 12px !important;
-			}	
-			.mainDrawerlogo{
-			    height: 55px;
-			    width: 55px;
-			    border-radius: 30px;
-			    margin-left: 4px;
-			    background-position: center;
-			    background-repeat: no-repeat;
-			    background-size: cover;
-			    border: 2px solid white;
-			}
-			.positionedLogo {
-				position: relative;
-			    left: 29px;
-			    top: 29px;
-			    background-color: white;
-			    border-radius: 20px;
-			    height: 25px;
-			    width: 25px;
-			    text-align: center;
-			    font-size: 17px;
-			    color: black;
-			}
-			.sidebarCloseStyle {
-			    font-size: 40px;
-			    position: relative;
-			    right: 0;
-			    top: -24px;
-    			cursor: pointer;
-    			height: 35px;
-			}
-			.modal-content-stl {
-	            display: flex;
-	            justify-content: center;
-	            align-items: center;
-	            background: transparent;
-	        }
-	        .spinner-border {    
-				--bs-spinner-width: 100px;
-			    --bs-spinner-height: 100px;
-			    --bs-spinner-border-width: 7px;
-				
-			}
-	</style>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'G-TNN6EKSPHR');
-	</script>
-	<!-- Google Analytics -->
-	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	
-	ga('create', 'UA-XXXXX-Y', 'auto');
-	ga('send', 'pageview');
-	</script>
-	<!-- End Google Analytics -->
-    <div class="container d-flex align-items-center justify-content-between containerHeader">
-		
-      <div id="imageTogglerSidebar" class="media_status" style="padding-left: 4px;">
-		  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
-	        <div id="beforelogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new.png'} + ');'">
-	        	<div class="positionedLogo">
-					<i class="fa fa-solid fa-bars"></i>
-				</div>
-			</div>
-	      </li>
-	      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
-		        <div id="afterlogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
-		        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); '">
-		        	<div class="positionedLogo">
-						<i class="fa fa-solid fa-bars"></i>
-					</div>
-				</div>
-			</th:block>
-			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
-				 <div id="afterlogINnoPhoto" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new.png'} + ');'">
-		        	<div class="positionedLogo">
-						<i class="fa fa-solid fa-bars"></i>
-					</div>
-				</div>
-			</th:block>
-		  </th:block>
-	  </div>
-	  
-	<!-- Sidebar Menu -->
-	<div id="sidebarMenuDiv" class="mobileActive hide-display">
-		<div id="sideBar" style="display: flex; flex-direction: column; justify-content: space-between;">
-			<div>
-				<div class="row">
-				<div class="col-10" style="display: flex; justify-content: start;">
-					<img th:src="@{${FAVICON}}" alt="favicon" class="img-fluid" style="width: auto; height: 30px; float: left;">
-					<h1 style="margin: 0;">&nbsp;Easegofly</h1>
-				</div>
-				<div class="col-2">
-				   <div id="sidebarClose" class="sidebarCloseStyle"><i class="fa fa-solid fa-circle-xmark"></i></div>
-			    </div>
-			</div>
-			
-			
-			<div class="media_status_flex_CPN" style="width: 100%; height: 18px">
-				<hr style="width: 100%; height: 2px; background: black;">
-			</div>
-			<p style="font-size: 14px; margin: 0;">&nbsp;&nbsp;&nbsp;<i class="fa fa-solid fa-list"></i>&nbsp;&nbsp; MAIN MENU</p>
-			<div class="" style="width: 100%; height: 4px; margin-top: -15px;">
-				<hr style="width: 100%; height: 2px; background: black;">
-			</div>
-			<ul class="" style="list-style: none; padding: 0;">
-	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown" id="li1" th:href="@{/}" >
-	          	<i class="fa fa-solid fa-house" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Home</span></a>
-	          </li>
-	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li3" th:href="@{/about#no-2}" >
-	          	<i class="fa fa-solid fa-circle-info" style="font-size: 24px;">&nbsp;&nbsp;</i><span>About Us</span></a>
-	          </li>
-	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li4" th:href="@{/about#no-3}">
-	          	<i class="fa fa-solid fa-address-book" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Contact</span></a>
-	          </li>
-	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li2" th:href="@{/about#no-8}" >
-	          	<i class="fa fa-solid fa-bell-concierge" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Services</span></a>
-	          </li>
-	          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li2"  th:href="@{/flight_activity}" >
-	          	<i class="fa fa-solid fa-bell-concierge" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
-	          </li>
-	          <li class="dropdown sidebar_modal" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
-		          <a class="dropdown-toggle sidebar_modal_dropdown" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content: space-between;">
-			          <span style="display: flex !important;  justify-content: start;">
-			          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-			          </span> 
-		          </a>
-	              <li th:replace="user_credential/loginModal :: login('tag')"></li>
-	          </li>
-	          
-	          	<li class="dropdown sidebar_modal" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-		          	<a class="dropdown-toggle sidebar_modal_dropdown" href="#" id="dropdownMenuLinkLogged" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content: space-between;">
-		          		<span style="display: flex !important;  justify-content: start;">
-			          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-			          	</span> 
-		          	</a>
-		          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
-	          	</li>
-	          
-	        </ul>
-			</div>
-	        <div style="margin-bottom: 8px;">
-				<h4>Subscribe for newsletter</h4>
-				<div class="form-floating mb-3">
-				  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" style="background: #0033ff2b;">
-				  <label for="floatingInput">Email address</label>
-				</div>
-				
-				<div class="media_status_flex_CPN" style="width: 100%; height: 18px">
-					<hr style="width: 100%; height: 2px; background: black;">
-				</div>
-				<p>Copyright @2024 All Rights Reserved By Easegofly</p>
-			</div>
-		</div>
-	</div>
-	
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <div class="col media-hide">
-      	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; float: left;"></a>
-      </div>
-      
-      
 
-      <nav id="navbar" class="navbar">
-        <ul class="ul_modify">
-          <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
-          	<i class="fa fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li3" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-2}" style="background: none;">
-          	<i class="fa fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li4" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-3}">
-          	<i class="fa fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-8}" >
-          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/flight_activity}" >
-          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
-          </li>
-          <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          <a href="#">
-		          <span style="display: flex !important;  justify-content: start;">
-		          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-		          </span> 
-		          <i class="bi bi-chevron-down"></i>
-	          </a>
-              <li th:replace="user_credential/loginModal :: login('tag')"></li>
-          </li>
-          
-          	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          	<a href="#">
-	          		<span style="display: flex !important;  justify-content: start;">
-		          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-		          	</span> 
-		          	<i class="bi bi-chevron-down"></i>
-	          	</a>
-	          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
-          	</li>
-          
-        </ul>
-	  <div class="mobile-nav-toggle" id="imageToggler" style="display: none !important;">
-		  
-	  </div>
-	      <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}"></i>-->
-     
-        <!--<i class="fa fa-solid fa-magnifying-glass " style="margin-left: 18px;"></i>-->
-      </nav><!-- .navbar -->
-      
-	  
-	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
-	      <div class="col media_status" style="display: none; text-align: center; " >
-	      	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px;"></a>
-	      </div>
-      </li>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		    <div class="col float-state" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
-		        <a th:href="@{/}"> <p class="float-state" >Hey, <span sec:authentication="principal.customer.firstName"></span>!</p></a>
-		    </div>
-	  </th:block>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
-				  <a type="button" style="color: white;"
-				th:href="@{/wallet-home}">
-		    	<i class="fa fa-solid fa-wallet"></i>
-		    	</a>
-		    </div>
-	  </th:block>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
-		    	<i class="fa fa-solid fa-bell"></i>
-		    </div>
-	  </th:block>
-      <!--<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div style="color: white; padding: 0 15px 0 12px; font-size: 22px;">
-		    	<i class="fa fa-solid fa-network-wired"></i>
-		    </div>
-	  </th:block>-->
-    </div>
-    
-	<script type="text/javascript" th:src="@{/js/common.js}"></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#imageToggler").click(function(){
-				$("#beforelogIN").toggleClass("togglerClass");
-			});
-			
-			$("#imageToggler").click(function(){
-				$("#afterlogIN").toggleClass("togglerClass");
-			});
-			
-			$("#imageToggler").click(function(){
-				$("#afterlogINnoPhoto").toggleClass("togglerClass");
-			});
-		});
-	</script>
-	<script>
-			$("#imageTogglerSidebar").click(function(){
-				$("#sideBar").toggleClass("sideBarActive");
-				
-			});
-			
-			$("#sidebarClose").click(function(){
-				$("#sideBar").toggleClass("sideBarActive");
-			});
-		
-	</script>
-	<script>
-		
-		$(document).mouseup(function(e) {
-		    var container = $("#sideBar");
-		
-		     // if the target of the click isn't the container nor a descendant of the container
-		    if (!container.is(e.target) && container.has(e.target).length === 0) {
-				$("#sideBar").removeClass("sideBarActive");
-			}
-		});
-	</script>
-	
-  </div>
-  <!-- End Header -->
-  
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
   
 	 <div th:replace="whatsapp :: content"></div>
 	 
@@ -698,10 +294,15 @@
 													</div>
 												</th:block>
 											</div>
-											
+											<th:block th:if="${param.otp != null}">
+												<!--<div class="row mb-3">
+													<div><input type="checkbox" name="remember-me">&nbsp; Remember me</div>
+													
+												</div>-->
+											</th:block>
 											<div class="row mb-3" style="width: 40%; margin: 0 auto;">
-												<th:block th:if="${param.otp == null}"><input type="submit" value="Send OTP" class="btn btn-primary button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/></th:block>
-												<th:block th:if="${param.otp != null}"><input type="submit" value="Login" class="btn btn-primary button" /></th:block>
+												<th:block th:if="${param.otp == null}"><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" > Send OTP</button></th:block>
+												<th:block th:if="${param.otp != null}"><button type="submit" class="btn btn-primary" > Login</button></th:block>
 											</div>
 										</div>
 									</form>
@@ -726,6 +327,7 @@
 			  </div>
 			</div>
 
+<div style="height: 600px;"></div>
 
 		<footer th:replace="fragments :: page_footer"></footer>
 	</div>
