@@ -137,7 +137,7 @@
 					</div>
 				</div>
 				<div class="col-12" style="margin: 15px 0 5px 0">
-					<input class="specialButton" type="submit" value="Update Profile" style="float: right;"/>
+					<input class="specialButton" type="submit" value="Update Profile" onclick="checkProperNameAttribute()" style="float: right;"/>
 					<input class="specialButton_danger" id="profile_cancel" value="Cancel" style="float: left; width: 79px;"/>
 				</div>
 			</div>
@@ -204,7 +204,25 @@ document.getElementsByName('image')[0].addEventListener('change', function(event
 });
 
 </script>
-
+<script>
+	function checkProperNameAttribute() {
+			var fName = $("#firstName").val();
+			var lName = $("#lastName").val();
+			if(fName.includes('@') || fName.includes('.com')) {
+				document.getElementById("firstName").setCustomValidity("Please do not include '@' or '.com' in your name.");
+				document.getElementById("firstName").reportValidity();
+			} else {
+				document.getElementById("firstName").setCustomValidity("");
+			}
+			
+			if(lName.includes('@') || lName.includes('.com')) {
+				document.getElementById("lastName").setCustomValidity("Please do not include '@' or '.com' in your name.");
+				document.getElementById("lastName").reportValidity();
+			} else {
+				document.getElementById("lastName").setCustomValidity("");
+			}
+	}
+</script>
 <script>
 	moduleURL = "[[@{/}]]";
 	imageSize = 1024;

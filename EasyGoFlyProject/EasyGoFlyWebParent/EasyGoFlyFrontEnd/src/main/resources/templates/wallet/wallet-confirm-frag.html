@@ -151,6 +151,9 @@
 			    height: 100%;
 			    width: 65%;
         }
+        .form-check-input:checked {
+			background-color: #0d6efd !important;
+		}
     </style>
 
     <body>
@@ -195,7 +198,7 @@
 						                           			<input type="hidden" th:name="${orderInfo.getKey}" th:value="${orderInfo.getValue}">
 						                           		</th:block>
 						                           		<input type="hidden" name="checksum" th:value="${checksum}">
-						                            	<input class="booking_footer_btn" style="width: 100%; border: none; color: white;" type="submit" value="Proceed" id="payButton">
+						                            	<input class="booking_footer_btn" style="width: 100%; border: none; color: white; background-color: #d32f2f;" type="submit" value="Proceed" id="payButton">
 						                            </form>
 												</div>
 											</div>

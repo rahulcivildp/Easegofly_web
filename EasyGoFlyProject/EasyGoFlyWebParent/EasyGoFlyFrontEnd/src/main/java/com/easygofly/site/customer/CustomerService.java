@@ -117,6 +117,36 @@ public class CustomerService {
 		return customerRepo.save(userInDB);
 	}
 	
+	public Customer updateCustomeName(Customer customerInForm, String fName, String lName) {
+		Customer userInDB = customerRepo.findById(customerInForm.getId()).get();
+		Iterable<Customer> usersIndb = customerRepo.findAll();
+		Integer count = 0;
+		
+		if (customerInForm.getPhotos() != null) {
+			userInDB.setPhotos(customerInForm.getPhotos());
+		}
+		
+		for (Customer customer : usersIndb) {
+			if (customer.getPhone() ==  customerInForm.getPhone()) {
+				count++;
+			}
+		}
+		
+		if (count == 0) {
+			try {
+				userInDB.setPhone(customerInForm.getPhone());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
+		userInDB.setFirstName(fName);
+		userInDB.setLastName(lName);
+		userInDB.setEnabled(true);
+		
+		return customerRepo.save(userInDB);
+	}
+	
 	private void registerCustomer(Customer customer) {
 		encodePassword(customer);
 		customer.setEnabled(false);

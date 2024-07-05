@@ -340,8 +340,7 @@
 	      </li>
 	      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
 			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
-		        <div id="afterlogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/customer-photos/' + ${#authentication.getPrincipal().getCustomer().id}
-		        + '/'  + ${#authentication.getPrincipal().getCustomer().photos}} + '); '">
+		        <div id="afterlogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{${#authentication.getPrincipal().getCustomer().photosImagePath}} + '); '">
 		        	<div class="positionedLogo">
 						<i class="fa fa-solid fa-bars"></i>
 					</div>
@@ -464,7 +463,7 @@
           	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
           </li>
           <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="">
+	          <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
 		          <span style="display: flex !important;  justify-content: start;">
 		          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          </span> 
@@ -473,7 +472,7 @@
           </li>
           
           	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          	<a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="">
+	          	<a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
 	          		<span style="display: flex !important;  justify-content: start;">
 		          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
 		          	</span> 
@@ -501,7 +500,7 @@
       </li>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
 		    <div class="col float-state media_status" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
-		        <a th:href="@{/}"> <p class="float-state" style="width: 170px;">Hey, <span sec:authentication="principal.customer.firstName"></span>!</p></a>
+		        <a th:href="@{/}"> <p class="float-state" style="width: 170px;">Hey, <span id="cusName" sec:authentication="principal.customer.firstName"></span>!</p></a>
 		    </div>
 	  </th:block>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
@@ -518,6 +517,10 @@
 		    </div>
 	  </th:block>
     </div>
+    
+    	
+	
+	
     <script>
 		$("#logoutLink").click(function(e) {
 		e.preventDefault();
@@ -550,6 +553,77 @@
  <!-- ======= Footer ======= -->
   <footer th:fragment="page_footer" >
 	  
+	<div class="modal fade text-center" id="checkNameDialogue" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="checkModalTitle"></h4>
+				</div>
+				<div class="modal-body">
+					<div id="checkBody">
+						<form th:action="@{/update_name}"  method="post" id="custNameForm" style="display: flex; justify-content: center;">
+							<div class="row ">
+								<div class="col-12 col-sm-6">
+									<div class="form-floating mb-3">
+									  <input type="text" class="form-control" id="firstName" name="firstName" required>
+									  <label for="firstName">First Name</label>
+									</div>
+								</div>
+								<div class="col-12 col-sm-6">
+									<div class="form-floating mb-3">
+									  <input type="text" class="form-control" id="lastName" name="lastName" required>
+									  <label for="lastName">Last Name</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer" style="display: flex; justify-content: center;">
+					<button type="submit" id="submitName" form="custNameForm" class="btn btn-primary" style="width: 100%;" onclick="checkProperNameAttribute()">Save</button>
+				</div>
+			</div>
+		</div>	
+	</div>
+
+    <script>
+			
+		$(document).ready(function(){
+			var nameCus = $("#cusName").text();
+			if (nameCus.includes('@') || nameCus.includes('.com')) {
+				$(this).delay(2000).queue(function() {
+					checkNameModelDialogue("Please tell us your name!");
+					$(this).dequeue();
+				});
+			}
+		})
+		
+		function checkNameModelDialogue(title) {
+			$("#checkModalTitle").text(title);
+			$("#checkNameDialogue").modal('show');
+		};
+	
+	</script>
+	<script>
+		function checkProperNameAttribute() {
+			var fName = $("#firstName").val();
+			var lName = $("#lastName").val();
+			if(fName.includes('@') || fName.includes('.com')) {
+				document.getElementById("firstName").setCustomValidity("Please do not include '@' or '.com' in your name.");
+				document.getElementById("firstName").reportValidity();
+			} else {
+				document.getElementById("firstName").setCustomValidity("");
+			}
+			
+			if(lName.includes('@') || lName.includes('.com')) {
+				document.getElementById("lastName").setCustomValidity("Please do not include '@' or '.com' in your name.");
+				document.getElementById("lastName").reportValidity();
+			} else {
+				document.getElementById("lastName").setCustomValidity("");
+			}
+		}
+	</script>
+	
 	<style>
 		
 		   .bottomFooter {

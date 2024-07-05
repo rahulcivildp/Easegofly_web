@@ -99,6 +99,10 @@ public class EasegoflyPhoneCustomerDetails implements UserDetails {
 		return this.customer.getPhotos();
 	}
 	
+	public void setPhoto(String photo) {
+		this.customer.setPhotos(photo);;
+	}
+	
 	public String getPhone() {
 		return this.customer.getPhone();
 	}

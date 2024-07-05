@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -50,18 +53,12 @@ public class AccountController {
 	@Autowired private ConversationRepository conversationRepo;
 	
 	@GetMapping("/account")
-	public String viewDetailsCustomer(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
-		String email; /*= loggedCustomer.getUsername();*/
+	public String viewDetailsCustomer(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, Model model) {
 		Customer customer; /*= customerService.getByPhone(email);*/
 		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByPhone(loggedCustomer.getUsername());
 			model.addAttribute("customer", customer);
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
-			model.addAttribute("customer", customer);
-		}
+		} 
 		
 		List<Country> listCountries = customerService.listAllCountries();
 		Request request = new Request();
@@ -70,7 +67,7 @@ public class AccountController {
 		model.addAttribute("listCountries", listCountries);
 		model.addAttribute("pageTitle", "Account Page");
 		
-		listByPage(loggedCustomer, googleLogin, 1, model, "id", "asc", null);
+		listByPage(loggedCustomer, 1, model, "id", "asc", null);
 		return "user_credential/account/account";
 	}
 	 
@@ -99,29 +96,38 @@ public class AccountController {
 		if (loggedCustomer != null) {
 			loggedCustomer.setFirstName(customer.getFirstName());
 			loggedCustomer.setLastName(customer.getLastName());
+			loggedCustomer.setPhoto(customer.getPhotos());
 		} 
 		
 		redirectAttributes.addFlashAttribute("message", "Your account is updated.");
 		return "redirect:/account";
 	}
 	
+	@PostMapping("/update_name")
+	public String updateNameCustomer(RedirectAttributes redirectAttributes, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+			@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) throws IOException {
+			Customer customer;
+			
+		if (loggedCustomer != null) {
+			customer = customerService.getByPhone(loggedCustomer.getUsername());
+			Customer updatedCustomer = customerService.updateCustomeName(customer, firstName, lastName);
+			
+			loggedCustomer.setFirstName(updatedCustomer.getFirstName());
+			loggedCustomer.setLastName(updatedCustomer.getLastName());
+		} 
+		
+		redirectAttributes.addFlashAttribute("message", "Your account is updated.");
+		return "redirect:/";
+	}
+	
 	@GetMapping("/account/{pageNum}")
-	public String listByPage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
+	public String listByPage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
 			@PathVariable(name = "pageNum") int pageNum, Model model, 
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
-		String email; 
 		Customer customer; 
 		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
-			pagingOrder(pageNum, sortField, sortDir, customer, model);
-			pagingRequest(pageNum, sortField, sortDir, customer, model);
-			model.addAttribute("customer", customer);
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByPhone(loggedCustomer.getUsername());
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
 			pagingOrder(pageNum, sortField, sortDir, customer, model);
 			pagingRequest(pageNum, sortField, sortDir, customer, model);

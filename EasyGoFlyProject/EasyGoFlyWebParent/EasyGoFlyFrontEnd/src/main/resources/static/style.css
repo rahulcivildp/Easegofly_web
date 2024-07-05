@@ -10,9 +10,13 @@
 
 *.font-times { font-family: 'Playfair Display', serif;}
 
-			
+
+label {
+	margin-left: .75rem;
+}
+
 input {
-	background: white !important;
+	background: white;
 }
 *.activated {
 	background: #D32F2F !important;

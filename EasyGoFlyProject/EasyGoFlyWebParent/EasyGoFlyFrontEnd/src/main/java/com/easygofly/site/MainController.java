@@ -35,7 +35,6 @@ import com.easygofly.site.flight.SearchHistoryRepository;
 import com.easygofly.site.flight.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.LoginSuccessHandler;
-import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
 import com.easygofly.site.setting.web.WebSettingService;
 
@@ -57,8 +56,7 @@ public class MainController {
 	private String tokenId = "";
 	
 	@GetMapping("/")
-	public String viewHomePage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
-			@AuthenticationPrincipal CustomerOAuth2User googleLogin, Model model) {
+	public String viewHomePage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,Model model) {
 		Country country = countryRepo.findById(106).get();
 		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		model.addAttribute("cities", cities);
@@ -77,15 +75,6 @@ public class MainController {
 			@SuppressWarnings("unused")
 			HttpSession session= attr.getRequest().getSession(true);
 			
-		} else if (googleLogin != null) {
-			phone = googleLogin.getEmail();
-			Customer customer = searchHistoryService.getByPhone(phone);
-			Wallet wallet = customer.getWallet();
-			model.addAttribute("balance", wallet.getBalance());
-			historyPart(model, customer);	
-			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-			@SuppressWarnings("unused")
-			HttpSession session= attr.getRequest().getSession(true);
 		}
 		
 		List<WebDetails> webDetails = webSettingService.listAllSettings();
