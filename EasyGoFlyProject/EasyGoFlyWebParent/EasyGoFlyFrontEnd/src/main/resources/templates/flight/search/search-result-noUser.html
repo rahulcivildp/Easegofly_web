@@ -398,68 +398,52 @@
             </div>
         </div>
     </div>
-    <div class="container" style="height: 150%; margin-top: 20px;">
+    <div class="container justify_center_div" style="margin-top: 20px;">
     	<div class="row">
-		<div class="col-md-3 tile-align media-hide">
+		<div class="col-12 col-md-3 tile-align media-hide" style="padding: 0;">
 			 <form method="POST" th:action="@{/noUser_search_filter}" id="searchFilterForm">
 				<div th:replace="flight/search/search_filter :: search_filter('tag')"></div>
 			 </form>
 		</div>
         	
-        <div class="col-md-9">
-        <div class="row">
-            <div class="col-md-12 shadow rounded anotherSetMargin" style="margin-bottom: 33px; background-color: white; padding: 0;">
-                    <div style="background-color: #f93737;">
-                        <div class="row">
-							<div class="col-3 media_status"> 
-								<div class="sortDivStl" >
-									<div type="button"  data-bs-toggle="modal" data-bs-target="#sortingModal" style="border: none; background: transparent;">
-										<i class="fa fa-solid fa-arrow-down-short-wide sortDivStlIcon"></i>
+        <div class="col-12 col-md-9 justify_center_div" style="padding: 0;">
+			<div class="justify_center_div_column">
+		        <div class="row">
+		            <div class="col-md-12 shadow rounded anotherSetMargin" style="margin-bottom: 33px; background-color: white; padding: 0;">
+		                    <div style="background-color: #f93737;">
+		                        <div class="row">
+									<div class="col-3 media_status"> 
+										<div class="sortDivStl" >
+											<div type="button"  data-bs-toggle="modal" data-bs-target="#sortingModal" style="border: none; background: transparent;">
+												<i class="fa fa-solid fa-arrow-down-short-wide sortDivStlIcon"></i>
+											</div>
+										</div>
 									</div>
-								</div>
-								
-
-							</div>
-                            <div class="col-md-4 col-6" style="color: white; display: flex; justify-content: start; align-items: center;">
-								
-								<th:block th:if="${currentDay} < ${searchedDay}">
-	                                <div class="previousDivStl media-hide">
-										<form th:action="@{/get_previous_day_flight}" method="get" id="previousForm">
-						      				<input type="hidden" name="adultNum" th:value="${adultNum}">
-						      				<input type="hidden" name="childNum" th:value="${childNum}">
-						      				<input type="hidden" name="infantNum" th:value="${infantNum}">
-						      				<input type="hidden" name="cityOne" th:value="${cityOne}">
-						      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
-						      				<input type="hidden" name="date" th:value="${strDate}">
-						      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
-						      				<input type="hidden" name="tripType" th:value="${tripType}">
-										</form>
-										<button type="submit" class="dayStyle" form="previousForm"><div style=" margin: 5px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Previous Day</div></button>
+		                            <div class="col-md-4 col-6" style="color: white; display: flex; justify-content: start; align-items: center;">
 										
-									</div>
-                                </th:block>
-                                
-								<th:block th:if="${currentDay} >= ${searchedDay}">
-									<div class="tile-align media-hide" style=" margin: 5px; color: #e1e1e1; padding: 4px 8px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Previous Day</div> 
-                                </th:block>
-                                <div class="tile-align media-hide" style="display: flex; align-items: center;  margin: 5px;">|</div>
-                                <div class="previousDivStl media-hide">
-									<form th:action="@{/get_next_day_flight}" method="get" id="nextForm">
-					      				<input type="hidden" name="adultNum" th:value="${adultNum}">
-					      				<input type="hidden" name="childNum" th:value="${childNum}">
-					      				<input type="hidden" name="infantNum" th:value="${infantNum}">
-					      				<input type="hidden" name="cityOne" th:value="${cityOne}">
-					      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
-					      				<input type="hidden" name="date" th:value="${strDate}">
-					      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
-					      				<input type="hidden" name="tripType" th:value="${tripType}">
-									</form>
-									<button type="submit" class="dayStyle" form="nextForm"><div class="tile-align " style=" margin: 5px;">Next Day&nbsp;<i class="fa fa-solid fa-angles-right"></i></div></button>
-                                </div>
-                                <div class="media_status">
-									<th:block th:if="${currentDay} < ${searchedDay}">
-		                                <div class="previousDivStl">
-											<form th:action="@{/get_previous_day_flight}" method="get" id="previousFormMobile">
+										<th:block th:if="${currentDay} < ${searchedDay}">
+			                                <div class="previousDivStl media-hide">
+												<form th:action="@{/get_previous_day_flight}" method="get" id="previousForm">
+								      				<input type="hidden" name="adultNum" th:value="${adultNum}">
+								      				<input type="hidden" name="childNum" th:value="${childNum}">
+								      				<input type="hidden" name="infantNum" th:value="${infantNum}">
+								      				<input type="hidden" name="cityOne" th:value="${cityOne}">
+								      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+								      				<input type="hidden" name="date" th:value="${strDate}">
+								      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+								      				<input type="hidden" name="tripType" th:value="${tripType}">
+												</form>
+												<button type="submit" class="dayStyle" form="previousForm"><div style=" margin: 5px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Previous Day</div></button>
+												
+											</div>
+		                                </th:block>
+		                                
+										<th:block th:if="${currentDay} >= ${searchedDay}">
+											<div class="tile-align media-hide" style=" margin: 5px; color: #e1e1e1; padding: 4px 8px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Previous Day</div> 
+		                                </th:block>
+		                                <div class="tile-align media-hide" style="display: flex; align-items: center;  margin: 5px;">|</div>
+		                                <div class="previousDivStl media-hide">
+											<form th:action="@{/get_next_day_flight}" method="get" id="nextForm">
 							      				<input type="hidden" name="adultNum" th:value="${adultNum}">
 							      				<input type="hidden" name="childNum" th:value="${childNum}">
 							      				<input type="hidden" name="infantNum" th:value="${infantNum}">
@@ -469,97 +453,113 @@
 							      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
 							      				<input type="hidden" name="tripType" th:value="${tripType}">
 											</form>
-											<button type="submit" class="dayStyle" form="previousFormMobile"><div style=" margin: 5px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Prev</div></button>
+											<button type="submit" class="dayStyle" form="nextForm"><div class="tile-align " style=" margin: 5px;">Next Day&nbsp;<i class="fa fa-solid fa-angles-right"></i></div></button>
 		                                </div>
-									</th:block>
-									<th:block th:if="${currentDay} >= ${searchedDay}">
-										<div style=" margin: 5px; color: #e1e1e1; padding: 4px 8px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Prev</div> 
-	                                </th:block>
-                                </div>
-                                <div class="tile-align media_status" style="margin: 5px;">:</div>
-                                <div class="previousDivStl media_status">
-									<form th:action="@{/get_next_day_flight}" method="get" id="nextForm">
-					      				<input type="hidden" name="adultNum" th:value="${adultNum}">
-					      				<input type="hidden" name="childNum" th:value="${childNum}">
-					      				<input type="hidden" name="infantNum" th:value="${infantNum}">
-					      				<input type="hidden" name="cityOne" th:value="${cityOne}">
-					      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
-					      				<input type="hidden" name="date" th:value="${strDate}">
-					      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
-					      				<input type="hidden" name="tripType" th:value="${tripType}">
-									</form>
-									<button type="submit" class="dayStyle" form="nextForm"><div style=" margin: 5px;">Next&nbsp;<i class="fa fa-solid fa-angles-right"></i></div></button>
-                                </div>
-                            </div>
-                            <div class="col-md-4 media-hide"></div>
-                            <div class="col-md-4 col-3">
-                                <div style="display: flex; justify-content: end; align-items: center; height: 100%;">
-                                    <label class="media-hide" for="result_per_page" style="color: white; margin: 3px;">Result Per Page</label>
-                                    <label class="media_status" for="result_per_page" style="color: white; margin: 3px;">R/P</label>
-                                    <select id="result_per_page" style="margin: 4px;">
-                                        <option th:value="${listSize}">[[${listSize}]]</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    <div>
-                        <div class="row media-hide" style="list-style-type: none;">
-                            <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" onclick="sortByBrandFlight()" id="navbarDropdownMenuLinkBrand" role="button" aria-expanded="false" style="padding: 10px !important;">
-                                    Air Line
-                                </a>
-                            </div>
-                            <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" onclick="sortByDepartureFlight()" id="navbarDropdownMenuLinkDeparture" role="button" aria-expanded="false" style="padding: 10px !important;">
-                                    Departure
-                                </a>
-                            </div>
-                            <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" onclick="sortByArrivalFlight()" id="navbarDropdownMenuLinkArrival" role="button" aria-expanded="false" style="padding: 10px !important;">
-                                    Arrival
-                                </a>
-                            </div>
-                            <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" onclick="sortByDurationFlight()" id="navbarDropdownMenuLinkDuration" role="button" aria-expanded="false" style="padding: 10px !important;">
-                                    Duration
-                                </a>
-                            </div>
-                            <div class="col-md-2 col">
-                                <a class="nav-link dropdown-toggle" onclick="sortByPriceFlight()" id="navbarDropdownMenuLinkPrice" role="button" aria-expanded="false" style="padding: 10px !important;">
-                                    Price
-                                </a>
-                            </div>
-                            <div class="col-md-2 col" style="padding: 7px 20px;">
-                                <div style="float:right;">
-                                    <input type="checkbox" id="send_quote" name="send_quote" value="send_quote">
-                                    <label for="send_quote"><i class="fa fa-envelope" aria-hidden="true"></i> Send Quote</label>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </div>
-            <div class="col-md-12" style="margin-bottom: 10px; padding: 0;">
-                <div class="shadow rounded"> 
-                	<a href="https://www.webkoro.com/" title="https://www.webkoro.com/">
-                    	<img th:src="@{/images/advertisement/webkoro add easegofly.png}" style="width: 100%;" class="shadow rounded" > 
-                    </a>
-                </div>
-            </div>
-    		
-			</div>
-             <div id="listDiv" class="row">
-            </div>
+		                                <div class="media_status">
+											<th:block th:if="${currentDay} < ${searchedDay}">
+				                                <div class="previousDivStl">
+													<form th:action="@{/get_previous_day_flight}" method="get" id="previousFormMobile">
+									      				<input type="hidden" name="adultNum" th:value="${adultNum}">
+									      				<input type="hidden" name="childNum" th:value="${childNum}">
+									      				<input type="hidden" name="infantNum" th:value="${infantNum}">
+									      				<input type="hidden" name="cityOne" th:value="${cityOne}">
+									      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+									      				<input type="hidden" name="date" th:value="${strDate}">
+									      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+									      				<input type="hidden" name="tripType" th:value="${tripType}">
+													</form>
+													<button type="submit" class="dayStyle" form="previousFormMobile"><div style=" margin: 5px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Prev</div></button>
+				                                </div>
+											</th:block>
+											<th:block th:if="${currentDay} >= ${searchedDay}">
+												<div style=" margin: 5px; color: #e1e1e1; padding: 4px 8px;"><i class="fa fa-solid fa-angles-left"></i>&nbsp;Prev</div> 
+			                                </th:block>
+		                                </div>
+		                                <div class="tile-align media_status" style="margin: 5px;">:</div>
+		                                <div class="previousDivStl media_status">
+											<form th:action="@{/get_next_day_flight}" method="get" id="nextForm">
+							      				<input type="hidden" name="adultNum" th:value="${adultNum}">
+							      				<input type="hidden" name="childNum" th:value="${childNum}">
+							      				<input type="hidden" name="infantNum" th:value="${infantNum}">
+							      				<input type="hidden" name="cityOne" th:value="${cityOne}">
+							      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+							      				<input type="hidden" name="date" th:value="${strDate}">
+							      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+							      				<input type="hidden" name="tripType" th:value="${tripType}">
+											</form>
+											<button type="submit" class="dayStyle" form="nextForm"><div style=" margin: 5px;">Next&nbsp;<i class="fa fa-solid fa-angles-right"></i></div></button>
+		                                </div>
+		                            </div>
+		                            <div class="col-md-4 media-hide"></div>
+		                            <div class="col-md-4 col-3">
+		                                <div style="display: flex; justify-content: end; align-items: center; height: 100%;">
+		                                    <label class="media-hide" for="result_per_page" style="color: white; margin: 3px;">Result Per Page</label>
+		                                    <label class="media_status" for="result_per_page" style="color: white; margin: 3px;">R/P</label>
+		                                    <select id="result_per_page" style="margin: 4px;">
+		                                        <option th:value="${listSize}">[[${listSize}]]</option>
+		                                    </select>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    
+		                    
+		                    <div>
+		                        <div class="row media-hide" style="list-style-type: none;">
+		                            <div class="col-md-2 col">
+		                                <a class="nav-link dropdown-toggle" onclick="sortByBrandFlight()" id="navbarDropdownMenuLinkBrand" role="button" aria-expanded="false" style="padding: 10px !important;">
+		                                    Air Line
+		                                </a>
+		                            </div>
+		                            <div class="col-md-2 col">
+		                                <a class="nav-link dropdown-toggle" onclick="sortByDepartureFlight()" id="navbarDropdownMenuLinkDeparture" role="button" aria-expanded="false" style="padding: 10px !important;">
+		                                    Departure
+		                                </a>
+		                            </div>
+		                            <div class="col-md-2 col">
+		                                <a class="nav-link dropdown-toggle" onclick="sortByArrivalFlight()" id="navbarDropdownMenuLinkArrival" role="button" aria-expanded="false" style="padding: 10px !important;">
+		                                    Arrival
+		                                </a>
+		                            </div>
+		                            <div class="col-md-2 col">
+		                                <a class="nav-link dropdown-toggle" onclick="sortByDurationFlight()" id="navbarDropdownMenuLinkDuration" role="button" aria-expanded="false" style="padding: 10px !important;">
+		                                    Duration
+		                                </a>
+		                            </div>
+		                            <div class="col-md-2 col">
+		                                <a class="nav-link dropdown-toggle" onclick="sortByPriceFlight()" id="navbarDropdownMenuLinkPrice" role="button" aria-expanded="false" style="padding: 10px !important;">
+		                                    Price
+		                                </a>
+		                            </div>
+		                            <div class="col-md-2 col" style="padding: 7px 20px;">
+		                                <div style="float:right;">
+		                                    <input type="checkbox" id="send_quote" name="send_quote" value="send_quote">
+		                                    <label for="send_quote"><i class="fa fa-envelope" aria-hidden="true"></i> Send Quote</label>
+		                                </div>
+		                            </div>
+		                        </div>
+		                </div>
+		            </div>
+		            <div class="col-md-12" style="margin-bottom: 10px; padding: 0;">
+		                <div class="shadow rounded"> 
+		                	<a href="https://www.webkoro.com/" title="https://www.webkoro.com/">
+		                    	<img th:src="@{/images/advertisement/webkoro add easegofly.png}" style="width: 100%;" class="shadow rounded" > 
+		                    </a>
+		                </div>
+		            </div>
+		    		
+					</div>
+		             <div id="listDiv" class="row">
+		            </div>
             
+				</div>
   
 		</div>
     </div>
     </div>
     
-    <div class="media_status" id="mobileFooter">
-		<div class="footerInner">
+    <div class="container media_status" id="mobileFooter">
+		<div class="container footerInner justify_center_div">
 	   	   <div class="row">
 			   <button class="col-6" id="homeFooter" onclick="history.back()">
 				   <div class="footerInnerDiv" style="color: white;">

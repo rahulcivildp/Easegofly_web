@@ -762,6 +762,7 @@ public class SearchHistoryController {
 		}
 	}
 	
+	
 	////Flight return segment.
 	
 	@GetMapping("/flight_return_search_{id}_{sortName}_{brand}_{stop}_{activeTime}")
