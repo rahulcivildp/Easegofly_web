@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<head th:replace="fragments :: page_head(': Tamilnadu Bus Service', 'tag')"></head>
+	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
+<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-TNN6EKSPHR');
+	</script>
+	<!-- Google Analytics -->
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	
+	ga('create', 'UA-XXXXX-Y', 'auto');
+	ga('send', 'pageview');
+	</script>
+	<!-- End Google Analytics -->
+        
+    
+</head>	
+<style>
+	.top-height {
+		height: 60px;
+	}
+	
+	@media screen and (max-width: 800px) {
+		.top-height {
+			height: 0;
+		}
+	}
+	.list-group-item {
+	  font-size: 1rem;
+	  padding: 10px;
+	}
+	
+	.badge-success { 
+	  background-color: #28a745;
+	  color: white;
+	  font-size: 0.85rem;
+	  padding: 5px 10px;
+	  border-radius: 20px;
+	}
+	
+	.card-body ul {
+	  padding-left: 20px;
+	  list-style: disc;
+	}
+	
+	.card-body p, .card-body ul {
+	  margin-bottom: 15px;
+	}
+</style>
+<body style="background-color: #f8f8f8;">
+
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+  
+<div class="top-height" style="background: transparent;">
+</div>
+
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Top Operators for Coimbatore to Chennai</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>YBM Travels </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Parveen Travels </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Essaar </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>City Travels </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>SRL Travels </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Swamy Ayyappa Travels </span><span class="badge badge-success">★★★★☆</span></li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>National Travels </span><span class="badge badge-success">★★★★☆</span></li>
+                    <li class="list-group-item"><span>No 1 Air Travels </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Tranz King Travels </span><span class="badge badge-success">★★★★☆</span></li>
+                    <li class="list-group-item"><span>SRM Transports </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>RV Transport </span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Sri Bagyalakshmi Travels </span><span class="badge badge-success">★★★★☆</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Boarding Points in Coimbatore</h2>
+        <div class="row">
+            <div class="col col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Gandhipuram</span></li>
+                    <li class="list-group-item"><span>Omni Bus Stand</span></li>
+                    <li class="list-group-item"><span>Hopes College</span></li>
+                    <li class="list-group-item"><span>Lakshmi Mills</span></li>
+                    <li class="list-group-item"><span>Gandhipuram - Tamil Nadu Hotel</span></li>
+                    <li class="list-group-item"><span>Singanallur</span></li>
+                </ul>
+            </div>
+            <div class="col col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Gandhipuram</span></li>
+                    <li class="list-group-item"><span>Omni Bus Stand</span></li>
+                    <li class="list-group-item"><span>Hopes College</span></li>
+                    <li class="list-group-item"><span>Lakshmi Mills</span></li>
+                    <li class="list-group-item"><span>Gandhipuram - Tamil Nadu Hotel</span></li>
+                    <li class="list-group-item"><span>Singanallur</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Other Routes from and to Coimbatore</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Coimbatore to Chitradurga</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Sankagiri</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Keelakarai</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Sivagiri</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Miraj</span></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Coimbatore to Chitradurga</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Sankagiri</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Keelakarai</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Sivagiri</span></li>
+                    <li class="list-group-item"><span>Coimbatore to Miraj</span></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Thuckalay to Coimbatore</span></li>
+                    <li class="list-group-item"><span>Alwarthirunagari to Coimbatore</span></li>
+                    <li class="list-group-item"><span>Ramanathapuram to Coimbatore</span></li>
+                    <li class="list-group-item"><span>Aranthangi to Coimbatore</span></li>
+                    <li class="list-group-item"><span>Arumuganeri to Coimbatore</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Book Buses from Coimbatore to Chennai Bus Tickets on EaseGoFly</h2>
+        <div class="card">
+            <div class="card-body">
+                <p>Chennai is a beautiful tourist destination in India. You can travel to Chennai via road for a scenic journey. You can visit this gorgeous city with your family and friends for a memorable holiday. You can book a Coimbatore to Chennai bus at affordable rates on EaseGoFly.</p>
+                <p>The overall journey duration of Coimbatore and Chennai is around 8h 20m. You can book your Coimbatore to Chennai bus ticket on EaseGoFly for a quick journey. Several buses are available at specific intervals till night.</p>
+                <p>You can make your bus booking online. The Coimbatore to Chennai bus tickets fare starts from INR 399 per head and can go as high as INR 2999 per head.</p>
+                <ul>
+                    <li>Charging points</li>
+                    <li>Water bottles</li>
+                    <li>Reading lights</li>
+                    <li>Hand sanitizers</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <div class="row">
+            <div class="text-center card col-md-6" style="margin-right: -1px;padding-left: 19px;margin-bottom: -9px;padding-bottom: 12px;padding-top: 10px;">
+                <h5 class="card-title"> ABC Travels <span class="badge badge-primary">AC Sleeper</span></h5>
+                <p class="card-text"><strong>Route:</strong> Coimbatore to Chennai<br><strong>Departure:</strong> 10:00 PM | <strong>Arrival:</strong> 6:00 AM<br><strong>Duration:</strong> 8h<br><strong>Ticket Price:</strong> ₹1,200<br></p>
+                <p class="card-text"><i class="bi bi-wifi"></i> Free Wifi<br><i class="bi bi-tv-fill"></i> Entertainment<br><i class="bi bi-plug-fill"></i> Charging Ports<br><i class="bi bi-cup-fill"></i> Refreshments </p>
+                <p class="card-text"><strong>Contact Number:</strong> +91 9876000010</p><a class="btn btn-secondary disabled float-right" role="button" href="#" style="padding-right: 53px;padding-left: 37px;margin-left: 119px;margin-right: 84px;">Coming Soon</a>
+            </div>
+            <div class="text-center card col-md-6" style="padding-left: 8px;margin-left: 0px;padding-bottom: 14px;margin-bottom: -10px;margin-top: 0px;padding-top: 12px;">
+                <h5 class="card-title"> XYZ Express <span class="badge badge-primary">Non AC Seater</span></h5>
+                <p class="card-text"><strong>Route:</strong> Bangalore to Hyderabad<br><strong>Departure:</strong> 9:00 PM | <strong>Arrival:</strong> 5:00 AM<br><strong>Duration:</strong> 8h<br><strong>Ticket Price:</strong> ₹850<br></p>
+                <p class="card-text"><i class="bi bi-tv-fill"></i> Entertainment<br><i class="bi bi-plug-fill"></i> Charging Ports<br><i class="bi bi-cup-fill"></i> Refreshments </p>
+                <p class="card-text"><strong>Contact Number:</strong> +91 9876000020</p><a class="btn btn-secondary disabled float-right" role="button" href="#" style="padding-left: 37px;margin-left: 119px;margin-right: 94px;">Coming Soon</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+ <div style="height: 80px;"></div>
+ 
+ <footer th:replace="fragments :: page_footer"></footer>
+ 
+ <script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+
+</html>

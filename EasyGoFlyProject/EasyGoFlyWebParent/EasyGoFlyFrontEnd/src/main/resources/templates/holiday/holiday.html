@@ -50,8 +50,25 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
     </gmp-map>
   </div>-->
+ <div style="height: 50px;"></div>
  
  <footer th:replace="fragments :: page_footer"></footer>
+ 
+<!-- Modal -->
+<div class="modal fade" id="staticBackdropChildAge" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Children Age</h1>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
  
  <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>

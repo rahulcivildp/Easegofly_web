@@ -1,0 +1,86 @@
+.carousal-float-header {
+		position: absolute; 
+		color: white; 
+		text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+		font-size: 34px;
+	}
+	.itenerary-style {
+		display: flex; 
+		justify-content: space-between;
+		padding: 10px 0;
+		width: 100%;
+	}
+	.packageoverview {
+		text-align: center;
+	    padding: 10px;
+	    margin: 5px 0 15px 0;
+	    border: 1px solid grey;
+	    background: #e6e6e6;
+	}
+	.section-style {
+		display: flex; 
+		justify-content: space-evenly;
+		padding: 10px 0;
+		flex-wrap: wrap;
+	}
+	.section-button {
+		padding: 10px 30px;
+	    background: whitesmoke;
+	    border: none;
+	    font-size: 19px;
+	}
+	.section-button:hover {
+	    background: #db545a;
+	    color: white;
+	    font-weight: 600;
+	}
+	.section-button-active {
+	    background: #db545a;
+	    color: white;
+	    font-weight: 600;
+	}
+	.section-para-display {
+		  display: block !important;
+	}
+	.section-para {
+		display: none;    
+		border-left: 5px solid blue;
+	    box-shadow: rgba(0, 0, 0, 0.15) -6px 0px 0px;
+	}
+	.section-div-style {
+		display: flex;
+    	justify-content: center;
+    	padding-top: 20px;
+    	padding-bottom: 15px;
+	}
+	.section-div-style p {
+		margin: 0;
+		padding-left: 10px;
+		font-size: 20px;
+		font-family: "Exo 2", sans-serif;
+		font-optical-sizing: auto;
+		font-weight: 500;
+		font-style: italic;
+	}
+	.bottom-div {
+		background: yellow;
+	    padding: 10px 20px;
+	    border-radius: 25px;
+	    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	    font-size: 22px;
+	    font-weight: 600;
+		color: black;
+	}
+	.bottom-div:hover {
+		background: green;
+		color: white;
+	}
+	.bottom-div-right {
+		background: #e4e4e4;
+	    padding: 10px 20px;
+	    border-radius: 25px;
+	    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	    font-size: 22px;
+	    font-weight: 600;
+		color: black;
+	}

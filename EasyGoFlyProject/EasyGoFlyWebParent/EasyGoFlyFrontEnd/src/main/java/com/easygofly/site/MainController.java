@@ -1,9 +1,11 @@
 package com.easygofly.site;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,9 @@ public class MainController {
 		Country country = countryRepo.findById(106).get();
 		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		model.addAttribute("cities", cities);
-		
+
+		Date today = new Date();
+		model.addAttribute("today", today);
 		
 		Iterable<City> allCities = cityRepo.findAll();
 		model.addAttribute("allCities", allCities);
@@ -220,7 +224,7 @@ public class MainController {
 	}
 	
 	@GetMapping("/login")
-	public String viewLoginPage(Principal principal, HttpServletRequest request) {
+	public String viewLoginPage(Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		String referer = request.getHeader("Referer");
 		request.getSession().setAttribute(LoginSuccessHandler.REDIRECT_URL_SESSION_ATTRIBUTE_NAME, referer);
 		Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
@@ -246,4 +250,16 @@ public class MainController {
 		return "about/about";
 	}
 	
+	@GetMapping("/mode")
+	public String settingMode() {
+		return "settings/mode";
+	}
+
+	@GetMapping("/coming_soon")
+	public String commingSoon() {
+		return "coming-soon";
+	}
+	
+
+
 }

@@ -138,6 +138,9 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<TotalTransaction> totalTransactions = new ArrayList<>();
 
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<SightseeingHistory> sightseeingHistories = new ArrayList<>();
+
 	
 	public Customer() {}
 	
@@ -420,6 +423,14 @@ public class Customer {
 
 	public void setWallet(Wallet wallet) {
 		this.wallet = wallet;
+	}
+
+	public List<SightseeingHistory> getSightseeingHistories() {
+		return sightseeingHistories;
+	}
+
+	public void setSightseeingHistories(List<SightseeingHistory> sightseeingHistories) {
+		this.sightseeingHistories = sightseeingHistories;
 	}
 
 	public List<Request> getRequests() {

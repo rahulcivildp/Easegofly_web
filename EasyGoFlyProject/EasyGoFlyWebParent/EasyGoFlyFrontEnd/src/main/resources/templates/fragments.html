@@ -72,6 +72,22 @@
 	ga('send', 'pageview');
 	</script>
 	<!-- End Google Analytics -->
+	
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '476198598595833');
+fbq('track', 'PageView');
+</script>
+<!-- End Meta Pixel Code -->
+
 </head>
 <body>
 <!-- ======= Header ======= -->
@@ -165,6 +181,9 @@
 					position: sticky;
 					background: #00012a;
 				}
+			}
+			.navbar a {
+				font-size: 20px;
 			}
 			
 			@media screen and (max-width: 600px) {
@@ -283,6 +302,9 @@
 				backdrop-filter: blur(12.6px);
 				-webkit-backdrop-filter: blur(12.6px);
 			}
+			
+			
+
 	</style>
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
@@ -328,9 +350,9 @@
 		//});
 	</script>
 	<!-- End Google Analytics -->
-    <div class="container d-flex align-items-center justify-content-between containerHeader">
-		
-      <button id="imageTogglerSidebar" onclick="return(checkBackDrop(this))" class="media_status" style="padding-left: 4px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+    <div class="container d-flex align-items-center justify-content-center containerHeader" style="flex-wrap: wrap;">
+		<div class="row">
+      <button id="imageTogglerSidebar" onclick="return(checkBackDrop(this))" class="col-2 media_status" style="padding-left: 4px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
 		  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
 	        <div id="beforelogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new-ch.png'} + ');'">
 	        	<div class="positionedLogo">
@@ -366,7 +388,7 @@
 		Button with data-bs-target
 	</button>-->
 		
-	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasExampleLabel" >
+	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasExampleLabel" style="padding: 0;">
 		<div class="offcanvas-header">
 			
 			<h5 class="offcanvas-title" id="offcanvasExampleLabel">
@@ -439,13 +461,14 @@
 	  
 	
       <!-- Uncomment below if you prefer to use an image logo -->
-      <div class="col media-hide">
-      	<a th:href="@{/}" style="height: 60px;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 105px; float: left;"></a>
+      <div class="col-3 media-hide">
+      	<a th:href="@{/}"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid"></a>
       </div>
       
-      
+      <div class="col-1 media-hide">
+      </div>
 
-      <nav id="navbar" class="navbar">
+      <nav id="navbar" class="navbar col-8 media-hide" style="justify-content: end;">
         <ul class="ul_modify">
           <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
           	<i class="fa fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
@@ -488,23 +511,23 @@
       <!-- .navbar -->
       
 	  
-	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
-	      <div class="col media_status" style="display: none; text-align: center; " >
+	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;" class="col-8">
+	      <div class="media_status" style="display: none; text-align: center; " >
 	      	<a th:href="@{/}" style="position: relative;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 73px; "></a>
 	      </div>
       </li>
-      <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none; padding-right: 10px;">
-	      <div class="col-2 media_status" style="display: none; text-align: center; color: white; font-size: 22px; " >
+      <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none; padding-right: 10px;"  class="col-2 justify_center_div">
+	      <div class="media_status" style="display: none; text-align: center; color: white; font-size: 28px; " >
 	      	<i class="fa fa-solid fa-share-from-square"></i>
 	      </div>
       </li>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		    <div class="col float-state media_status" style="color: white; font-size: 20px; font-weight: 600; padding-left: 40px; padding-top: 20px;">
+		    <div class="col-6 float-state media_status justify_center_div" style="color: white; font-size: 20px; font-weight: 600; padding-top: 20px;">
 		        <a th:href="@{/}"> <p class="float-state" style="width: 170px;">Hey, <span id="cusName" sec:authentication="principal.customer.firstName"></span>!</p></a>
 		    </div>
 	  </th:block>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div class="media_status" style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
+		  	<div class="col-2 media_status_flex_CPN justify_center_div" style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
 				  <a type="button" style="color: white;"
 				th:href="@{/wallet-home}">
 		    	<i class="fa fa-solid fa-wallet"></i>
@@ -512,12 +535,12 @@
 		    </div>
 	  </th:block>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div class="media_status" style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
+		  	<div class="col-2 media_status_flex_CPN justify_center_div" style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
 		    	<i class="fa fa-solid fa-bell"></i>
 		    </div>
 	  </th:block>
     </div>
-    
+    </div>
     	
 	
 	
@@ -561,7 +584,7 @@
 				</div>
 				<div class="modal-body">
 					<div id="checkBody">
-						<form th:action="@{/update_name}"  method="post" id="custNameForm" style="display: flex; justify-content: center;">
+						<form id="custNameForm" style="display: flex; justify-content: center;">
 							<div class="row ">
 								<div class="col-12 col-sm-6">
 									<div class="form-floating mb-3">
@@ -586,6 +609,7 @@
 		</div>	
 	</div>
 
+
     <script>
 			
 		$(document).ready(function(){
@@ -608,20 +632,53 @@
 		function checkProperNameAttribute() {
 			var fName = $("#firstName").val();
 			var lName = $("#lastName").val();
+			var valid = 0;
 			if(fName.includes('@') || fName.includes('.com')) {
 				document.getElementById("firstName").setCustomValidity("Please do not include '@' or '.com' in your name.");
 				document.getElementById("firstName").reportValidity();
+				valid = 1;
 			} else {
 				document.getElementById("firstName").setCustomValidity("");
+				valid = 2;
 			}
 			
 			if(lName.includes('@') || lName.includes('.com')) {
 				document.getElementById("lastName").setCustomValidity("Please do not include '@' or '.com' in your name.");
 				document.getElementById("lastName").reportValidity();
+				valid = 1;
 			} else {
 				document.getElementById("lastName").setCustomValidity("");
+				valid = 2;
+			}
+			
+			if(valid == 2) {
+				checkCustomerName();
 			}
 		}
+	</script>
+	
+    <script type="text/javascript">
+
+		function checkCustomerName() {
+		var fname = $("#firstName").val();
+		var lname = $("#lastName").val();
+		var	url = "[[@{/update_name_rest}]]";
+		var params = {firstName: fname, lastName: lname};
+			
+			$.post(url, params, function(elem) {
+					
+    			if (elem != "success") {
+					alert("Failed");
+				} else {
+					$("#checkNameDialogue").modal('hide');
+				}
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+			
+			return false;
+		};
 	</script>
 	
 	<style>
@@ -630,10 +687,24 @@
 			   align-items: center; 
 			   justify-content: center; 
 			   display: flex;
+	    	   border: none;
 		   }
 		   
-		   .bottomFooter:hover {
-			   background-color: rgb(13 188 0 / 75%);
+		   .bottomFooterClick {
+				background-color: rgb(13 188 0 / 75%);    
+				border-radius: 16px;
+	    		box-shadow: 0 -15px 0 0 rgb(13 188 0 / 75%);
+	    		border: none;
+		   }
+		   .bottomLeftside {
+				border-radius: 0 18px 0 0;
+	    		box-shadow: 0 -15px 0 0 rgb(13 188 0 / 75%);
+			   
+		   }
+		   .bottomRightside {
+				border-radius: 18px 0 0 0;
+	    		box-shadow: 0 -15px 0 0 rgb(13 188 0 / 75%);
+			   
 		   }
 		   .media_status { display: none;}
 
@@ -732,17 +803,25 @@
 	</div>
 
 	<div style="display: none;" id="mobileFooter">
-		<div class="justify_center_div" style="position: fixed; bottom: 0; width: 100%; background: rgb(36 32 74); z-index: 9; color: white;" >
+		<div class="justify_center_div footer_btn_style" style="position: fixed; z-index: 990; width: 100%;" >
 	   	   <div class="row">
-			   <button class="col-6 bottomFooter bottomFooterStl" id="homeFooter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+			   <button class="col-3 bottomFooter bottomFooterStl" id="homeFooter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
 				   <div class="footerFragInnerDiv">
 					   <i class="fa fa-solid fa-house fa-2x"></i><br>
-				   		<p>Home</p>
 			   		</div>
 			   	</button>
-			   <button class="col-6 bottomFooter bottomFooterStl" id="categoriesFooter">
+			   <button class="col-3 bottomFooter bottomFooterStl" id="walletFooter">
 				   <div class="footerFragInnerDiv">
-				   		<p>Mode</p>
+					   <i class="fa fa-solid fa-wallet"></i><br>
+				   </div>
+				</button>
+			   <button class="col-3 bottomFooter bottomFooterStl" id="historyFooter">
+				   <div class="footerFragInnerDiv">
+					   <i class="fa fa-solid fa-clock-rotate-left"></i><br>
+				   </div>
+				</button>
+			   <button class="col-3 bottomFooter bottomFooterStl" id="categoriesFooter">
+				   <div class="footerFragInnerDiv">
 					   <i class="fa fa-solid fa-gears fa-2x"></i><br>
 				   </div>
 				</button>
@@ -754,6 +833,31 @@
 			$("#homeFooter").click(function(){
 				//alert("clicked");
 				$("#sideBar").toggleClass("sideBarActive");
+			});
+		
+	</script>
+   
+   	<script>
+			$("#walletFooter").click(function(){
+				location.href = "[[@{/wallet-home}]]";
+			});
+			$("#historyFooter").click(function(){
+				location.href = "[[@{/show-history}]]";
+			});
+			$("#categoriesFooter").click(function(){
+				location.href = "[[@{/about#no-1}]]";
+			});
+		
+	</script>
+   
+   	<script>
+			$(".bottomFooter").click(function(){
+				$(".bottomFooter").removeClass("bottomFooterClick");
+				$(".bottomFooter").removeClass("bottomRightside");
+				$(".bottomFooter").removeClass("bottomLeftside");
+				$(this).next(".bottomFooter").toggleClass("bottomRightside");
+				$(this).prev(".bottomFooter").toggleClass("bottomLeftside");
+				$(this).toggleClass("bottomFooterClick");
 			});
 		
 	</script>

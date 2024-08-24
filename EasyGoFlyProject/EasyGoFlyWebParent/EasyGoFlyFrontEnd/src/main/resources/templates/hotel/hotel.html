@@ -11,7 +11,27 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 			position: relative;
 			background: transparent;
 		}
+		.hotel-card-style {
+			height: 110px !important;
+		}	
+		.hotel-tabs-style {
+			background: #dddddd !important; 
+			padding: 5px 0;
+		}
+		.hotel-tile-style {
+			border: none !important; 
+		}
 	}
+		.hotel-card-style {
+			height: 210px;
+		}
+		.hotel-tabs-style {
+			background: white;
+		}
+		.hotel-tile-style {
+			border: 1px solid #8080803d; 
+			border-radius: 8px;
+		}
 	gmp-map {
 		width: 50vh;
         height: 50vh;
@@ -51,6 +71,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
     </gmp-map>
   </div>-->
+ <div style="height: 80px;"></div>
  
  <footer th:replace="fragments :: page_footer"></footer>
  

@@ -3,11 +3,14 @@ package com.easygofly.site.flight;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.springframework.stereotype.Service;
+
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
 
+@Service
 public class ProductSaveHelper {
 	
 	public static void setSearchHistory(Customer customer, String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,

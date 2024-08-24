@@ -71,8 +71,8 @@ public class BusController {
 	private String orderURL = "";
 	
 	BusHistory history = new BusHistory();
-	List<Bus> buses = new ArrayList<>();
-	List<BusSeat> seatList = new ArrayList<>();
+	List<Bus> buses;
+	List<BusSeat> seatList;
 	
 	private String[] parameter = new String[20];
 	private String checksum;

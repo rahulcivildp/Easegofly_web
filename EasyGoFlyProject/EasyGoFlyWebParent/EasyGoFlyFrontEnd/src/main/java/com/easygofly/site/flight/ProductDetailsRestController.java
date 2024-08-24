@@ -36,7 +36,6 @@ public class ProductDetailsRestController {
 	@PostMapping("/flight_order_check_coupon")
 	public Coupon checkCoupon(@RequestBody Coupon coupon, RedirectAttributes redirectAttributes) throws IOException {
 		Coupon coupon2 =  couponRepo.findByCouponCode(coupon.getCouponCode());
-		System.out.println(coupon2.toString());
 		if (coupon2.equals(null)) {
 			return null;
 		} else {

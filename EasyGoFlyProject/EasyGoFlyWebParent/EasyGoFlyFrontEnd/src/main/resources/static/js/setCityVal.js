@@ -34,7 +34,6 @@ function autocomplete(inp, arr, labelById, arrCode, arrName) {
               inp.value = this.getElementsByTagName("input")[0].value;
               /*insert city name in the div below the selection box*/
               findCityName(this.getElementsByTagName("input")[0].value, labelById);
-              createCssClass(38);
               /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
               closeAllLists();
@@ -54,7 +53,6 @@ function autocomplete(inp, arr, labelById, arrCode, arrName) {
               inp.value = this.getElementsByTagName("input")[0].value;
               
               findCityName(this.getElementsByTagName("input")[0].value, labelById);
-              createCssClass(38);
               /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
               closeAllLists();

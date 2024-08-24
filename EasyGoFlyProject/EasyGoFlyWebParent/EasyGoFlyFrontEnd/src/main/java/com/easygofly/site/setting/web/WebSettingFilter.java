@@ -37,7 +37,6 @@ public class WebSettingFilter implements Filter {
 		List<WebDetails> generalSettings = service.getGeneralSetting();
 		
 		generalSettings.forEach(setting -> {
-			//System.out.println(setting);
 			request.setAttribute(setting.getKey(), setting.getValue());
 		});
 		

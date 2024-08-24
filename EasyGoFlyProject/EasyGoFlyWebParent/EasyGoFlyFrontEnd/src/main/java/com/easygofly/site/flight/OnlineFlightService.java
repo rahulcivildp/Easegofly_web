@@ -30,17 +30,18 @@ public class OnlineFlightService {
 
 	public int apiAuthentication(StringBuilder responseBody)
 			throws IOException {
-    	// Create URL object with the API end-point
-        URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
-        
-    	// Create URL object with the API end-point
-//        URL url = new URL("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate");
-
-        // Open a connection
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         // Get API details from Settings.
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		
+    	// Create URL object with the API end-point
+//        URL url = new URL("https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate");
+        
+    	// Create URL object with the API end-point
+        URL url = new URL(apiServiceSettingBag.getAuthURL());
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -51,7 +52,7 @@ public class OnlineFlightService {
         
         // Enable writing data to the connection
         connection.setDoOutput(true);
-        ;
+        ; 
         // Create the request body
         String requestBody = "{"
         		+ "\"ClientId\": \"" + apiServiceSettingBag.getClientId() + "\", "

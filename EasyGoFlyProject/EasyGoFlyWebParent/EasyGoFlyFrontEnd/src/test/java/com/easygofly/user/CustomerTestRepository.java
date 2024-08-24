@@ -117,4 +117,17 @@ public class CustomerTestRepository {
 		
 		System.out.println("New Customer");
 	}
+
+	@Test
+	public void testRsultIndex() {
+
+		String resultIndex = "OB436";
+
+		String[] arrRIndex = resultIndex.split("TBO");
+		resultIndex = arrRIndex[0].replace("[", "");
+		
+		System.out.println(resultIndex);
+		
+		
+	}
 }

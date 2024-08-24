@@ -61,6 +61,10 @@ public class CartItem {
 		this.customer = customer;
 		this.productDetail = productDetail;
 	}
+	
+	public CartItem(ProductDetail productDetail) {
+		this.productDetail = productDetail;
+	}
 
 	public CartItem(Customer customer, ProductDetail productDetail, int quantity, double totalPrice, String email, BigInteger phoneNum) {
 		this.customer = customer;

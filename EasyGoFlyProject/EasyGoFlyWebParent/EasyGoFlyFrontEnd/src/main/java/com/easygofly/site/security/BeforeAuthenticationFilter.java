@@ -75,7 +75,7 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
 					}
 	        	}
 	    		
-	    		System.out.println("attemptAuthentication - Email: " + phone);
+	    		System.out.println("Attempt Authentication - Email: " + phone);
 	    		float spamScore = getGoogleRecaptchaScore();
 	    		
 	    		if (spamScore < 0.5) {
@@ -98,7 +98,7 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	        		return super.attemptAuthentication(request, response);
 	        	}
 	    		
-	    		System.out.println("attemptAuthentication - phone: " + phone);
+	    		System.out.println("Attempt Authentication - phone: " + phone);
 	    		float spamScore = getGoogleRecaptchaScore();
 	    		
 	    		if (spamScore < 0.5) {

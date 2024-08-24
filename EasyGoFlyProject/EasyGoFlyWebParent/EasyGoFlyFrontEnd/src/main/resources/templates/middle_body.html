@@ -618,6 +618,11 @@ body {
 		    display: flex;
 		    justify-content: center;
 		}
+		.content-title-header {
+			position: absolute;
+		    top: 18px;
+		    padding: 0 10px;
+		}
 </style>
 
 <body>
@@ -632,25 +637,34 @@ body {
 		    <div class="sets-wrapper">
 		        <div class="set">
 		            <div class="card_items" style="margin-left: 8px;">
-						<img th:src="@{/images/front/Train1.png}" alt="" class="img-fluid" style="width: 40px;">
-						<p >Train</p>
+						<a th:href="@{/coming_soon}" style="color: #5c5c5c;">
+							<img th:src="@{/images/front/backpackttt.png}" alt="" class="img-fluid" style="width: 40px;">
+							<p >Tour</p>
+							<p >Plan</p>
+						</a>
 					</div>
 		            <div class="card_items">
-						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
-						<p >Hourly</p>
-						<p >Stays</p>
+						<a th:href="@{/coming_soon}" style="color: #5c5c5c;">
+							<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
+							<p >Hourly</p>
+							<p >Stays</p>
+						</a>
 					</div>
 		            <div class="card_items">
-						<img th:src="@{/images/front/Insurence.png}" alt="" class="img-fluid" style="width: 40px;">
-						<p >Travel</p>
-						<p >Insurance</p>
+						<a th:href="@{/coming_soon}" style="color: #5c5c5c;">
+							<img th:src="@{/images/front/Insurence.png}" alt="" class="img-fluid" style="width: 40px;">
+							<p >Travel</p>
+							<p >Insurance</p>
+						</a>
 					</div>
 		            <div class="card_items">
-						<img th:src="@{/images/front/Car1.png}" alt="" class="img-fluid" style="width: 40px;">
-						<p >Cabs</p>
+						<a th:href="@{/coming_soon}" style="color: #5c5c5c;">
+							<img th:src="@{/images/front/Car1.png}" alt="" class="img-fluid" style="width: 40px;">
+							<p >Cabs</p>
+						</a>
 					</div>
 		        </div>
-		        <div class="set">
+		        <div class="set" style="display: none;">
 		            <div class="card_items" style="margin-left: 8px;">
 						<img th:src="@{/images/front/Bed1.png}" alt="" class="img-fluid" style="width: 40px;">
 						<p >Hourly</p>
@@ -783,9 +797,9 @@ body {
         <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/first-class.png'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
         <div class="content-overlay"></div>
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+        <h5 class="card-title">SpiceJet Monsoon Sale</h5>
+        <p class="card-text">Travel with SpiceJet at Starting Fares of INR *1500</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Check Offer!</a>
       </div>
     </div>
         </div>
@@ -793,9 +807,9 @@ body {
         <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/flight_reflection.png'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
         <div class="content-overlay"></div>
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+        <h5 class="card-title">Air India Non-Stop Flights</h5>
+        <p class="card-text">Introducing Daily Non-Stop Flights Between Bangalore & Kolkata.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Check Offer!</a>
       </div>
     </div>
         </div>
@@ -803,9 +817,9 @@ body {
         <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/flight_seat.png'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
         <div class="content-overlay"></div>
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+        <h5 class="card-title">Business Class Offer</h5>
+        <p class="card-text">Book Business Class Flight Tickets & Get Special Assistance.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Check Offer!</a>
       </div>
     </div>
         </div>
@@ -813,9 +827,9 @@ body {
         <div class="card content extra_height" th:style="'background: url(' + @{'/images/deals/ST_20180920_KAHUB_4290944.jpg'} + ') no-repeat center; padding: 31px 0; background-size: cover; color: white; border-radius: 15px;'">
         <div class="content-overlay"></div>
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Go somewhere</a>
+        <h5 class="card-title">Vistara Airline Flight</h5>
+        <p class="card-text">Inroducing Boeing 787-900 Dreamliner Aircraft for Direct Flights from Delhi to Bali.</p>
+        <a href="#" class="btn btn-primary content-details fadeIn-bottom">Check Offer!</a>
       </div>
     </div>
         </div>
@@ -1278,221 +1292,10 @@ body {
 	<div class="media-hide"  style="width: 80%; margin: 0 auto;">
     	<div class="tab folder_style col-sm-3"><h3 style="margin-left: 20px;">Exclusive Deals</h3></div>
 	</div>
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="background: white;">
-	   <h2 class="media_status" style="padding: 10px 0 5px 10px; font-size: 18px;">Exclusive Deals</h2>
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner carousel_inners" style="padding: 0 0 5px !important;">
-    <div class="carousel-item active style_container" data-interval="4000" style="padding: 20px 15px;">
-        
-        <div class="row">
-	    	<div class="col-md-3 col-6">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-3 col-6">
-            <div class="cards">
-                <div class="cards-box">
-                    <div class="cards-img shadow"></div>
-                    <div class="cards-dialogue shadow">
-                        <div class="cards-text">
-                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-                        </div>
-                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-                    </div>
-                </div>
-            </div>
-	        </div>
-	        <div class="col-md-3 media-hide">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-3 media-hide">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-    	</div>
-        
-    </div>
-      
-    <div class="carousel-item style_container" data-interval="4000" style="padding: 20px 15px;">
-      <div class="row">
-	    	<div class="col-md-3 col-6">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-3 col-6">
-            <div class="cards">
-                <div class="cards-box">
-                    <div class="cards-img shadow"></div>
-                    <div class="cards-dialogue shadow">
-                        <div class="cards-text">
-                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-                        </div>
-                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-                    </div>
-                </div>
-            </div>
-	        </div>
-	        <div class="col-md-3 media-hide">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-3 media-hide">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-    	</div>
-    </div>
-    <div class="carousel-item style_container" data-interval="4000" style="padding: 20px 15px;">
-    	<div class="row">
-	    	<div class="col-md-3 col-6">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-3 col-6">
-            <div class="cards">
-                <div class="cards-box">
-                    <div class="cards-img shadow"></div>
-                    <div class="cards-dialogue shadow">
-                        <div class="cards-text">
-                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-                        </div>
-                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-                    </div>
-                </div>
-            </div>
-	        </div>
-	        <div class="col-md-3 media-hide">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-3 media-hide">
-	            <div class="cards">
-	                <div class="cards-box">
-	                    <div class="cards-img shadow"></div>
-	                    <div class="cards-dialogue shadow">
-	                        <div class="cards-text">
-	                            <h3 style="padding-left: 40px;">Stop At Nothing</h3><br>
-	                            <span><p style="padding-left: 5px;">something to write here...</p></span>
-	                        </div>
-	                        <a class="btn btn-primary" style="margin: 3px 0 2px 20px;">Book Now</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        
-    	</div>
-      
-        
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon arrow-icons" aria-hidden="true">
-        <svg class="svg-icon shadow-lg circle" viewBox="0 0 20 20">
-            <path fill="none" d="M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z">
-            </path>
-        </svg>
-</span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon arrow-icons" aria-hidden="true">
-        <svg class="svg-icon shadow-lg circle" viewBox="0 0 20 20">
-            <path fill="none" d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z">
-            </path>
-        </svg>
-</span>
-    <span class="visually-hidden">Next</span>
-  </button>
+  	<div th:replace="middle_body_fragment_offers :: offers_fragment"></div>
 </div>
-</div>
+
+
 
 <!-- Super Offers -->
 <div class="popular_destinations" style="margin-bottom: 30px;">
@@ -1500,7 +1303,7 @@ body {
 	    <div class="tab folder_style col-sm-3" ><h3 class="headerStyle">Popular <span>Destinations</span></h3></div>
 	</div>
     <div class="container" id="destinationDiv">
-		<div class="style_container">
+		<div class="style_container justify_center_verticle"> 
 			
 	   <h2 class="media_status" style="padding: 10px 0 5px 10px; font-size: 18px;">Destinations</h2>
         <div class="row" style="padding-bottom: 12px;">
@@ -1523,7 +1326,7 @@ body {
 	        <div class="col-sm-6 shadow-sm small_container media-hide">
 	            <div th:replace="popular_destinaiton :: popular_destination('tag')"></div>
 	        </div>
-	        <div class="col-sm-6">
+	        <div class="col-sm-6 justify_center_verticle">
 	        	<div class="row">
 	        		<div class="col-6 ghfghgfh">
 	        			<div >
@@ -1611,9 +1414,9 @@ body {
                                 <div class="content-overlay"></div>
                                 <img class="content-image" th:src="@{/images/deals/J&K.jpg}" style="width: 100%;">
 
+                                    <h3 class="content-title content-title-header">Jammu & Kashmir, India</h3>
                                 <div class="content-details fadeIn-bottom">
-                                    <h3 class="content-title">Jammu & Kashmir, India</h3>
-                                    <a class="btn btn-primary" th:href="@{/jammu_view}">Book Now</a>
+                                    <a class="btn btn-primary" th:href="@{/jammu_view}">Check Out!</a>
                                 </div>
                     
                             </div>
@@ -1624,10 +1427,10 @@ body {
                             <div class="content" style="border-radius: 10px;">
                                 <div class="content-overlay"></div>
                                 <img class="content-image" th:src="@{/images/deals/kannyakumari-temple.jpg}" style="width: 100%;">
+                                    <h3 class="content-title content-title-header">Kanyakumari, India</h3>
 
                                 <div class="content-details fadeIn-bottom">
-                                    <h3 class="content-title">Kanyakumari, India</h3>
-                                    <a class="btn btn-primary" >Book Now</a>
+                                    <a class="btn btn-primary" >Check Out!</a>
                                 </div>
                     
                             </div>
@@ -1638,10 +1441,10 @@ body {
                             <div class="content" style="border-radius: 10px;">
                                 <div class="content-overlay"></div>
                                 <img class="content-image" th:src="@{/images/deals/beachFun2.jpg}" style="width: 100%;">
+                                    <h3 class="content-title content-title-header">Srilanka</h3>
 
                                 <div class="content-details fadeIn-bottom">
-                                    <h3 class="content-title">Kanyakumari, India</h3>
-                                    <a class="btn btn-primary" >Book Now</a>
+                                    <a class="btn btn-primary" >Check Out!</a>
                                 </div>
                     
                             </div>
@@ -1673,10 +1476,10 @@ body {
 
     function updateIndicatorDots() {
         indicatorDots.forEach(dot => dot.remove());
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 1; i++) {
             const dot = document.createElement('div');
             dot.classList.add('indicator-dot');
-            dot.addEventListener('click', () => showSets(i * 2));
+            dot.addEventListener('click', () => showSets(i * 1));
             indicator.appendChild(dot);
             indicatorDots.push(dot);
         }
@@ -1686,7 +1489,7 @@ body {
     updateIndicatorDots();
 
     function nextSets() {
-        currentIndex = Math.min(currentIndex + 2, 6);
+        currentIndex = Math.min(currentIndex + 2, 1);
         showSets(currentIndex);
     }
 

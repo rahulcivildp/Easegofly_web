@@ -81,6 +81,19 @@ public class SearchHistory {
 	}
 	
 	public SearchHistory(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum,
+			Integer childNum, Integer infantNum, String tripType, Date date) {
+		this.cityOne = cityOne;
+		this.cityTwo = cityTwo;
+		this.passengerNum = passengerNum;
+		this.journeyClass = journeyClass;
+		this.adultNum = adultNum;
+		this.childNum = childNum;
+		this.infantNum = infantNum;
+		this.tripType = tripType;
+		this.date = date;
+	}
+	
+	public SearchHistory(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum,
 			Integer childNum, Integer infantNum, String tripType, Date date, Date returnDate, Customer customer) {
 		this.cityOne = cityOne;
 		this.cityTwo = cityTwo;

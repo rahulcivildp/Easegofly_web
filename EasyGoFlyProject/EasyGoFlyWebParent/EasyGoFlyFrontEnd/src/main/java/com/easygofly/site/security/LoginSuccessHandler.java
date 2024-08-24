@@ -20,11 +20,13 @@ import org.springframework.stereotype.Component;
 
 import com.easygofly.entity.Customer;
 import com.easygofly.site.customer.CustomerService;
+import com.easygofly.site.flight.ProductDetailsController;
 
 @Component
 @EntityScan({"com.easygofly.entity", "com.easygofly.site.customer"})
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler{
 		@Autowired private CustomerService customerService;
+		@Autowired private ProductDetailsController pController ;
 		public static final String REDIRECT_URL_SESSION_ATTRIBUTE_NAME = "REDIRECT_URL";
 		private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 		
@@ -56,9 +58,19 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 			Map<String, String> roleTargetUrlMap = new HashMap<>();
 			
-			System.out.println(redirectURLObject);
+			String redirectURl = "";
+			String travelerUrl = "" + pController.travelerUrl;
+			
+			if (travelerUrl.contains("flight_traveler_details") ) {
+				redirectURl = travelerUrl.split("redirect:")[1];
+			} else if (travelerUrl.equals("")) {
+				redirectURl = redirectURLObject.toString();
+			}
+			
+        	roleTargetUrlMap.put("Customer", redirectURl);
+			
+			System.out.println("Redirect URL : " + redirectURl); //String
 
-        	roleTargetUrlMap.put("Customer", "/");
 	        
 		    request.getSession().removeAttribute(REDIRECT_URL_SESSION_ATTRIBUTE_NAME);
 		    

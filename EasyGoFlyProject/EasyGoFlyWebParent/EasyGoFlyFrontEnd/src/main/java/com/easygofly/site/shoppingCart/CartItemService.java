@@ -33,14 +33,12 @@ public class CartItemService {
 	public CartItem updateCartItem(CartItem cartItem, String email, BigInteger phoneNum, int quantity, boolean ordered) {
 		CartItem updateCart = cartRepo.findById(cartItem.getId()).get();
 		
-		if(updateCart.getCustomer() != null && updateCart.getProductDetail() != null) {
-			updateCart.setCustomer(updateCart.getCustomer());
-			updateCart.setProductDetail(updateCart.getProductDetail());
-			updateCart.setEmail(email);
-			updateCart.setQuantity(quantity);
-			updateCart.setPhoneNum(phoneNum);
-			updateCart.setOrdered(ordered);
-		}
+		updateCart.setCustomer(updateCart.getCustomer());
+		updateCart.setProductDetail(updateCart.getProductDetail());
+		updateCart.setEmail(email);
+		updateCart.setQuantity(quantity);
+		updateCart.setPhoneNum(phoneNum);
+		updateCart.setOrdered(ordered);
 		
 		return cartRepo.save(updateCart);
 	}
@@ -48,18 +46,14 @@ public class CartItemService {
 	public CartItem updateCartItemOrdered(CartItem cartItem) {
 		CartItem updateCart = cartRepo.findById(cartItem.getId()).get();
 		
-		if(updateCart.getCustomer() != null && updateCart.getProductDetail() != null) {
-			updateCart.setOrdered(true);
-		}
+		updateCart.setOrdered(true);
 		
 		return cartRepo.save(updateCart);
 	}
 	
 	public CartItem updateTotalPrice(CartItem cartItem, double totalPrice) {
 		CartItem updateCart = cartRepo.findById(cartItem.getId()).get();
-		if(updateCart.getCustomer() != null && updateCart.getProductDetail() != null) {
-			updateCart.setTotalPrice(totalPrice);
-		}
+		updateCart.setTotalPrice(totalPrice);
 		
 		return cartRepo.save(updateCart);
 	}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<head th:replace="fragments :: page_head(': Tamilnadu Bus Service', 'tag')"></head>
+	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
+<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-TNN6EKSPHR');
+	</script>
+	<!-- Google Analytics -->
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	
+	ga('create', 'UA-XXXXX-Y', 'auto');
+	ga('send', 'pageview');
+	</script>
+	<!-- End Google Analytics -->
+        
+    
+</head>	
+<style>
+	.top-height {
+		height: 60px;
+	}
+	
+	@media screen and (max-width: 800px) {
+		.top-height {
+			height: 0;
+		}
+	}
+	.list-group-item {
+	  font-size: 1rem;
+	  padding: 10px;
+	}
+	
+	.badge-success { 
+	  background-color: #28a745;
+	  color: white;
+	  font-size: 0.85rem;
+	  padding: 5px 10px;
+	  border-radius: 20px;
+	}
+	
+	.card-body ul {
+	  padding-left: 20px;
+	  list-style: disc;
+	}
+	
+	.card-body p, .card-body ul {
+	  margin-bottom: 15px;
+	}
+</style>
+<body style="background-color: #f8f8f8;">
+
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+  
+<div class="top-height" style="background: transparent;">
+</div>
+
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Top Operators for&nbsp; Bihar to Jharkhand</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>BSRTC&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>JGD Travels Pvt Ltd.&nbsp; &nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Arzoo Travels&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Vijay Rath&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Yarana Travels&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Mahuli Travels&nbsp;&nbsp;</span><span class="badge badge-success">★★★★☆</span></li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Rekha Luxury&nbsp;&nbsp;</span><span class="badge badge-success">★★★★☆</span></li>
+                    <li class="list-group-item"><span>Sadhvi Rath&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Puja Rath&nbsp;&nbsp;</span><span class="badge badge-success">★★★★☆</span></li>
+                    <li class="list-group-item"><span>Pihu&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>MAA Travels&nbsp;&nbsp;</span><span class="badge badge-success">★★★★★</span></li>
+                    <li class="list-group-item"><span>Aradhana Travels&nbsp;&nbsp;</span><span class="badge badge-success">★★★★☆</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Boarding Points in Bihar Ranchi</h2>
+        <div class="row">
+            <div class="col col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>Ring Road</span></li>
+                    <li class="list-group-item"><span>Ranchi Govt.</span></li>
+                    <li class="list-group-item"><span>Medchal</span></li>
+                    <li class="list-group-item"><span>Kanta</span></li>
+                    <li class="list-group-item"><span>Kanta Toil</span></li>
+                    <li class="list-group-item"><span>BIT</span></li>
+                </ul>
+            </div>
+            <div class="col col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><span>BIT Meshra</span></li>
+                    <li class="list-group-item"><span>Medchal</span></li>
+                    <li class="list-group-item"><span>Ratu Road</span></li>
+                    <li class="list-group-item"><span>Booti More</span></li>
+                    <li class="list-group-item"><span>Ranchi Over</span></li>
+                    <li class="list-group-item"><span>Vikash</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <h2 style="color: #007bff;" class="text-center mb-4">Book Buses from Bihar to Jharkhand Bus Tickets on EaseGoFly</h2>
+        <div class="card">
+            <div class="card-body">
+                <p><span style="color: rgb(74, 74, 74);">Jharkhand is a beautiful tourist destination in India. You can travel to Jharkhand&nbsp; via road for a scenic journey. You can visit this gorgeous city with your family and friends for a memorable holiday. You can book a Patna to Ranchi bus at affordable rates&nbsp;</span>on EaseGoFly.</p>
+                <p>The overall journey duration of Patna&nbsp; and Ranchi&nbsp; is around 8h 35m. Although the duration of the journey depends on the bus you are booking. Most of the time, these stoppages are at eminent food joints. Although the duration of the halt is generally short, you can utilize this time period for eating and getting freshened up.</p>
+                <p><span style="color: rgb(74, 74, 74);">You can make your bus booking online. The Bihar to Ranchi bus tickets fare starts from INR 165 per head and can go as high as INR 2000 per head.</span></p>
+                <ul>
+                    <li>Charging points</li>
+                    <li>Water bottles</li>
+                    <li>Reading lights</li>
+                    <li>Hand sanitizers</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5 justify_center_verticle" style="margin-top: 20px;">
+        <div class="row">
+            <div class="text-center card col-md-6" style="margin-right: -1px;padding-left: 19px;margin-bottom: -9px;padding-bottom: 12px;padding-top: 10px;">
+                <h5 class="card-title">VIJAY RATH&nbsp;&nbsp;<span class="badge badge-primary">AC</span></h5>
+                <p class="card-text"><strong>Route: Patna To Ranchi</strong><br><strong>Departure:</strong> 10:00 PM | <strong>Arrival:</strong> 6:00 AM<br><strong>Duration:</strong>&nbsp;9h<br><strong>Ticket Price:</strong> ₹665<br></p>
+                <p class="card-text"><i class="bi bi-wifi"></i> Free Wifi<br><i class="bi bi-tv-fill"></i> Entertainment<br><i class="bi bi-plug-fill"></i> Charging Ports<br><i class="bi bi-cup-fill"></i> Refreshments </p>
+                <p class="card-text"><strong>Contact Number:</strong> +91 9876000010</p><a class="btn btn-secondary disabled float-right" role="button" href="#" style="padding-right: 53px;padding-left: 37px;margin-left: 119px;margin-right: 84px;">Coming Soon</a>
+            </div>
+            <div class="text-center card col-md-6" style="padding-left: 8px;margin-left: 0px;padding-bottom: 14px;margin-bottom: -10px;margin-top: 0px;padding-top: 12px;">
+                <h5 class="card-title">Yarana Travels&nbsp;<span class="badge badge-primary">Non AC Seater</span></h5>
+                <p class="card-text"><strong>Route: Ranchi To Patna&nbsp; &nbsp;&nbsp;</strong>&nbsp;<strong>Departure:</strong>9:00PM | <strong>Arrival:</strong> 5:00 AM<br><strong>Duration:</strong>&nbsp;9h<br><strong>Ticket Price:</strong> ₹550<br></p>
+                <p class="card-text"><i class="bi bi-tv-fill"></i> Entertainment<br><i class="bi bi-plug-fill"></i> Charging Ports<br><i class="bi bi-cup-fill"></i> Refreshments </p>
+                <p class="card-text"><strong>Contact Number:</strong> +91 9876000020</p><a class="btn btn-secondary disabled float-right" role="button" href="#" style="padding-left: 37px;margin-left: 119px;margin-right: 94px;">Coming Soon</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+ <div style="height: 80px;"></div>
+ 
+ <footer th:replace="fragments :: page_footer"></footer>
+ 
+ <script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+
+</html>

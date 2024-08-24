@@ -731,6 +731,10 @@ public class ProductDetail {
 		this.cartItems.add(new CartItem(customer, this));
 	}
 	
+	public void addBooking() {
+		this.cartItems.add(new CartItem(this));
+	}
+	
 	public void addContactBooking(Customer customer, int quantity, double totalPrice, String email, BigInteger phoneNum) {
 		this.cartItems.add(new CartItem(customer, this, quantity, totalPrice, email, phoneNum));
 	}

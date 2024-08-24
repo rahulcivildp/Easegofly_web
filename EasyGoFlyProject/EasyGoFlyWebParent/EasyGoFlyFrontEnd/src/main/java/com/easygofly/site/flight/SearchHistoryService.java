@@ -1,20 +1,15 @@
 package com.easygofly.site.flight;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.SearchHistory;
-import com.easygofly.site.LogService;
 import com.easygofly.site.customer.CustomerRepository;
 
 @Service
@@ -24,8 +19,7 @@ public class SearchHistoryService {
 	@Autowired private CustomerRepository customerRepo;
 	@Autowired private SearchHistoryRepository searchRepo;
 	@Autowired private EntityManager entityManager;
-	@Autowired private OnlineFlightService onlineFlightService;
-	@Autowired private LogService logService;
+	@Autowired private SearchHistoryRepository hisrepo;
 	
 	public Customer saveSearchHistory(Customer customer) {
 		Customer userLoggedin = customerRepo.findById(customer.getId()).get();
@@ -33,6 +27,14 @@ public class SearchHistoryService {
 		userLoggedin.setSearchHistory(customer.getSearchHistory());
 		
 		return customerRepo.save(userLoggedin);
+	}
+	
+	public SearchHistory setCustomerSearchHistory(Customer customer, SearchHistory search) {
+		SearchHistory searchHistory = searchRepo.findById(search.getId()).get();
+		
+		searchHistory.setCustomer(customer);
+		
+		return searchRepo.save(searchHistory);
 	}
 	
 	public SearchHistory updateSearchHistory(SearchHistory search, CartItem item) {
@@ -59,14 +61,11 @@ public class SearchHistoryService {
 		SearchHistory firstHistory = search.iterator().next();
 		Integer id = firstHistory.getId();
 		Integer count = extracted(search);
-		System.out.println(count);
 		for (int i=1;i<count;i++) {
 			if (count >= 4) {
-				System.out.println(firstHistory.getId());
 				searchRepo.deleteSearchByCustomer(id, cust);
 				count = count - 1;
 				id++;
-				System.out.println(count);
 			}
 		}
 	}
@@ -84,29 +83,23 @@ public class SearchHistoryService {
 		return customerRepo.getCustomerByPhone(phone);
 	}
 	
-	public void authenticationFlightAirIQ(Model model) {
-		try {
-        	// Create URL object with the API end-point
-            URL url = new URL("https://omairiq.azurewebsites.net/login");
-
-            // Open a connection
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-        	StringBuilder responseBody = new StringBuilder();
-        	
-            onlineFlightService.apiAirIQAuthentication(connection, responseBody);
-            
-            JSONObject jsonObj = new JSONObject(responseBody.toString());
-          
-            onlineFlightService.tokenAirIQ = (String) jsonObj.get("token");
-            System.out.println(jsonObj);
-            logService.generateLog(jsonObj.toString());
-            
-            connection.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	public SearchHistory setSearchHistoryWithouLogin(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,
+			String tripType, Date date ) {
+		if(cityOne == null || cityTwo == null) return null;
+		
+		Integer passengerNum1 = passengerNum; 
+		String journeyClass1 = journeyClass; 
+		Integer adultNum1 = adultNum; 
+		Integer childNum1 = childNum; 
+		Integer infantNum1 = infantNum;
+		String tripType1 = tripType; 
+		Date date1 = date;
+		String cityOne1 = cityOne;
+		String cityTwo1 = cityTwo;
+		
+		SearchHistory history = new SearchHistory(cityOne1, cityTwo1, passengerNum1, journeyClass1, adultNum1, childNum1, infantNum1, tripType1, date1);
+		
+		return hisrepo.save(history);
 	}
 	
 }

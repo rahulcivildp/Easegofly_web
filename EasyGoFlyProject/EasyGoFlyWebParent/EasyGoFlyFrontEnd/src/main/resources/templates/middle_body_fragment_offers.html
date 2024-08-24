@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" 
+	th:fragment="offers_fragment">
+	
+	
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+		.jusaghd {
+		  display: flex;
+		  justify-content: start;
+		  align-items: center;
+		}
+		a {
+		  text-decoration: none;
+		}
+		.a-linked {
+		  padding: 4px 8px;
+		  border-radius: 10px 10px 0 0;
+		  color: rgb(106, 188, 255);
+		}
+		.a-linked:hover {
+		  background-color: rgb(236, 236, 236);
+		  color: #db2250 !important;
+		  text-decoration: underline;
+		  font-weight: 600;
+		}
+		.a-linked h4 {
+		  font-family: "Exo 2", sans-serif;
+		  font-optical-sizing: auto;
+		  font-weight: 500;
+		  font-style: normal;
+		}
+		.a-linked-active {
+		  color: #db2250 !important;
+		  font-weight: 600;
+		  text-decoration: underline;
+		}
+		.offer-upper {
+		  position: relative; 
+		  padding: 15px; 
+		  border-radius: 0 10px 10px 10px;
+		  display: none;
+		}
+		.offer-display {
+		  display: block;
+		}
+		.last-border {
+		  background: white; 
+		  padding: 4px;
+		}
+		.offer-inner-style {
+		  padding: 0; 
+		  border-radius: 0 10px 10px 10px;
+		}
+		.offer-card {
+		  margin: 4px 0;
+		  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+		  border: none;
+		}
+		.offer-front-row {
+		  padding-bottom: 6px;
+		}
+		.card {
+			width: 100%;
+		}
+		.dropdown-a-style {
+			width: 100%;
+		    background: transparent !important;
+		    border: none;
+		    color: #d60404 !important;
+		    font-weight: 600;
+		    text-align: right;
+		}
+	</style>
+</head>
+
+<body>
+    <div class="container style_container">
+        <div class="row media-hide" style="position: relative; z-index: 20;">
+            <div class="col jusaghd">
+                <a class="a-linked a-linked-active" href="#"> 
+                    <div>
+                        <h4>All Offers</h4>
+                    </div>
+                </a>
+                <a class="a-linked " href="#">
+                    <div>
+                        <h4>Domestic</h4>
+                    </div>
+                </a>
+                <a class="a-linked" href="#"> 
+                    <div >
+                        <h4>Intenational</h4>
+                    </div>
+                </a>
+                <a class="a-linked" href="#"> 
+                    <div >
+                        <h4>Hotel</h4>
+                    </div>
+                </a>
+                <a class="a-linked" href="#"> 
+                    <div >
+                        <h4>Holidays</h4>
+                    </div>
+                </a>
+                <a class="a-linked last-link" href="#"> 
+                    <div >
+                        <h4>Bus</h4>
+                    </div>
+                </a>
+                <div class="last-border">
+                    <h4 style="color: white;"></h4>
+                </div>
+            </div>
+        </div>
+        <div class="media_status_flex_CPN">
+	        <div class="row" style="position: relative; z-index: 20;">
+				<div class="col-6" style="display: flex; justify-content: start; align-items: center;">
+	    			<div class="tab col-sm-3"><h2 style="padding: 10px 0 5px 10px; font-size: 18px;">Exclusive Deals</h2></div>
+	    		</div>
+				<div class="col-6">
+			        <div class="dropdown">
+					  <a class="btn btn-secondary dropdown-toggle dropdown-a-style" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" onclick="">
+					    Offers
+					  </a>
+					
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					    <li><a class="itemsDrop dropdown-item a-linked-active" href="#">All</a></li>
+					    <li><a class="itemsDrop dropdown-item" href="#">Domestic</a></li>
+					    <li><a class="itemsDrop dropdown-item" href="#">Intenational</a></li>
+					    <li><a class="itemsDrop dropdown-item" href="#">Hotel</a></li>
+					    <li><a class="itemsDrop dropdown-item" href="#">Holidays</a></li>
+					    <li><a class="itemsDrop dropdown-item" href="#">Bus</a></li>
+					  </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="offer-upper offer-display">
+            <div id="carouselExampleAutoplaying" class="carousel slide" > <!--data-bs-ride="carousel"-->
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs "><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/qatar airways.jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/air india express.jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/spicaejet.jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                   
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+        <div class="offer-upper">
+
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                   
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+        <div class="offer-upper">
+
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  
+                 
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+        <div class="offer-upper">
+
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" style="display: none;">
+                
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/air india express.jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  
+                 
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+        <div class="offer-upper">
+
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" style="display: none;">
+                
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  
+                 
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+        <div class="offer-upper">
+
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" style="display: none;">
+                
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div  class="offer-inner-style justify_center_div">
+                        <div class="row">
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Qatar Airways!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Switzerland!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">LIVE NOW: Sale by Airindia Express!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="card offer-card" style="overflow: hidden;">
+	                                <div class="row g-0 pos-rel content mob-card-height" style="width: 100%;">
+										<div class="content-overlay" style="z-index: 1;"></div>
+	                                    <div class="col-md-4 mobile-pos-abs mob-card-height"><img class="img-fluid rounded-start mob-card-img mob-card-height" th:src="@{images/offers/Switzerland offer .jpg}" alt="Offer 1" style="height: 100%;"></div>
+	                                    <div class="col-md-8 pos-rel" >
+	                                        <div class="card-body">
+	                                            <h5 class="card-title mob-card-title">Enjoy your blissful flight with The SpiceJet!</h5>
+	                                            <p class="card-text media-hide">Up to 20% OFF* on business class fares. T&amp;C's Apply. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	                                        </div>
+	                                    </div>
+		                                <div class="content-details fadeIn-bottom" style="z-index: 2;">
+		                                    <a class="btn btn-primary" href="/jammu_view">Check Out!</a>
+		                                </div>
+	                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+                  
+                 
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(".a-linked").click(function() {
+            $(".a-linked").removeClass("a-linked-active");
+            $(".offer-upper").removeClass("offer-display");
+            $(this).addClass("a-linked-active");
+            // alert($(".offer-upper").length);
+            for (var i = 0; i < $(".a-linked").length; i++) {
+                if(this == $(".a-linked")[i]){
+                    $($(".offer-upper")[i]).addClass("offer-display");
+                }
+            }
+        });
+        
+
+    </script>
+    <script>
+		
+        $(".itemsDrop").click(function() {
+            $(".itemsDrop").removeClass("a-linked-active");
+            $(".offer-upper").removeClass("offer-display");
+            $(this).addClass("a-linked-active");
+            // alert($(".offer-upper").length);
+            for (var i = 0; i < $(".itemsDrop").length; i++) {
+                if(this == $(".itemsDrop")[i]){
+                    $($(".offer-upper")[i]).addClass("offer-display");
+                }
+            }
+        });
+		
+	</script>
+</body>
+
+</html>

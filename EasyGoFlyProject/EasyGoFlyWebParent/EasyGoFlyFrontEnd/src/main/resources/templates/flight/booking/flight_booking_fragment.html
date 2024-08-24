@@ -130,7 +130,12 @@
 		}
 		
 	}
-	
+	.modal-content-stl {
+		background: transparent;
+		border: none;	
+		justify-content: center;
+		align-items: center;
+	}
     </style>
     <body>
 		<div class="media-hide" style="background-color:#061123; padding-top: 120px;"></div>
@@ -582,7 +587,7 @@
                                         <div class="col-md-4">
                                         <p style=" margin: 8px 0 8px 30px;">SMS will be sent to this number</p>
                                             <div class="form-floating mb-3">
-                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:field="${item.phoneNum}" maxlength="12">
+                                                <input type="number" class="form-control" id="phone_num" name="phoneNum" th:value="${item.phoneNum}" maxlength="12">
                                                 <label for="floatingInput">Phone No :</label>
                                             </div>
                                         </div>
@@ -621,7 +626,7 @@
 		                    <div class="row">
 		                        <div class="col-md-12" style="border: 1px solid #a7a7a794; padding: 0;">
 		                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_home" style="float: left; color: white; text-decoration: none;">Home</a>
-		                            <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next" style="float: right; border: none; color: white;" value="Next">
+		                            <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next" style="float: right; border: none; color: white;" value="Next" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 		                        </div>
 		                        <div class="col-md-3"></div>
 		                    </div>
@@ -637,6 +642,18 @@
                 
             </div>
         </div>
+        
+        
+			<!-- Modal -->
+			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content modal-content-stl">
+		            <div class="spinner-border text-primary" role="status">
+		                <span class="sr-only">Loading...</span>
+		            </div>
+			    </div>
+			  </div>
+			</div>
      
     </body>
     <script type="text/javascript">

@@ -156,7 +156,15 @@ input:checked+br+label {
 
 
 
+	.n-text {
+		display: block;
+		font-size: 18px;
+		margin: 0;
+	}
 
+	.n-text h5 {
+		margin: 0;
+	}
 
 		@media screen and (max-width: 800px) {
 			
@@ -221,6 +229,9 @@ input:checked+br+label {
 
 			.n-text {
 				margin-top: -6px !important;
+			}
+			.n-text {
+				margin: 19px 0;
 			}
 		}
 		
@@ -518,11 +529,7 @@ input:checked+br+label {
 			width: 100%;
 		}
 
-		.n-text {
-			display: block;
-			font-size: 18px;
-			margin: 19px 0;
-		}
+		
 
 		.submit_btns {
 			width: 100%;
@@ -674,7 +681,7 @@ input:checked+br+label {
 							<div class="col-md-5 col-12" style=" float: left; ">
 	
 								<div class="col-md-6 col-6 aligner form-floating" id="aligner3">
-									<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" 
+									<input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" value="Bangalore"
 										placeholder="Depurture City" list="cityOneList"
 										oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
 									<datalist id="cityOneList">
@@ -686,7 +693,7 @@ input:checked+br+label {
 										From</label>
 								</div>
 								<div class="col-md-6 col-6 aligner form-floating media-hide" id="aligner4">
-									<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo"
+									<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" value="Kolkata"
 										placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" 
 										required>
 									<datalist id="cityTwoList">
@@ -729,7 +736,7 @@ input:checked+br+label {
 												<h5 id="result3"></h5>
 												<h5 id="result"></h5>
 												<input type="hidden" name="something" id="passengerNum1" value="">
-												<h1 class="n-text" id="n-text-1">Travelers</h1>
+												<div class="n-text" id="n-text-1"><h5>Economy</h5><h5>Pax 1</h5></div>
 											</div>
 											<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)"
 												onmouseleave="dropdownClose(this)">
@@ -818,7 +825,7 @@ input:checked+br+label {
 											<div class="col-md-5 col-5 form-floating" id="aligner3" style="padding: 0;">
 												<input type="search" class="form-control hill1 input_styles_mobile autocomplete" name="cityOne" id="cityOneMobile"
 													placeholder="Depurture City" 
-													oninput="checkCityCodeMatch(document.getElementById('cityTwoMobile'))" required>
+													oninput="checkCityCodeMatch(document.getElementById('cityTwoMobile'))" value="Kolkata" required>
 												<label class="labelStyle labelSetting" for="cityOneMobile">
 													From</label>
 											</div>
@@ -829,14 +836,14 @@ input:checked+br+label {
 											</div>
 											<div class="col-md-5 col-5 form-floating " id="aligner4" style="padding: 0;">
 												<input type="search" class="form-control hill2 input_styles_mobile autocomplete" name="cityTwo" id="cityTwoMobile"
-													placeholder="Arrival City" oninput="checkCityCodeMatch(this)" style="direction: rtl;"
+													placeholder="Arrival City" oninput="checkCityCodeMatch(this)" style="direction: rtl;" value="Bangalore"
 													required>
-												<label class="labelStyle labelSetting" for="cityTwoMobile" style="direction: rtl;">
+												<label class="labelStyle labelSetting" for="cityTwoMobile" style="position: absolute; right: 0; direction: rtl;">
 													To</label>
 											</div>
 											
 											<div class="col-md-6 col-6 form-floating" id="aligner3" style="padding: 0;">
-												<div id="cityOneLabel" class="floatingResponseDiv" onchange="alertgj()"></div>
+												<div id="cityOneLabel" class="floatingResponseDiv"></div>
 											</div>
 											<div class="col-md-6 col-6 form-floating " id="aligner4" style="padding: 0;">
 												<div id="cityTwoLabel" class="floatingResponseDiv" style="text-align: right;"></div>
@@ -854,9 +861,10 @@ input:checked+br+label {
 									<div class="col-md-4 col-6 aligner">
 										<label class="paddingDate" for="floatingInputDepurtureMobile">
 											Departure</label>
-										<input type="date" name="date" class="form-control input_calender"
+										<input type="date" name="date" class="form-control input_calender" placeholder="dd-mm-yyyy"
+												onfocus="(this.type='date')" onblur="(this.type='text')"
 											id="floatingInputDepurtureMobile" required>
-										<div id="dateLabel1" class="floatingResponseDivDate media_status_flex_CPN" style="margin-top: 19px; height: 30px;">Selected Day</div>
+										<div id="dateLabel1" class="floatingResponseDivDate media_status_flex_CPN" style="margin-top: 19px; height: 30px;">Select a Date</div>
 		
 									</div>
 									<div class="col-md-4 col-6 aligner" id="input_roundtrip_mobile"><!-- id="input_roundtrip" --> 
@@ -888,7 +896,16 @@ input:checked+br+label {
 														</div>
 													</div>
 													<input type="hidden" name="something" id="passengerNum1" value="">
-													<h1 class="n-text" id="n-text-2">Travelers</h1>
+													<div class="n-text" id="n-text-2">
+														<div class="row" style="padding-top: 6px;">
+															<div class="col-6">
+																<h5>Economy</h5>
+															</div>
+															<div class="col-6">
+																<h5>Pax 1</h5>
+															</div>
+														</div>
+													</div>
 												</button>
 												<ul class="dropdownMenu dropdowns-menu deactive" onmouseover="dropdownOpen(this)" id="oneWayDropdown"
 													onmouseleave="dropdownClose(this)">
@@ -2216,11 +2233,6 @@ input:checked+br+label {
 	})
 </script>
 <script>
-	function alertgj(){
-		alert("changed");
-	}
-</script>
-<script>
 	var modURL = "[[@{/find_city_name_}]]";
 	
 	var myInput1 = "cityOneMobile";
@@ -2241,7 +2253,35 @@ input:checked+br+label {
 	var labelById7 = "#cityOneLabelInterMobileInter";
 	var labelById8 = "#cityTwoLabelInterMobileInter";
 	
+
+</script>
+<script>
+	$(document).ready(function(){
+		findCityNameOnStart($("#cityOneMobile").val(), labelById1);
+		findCityNameOnStart($("#cityTwoMobile").val(), labelById2);
+		defaultDate('floatingInputDepurtureMobile');
+		defaultDate('floatingInputDepurture');
+	});
 	
+		function findCityNameOnStart(elementById, labelById){
+			cityName = elementById;
+			
+			urlCity = modURL + cityName;
+			
+			$.get(urlCity, function(city) {
+				$(labelById).html(city);
+				
+			}).fail(function(){
+				alert("Could not connect to the server.");
+			});
+		};
+		
+		function defaultDate(input) {
+			let dateDate = new Date();
+			dateDate.setDate(dateDate.getDate() + 1);
+			
+			document.getElementById(input).valueAsDate = dateDate;  
+		}
 </script>
 <script>
 $(function(){
