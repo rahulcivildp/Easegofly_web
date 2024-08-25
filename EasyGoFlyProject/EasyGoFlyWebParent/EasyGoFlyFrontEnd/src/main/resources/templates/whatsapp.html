@@ -3,66 +3,7 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 	<div th:fragment="content">
-	<style>
-		
-	@media screen and (max-width: 800px) {
-		.chat {
-			bottom: 109px !important;
-    		right: -90px !important;
-		}
-	}
-	
-		.hoverInv:hover {
-	background-color: #681414 !important;
-	border-color: #681414 !important;
-	color: white;
-}
-
-.hover:hover {
-	background-color: #D32F2F !important;
-	border-color: #D32F2F !important;
-	color: white;
-}
-
-.chat {
-	margin-right: 15px;
-	width: 60px;
-	height: 45px;
-	border-radius: 27px;
-	position: fixed;
-	bottom: 100px;
-	right: 0px;
-	z-index: 6;
-	font-size: 45px;
-}
-
-.chat i {
-	color: #4dc85b;
-	padding-left: 15px;
-	position: relative;
-	bottom: 6px;
-}
-
-.chat strong {
-	color: #4dc85b;
-	font-size: 17px;
-	position: relative;
-	bottom: 12px;
-	left: 7px;
-}
-
-.resizer {
-	margin: 0;
-}
-
-.resizer li {
-	display: inline;
-	float: left;
-	list-style-type: none;
-	margin-bottom: 2px;
-}
-	
-	</style>
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
 	
 		<div class="chat shadow-lg">
 			<a th:href="@{'https://wa.me/91' + ${WHATSAPP}}"

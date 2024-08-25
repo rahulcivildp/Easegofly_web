@@ -522,7 +522,7 @@ fbq('track', 'PageView');
 	      </div>
       </li>
       <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		    <div class="col-6 float-state media_status justify_center_div" style="color: white; font-size: 20px; font-weight: 600; padding-top: 20px;">
+		    <div class="col-8 float-state media_status justify_center_div" style="color: white; font-size: 20px; font-weight: 600; padding-top: 20px;">
 		        <a th:href="@{/}"> <p class="float-state" style="width: 170px;">Hey, <span id="cusName" sec:authentication="principal.customer.firstName"></span>!</p></a>
 		    </div>
 	  </th:block>
@@ -532,11 +532,6 @@ fbq('track', 'PageView');
 				th:href="@{/wallet-home}">
 		    	<i class="fa fa-solid fa-wallet"></i>
 		    	</a>
-		    </div>
-	  </th:block>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div class="col-2 media_status_flex_CPN justify_center_div" style="color: white; padding: 0 18px 0 15px; font-size: 22px;">
-		    	<i class="fa fa-solid fa-bell"></i>
 		    </div>
 	  </th:block>
     </div>

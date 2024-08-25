@@ -3,6 +3,8 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 		th:fragment="flight_booking">
 
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
+	
     <script>
         $(function () {
             $("#datepicker").datepicker({ 
@@ -181,7 +183,7 @@
                     </div>
                     <div class="progress_border"></div>
                 </div>
-                <div id="traveller_details_tab" style="margin-bottom: 15px;">
+                <div id="traveller_details_tab justify_center_div" style="margin-bottom: 15px;">
                     <div class="row">
                     	<div class="col-md-9" style="padding: 0;">
                     	<form th:action="@{/traveller_details_international_return}" method="post">
@@ -734,8 +736,8 @@
                             
 		                    <div class="row">
 		                        <div class="col-md-12" style="border: 1px solid #a7a7a794; padding: 0;">
-		                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_home" style="float: left; color: white; text-decoration: none;">Home</a>
-		                            <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next" style="float: right; border: none; color: white;" value="Next">
+		                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-4 booking_footer_btn" id="footer_home" style="float: left; color: white; text-decoration: none;">Home</a>
+		                            <input type="submit" class="col-md-2 col-4 booking_footer_btn" id="footer_next" style="float: right; border: none; color: white;" value="Next">
 		                        </div>
 		                        <div class="col-md-3"></div>
 		                    </div>
@@ -752,6 +754,8 @@
             </div>
         </div>
      
+        <div class="media_status" style="height: 50px;"></div>
+        
     </body>
     <script type="text/javascript">
 		

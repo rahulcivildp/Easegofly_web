@@ -3,6 +3,7 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 		th:fragment="flight_booking(remove)" th:remove="${remove}">
 
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
     
     <style>
         .tile-align {
@@ -251,7 +252,7 @@
                     </div>
                     <div class="progress_border"></div>
                 </div>
-                <div id="review_tab" class="">
+                <div id="review_tab" class="justify_center_div">
                 	
                     <div class="row">
                             <div class="col-md-9" style="padding: 0;">
@@ -926,9 +927,9 @@
                                 
                                 <div class="row" style="margin-bottom: 20px;">
 		                            <div class="col-md-9" style="border: 1px solid #a7a7a794; padding: 0; width: 100% !important;">
-		                            	<a th:href="@{'/flight_booking' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
+		                            	<a th:href="@{'/flight_booking' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="col-md-2 col-4 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
 		                               
-		                                <input type="submit" class="col-md-2 col-3 booking_footer_btn" id="footer_next1" style="float: right; color: white; border: none;" value="Next">
+		                                <input type="submit" class="col-md-2 col-4 booking_footer_btn" id="footer_next1" style="float: right; color: white; border: none;" value="Next">
 		                            </div>
 		                            <div class="col-md-3"></div>
 		                        </div>
@@ -995,7 +996,7 @@
                                                             <div class="col-md-7">
                                                                 <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne3" data-bs-target="#flush-collapseOne3" data-bs-toggle="collapse" id="summaries"><i class="fa fa-inr" aria-hidden="true"></i>Coupon</button>
                                                             </div>
-                                                            <div class="col-md-5"> <p id="amountOfCoupon" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;}"></p></div>
+                                                            <div class="col-md-5"> <p id="amountOfCoupon" style="display: none; float: right; font-size: 16px; justify-content: right; align-items: center; padding: 1rem 1.25rem; margin: 0;"></p></div>
                                                         </div>
                                                         </th:block>
                                                     </div>
@@ -1033,6 +1034,7 @@
             </div>
         </div>
      
+        <div class="media_status" style="height: 50px;"></div>
     </body>
 <script type="text/javascript">
 		

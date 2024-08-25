@@ -3,6 +3,8 @@
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 		th:fragment="flight_booking(remove)" th:remove="${remove}">
 
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
+	
     <script>
         $(function () {
             $("#datepicker").datepicker({ 
@@ -245,7 +247,7 @@
                     </div>
                     <div class="progress_border"></div>
                 </div>
-                <div id="payment_tab" class="" style="margin-bottom: 15px;">
+                <div id="payment_tab justify_center_div" class="" style="margin-bottom: 15px;">
                     <div class="row">
                         <div class="col-md-9" style="padding: 0;">
                             <div id="flight_details" class="booking_tiles back_white shadow">
@@ -598,7 +600,7 @@
                     
                     <div class="row">
                         <div class="col-md-9" style="border: 1px solid #a7a7a794; padding: 0;">
-                            <a th:href="@{'/flight_traveler_return_details' + ${search.id} +'&'+ ${flightOne.id} +'&'+ ${itemOne.id} +'&'+ ${flightTwo.id} +'&'+ ${itemTwo.id}}" class="col-md-2 col-3 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
+                            <a th:href="@{'/flight_traveler_return_details' + ${search.id} +'&'+ ${flightOne.id} +'&'+ ${itemOne.id} +'&'+ ${flightTwo.id} +'&'+ ${itemTwo.id}}" class="col-md-2 col-4 booking_footer_btn" id="footer_previous" style="float: left; color: white;text-decoration: none !important;"><b>Previous</b></a>
                             
                             <!-- ** PHONEPE ** --> <!-- 
                             <form th:action="@{/phonepe}" method="post">
@@ -648,7 +650,7 @@
                             	<input type="hidden" name="Order1_id" th:value="${orderOne.id}">
                             	<input type="hidden" name="Order2_id" th:value="${orderTwo.id}">
                             	<input type="hidden" name="search_id" th:value="${search.id}">
-                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white; display: none;" type="submit" value="Book Now" id="payButtonWallet" data-bs-toggle="modal" data-bs-target="#modalDialogue">
+                            	<input class="col-md-2 col-4 booking_footer_btn" style="float: right; border: none; color: white; display: none;" type="submit" value="Book Now" id="payButtonWallet" data-bs-toggle="modal" data-bs-target="#modalDialogue">
                             </form>
                            
                         </div>
@@ -674,6 +676,9 @@
 				</div>
 			</div>	
 		</div>
+		
+        <div class="media_status" style="height: 50px;"></div>
+        
     </body>
      
  <script type="text/javascript">

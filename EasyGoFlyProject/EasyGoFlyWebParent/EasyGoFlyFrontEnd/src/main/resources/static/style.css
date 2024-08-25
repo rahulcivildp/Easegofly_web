@@ -405,6 +405,10 @@ a:hover {
 	*.card-shadow-style {
 		box-shadow: none;
 	}
+	*.chat {        
+		bottom: 149px !important;
+    	right: -78px !important;
+	}
 }
 *.modify_link_navigation {
 	justify-content: unset !important;
