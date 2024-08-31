@@ -23,6 +23,7 @@
 	<modules>
 		<module>EasyGoFlyBackEnd</module>
 		<module>EasyGoFlyFrontEnd</module>
+		<module>EasyGoFlyAPI</module>
 	</modules>
 	 
 	<dependencies>

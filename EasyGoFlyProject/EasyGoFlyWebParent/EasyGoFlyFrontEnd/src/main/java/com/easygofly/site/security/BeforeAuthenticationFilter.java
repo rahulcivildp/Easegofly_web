@@ -22,7 +22,6 @@ import com.easygofly.site.customer.CustomerService;
 @Component
 public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
-
 	@Autowired private CustomerService customerService;
      
     @Autowired
@@ -38,9 +37,8 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
      
     @Autowired
-    @Override
     public void setAuthenticationSuccessHandler(
-            AuthenticationSuccessHandler successHandler) {
+    		LoginSuccessHandler successHandler) {
         super.setAuthenticationSuccessHandler(successHandler);
     }
  

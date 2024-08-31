@@ -409,6 +409,10 @@ a:hover {
 		bottom: 149px !important;
     	right: -78px !important;
 	}
+	
+	*.text_modify {
+	    color: #484848 !important;
+	}
 }
 *.modify_link_navigation {
 	justify-content: unset !important;

@@ -18,23 +18,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-//import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
-//import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-//import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
-//import org.springframework.security.config.BeanIds;
-//import org.springframework.beans.factory.annotation.Qualifier;
+import com.easygofly.site.security.oauth.CustomerOAuth2UserService;
+import com.easygofly.site.security.oauth.OAuth2LoginSuccessHandler;
+
 
 @SuppressWarnings("deprecation")
 @Configuration
@@ -47,10 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         return super.authenticationManagerBean();
     }
     
-    @Autowired  private BeforeAuthenticationFilter beforeLoginFilter;
+    @Autowired private BeforeAuthenticationFilter beforeLoginFilter;
     @Autowired private LoginSuccessHandler loginSuccessHandler;
     @Autowired private LoginFailureHandler loginFailureHandler;
     @Autowired private DataSource datasource;
+    @Autowired private CustomerOAuth2UserService oAuth2UserService;
+    @Autowired private OAuth2LoginSuccessHandler auth2LoginHandler;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -114,6 +111,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	            .failureHandler(loginFailureHandler)
 				.permitAll()
 			.and()
+            .oauth2Login()
+	        	.loginPage("/login")
+	        	.userInfoEndpoint()
+	        	.userService(oAuth2UserService)
+	            .and()
+	        	.successHandler(auth2LoginHandler)
+	        .and()
 			.logout().permitAll()
 			.and()
 			.rememberMe().key("AbcDefgHijKlmnopqrst_1234567890").tokenValiditySeconds(7 * 24 * 60 * 60)
@@ -137,7 +141,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	    persistenceTokenBasedservice.setAlwaysRemember(true);
 	    return persistenceTokenBasedservice;
 	}
-	
 	
 	public void addCorsMappings(CorsRegistry registry) {
 	    registry.addMapping("/**")

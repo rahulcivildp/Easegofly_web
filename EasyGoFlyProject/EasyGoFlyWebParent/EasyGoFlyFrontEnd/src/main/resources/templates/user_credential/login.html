@@ -255,6 +255,10 @@
 										<!--<p class="text-center">Please <a th:href="@{/registration}" class="specialButton styleLinkHover styleLink"><span> Sign up</span></a> if you're not registered!</p>-->
 										<div style=" border: 1px solid grey; border-radius: 15px; background-color: rgba(255,255,255,0.4); padding: 10px;">
 											<h1 class="text-center" style="margin-bottom: 24px;">Login</h1>
+											<div class="justify-content-center d-flex mt-3">
+												<a class="btn btn-lg btn-secondary text-center" th:href="@{/oauth2/authorization/google}">Continue with Google.</a>
+											</div>
+											<br>
 											<div class="row mb-3">
 											<div th:if="${param.error}">
 											    <p class="text-success"

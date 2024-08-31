@@ -1,0 +1,41 @@
+logging:
+  file:
+    name: logs/application.log
+  level:
+    root: INFO
+server:
+  port: 8444
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        http-only: true
+        same-site: none
+        secure: true
+      timeout: 60m
+      tracking-modes: cookie
+spring:
+  application:
+    name: EasyGoFlyAPI
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: tanmay@311
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/easygofly
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format-sql: true
+        globally-quoted-identifiers: true
+        use-sql-comments: true
+    show-sql: false
+  main:
+    allow-circular-references: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher

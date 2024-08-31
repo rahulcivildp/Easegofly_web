@@ -37,3 +37,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            scope:
+              - email
+              - profile
+            client-id: 640385530645-4ccu1nfvso6gclg03e9hbi6lueko2qta.apps.googleusercontent.com
+            client-secret: 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

@@ -30,7 +30,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 	@Modifying
 	public void updateEnableStatus(Integer id);
 	
-	@Query("SELECT c FROM Customer c WHERE c.email = ?1")
+	@Query("SELECT c FROM Customer c WHERE c.email = :email")
 	public Customer findCustomerByEmail(String email);
 	
 	@Query("SELECT c FROM Customer c WHERE c.phone = ?1")

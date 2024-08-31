@@ -3,10 +3,15 @@ package com.easygofly.site.security.oauth;
 import java.util.Collection;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+
+import com.easygofly.entity.Customer;
+import com.easygofly.site.customer.CustomerService;
+
 
 @Component
 @AutoConfiguration
@@ -14,10 +19,12 @@ public class CustomerOAuth2User implements OAuth2User {
 
 	private String clientName;
 	private OAuth2User oauth2User;
+	private Customer customer;
 	
-	public CustomerOAuth2User(OAuth2User oauth2User, String clientName) {
+	public CustomerOAuth2User(OAuth2User oauth2User, String clientName, Customer customer) {
 		this.oauth2User = oauth2User;
 		this.clientName = clientName;
+		this.customer = customer;
 	}
 
 	@Override
@@ -45,6 +52,22 @@ public class CustomerOAuth2User implements OAuth2User {
 
 	public String getClientName() {
 		return clientName;
+	}
+
+	public Customer getCustomer() {
+		return this.customer;
+	}
+
+	public String getPhoto() {
+		return this.customer.getPhotos();
+	}
+	
+	public void setPhoto(String photo) {
+		this.customer.setPhotos(photo);
+	}
+	
+	public String getPhone() {
+		return this.customer.getPhone();
 	}
 
 }

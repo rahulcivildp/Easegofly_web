@@ -30,6 +30,7 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.Wallet;
 import com.easygofly.entity.WebDetails;
+import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.CityRepository;
 import com.easygofly.site.flight.FlightRepository;
@@ -37,6 +38,7 @@ import com.easygofly.site.flight.SearchHistoryRepository;
 import com.easygofly.site.flight.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.LoginSuccessHandler;
+import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
 import com.easygofly.site.setting.web.WebSettingService;
 
@@ -52,13 +54,14 @@ public class MainController {
 	@Autowired private FlightRepository flightRepo;
 	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private CountryRepository countryRepo;
+	@Autowired private CustomerService customerService;
 	@Autowired private SearchHistoryRepository searchRepo;
 	
 	@SuppressWarnings("unused")
 	private String tokenId = "";
 	
 	@GetMapping("/")
-	public String viewHomePage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,Model model) {
+	public String viewHomePage(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model) {
 		Country country = countryRepo.findById(106).get();
 		Iterable<City> cities = cityRepo.getCityByCountry(country);
 		model.addAttribute("cities", cities);
@@ -78,8 +81,20 @@ public class MainController {
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			@SuppressWarnings("unused")
 			HttpSession session= attr.getRequest().getSession(true);
-			
+		} else if (oauthCustomer != null) {
+			System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+			phone = oauthCustomer.getEmail();
+			Customer customer = customerService.getByEmail(phone);
+			Wallet wallet = customer.getWallet();
+			model.addAttribute("balance", wallet.getBalance());
+			historyPart(model, customer);
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			@SuppressWarnings("unused")
+			HttpSession session= attr.getRequest().getSession(true);
+			System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 		}
+//		phone = oauthCustomer.getEmail();
+//		Customer customer = customerService.getByPhone(phone);
 		
 		List<WebDetails> webDetails = webSettingService.listAllSettings();
 		for (WebDetails detail : webDetails) {

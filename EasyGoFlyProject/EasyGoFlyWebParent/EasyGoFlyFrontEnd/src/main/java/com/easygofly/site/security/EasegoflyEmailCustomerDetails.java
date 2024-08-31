@@ -63,7 +63,7 @@ public class EasegoflyEmailCustomerDetails implements UserDetails{
 	} 
 	
 	public String getFullName() {
-		return this.customer.getFirstName() + " " + this.customer.getLastName();
+		return this.customer.getFirstName();
 	}
 
 	@Override

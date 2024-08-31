@@ -49,9 +49,9 @@ public class CustomerService {
 		return countryRepo.findAllByOrderByNameAsc();
 	}
 	
-//	public Customer getByEmail(String email) {
-//		return customerRepo.getCustomerByEmail(email);
-//	}
+	public Customer getByEmail(String email) {
+		return customerRepo.getCustomerByEmail(email);
+	}
 	
 	public Customer getByPhone(String phone) {
 		return customerRepo.getCustomerByPhone(phone);
@@ -570,13 +570,25 @@ public class CustomerService {
 		customer.addRole(roleCustomer);
 		customer.setCreatedTime(new Date());
 		customer.setAuthenticationType(authenticationType);
-		customer.setPassword("");
 		customer.setAddressLine1("");
 		customer.setCity(""); 
 		customer.setState("");
 		customer.setCountry(countryRepo.findByCode(countryCode));
 		customer.setPostalCode("");
-		customer.setPhone("");
+		customer.setPhone(email);
+
+		Random rnd = new Random(); 
+		int data1 = rnd.nextInt(9); 
+		int data2 = rnd.nextInt(9);
+		int data3 = rnd.nextInt(9);
+		int data4 = rnd.nextInt(9);
+		int data5 = rnd.nextInt(9);
+		int data6 = rnd.nextInt(9); 
+		
+		String randomCode = Integer.toString(data1) + Integer.toString(data2) + Integer.toString(data3) + Integer.toString(data4) + Integer.toString(data5) + Integer.toString(data6); 
+		String encodeRandomeCode = passwordEncoder.encode(randomCode);
+		customer.setVerificationCode(encodeRandomeCode);
+		customer.setPassword(encodeRandomeCode);
 		
 		return customerRepo.save(customer);
 	}
