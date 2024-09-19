@@ -57,6 +57,12 @@ public class CustomerService {
 		return customerRepo.getCustomerByPhone(phone);
 	}
 	
+	public Customer loginEmailGoogle(String email) {
+		Customer savedCustomer = getByEmail(email);
+		
+		return customerRepo.getCustomerByEmail(email);
+	}
+	
 	public List<Role> listRoles() {
 		return (List<Role>) roleRepo.findAll();
 	}
@@ -540,6 +546,17 @@ public class CustomerService {
 		} 
 	}
 	
+	public void updateOpenid(Customer customer, String openId, AuthenticationType authenticationType) {
+		Customer updateCutomer = customer;
+		
+		if (authenticationType.equals(AuthenticationType.GOOGLE)) {
+			String encodedOpenId = passwordEncoder.encode(openId);
+			updateCutomer.setPassword(encodedOpenId);
+			updateCutomer.setOpenId(openId);
+			customerRepo.save(updateCutomer);
+		}
+	}
+	
 	public Customer addWallet(Customer customer) {
 		Wallet wallet = new Wallet();
 		wallet.setBalance(0);
@@ -559,7 +576,7 @@ public class CustomerService {
 		return customerRepo.findCustomerByPhone(phone);
 	}
 	
-	public Customer addNewCustomerUponOAuth2Login(String name, String email, String countryCode, AuthenticationType authenticationType) {
+	public Customer addNewCustomerUponOAuth2Login(String name, String email, String countryCode, AuthenticationType authenticationType, String openId) {
 		Role roleCustomer = new Role(3);
 		Customer customer = new Customer();
 		customer.setEmail(email);
@@ -576,6 +593,7 @@ public class CustomerService {
 		customer.setCountry(countryRepo.findByCode(countryCode));
 		customer.setPostalCode("");
 		customer.setPhone(email);
+		customer.setOpenId(openId);
 
 		Random rnd = new Random(); 
 		int data1 = rnd.nextInt(9); 

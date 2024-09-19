@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("/", "/favicon/**", "/site-logo/**", "/customers/**", "/login**", "/registration/**", "/hotel", "/about/**", 
+			.antMatchers("/", "/favicon/**", "/site-logo/**", "/customers/**", "/login**", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
 					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml", "/indirect_login**",
 					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search_return_save",  "/flight_search**",
 					"/flight_international_search_save", "/flight_international_search_return_save", "/flight_search_**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", 
@@ -132,8 +132,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**");
-    }
+        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**", "../customer-photos/**");
+    } 
 	
 	@Bean
 	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices(UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {

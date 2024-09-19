@@ -34,7 +34,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
       System.out.println("On Authentication Failure Phone: " + phone);
       request.setAttribute("phone", phone);
        
-      String redirectURL = "/login?error&phone=" + phone;
+      String redirectURL = "/api/login?error&phone=" + phone;
 
       if (phone.contains("@")) {
           Customer customerCheck = customerService.getCustomerByEmail(phone);
@@ -53,19 +53,19 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
       }
        
       if (exception.getMessage().contains("OTP")) {
-          redirectURL = "/login?otp=true&phone=" + phone;
+          redirectURL = "/api/login?otp=true&phone=" + phone;
       } else {
           Customer customer = customerService.getCustomerByPhone(phone);
           if (customer != null) {
         	  if (customer.isOTPRequired()) {
-                  redirectURL = "/login?otp=true&phone=" + phone;
+                  redirectURL = "/api/login?otp=true&phone=" + phone;
               } 
           }
           
           Customer customerEmail = customerService.getCustomerByEmail(phone);
           if (customerEmail != null) {
         	  if (customerEmail.isOTPRequired()) {
-                  redirectURL = "/login?otp=true&phone=" + phone;
+                  redirectURL = "/api/login?otp=true&phone=" + phone;
               } 
           }
           

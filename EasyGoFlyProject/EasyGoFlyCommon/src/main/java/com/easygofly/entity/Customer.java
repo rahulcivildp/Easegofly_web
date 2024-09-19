@@ -44,6 +44,9 @@ public class Customer {
 	@Column(name = "last_name", length = 45, nullable = false)
 	private String lastName;
 	
+	@Column(name = "open_id")
+	private String openId;
+	
 	@Column(name = "phone", length = 128, nullable = false, unique = true)
 	private String phone;
 	
@@ -259,6 +262,14 @@ public class Customer {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 	public String getPostalCode() {

@@ -49,9 +49,21 @@ public class CustomerService {
 		return countryRepo.findAllByOrderByNameAsc();
 	}
 	
-//	public Customer getByEmail(String email) {
-//		return customerRepo.getCustomerByEmail(email);
-//	}
+	public Customer getByEmail(String email) {
+		return customerRepo.getCustomerByEmail(email);
+	}
+
+	public void updateOpenid(String email, String openId, AuthenticationType authenticationType) {
+		Customer updateCutomer = getByEmail(email);
+		
+		if (authenticationType.equals(AuthenticationType.GOOGLE)) {
+			String encodedOpenId = passwordEncoder.encode(openId);
+			updateCutomer.setPassword(encodedOpenId);
+			updateCutomer.setOpenId(openId);
+			customerRepo.save(updateCutomer);
+		}
+	}
+	
 	
 	public Customer getByPhone(String phone) {
 		return customerRepo.getCustomerByPhone(phone);

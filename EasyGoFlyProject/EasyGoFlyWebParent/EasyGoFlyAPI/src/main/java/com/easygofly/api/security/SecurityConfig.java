@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -49,11 +50,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
          .and()
          .authorizeRequests()
-         .antMatchers("/login").permitAll()
+         .antMatchers("/api/login", "/customer-photos/**").permitAll()
          .anyRequest().authenticated()
          .and()
-         .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+         .addFilter(new JwtAuthenticationFilter(authenticationManager(), getApplicationContext()))
          .addFilter(new JwtAuthorizationFilter(authenticationManager()));
 	}
+	
+	@Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**", "../customer-photos/**");
+    }
 
 }

@@ -70,4 +70,7 @@ public class CustomerOAuth2User implements OAuth2User {
 		return this.customer.getPhone();
 	}
 
+	public String getOpenid() {
+		return oauth2User.getAttribute("sub"); 
+	}
 }
