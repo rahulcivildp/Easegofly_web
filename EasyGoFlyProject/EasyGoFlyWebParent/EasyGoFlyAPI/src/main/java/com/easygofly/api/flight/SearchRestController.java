@@ -1,7 +1,10 @@
 package com.easygofly.api.flight;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,6 +108,50 @@ public class SearchRestController {
     }
 	
 
+	
+	@PostMapping("/api/flight/save_history")
+    public String flightHistorySave(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        UserHistorySave historySave = new ObjectMapper().readValue(request.getInputStream(), UserHistorySave.class);
+        Customer existingUser = customerRepo.findById(historySave.user_id).get();
+        
+        Integer totalPax = historySave.adultCount + historySave.childCount + historySave.infantCount;
+        Date origin = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(historySave.preferredDepartureTime);
+        Date destination = null;
+        if (historySave.preferredDepartureTimeReturn != null) {
+            destination = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(historySave.preferredDepartureTimeReturn);
+		}
+        
+        SearchHistory newSearch = new SearchHistory(historySave.origin, historySave.destination, totalPax, historySave.journey_class, historySave.adultCount, historySave.childCount, historySave.infantCount, historySave.trip_type, origin, destination, existingUser);
+        
+        SearchHistory savedHistory = historyRepo.save(newSearch);
+        
+		String historyBody =  "{"
+	        		+ "\"id\": " + savedHistory.getId() + ", "
+	                + "\"adult_num\": " + savedHistory.getAdultNum() + ", "
+	        		+ "\"child_num\": " + savedHistory.getChildNum() + ", "
+	        		+ "\"infant_num\": " + savedHistory.getInfantNum() + ", "
+	    	        + "\"journey_class\": \"" + savedHistory.getJourneyClass() + "\", "
+	    	    	+ "\"city_one\": \"" + savedHistory.getCityOne() + "\", "
+	    	    	+ "\"city_two\": \"" + savedHistory.getCityTwo() + "\", "
+	    	    	+ "\"date\": \"" + savedHistory.getDate() + "\", "
+	    	    	+ "\"return_date\": \"" + savedHistory.getReturnDate() + "\", "
+	    	    	+ "\"trip_type\": \"" + savedHistory.getTripType() + "\", "
+	        		+ "\"user_id\": " + existingUser.getId() + ""
+	        		+ "}";
+		
+        String responseBody = "{"
+        		+ "\"code\": 0, "
+        		+ "\"msg\": \"List of Flight Search Result.\", "
+        		+ "\"data\": " + historyBody + ""
+        		+ "}";
+
+      return responseBody;
+    }
+	
+	// Static POJO List
+	
     private static class UserHistory {
         private Integer user_id;
 
@@ -117,7 +164,86 @@ public class SearchRestController {
 		public void setUser_id(Integer user_id) {
 			this.user_id = user_id;
 		}
-        
-        
     }
+    
+
+    @SuppressWarnings("unused")
+	private static class UserHistorySave {
+        private Integer adultCount;
+        private Integer childCount;
+        private Integer infantCount;
+        private String journey_class;
+        private String origin;
+        private String destination;
+        private String preferredDepartureTime;
+        private String preferredDepartureTimeReturn;
+        private String trip_type;
+        private Integer user_id;
+		public Integer getAdultCount() {
+			return adultCount;
+		}
+		public void setAdultCount(Integer adultCount) {
+			this.adultCount = adultCount;
+		}
+		public Integer getChildCount() {
+			return childCount;
+		}
+		public void setChildCount(Integer childCount) {
+			this.childCount = childCount;
+		}
+		public Integer getInfantCount() {
+			return infantCount;
+		}
+		public void setInfantCount(Integer infantCount) {
+			this.infantCount = infantCount;
+		}
+		public String getJourney_class() {
+			return journey_class;
+		}
+		public void setJourney_class(String journey_class) {
+			this.journey_class = journey_class;
+		}
+		public String getOrigin() {
+			return origin;
+		}
+		public void setOrigin(String origin) {
+			this.origin = origin;
+		}
+		public String getDestination() {
+			return destination;
+		}
+		public void setDestination(String destination) {
+			this.destination = destination;
+		}
+		public String getPreferredDepartureTime() {
+			return preferredDepartureTime;
+		}
+		public void setPreferredDepartureTime(String preferredDepartureTime) {
+			this.preferredDepartureTime = preferredDepartureTime;
+		}
+		public String getPreferredDepartureTimeReturn() {
+			return preferredDepartureTimeReturn;
+		}
+		public void setPreferredDepartureTimeReturn(String preferredDepartureTimeReturn) {
+			this.preferredDepartureTimeReturn = preferredDepartureTimeReturn;
+		}
+		public String getTrip_type() {
+			return trip_type;
+		}
+		public void setTrip_type(String trip_type) {
+			this.trip_type = trip_type;
+		}
+		public Integer getUser_id() {
+			return user_id;
+		}
+		public void setUser_id(Integer user_id) {
+			this.user_id = user_id;
+		}
+
+		
+    }
+    
+    
+    
+    
 }
