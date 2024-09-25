@@ -143,6 +143,39 @@ public class TravellerDetail {
 		this.cartItem = cartItem;
 	}
 
+	
+	public TravellerDetail(String salutation, String firstName, String lastName, String paxType, Integer cabinBaggage,
+			Integer baggageWT, String passportNo, Date passportExpiry, Date dob, ProductDetail productDetail,
+			MealsOnline mealOnline, BaggageOnline baggageOnline, SeatsOnline seatsOnline) {
+		this.salutation = salutation;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.paxType = paxType;
+		this.cabinBaggage = cabinBaggage;
+		this.baggageWT = baggageWT;
+		this.passportNo = passportNo;
+		this.passportExpiry = passportExpiry;
+		this.dob = dob;
+		this.productDetail = productDetail;
+		this.mealOnline = mealOnline;
+		this.baggageOnline = baggageOnline;
+		this.seatsOnline = seatsOnline;
+	}
+	
+	public TravellerDetail(String salutation, String firstName, String lastName, String paxType, Integer cabinBaggage,
+			Integer baggageWT, String passportNo, Date passportExpiry, Date dob, ProductDetail productDetail) {
+		this.salutation = salutation;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.paxType = paxType;
+		this.cabinBaggage = cabinBaggage;
+		this.baggageWT = baggageWT;
+		this.passportNo = passportNo;
+		this.passportExpiry = passportExpiry;
+		this.dob = dob;
+		this.productDetail = productDetail;
+	}
+
 	public Integer getId() {
 		return id;
 	}
