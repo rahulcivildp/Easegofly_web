@@ -64,7 +64,7 @@ public class CartItemController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			pagingCartItem(pageNum, sortField, sortDir, keyword, customer, model);
 			pagingOrder(1, sortField, sortDir, customer, model, request);
 		}
@@ -89,7 +89,7 @@ public class CartItemController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			pagingCartItem(1, sortField, sortDir, keyword, customer, model);
 			pagingOrder(pageNum, sortField, sortDir, customer, model, request);
 		}

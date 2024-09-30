@@ -1,6 +1,8 @@
 package com.easygofly.api.flight;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +32,7 @@ public class SearchRestController {
 	@Autowired private CustomerRepository customerRepo;
 	@Autowired private SearchHistoryRepository historyRepo;
 	@Autowired private ProductDetailCrudRepository flightRepo;
+	@Autowired private OnlineFlightService onlineFlightService ;
 
 
 	@GetMapping("/api/flight/cities")
@@ -233,6 +236,27 @@ public class SearchRestController {
 
       return responseBody;
     }
+
+	@PostMapping("/api/flight/tbo-search/oneway")
+    public String flightOnewaySearchTBO(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        SearchOnewayOfflineRequest searchOneway = new ObjectMapper().readValue(request.getInputStream(), SearchOnewayOfflineRequest.class);
+        
+        if (searchOneway.journey_class.equals("1")) {
+			searchOneway.setJourney_class("Economy");
+		}
+        
+        Date origin = new SimpleDateFormat("yyyy-MM-dd").parse(searchOneway.preferredDepartureTime);
+		
+        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
+
+        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+        
+        StringBuilder responseBody = onlineFlightService.apiOnlineSearchMod(connectionSearch, searchOneway.origin, searchOneway.destination, searchOneway.adultCount, searchOneway.childCount, searchOneway.infantCount, origin);
+
+        return responseBody.toString();
+    }
 	
 	// Static POJO List
 	
@@ -394,5 +418,124 @@ public class SearchRestController {
 		}
 	}
     
+    @SuppressWarnings("unused")
+	private static class SearchOnewayTBORequest {
+    	private String TokenId;
+        private String EndUserIp;
+        private String AdultCount;
+        private String ChildCount;
+        private String infantCount;
+        private String DirectFlight;
+        private String PreferredAirlines;
+        private String JourneyType;
+        private String OneStopFlight;
+        private String Sources;
+        private List<SearchOnewayTBOSegments> Segments;
+		public String getTokenId() {
+			return TokenId;
+		}
+		public void setTokenId(String tokenId) {
+			TokenId = tokenId;
+		}
+		public String getEndUserIp() {
+			return EndUserIp;
+		}
+		public void setEndUserIp(String endUserIp) {
+			EndUserIp = endUserIp;
+		}
+		public String getAdultCount() {
+			return AdultCount;
+		}
+		public void setAdultCount(String adultCount) {
+			AdultCount = adultCount;
+		}
+		public String getChildCount() {
+			return ChildCount;
+		}
+		public void setChildCount(String childCount) {
+			ChildCount = childCount;
+		}
+		public String getInfantCount() {
+			return infantCount;
+		}
+		public void setInfantCount(String infantCount) {
+			this.infantCount = infantCount;
+		}
+		public String getDirectFlight() {
+			return DirectFlight;
+		}
+		public void setDirectFlight(String directFlight) {
+			DirectFlight = directFlight;
+		}
+		public String getPreferredAirlines() {
+			return PreferredAirlines;
+		}
+		public void setPreferredAirlines(String preferredAirlines) {
+			PreferredAirlines = preferredAirlines;
+		}
+		public String getJourneyType() {
+			return JourneyType;
+		}
+		public void setJourneyType(String journeyType) {
+			JourneyType = journeyType;
+		}
+		public String getOneStopFlight() {
+			return OneStopFlight;
+		}
+		public void setOneStopFlight(String oneStopFlight) {
+			OneStopFlight = oneStopFlight;
+		}
+		public String getSources() {
+			return Sources;
+		}
+		public void setSources(String sources) {
+			Sources = sources;
+		}
+		public List<SearchOnewayTBOSegments> getSegments() {
+			return Segments;
+		}
+		public void setSegments(List<SearchOnewayTBOSegments> segments) {
+			Segments = segments;
+		}
+	}
+    
+    @SuppressWarnings("unused")
+	private static class SearchOnewayTBOSegments {
+    	private String Origin;
+        private String Destination;
+        private String FlightCabinClass;
+        private String PreferredDepartureTime;
+        private String PreferredArrivalTime;
+		public String getOrigin() {
+			return Origin;
+		}
+		public void setOrigin(String origin) {
+			Origin = origin;
+		}
+		public String getDestination() {
+			return Destination;
+		}
+		public void setDestination(String destination) {
+			Destination = destination;
+		}
+		public String getFlightCabinClass() {
+			return FlightCabinClass;
+		}
+		public void setFlightCabinClass(String flightCabinClass) {
+			FlightCabinClass = flightCabinClass;
+		}
+		public String getPreferredDepartureTime() {
+			return PreferredDepartureTime;
+		}
+		public void setPreferredDepartureTime(String preferredDepartureTime) {
+			PreferredDepartureTime = preferredDepartureTime;
+		}
+		public String getPreferredArrivalTime() {
+			return PreferredArrivalTime;
+		}
+		public void setPreferredArrivalTime(String preferredArrivalTime) {
+			PreferredArrivalTime = preferredArrivalTime;
+		}
+    }
     
 }

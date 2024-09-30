@@ -67,7 +67,7 @@ public class FlightActivityController {
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
 
@@ -162,7 +162,7 @@ public class FlightActivityController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 

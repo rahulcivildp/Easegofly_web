@@ -1,6 +1,7 @@
 package com.easygofly.api.flight;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.easygofly.entity.ProductDetail;
-import com.easygofly.entity.Stop;
 import com.easygofly.entity.TravellerDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,7 +20,46 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ProductDetailRestController {
 	@Autowired private ProductDetailCrudRepository flightRepo;
 	@Autowired private TravellerRepository travellerRepo;
+	@Autowired private OnlineFlightService onlineFlightService;
 
+	@PostMapping("/api/flight/tbo-search/fareRule")
+    public String tbofareRule(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        TBOfareRuleQuote fareRuleQuote = new ObjectMapper().readValue(request.getInputStream(), TBOfareRuleQuote.class);
+		
+        URL url = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
+        
+        StringBuilder responseBody = onlineFlightService.apiOnlineFarerule_quote(url, fareRuleQuote.traceId, fareRuleQuote.resultIndex);
+
+        return responseBody.toString();
+	}
+	
+	@PostMapping("/api/flight/tbo-search/fareQuote")
+    public String tbofareQuote(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        TBOfareRuleQuote fareRuleQuote = new ObjectMapper().readValue(request.getInputStream(), TBOfareRuleQuote.class);
+		
+        URL url = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
+        
+        StringBuilder responseBody = onlineFlightService.apiOnlineFarerule_quote(url, fareRuleQuote.traceId, fareRuleQuote.resultIndex);
+
+        return responseBody.toString();
+	}
+	
+	@PostMapping("/api/flight/tbo-search/ssr")
+    public String tboSSR(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        TBOfareRuleQuote fareRuleQuote = new ObjectMapper().readValue(request.getInputStream(), TBOfareRuleQuote.class);
+		
+        URL url = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
+        
+        StringBuilder responseBody = onlineFlightService.apiOnlineFarerule_quote(url, fareRuleQuote.traceId, fareRuleQuote.resultIndex);
+
+        return responseBody.toString();
+	}
 
 	@PostMapping("/api/flight/save_flight")
     public String flightDetailSave(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
@@ -30,7 +69,6 @@ public class ProductDetailRestController {
 
         Date origin = new SimpleDateFormat("yyyy-MM-dd").parse(saveFlight.date);
         
-        ProductDetail mainFlight = flightRepo.findById(saveFlight.stop_id).get();
         ProductDetail flight = new ProductDetail();
         
         flight.setArrTime(saveFlight.arr_time);
@@ -58,7 +96,7 @@ public class ProductDetailRestController {
         flight.setStopNum(saveFlight.stop_num);
         flight.setTraceId(saveFlight.trace_id);
         flight.setResultIndex(saveFlight.result_index);
-        flight.setAirlineRemarks(saveFlight.stop_id.toString());
+        flight.setAirlineRemarks(saveFlight.airline_remarks);
         flight.setMode(saveFlight.mode);
         flight.setLcc(saveFlight.lcc);
         flight.setDevice(saveFlight.device);
@@ -67,9 +105,6 @@ public class ProductDetailRestController {
         flight.setUploadSeats(saveFlight.upload_seats);
         flight.setEnabled(saveFlight.enabled);
         
-        for (Stop stop : mainFlight.getStops()) {
-            flight.addStopDetails(stop.getCityName(), stop.getDepTime(), stop.getArrTime(), stop.getTotalTime());
-		}
 
         ProductDetail savedFlight = flightRepo.save(flight);
         
@@ -86,7 +121,6 @@ public class ProductDetailRestController {
 
       return responseBody;
     }
-
 
 	@PostMapping("/api/flight/save_traveller")
     public String saveTravelerDetail(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
@@ -159,7 +193,6 @@ public class ProductDetailRestController {
         private String dep_date;
         private String upload_seats;
         private boolean enabled;
-        private Integer stop_id;
 		public String getArr_time() {
 			return arr_time;
 		}
@@ -370,12 +403,7 @@ public class ProductDetailRestController {
 		public void setEnabled(boolean enabled) {
 			this.enabled = enabled;
 		}
-		public Integer getStop_id() {
-			return stop_id;
-		}
-		public void setStop_id(Integer stop_id) {
-			this.stop_id = stop_id;
-		}
+
 	}
     
 
@@ -745,4 +773,27 @@ public class ProductDetailRestController {
     	
     }
     
+
+    @SuppressWarnings("unused")
+	private static class TBOfareRuleQuote {
+    	private String traceId;
+    	private String resultIndex;
+		public String getTraceId() {
+			return traceId;
+		}
+		public void setTraceId(String traceId) {
+			this.traceId = traceId;
+		}
+		public String getResultIndex() {
+			return resultIndex;
+		}
+		public void setResultIndex(String resultIndex) {
+			this.resultIndex = resultIndex;
+		}
+
+    	
+    }
+    
+    
+
 }

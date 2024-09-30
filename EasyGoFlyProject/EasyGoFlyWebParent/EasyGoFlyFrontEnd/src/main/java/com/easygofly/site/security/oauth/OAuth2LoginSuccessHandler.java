@@ -82,7 +82,11 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
 		Map<String, String> roleTargetUrlMap = new HashMap<>();
 		
-        roleTargetUrlMap.put("ROLE_USER", redirectURLObject.toString());
+		if (redirectURLObject.toString().contains("fontawesome")) {
+	        roleTargetUrlMap.put("ROLE_USER", "/");
+		} else {
+	        roleTargetUrlMap.put("ROLE_USER", redirectURLObject.toString());
+		}
 		System.out.println("Redirect Object URL : " + redirectURLObject.toString()); //String
        
 	    request.getSession().removeAttribute(REDIRECT_URL_SESSION_ATTRIBUTE_NAME);

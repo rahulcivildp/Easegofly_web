@@ -45,5 +45,5 @@ spring:
             scope:
               - email
               - profile
-            client-id: 640385530645-4ccu1nfvso6gclg03e9hbi6lueko2qta.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 624963343127-vkeubt79bh4k0oo7me4fhgmp5lgh9q68.apps.googleusercontent.com
+            client-secret: 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

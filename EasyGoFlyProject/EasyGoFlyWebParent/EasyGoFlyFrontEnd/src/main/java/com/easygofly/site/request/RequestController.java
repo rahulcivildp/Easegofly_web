@@ -50,7 +50,7 @@ public class RequestController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			saveRequestPart(customerRequest, redirectAttributes, request, conversation, email, customer);
 		}
 		

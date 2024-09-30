@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.easygofly.api.customer.CustomerService;
 import com.easygofly.entity.AuthenticationType;
@@ -28,7 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     @Autowired private CustomerService customerService;
-
+    
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx) {
         this.authenticationManager = authenticationManager;
         this.customerService = ctx.getBean(CustomerService.class);
@@ -85,6 +87,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		} else if (customer.getAuthenticationType().equals(AuthenticationType.DATABASE)) {
 	        type = 1;
 		}
+        String customerPhoto = 
+        		"https://easegofly.com" + customer.getPhotosImagePath();
+        
+        System.out.println("Customer Photo URL: " + customerPhoto);
         
         String customerBody =  "{"
         		+ "\"id\": " + customer.getId() + ", "
@@ -95,8 +101,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         		+ "\"lastName\": \"" + customer.getLastName() + "\", "
                 + "\"name\": \"" + customer.getFirstName() + " " + customer.getLastName() + "\", "
         		+ "\"gender\": \"" + customer.getGender() + "\", "
-        		+ "\"photo\": \"" + customer.getPhotosImagePath() + "\", "
-                + "\"avatar\": \"" + customer.getPhotosImagePath() + "\", "
+        		+ "\"photo\": \"" + customerPhoto + "\", "
+                + "\"avatar\": \"" + customerPhoto + "\", "
         		+ "\"address\": \"" + customer.getAddressLine1() + "\", "
         		+ "\"addressAdditional\": \"" + customer.getAddressLine2() + "\", "
         		+ "\"pin\": \"" + customer.getPostalCode() + "\", "

@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.easygofly.api.security.PasswordEncoderConfig;
 
@@ -24,4 +24,17 @@ public class Users {
 		
 		System.out.println("Encoded password: " + encodedPass);
 	}
+
+	@Test
+	public void testBaseUrl() {
+	    String baseUrl = 
+	    		ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+		
+		System.out.println("Base URL: " + baseUrl);
+	}
+
+
+
+
+
 }

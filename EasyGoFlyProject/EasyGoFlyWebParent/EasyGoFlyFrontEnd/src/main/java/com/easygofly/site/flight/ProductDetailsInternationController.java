@@ -134,7 +134,7 @@ public class ProductDetailsInternationController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryInternationalController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
 						infantNum, customer);
@@ -177,7 +177,7 @@ public class ProductDetailsInternationController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		ProductDetail flight = flightRepo.findById(flight_id).get();
@@ -260,7 +260,7 @@ public class ProductDetailsInternationController {
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
 			timeRemainingProOne = timeRemaining;
@@ -332,7 +332,7 @@ public class ProductDetailsInternationController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -717,7 +717,7 @@ public class ProductDetailsInternationController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryInternationalController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer);
 				searchIdInt = savedSearchId;
@@ -758,7 +758,7 @@ public class ProductDetailsInternationController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		ProductDetail flightOne = flightRepo.findById(flightOneId).get();
@@ -889,7 +889,7 @@ public class ProductDetailsInternationController {
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
 
@@ -951,7 +951,7 @@ public class ProductDetailsInternationController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 

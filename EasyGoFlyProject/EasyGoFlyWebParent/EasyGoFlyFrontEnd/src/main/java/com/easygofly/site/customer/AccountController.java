@@ -50,10 +50,13 @@ public class AccountController {
 	@Autowired private ConversationRepository conversationRepo;
 	
 	@GetMapping("/account")
-	public String viewDetailsCustomer(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, Model model) {
+	public String viewDetailsCustomer(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model) {
 		Customer customer; /*= customerService.getByPhone(email);*/
 		if (loggedCustomer != null) {
 			customer = customerService.getByPhone(loggedCustomer.getUsername());
+			model.addAttribute("customer", customer);
+		} else if (oauthCustomer != null) {
+			customer = customerService.getByEmail(oauthCustomer.getEmail());
 			model.addAttribute("customer", customer);
 		} 
 		

@@ -22,6 +22,7 @@ import com.easygofly.entity.TBOCity;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.TBOCityRepository;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.security.oauth.CustomerOAuth2User;
 
 @Controller
 public class HolidayController {
@@ -43,7 +44,7 @@ public class HolidayController {
 	}
 	
 	@PostMapping("/holiday/saveSearchHoliday")
-	public String saveSearchSightseeing(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+	public String saveSearchSightseeing(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer,
 			@RequestParam(name = "hotelCity", required = false) String hotelCity, 
 			@RequestParam(name = "checkInDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date checkInDate, 
 			@RequestParam(name = "checkOutDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date checkOutDate, 
@@ -57,6 +58,23 @@ public class HolidayController {
 		if (loggedCustomer != null) {
 			String email = loggedCustomer.getUsername();
 			Customer customer = customerService.getByPhone(email);	
+			SightseeingHistory newHistory = new SightseeingHistory();
+			
+			newHistory.setAdultCount(noOfAdults);
+			newHistory.setChildCount(noOfChildren);
+			newHistory.setFromDate(checkOutDate);
+			newHistory.setToDate(checkOutDate);
+			newHistory.setChildrenAge(childAge);
+			newHistory.setCityId(city.getCityId());
+			newHistory.setCountryCode(city.getCountryCode());
+			newHistory.setCustomer(customer);
+			
+			history = new SightseeingHistory();
+			history = service.saveSightseeingHistory(newHistory, customer);
+			
+		} else if (oauthCustomer != null) {
+			String email = oauthCustomer.getEmail();
+			Customer customer = customerService.getByEmail(email);	
 			SightseeingHistory newHistory = new SightseeingHistory();
 			
 			newHistory.setAdultCount(noOfAdults);

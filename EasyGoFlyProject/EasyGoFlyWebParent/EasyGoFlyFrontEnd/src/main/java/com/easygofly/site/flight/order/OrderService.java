@@ -323,7 +323,7 @@ public class OrderService {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			if (coupon1 != null) {
 				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
 				if (order != null) {

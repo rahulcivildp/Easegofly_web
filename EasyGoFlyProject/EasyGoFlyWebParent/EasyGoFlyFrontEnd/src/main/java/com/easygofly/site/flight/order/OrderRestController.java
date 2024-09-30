@@ -32,7 +32,7 @@ public class OrderRestController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			Wallet wallet = customer.getWallet();
 			if ((wallet.getBalance() / 100) < price) {
 				return "insufficient";

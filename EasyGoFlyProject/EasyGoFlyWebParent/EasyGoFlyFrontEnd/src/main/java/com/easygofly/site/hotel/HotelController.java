@@ -51,6 +51,7 @@ import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.TBOCityRepository;
 import com.easygofly.site.flight.order.TransactionService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
+import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.PaymentSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.wallet.TotalTransactionService;
@@ -96,7 +97,7 @@ public class HotelController {
 	}
 
 	@PostMapping("/hotel/saveSearchHotel")
-	public String saveSearchHotel(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+	public String saveSearchHotel(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer,
 			@RequestParam(name = "hotelCity", required = false) String hotelCity, 
 			@RequestParam(name = "checkInDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date checkInDate, 
 			@RequestParam(name = "checkOutDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date checkOutDate, 
@@ -146,7 +147,39 @@ public class HotelController {
 			history = new HotelHistory();
 			history = hotelService.saveHotelHistory(newHistory, customer);
 			
-		} else {
+		} else if (oauthCustomer != null) {
+			String email = oauthCustomer.getEmail();
+			Customer customer = customerService.getByEmail(email);	
+			HotelHistory newHistory = new HotelHistory();
+
+			if (noOfRoomsTwo != 0) {
+				newHistory.setNoOfRooms(noOfRoomsTwo.toString());
+			} else {
+				newHistory.setNoOfRooms(noOfRooms.toString());
+			}
+			if (noOfAdultsTwo == null) {
+				noOfAdultsTwo = 0;
+			}
+			if (noOfChildrenTwo == null) {
+				noOfChildrenTwo = 0;
+			}
+			
+			Integer tot = noOfAdultsTwo + noOfAdults;
+			newHistory.setNoOfAdults(tot.toString());
+			
+			Integer totCh = noOfChildrenTwo + noOfChildren;
+			newHistory.setNoOfChild(totCh.toString());
+			
+			newHistory.setCheckInDate(checkInDate);
+			newHistory.setCheckOutDate(checkOutDate);
+			newHistory.setChildrenAge(null);
+			newHistory.setCityId(city.getCityId().toString());
+			newHistory.setCountryCode(city.getCountryCode());
+			newHistory.setNearBySearchAllowed(false);
+			newHistory.setCustomer(customer);
+			
+			history = new HotelHistory();
+			history = hotelService.saveHotelHistory(newHistory, customer);
 			
 		}
 
@@ -350,12 +383,19 @@ public class HotelController {
 			@PathVariable(name = "history_id") Integer history_id,
 			@PathVariable(name = "hotelCode") String hotelCode,
 			@PathVariable(name = "hotel_id") Integer hotel_id, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer) throws Exception {
 
 		Hotel hotel = hotelService.findByIdHotel(hotel_id);
         hotelRooms = new ArrayList<HotelRoom>();
         hotelGuests =  new ArrayList<HotelGuest>();
-        Customer customer = customerService.getByPhone(loggedCustomer.getUsername());
+        Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (oauthCustomer !=  null) {
+        	customer = customerService.getByEmail(oauthCustomer.getEmail());
+			
+		}		
         
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    Date checkIn = dateFormat.parse(checkInDate);
@@ -393,7 +433,7 @@ public class HotelController {
 	@PostMapping("/hotel/saveHotel")
 	public String saveHotel(@RequestParam(name = "resultIndex", required = false) String resultIndex,
 			@RequestParam(name = "hotelCode", required = false) String hotelCode,
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer,
 			@RequestParam(name = "hotelCity", required = false) String hotelCity, 
 			@RequestParam(name = "checkInDate", required = false) String checkInDate, 
 			@RequestParam(name = "checkOutDate", required = false) String checkOutDate, 
@@ -405,8 +445,14 @@ public class HotelController {
 	    Date checkOut = dateFormat.parse(checkOutDate);
 		TBOCity city = tboRepo.getCityByCityName(hotelCity);
 
-		String email = loggedCustomer.getUsername();
-		Customer customer = customerService.getByPhone(email);
+        Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (oauthCustomer !=  null) {
+        	customer = customerService.getByEmail(oauthCustomer.getEmail());
+		}
+        
 		if (history == null) {
 			HotelHistory newHistory = new HotelHistory();
 
@@ -447,7 +493,7 @@ public class HotelController {
 	@PostMapping("/hotel/save_order")
 	public String saveHotelOrder(@RequestParam(name = "hotel_id", required = false) Integer hotel_id, 
 			@RequestParam(name = "search_id", required = false) Integer search_id, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer) {
 		Hotel hotel = hotelService.findByIdHotel(hotel_id);
 		List<HotelRoom> hotelRooms = hotel.getHotelRooms();
 		List<HotelGuest> hotelGuests = hotel.getGuests();
@@ -489,10 +535,19 @@ public class HotelController {
 	public String hotelOrder(Model model,
 			@PathVariable(name = "hotel_id") Integer hotel_id,
 			@PathVariable(name = "search_id") Integer search_id,
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, 
 			HttpServletRequest request, RedirectAttributes redirectAttributes) throws MalformedURLException, IOException {
 		
-		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+
+        Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (oauthCustomer !=  null) {
+        	customer = customerService.getByEmail(oauthCustomer.getEmail());
+			
+		}
+        
     	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		Hotel hotel = hotelService.findByIdHotel(hotel_id);
@@ -602,11 +657,20 @@ public class HotelController {
 	
 	
 	@PostMapping("/hotel/order/wallet_check")
-	public String hotelWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+	public String hotelWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, 
 			@RequestParam(name = "order_id") Integer order_id, 
 			@RequestParam(name = "hotel_id") Integer hotel_id) {
 		
-		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+
+        Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (oauthCustomer !=  null) {
+        	customer = customerService.getByEmail(oauthCustomer.getEmail());
+			
+		}
+        
 		Hotel hotel = hotelService.findByIdHotel(hotel_id);
 		HotelOrder hotelOrder = hotelService.findByIdOrder(order_id);
 		Integer totalPrice = 0;
@@ -628,11 +692,17 @@ public class HotelController {
 	}
 
 	@GetMapping("/hotel/order/wallet_response_{order_id}")
-	public String showHotelWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, Model model,
+	public String showHotelWalletPayment(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model,
 			@PathVariable(name = "order_id") Integer order_id) throws MalformedURLException, IOException {
-		
 
-		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+        Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (oauthCustomer !=  null) {
+        	customer = customerService.getByEmail(oauthCustomer.getEmail());
+			
+		}
 		
 		HotelOrder order = hotelService.findByIdOrder(order_id);
 		model.addAttribute("orderId", order.getId());
@@ -676,7 +746,7 @@ public class HotelController {
 	@RequestMapping(value = "/zaakpay/hotel/response",
 			method = {RequestMethod.POST})
 	public String zaakpayHotelResponse (HttpServletRequest request, HttpServletResponse response,
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, 
 			@RequestParam(name = "search_id") Integer search_id) throws Exception {
 
     	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
@@ -720,9 +790,18 @@ public class HotelController {
 	@RequestMapping(value = "/zaakpay/hotel/response",
 			method = {RequestMethod.GET})
 	public String zaakpayHotelResponseSe (Model model, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer) throws Exception {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer) throws Exception {
 		
-		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+
+        Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (oauthCustomer !=  null) {
+        	customer = customerService.getByEmail(oauthCustomer.getEmail());
+			
+		}
+        
 		model.addAttribute("customer", customer);
 		
 		System.out.println(parameter);

@@ -95,7 +95,7 @@ public class SearchHistoryInternationalController {
 				return "redirect:/loading_international_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
@@ -127,7 +127,7 @@ public class SearchHistoryInternationalController {
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -446,7 +446,7 @@ public class SearchHistoryInternationalController {
 				return "redirect:/loading_international_return_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 				searchReturnURL = "/flight_search_international_return_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;
@@ -476,7 +476,7 @@ public class SearchHistoryInternationalController {
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 	

@@ -70,7 +70,7 @@ public class WalletController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 			responseBalance(model, customer);
 		} 
@@ -96,7 +96,7 @@ public class WalletController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			Integer paisaValue = rechargeAmount * 100;
 			
 			walletService.setTempValue(customer, paisaValue);
@@ -122,7 +122,7 @@ public class WalletController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			Wallet wallet = customer.getWallet();
 			Integer paisaValueTemp = wallet.getTempValue() / 100;
 			model.addAttribute("temp_value", paisaValueTemp);
@@ -184,7 +184,15 @@ public class WalletController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 
-		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+		Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (googleLogin !=  null) {
+        	customer = customerService.getByEmail(googleLogin.getEmail());
+			
+		} 
+        
     	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		Transaction transaction = new Transaction();
@@ -234,7 +242,16 @@ public class WalletController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
 
-		Customer customer = customerService.getByPhone(loggedCustomer.getUsername()); 
+
+		Customer customer = new Customer();
+        
+        if (loggedCustomer != null) {
+        	customer = customerService.getByPhone(loggedCustomer.getUsername());
+		} else if (googleLogin !=  null) {
+        	customer = customerService.getByEmail(googleLogin.getEmail());
+			
+		} 
+        
 		double balance = responseBalance(model, customer);
 		boolean isProcessed = true;
 		System.out.println(parameter);
@@ -322,7 +339,7 @@ public class WalletController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			Wallet wallet = customer.getWallet();
 			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
 

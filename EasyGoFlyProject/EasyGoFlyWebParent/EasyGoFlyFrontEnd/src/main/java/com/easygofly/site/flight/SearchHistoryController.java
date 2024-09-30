@@ -186,6 +186,12 @@ public class SearchHistoryController {
 				searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				
+			} else if (googleLogin != null) {
+				customer = customerService.getByEmail(googleLogin.getEmail());
+				model.addAttribute("customer", customer);
+				searchId = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
+						infantNum, customer);
+				
 			} else {
 				searchId = saveHistoryPartWithouLogin(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum);
@@ -452,7 +458,7 @@ public class SearchHistoryController {
 	//Previous day and next day
 	
 	@GetMapping("/get_previous_day_flight")
-    public String getResultPreviousDay(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+    public String getResultPreviousDay(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") String searchId, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
@@ -499,6 +505,12 @@ public class SearchHistoryController {
 				searchIddbl = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
 				
+			} else if (oauthCustomer != null) {
+				customer = customerService.getByEmail(oauthCustomer.getEmail());
+				model.addAttribute("customer", customer);
+				searchIddbl = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
+						infantNum, customer);
+				
 			} else {
 				searchIddbl = 1.5;
 			}
@@ -509,7 +521,7 @@ public class SearchHistoryController {
     }
 
 	@GetMapping("/get_next_day_flight")
-    public String getResultNextDay(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,
+    public String getResultNextDay(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer,
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin, 
 			@RequestParam(name = "search_id") String searchId, 
 			@RequestParam(name = "cityOne", required = false) String cityOne, 
@@ -555,7 +567,14 @@ public class SearchHistoryController {
 				model.addAttribute("customer", customer);
 				searchIddbl = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
 						infantNum, customer);
-				
+
+			} else if (oauthCustomer != null) {
+				customer = customerService.getByEmail(oauthCustomer.getEmail());
+				model.addAttribute("customer", customer);
+				searchIddbl = saveHistoryPart(city1.getCode(), city2.getCode(), date, journeyClass, tripType, adultNum, childNum,
+						infantNum, customer);
+
+				customer = customerService.getByEmail(oauthCustomer.getEmail());
 			} else {
 				searchIddbl = 1.5;
 			}
@@ -705,7 +724,7 @@ public class SearchHistoryController {
 			model.addAttribute("customer", customer);
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -833,7 +852,7 @@ public class SearchHistoryController {
 				return "redirect:/loading_return_";
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 				Integer searchId = saveHistoryReturnPart(city1.getCode(), city2.getCode(), date, returnDate, journeyClass, tripType, adultNum, childNum, infantNum, customer);
 				searchReturnURL = "/flight_return_search_" + searchId +"_"+ sort +"_"+ brand +"_"+ stop +"_"+ activeTime;

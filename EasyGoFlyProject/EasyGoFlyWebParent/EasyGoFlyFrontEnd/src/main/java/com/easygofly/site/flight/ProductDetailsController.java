@@ -148,7 +148,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			phone = googleLogin.getEmail();
-			Customer customer = searchHistoryService.getByPhone(phone);
+			Customer customer = customerService.getByEmail(phone);
 			Wallet wallet = customer.getWallet();
 			model.addAttribute("balance", wallet.getBalance());
 			historyPart(model, customer);	
@@ -269,7 +269,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		
@@ -309,7 +309,7 @@ public class ProductDetailsController {
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer,  
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer,  
 			Model model,
 			@RequestParam(name = "salutation", required = false) String[] salutation, 
 			@RequestParam(name = "firstName", required = false) String[] firstName,  
@@ -326,7 +326,12 @@ public class ProductDetailsController {
 			model.addAttribute("customer", customer);
 			SearchHistory searchHistory = searchRepo.findById(searchId).get();
 			searchService.setCustomerSearchHistory(customer, searchHistory);
-		}  else {
+		} else if (oauthCustomer != null) {
+			customer = customerService.getByEmail(oauthCustomer.getEmail());
+			model.addAttribute("customer", customer);
+			SearchHistory searchHistory = searchRepo.findById(searchId).get();
+			searchService.setCustomerSearchHistory(customer, searchHistory);
+		} else {
 			customer = customerService.registerCustomerByEmailFromBooking(email, phoneNum);
 			model.addAttribute("customer", customer);
 			SearchHistory searchHistory = searchRepo.findById(searchId).get();
@@ -415,7 +420,7 @@ public class ProductDetailsController {
 			@RequestParam(name = "date") String date,
 			@RequestParam(name = "device") String device,
 			@RequestParam(name = "deviceInfo") String deviceInfo, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, Model model) throws ParseException {
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model) throws ParseException {
 
 		
 		Customer customer; 
@@ -426,6 +431,22 @@ public class ProductDetailsController {
 		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			customer = customerService.getByPhone(loggedCustomer.getUsername());
+//			if (searchIddbl == 1.5) {
+//				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
+//						infantNum, customer);
+//				searchIdInt = savedSearchId;
+//			} else {
+//				searchIdInt = (int)searchIddbl;
+//			}
+			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			ProductDetail productDetail = cartItem.getProductDetail();
+			
+			productService.updateDeviceInfo(productDetail, device, deviceInfo);
+			
+			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			
+		} else if (oauthCustomer != null) {
+			customer = customerService.getByEmail(oauthCustomer.getEmail());
 //			if (searchIddbl == 1.5) {
 //				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
 //						infantNum, customer);
@@ -457,7 +478,7 @@ public class ProductDetailsController {
 	public String filghtBookingSave(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
+			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, 
 			CartItem cartItem ) throws IOException {
@@ -478,7 +499,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		ProductDetail flight = flightRepo.findById(flight_id).get();
@@ -1064,7 +1085,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			if (searchId == 1.5f) {
 				Integer savedSearchId = sHistoryController.saveHistoryReturnPart(cityOne, cityTwo, dateFlight, returnDateFlight, journeyClass, "twoWay", adultNum, childNum, infantNum, customer);
 				searchIdInt = savedSearchId;
@@ -1169,7 +1190,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 		ProductDetail flightOne = flightRepo.findById(flightOneId).get();
@@ -1298,7 +1319,7 @@ public class ProductDetailsController {
 				
 			} else if (googleLogin != null) {
 				email = googleLogin.getEmail();
-				customer = customerService.getByPhone(email);
+				customer = customerService.getByEmail(email);
 				model.addAttribute("customer", customer);
 			}
 			timeRemainingPro = timeRemaining;
@@ -1394,7 +1415,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			model.addAttribute("customer", customer);
 		}
 
@@ -1930,7 +1951,7 @@ public class ProductDetailsController {
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
-			customer = customerService.getByPhone(email);
+			customer = customerService.getByEmail(email);
 			
 			SearchHistory history = productService.searcHistorySave(productDetail, cityOne, cityTwo, passengerNum, journeyClass, tripType, adultNum,
 					childNum, infantNum, customer);
