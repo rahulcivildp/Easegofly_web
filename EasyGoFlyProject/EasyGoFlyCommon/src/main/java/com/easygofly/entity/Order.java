@@ -122,6 +122,9 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<TravellerDetail> travellerDetails = new ArrayList<>();
+
+	@Column(name = "flight_ids")
+	private String flightIds;
 	
 	@Column(name = "device", length = 100)
 	private String device;
@@ -181,6 +184,14 @@ public class Order {
 
 	public void setContactEmail(String contactEmail) {
 		this.contactEmail = contactEmail;
+	}
+
+	public String getFlightIds() {
+		return flightIds;
+	}
+
+	public void setFlightIds(String flightIds) {
+		this.flightIds = flightIds;
 	}
 
 	public String getCityOne() {

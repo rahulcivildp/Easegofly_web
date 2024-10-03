@@ -163,7 +163,7 @@ public class TravellerDetail {
 	}
 	
 	public TravellerDetail(String salutation, String firstName, String lastName, String paxType, Integer cabinBaggage,
-			Integer baggageWT, String passportNo, Date passportExpiry, Date dob, ProductDetail productDetail) {
+			Integer baggageWT, String passportNo, Date passportExpiry, Date dob, Integer travelerCountSerial, ProductDetail productDetail) {
 		this.salutation = salutation;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -173,6 +173,7 @@ public class TravellerDetail {
 		this.passportNo = passportNo;
 		this.passportExpiry = passportExpiry;
 		this.dob = dob;
+		this.travelerCountSerial = travelerCountSerial;
 		this.productDetail = productDetail;
 	}
 

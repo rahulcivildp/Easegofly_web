@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,44 +70,50 @@ public class ProductDetailRestController {
 
         Date origin = new SimpleDateFormat("yyyy-MM-dd").parse(saveFlight.date);
         
-        ProductDetail flight = new ProductDetail();
+        ProductDetail existingFlight = flightRepo.getFlight(saveFlight.trace_id, saveFlight.result_index);
+        ProductDetail savedFlight = new ProductDetail();;
         
-        flight.setArrTime(saveFlight.arr_time);
-        flight.setDepTime(saveFlight.dep_time);
-        flight.setCityOne(saveFlight.city_one);
-        flight.setCityTwo(saveFlight.city_two);
-        flight.setDate(origin);
-        flight.setPnr(saveFlight.pnr);
-        flight.setTotalSeats(saveFlight.total_seats);
-        flight.setFlightNum(saveFlight.flight_num);
-        flight.setArrTimeInteger(saveFlight.arr_time_integer);
-        flight.setDepTimeInteger(saveFlight.dep_time_integer);
-        flight.setPriceADT(saveFlight.priceadt);
-        flight.setPriceINF(saveFlight.priceinf);
-        flight.setMarkupADT(saveFlight.markupadt);
-        flight.setMarkupINF(saveFlight.markupinf);
-        flight.setJourneyClass(saveFlight.journey_class);
-        flight.setTerminalDep(saveFlight.terminal_dep);
-        flight.setTerminalArr(saveFlight.terminal_arr);
-        flight.setCabinBaggage(saveFlight.cabin_baggage);
-        flight.setBaggage(saveFlight.baggage);
-        flight.setCraftType(saveFlight.craftType);
-        flight.setDuration(saveFlight.duration);
-        flight.setBrand(saveFlight.brand);
-        flight.setStopNum(saveFlight.stop_num);
-        flight.setTraceId(saveFlight.trace_id);
-        flight.setResultIndex(saveFlight.result_index);
-        flight.setAirlineRemarks(saveFlight.airline_remarks);
-        flight.setMode(saveFlight.mode);
-        flight.setLcc(saveFlight.lcc);
-        flight.setDevice(saveFlight.device);
-        flight.setDeviceDescription(saveFlight.device_description);
-        flight.setDeviceType(saveFlight.device_type);
-        flight.setUploadSeats(saveFlight.upload_seats);
-        flight.setEnabled(saveFlight.enabled);
-        
+        if (existingFlight == null) {
+            ProductDetail flight = new ProductDetail();
 
-        ProductDetail savedFlight = flightRepo.save(flight);
+            flight.setArrTime(saveFlight.arr_time);
+            flight.setDepTime(saveFlight.dep_time);
+            flight.setCityOne(saveFlight.city_one);
+            flight.setCityTwo(saveFlight.city_two);
+            flight.setDate(origin);
+            flight.setPnr(saveFlight.pnr);
+            flight.setTotalSeats(saveFlight.total_seats);
+            flight.setFlightNum(saveFlight.flight_num);
+            flight.setArrTimeInteger(saveFlight.arr_time_integer);
+            flight.setDepTimeInteger(saveFlight.dep_time_integer);
+            flight.setPriceADT(saveFlight.priceadt);
+            flight.setPriceINF(saveFlight.priceinf);
+            flight.setMarkupADT(saveFlight.markupadt);
+            flight.setMarkupINF(saveFlight.markupinf);
+            flight.setJourneyClass(saveFlight.journey_class);
+            flight.setTerminalDep(saveFlight.terminal_dep);
+            flight.setTerminalArr(saveFlight.terminal_arr);
+            flight.setCabinBaggage(saveFlight.cabin_baggage);
+            flight.setBaggage(saveFlight.baggage);
+            flight.setCraftType(saveFlight.craftType);
+            flight.setDuration(saveFlight.duration);
+            flight.setBrand(saveFlight.brand);
+            flight.setStopNum(saveFlight.stop_num);
+            flight.setTraceId(saveFlight.trace_id);
+            flight.setResultIndex(saveFlight.result_index);
+            flight.setAirlineRemarks(saveFlight.airline_remarks);
+            flight.setMode(saveFlight.mode);
+            flight.setLcc(saveFlight.lcc);
+            flight.setDevice(saveFlight.device);
+            flight.setDeviceDescription(saveFlight.device_description);
+            flight.setDeviceType(saveFlight.device_type);
+            flight.setUploadSeats(saveFlight.upload_seats);
+            flight.setEnabled(saveFlight.enabled);
+            
+            savedFlight = flightRepo.save(flight);
+		} else {
+            savedFlight = existingFlight;
+		}
         
         String flightBody =  "{"
         		+ "\"id\": " + savedFlight.getId() + ""
@@ -128,16 +135,39 @@ public class ProductDetailRestController {
 
         SaveTraveler saveTraveler = new ObjectMapper().readValue(request.getInputStream(), SaveTraveler.class);
         ProductDetail flight = flightRepo.findById(saveTraveler.flight_id).get();
+        TravellerDetail traveler = new TravellerDetail();        
+        TravellerDetail savedTraveler = new TravellerDetail();
         
         Date passportExpiry = new SimpleDateFormat("yyyy-MM-dd").parse(saveTraveler.passport_expiry);
         Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(saveTraveler.dob);
-     
-        TravellerDetail traveler = new TravellerDetail(saveTraveler.salutation, saveTraveler.first_name, saveTraveler.last_name, saveTraveler.pax_type, 7, 15, saveTraveler.passposrt_no, passportExpiry, dob, flight);
-        traveler.addMeal(saveTraveler.meal.description, Double.toString(saveTraveler.meal.price), saveTraveler.meal.code, saveTraveler.meal.quantity.toString());
-        traveler.addBaggage(Double.toString(saveTraveler.baggage.price), saveTraveler.baggage.code, saveTraveler.baggage.weight.toString());
-        traveler.addSeat(Double.toString(saveTraveler.seat.price), saveTraveler.seat.compartment, saveTraveler.seat.availablity_type, saveTraveler.seat.deck, saveTraveler.seat.row_no, saveTraveler.seat.code, saveTraveler.seat.seat_type, saveTraveler.seat.seat_no, saveTraveler.seat.craft_type);
+        Integer paxType = 0;
+        if (saveTraveler.pax_type.equals("Adult")) {
+			paxType = 1;
+		} else if (saveTraveler.pax_type.equals("Child")) {
+			paxType = 2;
+		} else {
+			paxType = 3;
+		}
         
-        TravellerDetail savedTraveler = travellerRepo.save(traveler);
+        List<TravellerDetail> listPax = travellerRepo.findTravellerFlightCount(flight, saveTraveler.total_pax);
+        if (listPax != null) {
+			if (saveTraveler.total_pax <= listPax.size()) {
+		        traveler = new TravellerDetail(saveTraveler.salutation, saveTraveler.first_name, saveTraveler.last_name, paxType.toString(), 7, 15, saveTraveler.passposrt_no, passportExpiry, dob, saveTraveler.total_pax, flight);
+		        traveler.addMeal(saveTraveler.meal.description, Double.toString(saveTraveler.meal.price), saveTraveler.meal.code, saveTraveler.meal.quantity.toString());
+		        traveler.addBaggage(Double.toString(saveTraveler.baggage.price), saveTraveler.baggage.code, saveTraveler.baggage.weight.toString());
+		        traveler.addSeat(Double.toString(saveTraveler.seat.price), saveTraveler.seat.compartment, saveTraveler.seat.availablity_type, saveTraveler.seat.deck, saveTraveler.seat.row_no, saveTraveler.seat.code, saveTraveler.seat.seat_type, saveTraveler.seat.seat_no, saveTraveler.seat.craft_type);
+		        
+		        savedTraveler = travellerRepo.save(traveler);
+			}
+		} else {
+	        traveler = new TravellerDetail(saveTraveler.salutation, saveTraveler.first_name, saveTraveler.last_name, paxType.toString(), 7, 15, saveTraveler.passposrt_no, passportExpiry, dob, saveTraveler.total_pax, flight);
+	        traveler.addMeal(saveTraveler.meal.description, Double.toString(saveTraveler.meal.price), saveTraveler.meal.code, saveTraveler.meal.quantity.toString());
+	        traveler.addBaggage(Double.toString(saveTraveler.baggage.price), saveTraveler.baggage.code, saveTraveler.baggage.weight.toString());
+	        traveler.addSeat(Double.toString(saveTraveler.seat.price), saveTraveler.seat.compartment, saveTraveler.seat.availablity_type, saveTraveler.seat.deck, saveTraveler.seat.row_no, saveTraveler.seat.code, saveTraveler.seat.seat_type, saveTraveler.seat.seat_no, saveTraveler.seat.craft_type);
+	        
+	        savedTraveler = travellerRepo.save(traveler);
+		}
+     
 
         String travelerBody =  "{"
         		+ "\"id\": " + savedTraveler.getId() + ""
@@ -419,6 +449,7 @@ public class ProductDetailRestController {
     	private String passposrt_no;
     	private String passport_expiry;
     	private String phone;
+    	private Integer total_pax;
     	private Integer flight_id;
     	private SaveMeal meal;
     	private SaveBaggage baggage;
@@ -508,8 +539,13 @@ public class ProductDetailRestController {
 		public void setSeat(SaveSeat seat) {
 			this.seat = seat;
 		}
-		
-		
+		public Integer getTotal_pax() {
+			return total_pax;
+		}
+		public void setTotal_pax(Integer total_pax) {
+			this.total_pax = total_pax;
+		}
+	
 	}
     
     @SuppressWarnings("unused")

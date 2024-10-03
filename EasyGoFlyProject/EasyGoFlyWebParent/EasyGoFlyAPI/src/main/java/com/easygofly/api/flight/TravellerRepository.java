@@ -26,5 +26,7 @@ public interface TravellerRepository extends CrudRepository<TravellerDetail, Int
 
 	@Query("SELECT t FROM TravellerDetail t WHERE t.productDetail = :productDetail AND t.order = :order AND t.travelerCountSerial = :travelerCountSerial")
 	public List<TravellerDetail> findTravellerByProductDetailOrderAndCount(ProductDetail productDetail, Order order, Integer travelerCountSerial);
-	
+
+	@Query("SELECT t FROM TravellerDetail t WHERE t.productDetail = :productDetail AND t.travelerCountSerial = :travelerCountSerial")
+	public List<TravellerDetail> findTravellerFlightCount(ProductDetail productDetail, Integer travelerCountSerial);
 }

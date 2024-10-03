@@ -14,5 +14,8 @@ public interface ProductDetailCrudRepository extends CrudRepository<ProductDetai
 	@Query("SELECT p FROM ProductDetail p WHERE p.cityOne = :cityOne AND p.cityTwo = :cityTwo AND p.journeyClass = :journeyClass AND p.traceId = :traceId AND p.mode = :mode AND p.date = :date")
 	public List<ProductDetail> findFlights(String cityOne, String cityTwo, String journeyClass, String traceId, String mode, Date date, Sort ascending);
 	
+	@Query("SELECT p FROM ProductDetail p WHERE p.traceId = :traceId AND p.resultIndex = :resultIndex")
+	public ProductDetail getFlight(String traceId, String resultIndex);
+	
 	
 }
