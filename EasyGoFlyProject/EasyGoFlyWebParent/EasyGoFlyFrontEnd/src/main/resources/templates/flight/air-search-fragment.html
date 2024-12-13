@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<body>
+	<!-- ======= Header ======= -->
+	<div th:fragment="page_banner(remove)" th:remove="${remove}">
+	    <div class="d-flex justify-content-start pb-2 search-tags" id="search-tags"></div>
+	    <div class="book-form position-absolute w-100 bg-white box-shadow p-4 pb-1 z-index1 rounded search-tag-menu" id="search-tag-menu">
+			
+			<div class="row item-slider2" >
+			 
+			    <div class="col-lg-6" id="search-item-1">
+					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchDesk" onsubmit="console.log('Form submitted');">
+	                    <div class="row d-flex align-items-center justify-content-between w-100">
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying From</label>
+	                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" value="Bangalore"
+											placeholder="Depurture City" list="cityOneList"
+											oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
+										<datalist id="cityOneList">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying To</label>
+										<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" value="Kolkata"
+											placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" 
+											required>
+										<datalist id="cityTwoList">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Depart</label>
+										<input type="date" name="date" class="form-control input_calender"
+											id="floatingInputDepurture" required>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Return</label>
+	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrival">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Travelars</label>
+	                                    <div class="passanger_detail">
+											<button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="deskDropdwon" data-bs-toggle="modal" data-bs-target="#travelerModal" onclick="return toggleOverflowTraveler();">
+												<input type="hidden" name="something" id="passengerNum1" value="">
+												<h5 class="m-0 n-text w-100">Economy Pax 1</h5>
+											</button>
+											
+											
+											
+											
+										</div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group mb-0 text-center">
+	                                <label class="mb-3"></label>
+	                                <input type="submit" class="nir-btn w-100" id="submitbtn" value="Search Now" onclick="form.submit;">
+	                            </div>
+	                        </div>
+	                    </div>
+					</form>
+			    </div>
+			    <div class="col-lg-6" id="search-item-2">
+					<form th:action="@{/flight_search_save}" method="get">
+				      <div class="row d-flex align-items-center justify-content-between">
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying From</label>
+	                                    <select class="niceSelect">
+	                                        <option value="1">city or airport</option>
+	                                        <option value="2">Argentina</option>
+	                                        <option value="3">Belgium</option>
+	                                        <option value="4">Canada</option>
+	                                        <option value="5">Denmark</option>
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying To</label>
+	                                    <select class="niceSelect">
+	                                        <option value="1">city or airport</option>
+	                                        <option value="2">Argentina</option>
+	                                        <option value="3">Belgium</option>
+	                                        <option value="4">Canada</option>
+	                                        <option value="5">Denmark</option>
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Depart</label>
+	                                    <input type="date" name="Depart" id="floatingInputDepurtureInter">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Return</label>
+	                                    <input type="date" name="Return" id="floatingInputArrivalInter">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Travelars</label>
+	                                        <div class="passanger_detail">
+												<div class="dropdown">
+												  <button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+													<input type="hidden" name="something" id="passengerNum2" value="">
+													<div class="n-text d-flex justify-content-around w-100" ><h5 class="m-0" id="n-text-21">Economy Pax 1</h5>
+												  </button>
+												  <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton2">
+												    <li>
+														<div class="dropdown-item">
+															<b>Class</b>
+															<select class="pass_list-10 form-control" name="journeyClass"
+																required="required">
+																<option value="Economy">Economy</option>
+																<option value="Premium Economy">Premium Economy</option>
+																<option value="Business">Business</option>
+																<option value="Premium Business">Premium Business</option>
+																<option value="First Class">First Class</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item">
+															<div class="d-flex justify-content-around">
+																<b class="me-2">Adult</b>
+																<p>(12+ yrs)</p>
+															</div>
+															<select class="pass_list11 form-control" name="adultNum"
+																required="required">
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item">
+															<div class="d-flex justify-content-around">
+																<b class="me-2">Children</b>
+																<p>(2-12 yrs)</p>
+															</div>
+															<select class="pass_list12 form-control" name="childNum">
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item">
+															<div class="d-flex justify-content-around">
+																<b class="me-2">Infant</b>
+																<p>Under 2yrs</p>
+															</div>
+															<select class="pass_list13 form-control" name="infantNum">
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item mt-2">
+															<button type="button" id="submitint" class="nir-btn w-100">Save</button>
+														</div>
+													</li>
+												  </ul>
+												</div>
+											</div>
+										
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group mb-0 text-center">
+	                                <label class="mb-3"></label>
+	                                <input type="submit" class="nir-btn w-100" id="submit" value="Search Now">
+	                            </div>
+	                        </div>
+	                    </div>
+	                </form>
+			    </div>
+			  
+			</div>
+	    </div>
+	                            
+	
+	
+	   
+<script>
+	
+	
+	$("#submit").click(function () {
+		travellerAddFun("#n-text-1", ".pass_list-1 option:selected", ".pass_list1 option:selected", ".pass_list2 option:selected", ".pass_list3 option:selected");
+	});
+	$("#submitint").click(function () {
+		travellerAddFun("#n-text-2", ".pass_list-10 option:selected", ".pass_list11 option:selected", ".pass_list12 option:selected", ".pass_list13 option:selected");
+	});
+	$("#submit1").click(function () {
+		travellerAddFun("#n-text-3", ".pass_list-2 option:selected", ".pass_list4 option:selected", ".pass_list5 option:selected", ".pass_list6 option:selected", "#result1", "#result4");
+	});
+	$("#submit1MobileReturn").click(function () {
+		travellerAddFun("#n-text-4", ".pass_list-20 option:selected", ".pass_list16 option:selected", ".pass_list17 option:selected", ".pass_list18 option:selected", "#result1MobileReturn", "#result4MobileReturn");
+	});
+	
+	
+	function travellerAddFun(nText, pasVal_1, pasVal_2, pasVal_3, pasVal_4) {
+		$(nText).empty();
+		var d = $(pasVal_1).val();
+		var a = parseInt($(pasVal_2).val());
+		var b = parseInt($(pasVal_3).val());
+		var c = parseInt($(pasVal_4).val());
+
+		var sum = a + b + c;
+
+		if (sum < 10) {
+			event.stopPropagation();
+			$(nText).html(d + " Pax " + Math.round(sum));
+		}
+		else {
+			event.stopPropagation();
+			$(nText).html(" <b style='color: red;'>INVALID<br>Max - 9</b> ");
+		}
+
+		$(".dropdownMenu").addClass("deactive");
+		$(".dropdownMenu").removeClass("active");
+	};
+
+	overflowSet("#domestic-btn");
+	overflowSet("#international-btn");
+	
+	function overflowSet(btn) {
+		$(btn).click(function () {
+			$("#carousel-inner-search").css("overflow", "hidden");
+
+			setTimeout(function() {
+				$("#carousel-inner-search").css("overflow", "unset");
+			}, 600);
+		});
+	}
+</script>
+    
+<script>
+		
+	$("#floatingInputDepurture").click(function () {
+		calenderView($("#floatingInputDepurture"));
+	});
+	
+	$("#floatingInputArrival").click(function () {
+		calenderViewReturnDestination($("#floatingInputDepurture"), "floatingInputArrival");
+	});
+		
+	$("#floatingInputDepurtureInter").click(function () {
+		calenderView($("#floatingInputDepurtureInter"));
+	});
+	
+	$("#floatingInputArrivalInter").click(function () {
+		calenderViewReturnDestination($("#floatingInputDepurtureInter"), "floatingInputArrivalInter");
+	});
+
+	function calenderView(input) {
+		name = input.attr("name");
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementsByName(name)[0].setAttribute('min', today);
+	}
+
+	function calenderViewReturnDestination(input, output) {
+		inputAttr = input.val();
+		if(inputAttr === "" ) {
+			var today = new Date().toISOString().split('T')[0];
+			document.getElementById(output).setAttribute('min', today);
+			return;
+		} else {
+			document.getElementById(output).setAttribute('min', inputAttr);
+			return;
+		}
+	}
+</script>
+	</div>
+	<!-- End Header -->
+	<!-- ======= Header ======= -->
+	
+	<div th:fragment="page_banner_mb(remove)" th:remove="${remove}">
+	    <div class="d-flex justify-content-start pb-2 search-mobile-tag position-relative" id="search-mobile-tag" style="z-index: 1;"></div>
+	    <div class="book-form w-100 bg-white box-shadow py-4 pb-1 z-index1 border radius-8 mb-2 search-tag-menu-mb">
+			
+			<div class="row item-slider3">
+			  
+			    <div class="col-lg-6" id="search-item-1">
+					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchMobile" onsubmit="console.log('Form submitted');">
+	                    <div class="row d-flex align-items-center justify-content-between">
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying From</label>
+	                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" value="Bangalore"
+											placeholder="Depurture City" list="cityOneList"
+											oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
+										<datalist id="cityOneList">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying To</label>
+										<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" value="Kolkata"
+											placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" 
+											required>
+										<datalist id="cityTwoList">
+											<th:block th:each="city : ${cities}">
+												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
+											</th:block>
+										</datalist>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Depart</label>
+										<input type="date" name="date" class="form-control input_calender"
+											id="floatingInputDepurture2" required>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Return</label>
+	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrival2">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Travelars</label>
+	                                    <div class="passanger_detail">
+											<button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="mobileDropdwon" data-bs-toggle="modal" data-bs-target="#travelerModalMobile" onclick="return toggleOverflowTraveler();">
+												<input type="hidden" name="something" id="passengerNum1" value="">
+												<h5 class="m-0 n-text w-100">Economy Pax 1</h5>
+											</button>
+										</div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group mb-0 text-center pt-2">
+	                                <input type="submit" class="nir-btn w-100" id="submitbtn" value="Search Now" onclick="form.submit;">
+	                            </div>
+	                        </div>
+	                    </div>
+					</form>
+			    </div>
+			    <div class="col-lg-6" id="search-item-2">
+					<form th:action="@{/flight_search_save}" method="get">
+				      <div class="row d-flex align-items-center justify-content-between">
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying From</label>
+	                                    <select class="niceSelect">
+	                                        <option value="1">city or airport</option>
+	                                        <option value="2">Argentina</option>
+	                                        <option value="3">Belgium</option>
+	                                        <option value="4">Canada</option>
+	                                        <option value="5">Denmark</option>
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Flying To</label>
+	                                    <select class="niceSelect">
+	                                        <option value="1">city or airport</option>
+	                                        <option value="2">Argentina</option>
+	                                        <option value="3">Belgium</option>
+	                                        <option value="4">Canada</option>
+	                                        <option value="5">Denmark</option>
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Depart</label>
+	                                    <input type="date" name="Depart" id="floatingInputDepurtureInter">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-6 mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Return</label>
+	                                    <input type="date" name="Return" id="floatingInputArrivalInter">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Travelars</label>
+	                                        <div class="passanger_detail">
+												<div class="dropdown">
+												  <button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"  onclick="return toggleOverflowTraveler();">
+													<input type="hidden" name="something" id="passengerNum2" value="">
+													<h5 class="n-text m-0">Economy Pax 1</h5>
+												  </button>
+												  <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton2">
+												    <li>
+														<div class="dropdown-item">
+															<b>Class</b>
+															<select class="pass_list-10 form-control" name="journeyClass"
+																required="required">
+																<option value="Economy">Economy</option>
+																<option value="Premium Economy">Premium Economy</option>
+																<option value="Business">Business</option>
+																<option value="Premium Business">Premium Business</option>
+																<option value="First Class">First Class</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item">
+															<div class="d-flex justify-content-around">
+																<b class="me-2">Adult</b>
+																<p>(12+ yrs)</p>
+															</div>
+															<select class="pass_list11 form-control" name="adultNum"
+																required="required">
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item">
+															<div class="d-flex justify-content-around">
+																<b class="me-2">Children</b>
+																<p>(2-12 yrs)</p>
+															</div>
+															<select class="pass_list12 form-control" name="childNum">
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item">
+															<div class="d-flex justify-content-around">
+																<b class="me-2">Infant</b>
+																<p>Under 2yrs</p>
+															</div>
+															<select class="pass_list13 form-control" name="infantNum">
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+															</select>
+														</div>
+													</li>
+													<li>
+														<div class="dropdown-item mt-2">
+															<button type="button" id="submitint2" class="nir-btn w-100">Save</button>
+														</div>
+													</li>
+												  </ul>
+												</div>
+											</div>
+										
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group mb-0 text-center">
+	                                <label class="mb-3"></label>
+	                                <input type="submit3" class="nir-btn w-100" id="submit" value="Search Now">
+	                            </div>
+	                        </div>
+	                    </div>
+	                </form>
+			    </div>
+			  
+			</div>
+	    </div>
+	                            
+	
+	
+	   
+<script>
+	
+	
+	$("#submit2").click(function () {
+		travellerAddFun("#n-text-10", ".pass_list-1 option:selected", ".pass_list1 option:selected", ".pass_list2 option:selected", ".pass_list3 option:selected");
+	});
+	$("#submitint2").click(function () {
+		travellerAddFun("#n-text-21", ".pass_list-10 option:selected", ".pass_list11 option:selected", ".pass_list12 option:selected", ".pass_list13 option:selected");
+	});
+	$("#submit1").click(function () {
+		travellerAddFun("#n-text-3", ".pass_list-2 option:selected", ".pass_list4 option:selected", ".pass_list5 option:selected", ".pass_list6 option:selected", "#result1", "#result4");
+	});
+	$("#submit1MobileReturn2").click(function () {
+		travellerAddFun("#n-text-4", ".pass_list-20 option:selected", ".pass_list16 option:selected", ".pass_list17 option:selected", ".pass_list18 option:selected", "#result1MobileReturn", "#result4MobileReturn");
+	});
+	
+	
+	function travellerAddFun(nText, pasVal_1, pasVal_2, pasVal_3, pasVal_4) {
+		$(nText).empty();
+		var d = $(pasVal_1).val();
+		var a = parseInt($(pasVal_2).val());
+		var b = parseInt($(pasVal_3).val());
+		var c = parseInt($(pasVal_4).val());
+
+		var sum = a + b + c;
+
+		if (sum < 10) {
+			event.stopPropagation();
+			$(nText).html(d + " Pax " + Math.round(sum));
+		}
+		else {
+			event.stopPropagation();
+			$(nText).html(" <b style='color: red;'>INVALID<br>Max - 9</b> ");
+		}
+
+		$(".dropdownMenu").addClass("deactive");
+		$(".dropdownMenu").removeClass("active");
+	};
+
+	overflowSet(".search-mobile-tag .domestic-btn");
+	overflowSet(".search-mobile-tag .international-btn");
+	
+	function overflowSet(btn) {
+		$(btn).click(function () {
+			$(".item-slider3 slick-list").css("overflow", "hidden");
+
+			setTimeout(function() {
+				$(".item-slider3 slick-list").css("overflow", "unset");
+			}, 600);
+		});
+	}
+</script>
+    
+<script>
+		
+	$("#floatingInputDepurture2").click(function () {
+		calenderView($("#floatingInputDepurture2"));
+	});
+	
+	$("#floatingInputArrival2").click(function () {
+		calenderViewReturnDestination($("#floatingInputDepurture2"), "floatingInputArrival2");
+	});
+		
+	$("#floatingInputDepurtureInter").click(function () {
+		calenderView($("#floatingInputDepurtureInter"));
+	});
+	
+	$("#floatingInputArrivalInter").click(function () {
+		calenderViewReturnDestination($("#floatingInputDepurtureInter"), "floatingInputArrivalInter");
+	});
+
+	function calenderView(input) {
+		name = input.attr("name");
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementsByName(name)[0].setAttribute('min', today);
+	}
+
+	function calenderViewReturnDestination(input, output) {
+		inputAttr = input.val();
+		if(inputAttr === "" ) {
+			var today = new Date().toISOString().split('T')[0];
+			document.getElementById(output).setAttribute('min', today);
+			return;
+		} else {
+			document.getElementById(output).setAttribute('min', inputAttr);
+			return;
+		}
+	}
+</script>
+	</div>
+	<!-- End Header -->		
+			
+		
+
+</body>
+
+</html>

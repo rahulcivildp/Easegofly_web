@@ -67,12 +67,22 @@ public class WalletController {
 			email = loggedCustomer.getUsername();
 			customer = customerService.getByPhone(email);
 			responseBalance(model, customer);
+			Wallet wallet = customer.getWallet();
+			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
+			model.addAttribute("rechargeStatus", RechargeHistoryStatus.SUCCESSFULL);
+			model.addAttribute("rechargeHistories", rechargeHistories);
+			model.addAttribute("customer", customer);
 			
 		} else if (googleLogin != null) {
 			email = googleLogin.getEmail();
 			customer = customerService.getByEmail(email);
-			model.addAttribute("customer", customer);
 			responseBalance(model, customer);
+			Wallet wallet = customer.getWallet();
+			List<RechargeHistory> rechargeHistories = walletService.listAllRechargeHistory(wallet, Sort.by("date").ascending());
+
+			model.addAttribute("rechargeStatus", RechargeHistoryStatus.SUCCESSFULL);
+			model.addAttribute("rechargeHistories", rechargeHistories);
+			model.addAttribute("customer", customer);
 		} 
 		
 		

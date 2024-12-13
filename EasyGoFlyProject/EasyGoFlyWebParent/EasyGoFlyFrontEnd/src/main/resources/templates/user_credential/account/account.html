@@ -25,14 +25,22 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 </head>
 
 
-<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'">
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
+<body>
+
+	<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
   
-  <div th:replace="whatsapp :: content"></div>
-  
-  <div style="background-color:#061123; padding-top: 120px; margin-bottom: 20px;"></div>
   
     <div th:if="${message != null}" class="alert alert-success text-center">
 		[[${message}]]
@@ -43,123 +51,59 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	<div th:if="${warning != null}" class="alert alert-warning text-center">
 		[[${warning}]]
 	</div>
-		
-	<div class="container contents shadow" style="display: flex; justify-content: center;">
-		<div class="row div-stl">
-		        <div class="col-md-3 media-hide">
-		            <div id="accordion" >
-		                <h4 class="sections specialButton margin-bottom-account mild_color" id="account" ><i class="fa fa-solid fa-address-card"></i>&nbsp;&nbsp;<span>Account</span></h4>
-		                <h4 class="sections specialButton margin-bottom-account mild_color" id="enquiry_board" ><i class="fa fa-solid fa-comment"></i>&nbsp;&nbsp;<span>Enquiry Board</span></h4>
-		                <h4 class="sections specialButton margin-bottom-account mild_color" id="flightCart" ><i class="fa fa-duotone fa-cart-shopping"></i>&nbsp;&nbsp;<span>Manage Booking</span></h4>
-		                <h4 class="sections specialButton margin-bottom-account mild_color" id="orderList" ><i class="fa fa-regular fa-boxes-stacked"></i>&nbsp;&nbsp;<span>Manage Order</span></h4>
-		            </div>
-		        </div>
-		        <div class="col media_status" style="display: none;">
-					<!-- Large button groups (default and split) -->
-					<div class="btn-group">
-					  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-					    <i class="fa fa-regular fa-bars"></i>
-					  </button>
-					  <ul class="dropdown-menu" style="padding: 4px;">
-					    	<li class="nav-item sections specialButton margin-bottom-mobile-account" id="account_mobile" style="width: 260px;"><i class="fa fa-solid fa-address-card"></i>&nbsp;&nbsp;<span
-								class="menu-text">Account</span></li>
-							<li class="nav-item sections specialButton margin-bottom-mobile-account" id="enquiry_board_mobile" style="width: 260px;"><i class="fa fa-solid fa-comment"></i>&nbsp;&nbsp;<span
-								class="menu-text">Enquiry Board</span></li>
-							<li class="nav-item sections specialButton margin-bottom-mobile-account" id="flightCart_mobile" style="width: 260px;"><i class="fa fa-duotone fa-cart-shopping"></i>&nbsp;&nbsp;<span
-								class="menu-text">Manage Booking</span></li>
-							<li class="nav-item sections specialButton margin-bottom-mobile-account" id="orderList_mobile" style="width: 260px;"><i class="fa fa-regular fa-boxes-stacked"></i>&nbsp;&nbsp;<span
-								class="menu-text">Manage Order</span></li>
-					  </ul>
-					</div>
-		        </div>
-		        <div class="col-md-9 hidden-groups" id="new_content1" style="padding: 10px 5px 0 0;">
-					<div th:replace="user_credential/account/account_form :: account_fragment('tag')"></div>
-		        </div>
-		        <div class="col-md-9 hidden-groups" id="new_content2" style="padding: 10px 5px 0 0; display: none;">
-					<div th:replace="user_credential/account/request/request_fragment :: request_fragment('tag')"></div>
-		        </div>
-		        <div class="col-md-9 hidden-groups" id="new_content3" style="padding: 10px 5px 0 0; display: none;">
-		        	<div th:replace="cart/manage_cart_fragment :: manageBooking('tag')"></div>
-		        </div>
-		        <div class="col-md-9 hidden-groups" id="new_content4" style="padding: 10px 5px 0 0; display: none;">
-		        	<div th:replace="cart/manage_order_fragment :: manageOrder('tag')"></div>
-		        </div>
-		    </div>
 	
-	</div>
+	
+</div>
+
+
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+	  <section id="preloader-mobile" class="spalsh-screen">
+	    <div class="circle text-center">
+	      <div>
+	        <h1>EaseGoFly</h1>
+	        <p>Discover Your Destinition</p>
+	      </div>
+	    </div>
+	    <div class="loader-spinner">
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+		</div>
+	</section>
+		<!-- splash-screen end -->
+	
+		<main class="home">
+			<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+			 
   
-  <div style="height: 60px;"></div>
- <footer th:replace="fragments :: page_footer"></footer>
- <script type="text/javascript" th:src="@{/js/common.js}"></script>
+		    <div th:if="${message != null}" class="alert alert-success text-center">
+				[[${message}]]
+			</div>
+			<div th:if="${alert != null}" class="alert alert-danger text-center">
+				[[${alert}]]
+			</div>
+			<div th:if="${warning != null}" class="alert alert-warning text-center">
+				[[${warning}]]
+			</div>
+		</main>
+	</div>
+  	<div th:replace="user_credential/account/account-fragment :: content"></div>
+  	
+	<div th:replace="whatsapp :: content"></div>
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
 <script>
-
-baseLink = "https://easegofly.com/";
-
-if(window.location.href == baseLink + "account#account") {
-	$(".sections").removeClass("active");
-	$("#account").addClass("active");
-	$(".hidden-groups").css("display", "none");
-    $("#new_content1").css("display", "block");
-}
-
-if(window.location.href == baseLink + "account") {
-	$(".sections").removeClass("active");
-	$("#account").addClass("active");
-	$(".hidden-groups").css("display", "none");
-    $("#new_content1").css("display", "block");
-}
-
-if(window.location.href == baseLink + "account#new_content2") {
-	$(".sections").removeClass("active");
-	$("#enquiry_board").addClass("active");
-	$(".hidden-groups").css("display", "none");
-    $("#new_content2").css("display", "block");
-}
-
-
-	$("#account").click(function() {
-		$(".sections").removeClass("active");
-		$("#account").addClass("active");
-		$(".hidden-groups").css("display", "none");
-	    $("#new_content1").css("display", "block");
-	});
-	$("#enquiry_board").click(function() {
-		$(".sections").removeClass("active");
-		$("#enquiry_board").addClass("active");
-		$(".hidden-groups").css("display", "none");
-	    $("#new_content2").css("display", "block");
-	});
-    $("#flightCart").click(function() {
-    	$(".sections").removeClass("active");
-    	$("#flightCart").addClass("active");
-    	$(".hidden-groups").css("display", "none");
-        $("#new_content3").css("display", "block");
-    });
-    $("#orderList").click(function() {
-    	$(".sections").removeClass("active");
-    	$("#orderList").addClass("active");
-    	$(".hidden-groups").css("display", "none");
-        $("#new_content4").css("display", "block");
-    });
-    
-    $("#account_mobile").click(function() {
-		$(".hidden-groups").css("display", "none");
-	    $("#new_content1").css("display", "block");
-	});
-    $("#enquiry_board_mobile").click(function() {
-		$(".hidden-groups").css("display", "none");
-	    $("#new_content2").css("display", "block");
-	});
-    $("#flightCart_mobile").click(function() {
-		$(".hidden-groups").css("display", "none");
-	    $("#new_content3").css("display", "block");
-	});
-    $("#orderList_mobile").click(function() {
-		$(".hidden-groups").css("display", "none");
-	    $("#new_content4").css("display", "block");
-	});
-    
+	$(".home").css("margin-bottom", "0");
 </script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>	

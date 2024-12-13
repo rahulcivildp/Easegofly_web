@@ -7,26 +7,63 @@
 	<head th:replace="fragments :: page_head(': Flight Order Page', 'tag')"></head>
 
 </head>	
-<style>
-	@media screen and (max-width: 700px) {
-		body #header {
-			position: relative;
-		}
-	}
+
+<body>
 	
-</style>
-<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'">
-	<div style="background-color: #00000047;">
-	  <header id="header" class="fixed-top d-flex align-items-center" >
-	  	<div th:replace="fragments :: page_header('tag')"></div>
-	  </header>
-	    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-	  
-	  <div th:replace="whatsapp :: content"></div>
+	<div class="hide-lg">
+		<!-- Preloader Starts-->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+
+		<!-- header starts -->
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
+	</div>
+
+
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<section id="preloader-mobile" class="spalsh-screen">
+			<div class="circle text-center">
+				<div>
+					<h1>EaseGoFly</h1>
+					<p>Discover Your Destinition</p>
+				</div>
+			</div>
+			<div class="loader-spinner">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</section>
+		<!-- splash-screen end -->
+	
+		<main class="home">
+			<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+		</main>
+	</div>
 	
 	<div th:replace="order/flight_order_fragment :: flight_booking('tag')"></div>
-	 
-	<footer th:replace="fragments :: page_footer"></footer>
-	</div>
+  	
+	<div th:replace="whatsapp :: content"></div>
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
+<script>
+	$(".home").css("margin-bottom", "0");
+	$(".home").css("padding", "0");
+</script>
+
 </html>

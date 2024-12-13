@@ -470,10 +470,10 @@ input:checked+br+label {
 			</div>
 		</div>
 		<!-- ======= Hero Section ======= -->
-		<section id="hero" class="heroDIsplay translateItem" style="translate: -100% 0;">
+		<section id="hero" class="heroDIsplay translateItem" style="translate: -100% 0;"> 
 			<div class="hero-container">
 				<div id="heroCarousel" data-bs-interval="5000"
-					class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 51vh;">
+					class="carousel slide carousel-fade" data-bs-ride="carousel">
 
 					<div class="carousel-indicators" id="hero-carousel-indicators">
 						<button type="button" data-bs-target="#carouselExampleIndicators"
@@ -488,34 +488,20 @@ input:checked+br+label {
 					<div class="carousel-inner carousel-inner-cont" role="listbox">
 
 						<!-- Slide 1 -->
-						<div class="carousel-item active"
-							th:style="'background-image: url(' + @{'/assets/img/slide/slide-1.jpg'} + ');'">
-							<div class="carousel-container">
-								<div class="carousel-content">
-									<div></div>
-								</div>
-							</div>
+						<div class="carousel-item active">
+							<img th:src="@{/assets/images/slide/slide-1.jpg}" class="img-fluid">
 						</div>
 
 						<!-- Slide 2 -->
-						<div class="carousel-item"
-							th:style="'background-image: url(' + @{'/assets/img/slide/slide-2.jpg'} + ');'">
-							<div class="carousel-container">
-								<div class="carousel-content">
-									<div></div>
-								</div>
-							</div>
+						<div class="carousel-item" >
+							<img th:src="@{/assets/images/slide/slide-2.jpg}" class="img-fluid">
+						</div>
+						
+						<!-- Slide 3 -->
+						<div class="carousel-item" >
+							<img th:src="@{/assets/images/slide/slide-3.jpg}" class="img-fluid">
 						</div>
 
-						<!-- Slide 3 -->
-						<div class="carousel-item"
-							th:style="'background-image: url(' + @{'/assets/img/slide/slide-2.jpg'} + ');'">
-							<div class="carousel-container">
-								<div class="carousel-content">
-									<div></div>
-								</div>
-							</div>
-						</div>
 
 					</div>
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="container">
+		
+			<div class="d-flex justify-content-center mb-2">
+				<div class="bg-white p-4 radius-8 hide-lg">
+	            	<p class="card-text"><span> [[${cityOneName}]] | [[${cityTwoName}]] | [[${journeyClass}]] | [[${passengerNum}]] Pax | [[${#dates.format(date, 'dd MMM, yy')}]]</span></p>
+				</div>
+				<div class="bg-white p-4 radius-8 text-center hide-mobile btndeactive">
+	            	<p class="card-text"><span> [[${cityOneName}]] | [[${cityTwoName}]] | [[${journeyClass}]] </span></p>
+	            	<p class="card-text"><span> [[${passengerNum}]] Pax | [[${#dates.format(date, 'dd MMM, yy')}]] </span></p>
+				</div>
+			</div>
+		
+	        <div class="row attract-slider">
+				<th:block th:each="leastFare : ${leastFareByBrand}">
+					<th:block th:if="${leastFare.traceId == 'offline'}">
+						<th:block th:if="${passengerNum} <= ${leastFare.totalSeats}">
+				            <div class="col-md-3 col-sm-6">
+								<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_least_fare' + ${leastFare.id}">
+									<input type="hidden" name="timeRemaining" class="timeRemain">
+									<input type="hidden" name="adultNum" th:value="${adultNum}">
+									<input type="hidden" name="childNum" th:value="${childNum}">
+									<input type="hidden" name="infantNum" th:value="${infantNum}">
+									<input type="hidden" name="cityOne" th:value="${cityOne}">
+									<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+									<input type="hidden" name="date" th:value="${strDate}">
+									<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+									<input type="hidden" name="search_id" th:value="${searchId}">
+									<input type="hidden" name="flight_id" th:value="${leastFare.id}">
+									<input type="hidden" name="device" class="device">
+									<input type="hidden" name="deviceInfo" class="deviceInfo">
+								</form>
+				                <div class="insta-image rounded">
+				                    <button type="submit" class="position-relative d-flex rounded" th:form="'booking_least_fare' + ${leastFare.id}" style="border: none; overflow: hidden;">
+										<img th:id="'brandLeastFareImg' + ${leastFare.id}">
+										<div class="position-absolute bottom-0 text-center" style="left: 0; right: 0; background: #494949ba; color: white;" th:id="'booking_least_fare_text' + ${leastFare.id}"></div>
+				                    </button>
+				                </div>
+								<script>
+						          	var totalAdultPrice = ([[${leastFare.priceADT}]] + [[${leastFare.markupADT}]]) * ([[${adultNum}]] + [[${childNum}]]);
+					          		var totalInfantPrice = ([[${leastFare.priceINF}]] + [[${leastFare.markupINF}]]) * [[${infantNum}]];
+					          		
+					          		var totalPrice = totalAdultPrice + totalInfantPrice;
+					          		$("#booking_least_fare_text" + [[${leastFare.id}]]).html('[[${CURRENCY_SYMBOL}]]' + totalPrice);
+					          		
+					          		var url = "[[@{/find_brand_}]]" + '[[${leastFare.brand}]]';
+					          		
+					          		$.get(url, function(response) {
+										$("#brandLeastFareImg" + [[${leastFare.id}]]).attr("src", response);
+										$("#brandLeastFareImg" + [[${leastFare.id}]]).attr("alt", '[[${leastFare.brand}]]');
+									}).fail(function(){
+										alert("Could not connect to the server.");
+									});
+									
+								</script>
+				            </div>
+						</th:block>
+					</th:block>
+					<th:block th:if="${leastFare.mode == 'Online-data'}">
+						<th:block th:if="${passengerNum} <= ${leastFare.totalSeats}">
+				            <div class="col-md-3 col-sm-6">
+								<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_least_fare_online' + ${leastFare.id}">
+									<input type="hidden" name="timeRemaining" class="timeRemain">
+									<input type="hidden" name="adultNum" th:value="${adultNum}">
+									<input type="hidden" name="childNum" th:value="${childNum}">
+									<input type="hidden" name="infantNum" th:value="${infantNum}">
+									<input type="hidden" name="cityOne" th:value="${cityOne}">
+									<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+									<input type="hidden" name="date" th:value="${strDate}">
+									<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+									<input type="hidden" name="search_id" th:value="${searchId}">
+									<input type="hidden" name="flight_id" th:value="${leastFare.id}">
+									<input type="hidden" name="device" class="device">
+									<input type="hidden" name="deviceInfo" class="deviceInfo">
+								</form>
+				                <div class="insta-image rounded">
+				                    <button type="submit" class="position-relative d-flex rounded" th:form="'booking_least_fare_online' + ${leastFare.id}" style="border: none; overflow: hidden;">
+										<img th:src="@{${leastFare.airlineLogo}}" th:alt="${leastFare.brand}">
+										<div class="position-absolute bottom-0 text-center" style="left: 0; right: 0; background: #494949ba; color: white;" th:id="'booking_least_fare_text_online' + ${leastFare.id}"></div>
+				                    </button>
+				                </div>
+				            
+								<script>
+						          	var totalAdultPrice = ([[${leastFare.priceADT}]] + [[${leastFare.markupADT}]]) * ([[${adultNum}]] + [[${childNum}]]);
+					          		var totalInfantPrice = ([[${leastFare.priceINF}]] + [[${leastFare.markupINF}]]) * [[${infantNum}]];
+					          		
+					          		var totalPrice = totalAdultPrice + totalInfantPrice;
+					          		$("#booking_least_fare_text_online" + [[${leastFare.id}]]).html(totalPrice);
+								</script>
+				            </div>
+						</th:block>
+					</th:block>
+				</th:block>
+	        </div>
+     	</div>
+     	
+ 
+
+	
+	
+ 
+	</div>
+</body>
+</html>

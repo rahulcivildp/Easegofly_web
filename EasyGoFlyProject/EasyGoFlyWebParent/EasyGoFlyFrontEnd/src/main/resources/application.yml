@@ -4,7 +4,7 @@ logging:
   level:
     root: INFO
 server:
-  port: 443
+  port: 444
   servlet:
     context-path: /
     session:

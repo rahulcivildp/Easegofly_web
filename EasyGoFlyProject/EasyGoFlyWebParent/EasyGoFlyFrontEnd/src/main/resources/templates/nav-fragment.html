@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<body>
+	<!-- ======= Header ======= -->
+	<div th:fragment="page_header(remove)" th:remove="${remove}">
+
+   
+		<div th:replace="whatsapp :: content"></div>
+	
+        <div class="header-content py-1 bg-theme">
+            <div class="container d-flex align-items-center justify-content-between">
+                <div class="links">
+                    <ul>
+                        <li><a href="#" class="white"><i class="icon-calendar white"></i> Thursday, Mar 26, 2021</a>
+                        </li>
+                        <li><a href="#" class="white"><i class="icon-location-pin white"></i> West Bengal, Berhampore</a>
+                        </li>
+                        <li><a href="#" class="white"><i class="icon-clock white"></i> Mon-Fri: 10 AM – 5 PM</a></li>
+                    </ul>
+                </div>
+                <div class="links float-right">
+                    <ul>
+                        <li><a th:href="@{${FACEBOOK}}" class="white"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+                        <li><a th:href="@{${TWITTER}}" class="white"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
+                        <li><a th:href="@{${INSTAGRAM}}" class="white"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+                        <li><a th:href="@{${LINKEDIN}}" class="white"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Bar -->
+        <div class="header_menu" id="header_menu">
+            <nav class="navbar navbar-default">
+                <div class="container">
+                    <div class="navbar-flex d-flex align-items-center justify-content-between w-100">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <a class="navbar-brand" th:href="@{/}">
+                                <img th:src="@{${SITE_LOGO}}" alt="image" style="height: 70px; width: 210px;">
+                            </a>
+                        </div>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="navbar-collapse1 d-flex align-items-center me-4" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav" id="responsive-menu">
+                                <li class="submenu active">
+                                    <a th:href="@{/}">Home </a>
+                                </li>
+
+                                <li class="submenu" id="hotel-lg"><a th:href="@{/hotel}">Hotel</a></li>
+                                <li class="submenu" id="bus-lg"><a th:href="@{/bus}">Bus</a></li>
+                                <li class="submenu dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                        aria-haspopup="true" aria-expanded="false">Holiday <i
+                                            class="icon-arrow-down" aria-hidden="true"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="destination-list.html">Holiday Search</a></li>
+                                        <li><a href="destination-detail.html">Packages</a></li>
+                                    </ul>
+                                </li>
+                                <li class="submenu" id="about-lg"><a th:href="@{/about}">About Us</a></li>
+                                <li class="submenu" id="contact-lg"><a th:href="@{/contact-us}">Contact</a></li>
+
+                                <li class="search-main"><a href="#search1" class="mt_search"><i
+                                            class="fa fa-search"></i></a></li>
+                            </ul>
+                        </div><!-- /.navbar-collapse -->
+                        <div class=" d-flex align-items-center">
+                            <a href="#" class="me-3">
+                                 Partner Login
+                            </a>
+                            <a th:href="@{/login}" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" class="nir-btn white"><i class="icon-user"></i> Login/Register</a>
+                            
+							<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm" id="logoutForm">
+								<input type="submit" value="SSSSS">
+							</form>
+	      					<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+	                            <ul class="nav navbar-nav" id="responsive-menu" >
+	                                <li class="submenu dropdown">
+	                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+	                                        aria-haspopup="true" aria-expanded="false">Account <i
+	                                            class="icon-arrow-down" aria-hidden="true"></i></a>
+	                                    <ul class="dropdown-menu">
+	                                        <li><a th:href="@{/account}">Account</a></li>
+	                                        <li><a th:href="@{/manage_booking}">Order</a></li>
+	                                        <li><a th:href="@{/wallet-home}">Wallet</a></li>
+	                                        <li><button type="submit" form="logoutForm">Logout!</button></li>
+	                                    </ul>
+	                                </li>
+	                            </ul>
+                            </th:block>
+                        </div>
+
+                        <div id="slicknav-mobile"></div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+	</div>
+  <!-- End Header -->
+   
+   
+	<!-- ======= Header ======= -->
+	<div th:fragment="page_header_mobile(remove)" th:remove="${remove}">
+        <!-- menu, side-menu start -->
+	    <section class="wrapper dz-mode p-0">
+	      <!-- menu -->
+	      <div class="menu">
+	        <button class="toggle-btn position-relative" style="width: 45px; height: 45px;">
+				
+	      		<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+					<th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
+						<img th:src="@{${#authentication.getPrincipal().getCustomer().photosImagePath}}" alt="avatar" class="rounded-circle">
+					</th:block>
+					<th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
+		            	<img th:src="@{/assets/mobile/profile/avatar.png}" alt="avatar" class="rounded-circle">
+					</th:block>
+				</th:block>
+		        <img th:src="@{/assets/mobile/profile/avatar.png}" alt="avatar" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" class="rounded-circle">
+	          	<img th:src="@{/assets/svg/menu/burger-white.svg}" alt="" class="icon position-absolute" style="bottom: -4px; right: -8px;">
+	        </button>
+	        
+		    <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+			    <a th:href="@{/}"><h4 class="m-0 text-white">Hey, <span id="cusName" sec:authentication="principal.customer.firstName"></span>!</h4></a>
+			</th:block>
+		        <a th:href="@{/}" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+					<div class="d-flex align-items-center">
+						<img th:src="@{${FAVICON}}" alt="favicon" class="img-fluid" style="width: auto; height: 30px;">&nbsp;<h4 class="m-0 text-white">Easegofly</h4>
+						
+					</div>
+				</a>
+	        <div class="btn-grp d-flex align-items-center gap-16">
+		          <a href="notification.html" class="d-flex align-items-center justify-content-center rounded-full position-relative">
+					  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M19 13.586V10C19 6.783 16.815 4.073 13.855 3.258C13.562 2.52 12.846 2 12 2C11.154 2 10.438 2.52 10.145 3.258C7.185 4.074 5 6.783 5 10V13.586L3.293 15.293C3.19996 15.3857 3.12617 15.4959 3.07589 15.6172C3.0256 15.7386 2.99981 15.8687 3 16V18C3 18.2652 3.10536 18.5196 3.29289 18.7071C3.48043 18.8946 3.73478 19 4 19H20C20.2652 19 20.5196 18.8946 20.7071 18.7071C20.8946 18.5196 21 18.2652 21 18V16C21.0002 15.8687 20.9744 15.7386 20.9241 15.6172C20.8738 15.4959 20.8 15.3857 20.707 15.293L19 13.586ZM19 17H5V16.414L6.707 14.707C6.80004 14.6143 6.87383 14.5041 6.92412 14.3828C6.9744 14.2614 7.00019 14.1313 7 14V10C7 7.243 9.243 5 12 5C14.757 5 17 7.243 17 10V14C17 14.266 17.105 14.52 17.293 14.707L19 16.414V17ZM12 22C12.6193 22.0008 13.2235 21.8086 13.7285 21.4502C14.2335 21.0917 14.6143 20.5849 14.818 20H9.182C9.38566 20.5849 9.76648 21.0917 10.2715 21.4502C10.7765 21.8086 11.3807 22.0008 12 22Z" fill="white"/>
+						</svg>
+		            <span class="dot"></span>
+		          </a>
+				<div class="dropdown">
+		          <a href="#" class="d-flex align-items-center justify-content-center rounded-full position-relative" id="dropdownMenuWallet" data-bs-toggle="dropdown" aria-expanded="false">
+		            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M16 2H8C4.691 2 2 4.691 2 8V20C2 20.2652 2.10536 20.5196 2.29289 20.7071C2.48043 20.8946 2.73478 21 3 21H16C19.309 21 22 18.309 22 15V8C22 4.691 19.309 2 16 2ZM20 15C20 17.206 18.206 19 16 19H4V8C4 5.794 5.794 4 8 4H16C18.206 4 20 5.794 20 8V15Z" fill="white"/>
+					<path d="M9.5 13C10.3284 13 11 12.3284 11 11.5C11 10.6716 10.3284 10 9.5 10C8.67157 10 8 10.6716 8 11.5C8 12.3284 8.67157 13 9.5 13Z" fill="white"/>
+					<path d="M14.5 13C15.3284 13 16 12.3284 16 11.5C16 10.6716 15.3284 10 14.5 10C13.6716 10 13 10.6716 13 11.5C13 12.3284 13.6716 13 14.5 13Z" fill="white"/>
+					</svg>
+
+		            <span class="dot"></span>
+		          </a>
+		          <div class="title dropdown-menu p-2 top-12" aria-labelledby="dropdownMenuWallet">
+  					<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+			  
+					  <h2 class="grey">Balance <span class="theme1">[[${CURRENCY_SYMBOL}]][[${#authentication.getPrincipal().getCustomer().wallet.balance} / 100]]</span></h2>
+		    
+					</th:block>
+				  </div>
+				</div>
+	          <label for="mode-change" class="mode-change d-flex align-items-center justify-content-center m-0">
+	            <input type="checkbox" id="mode-change">
+	            <img th:src="@{/assets/svg/menu/sun-white.svg}" alt="icon" class="sun">
+	            <img th:src="@{/assets/svg/menu/moon-white.svg}" alt="icon" class="moon">
+	          </label>
+	        </div>
+	      </div>
+	      <div class="m-menu__overlay"></div>
+	      <!-- main menu -->
+	      <div class="m-menu">
+	        <div class="m-menu__header">
+	          <button class="m-menu__close">
+	            <img th:src="@{/assets/svg/menu/close-white.svg}" alt="icon">
+	          </button>
+	          <div class="menu-user">
+	            
+	      		<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+					<th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
+						<img th:src="@{${#authentication.getPrincipal().getCustomer().photosImagePath}}" alt="avatar" >
+					</th:block>
+					<th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
+		            	<img th:src="@{/assets/mobile/profile/avatar.png}" alt="avatar" >
+					</th:block>
+				</th:block>
+		        <img th:src="@{${FAVICON}}" alt="avatar" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+	            <div >
+			      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+			        <a th:href="@{/}">Hey, <span id="cusName" sec:authentication="principal.customer.firstName"></span>!</a>
+		              <h3>
+		                Verified user
+		              </h3>
+				  </th:block>
+			        
+			        <a th:href="@{/}" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+						<div class="d-flex align-items-center">
+							<h4 class="m-0 text-white">Easegofly</h4>
+						</div>
+					</a>
+	            </div>
+	          </div>
+	        </div>
+	        <ul class="d-flex flex-column">
+	          <li>
+	            <h2 class="menu-title" > <i class="fa fa-solid fa-list"></i> &nbsp;&nbsp;main menu</h2>
+	          </li>
+	
+	          <li>
+	              <a th:href="@{/}" >
+	                <div class="d-flex align-items-center gap-16">
+	                  <span class="icon">
+	                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M13.717 15.2913C14.921 15.2913 15.901 16.2643 15.901 17.4603V20.5363C15.901 20.7933 16.107 20.9993 16.371 21.0053H18.277C19.779 21.0053 21 19.7993 21 18.3173V9.59325C20.993 9.08325 20.75 8.60325 20.333 8.28425L13.74 3.02625C12.855 2.32525 11.617 2.32525 10.729 3.02825L4.181 8.28225C3.748 8.61125 3.505 9.09125 3.5 9.61025V18.3173C3.5 19.7993 4.721 21.0053 6.223 21.0053H8.147C8.418 21.0053 8.638 20.7903 8.638 20.5263C8.638 20.4683 8.645 20.4103 8.657 20.3553V17.4603C8.657 16.2713 9.631 15.2993 10.826 15.2913H13.717ZM18.277 22.5053H16.353C15.251 22.4793 14.401 21.6143 14.401 20.5363V17.4603C14.401 17.0913 14.094 16.7913 13.717 16.7913H10.831C10.462 16.7933 10.157 17.0943 10.157 17.4603V20.5263C10.157 20.6013 10.147 20.6733 10.126 20.7413C10.018 21.7313 9.172 22.5053 8.147 22.5053H6.223C3.894 22.5053 2 20.6263 2 18.3173V9.60325C2.01 8.60925 2.468 7.69925 3.259 7.10025L9.794 1.85525C11.233 0.71525 13.238 0.71525 14.674 1.85325L21.256 7.10325C22.029 7.69225 22.487 8.60025 22.5 9.58225V18.3173C22.5 20.6263 20.606 22.5053 18.277 22.5053Z" fill="white"/>
+						</svg>
+
+	                  </span>
+	                  Home
+	                </div>
+	              </a>
+	          </li>
+	          <li>
+	              <a th:href="@{/hotel}">
+	                <div class="d-flex align-items-center gap-16">
+	                  <span class="icon">
+	                    <i class="fa fa-solid fa-bed"></i>
+	                  </span>
+	                  Hotel
+	                </div>
+	              </a>
+	          </li>
+	          <li>
+	              <a th:href="@{/bus}">
+	                <div class="d-flex align-items-center gap-16">
+	                  <span class="icon">
+	                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bus-front" viewBox="0 0 16 16"> <path d="M5 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0m8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-6-1a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2zm1-6c-1.876 0-3.426.109-4.552.226A.5.5 0 0 0 3 4.723v3.554a.5.5 0 0 0 .448.497C4.574 8.891 6.124 9 8 9s3.426-.109 4.552-.226A.5.5 0 0 0 13 8.277V4.723a.5.5 0 0 0-.448-.497A44 44 0 0 0 8 4m0-1c-1.837 0-3.353.107-4.448.22a.5.5 0 1 1-.104-.994A44 44 0 0 1 8 2c1.876 0 3.426.109 4.552.226a.5.5 0 1 1-.104.994A43 43 0 0 0 8 3"/> <path d="M15 8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1V2.64c0-1.188-.845-2.232-2.064-2.372A44 44 0 0 0 8 0C5.9 0 4.208.136 3.064.268 1.845.408 1 1.452 1 2.64V4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v3.5c0 .818.393 1.544 1 2v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V14h6v1.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-2c.607-.456 1-1.182 1-2zM8 1c2.056 0 3.71.134 4.822.261.676.078 1.178.66 1.178 1.379v8.86a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5V2.64c0-.72.502-1.301 1.178-1.379A43 43 0 0 1 8 1"/> </svg>
+	                  </span>
+	                  Bus
+	                </div>
+	              </a>
+	          </li>
+	          <li>
+	              <a href="../page.html">
+	                <div class="d-flex align-items-center gap-16">
+	                  <span class="icon">
+	                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-alt-high" viewBox="0 0 16 16"> <path d="M8 3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 3m8 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5m-13.5.5a.5.5 0 0 0 0-1h-2a.5.5 0 0 0 0 1zm11.157-6.157a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m-9.9 2.121a.5.5 0 0 0 .707-.707L3.05 5.343a.5.5 0 1 0-.707.707zM8 7a4 4 0 0 0-4 4 .5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5 4 4 0 0 0-4-4m0 1a3 3 0 0 1 2.959 2.5H5.04A3 3 0 0 1 8 8"/> </svg>
+	                  </span>
+	                  Holiday
+	                </div>
+	              </a>
+	          </li>
+	          <li>
+	            <label class="a-label__chevron" for="item-4">
+	              <span class="d-flex align-items-center gap-16">
+	                <span class="icon">
+	                  <img th:src="@{/assets/svg/menu/grid-white.svg}" alt="">
+	                </span>
+	                Account
+	              </span>
+	              <img th:src="@{/assets/svg/menu/chevron-right-black.svg}" alt="">
+	            </label>
+	            <input type="checkbox" id="item-4" name="item-4" class="m-menu__checkbox">
+	            <div class="m-menu">
+	              <div class="m-menu__header">
+	                <label class="m-menu__toggle" for="item-4">
+	                  <img th:src="@{/assets/svg/menu/back-white.svg}" alt="">
+	                </label>
+	                <span class="m-menu__header-title">Account</span>
+	              </div>
+	              
+			      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+			        <ul class="d-flex flex-column" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+		                <li>
+		                  <a th:href="@{/account}">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+		                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16"> <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/> </svg>
+		                      </span>
+		                      Profile
+		                    </div>
+		                  </a>
+		                </li>
+		                <li>
+		                  <a th:href="@{/manage_booking}">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+								  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+  <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2zm3.564 1.426L5.596 5 8 5.961 14.154 3.5zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/>
+</svg>
+		                      </span>
+		                      Order
+		                    </div>
+		                  </a>
+		                </li>
+		                <li>
+		                  <a th:href="@{/wallet-home}">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+								  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
+  <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z"/>
+</svg>
+		                      </span>
+		                      Wallet
+		                    </div>
+		                  </a>
+		                </li>
+		                <li>
+		                  <button type="submit" form="logoutForm">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+		                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+</svg>
+		                      </span>
+		                      Logout!
+		                    </div>
+		                  </button>
+		                </li>
+		              </ul>
+				  </th:block>
+				  <th:block th:unless="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+		              <ul class="d-flex flex-column" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+		                <li>
+		                  <a th:href="@{/login}">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+		                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16"> <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/> </svg>
+		                      </span>
+		                      Login
+		                    </div>
+		                  </a>
+		                </li>
+		                <li>
+		                  <a href="../components/splash-screen.html">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+		                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16"> <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/> </svg>
+		                      </span>
+		                      Partner Login
+		                    </div>
+		                  </a>
+		                </li>
+		              </ul>
+				  </th:block>
+	            </div>
+	          </li>
+	          <li>
+	              <a th:href="@{/about}">
+	                <div class="d-flex align-items-center gap-16">
+	                  <span class="icon">
+	                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-exclamation" viewBox="0 0 16 16"> <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/> <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0V11a.5.5 0 0 0-.5-.5m0 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/> </svg>
+	                  </span>
+	                  About Us
+	                </div>
+	              </a>
+	          </li>
+	          <li>
+	              <a th:href="@{/contact-us}">
+	                <div class="d-flex align-items-center gap-16">
+	                  <span class="icon">
+	                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-vcard" viewBox="0 0 16 16"> <path d="M5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4m4-2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5M9 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 9 8m1 2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"/> <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM1 4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8.96q.04-.245.04-.5C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 1 1 12z"/> </svg>
+	                  </span>
+	                  Contact
+	                </div>
+	              </a>
+	          </li>
+	          
+	          <li class="dz-switch">
+	            <div class="a-label__chevron">
+	              <div class="d-flex align-items-center gap-16">
+	                <span class="icon">
+	                  <img th:src="@{/assets/svg/menu/moon-white.svg}" alt="">
+	                </span>
+	                switch to dark mode
+	              </div>
+	              <label class="toggle-switch" for="enableMode">
+	                <input type="checkbox" id="enableMode" class="mode-switch">
+	                <span class="slider"></span>
+	              </label>
+	            </div>
+	          </li>
+	        </ul>
+	      </div>
+	      <!-- end main menu -->
+	    </section>
+	    <!-- menu, side-menu end -->
+	    
+	    
+	</div>
+  <!-- End Header -->
+   
+ <!-- ======= Social Icon Bar ======= -->
+ 
+  <div th:fragment="social_side_bar" th:remove="tag">
+	  <div class="social-icon-main">
+		  <div class="socila-icon-popup">
+			  <div class="row">
+				  <div class="col-8 pe-0 justify-end-center-row">
+					  <button class="social-btn-icon" onclick="return rotateSocialIcon('.social-icon-sidebar', '.social-btn-icon-div-img', '.social-btn-icon-div-img img', '#social-icon-image-xx');"> 
+						 <div class="social-btn-icon-div-img">
+						  	<img class="img-fluid p-2" th:src="@{/img/icon/left-chevron.png}" draggable="false">
+		    			</div>
+					  </button>
+				  </div>
+				  <div class="col-4 ps-0 social-btn-icon-sidediv"></div>
+			  </div>
+			  
+		  </div>
+		  <div class="position-relative">
+			  <div class="social-icon-sidebar">
+		        	<div class="social-icons mb-1" id="social-icon-map" onclick="return socialRedirect()" hidden>
+						<div class="btn text-white social-icons-inner" id="social-icons-icon-1">
+							<i class="fa fa-map-marker social-icons-icon" ></i>
+						</div> 
+		        	</div>
+		        	<div class="social-icons mb-1" id="social-icon-phone" >
+						<div class="btn text-white social-icons-inner" id="social-icons-icon-2" >
+							<i class="fab fa-brands fa-whatsapp social-icons-icon"></i>
+						</div> 
+		        	</div>
+		        	<div class="social-icons mb-1" id="social-icon-facebook" >
+						<div class="btn text-white social-icons-inner" id="social-icons-icon-3">
+							<i class="fab fa-facebook-f social-icons-icon"></i>
+						</div> 
+		        	</div>
+		        	<div class="social-icons mb-1" id="social-icon-twitter" >
+						<div class="btn text-white social-icons-inner" id="social-icons-icon-4">
+							<i class="fab fa-twitter social-icons-icon"></i>
+						</div> 
+		        	</div>
+		        	<div class="social-icons mb-1" id="social-icon-linkedin" >
+						<div class="btn text-white social-icons-inner" id="social-icons-icon-5">
+							<i class="fab fa-linkedin-in social-icons-icon"></i>
+						</div> 
+		        	</div>
+		        	<div class="social-icons mb-1" id="social-icon-instagram">
+						<div class="btn text-white social-icons-inner" id="social-icons-icon-6">
+							<i class="fab fa-instagram social-icons-icon"></i>
+						</div> 
+		        	</div>
+			  </div>
+			  
+		  </div>
+	  </div>
+	  
+	  <script>
+		$(".social-icon-main").draggable({ axis: "y" , cancel: false, containment: "parent"});
+	  </script>
+		  
+		  <script>
+			  $("#social-icon-map").click(function (){
+				  window.location.href = "[[@{/}]]";
+				  return false;
+			  });
+			  $("#social-icon-phone").click(function (){
+				  window.location.href = "tel: [[@{${ADMIN_PHONE}}]]";
+				  return false;
+			  });
+			  $("#social-icon-facebook").click(function (){
+				  window.location.href = "[[@{${FACEBOOK}}]]";
+				  return false;
+			  });
+			  $("#social-icon-twitter").click(function (){
+				  window.location.href = "[[@{${TWITTER}}]]";
+				  return false;
+			  });
+			  $("#social-icon-linkedin").click(function (){
+				  window.location.href = "[[@{${LINKEDIN}}]]";
+				  return false;
+			  });
+			  $("#social-icon-instagram").click(function (){
+				  window.location.href = "[[@{${INSTAGRAM}}]]";
+				  return false;
+			  });
+		  </script>
+		  
+		  <script>
+			  $('.social-icon-image').attr('src', '[[@{/img/social-media.png}]]');  
+			  
+			  function rotateSocialIcon(elem, btn, img1, img2) {
+				  $(elem).toggleClass('social-icon-sidebar-toggle');
+				  $(btn).toggleClass('social-btn-icon-toggle');
+				  $(img1).toggleClass('unique-toggle');
+				  $(img2).toggleClass('unique-toggle');
+			  }
+		  </script>
+	</div>
+ 
+ <!-- ======= Social Icon Bar ======= -->
+   
+  
+ <!-- ======= Footer ======= -->
+  <footer th:fragment="page_footer" >
+	
+	
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-3 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Address</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>[[${ADMIN_ADDRESS}]]</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i><a th:href="'tel:' + ${ADMIN_PHONE}" >[[${ADMIN_PHONE}]]</a></p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i><a th:href="'mailto:' + ${ADMIN_EMAIL}">[[${ADMIN_EMAIL}]]</a></p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social rounded-circle" th:href="${TWITTER}"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" th:href="${FACEBOOK}"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" th:href="${INSTAGRAM}"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" th:href="${YOUTUBE}"><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social rounded-circle" th:href="${LINKEDIN}"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <h5 class="text-light mb-4">Services</h5>
+                    <a class="btn btn-link" href="">Cardiology</a>
+                    <a class="btn btn-link" href="">Pulmonary</a>
+                    <a class="btn btn-link" href="">Neurology</a>
+                    <a class="btn btn-link" href="">Orthopedics</a>
+                    <a class="btn btn-link" href="">Laboratory</a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <h5 class="text-light mb-4">Quick Links</h5>
+                    <a class="btn btn-link" href="">About Us</a>
+                    <a class="btn btn-link" href="">Contact Us</a>
+                    <a class="btn btn-link" href="">Our Services</a>
+                    <a class="btn btn-link" href="">Terms & Condition</a>
+                    <a class="btn btn-link" href="">Support</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-light mb-4">Newsletter</h5>
+                    <p>Stay updated with the latest in medical advancements and wellness tips in this month’s newsletter. We’re here to keep you informed and empowered on your health journey!</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">takecareglobal.com</a>, All Right Reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        Designed By <a class="border-bottom" href="https://webkoro.com">Webkoro Technology Private Limited</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+	<div th:if="${param.message}">
+		<div class="my-2">
+			<div class="toast-container p-3 position-fixed bottom-0 left-0" style="z-index: 1000;">
+			  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="15000">
+			    <div class="toast-header">
+			      <img th:src="@{/img/doctor.svg}" class="rounded me-2 img-fluid" alt="..." width="20">
+			      <strong class="me-auto">Message</strong>
+			      <small><span id="timer">0</span> Seconds ago</small>
+			      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			    </div>
+			    <div class="toast-body alert">
+		    		<h6 class="text-success m-0">[[${param.message}]]</h6>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	</div>
+    
+<script>
+	toasterBootstrap('liveToast', 'timer');
+	
+	function toasterBootstrap(elem, timer) {
+		const toastLiveExample = document.getElementById(elem);
+		const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+		toastBootstrap.show();
+		
+		let seconds = 0;
+
+        // Function to update the timer
+        function updateTimer() {
+            seconds++;
+            document.getElementById(timer).textContent = seconds;
+        }
+
+        // Update the timer every 1000 milliseconds (1 second)
+        setInterval(updateTimer, 1000);
+	}
+</script>
+    
+    <!-- Footer End -->
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  
+ <!-- ======= back to top ======= -->
+ 
+  <div th:fragment="back_to_top" >
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top back-to-top-btn"><i class="bi bi-arrow-up"></i></a>
+  </div>
+ 
+ <!-- ======= back to top ======= -->
+
+
+
+</body>
+
+</html>

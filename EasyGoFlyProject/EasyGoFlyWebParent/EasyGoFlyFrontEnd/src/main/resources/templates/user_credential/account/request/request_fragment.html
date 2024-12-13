@@ -57,7 +57,7 @@
 </head>
 <body>
 
-<div class="container-fluid" >
+<div  >
 		
 		<div>
 			<div th:if="${message != null}" class="alert alert-success text-center">
@@ -101,17 +101,17 @@
 			 -->
 			</div>
 		</div>
-		<div class="full-details">
+		<div class="">
 			<th:block th:each="request : ${listRequests}">
 			<div class="request_tab">
 				<div class="row">
-					<div class="col-3">
+					<div class="col-12 col-md-3">
 						<p style="margin: 0;">Time: [[${#dates.format(request.createdTime, 'E, dd MM HH:mm:ss')}]]</p>
 					</div>
-					<div class="col-7">
+					<div class="col-12 col-md-7 mb-2">
 						<p style="margin: 0;">Subject: [[${request.subject}]]</p>
 					</div>
-					<div class="col-2">
+					<div class="col-12 col-md-2">
 						<a class="specialButton request_tab_link link-special-detail" th:href="@{'/request_conversation_' + ${request.id}}"><span style="padding: 6px 9px !important;">Open</span></a>
 					</div>
 				</div>
@@ -119,27 +119,7 @@
 			</th:block>
 		</div>
 		
-		<div class="less-details">
-		<th:block th:each="request : ${listRequests}" >
-			<div class="row m-1 styleLinkButton"  style="background: white;">
-				<div class="col">
-					<div>Time: [[${#dates.format(request.createdTime, 'E, dd MM HH:mm:ss')}]]</div>
-				</div>
-				<div class="colmt-2">
-					
-					<div>Subject: [[${request.subject}]]</div>
-					<div class="mt-3"></div>
-				</div>
-				<div class="col-12" style=" height: 53px;">
-					<div class="row">
-						<a class="col specialButton link-special-detail" th:href="@{'/request_conversation_' + ${request.id}}" style="text-decoration: none; display: flex; justify-content: center;">
-							<span class="" style="padding: 6px 9px !important;">Open</span
-						></a>
-					</div>
-				</div>
-			</div>
-			</th:block>
-		</div>
+		
 		<div style="margin-top: 15px;" >
 			<div th:replace="cart/booking_fragment :: pagination('account', 'Requests', ${totalPages2}, ${totalItems2}, ${startCount2}, ${endCount2})"></div>
 		</div>

@@ -4,402 +4,512 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 	
-<style type="text/css">
-body {
-  background-image: url('http://localhost:8080/air2fly/img/1971537-Recovered.jpg');
-  background-attachment: fixed;
-  background-size: cover;
-}
-@import
-	url("https://fonts.googleapis.com/css2?family=Grandstander&display=swap")
-	;
+    <!-- about-us starts -->
+    <section class="about-us pt-2" th:style="'background-image:url(' + @{/assets/images/background_pattern.png} + '); background-position:top left;'">
+        <div class="container">
+            <div class="about-image-box">
+                <div class="row d-flex align-items-center justify-content-between">
+                    <div class="col-12">
+                        <div class="title about-content text-center text-lg-start">
+                            <h4 class="theme d-inline-block mb-0">Get To Know Us</h4>
+                            <h2 class="border-b mb-2 pb-1 shrink-0">Explore All Tour of the world with us.</h2>
+                            <div class="border-b mb-2 pb-2 text-start read-main">
+								<div class="read-more"> 
+									<div class="m-0 read-more-item" th:utext="${ABOUT_US}"></div>
+								</div>
+                            	
+                            </div>
+                            <div class="about-listing pt-2">
+                                <ul class="d-flex justify-content-between">
+                                    <li><i class="icon-location-pin theme"></i><span class="black-theme ms-2">Tour Guide</span> </li>
+                                    <li><i class="icon-briefcase theme"></i><span class="black-theme ms-2"> Friendly Price</span></li>
+                                    <li><i class="icon-folder theme"></i><span class="black-theme ms-2"> Reliable Tour Package</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="white-overlay"></div>
+    </section>
+    <!-- about-us ends -->
 
-body {
-	font-family: "Grandstander", cursive;
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-.side-nav, .nav-menu {
-	height: 100%;
-}
-
-.side-nav .nav-menu {
-	list-style: none;
-	padding: 40px 0;
-	width: 100%;
-	background-color: #3498db;
-}
-
-.side-nav .nav-item {
-	position: relative;
-	padding: 10px 20px;
-}
-
-.nav-item.active {
-	background-color: #fff;
-	box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
-}
-
-.nav-item.active a {
-	color: #2980b9;
-}
-
-.nav-item a {
-	text-decoration: none;
-	color: #fff;
-}
-
-.menu-text {
-	padding: 0 20px;
-}
-
-.side-nav .nav-item.active::before {
-	content: "";
-	position: absolute;
-	background-color: transparent;
-	bottom: 100%;
-	right: 0;
-	height: 150%;
-	width: 20px;
-	border-bottom-right-radius: 25px;
-	box-shadow: 0 20px 0 0 #fff;
-}
-
-.side-nav .nav-item.active::after {
-	content: "";
-	position: absolute;
-	background-color: transparent;
-	top: 100%;
-	right: 0;
-	height: 150%;
-	width: 20px;
-	border-top-right-radius: 25px;
-	box-shadow: 0 -20px 0 0 #fff;
-}
-
-.side-nav .nav-item:hover {
-	background-color: grey;
-	box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
-}
-
-.side-nav .nav-item.active:hover {
-	background-color: #fff;
-	box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
-}
-
-.side-nav {
-	float: left;
-}
-
-.inner_conetnt {
-	text-align: center;
-	padding-top: 30px;
-}
-
-.content {
-	display: none;
-	height: auto !important;
-}
-
-.content p {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	text-align: justify;
-	padding: 0 24px;
-	margin-left: 20px;
-	font-size: 16px;
-}
-
-.activate {
-	display: block !important;
-}
-
-.nav-item {
-	cursor: pointer;
-}
-
-#para span {
-	font-size: 20px;
-	margin: 5px 0;
-	color: cornflowerblue;
-}
-
-@media only screen and (max-width: 600px) {
-	*.background_media {
-	background: #c6ecff !important;
-}
-}
-</style>
-<script>
-		$(document).ready(function() {
-			urlParse = window.location.href.split("/");
-			baseURL = urlParse[0] + "/" + urlParse[1] + "/" + urlParse[2] + "/";
-			
-            if (window.location.href == baseURL + "about#no-1") {
-              $("#no-1").addClass("activate");
-              $("#1m").addClass("active");
-            }
+    <!-- about-us starts -->
+    <section class="about-us pb-0">
+        <div class="section-shape section-shape1" th:style="'background-image: url(' + @{/assets/images/shape8.png} + ');'"></div>
+        <div class="container">
             
-            if (window.location.href == baseURL + "about#no-2") {
-                $("#no-2").addClass("activate");
-                $("#2m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-3") {
-              $("#no-3").addClass("activate");
-              $("#3m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-4") {
-              $("#no-4").addClass("activate");
-              $("#4m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-5") {
-              $("#no-5").addClass("activate");
-              $("#5m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-6") {
-                $("#no-6").addClass("activate");
-                $("#6m").addClass("active");
-            }
-		
-            if (window.location.href == baseURL + "about#no-7") {
-                $("#no-7").addClass("activate");
-                $("#7m").addClass("active");
-              }
-            
-            if (window.location.href == baseURL + "about#no-8") {
-              $("#no-8").addClass("activate");
-              $("#8m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-9") {
-                $("#no-9").addClass("activate");
-                $("#9m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-10") {
-                $("#no-10").addClass("activate");
-                $("#10m").addClass("active");
-            }
-            
-            if (window.location.href == baseURL + "about#no-10") {
-                $("#no-11").addClass("activate");
-                $("#11m").addClass("active");
-            }
-            
-            $("li").click(function(e) {
-				$("li").removeClass("active");
-				$(this).addClass("active");
+            <div class="section-title title mb-6 w-50 mx-auto text-center">
+                <h4 class="mb-1 theme1">Core Features</h4>
+                <h2 class="mb-1 shrink-0 black-theme">Find <span class="theme">Travel Perfection</span></h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </div>
 
-			});
-			
-			$("#1").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-1").addClass("activate");
-			});
-			$("#2").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-2").addClass("activate");
-			});
-			$("#3").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-3").addClass("activate");
-			});
-			$("#4").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-4").addClass("activate");
-			});
-			$("#5").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-5").addClass("activate");
-			});
-			$("#6").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-6").addClass("activate");
-			});
-			$("#7").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-7").addClass("activate");
-			});
-			$("#8").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-8").addClass("activate");
-			});
-			$("#9").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-9").addClass("activate");
-			});
-			$("#10").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-10").addClass("activate");
-			});
-			$("#11").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-11").addClass("activate");
-			});
+            <!-- why us starts -->
+            <div class="why-us hide-lg">
+                <div class="why-us-box">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                            <div class="why-us-item p-5 pt-6 pb-6 border rounded bg-white">
+                                <div class="why-us-content">
+                                    <div class="why-us-icon mb-1">
+                                        <i class="icon-flag theme"></i>
+                                    </div>
+                                    <h4><a href="#">Tell Us What You want To Do</a></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                            <div class="why-us-item p-5 pt-6 pb-6 border rounded bg-white">
+                                <div class="why-us-content">
+                                    <div class="why-us-icon mb-1">
+                                        <i class="icon-location-pin theme"></i>
+                                    </div>
+                                    <h4><a href="#">Share Your Travel Locations</a></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                            <div class="why-us-item p-5 pt-6 pb-6 border rounded bg-white">
+                                <div class="why-us-content">
+                                    <div class="why-us-icon mb-1">
+                                        <i class="icon-directions theme"></i>
+                                    </div>
+                                    <h4><a href="#">Share Your Travel Preference</a></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                            <div class="why-us-item p-5 pt-6 pb-6 border rounded bg-white">
+                                <div class="why-us-content">
+                                    <div class="why-us-icon mb-1">
+                                        <i class="icon-compass theme"></i>
+                                    </div>
+                                    <h4><a href="#">Here 100% Trusted Tour Agency</a></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- why us ends -->
+            
+            
+			<div class="why-us hide-mobile btndeactive">
+				<ul class="nav nav-tabs justify-content-center" id="settingTab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-bs-toggle="tab" href="#general" role="tab">
+	                        <div class="why-us-icon m-1">
+	                            <i class="icon-flag theme"></i>
+	                        </div>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-bs-toggle="tab" href="#advertisement" role="tab">
+	                        <div class="why-us-icon m-1">
+	                            <i class="icon-location-pin theme"></i>
+	                        </div>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-bs-toggle="tab" href="#images" role="tab">
+	                        <div class="why-us-icon m-1">
+	                            <i class="icon-directions theme"></i>
+	                        </div>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-bs-toggle="tab" href="#offers" role="tab">
+	                        <div class="why-us-icon m-1">
+	                            <i class="icon-compass theme"></i>
+	                        </div>
+						</a>
+					</li>
+				</ul>
+				
+				<div class="tab-content">
+					<div class="tab-pane active p-3" id="general" role="tabpanel">
+						<h4 class="text-center"><a href="#">Tell Us What You want To Do</a></h4>
+					</div>
+					<div class="tab-pane p-3" id="advertisement" role="tabpanel">
+						<h4 class="text-center"><a href="#">Share Your Travel Locations</a></h4>
+					</div>
+					<div class="tab-pane p-3" id="images" role="tabpanel">
+						<h4 class="text-center"><a href="#">Share Your Travel Preference</a></h4>
+					</div>
+					<div class="tab-pane p-3" id="offers" role="tabpanel">
+						<h4 class="text-center"><a href="#">Here 100% Trusted Tour Agency</a></h4>
+					</div>
+				</div>
+			</div>
+            
+            
+            
+        </div>
+    </section>
+    <!-- about-us ends -->
+    
+    <!-- about-us starts -->
+    <section class="about-us pt-6">
+        <div class="container">
+            <div class="about-image-box">
+	            <div class="section-title title mb-6 text-center w-75 mx-auto">
+					<h4 class="mb-1 theme1">Terms & Policies</h4>
+		 			<h2 class="mb-1 black-theme">Read <span class="theme">Our Policy</span></h2>
+	            </div>
+                <div class="row d-flex align-items-center justify-content-between">
+                    <div class="col-12 ps-4">
+                        <div class="about-content text-center text-lg-start">
+                            
+				            <div class="faq-accordian">
+				                <div class="row">
+				                    <div class="col-lg-6 col-md-12 mb-4">
+				                        <div class="accrodion-grp faq-accrodion" data-grp-name="faq-accrodion1">
+				                            <div class="accrodion">
+				                                <div class="accrodion-title">
+				                                    <h5>Terms &amp; conditions</h5>
+				                                </div>
+				                                <div class="accrodion-content" style="display: none;">
+				                                    <div class="inner">
+				                                        <div class="border-t mb-2 pt-2 black-theme"><div th:utext="${TERMS}"></div></div>
+				                                    </div><!-- /.inner -->
+				                                </div>
+				                            </div>
+				                            <div class="accrodion">
+				                                <div class="accrodion-title">
+				                                    <h5>Privacy Policy</h5>
+				                                </div>
+				                                <div class="accrodion-content" style="display: none;">
+				                                    <div class="inner">
+														<div class="border-t mb-2 pt-2 black-theme"><div th:utext="${PRIVACY}"></div></div>
+				                                    </div><!-- /.inner -->
+				                                </div>
+				                            </div>
+				                            <div class="accrodion">
+				                                <div class="accrodion-title">
+				                                    <h5>User Agreemen</h5>
+				                                </div>
+				                                <div class="accrodion-content" style="display: none;">
+				                                    <div class="inner">
+														<div class="border-t mb-2 pt-2 black-theme"><div th:utext="${AGREEMENT}"></div></div>
+				                                    </div><!-- /.inner -->
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>
+				                    <div class="col-lg-6 col-md-12 mb-4">
+				                        <div class="accrodion-grp faq-accrodion" data-grp-name="faq-accrodion2">
+				                            <div class="accrodion">
+				                                <div class="accrodion-title">
+				                                    <h5>Payment Security</h5>
+				                                </div>
+				                                <div class="accrodion-content" style="display: none;">
+				                                    <div class="inner">
+														<div class="border-t mb-2 pt-2 black-theme"><div th:utext="${SECURITY}"></div></div>
+				                                    </div><!-- /.inner -->
+				                                </div>
+				                            </div>
+				                            <div class="accrodion ">
+				                                <div class="accrodion-title">
+				                                    <h5>Refund & Cancellation</h5>
+				                                </div>
+				                                <div class="accrodion-content" style="display: none;">
+				                                    <div class="inner">
+														<div class="border-t mb-2 pt-2 black-theme"><div th:utext="${REFUND_CANCELLATION}"></div></div>
+				                                    </div><!-- /.inner -->
+				                                </div>
+				                            </div>
+				                            <div class="accrodion">
+				                                <div class="accrodion-title">
+				                                    <h5>Bank Details</h5>
+				                                </div>
+				                                <div class="accrodion-content" style="display: none;">
+				                                    <div class="inner">
+														<div class="border-t mb-2 pt-2 black-theme"><div th:utext="${BANK}"></div></div>
+				                                    </div><!-- /.inner -->
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+							
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+    <!-- about-us ends -->
 
-			//mobile view
-			$("#1m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-1").addClass("activate");
-			});
-			$("#2m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-2").addClass("activate");
-			});
-			$("#3m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-3").addClass("activate");
-			});
-			$("#4m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-4").addClass("activate");
-			});
-			$("#5m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-5").addClass("activate");
-			});
-			$("#6m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-6").addClass("activate");
-			});
-			$("#7m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-7").addClass("activate");
-			});
-			$("#8m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-8").addClass("activate");
-			});
-			$("#9m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-9").addClass("activate");
-			});
-			$("#10m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-10").addClass("activate");
-			});
-			$("#11m").click(function() {
-				$(".content").removeClass("activate");
-				$("#no-11").addClass("activate");
-			});
-		});
-	
-</script>
-<div class="media_status" style="display: none;">
-	<!-- Large button groups (default and split) -->
-	<div class="btn-group">
-	  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-	    <i class="fa fa-regular fa-bars"></i>
-	  </button>
-	  <ul class="dropdown-menu" style="padding: 4px;">
-	    	<li class="nav-item specialButton" id="1" style="width: 260px;"><i class="fa fa-quora"></i><span
-				class="menu-text">FAQ</span></li>
-			<li class="nav-item specialButton" id="2" style="width: 260px;"><i class="fa fa-book"></i><span
-				class="menu-text">About us</span></li>
-			<li class="nav-item specialButton" id="3" style="width: 260px;"><i class="fa fa-address-card"></i><span
-				class="menu-text">Contact us</span></li>
-			<li class="nav-item specialButton" id="4" style="width: 260px;"><i class="fa fa-play "></i><span
-				class="menu-text">Terms &amp; conditions</span></li>
-			<li class="nav-item specialButton" id="5" style="width: 260px;"><i class="fa fa-user-secret"></i><span
-				class="menu-text">Privacy Policy</span></li>
-			<li class="nav-item specialButton" id="6" style="width: 260px;"><i class="fa fa-paperclip"></i><span
-				class="menu-text">User Agreement</span></li>
-			<li class="nav-item specialButton" id="7" style="width: 260px;"><i class="fa fa-cc-diners-club"></i><span
-				class="menu-text">Payment Security</span></li>
-			<li class="nav-item specialButton" id="8" style="width: 260px;"><i class="fa fa-code-fork"></i><span
-				class="menu-text">Service</span></li>
-			<li class="nav-item specialButton" id="9" style="width: 260px;"><i class="fa fa-solid fa-phone-volume"></i><span
-				class="menu-text">Customer Support</span></li>
-			<li class="nav-item specialButton" id="10" style="width: 260px;"><i class="fa fa-reply-all"></i><span
-				class="menu-text">Refund & Cancellation</span></li>
-			<li class="nav-item specialButton" id="11" style="width: 260px;"><i class="fa fa-regular fa-building-columns"></i><span
-				class="menu-text">Bank Details</span></li>
-	  </ul>
-	</div>
-</div>
+    <!-- our teams starts -->
+    <section class="our-team pb-0 pt-6" th:style="'background-image:url(' + @{/assets/images/testimonial.png} + ')'">
+        <div class="container">
+              
+            <div class="section-title title mb-6 w-75 mx-auto text-center">
+                <h4 class="mb-1 theme1">Tour Guides</h4>
+                <h2 class="mb-1 "><span class="black-theme">Meet Our</span> <span class="theme">Excellent Guides</span></h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </div>  
+            <div class="team-main">
+                <div class="row shop-slider">
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <div class="team-list rounded">
+                            <div class="team-image">
+                                <img th:src="@{/assets/images/team/img1.jpg}" alt="team">
+                            </div>
+                            <div class="team-content text-center p-3 bg-theme">
+                               <h4 class="mb-0 white">Salmon Thuir</h4>
+                                <p class="mb-0 white">Senior Agent</p>
+                            </div>
+                        </div>
+                    </div>
 
-<div style="margin: 0 auto; width: 80%;">
-	<div class="row">
-		<nav class="side-nav col-md-3 media-hide">
-			<ul class="nav-menu" style="margin: 0; padding: 0;">
-				<li class="nav-item" id="1m"><i class="fa fa-quora"></i><span
-					class="menu-text">FAQ</span></li>
-				<li class="nav-item" id="2m"><i class="fa fa-book"></i><span
-					class="menu-text">About us</span></li>
-				<li class="nav-item" id="3m"><i class="fa fa-address-card"></i><span
-					class="menu-text">Contact us</span></li>
-				<li class="nav-item" id="4m"><i class="fa fa-play "></i><span
-					class="menu-text">Terms &amp; conditions</span></li>
-				<li class="nav-item" id="5m"><i class="fa fa-user-secret"></i><span
-					class="menu-text">Privacy Policy</span></li>
-				<li class="nav-item" id="6m"><i class="fa fa-paperclip"></i><span
-					class="menu-text">User Agreement</span></li>
-				<li class="nav-item" id="7m"><i class="fa fa-cc-diners-club"></i><span
-					class="menu-text">Payment Security</span></li>
-				<li class="nav-item" id="8m"><i class="fa fa-code-fork"></i><span
-					class="menu-text">Service</span></li>
-				<li class="nav-item" id="9m"><i class="fa fa-solid fa-phone-volume"></i><span
-					class="menu-text">Customer Support</span></li>
-				<li class="nav-item" id="10m"><i class="fa fa-reply-all"></i><span
-					class="menu-text">Refund & Cancellation</span></li>
-				<li class="nav-item" id="11m"><i class="fa fa-regular fa-building-columns"></i><span
-					class="menu-text">Bank Details</span></li>
-			</ul>
-	  <br>
-		</nav>
-		<div class="inner_conetnt col-md-9 col-12">
-			<div class="content col" id="no-1">
-				<div th:utext="${FAQ}"></div>
-			</div>
-			<div class="content col " id="no-2">
-				<div th:utext="${ABOUT_US}"></div>
-			</div>
-			<div class="content col" id="no-3">
-				<div th:utext="${CONTACT_US}"></div>
-				<div style="margin-bottom: 15px;"></div>
-			</div>
-			<div class="content col" id="no-4">
-				<div th:utext="${TERMS}"></div>
-			</div>
-			<div class="content col" id="no-5">
-				<div th:utext="${PRIVACY}"></div>
-			</div>
-			<div class="content col" id="no-6">
-				<div th:utext="${AGREEMENT}"></div>
-				<div style="margin-bottom: 180px;"></div>
-			</div>
-			<div class="content col" id="no-7">
-				<div th:utext="${SECURITY}"></div>
-				<div style="margin-bottom: 180px;"></div>
-			</div>
-			<div class="content col" id="no-8">
-				<div th:utext="${SERVICE}"></div>
-				<div style="margin-bottom: 60px;"></div>
-			</div>
-			<div class="content col" id="no-9">
-				<div th:utext="${CONTACT_US}"></div>
-				<div style="margin-bottom: 15px;"></div>
-			</div>
-			<div class="content col" id="no-10">
-				<div th:utext="${REFUND_CANCELLATION}"></div>
-				<div style="margin-bottom: 15px;"></div>
-			</div>
-			<div class="content col" id="no-11">
-				<div th:utext="${BANK}"></div>
-				<div style="margin-bottom: 15px;"></div>
-			</div>
-		</div>
-	</div>
-	
-</div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <div class="team-list rounded">
+                            <div class="team-image">
+                                <img th:src="@{/assets/images/team/img2.jpg}" alt="team">
+                            </div>
+                            <div class="team-content text-center p-3 bg-theme">
+                               <h4 class="mb-0 white">Horke Pels</h4>
+                                <p class="mb-0 white">Head Officer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <div class="team-list rounded">
+                            <div class="team-image">
+                                <img th:src="@{/assets/images/team/img4.jpg}" alt="team">
+                            </div>
+                            <div class="team-content text-center p-3 bg-theme">
+                               <h4 class="mb-0 white">Solden kalos</h4>
+                                <p class="mb-0 white">Supervisor</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <div class="team-list rounded">
+                            <div class="team-image">
+                                <img th:src="@{/assets/images/team/img3.jpg}" alt="team">
+                            </div>
+                            <div class="team-content text-center p-3 bg-theme">
+                               <h4 class="mb-0 white">Nelson Bam</h4>
+                                <p class="mb-0 white">Quality Assurance</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <div class="team-list rounded">
+                            <div class="team-image">
+                                <img th:src="@{/assets/images/team/img4.jpg}" alt="team">
+                            </div>
+                            <div class="team-content text-center bg-theme p-3">
+                               <h4 class="mb-0 white">Cacics Coold</h4>
+                                <p class="mb-0 white">Asst. Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- our teams Ends -->
+
+    <!-- About detail Start -->
+    <section class="faq-main pb-6 pt-6">
+        <div class="container">
+            <div class="section-title title mb-6 text-center w-75 mx-auto">
+                <h4 class="mb-1 theme1">Faq</h4>
+                <h2 class="mb-1"><span class="black-theme">Frequent Asked </span><span class="theme">Questions</span></h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </div>
+            <div class="faq-accordian">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 mb-4">
+                        <div class="accrodion-grp faq-accrodion" data-grp-name="faq-accrodion1">
+                            <div class="accrodion active">
+                                <div class="accrodion-title">
+                                    <h5>Who We Are?</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: block;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion">
+                                <div class="accrodion-title">
+                                    <h5>Wanna know our Special Features?</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion">
+                                <div class="accrodion-title">
+                                    <h5>Check Your Status</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion ">
+                                <div class="accrodion-title">
+                                    <h5>Why choose us?</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion ">
+                                <div class="accrodion-title">
+                                    <h5>How do I post my listing</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 mb-4">
+                        <div class="accrodion-grp faq-accrodion" data-grp-name="faq-accrodion2">
+                            <div class="accrodion active">
+                                <div class="accrodion-title">
+                                    <h5>Why my card payment is failing?</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: block;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion ">
+                                <div class="accrodion-title">
+                                    <h5>Can I upload attachments</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion">
+                                <div class="accrodion-title">
+                                    <h5>Can I create a profile page for business</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion ">
+                                <div class="accrodion-title">
+                                    <h5>What is the price of posting</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                            <div class="accrodion ">
+                                <div class="accrodion-title">
+                                    <h5>How do I post my listing</h5>
+                                </div>
+                                <div class="accrodion-content" style="display: none;">
+                                    <div class="inner">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, inventore cumque veniam, praesentium velit incidunt rem quas a, quos eos ipsum, reprehenderit voluptatem.</p>
+                                    </div><!-- /.inner -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About detail Ends -->   
+
+    <!-- testomonial start -->
+    <section class="testimonial pt-9" th:style="'background-image:url(' + @{/assets/images/testimonial.png} + ')'">
+        <div class="container"> 
+            <div class="section-title title mb-6 text-center w-75 mx-auto">
+                    <h4 class="mb-1 theme1">Our Testimonails</h4>
+                    <h2 class="mb-1"><span class="black-theme">Good Reviews By</span> <span class="theme">Clients</span></h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+            <div class="row align-items-center">
+                <div class="col-lg-5 pe-4">
+                    <div class="testimonial-image">
+                        <img th:src="@{/assets/images/travel2.png}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-7 ps-4">
+                    <div class="row review-slider">
+                        <div class="col-sm-4 item">
+                            <div class="testimonial-item1 rounded">
+                                <div class="author-info mt-2 d-flex align-items-center mb-4">
+                                    <a href="#"><img th:src="@{/assets/images/testimonial/img1.jpg}" alt=""></a>
+                                    <div class="author-title ms-3">
+                                        <h5 class="m-0 theme">Jared Erondu</h5>
+                                        <span>Supervisor</span>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <p class="m-0"><i class="fa fa-quote-left me-2 fs-1"></i>Lorem Ipsum is simply dummy text of the printing andypesetting industry. Lorem ipsum a simple Lorem Ipsum has been the industry's standard dummy hic et quidem. Dignissimos maxime velit unde inventore quasi vero dolorem.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 item">
+                            <div class="testimonial-item1 rounded">
+                                <div class="author-info mt-2 d-flex align-items-center mb-4">
+                                    <a href="#"><img th:src="@{/assets/images/testimonial/img1.jpg}" alt=""></a>
+                                    <div class="author-title ms-3">
+                                        <h5 class="m-0 theme">Jared Erondu</h5>
+                                        <span>Supervisor</span>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <p class="m-0"><i class="fa fa-quote-left me-2 fs-1"></i>Lorem Ipsum is simply dummy text of the printing andypesetting industry. Lorem ipsum a simple Lorem Ipsum has been the industry's standard dummy hic et quidem. Dignissimos maxime velit unde inventore quasi vero dolorem.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- testimonial ends --> 
+
+    <!-- partner starts -->
+    <div class="our-partner pt-0 pb-6">
+        <div class="container">
+            <div class="partners_inner">
+                <ul>
+                    <!--<li><img th:src="@{/assets/images/cl-5.png}" alt=""></li>
+                    <li><img th:src="@{/assets/images/cl-2.png}" alt=""></li>
+                    <li><img th:src="@{/assets/images/cl-3.png}" alt=""></li>
+                    <li><img th:src="@{/assets/images/cl-4.png}" alt=""></li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- partner ends -->
+
 
 	</div>
 	

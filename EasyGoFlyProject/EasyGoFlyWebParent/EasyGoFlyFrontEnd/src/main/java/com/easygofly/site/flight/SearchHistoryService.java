@@ -84,7 +84,7 @@ public class SearchHistoryService {
 	}
 	
 	public SearchHistory setSearchHistoryWithouLogin(String cityOne, String cityTwo, Integer passengerNum, String journeyClass, Integer adultNum, Integer childNum, Integer infantNum,
-			String tripType, Date date ) {
+			String tripType, Date date, Date returnDate) {
 		if(cityOne == null || cityTwo == null) return null;
 		
 		Integer passengerNum1 = passengerNum; 
@@ -98,6 +98,7 @@ public class SearchHistoryService {
 		String cityTwo1 = cityTwo;
 		
 		SearchHistory history = new SearchHistory(cityOne1, cityTwo1, passengerNum1, journeyClass1, adultNum1, childNum1, infantNum1, tripType1, date1);
+		history.setReturnDate(returnDate);
 		
 		return hisrepo.save(history);
 	}

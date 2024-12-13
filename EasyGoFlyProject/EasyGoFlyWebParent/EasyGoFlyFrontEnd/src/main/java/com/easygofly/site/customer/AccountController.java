@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Conversation;
 import com.easygofly.entity.Country;
@@ -32,6 +33,7 @@ import com.easygofly.site.flight.order.OrderService;
 import com.easygofly.site.request.ConversationRepository;
 import com.easygofly.site.request.RequestRepository;
 import com.easygofly.site.request.RequestService;
+import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.SearchHistoryRepository;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
@@ -48,6 +50,7 @@ public class AccountController {
 	@Autowired private RequestService requestService;
 	@Autowired private RequestRepository requestRepo;
 	@Autowired private ConversationRepository conversationRepo;
+	@Autowired private BrandRepositoy brandRepo;
 	
 	@GetMapping("/account")
 	public String viewDetailsCustomer(@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model) {
@@ -63,9 +66,17 @@ public class AccountController {
 		List<Country> listCountries = customerService.listAllCountries();
 		Request request = new Request();
 		
+		Iterable<Brand> brands = brandRepo.findAll();
+		
 		model.addAttribute("request", request);
 		model.addAttribute("listCountries", listCountries);
 		model.addAttribute("pageTitle", "Account Page");
+		model.addAttribute("newOrder", OrderStatus.NEW);
+		model.addAttribute("orderCancelled", OrderStatus.CANCELLED);
+		model.addAttribute("orderSuccess", OrderStatus.SUCCESSFULL);
+		model.addAttribute("orderFailed", OrderStatus.FAILED);
+		model.addAttribute("orderPending", OrderStatus.PENDING);
+		model.addAttribute("brands", brands);
 		
 		listByPage(loggedCustomer, 1, model, "id", "asc", null);
 		return "user_credential/account/account";

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" th:fragment="index">
+
+<body class="">
+	
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+	  <section id="preloader-mobile" class="spalsh-screen">
+	    <div class="circle text-center">
+	      <div>
+	        <h1>EaseGoFly</h1>
+	        <p>Discover Your Destinition</p>
+	      </div>
+	    </div>
+	    <div class="loader-spinner">
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	    </div>
+	  </section>
+	  <!-- splash-screen end -->
+	
+	  <main class="home">
+	    <div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+	
+	   
+	
+	    <!-- service start -->
+	    <section class="service py-12">
+	      <!-- item 1 -->
+	      <a href="#" onclick="return toggleSearch(this);">
+	        <figure class="item text-center">
+	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto" id="toggle-div">
+	            <img th:src="@{/assets/mobile/home/airport.png}" alt="airport" class="img-fluid backface-hidden">
+	          </div>
+	          <figcaption>Flight</figcaption>
+	        </figure>
+	      </a>
+	
+	      <!-- item 3 -->
+	      <a th:href="@{/hotel}">
+	        <figure class="item text-center">
+	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	            <img th:src="@{/assets/mobile/home/hotel.png}" alt="hotel" class="img-fluid backface-hidden">
+	          </div>
+	          <figcaption>Hotel</figcaption>
+	        </figure>
+	      </a>
+	      <!-- item 2 -->
+	      <a th:href="@{/bus}">
+	        <figure class="item text-center">
+	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	            <img th:src="@{/assets/mobile/home/car-rental.png}" alt="car" class="img-fluid backface-hidden">
+	          </div>
+	          <figcaption>Bus</figcaption>
+	        </figure>
+	      </a>
+	
+	
+	      <!-- item 4 -->
+	      <figure class="item text-center" data-bs-toggle="modal" data-bs-target="#serviceModal">
+	        <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	          <img th:src="@{/assets/mobile/home/category.png}" alt="category" class="img-fluid backface-hidden">
+	        </div>
+	        <figcaption>More</figcaption>
+	      </figure>
+	    </section>
+	    <!-- service end -->
+	
+	    <!-- search start -->
+	    <section class="search py-0" >
+			<div id="search-bar-py" style="transition: all 0.4s ease-in-out;">
+		        <div id="search-bar-mb" class="search-bar-class h-0">
+					<div th:replace="flight/air-search-fragment :: page_banner_mb('tag')"></div>
+					
+				</div>
+			
+			</div>
+                <script>
+					
+			if (window.innerWidth < 900) { 
+					$("#search-bar-mb").css("height",  "500px");	
+					
+					function toggleSearch(id){
+						$("#toggle-div").toggleClass("img-select");
+						$("#search-bar-mb").toggleClass("h-0");
+						$("#search-bar-mb").removeClass("overflow-unset");
+						$("#search-bar-py").toggleClass("py-12");
+					}
+					
+					function toggleOverflowTraveler(){
+						$("#search-bar-mb").addClass("overflow-unset");
+					}
+				}
+				</script>
+	    </section>
+	    <!-- search end -->
+	    
+	    
+	    
+	    
+	    
+	     <!-- service modal start -->
+	  <div class="modal fade bottomModal modalBg" id="travelerModalMobile" tabindex="-1" aria-hidden="true" style="z-index: 10000;">
+	    <div class="modal-dialog">
+	      <div class="modal-content h-auto">
+	        <div class="modal-header">
+	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+	          </button>
+	          <h1 class="modal-title">Set Traveler</h1>
+	        </div>
+	        <div class="modal-body">
+                  <div class="row p-2" id="flush-collapseOne">
+				    <div class="col-12">
+						<div class="dropdown-item">
+							<b>Class</b>
+							<select class="pass_list-1 form-control" name="journeyClass" form="onewaySearchMobile"
+								required="required">
+								<option value="Economy">Economy</option>
+								<option value="Premium Economy">Premium Economy</option>
+								<option value="Business">Business</option>
+								<option value="Premium Business">Premium Business</option>
+								<option value="First Class">First Class</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item">
+							<div class="d-flex justify-content-between">
+								<b class="me-2">Adult</b>
+								<p>(12+ yrs)</p>
+							</div>
+							<select class="pass_list1 form-control" name="adultNum"form="onewaySearchMobile"
+								required="required">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item">
+							<div class="d-flex justify-content-between">
+								<b class="me-2">Children</b>
+								<p>(2-12 yrs)</p>
+							</div>
+							<select class="pass_list2 form-control" name="childNum" form="onewaySearchMobile">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item">
+							<div class="d-flex justify-content-between">
+								<b class="me-2">Infant</b>
+								<p>Under 2yrs</p>
+							</div>
+							<select class="pass_list3 form-control" name="infantNum" form="onewaySearchMobile">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item mt-2">
+							<button type="button" id="submit2" form="onewaySearch" class="nir-btn w-100" data-bs-dismiss="modal" onclick="return setTravelerDetails('#mobileDropdwon', '#flush-collapseOne');">Set</button>
+						</div>
+					</div>
+				  </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <!-- service modal end -->
+	    
+	    
+	    
+	    <script>
+			function setTravelerDetails(btn, formData) {
+				var nText = $(btn).children(".n-text");
+				var optionList = $(formData + " select");
+				var paxCount = 0;
+				var journeyType = "";
+				nText.empty();
+				
+				$.each(optionList, function( index, value ) {
+					if(index == 0) {
+						journeyType =  value.value;
+					} else {
+						paxCount = paxCount + parseInt(value.value);
+					}
+				})
+				
+				nText.text(journeyType + " Pax " + paxCount);
+			}
+		</script>
+	    
+	    
+	    
+	    
+	    <section class="py-12">
+          
+	        <div class="row side-slider-mobile ms-0">
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <div class="trending-topic-content" >
+	                        <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <div class="trending-topic-content text-center">
+	                        <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/flight_grid_5f.png}" class="mb-1 d-inline-block" alt="">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Dragon Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                    <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
+	                    <div class="trending-topic-content">
+	                        <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+            
+		</section>
+	
+	    <!-- history start -->
+		<section class="py-12" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+	      <!-- cards -->
+	      <div class="row"> 
+	        <!-- item 1 -->
+	        <div class="col-4 ">
+	            <div class="d-flex flex-column justify-content-start align-items-center border radius-8 p-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sort-down" viewBox="0 0 16 16">
+					  <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+					</svg>
+	                <div >
+	            		<p><b class="m-0 theme" style="font-size: 12px;"> &nbsp;&nbsp;Lowest Fare Airline</b></p>
+	    				<small class="mb-0" style="font-size: 10px;"> &nbsp;&nbsp;Guaranteed</small>	
+					</div>
+	            </div>
+	        </div>
+	        <div class="col-4 ">
+	            <div class="d-flex flex-column justify-content-start align-items-center border radius-8 p-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-journal-plus" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5"/>
+					  <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+					  <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+					</svg>
+	                <div >
+	            		<p><b class="m-0 theme" style="font-size: 12px;"> &nbsp;&nbsp;Easy Booking</b></p>
+	    				<small class="mb-0" style="font-size: 10px;"> &nbsp;&nbsp;Just 3 Steps</small>	
+					</div>
+	            </div>
+	        </div>
+	        <div class="col-4 ">
+	            <div class="d-flex flex-column justify-content-start align-items-center border radius-8 p-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-telephone-outbound" viewBox="0 0 16 16">
+					  <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zM11 .5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-4.146 4.147a.5.5 0 0 1-.708-.708L14.293 1H11.5a.5.5 0 0 1-.5-.5"/>
+					</svg>
+	                <div >
+	            		<p><b class="m-0 theme" style="font-size: 12px;"> &nbsp;&nbsp;24x7</b></p>
+	    				<small class="mb-0" style="font-size: 10px;"> &nbsp;&nbsp;Free Phone Assistance</small>	
+					</div>
+	            </div>
+	        </div>
+			  
+	      </div>
+			
+		</section>
+		<section class="py-12" sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+	      <!-- title -->
+	      <div class="title d-flex align-items-center justify-content-start">
+            <h2 class="shrink-0"><span class="black-theme">Search </span><span class="theme">History</span></h2>
+	      </div>
+	      <!-- cards -->
+	      <div class="row"> 
+	        <!-- item 1 -->
+	        <div class="col-4 ">
+			   <form th:action="@{/loading___}" method="get" >
+					<th:block th:if="${lastValue1 != null}">
+					   <input type="hidden" name="searchId" th:value="${lastValue1.id}">
+					   <button type="submit" class="historybtn d-flex flex-column justify-content-start align-items-center border radius-8 p-2 mb-2">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+							</svg>
+			          		<p class="float-left theme" style="padding-left: 5px; font-size: 12px;"><b>[[${#dates.format(lastValue1.date, 'dd MMM, yy')}]]</b></p>
+			          		<small style="font-weight: 600; color: #777;"> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small>
+					   </button>
+					</th:block>
+			   </form>
+	        </div>
+	        <div class="col-4 ">
+			   <form th:action="@{/loading___}" method="get" >
+					<th:block th:if="${lastValue2 != null}">
+					   <input type="hidden" name="searchId" th:value="${lastValue2.id}">
+					   <button type="submit" class="historybtn d-flex flex-column justify-content-start align-items-center border radius-8 p-2 mb-2">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+							</svg>
+			          		<p class="float-left theme" style="padding-left: 5px; font-size: 12px;"><b>[[${#dates.format(lastValue2.date, 'dd MMM, yy')}]]</b></p>
+			          		<small style="font-weight: 600; color: #777;"> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small>
+					   </button>
+					</th:block>
+			   </form>
+	        </div>
+	        <div class="col-4 ">
+			   <form th:action="@{/loading___}" method="get" >
+					<th:block th:if="${lastValue3 != null}">
+					   <input type="hidden" name="searchId" th:value="${lastValue3.id}">
+					   <button type="submit" class="historybtn d-flex flex-column justify-content-start align-items-center border radius-8 p-2 mb-2">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+							</svg>
+			          		<p class="float-left theme" style="padding-left: 5px; font-size: 12px;"><b>[[${#dates.format(lastValue3.date, 'dd MMM, yy')}]]</b></p>
+			          		<small style="font-weight: 600; color: #777;"> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small>
+					   </button>
+					</th:block>
+			   </form>
+	        </div>
+			  
+	      </div>
+			
+		</section>
+	    <!-- history end -->
+	
+	
+	    <!-- visited start -->
+	    <section class="visited py-12">
+	      <!-- title -->
+	      <div class="title d-flex align-items-center justify-content-between">
+			  <div class="shrink-0">
+	            <small class="theme1">Recomended Flights</small>
+	            <h2><span class="black-theme">Check Our </span> <span class="theme">Scheduled Flights</span></h2>
+			  </div>
+			  
+				<script>
+					var leastDareLength = 0;
+				</script>
+				<th:block th:each="fareL : ${leastFares}">
+					<th:block th:if="${fareL.productDetail.date} != null">
+						
+						<script>
+							leastDareLength = leastDareLength + 1;
+						</script>
+					</th:block>
+				</th:block>
+	            <small style="color: #777;">Count - <span id="listSizeLeast"></span></small>
+				<script>
+					$("#listSizeLeast").text(leastDareLength);
+				</script>
+	      </div>
+	
+	      <div class="swiper visited-swiper ">
+	        <div class=" side-slider-frequent">
+				  
+				<th:block th:each="fareL : ${leastFares}">
+					<th:block th:if="${fareL.productDetail.date} != null">
+			          <!-- item-1 -->
+			          <div class="swiper-slide place-card">
+		                <div class="m-2 radius-8 shadow">
+				            <a th:href="@{${fareL.url}}">
+				              <div class="image position-relative">
+				                <img th:class="'brandImgLeast' + ${fareL.id} + ' img-fluid w-100 overflow-hidden radius-8'">
+				                <span class="d-flex align-items-center justify-content-center rounded-full">
+				                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-airplane-engines-fill" viewBox="0 0 16 16">
+									  <path d="M8 0c-.787 0-1.292.592-1.572 1.151A4.35 4.35 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0"/>
+									</svg>
+				                </span>
+				              </div>
+				              <div class="content p-2 pt-0">
+								  <div class="w-100 d-flex justify-content-between align-items-center ms-1">
+				                	<h4>[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]] </h4>
+				                	<p class="theme1 location">[[${fareL.productDetail.brand}]]</p>
+								  </div>
+				                <p class="d-flex align-items-center gap-04 location">
+				                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-geo-alt-fill me-1" viewBox="0 0 16 16">
+									  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+									</svg>
+				                  [[${fareL.productDetail.cityOne}]] - [[${fareL.productDetail.cityTwo}]]
+				                </p>
+				                <p class="d-flex align-items-center gap-04 location mt-1">
+				                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-calendar-check me-1" viewBox="0 0 16 16">
+									  <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+									  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+									</svg>
+				                  [[${fareL.productDetail.depTime}]] - [[${fareL.productDetail.arrTime}]]
+				                </p>
+				                <div class="price d-flex align-items-center justify-content-between">
+				                  <h3>[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></h3>
+				                  <p class="d-flex align-items-center gap-04">
+				                    <img th:src="@{/assets/svg/star-yellow.svg}" alt="icon">
+				                    4.4 <span>(32)</span>
+				                  </p>
+				                </div>
+				              </div>
+				            </a>
+		                </div>
+		                <script>
+				          	if ([[${fareL.productDetail.stopNum}]] == 0) {
+				          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+				          	} else {
+				          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+				          	}
+			          		
+			          		//**************************//
+				          	
+				          	var timeDuration = [[${fareL.productDetail.duration}]];
+				          	var timeInHour = Math.floor(timeDuration / 60);
+				          	var timeRemaining = timeDuration - (timeInHour * 60);
+				          	
+				          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+				          	
+			          		//**************************//
+			          		
+				          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
+			          		
+			          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+			          		
+			          		//**************************//
+			          		
+			          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+			          		 
+							function checkBrandImageDataLeast(id) {
+								var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
+								  
+						  		$.get(url, function(response) {
+									$(id).attr("src", response);
+									$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
+									$(id).css("width", '100%');
+									$(id).css("height", '80px');
+								}).fail(function(){
+									alert("Could not connect to the server.");
+								});
+							}
+							
+							
+						</script>
+						
+	          			</div>
+					</th:block>
+				</th:block>
+
+	         
+	        </div>
+	      </div>
+	    </section>
+	    <!-- visited end -->
+
+		<div th:replace="top-destination :: element-mobile"></div>
+	
+    <!-- visited start -->
+    <section class="visited py-12">
+      <!-- title -->
+      <div class="title d-flex align-items-center justify-content-between">
+	    <h2 class="shrink-0"><span class="black-theme">Frequently </span> <span class="theme">visited</span></h2>
+        <div class="custom-pagination frequent-visited-pagination" style="width: fit-content;"></div>
+      </div>
+
+      <div class="swiper frequent-visited-swiper">
+        <div class="swiper-wrapper">
+          <!-- item-1 -->
+          <div class="swiper-slide place-card">
+            <a href="vacation-details.html">
+              <div class="image position-relative">
+                <img th:src="@{/assets/mobile/home/item-1.png}" alt="desert" class="img-fluid w-100 overflow-hidden radius-8">
+                <span class="d-flex align-items-center justify-content-center rounded-full">
+                  <img th:src="@{/assets/svg/heart-red.svg}" alt="icon">
+                </span>
+              </div>
+              <div class="content">
+                <h4>Tahiti Beach</h4>
+                <p class="d-flex align-items-center gap-04 location">
+                  <img th:src="@{/assets/svg/map-marker.svg}" alt="icon">
+                  Polynesia, French
+                </p>
+                <div class="price d-flex align-items-center justify-content-between">
+                  <h3>$235</h3>
+                  <p class="d-flex align-items-center gap-04">
+                    <img th:src="@{/assets/svg/star-yellow.svg}" alt="icon">
+                    4.4 <span>(32)</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- item-2 -->
+          <div class="swiper-slide place-card">
+            <a href="vacation-details.html">
+              <div class="image position-relative">
+                <img th:src="@{/assets/mobile/home/item-2.png}" alt="desert" class="img-fluid w-100 overflow-hidden radius-8">
+                <span class="d-flex align-items-center justify-content-center rounded-full">
+                  <img th:src="@{/assets/svg/heart-black.svg}" alt="icon">
+                </span>
+              </div>
+              <div class="content">
+                <h4>St. Lucia Mountain</h4>
+                <p class="d-flex align-items-center gap-04 location">
+                  <img th:src="@{/assets/svg/map-marker.svg}" alt="icon">
+                  South America
+                </p>
+                <div class="price d-flex align-items-center justify-content-between">
+                  <h3>$235</h3>
+                  <p class="d-flex align-items-center gap-04">
+                    <img th:src="@{/assets/svg/star-yellow.svg}" alt="icon">
+                    4.4 <span>(41)</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- item-3 -->
+          <div class="swiper-slide place-card">
+            <a href="vacation-details.html">
+              <div class="image position-relative">
+                <img th:src="@{/assets/mobile/home/item-1.png}" alt="desert" class="img-fluid w-100 overflow-hidden radius-8">
+                <span class="d-flex align-items-center justify-content-center rounded-full">
+                  <img th:src="@{/assets/svg/heart-red.svg}" alt="icon">
+                </span>
+              </div>
+              <div class="content">
+                <h4>Tahiti Beach</h4>
+                <p class="d-flex align-items-center gap-04 location">
+                  <img th:src="@{/assets/svg/map-marker.svg}" alt="icon">
+                  Polynesia, French
+                </p>
+                <div class="price d-flex align-items-center justify-content-between">
+                  <h3>$235</h3>
+                  <p class="d-flex align-items-center gap-04">
+                    <img th:src="@{/assets/svg/star-yellow.svg}" alt="icon">
+                    4.4 <span>(32)</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- item-4 -->
+          <div class="swiper-slide place-card">
+            <a href="vacation-details.html">
+              <div class="image position-relative">
+                <img th:src="@{/assets/mobile/home/item-2.png}" alt="desert" class="img-fluid w-100 overflow-hidden radius-8">
+                <span class="d-flex align-items-center justify-content-center rounded-full">
+                  <img th:src="@{/assets/svg/heart-black.svg}" alt="icon">
+                </span>
+              </div>
+              <div class="content">
+                <h4>St. Lucia Mountain</h4>
+                <p class="d-flex align-items-center gap-04 location">
+                  <img th:src="@{/assets/svg/map-marker.svg}" alt="icon">
+                  South America
+                </p>
+                <div class="price d-flex align-items-center justify-content-between">
+                  <h3>$235</h3>
+                  <p class="d-flex align-items-center gap-04">
+                    <img th:src="@{/assets/svg/star-yellow.svg}" alt="icon">
+                    4.4 <span>(41)</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- visited end -->
+	    	
+	    <!-- guide start -->
+	    <section class="guide py-12">
+	      <!-- title -->
+	      <div class="title d-flex align-items-center justify-content-between">
+            <h2 class="shrink-0"><span class="black-theme">Tour </span><span class="theme">Guide</span></h2>
+	        <a href="tour-guide.html" class="shrink-0 d-inline-block">See All</a>
+	      </div>
+	
+	      <!-- cards -->
+	      <div class="d-flex gap-24 all-cards scrollbar-hidden">
+	        <!-- item 1 -->
+	        <a href="profile/guide-profile.html" class="d-flex gap-16 item w-fit shrink-0">
+	          <div class="image position-relative shrink-0">
+	            <img th:src="@{/assets/mobile/home/guide-1.png}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
+	            <div class="rating d-flex align-items-center gap-04 w-fit">
+	              <img th:src="@{/assets/svg/star-yellow.svg}" alt="Star">
+	              <span class="d-inline-block">4.0</span>
+	            </div>
+	          </div>
+	
+	          <div class="content">
+	            <h4>Emilia Ricardo</h4>
+	            <h5>$25 (1 Day)</h5>
+	            <p class="d-flex align-items-center gap-8 location">
+	              <img th:src="@{/assets/svg/map-black.svg}" alt="icon">
+	              Polynesia, French 
+	            </p>
+	          </div>
+	        </a>
+	
+	        <!-- item 2 -->
+	        <a href="profile/guide-profile.html" class="d-flex gap-16 item w-fit shrink-0">
+	          <div class="image position-relative shrink-0">
+	            <img th:src="@{/assets/mobile/home/guide-2.png}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
+	            <div class="rating d-flex align-items-center gap-04 w-fit">
+	              <img th:src="@{/assets/svg/star-yellow.svg}" alt="Star">
+	              <span class="d-inline-block">4.0</span>
+	            </div>
+	          </div>
+	
+	          <div class="content">
+	            <h4>Jonsky Alexia</h4>
+	            <h5>$30 (1 Day)</h5>
+	            <p class="d-flex align-items-center gap-8 location">
+	              <img th:src="@{/assets/svg/map-black.svg}" alt="icon">
+	              South America 
+	            </p>
+	          </div>
+	        </a>
+	
+	      </div>
+	    </section>
+	    <!-- guide end -->
+	    	
+	    <!-- guide start -->
+	    <section class="guide py-12">
+	      <!-- title -->
+	      <div class="title d-flex align-items-center justify-content-between">
+            <h2 class="shrink-0"><span class="black-theme">Customer </span><span class="theme">Review</span></h2>
+	        <a href="tour-guide.html" class="shrink-0 d-inline-block">See All</a>
+	      </div>
+	
+	      <!-- cards -->
+	      <div class="d-flex gap-24 all-cards scrollbar-hidden">
+	        <!-- item 1 -->
+	        <a href="profile/guide-profile.html" class="d-flex col-8">
+	          <div class="image position-relative shrink-0">
+	            <img th:src="@{/assets/mobile/home/guide-1.png}" alt="guide" class="guide-img object-fit-cover img-fluid rounded-circle">
+	          </div>
+	
+	          <div class="content ms-2">
+	            <h4 style="font-size: 16px;">Emilia Ricardo</h4>
+	            <div class="d-flex align-items-center gap-04 w-fit">
+	              <img th:src="@{/assets/svg/star-yellow.svg}" alt="Star">
+	              <b class="d-inline-block" style="font-size: 12px;">4.0</b>
+	            </div>
+	            <p class="gap-8 location myParagraph">
+	              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce rutrum non nibh sit amet dignissim. Suspendisse ipsum nibh, malesuada eget nunc finibus, mattis convallis nisi. Aliquam sed arcu imperdiet justo porttitor varius ut et tellus.  
+	            </p>
+	          </div>
+	        </a>
+	
+	        <!-- item 2 -->
+	        <a href="profile/guide-profile.html" class="d-flex col-8">
+	          <div class="image position-relative shrink-0">
+	            <img th:src="@{/assets/mobile/home/guide-1.png}" alt="guide" class="guide-img object-fit-cover img-fluid rounded-circle">
+	          </div>
+	
+	          <div class="content ms-2">
+	            <h4 style="font-size: 16px;">Emilia Ricardo</h4>
+	            <div class="d-flex align-items-center gap-04 w-fit">
+	              <img th:src="@{/assets/svg/star-yellow.svg}" alt="Star">
+	              <b class="d-inline-block" style="font-size: 12px;">4.0</b>
+	            </div>
+	            <p class="gap-8 location myParagraph">
+	              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce rutrum non nibh sit amet dignissim. Suspendisse ipsum nibh, malesuada eget nunc finibus, mattis convallis nisi. Aliquam sed arcu imperdiet justo porttitor varius ut et tellus.  
+	            </p>
+	          </div>
+	        </a>
+	
+	      </div>
+	    </section>
+	    <!-- guide end -->
+	  </main>
+	
+	  
+ 	</div>
+</body>
+</html>

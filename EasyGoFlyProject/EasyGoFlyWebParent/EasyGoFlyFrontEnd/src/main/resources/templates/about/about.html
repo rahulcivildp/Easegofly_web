@@ -2,59 +2,66 @@
 <html xmlns:th=http://www.thymeleaf.org>
 <head>
 	<head th:replace="fragments :: page_head(': About Us', 'tag')"></head>
-	
-	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
- 	 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
-    </script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'G-TNN6EKSPHR');
-	</script>
-	<!-- Google Analytics -->
-	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	
-	ga('create', 'UA-XXXXX-Y', 'auto');
-	ga('send', 'pageview');
-	</script>
-	<!-- End Google Analytics -->
 </head>	
-<style>
-	@media screen and (max-width: 700px) {
-		
-	}
-</style>
-<body th:style="'background-image: url(' + @{'/assets//img/1971537-temp.jpg'} + ');'" >
-	<div>
-	<!-- ======= Header ======= -->
-	  <header id="header" class="fixed-top d-flex align-items-center" >
-	  	<div th:replace="fragments :: page_header('tag')"></div>
-	  </header>
-	    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-	  <div th:replace="whatsapp :: content"></div>
-	<br class="media-hide">
-	<br class="media-hide">
-	<br class="media-hide">
-	<br class="media-hide">
-	<br class="media-hide">
-	<div th:replace="about/about-fragments :: content"></div>
-	
-	  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-	
-	 <script type="text/javascript" th:src="@{/js/login.js}"></script>
+<body>
+	<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
 	</div>
 	
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+	  <section id="preloader-mobile" class="spalsh-screen">
+	    <div class="circle text-center">
+	      <div>
+	        <h1>EaseGoFly</h1>
+	        <p>Discover Your Destinition</p>
+	      </div>
+	    </div>
+	    <div class="loader-spinner">
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	    </div>
+	  </section>
+	  <!-- splash-screen end -->
 	
- <footer th:replace="fragments :: page_footer"></footer>
+	  <main class="home p-0">
+	    <div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+	  </main>
+	</div>
+	
+	<div th:replace="whatsapp :: content"></div>
+	<br class="media-hide">
+	
+	  <main class="home p-0">
+	    
+		<div th:replace="about/about-fragments :: content"></div>
+	    
+	
+	  </main>
+	
+	
+ 
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
 </body>
 </html>

@@ -31,8 +31,8 @@ public class HolidayController {
 	@Autowired private HolidayService service ;
 
 	private String searchURL = "";
-	private String bookingURL = "";
-	private String orderURL = "";
+//	private String bookingURL = "";
+//	private String orderURL = "";
 	
 	SightseeingHistory history = new SightseeingHistory();
 

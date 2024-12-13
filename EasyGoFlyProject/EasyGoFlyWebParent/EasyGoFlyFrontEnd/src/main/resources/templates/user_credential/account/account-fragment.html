@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<section class="py-12" style="margin-bottom: 70px;">
+			<div class="container mt-3" id="account-container">
+			    <div class="row">
+			        <!-- Sidebar Navigation -->
+			        <div class="col-lg-3 mb-4">
+			            <div class="profile-card text-center radius-8">
+			                <div class="profile-header">
+			                    <img th:src="@{${customer.photosImagePath}}" alt="Profile Picture" class="profile-picture">
+			                    <h3 class="mt-3" id="userName">[[${customer.fullName}]]</h3>
+			                </div>
+			                <div class="nav flex-column nav-pills" role="tablist">
+			                    <a  class="nav-link active" data-bs-toggle="tab" href="#profile" role="tab">Profile</a>
+			                    <a  class="nav-link" data-bs-toggle="tab" href="#message" role="tab">Messages</a>
+			                    <a  class="nav-link" data-bs-toggle="tab" href="#booking" role="tab">Booking</a>
+			                    <a  class="nav-link" data-bs-toggle="tab" href="#order" role="tab">Order</a>
+			                    <a  class="nav-link" href="#" ><button type="submit" form="logoutForm">Logout!</button></a>
+			                </div>
+			            </div>
+			        </div>
+			        
+			        <!-- Main Content -->
+			        <div class="col-lg-9">
+						<div class="tab-pane active" id="profile" role="tabpanel">
+							<div id="carouselExamp" class="carousel slide radius-8" data-bs-ride="">
+							  <div class="carousel-inner">
+							    <div class="carousel-item active">
+						            <div class="profile-card">
+						                <div class="profile-body">
+						                    <h4 class="mb-4">Profile Details</h4>
+						                    <ul class="list-group">
+						                        <li class="list-group-item d-flex justify-content-between align-items-center">
+						                            <strong>Name:</strong> <span id="userNameDetail">[[${customer.fullName}]]</span>
+						                        </li>
+						                        <li class="list-group-item d-flex justify-content-between align-items-center">
+						                            <strong>Email:</strong> <span id="userEmail">[[${customer.email}]]</span>
+						                        </li>
+						                        <li class="list-group-item d-flex justify-content-between align-items-center">
+						                            <strong>Phone:</strong> <span id="userPhone">[[${customer.phone}]]</span>
+						                        </li>
+						                        <li class="list-group-item d-flex justify-content-between align-items-center">
+						                            <strong>Location:</strong> <span id="userLocation">[[${customer.addressLine1}]]<br> [[${customer.city}]]</span>
+						                        </li>
+						                        <li class="list-group-item d-flex justify-content-between align-items-center">
+						                            <strong>Pin:</strong> <span id="userLocation">[[${customer.state}]] - [[${customer.postalCode}]]</span>
+						                        </li>
+						                    </ul>
+						                    <button class="btn btn-primary mt-4 active" type="button" id="editProfileBtn" data-bs-target="#carouselExamp" data-bs-slide-to="1" aria-label="Slide 2" >Edit Profile</button>
+						                </div>
+						            </div>
+							    </div>
+							    <div class="carousel-item">
+									<form th:action="@{/account/update}" th:object="${customer}" method="post" enctype="multipart/form-data" id="form_hide">
+										<div class="account_update container">
+											<input type="hidden" th:field="*{id}">
+											<input type="hidden" id="custometId" th:value="${customer.id}">
+											<div class="row">
+												<div class="col-md-4">
+													<input type="hidden" th:field="*{photos}">
+													<img class="img-thumbnail img-fluid" id="thumbnail1" th:src="@{${customer.photosImagePath}}" alt="Photo Preview" />
+													<div style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+														<label for="fileImage">Select: </label>
+														<input type="file" name="image" id="fileImage" accept="image/png, image/jpeg" class="mb-2" style="margin-top: 4px; margin-left: 5px;" onchange="showImageThumbnail(this, '#thumbnail')"/>
+													</div>
+												</div>
+												<div class="col-md-8 class_center">
+													<div class="row">
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+																<input type="text" class="form-control" th:field="*{firstName}" minlength="3" maxlength="128">
+															  	<label for="firstName">First Name</label>
+															</div>
+														</div>
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+																<input type="text" class="form-control" th:field="*{lastName}" minlength="3" maxlength="128">
+															  	<label for="lastName">Last Name</label>
+															</div>
+														</div>
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+																<input type="text" class="form-control" th:field="*{phone}" minlength="3" maxlength="128">
+															  	<label for="phone">Phone</label>
+															</div>
+														</div>
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+															  <select class="form-select" th:field="*{gender}" aria-label="Floating label select example">
+															    <option value="Male" selected>Male</option>
+															    <option value="Female">Female</option>
+															    <option value="Trans">Trans</option>
+															  </select>
+															  <label for="gender">Gender</label>
+															</div>
+														</div>
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+																<input class="input form-control" type="text" th:field="*{city}" placeholder="City" />
+															  	<label for="city">City</label>
+															</div>
+														</div>
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+																<input class="input form-control" type="text" th:field="*{state}" placeholder="State" />
+															  	<label for="state">State</label>
+															</div>
+														</div>
+														<div class="col-12 margin-bottom-update-account">
+															<div class="form-floating">
+																<input class="input form-control" type="text" th:field="*{addressLine1}" placeholder="Address Line 1"/>
+															  	<label for="addressLine1">Address Line 1 </label>
+															</div>
+														</div>
+														<div class="col-12 margin-bottom-update-account">
+															<div class="form-floating">
+																<input class="input form-control" type="text" th:field="*{addressLine2}" placeholder="Address Line 2" />
+															  	<label for="addressLine2">Address Line 2</label>
+															</div>
+														</div>
+														<div class="col-6 margin-bottom-update-account">
+															<div class="form-floating">
+																<input class="input form-control" type="text" th:field="*{postalCode}" placeholder="PIN" />
+															  	<label for="postalCode">PIN</label>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-12" style="margin: 15px 0 5px 0">
+													<input class="specialButton" type="submit" value="Update Profile" onclick="checkProperNameAttribute()" style="float: right;"/>
+													<button type="button" class="btn btn-danger active" data-bs-target="#carouselExamp" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1">Cancel</button>
+												</div>
+											</div>
+										</div>
+									</form>
+										
+							    </div>
+							  </div>
+							</div>
+							
+						</div>
+						
+						<div class="tab-pane" id="message" role="tabpanel">
+				            <div class="profile-card">
+				                <div class="profile-body">
+				                    <h4 class="mb-4">Massages</h4>
+				                    
+				                    
+									<form th:action="@{/request/save}" th:object="${request}" method="post">
+										<div class="mobile_account_view" style="padding: 15px 0; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+											<input type="hidden" th:field="*{id}">
+											<h4 class="mb-1 text-center">Submit your query below</h4>
+											<div class="row w-100">
+												<div class="col-12" style="margin-bottom: 10px;">
+													<input class="form-control" th:field="*{subject}" type="text" placeholder="Subject" required>
+												</div>
+												<div class="col-12" style="margin-bottom: 10px;">
+													<textarea class="form-control" name="conversation" rows="8" cols="" placeholder="Ask your question here..."></textarea>
+												</div>
+												<div class="col-12" style="margin-bottom: 10px;">
+													<input class="form-control specialButton" type="submit" value="Submit" style=" width: 100%; height: 37px;">
+												</div>
+											</div>
+										</div>
+									</form>
+									
+									
+									<h4 class="mt-3 mb-1 text-center">Query List</h4>
+									<div th:replace="user_credential/account/request/request_fragment :: request_fragment('tag')"></div>
+				                </div>
+				             </div>
+						</div>
+						<div class="tab-pane" id="booking" role="tabpanel">
+				            <div class="profile-card">
+				                <div class="profile-body">
+				                    <h4 class="mb-4">Manage Booking</h4>
+				                    
+									<h4 class="mt-3 mb-1 text-center">Booking</h4>
+				        			<div th:replace="cart/manage_cart_fragment :: manageBooking('tag')"></div>
+				                </div>
+				             </div>
+							
+						</div>
+						<div class="tab-pane" id="order" role="tabpanel">
+				            <div class="profile-card">
+				                <div class="profile-body">
+				                    <h4 class="mb-4">Manage Order</h4>
+				                    
+									<h4 class="mt-3 mb-1 text-center">Order</h4>
+				        			<div th:replace="cart/manage_order_fragment :: manageOrder('tag')"></div>
+				                </div>
+				             </div>
+							
+						</div>
+						
+						
+			        </div>
+			   
+			</div>
+		</section>
+		<script type="text/javascript">
+
+	moduleURL = "[[@{/}]]";
+	
+	function checkPasswordMatch(confirmPassword) {
+		if(confirmPassword.value != $("#password").val()) {
+			confirmPassword.setCustomValidity("Passwords do not match!");
+		} else {
+			confirmPassword.setCustomValidity("");
+		}
+	}
+	
+</script>
+
+<script type="text/javascript">
+
+var reader = new FileReader();
+reader.onload = function(r_event) {
+  document.getElementById('thumbnail1').setAttribute('src', r_event.target.result);
+}
+
+document.getElementsByName('image')[0].addEventListener('change', function(event) {
+    reader.readAsDataURL(this.files[0]);
+});
+
+</script>
+<script>
+	function checkProperNameAttribute() {
+			var fName = $("#firstName").val();
+			var lName = $("#lastName").val();
+			if(fName.includes('@') || fName.includes('.com')) {
+				document.getElementById("firstName").setCustomValidity("Please do not include '@' or '.com' in your name.");
+				document.getElementById("firstName").reportValidity();
+			} else {
+				document.getElementById("firstName").setCustomValidity("");
+			}
+			
+			if(lName.includes('@') || lName.includes('.com')) {
+				document.getElementById("lastName").setCustomValidity("Please do not include '@' or '.com' in your name.");
+				document.getElementById("lastName").reportValidity();
+			} else {
+				document.getElementById("lastName").setCustomValidity("");
+			}
+	}
+</script>
+<script>
+	moduleURL = "[[@{/}]]";
+	imageSize = 1024;
+	
+	sizeScale = "kb";
+	
+	checkImageSize("#fileImage", imageSize, "an image");
+	
+	function checkImageSize(fileInput, size, msg) {
+		$(fileInput).change(function() {
+			fileSize = this.files[0].size;
+			var nesize = fileSize / 1024;
+			imageSizeShort = size * 1024;
+			
+			if (fileSize > imageSizeShort) {
+				var strmsg = "You must choose "+msg+" less than "+size+" "+sizeScale+"! Current image size is " + nesize + " kb.";
+				this.setCustomValidity(strmsg);
+				this.reportValidity();
+				showModelDialogue("Warning!", strmsg)
+			} else {
+				this.setCustomValidity("");
+				showImageThumbnail(this);
+			}
+		})
+	}
+	
+	function showModelDialogue(title, message) {
+		if (message != null) {
+			$("#modalTitle").text(title);
+			$("#modalBody").text(message);
+			$("#modalDialogue").modal('show');
+		};
+	};
+	
+	function showImageThumbnail(fileInput, thumb) {
+		var localFile = fileInput.files[0];
+		var extension = fileInput.files[0].name.split('.');
+		var reader = new FileReader();
+		if (extension[1] != "pdf") {
+			reader.onload = function(e) {
+				$(thumb).attr("src", e.target.result);
+			};
+		} 
+			
+		reader.readAsDataURL(localFile);
+		
+	}
+</script>
+	
+<script>
+		$("#checkbtn").click(function(){
+			checkPhone();
+		})
+	
+		function checkPhone() {
+			var custId = $("#custometId").val();
+			var phone = $("input[name='phone']").val();
+			
+			var params = {id: custId, phone: phone};
+			var urlCheck = "[[@{/customers/check_phone}]]";
+				alert(custId);
+				alert(phone);
+				
+	    	
+	    	$.post(urlCheck, params, function(elem) {
+				alert(elem);
+				
+	    	}).fail(function(){
+				consol.log("Something went wrong in the server!");
+	    	});
+		};
+</script>
+
+		
+		
+	</div>
+</body>
+</html>

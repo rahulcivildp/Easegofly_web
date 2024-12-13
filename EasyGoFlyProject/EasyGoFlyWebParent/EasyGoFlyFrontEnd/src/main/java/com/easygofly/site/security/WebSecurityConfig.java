@@ -80,17 +80,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("/", "/favicon/**", "/site-logo/**", "/customers/**", "/login**", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
-					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml", "/indirect_login**",
-					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search_return_save",  "/flight_search**",
+			.antMatchers("/", "/favicon/**", "/site-logo/**", "/images/**", "/customers/**", "/login**", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
+					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml", "/indirect_login**", "/indirect_login/**",
+					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search/return_**",  "/flight_search**",
 					"/flight_international_search_save", "/flight_international_search_return_save", "/flight_search_**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", 
 					"/get_value", "/rishikesh_view", "/shimla_view", "/kolkata_view", "/darjeeling_view", "/bangalore_view", "/kerala_view", "/mumbai_view", 
-					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/flight_booking**",
+					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/flight_booking**", "/flight_booking/return_**",
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**",  
-					"/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight", "/traveller_details",
+					"/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight", "/traveller_details**",
 					"/hotel/saveSearchHotel", "/hotel/search_**", "/hotel_loading...", "/bus", "/bus/saveSearchBus", "/bus_loading...", "/bus/search_**", "/holiday", "/bus/test_response", 
 					"/bus/transport-**", "/test_wallet_send_email", "/testing", "/get_flight_list", "/get_least_fare_by_brand", "/get_next_day_flight",
-					"/get_previous_day_flight", "/sort_flights_by_**", "/noUser_search_filter", "/mode", "/bus/transport_**", "/coming_soon").permitAll()
+					"/get_previous_day_flight", "/sort_flights_by_**", "/noUser_search_filter", "/mode", "/bus/transport_**", "/coming_soon", "/test_redirect", "/flight_redirect", 
+					"/assets/images/**", "/contact-us").permitAll()
 			.anyRequest().authenticated()
             .and()
             .addFilterBefore(beforeLoginFilter,
@@ -128,11 +129,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				.expiredUrl("/login");
 		
 			http.cors();
-	}
+	} 
 	
 	@Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**", "../customer-photos/**");
+        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/assets/js/**", "/assets/css/**", "/assets/images/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**", "../customer-photos/**");
     } 
 	
 	@Bean

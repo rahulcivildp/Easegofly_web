@@ -58,8 +58,6 @@ public class CustomerService {
 	}
 	
 	public Customer loginEmailGoogle(String email) {
-		Customer savedCustomer = getByEmail(email);
-		
 		return customerRepo.getCustomerByEmail(email);
 	}
 	

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+	
+    <!-- contact starts -->
+    <section class="contact-main pt-6 pb-60">
+        <div class="container">
+            <div class="contact-info-main mt-0">
+                <div class="row">
+                    <div class="col-lg-10 col-offset-lg-1 mx-auto">
+                        <div class="contact-info">
+                            <div class="contact-info-title text-center mb-4">
+                                <h3 class="mb-1 black-theme">INFORMATION ABOUT US</h3>
+                                <div class="mb-0 black-theme"> <span><div th:utext="${CONTACT_US}"></div></span></div>
+                                <div class="mb-2 black-theme"> <span th:utext="${SERVICE}"></span></div>
+                            </div>
+                            <div class="contact-info-content row mb-1">
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <div class="info-item bg-lgrey px-4 py-5 border-all text-center rounded">
+                                        <div class="info-icon mb-2">
+                                            <i class="fa fa-map-marker-alt theme"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h3>Office Location</h3>
+                                            <div class="m-0" th:utext="${ADMIN_ADDRESS}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <div class="info-item bg-lgrey px-4 py-5 border-all text-center rounded">
+                                        <div class="info-icon mb-2">
+                                            <i class="fa fa-phone theme"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h3>Phone Number</h3>
+                                            <p class="m-0">[[${WHATSAPP}]]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 mb-4">
+                                    <div class="info-item bg-lgrey px-4 py-5 border-all text-center rounded">
+                                        <div class="info-icon mb-2">
+                                            <i class="fa fa-envelope theme"></i>
+                                        </div>
+                                        <div class="info-content ps-4 info-content-email">
+                                            <h3>Email Address</h3>
+                                        </div>
+                                        <script>
+											$(document).ready(function(){
+												var emailList = '[[${ADMIN_EMAILS}]]';
+												var arrEmail = emailList.split(',');
+												
+												for (let i = 0; i < arrEmail.length; i++) {
+													var htmls = "<p class='m-0'>" + arrEmail[i] + "</p>";
+													$(".info-content-email").append(htmls);
+												}
+											})
+										</script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="contact-form1" class="contact-form">
+                                <div class="row">
+                                    <div class="col-lg-6 col-12">
+                                        <div class="map rounded overflow-hiddenb rounded mb-4" style="height: fit-content;">
+                                            <div style="width: 100%">
+                                                <iframe height="500" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=+(webkoro)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
+                                        
+                                        <div id="contactform-error-msg"></div>
+
+                                        <form method="post" action="#" name="contactform2" id="contactform2">
+                                            <div class="form-group mb-2">
+                                                <input type="text" name="first_name" class="form-control" id="fullname" placeholder="First Name">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="text" name="last_name" class="form-control" id="llastname" placeholder="Last Name">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="email" name="email"  class="form-control" id="email" placeholder="Email">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="text" name="phone" class="form-control" id="phnumber" placeholder="Phone">
+                                            </div>
+                                            <div class="textarea mb-2">
+                                                <textarea name="comments" placeholder="Enter a message"></textarea>
+                                            </div>
+                                            <div class="comment-btn text-center">
+                                                <input type="submit" class="nir-btn" id="submit2" value="Send Message">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- contact Ends -->
+
+
+	</div>
+	
+</body>
+
+</html>

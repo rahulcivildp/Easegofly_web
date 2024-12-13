@@ -6,336 +6,142 @@
 	<head th:replace="fragments :: page_head(': Login Page', 'tag')"></head>
 
 	  
-	  <style type="text/css">
-	  	*.specialButton {
-			cursor: pointer;
-			width: auto;
-			color: #2c2c2ceb;
-		    padding: 3px 9px;
-		    border-radius: 5px;
-		    border: 1px solid green;
-		    font-weight: 600;
-		    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
-			  -webkit-transition: background-color 2s ease-out;
-			  -moz-transition: background-color 2s ease-out;
-			  -o-transition: background-color 2s ease-out;
-			  transition: background-color 2s ease-out;
-			  -webkit-transition: color 0.5s ease-out;
-			  -moz-transition: color 0.5s ease-out;
-			  -o-transition: color 0.5s ease-out;
-			  transition: color 0.5s ease-out;
-		}
-		*.specialButton:hover {
-			background-color: green;
-			color: white;
-		}
-		*.a_center {
-			width: auto !important;
-		    display: flex !important;
-		    justify-content: center !important;
-		}
-		*.horiz {
-			display: inline-block !important;
-			zoom: 1;
-			float: left;
-			text-align: center;
-			margin: 8px 0;
-    		width: 100% !important;
-		}
-		*.google_button {
-			/* From https://css.glass */
-			background: rgba(139, 239, 163, 0.78);
-			border-radius: 16px;
-			backdrop-filter: blur(2px);
-			-webkit-backdrop-filter: blur(2px);
-			border: 1px solid rgba(139, 239, 163, 0.28);
-			box-shadow: rgb(0 0 0 / 10%) 0px 10px 20px, rgb(0 0 0 / 10%) 0px 10px 20px;
-			height: 100%;
-		}
-		*.google_button h5 {
-		    display: flex;
-		    justify-content: center;
-		    align-items: center;
-		    margin: 0;
-		    padding: 0;
-		}
-		*.google_button:hover {
-		    background: rgb(116 208 138 / 78%);
-		    backdrop-filter: blur(10px);
-   			-webkit-backdrop-filter: blur(10px);
-   			color: green;
-   			box-shadow: rgb(0 0 0 / 20%) 0px 10px 20px, rgb(0 0 0 / 26%) 0px 10px 20px;
-		}
-		*.facebook_button {
-			background: rgb(139 175 239 / 78%);
-			border-radius: 16px;
-			backdrop-filter: blur(2px);
-			-webkit-backdrop-filter: blur(2px);
-			border: 1px solid rgba(139, 175, 239, 0.28);
-			box-shadow: rgb(0 0 0 / 10%) 0px 10px 20px, rgb(0 0 0 / 10%) 0px 10px 20px;
-			height: 100%;
-		}
-		*.facebook_button h5 {
-		    display: flex;
-		    justify-content: center;
-		    align-items: center;
-		    margin: 0;
-		    padding: 0;
-		    color: #0000ff6e;
-		}
-		*.facebook_button:hover {
-		    background: rgb(107 116 192 / 78%);
-		    backdrop-filter: blur(10px);
-   			-webkit-backdrop-filter: blur(10px);
-   			color: #0000ffb0;
-   			box-shadow: rgb(0 0 0 / 20%) 0px 10px 20px, rgb(0 0 0 / 26%) 0px 10px 20px;
-		}
-  /* Responsive */
-@media only screen and (max-width: 600px) {
-	*.ul_modify {
-	  	border-radius: 7px;
-	  	box-shadow: 0 0 5px 6px;
-	    background: #ffffff2b !important;
-	    backdrop-filter: blur(10px);
-	  }
-	  *.media_status_flex { 
-	  display: flex !important;
-	  justify-content: center;
-	  align-items: center;
-  	}
-  	*.media_status { display: block !important;}
-  	*.media-hide { display: none !important;}
-	  *.inbox_login_button {
-		cursor: pointer;
-		margin: 3px 5px;
-		background: white;
-		width: auto;
-		color: #2c2c2ceb;
-	    padding: 3px 9px;
-	    border-radius: 5px;
-	    border: 1px solid green;
-	    font-weight: 600;
-	    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
-		  -webkit-transition: background-color 2s ease-out;
-		  -moz-transition: background-color 2s ease-out;
-		  -o-transition: background-color 2s ease-out;
-		  transition: background-color 2s ease-out;
-		  -webkit-transition: color 0.5s ease-out;
-		  -moz-transition: color 0.5s ease-out;
-		  -o-transition: color 0.5s ease-out;
-		  transition: color 0.5s ease-out;
-	}
-	*.background_media {
-		background: #c6ecff !important;
-	}
-}
-*.forgot_password {
-	float: right;
-	cursor: pointer;
-	color: blue;
-	font-weight: 600;
-	text-decoration: none;
-}
-*.forgot_password:hover {
-	color: green;
-	text-decoration: blink;
-}
-		.empty1 {
-			border-radius: 26px;
-			border: 1px solid gray;
-			margin-top: 10px;
-			padding: 12px 5px;
-		}
-		
-		
-		.togglerClass {
-			display: none;
-		}
-		.toggleWidth {
-			width: 100%;
-		}
-		.containerHeader {
-			max-width: 81%;
-		}
-			
-		@media screen and (max-width: 700px) {
-			.containerHeader {
-	    		width: 100% !important;
-				max-width: 100% !important;
-			}
-		}
-		#hero {
-			height: auto !important;
-		}
-		.modal-content-stl {
-			background: transparent;
-			border: none;	
-			justify-content: center;
-			align-items: center;
-		}
-	  </style>
+	
 </head>
 <body>
+	
+	
+		<div class="preloading d-none">
+		    <div class="status-loading"></div>
+		</div>
 
+	<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
 
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-  
-	 <div th:replace="whatsapp :: content"></div>
+	 	<div th:replace="whatsapp :: content"></div>
 	 
-	<div>
-		<section id="hero" style="position: absolute; z-index: -1;">
-			<div class="hero-container">
-				<div id="heroCarousel" data-bs-interval="5000"
-					class="carousel slide carousel-fade" data-bs-ride="carousel">
+		
+		<div th:replace="user_credential/login-fragment :: content"></div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content modal-content-stl">
+	            <div class="spinner-border text-primary" role="status">
+	                <span class="sr-only">Loading...</span>
+	            </div>
+		    </div>
+		  </div>
+		</div>
 
-					<div class="carousel-indicators" id="hero-carousel-indicators">
-						<button type="button" data-bs-target="#carouselExampleIndicators"
-							data-bs-slide-to="0" class="active" aria-current="true"
-							aria-label="Slide 1"></button>
-						<button type="button" data-bs-target="#carouselExampleIndicators"
-							data-bs-slide-to="1" aria-label="Slide 2"></button>
-						<button type="button" data-bs-target="#carouselExampleIndicators"
-							data-bs-slide-to="2" aria-label="Slide 3"></button>
-					</div>
 
-					<div class="carousel-inner carousel-inner-cont" role="listbox">
-
-						<!-- Slide 1 -->
-						<div class="carousel-item active"
-							th:style="'background-image: url(' + @{'/assets/img/slide/slide-1.jpg'} + ');'">
-							<div class="carousel-container">
-								<div class="carousel-content">
-									<div></div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Slide 2 -->
-						<div class="carousel-item"
-							th:style="'background-image: url(' + @{'/assets/img/slide/slide-2.jpg'} + ');'">
-							<div class="carousel-container">
-								<div class="carousel-content">
-									<div></div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Slide 3 -->
-						<div class="carousel-item"
-							th:style="'background-image: url(' + @{'/assets/img/slide/slide-2.jpg'} + ');'">
-							<div class="carousel-container">
-								<div class="carousel-content">
-									<div></div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-					<a class="carousel-control-prev" href="#heroCarousel" role="button"
-						data-bs-slide="prev"> <span
-						class="carousel-control-prev-icon bi bi-chevron-left"
-						aria-hidden="true"></span>
-					</a> <a class="carousel-control-next" href="#heroCarousel"
-						role="button" data-bs-slide="next"> <span
-						class="carousel-control-next-icon bi bi-chevron-right"
-						aria-hidden="true"></span>
-					</a>
-
+	</div>
+	
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<section id="preloader-mobile" class="spalsh-screen">
+			<div class="circle text-center">
+				<div>
+					<h1>EaseGoFly</h1>
+					<p>Discover Your Destinition</p>
 				</div>
 			</div>
+			<div class="loader-spinner">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
 		</section>
-			<div class="imgbck login_box1" style="padding: 170px 0 35px 0;">
-				<div class="container">
-					<div class="col-md-5 col-12 registration_box" style="box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;">
-					<form th:action="@{/login}" method="post">
-										<!--<p class="text-center">Please <a th:href="@{/registration}" class="specialButton styleLinkHover styleLink"><span> Sign up</span></a> if you're not registered!</p>-->
-										<div style=" border: 1px solid grey; border-radius: 15px; background-color: rgba(255,255,255,0.4); padding: 10px;">
-											<h1 class="text-center" style="margin-bottom: 24px;">Login</h1>
-											<div class="justify-content-center d-flex mt-3">
-												<a class="btn btn-lg btn-secondary text-center" th:href="@{/oauth2/authorization/google}">Continue with Google.</a>
-											</div>
-											<br>
-											<div class="row mb-3">
-											<div th:if="${param.error}">
-											    <p class="text-success"
-											        th:utext="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">Error message</p>
-											</div>
-											<div th:if="${param.otp}">
-											    <p class="text-primary">
-											        Kindly check [[${param.phone}]] and use the provided OTP to login.<br>
-											        Note: The OTP will expire after 5 minutes.
-											    </p>
-											</div>   
-											<div th:if="${param.logout}">
-											    <p class="text-warning">You have been logged out.</p>
-											</div>
-											 
-											<div th:if="${message != null}">
-											    <p class="text-primary">[[${message}]]</p>
-											</div>
-										</div>
-											<div class="row mb-3">
-												<label for="inputEmail3" class="col-sm-6 col-form-label label"><p>
-														Email Or Phone Number:<span class="star_marked"> *</span>
-													</p></label><br>
-												<div class="col-sm-10" style="width: 100%;">
-													<input type="text" name="phone" class="form-control" 
-														placeholder="email or phone" th:value="${param.phone}" required autofocus>
-												</div>
-											</div>
-											<div class="row mb-3">
-												<th:block th:if="${param.otp != null && param.phone != null}">
-													<label for="inputPassword3" class="col-sm-4 col-form-label label"><p>
-															OTP:<span class="star_marked"> *</span>
-														</p></label>
-													<div class="col-sm-10" style="width: 100%;">
-														<input type="password" class="form-control input" name="password"
-															 placeholder="XXXXXX" required>
-													</div>
-												</th:block>
-											</div>
-											<th:block th:if="${param.otp != null}">
-												<!--<div class="row mb-3">
-													<div><input type="checkbox" name="remember-me">&nbsp; Remember me</div>
-													
-												</div>-->
-											</th:block>
-											<div class="row mb-3" style="width: 40%; margin: 0 auto;">
-												<th:block th:if="${param.otp == null}"><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" > Send OTP</button></th:block>
-												<th:block th:if="${param.otp != null}"><button type="submit" class="btn btn-primary" > Login</button></th:block>
-											</div>
-										</div>
-									</form>
-									
-					</div>
-					
-					
-					
-			</div>
-			</div>
-		</div>
-		</div>
+		<!-- splash-screen end -->
+	
+		<main class="home p-0">
+	   		<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+	    
 		
-			<!-- Modal -->
-			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-			  <div class="modal-dialog modal-dialog-centered">
-			    <div class="modal-content modal-content-stl">
-		            <div class="spinner-border text-primary" role="status">
-		                <span class="sr-only">Loading...</span>
-		            </div>
-			    </div>
-			  </div>
-			</div>
-
-<div style="height: 600px;"></div>
-
-		<footer th:replace="fragments :: page_footer"></footer>
+			  <!-- signin start -->
+			    <section class="auth signin">
+			      <div class="heading">
+			        <h2>Hi, Welcome Back!</h2>
+			      </div>
+			  
+			      
+				<div class="form-area auth-form">
+					
+					<div th:if="${param.error}">
+					    <p class="text-success"
+					        th:utext="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">Error message</p>
+					</div>
+					<div th:if="${param.otp}">
+					    <p class="text-primary">
+					        Kindly check [[${param.phone}]] and use the provided OTP to login.<br>
+					        Note: The OTP will expire after 5 minutes.
+					    </p>
+					</div>   
+					<div th:if="${param.logout}">
+					    <p class="text-warning">You have been logged out.</p>
+					</div>
+					 
+					<div th:if="${message != null}">
+					    <p class="text-primary">[[${message}]]</p>
+					</div>
+			        <form th:action="@{/login}" method="post">
+			          <div>
+			            <label for="lemail1">Email</label>
+			            <input type="text" name="phone"  id="lemail1" placeholder="Enter your email address" class="input-field" th:value="${param.phone}" required autofocus>
+						<th:block th:if="${param.otp != null && param.phone != null}">
+							<label for="inputPassword3" class="col-sm-4 col-form-label label"><p>
+									OTP:<span class="star_marked"> *</span>
+								</p></label>
+							<div class="col-sm-10" style="width: 100%;">
+								<input type="password" class="form-control input" name="password"
+									 placeholder="XXXXXX" required>
+							</div>
+						</th:block>
+			          </div>
+			          
+						<th:block th:if="${param.otp == null}"><button type="submit" class="btn btn-primary" onclick="return loginbtnClick(this);" > Send OTP</button></th:block>
+						<th:block th:if="${param.otp != null}"><button type="submit" class="btn btn-primary" > Login</button></th:block>
+			        </form>
+			  
+			        <div class="divider d-flex align-items-center justify-content-center gap-12">
+			          <span class="d-inline-block"></span>
+			          <small class="d-inline-block">Or continue with</small>
+			          <span class="d-inline-block"></span>
+			        </div>
+			  
+			        <div class="d-flex flex-column gap-16">
+			          <button type="button" class="social-btn" data-bs-toggle="modal" data-bs-target="#loginSuccess">
+			            <img src="../../assets/svg/icon-google.svg" alt="Google">
+			            Continue with Google
+			          </button>
+			        </div>
+			  
+			      </div>
+			    </section>
+			    <!-- signin end -->
+		</main>
 	</div>
 
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
 </body>
 <script>
 	$("#return-next").click(function(){
@@ -350,6 +156,11 @@
 		$("#return-next").css("display", "none");
 		$("#return-previous").css("display", "flex");
 	})
+	
+	
+	if (window.innerWidth < 900) { 
+		$(".login-img").css("height", "100vh");
+	}
 </script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>

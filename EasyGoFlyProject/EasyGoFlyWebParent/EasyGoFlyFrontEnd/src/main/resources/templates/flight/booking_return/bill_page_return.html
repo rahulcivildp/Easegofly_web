@@ -4,60 +4,126 @@
 
 <body>
 <div th:fragment="bill_section(remove)" th:remove="${remove}">
-	<div>
-	    <div id="selection_summary" class="booking_tiles">
-	        <div style="background-color: #ecf5fd;">
-	            <p style="margin: 0;font-size: 16px;padding: 8px; font-weight:600;">Selection Summary</p>
+	
+	<div class="sidebar-sticky ">
+	    <div class="sidebar-item bg-white rounded box-shadow overflow-hidden p-3 mb-2 shadow">
+	        <h4>Your Booking Details</h4>
+	        <div class="trend-full border-b py-2 mb-2">
+	            <div class="d-flex justify-content-start align-items-end">
+	               
+	            	<img  th:class="'brandImg' + ${flightOne.id} + ' radius-8'" style="width: 30%;">
+	                
+	                <div class="ms-2 trend-content position-relative">
+	                    <small class="text-uppercase">[[${flightOne.brand}]]</small>
+	                    <small>[[${flightOne.craftType}]]</small><br>
+	                    <h6 class="theme mb-0"><i class="icon-location-pin"></i> [[${search.cityOne}]] - [[${search.cityTwo}]]</h6>
+	                </div>
+	            </div>
 	        </div>
-	        <div>
-	            <div class="accordion accordion-flush" id="accordionFlushExample">
-	                <div class="accordion-item">
-	                    <h2 class="accordion-header" id="flush-headingOne1" style="background-color: white !important;">
-	                        <div aria-expanded="true">
-	                            <div class="row">
-	                                <div class="col-md-6">
-	                                    <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne1" data-bs-target="#flush-collapseOne1" data-bs-toggle="collapse" id="summaries">Base Fare</button>
-	                                </div>
-	                                <div class="col-md-6"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i>[[${totalPrice}]]</p></div>
-	                            </div>
-	                        </div>
-	                    </h2>
-	                    <div id="flush-collapseOne1" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
+	        <div class="trend-check">
+	            <div class="row">
+	                <div class="col-lg-12">
+	                    <div class="trend-check-item bg-grey rounded p-3 mb-2">
+	                        <p class="mb-0">Departure</p>
+	                        <h6 class="mb-0">[[${#dates.format(search.date, 'E dd MMM yyyy')}]] | <small>[[${flightOne.depTime}]]</small></h6>
+	                    </div>
+	                </div>
+	                <div class="col-lg-12">
+	                    <div class="trend-check-item bg-grey rounded p-3 mb-2">
+	                        <p class="mb-0">Arraival</p>
+	                        <h6 class="mb-0">[[${#dates.format(search.date, 'E dd MMM yyyy')}]] | <small>[[${flightOne.arrTime}]]</small></h6>
 	                        
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div>
-	            <div class="accordion accordion-flush" id="accordionFlushExample">
-	                <div class="accordion-item">
-	                    <h2 class="accordion-header" id="flush-headingOne2" style="background-color: white !important;">
-	                        <div aria-expanded="true">
-	                            <div class="row">
-	                                <div class="col-md-7">
-	                                    <button class="accordion-button summary_btn_stl collapsed" type="button" aria-expanded="false" aria-controls="flush-collapseOne2" data-bs-target="#flush-collapseOne2" data-bs-toggle="collapse" id="summaries">Fee & Surcharges</button>
-	                                </div>
-	                                <div class="col-md-5"><p style="margin: 0;font-size: 16px;padding: 1rem 1.25rem; float: right;"><i class="fa fa-inr" aria-hidden="true"></i> 0000</p></div>
-	                            </div>
-	                        </div>
-	                    </h2>
-	                    <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne2" data-bs-parent="#accordionFlushExample">
-	                        <div class="accordion-body">
-	                        <p>Service Charge: </p>
-	                        <p>GST: </p>
-	                        </div>
+	        
+			<div class="w-100 text-center">
+				<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+					<path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+				</svg>
+				
+			</div>
+	        <div class="trend-full border-b py-2 mb-2">
+	            <div class="d-flex justify-content-start align-items-end">
+	               
+	            	<img  th:class="'brandImg' + ${flightTwo.id} + ' radius-8'" style="width: 30%;">
+	                
+	                <div class="ms-2 trend-content position-relative">
+	                    <small class="text-uppercase">[[${flightTwo.brand}]]</small>
+	                    <small>[[${flightTwo.craftType}]]</small><br>
+	                    <h6 class="theme mb-0"><i class="icon-location-pin"></i> [[${search.cityTwo}]] - [[${search.cityOne}]]</h6>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="trend-check">
+	            <div class="row">
+	                <div class="col-lg-12">
+	                    <div class="trend-check-item bg-grey rounded p-3 mb-2">
+	                        <p class="mb-0">Departure</p>
+	                        <h6 class="mb-0">[[${#dates.format(search.returnDate, 'E dd MMM yyyy')}]] | <small>[[${flightTwo.depTime}]]</small></h6>
+	                    </div>
+	                </div>
+	                <div class="col-lg-12">
+	                    <div class="trend-check-item bg-grey rounded p-3">
+	                        <p class="mb-0">Arraival</p>
+	                        <h6 class="mb-0">[[${#dates.format(search.returnDate, 'E dd MMM yyyy')}]] | <small>[[${flightTwo.arrTime}]]</small></h6>
+	                        
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <div style="border:1px solid grey; height: 40px; background-color: #07162d;">
-	            <h2 style=" float: left; font-size: 18px; margin: 10px 20px; color:white;">Total</h2>
-	            <div style="float: right;">
-	                <p style="margin: 0;font-size: 16px;padding: 8px 20px; color:white;"><i class="fa fa-inr" aria-hidden="true"></i>[[${totalPrice}]]</p>
-	            </div>
-	        </div>
+	
+	    </div>  
+	    <div class="sidebar-item bg-white rounded box-shadow overflow-hidden p-3 mb-4 shadow">
+	        <h4>Your Price Summary</h4>
+	        <table>
+	            <tbody>
+	                <tr>
+	                    <td>No. of Pax</td>
+	                    <td class="theme2" id="passengerNum"></td>
+	                </tr>
+	                <tr>
+	                    <td>Tax & fee</td>
+	                    <td class="theme2">0.00</td>
+	                </tr>
+	                <tr>
+	                    <td>Booking Fee</td>
+	                    <td class="theme2">[[${CURRENCY_SYMBOL}]][[${totalPrice}]]</td>
+	                </tr>
+	            </tbody>
+	            <tfoot class="bg-title">
+	                <tr>
+	                    <th class="font-weight-bold white">Total Amount</th>
+	                    <th class="font-weight-bold white">[[${CURRENCY_SYMBOL}]][[${totalPrice}]]</th>
+	                </tr>
+	            </tfoot>
+	        </table>
 	    </div>
 	</div>
+	
+	<script>
+		
+		checkBrandImageData('.brandImg[[${flightOne.id}]]', '[[${flightOne.brand}]]');
+		checkBrandImageData('.brandImg[[${flightTwo.id}]]', '[[${flightTwo.brand}]]');
+		
+		function checkBrandImageData(id, brand) {
+			var url = "[[@{/find_brand_}]]" + brand;
+			  
+	  		$.get(url, function(response) {
+				$(id).attr("src", response);
+				$(id).attr("alt", brand);
+			}).fail(function(){
+				alert("Could not connect to the server.");
+			});
+		}
+		
+	</script>
+	<script>
+		var totalPassenger = [[${search.adultNum}]] + [[${search.childNum}]] + [[${search.infantNum}]];
+		
+		$("#passengerNum").text(totalPassenger);
+	</script>
 </div>
 </body>
 </html>

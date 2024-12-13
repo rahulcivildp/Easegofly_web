@@ -60,16 +60,24 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			
 			String redirectURl = "";
 			String travelerUrl = "" + pController.travelerUrl;
+			String travelerUrlReturn = "" + pController.travelerUrlReturn;
 			
-			if (redirectURLObject.toString().contains("flight_booking") ) {
-				redirectURl = travelerUrl.split("redirect:")[1];
-			} else if (travelerUrl.equals("")) {
+			if (travelerUrl != "") {
+				redirectURl = travelerUrl;
+			}
+			
+			if (travelerUrlReturn != "") {
+				redirectURl = travelerUrlReturn;
+			}
+			
+			if (redirectURLObject != null) {
+				System.out.println("Redirect Object URL : " + redirectURLObject.toString()); //String
+
 				redirectURl = redirectURLObject.toString();
 			}
 			
         	roleTargetUrlMap.put("Customer", redirectURl);
 			
-			System.out.println("Redirect Object URL : " + redirectURLObject.toString()); //String
 			System.out.println("Redirect URL : " + redirectURl); //String
 
 	        

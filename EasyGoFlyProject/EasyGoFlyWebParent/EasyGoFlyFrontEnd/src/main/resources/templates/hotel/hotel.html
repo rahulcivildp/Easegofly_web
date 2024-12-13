@@ -7,10 +7,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 </head>	
 <style>
 	@media screen and (max-width: 800px) {
-		body #header {
-			position: relative;
-			background: transparent;
-		}
 		.hotel-card-style {
 			height: 110px !important;
 		}	
@@ -38,31 +34,259 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       }
 </style>
 <body>
-<!-- Small svg tabs #6252f3-->
-<div class="media_status" style="position: relative;">
-	<div style="position: absolute; width: 100%; background: white;">
-		<div style="height: 80px; background: #00012a;"></div>
-		<svg style="margin-top: -4px;" version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-			<path d="M0 0 C165 0 330 0 500 0 C500 20.13 500 40.26 500 61 C487.13 59.515 487.13 59.515 474 58 C456.00406544 56.0080186 
-			438.10597728 54.39998477 420 54 C418.83404297 53.96712891 418.83404297 53.96712891 417.64453125 53.93359375 C372.85160316 
-			52.76100401 328.86525639 59.89987911 284.86889648 67.33032227 C265.94767358 70.52556128 247.04925793 73.66832449 228 76 
-			C226.73607422 76.16081055 225.47214844 76.32162109 224.16992188 76.48730469 C160.71645002 84.24699552 97.52327843 77.15872824 
-			34.92041016 66.48071289 C31.58923536 65.91293201 28.25749986 65.34870566 24.92539978 64.78639698 C21.69986321 64.24148133 
-			18.47495482 63.69287771 15.25 63.14453125 C14.05963135 62.94350296 12.8692627 62.74247467 11.64282227 62.53535461 C10.54897217 
-			62.34813339 9.45512207 62.16091217 8.328125 61.96801758 C7.3680957 61.80465408 6.40806641 61.64129059 5.41894531 61.47297668 
-			C3 61 3 61 0 60 C0 40.2 0 20.4 0 0 Z " fill="#00012a" transform="translate(0,0)"/>
-		</svg>
+<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
+	    
+	    <!-- Banner start -->
+		<section class="banner flight-banner pb-14" style="position: relative;" id="headerDiv3">
+			<video autoplay muted loop id="myVideo2" class="pb-4" style="width: 100%; transform: rotateY(180deg);">
+				<source th:src="@{assets/videos/business-jet-in-flight-2023-11-27-05-11-43-utc.mp4}" type="video/mp4">
+				Your browser does not support HTML5 video.
+			</video>
+			  <div style="width: 100%; position: absolute; top: 2%;" id="headerDiv4">
+			    <div class="container" >
+			        <div class="banner-in" >
+			            <div class="row align-items-center position-relative"  id="headerDiv2">
+			
+			                <div class="col-lg-6 mb-4" id="headerDiv1" >
+			                    <div class="banner-content text-lg-start text-center" >
+			                        <h4 class="theme mb-0" style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Explore The World</h4>
+			                        <h1 style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Start Planning Your Dream Trip Today!</h1>
+			                        <p class="mb-4" style="color: #272727; text-shadow:rgb(255, 255, 255) 0px 1px 1px;">EaseGoFly offers seamless travel experiences, connecting you to top destinations with affordable flights and personalized tour packages. Our user-friendly platform makes booking fast and convenient, so you can focus on creating memories. With EaseGoFly, adventure is just a click away.</p>
+			                        
+									
+			                    </div>
+			                </div>
+			                <div class="col-lg-6 mb-4 position-relative" >
+			                    <div class="flight-slider">
+			                        <div class="row review-slider1">
+			                            <div class="col-lg">
+			                                <img th:src="@{/assets/images/flights/3f.jpg}" alt="" class="rounded">
+			                            </div>
+			                            <div class="col-lg">
+			                                <img th:src="@{/assets/images/flights/4f.jpg}" alt="" class="rounded">
+			                            </div>
+			                            <div class="col-lg">
+			                                <img th:src="@{/assets/images/flights/5f.jpg}" alt="" class="rounded">
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			                
+							<div id="tabsModalDiv" class="paddingResize position-absolute w-100" style="z-index: 2; bottom: 100px;">
+									<div th:replace="hotel/hotel-search-tab :: hotel-search"></div>
+							</div>
+			            </div>
+			            <div class="category-main-inner border-t pt-1">
+			                <div class="row side-slider">
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <div class="trending-topic-content">
+			                                <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <div class="trending-topic-content text-center">
+			                                <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <div class="trending-topic-content">
+			                                <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <div class="trending-topic-content">
+			                                <img th:src="@{/assets/images/flights/flight_grid_5f.png}" class="mb-1 d-inline-block" alt="">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Dragon Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <div class="trending-topic-content">
+			                                <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <div class="trending-topic-content">
+			                                <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-3 col-md-6 my-4">
+			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+			                            <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
+			                            <div class="trending-topic-content">
+			                                <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			  </div>
+		    
+		</section>
+	    <!-- Banner end -->
+	
+	<script>
+	    $("#headerDiv1").css("height", $("#headerDiv2").height() + "px");
+	    $("#headerDiv3").css("height", $("#headerDiv4").height() + "px");
+	    // alert($("#headerDiv2").height());
+	
+	</script>
+	    
+	    
+	    
+	    
+</div>
+<div class="hide-mobile btndeactive scrollbar-hidden">
+	  <section id="preloader-mobile" class="spalsh-screen">
+	    <div class="circle text-center">
+	      <div>
+	        <h1>EaseGoFly</h1>
+	        <p>Discover Your Destinition</p>
+	      </div>
+	    </div>
+	    <div class="loader-spinner">
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	      <div></div>
+	    </div>
+	  </section>
+	  <!-- splash-screen end -->
+	
+	  <main class="home">
+	    <div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+	    
+	
+	    <!-- service start -->
+	    <section class="service py-12">
+	      <!-- item 1 -->
+	      <a th:href="@{/}" >
+	        <figure class="item text-center">
+	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto" >
+	            <img th:src="@{/assets/mobile/home/airport.png}" alt="airport" class="img-fluid backface-hidden">
+	          </div>
+	          <figcaption>Flight</figcaption>
+	        </figure>
+	      </a>
+	
+	      <!-- item 3 -->
+	      <a href="#" onclick="return toggleSearch(this);">
+	        <figure class="item text-center">
+	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto img-select" id="toggle-div">
+	            <img th:src="@{/assets/mobile/home/hotel.png}" alt="hotel" class="img-fluid backface-hidden">
+	          </div>
+	          <figcaption>Hotel</figcaption>
+	        </figure>
+	      </a>
+	      <!-- item 2 -->
+	      <a th:href="@{/bus}" >
+	        <figure class="item text-center">
+	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	            <img th:src="@{/assets/mobile/home/car-rental.png}" alt="car" class="img-fluid backface-hidden">
+	          </div>
+	          <figcaption>Bus</figcaption>
+	        </figure>
+	      </a>
+	
+	
+	      <!-- item 4 -->
+	      <figure class="item text-center" data-bs-toggle="modal" data-bs-target="#serviceModal">
+	        <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	          <img th:src="@{/assets/mobile/home/category.png}" alt="category" class="img-fluid backface-hidden">
+	        </div>
+	        <figcaption>More</figcaption>
+	      </figure>
+	    </section>
+	    <!-- service end -->
+	
+	    <!-- search start -->
+	    <section class="search py-0" >
+			<div id="search-bar-py" style="transition: all 0.4s ease-in-out;">
+		        <div id="search-bar-mb" class="search-bar-class">
+					<div th:replace="hotel/hotel-search-tab :: hotel-search"></div>
+					
+				</div>
+			
+			</div>
+                <script>
+					
+			if (window.innerWidth < 900) { 
+					$(".search-tags-mb").css("box-shadow", "none");
+					$(".search-tags-mb").addClass("border radius-8 mb-2");
+					$(".search-tags-mb label").addClass("p-0 m-0 label-change");
+					$(".cityFIcon").addClass("m-0");
+					
+					//$(".search-col").addClass("col-6");
+					//$(".search-tags").removeClass("justify-content-start");
+					//$(".search-tags").addClass("justify-content-around");
+					var totalHeightSearch = ($(".search-tags-mb").height() + convertToInt($(".search-tags-mb").css("padding-top")) + convertToInt($(".search-tags-mb").css("padding-bottom")) + convertToInt($(".search-tags-mb").css("margin-top")) + convertToInt($(".search-tags-mb").css("margin-bottom")));
+					
+					$("#search-bar-mb").css("height", totalHeightSearch + "px");
+					
+					function toggleSearch(id){
+						$("#toggle-div").toggleClass("img-select");
+						$("#search-bar-mb").toggleClass("h-0");
+						$("#search-bar-mb").removeClass("overflow-unset");
+						$("#search-bar-py").toggleClass("py-12");
+					}
+					
+					function convertToInt(str) {
+						var arr = str.split("px");
+						return parseInt(arr[0]);
+					}
+					
+					
+					function toggleOverflowTraveler(){
+						$("#search-bar-mb").addClass("overflow-unset");
+					}
+				}
+				</script>
+	    </section>
+	    <!-- search end -->
+	    
+	  </main>
 	</div>
-</div>
-<div class="media_status" style="position: fixed; width: 100%; height: 110px; z-index: 99; background: #00012a;">
-</div>
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
-  
   <div th:replace="whatsapp :: content"></div>
   
-  <div th:replace="hotel/category :: category('none')"></div>
+ 
   
   <div th:replace="hotel/hotel_middle :: hotel-middle"></div>
   
@@ -71,13 +295,11 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
     </gmp-map>
   </div>-->
- <div style="height: 80px;"></div>
  
- <footer th:replace="fragments :: page_footer"></footer>
+ <footer th:replace="fragments :: page_footer('tag')"></footer>
  
  <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
-<link th:href="@{css/custom.css}" rel="stylesheet">
 </html>	
  
 

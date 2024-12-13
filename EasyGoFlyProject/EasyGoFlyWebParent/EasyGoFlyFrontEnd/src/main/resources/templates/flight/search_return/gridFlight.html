@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<div th:fragment="content" th:remove="tag">
+        <div class="row">
+			<th:block th:each="flightMap, ind : ${flightMaps}">
+				<div class="col-lg-12 col-md-12 mb-4">
+					<div class="trend-item rounded box-shadow px-2">
+						<form th:action="@{/flight_booking_return_save}" method="post" th:id="'booking_form_grid' + ${ind.index}">
+							<input type="hidden" name="timeRemaining" class="timeRemain">
+		      				<input type="hidden" name="adultNum" th:value="${adultNum}">
+		      				<input type="hidden" name="childNum" th:value="${childNum}">
+		      				<input type="hidden" name="infantNum" th:value="${infantNum}">
+		      				<input type="hidden" name="cityOne" th:value="${cityOne}">
+		      				<input type="hidden" name="cityTwo" th:value="${cityTwo}">
+		      				<input type="hidden" name="date" th:value="${strDate}">
+		      				<input type="hidden" name="returnDate" th:value="${strReturnDate}">
+		      				<input type="hidden" name="journeyClass" th:value="${journeyClass}">
+		          			<input type="hidden" name="search_id" th:value="${search.id}">
+				            <input type="hidden" name="device" class="device">
+				            <input type="hidden" name="deviceInfo" class="deviceInfo">
+							<div class="row">
+								<th:block th:each="flight : ${listFlight}" th:if="${flightMap.flightIdOne} == ${flight.id}">
+									<th:block th:if="${passengerNum} <= ${flight.totalSeats}">
+										<div class="col-lg-5 col-md-5 col-5 mb-2 pe-0">
+			            					<input type="hidden" name="flightOne_id" th:value="${flight.id}" th:form="'booking_form_grid' + ${ind.index}">
+									            
+											<button type="submit" style="background: transparent;" class="w-100 pt-2 ">
+							                    <div class="trend-image position-relative radius-8 overflow-hidden">
+							                        <img th:id="'gridBrand' + ${flight.id}">
+							                        <div class="color-overlay"></div>
+							                    </div>
+							                    <div class="trend-content pt-4 position-relative bg-white d-flex align-items-start justify-content-between text-start" style="flex-direction: column;">
+							                        <h3 class="mb-1">
+				                                        <th:block th:each="city : ${cities}">
+				                                        	<th:block th:if="${city.code} == ${flight.cityOne}">
+																[[${city.cityName}]] 
+															</th:block>
+														</th:block>
+														 To 
+				                                        <th:block th:each="city : ${cities}">
+				                                        	<th:block th:if="${city.code} == ${flight.cityTwo}">
+																[[${city.cityName}]] 
+															</th:block>
+														</th:block>
+													</h3>
+							                        <p class="border-b pb-2 mb-2">[[${#dates.format(date, 'dd MMMM, yy')}]] - [[${flight.depTime}]]</p>
+							                        <p class="border-b pb-2 mb-2">
+														<span>Operated by [[${flight.brand}]] | Arriving at [[${flight.arrTime}]]</span><br>
+														<span>Flight [[${flight.craftType}]] | Aircraft [[${flight.craftType}]]</span><br>
+														<span>Adult(s): [[${flight.baggage}]]KG luggage free</span>
+					                                </p>
+				                                    <th:block th:if="${flight.stopNum} == 0">
+								                        <h4 class="theme border-b pb-2 mb-2">Non-Stop</h4>
+													</th:block>
+				                                    <th:block th:if="${flight.stopNum} > 0">
+														<div class="border-b pb-2 mb-2">
+									                        <h4 class="theme">Stop [[${flight.stopNum}]]</h4>
+									                        <th:block th:each="stop : ${flight.stops}">
+																<div class="flight-detail-right">
+					                                                <h5>
+																		<i class="fa fa-plane"></i> 
+					                                                    <th:block th:each="city : ${cities}">
+					                                                    	<th:block th:if="${city.code} == ${stop.cityName}">
+																				[[${city.code}]] - [[${city.name}]], [[${city.cityName}]]
+																			</th:block>
+																		</th:block>
+					                                                </h5>
+					                                        	</div>
+															</th:block>
+														</div>
+													</th:block>
+							                        <div class="entry-meta d-flex align-items-center justify-content-between w-100">
+							                            <div class="entry-author d-flex align-items-center justify-content-start">
+							                                <p class="mb-0">[[${flight.journeyClass}]] from<br><span class="theme fw-bold fs-5"> [[${CURRENCY_SYMBOL}]]<span th:id="'gridtotalPrice-' + ${flight.id}"></span></span> | Base Fare</p>
+							                            </div>
+							                        </div>
+							                    </div>
+											</button>
+								        </div>
+							            <script>
+								          	var totalAdultPrice = ([[${flight.priceADT}]] + [[${flight.markupADT}]]) * ([[${adultNum}]] + [[${childNum}]]);
+							          		var totalInfantPrice = ([[${flight.priceINF}]] + [[${flight.markupINF}]]) * [[${infantNum}]];
+							          		
+							          		var totalPrice = totalAdultPrice + totalInfantPrice;
+							          		$("#gridtotalPrice-" + [[${flight.id}]]).text(totalPrice);
+								          		
+							          		checkBrandImageData('#gridBrand[[${flight.id}]]');
+							          		 
+											function checkBrandImageData(id) {
+												var url = "[[@{/find_brand_}]]" + '[[${flight.brand}]]';
+												  
+										  		$.get(url, function(response) {
+													$(id).attr("src", response);
+													$(id).attr("alt", '[[${flight.brand}]]');
+												}).fail(function(){
+													alert("Could not connect to the server.");
+												});
+											}
+										</script>
+									</th:block>
+								</th:block>
+								
+								<div class="col-lg-2 col-md-2 col-2 d-flex justify-content-center align-items-center p-0">
+									<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
+									</svg>
+								</div>
+								<th:block th:each="flight : ${listFlightReturn}" th:if="${flightMap.flightIdTwo} == ${flight.id}">
+									<th:block th:if="${passengerNum} <= ${flight.totalSeats}">
+										<div class="col-lg-5 col-md-5 col-5 mb-2 ps-0">
+			            					<input type="hidden" name="flightTwo_id" th:value="${flight.id}" th:form="'booking_form_grid' + ${ind.index}">
+									            
+											<button type="submit" style="background: transparent;" class="w-100 pt-2">
+							                    <div class="trend-image position-relative overflow-hidden radius-8">
+							                        <img th:id="'gridBrand' + ${flight.id}">
+							                        <div class="color-overlay"></div>
+							                    </div>
+							                    <div class="trend-content pt-4 position-relative bg-white d-flex align-items-start justify-content-between text-start" style="flex-direction: column;">
+							                        <h3 class="mb-1">
+				                                        <th:block th:each="city : ${cities}">
+				                                        	<th:block th:if="${city.code} == ${flight.cityOne}">
+																[[${city.cityName}]] 
+															</th:block>
+														</th:block>
+														 To 
+				                                        <th:block th:each="city : ${cities}">
+				                                        	<th:block th:if="${city.code} == ${flight.cityTwo}">
+																[[${city.cityName}]] 
+															</th:block>
+														</th:block>
+													</h3>
+							                        <p class="border-b pb-2 mb-2">[[${#dates.format(date, 'dd MMMM, yy')}]] - [[${flight.depTime}]]</p>
+							                        <p class="border-b pb-2 mb-2">
+														<span>Operated by [[${flight.brand}]] | Arriving at [[${flight.arrTime}]]</span><br>
+														<span>Flight [[${flight.craftType}]] | Aircraft [[${flight.craftType}]]</span><br>
+														<span>Adult(s): [[${flight.baggage}]]KG luggage free</span>
+					                                </p>
+				                                    <th:block th:if="${flight.stopNum} == 0">
+								                        <h4 class="theme border-b pb-2 mb-2">Non-Stop</h4>
+													</th:block>
+				                                    <th:block th:if="${flight.stopNum} > 0">
+														<div class="border-b pb-2 mb-2">
+									                        <h4 class="theme">Stop [[${flight.stopNum}]]</h4>
+									                        <th:block th:each="stop : ${flight.stops}">
+																<div class="flight-detail-right">
+					                                                <h5>
+																		<i class="fa fa-plane"></i> 
+					                                                    <th:block th:each="city : ${cities}">
+					                                                    	<th:block th:if="${city.code} == ${stop.cityName}">
+																				[[${city.code}]] - [[${city.name}]], [[${city.cityName}]]
+																			</th:block>
+																		</th:block>
+					                                                </h5>
+					                                        	</div>
+															</th:block>
+														</div>
+													</th:block>
+							                        <div class="entry-meta d-flex align-items-center justify-content-between w-100">
+							                            <div class="entry-author d-flex align-items-center justify-content-start">
+							                                <p class="mb-0">[[${flight.journeyClass}]] from<br><span class="theme fw-bold fs-5"> [[${CURRENCY_SYMBOL}]]<span th:id="'gridtotalPrice-' + ${flight.id}"></span></span> | Base Fare</p>
+							                            </div>
+							                        </div>
+							                    </div>
+											</button>
+									    </div>
+							            <script>
+								          	var totalAdultPrice = ([[${flight.priceADT}]] + [[${flight.markupADT}]]) * ([[${adultNum}]] + [[${childNum}]]);
+							          		var totalInfantPrice = ([[${flight.priceINF}]] + [[${flight.markupINF}]]) * [[${infantNum}]];
+							          		
+							          		var totalPrice = totalAdultPrice + totalInfantPrice;
+							          		$("#gridtotalPrice-" + [[${flight.id}]]).text(totalPrice);
+								          		
+							          		checkBrandImageData('#gridBrand[[${flight.id}]]');
+							          		 
+											function checkBrandImageData(id) {
+												var url = "[[@{/find_brand_}]]" + '[[${flight.brand}]]';
+												  
+										  		$.get(url, function(response) {
+													$(id).attr("src", response);
+													$(id).attr("alt", '[[${flight.brand}]]');
+												}).fail(function(){
+													alert("Could not connect to the server.");
+												});
+											}
+										</script>
+									</th:block>
+								</th:block>
+							</div>
+						</form>
+					</div>
+				</div>
+			</th:block>
+        </div>
+ 
+
+	
+	
+ 
+	</div>
+</body>
+</html>

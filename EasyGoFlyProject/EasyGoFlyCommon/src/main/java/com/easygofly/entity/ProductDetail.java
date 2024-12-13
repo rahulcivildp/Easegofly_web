@@ -124,7 +124,7 @@ public class ProductDetail {
 	@JsonIgnore
 	private Product product;
 	
-	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Stop> stops = new ArrayList<>();
 	

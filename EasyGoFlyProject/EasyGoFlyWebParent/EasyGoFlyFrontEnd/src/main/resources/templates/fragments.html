@@ -3,57 +3,68 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head th:fragment="page_head(title, remove)" th:remove="${remove}">
-	<link rel="icon" th:href="@{${FAVICON}}" type="image/png">
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
 	<meta name="google-adsense-account" content="ca-pub-5735245994573442">
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5735245994573442"
-     crossorigin="anonymous"></script>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5735245994573442" crossorigin="anonymous"></script>
      
-	<title>[[${SITE_NAME}]][[${title}]]</title>
-	<script type="text/javascript" th:src="@{/webjars/jquery/3.6.1/jquery.min.js}"></script>
-	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" >
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" >
-	<link rel="stylesheet" type="text/css" th:href="@{/css/front_style.css}" >
-	<link rel="stylesheet" type="text/css" th:href="@{/css/NewFile.css}" >
-	<link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}" >
-	<script src="https://kit.fontawesome.com/482a6a1121.js" crossorigin="anonymous"></script>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>[[${SITE_NAME}]] - Travel Tour Booking HTML Templates</title>
+    <!-- Favicon -->
+	<link rel="icon" th:href="@{${FAVICON}}" type="image/png">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <!--Custom CSS-->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet" type="text/css">
+    <!--Plugin CSS-->
+    <link th:href="@{/assets/css/plugin.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/assets/fonts/flaticon.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/fontawesome/all.css}" rel="stylesheet" type="text/css">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/assets/fonts/line-icons.css}" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-	  <!-- Google Fonts -->
-	  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 	
-     
-	  <!-- Vendor CSS Files -->
-	  <link type="text/css" th:href="@{/assets/vendor/animate.css/animate.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
-	  <link type="text/css" th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+<link th:href="@{/css/custom.css}" rel="stylesheet">
 	
-	  <!-- Template Main CSS File -->
-	  <link type="text/css" th:href="@{/assets/css/style.css}" rel="stylesheet">
-	  
-		            
-	  <!-- Vendor JS Files -->
-	  <script th:src="@{/ssets/vendor/purecounter/purecounter_vanilla.js}"></script>
-	  <script th:src="@{/assets/vendor/glightbox/js/glightbox.min.js}"></script>
-	  <script th:src="@{/assets/vendor/isotope-layout/isotope.pkgd.min.js}"></script>
-	  <script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
-	  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+  <!-- swiper -->
+  <link rel="stylesheet" th:href="@{/assets/css/swiper-bundle.min.css}">
+
+  <!-- datepicker -->
+  <link rel="stylesheet" th:href="@{/assets/css/jquery.datetimepicker.css}">
+
+  <!-- common -->
+  <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+
+  <!-- animations -->
+  <link rel="stylesheet" th:href="@{/assets/css/animations.css}">
+
+  <!-- welcome -->
+  <link rel="stylesheet" th:href="@{/assets/css/welcome.css}">
+
+  <!-- jquery ui -->
+  <link rel="stylesheet" th:href="@{/assets/css/jquery-ui.min.css}">
+
+  <!-- details -->
+  <link rel="stylesheet" th:href="@{/assets/css/home.css}">
 	
-	  <!-- Template Main JS File -->
-	  <script src="assets/js/main.js"></script>
+  <!-- auth -->
+  <link rel="stylesheet" th:href="@{/assets/css/auth.css}">
+	
+     <!-- Google tag (gtag.js) -->
 	  <meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
-<!-- Google tag (gtag.js) -->
+
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
 	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo&callback=console.debug&libraries=maps,marker&v=beta">
     </script>
 	
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
@@ -73,756 +84,739 @@
 	</script>
 	<!-- End Google Analytics -->
 	
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '476198598595833');
-fbq('track', 'PageView');
-</script>
-<!-- End Meta Pixel Code -->
+
 
 </head>
 <body>
-<!-- ======= Header ======= -->
-<div th:fragment="page_header(remove)" th:remove="${remove}">
 
-	<style>
-		.togglerClass {
-			display: none;
-		}
-		.toggleWidth {
-			width: 100%;
-		}
-		.containerHeader {
-			max-width: 81%;
-		}
-		
-		.hide-display {
-			display: none;
-		}
-			
-		@media screen and (max-width: 800px) {
-			.containerHeader {
-	    		width: 100% !important;
-				max-width: 100% !important;
-			}
-			.hide-display {
-				display: block !important;
-			}
-			 #sideBar {
-			    position: absolute;
-			    z-index: 99;
-				border-radius: 0 10px 10px 0;
-			    height: 100vh;
-			    width: 85%;
-			    translate: -760px 0;
-				transition-property: translate; 
-				transition-duration: 300ms; 
-				transition-timing-function: ease-in;
-			    -webkit-translate: -375px 0;
-			    -ms-translate: -360px 0;
-				-webkit-transition-property: translate; 
-				-webkit-transition-duration: 300ms; 
-				-webkit-transition-timing-function: ease-in;
-				-ms-transition-property: translate; 
-				-ms-transition-duration: 300ms; 
-				-ms-transition-timing-function: ease-in;
-				padding: 30px 30px 40px 45px;/* From https://css.glass */
-			    background: rgb(227 238 255 / 77%);
-			    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-			    backdrop-filter: blur(27.599999999999994px);
-			    -webkit-backdrop-filter: blur(7.6px);
-			    border: 1px solid rgba(255, 255, 255, 0.31);
-			  }
-			  
-		      #sideBar.sideBarActive {
-			    translate: -90px 0;
-			    -webkit-translate: -14px 0;
-			    -ms-translate: -14px 0;
-			    position: absolute;
-			    z-index: 99;
-			  }
-			  
-			  #sidebarMenuDiv.mobileActive {
-				height: auto;
-		    	width: 100%;
-		    	position: fixed;    
-		    	top: 0px;
-		    	z-index: 999
-			  }
-			  
-			  .sidebar_modal {
-				    cursor: pointer;
-				    margin: 20px 0;
-				    width: auto;
-				    color: #2c2c2ceb;
-				    padding: 3px 9px;
-				    border-radius: 5px;
-				    font-weight: 600;
-				    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
-				    -webkit-transition: background-color 2s ease-out;
-				    -moz-transition: background-color 2s ease-out;
-				    -o-transition: background-color 2s ease-out;
-				    transition: background-color 2s ease-out;
-				    -webkit-transition: color 0.5s ease-out;
-				    -moz-transition: color 0.5s ease-out;
-				    -o-transition: color 0.5s ease-out;
-				    transition: color 0.5s ease-out;
-				}
-				
-				#header {
-					position: sticky;
-					background: #00012a;
-				}
-			}
-			.navbar a {
-				font-size: 20px;
-			}
-			
-			@media screen and (max-width: 600px) {
-			 #sideBar {
-			    position: absolute;
-			    z-index: 99;
-				border-radius: 0 10px 10px 0;
-			    height: 100vh;
-			    width: 85%;
-			    translate: -375px 0;
-				transition-property: translate; 
-				transition-duration: 300ms; 
-				transition-timing-function: ease-in;
-			    -webkit-translate: -375px 0;
-			    -ms-translate: -375px 0;
-				-webkit-transition-property: translate; 
-				-webkit-transition-duration: 300ms; 
-				-webkit-transition-timing-function: ease-in;
-				-ms-transition-property: translate; 
-				-ms-transition-duration: 300ms; 
-				-ms-transition-timing-function: ease-in;
-				padding: 30px 30px 40px 45px;/* From https://css.glass */
-			    background: rgb(227 238 255 / 77%);
-			    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-			    backdrop-filter: blur(27.599999999999994px);
-			    -webkit-backdrop-filter: blur(7.6px);
-			    border: 1px solid rgba(255, 255, 255, 0.31);
-			  }
-			  
-			  
-		      #sideBar.sideBarActive {
-			    translate: -40px 0;
-			    -webkit-translate: -14px 0;
-			    -ms-translate: -14px 0;
-			    position: absolute;
-			    z-index: 99;
-			  }
-	    }
-			
-		    .sidebar_modal_dropdown {
-				display: flex;
-			    background: none;
-			    color: black !important;
-			    font-size: 18px;
-			}
-		
-		  
-		  .dropdown-toggle::after {
-			    margin-top: 12px !important;
-			}	
-			.mainDrawerlogo{
-			    height: 50px;
-			    width: 50px;
-			    border-radius: 30px;
-			    margin-left: 4px;
-			    background-position: center;
-			    background-repeat: no-repeat;
-			    background-size: cover;
-			    border: 2px solid white;
-			}
-			.positionedLogo {
-				position: relative;
-			    left: 26px;
-			    top: 25px;
-			    background-color: white;
-			    border-radius: 20px;
-			    height: 25px;
-			    width: 25px;
-			    text-align: center;
-			    font-size: 17px;
-			    color: black;
-			}
-			.sidebarCloseStyle {
-			    font-size: 40px;
-			    position: relative;
-			    right: 0;
-			    top: -24px;
-    			cursor: pointer;
-    			height: 35px;
-			}
-			#imageTogglerSidebar {
-				background: transparent;
-				border: none;
-			}
-			#offcanvasMenu {
-				max-width: 80%;
-				background: transparent;
-			}
-			.offcanvasBodyStyle {
-				/* From https://css.glass */
-				background: rgb(255 255 255 / 96%);
-				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-				backdrop-filter: blur(12.6px);
-				-webkit-backdrop-filter: blur(12.6px);
-				
-			}
-			.offcanvas-header {
-				/* From https://css.glass */
-				background: rgb(207 245 255 / 90%);
-				border-radius: 0 16px 0 0;
-				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-				backdrop-filter: blur(12.6px);
-				-webkit-backdrop-filter: blur(12.6px);
-			}
-			.offcanvas-innerbody {
-				display: flex; 
-				flex-direction: column; 
-				justify-content: space-between; 
-				height: 100%;
-			}
-			.offcanvas-footer {
-				/* From https://css.glass */
-				background: rgb(207 245 255 / 90%);
-				border-radius: 0 0 16px 0;
-				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-				backdrop-filter: blur(12.6px);
-				-webkit-backdrop-filter: blur(12.6px);
-			}
-			
-			
-
-	</style>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'G-TNN6EKSPHR');
-	</script>
-	<!-- Google Analytics -->
-	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	
-	ga('create', 'UA-XXXXX-Y', 'auto');
-	ga('send', 'pageview');
-	</script>
-	<script>
-		function checkBackDrop(adg) {
-			var len = $('.offcanvas-backdrop');
-			if ($('body').hasClass(classes['offcanvas-backdrop'])){
-				alert($(this).attr("class"));
-		    }
-			//var classes = len.classList;
-			
-			//alert(classes.length);
-		}
-		//$("#imageTogglerSidebar").click(function(){
-						//alert($(this).attr("class"));
-			//
-			// Loop through the elements and do something with them
-			
-				//
-		        //for (var i=0; i<classes.length; i++){
-		           // if ($('body').hasClass(classes[i])){
-						//alert($(this).attr("class"));
-		           // }
-		        //}
-			
-		//});
-	</script>
-	<!-- End Google Analytics -->
-    <div class="container d-flex align-items-center justify-content-center containerHeader" style="flex-wrap: wrap;">
-		<div class="row">
-      <button id="imageTogglerSidebar" onclick="return(checkBackDrop(this))" class="col-2 media_status" style="padding-left: 4px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
-		  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;">
-	        <div id="beforelogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new-ch.png'} + ');'">
-	        	<div class="positionedLogo">
-					<i class="fa fa-solid fa-bars"></i>
-				</div>
-			</div>
-	      </li>
-	      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos != null}">
-		        <div id="afterlogIN" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{${#authentication.getPrincipal().getCustomer().photosImagePath}} + '); '">
-		        	<div class="positionedLogo">
-						<i class="fa fa-solid fa-bars"></i>
-					</div>
-				</div>
-			</th:block>
-			 <th:block th:if="${#authentication.getPrincipal().getCustomer().photos == null}">
-				 <div id="afterlogINnoPhoto" class="loginModalTabs mainDrawerlogo" th:style="'background-image: url(' + @{'/images/no-user-new-ch.png'} + ');'">
-		        	<div class="positionedLogo">
-						<i class="fa fa-solid fa-bars"></i>
-					</div>
-				</div>
-			</th:block>
-		  </th:block>
-	  </button>
-	  
-	  
-	  
-	  
-	<!--<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasMenu" role="button" aria-controls="offcanvasMenu">
-		Link with href
-	</a>
-	<button class="btn btn-primary media_status" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
-		Button with data-bs-target
-	</button>-->
-		
-	<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasExampleLabel" style="padding: 0;">
-		<div class="offcanvas-header">
-			
-			<h5 class="offcanvas-title" id="offcanvasExampleLabel">
-				<img th:src="@{${FAVICON}}" alt="favicon" class="img-fluid" style="width: auto; height: 30px; float: left;">&nbsp;Easegofly
-			</h5>
-			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body offcanvasBodyStyle">
-			<div  class="offcanvas-innerbody">
-			 <div>
-				<div class="media_status_flex_CPN" style="width: 100%; height: 18px">
-					<hr style="width: 100%; height: 2px; background: black;">
-				</div>
-				<p style="font-size: 14px; margin: 0;">&nbsp;&nbsp;&nbsp;<i class="fa fa-solid fa-list"></i>&nbsp;&nbsp; MAIN MENU</p>
-				<div class="" style="width: 100%; height: 4px; margin-top: -15px;">
-					<hr style="width: 100%; height: 2px; background: black;">
-				</div>
-				<ul class="" style="list-style: none; padding: 0; margin-top: 5px;">
-		          <li class="sidebar_modal"><a class="sidebar_modal_dropdown" id="li1" th:href="@{/}" >
-		          	<i class="fa fa-solid fa-house" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Home</span></a>
-		          </li>
-		          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li3" th:href="@{/hotel}" >
-		          	<i class="fa fa-solid fa-hotel" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Hotels</span></a>
-		          </li>
-		          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li3" th:href="@{/bus}" >
-		          	<i class="fa fa-solid fa-circle-info" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Bus</span></a>
-		          </li>
-		          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li4" th:href="@{/about#no-3}">
-		          	<i class="fa fa-solid fa-address-book" style="font-size: 24px;">&nbsp;&nbsp;</i><span>Contact</span></a>
-		          </li>
-		          <li class="sidebar_modal"><a class="sidebar_modal_dropdown"  id="li3" th:href="@{/about#no-2}" >
-		          	<i class="fa fa-solid fa-circle-info" style="font-size: 24px;">&nbsp;&nbsp;</i><span>About Us</span></a>
-		          </li>
-		          <li class="dropdown sidebar_modal" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="padding: 0;">
-			          <a class="dropdown-toggle sidebar_modal_dropdown" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content: space-between; padding: 3px 9px;">
-				          <span style="display: flex !important;  justify-content: start;">
-				          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-				          </span> 
-			          </a>
-		              <li th:replace="user_credential/loginModal :: login('tag')"></li>
-		          </li>
-		          
-		          	<li class="dropdown sidebar_modal" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="padding: 0;">
-			          	<a class="dropdown-toggle sidebar_modal_dropdown" href="#" id="dropdownMenuLinkLogged" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; justify-content: space-between; padding: 3px 9px;">
-			          		<span style="display: flex !important;  justify-content: start;">
-				          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-				          	</span> 
-			          	</a>
-			          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
-		          	</li>
-		          
-		        </ul>
-				</div>
-			</div>
-		</div>
-		<div class="offcanvas-footer"> 
-		        <div style="margin: 11px;">
-					<div class="media_status_flex_CPN" style="width: 100%; height: 18px">
-					</div>
-					<p>Copyright @2024 All Rights Reserved By Easegofly</p>
-				</div>
-			
-		</div>
-	</div>
-	  
-	  
-	  
-	  
-	  
-	  
-	
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <div class="col-3 media-hide">
-      	<a th:href="@{/}"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid"></a>
-      </div>
-      
-      <div class="col-1 media-hide">
-      </div>
-
-      <nav id="navbar" class="navbar col-8 media-hide" style="justify-content: end;">
-        <ul class="ul_modify">
-          <li class="inbox_login_button"><a  id="li1" class="nav-link scrollto modify_link_navigation" th:href="@{/}" >
-          	<i class="fa fa-solid fa-house media_status" style="display: none;">&nbsp;&nbsp;</i><span>Home</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li3" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-2}" style="background: none;">
-          	<i class="fa fa-solid fa-circle-info media_status" style="display: none;">&nbsp;&nbsp;</i><span>About Us</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li4" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-3}">
-          	<i class="fa fa-solid fa-address-book media_status" style="display: none;">&nbsp;&nbsp;</i><span>Contact</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/about#no-8}" >
-          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Services</span></a>
-          </li>
-          <li class="inbox_login_button"><a  id="li2" class="nav-link scrollto modify_link_navigation" th:href="@{/flight_activity}" >
-          	<i class="fa fa-solid fa-bell-concierge media_status" style="display: none;">&nbsp;&nbsp;</i><span>Flight Activities</span></a>
-          </li>
-          <li class="dropdown inbox_login_button background_media" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-		          <span style="display: flex !important;  justify-content: start;">
-		          	<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-		          </span> 
-	          </a>
-              <li th:replace="user_credential/loginModal :: login('tag')"></li>
-          </li>
-          
-          	<li class="dropdown inbox_login_button background_media" th:if="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" >
-	          	<a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-	          		<span style="display: flex !important;  justify-content: start;">
-		          		<i class="fa fa-solid fa-address-card media_status_flex" style="display: none;">&nbsp;&nbsp;</i><span>Account</span>
-		          	</span> 
-	          	</a>
-	          	<li th:replace="user_credential/loginModal :: loggedin('tag')"></li>
-          	</li>
-          
-        </ul>
-	  <div class="mobile-nav-toggle" id="imageToggler" style="display: none !important;">
-		  
-	  </div>
-      </nav>
-      <!-- .navbar -->
-      
-	  
-	  <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none;" class="col-8">
-	      <div class="media_status" style="display: none; text-align: center; " >
-	      	<a th:href="@{/}" style="position: relative;"><img th:src="@{${SITE_LOGO}}" alt="" class="img-fluid" style="width: auto; height: 73px; "></a>
-	      </div>
-      </li>
-      <li th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}" style="list-style: none; padding-right: 10px;"  class="col-2 justify_center_div">
-	      <div class="media_status" style="display: none; text-align: center; color: white; font-size: 28px; " >
-	      	<i class="fa fa-solid fa-share-from-square"></i>
-	      </div>
-      </li>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		    <div class="col-8 float-state media_status justify_center_div" style="color: white; font-size: 20px; font-weight: 600; padding-top: 20px;">
-		        <a th:href="@{/}"> <p class="float-state" style="width: 170px;">Hey, <span id="cusName" sec:authentication="principal.customer.firstName"></span>!</p></a>
-		    </div>
-	  </th:block>
-      <th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		  	<div class="col-2 media_status_flex_CPN justify_center_div" style="color: white; padding: 0 15px 0 15px; font-size: 22px; cursor: pointer;">
-				  <a type="button" style="color: white;"
-				th:href="@{/wallet-home}">
-		    	<i class="fa fa-solid fa-wallet"></i>
-		    	</a>
-		    </div>
-	  </th:block>
-    </div>
-    </div>
-    	
-	
-	
-    <script>
-		$("#logoutLink").click(function(e) {
-		e.preventDefault();
-		document.logoutForm.submit();
-	});
-	</script>
-	<script type="text/javascript" th:src="@{/js/common.js}"></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#imageToggler").click(function(){
-				$("#beforelogIN").toggleClass("togglerClass");
-			});
-			
-			$("#imageToggler").click(function(){
-				$("#afterlogIN").toggleClass("togglerClass");
-			});
-			
-			$("#imageToggler").click(function(){
-				$("#afterlogINnoPhoto").toggleClass("togglerClass");
-			});
-		});
-	</script>
-
-	
-  </div>
-  <!-- End Header -->
-   
   
  <!-- ======= Footer ======= -->
-  <footer th:fragment="page_footer" >
+  <footer th:fragment="page_footer(remove)" th:remove="${remove}" >
 	  
-	<div class="modal fade text-center" id="checkNameDialogue" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="checkModalTitle"></h4>
-				</div>
-				<div class="modal-body">
-					<div id="checkBody">
-						<form id="custNameForm" style="display: flex; justify-content: center;">
-							<div class="row ">
-								<div class="col-12 col-sm-6">
-									<div class="form-floating mb-3">
-									  <input type="text" class="form-control" id="firstName" name="firstName" required>
-									  <label for="firstName">First Name</label>
-									</div>
-								</div>
-								<div class="col-12 col-sm-6">
-									<div class="form-floating mb-3">
-									  <input type="text" class="form-control" id="lastName" name="lastName" required>
-									  <label for="lastName">Last Name</label>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="modal-footer" style="display: flex; justify-content: center;">
-					<button type="submit" id="submitName" form="custNameForm" class="btn btn-primary" style="width: 100%;" onclick="checkProperNameAttribute()">Save</button>
-				</div>
-			</div>
-		</div>	
-	</div>
+	  
+    <!-- Preloader -->
+    <div id="preloading btndeactive">
+        <div id="status-loading"></div>
+    </div>
+    <!-- Preloader Ends -->
+	  
+ 
+    <!-- search popup -->
+    <div id="search1">
+        <button type="button" class="close">×</button>
+        <form>
+            <input type="search" value="" placeholder="type keyword(s) here" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <!-- login registration modal -->
+    <div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="post-tabs">
+                        <!-- tab navs -->
+                        <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button aria-controls="login" aria-selected="false" class="nav-link active"
+                                    data-bs-target="#login" data-bs-toggle="tab" id="login-tab" role="tab"
+                                    type="button">Login</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button aria-controls="register" aria-selected="true" class="nav-link"
+                                    data-bs-target="#register" data-bs-toggle="tab" id="register-tab" role="tab"
+                                    type="button">Register</button>
+                            </li>
+                        </ul>
+                        <!-- tab contents -->
+                        <div class="tab-content blog-full" id="postsTabContent">
+                            <!-- popular posts -->
+                            <div aria-labelledby="login-tab" class="tab-pane fade active show" id="login"
+                                role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="blog-image rounded">
+                                            <a href="#"
+                                                style="background-image: url(images/trending/trending5.jpg);"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h4 class="text-center border-b pb-2">Login</h4>
+                                        <div class="log-reg-button d-flex align-items-center justify-content-between">
+                                            <button type="submit" class="btn btn-fb">
+                                                <i class="fab fa-facebook"></i> Login with Facebook
+                                            </button>
+                                            <button type="submit" class="btn btn-google">
+                                                <i class="fab fa-google"></i> Login with Google
+                                            </button>
+                                        </div>
+                                        <hr class="log-reg-hr position-relative my-4 overflow-visible">
+                                        <form method="post" action="#" name="contactform" id="contactform">
+                                            <div class="form-group mb-2">
+                                                <input type="text" name="user_name" class="form-control" id="fname"
+                                                    placeholder="User Name or Email Address">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="password" name="password_name" class="form-control"
+                                                    id="lpass" placeholder="Password">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="checkbox" class="custom-control-input" id="exampleCheck">
+                                                <label class="custom-control-label mb-0" for="exampleCheck1">Remember
+                                                    me</label>
+                                                <a class="float-end" href="#">Lost your password?</a>
+                                            </div>
+                                            <div class="comment-btn mb-2 pb-2 text-center border-b">
+                                                <input type="submit" class="nir-btn w-100" id="submit" value="Login">
+                                            </div>
+                                            <p class="text-center">Don't have an account? <a href="#"
+                                                    class="theme">Register</a></p>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Recent posts -->
+                            <div aria-labelledby="register-tab" class="tab-pane fade" id="register" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="blog-image rounded">
+                                            <a href="#"
+                                                style="background-image: url(images/trending/trending5.jpg);"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h4 class="text-center border-b pb-2">Register</h4>
+                                        <div class="log-reg-button d-flex align-items-center justify-content-between">
+                                            <button type="submit" class="btn btn-fb">
+                                                <i class="fab fa-facebook"></i> Login with Facebook
+                                            </button>
+                                            <button type="submit" class="btn btn-google">
+                                                <i class="fab fa-google"></i> Login with Google
+                                            </button>
+                                        </div>
+                                        <hr class="log-reg-hr position-relative my-4 overflow-visible">
+                                        <form method="post" action="#" name="contactform1" id="contactform1">
+                                            <div class="form-group mb-2">
+                                                <input type="text" name="user_name" class="form-control" id="fname1"
+                                                    placeholder="User Name">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="text" name="user_name" class="form-control" id="femail"
+                                                    placeholder="Email Address">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="password" name="password_name" class="form-control"
+                                                    id="lpass1" placeholder="Password">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <input type="password" name="password_name" class="form-control"
+                                                    id="lrepass" placeholder="Re-enter Password">
+                                            </div>
+                                            <div class="form-group mb-2 d-flex">
+                                                <input type="checkbox" class="custom-control-input" id="exampleCheck1">
+                                                <label class="custom-control-label mb-0 ms-1 lh-1" for="exampleCheck1">I
+                                                    have read and accept the Terms and Privacy Policy?</label>
+                                            </div>
+                                            <div class="comment-btn mb-2 pb-2 text-center border-b">
+                                                <input type="submit" class="nir-btn w-100" id="submit1"
+                                                    value="Register">
+                                            </div>
+                                            <p class="text-center">Already have an account? <a href="#"
+                                                    class="theme">Login</a></p>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+	  
+	  
+	  <!-- footer starts -->
+    <footer class="pt-20 pb-4 hide-lg" style="background-image: url(images/background_pattern.png);">
+        <div class="section-shape top-0" style="background-image: url(images/shape8.png);"></div>
+        <!-- Instagram starts -->
+        <div class="insta-main pb-10">
+            <div class="container">
+                <div class="insta-inner">
+                    <div class="follow-button">
+                        <h5 class="m-0 rounded"><i class="fab fa-instagram"></i> Follow on Instagram</h5>
+                    </div>
+                    <div class="row attract-slider">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-3.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-4.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-5.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-1.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-7.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-8.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-2.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-6.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="insta-image rounded">
+                                <a href="gallery.html"><img th:src="@{/assets/images/insta/ins-9.jpg}" alt="insta"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Instagram ends -->
+        <div class="footer-upper pb-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4 pe-4">
+                        <div class="footer-about">
+                            <img th:src="@{${SITE_LOGO}}" alt="site logo">
+                            <div class="mt-3 mb-3 white text-white myParagraph-footer" th:utext="${FAQ}"></div>
+                            <ul>
+                                <li class="white"><strong>PO Box:</strong> [[${WHATSAPP}]]</li><br>
+                                <li class="white"><strong>Location:</strong> [[${ADMIN_ADDRESS}]]</li><br>
+                                <li class="white"><strong>Email:</strong> support@webkoro.com</li>
+                                <li class="white"><strong>Website:</strong> www.Webkoro.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12 mb-4">
+                        <div class="footer-links">
+                            <h3 class="white">Quick link</h3>
+                            <ul>
+                                <li><a href="about-us.html">About Us</a></li>
+                                <li><a href="about-us.html">Delivery Information</a></li>
+                                <li><a href="about-us.html">Privacy Policy</a></li>
+                                <li><a href="about-us.html">Terms &amp; Conditions</a></li>
+                                <li><a href="about-us.html">Customer Service</a></li>
+                                <li><a href="#about-us.html">Return Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12 mb-4">
+                        <div class="footer-links">
+                            <h3 class="white">Categories</h3>
+                            <ul>
+                                <li><a href="about-us.html">Travel</a></li>
+                                <li><a href="about-us.html">Technology</a></li>
+                                <li><a href="about-us.html">Lifestyle</a></li>
+                                <li><a href="about-us.html">Destinations</a></li>
+                                <li><a href="about-us.html">Entertainment</a></li>
+                                <li><a href="about-us.html">Business</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="footer-links">
+                            <h3 class="white">Newsletter</h3>
+                            <div class="newsletter-form ">
+                                <p class="mb-3">Our community of readers who receives emails
+                                    filled with news, promotions, and other good stuff.</p>
+                                <form action="#" method="get" accept-charset="utf-8"
+                                    class="border-0 d-flex align-items-center">
+                                    <input type="text" placeholder="Email Address">
+                                    <button class="nir-btn ms-2">Subscribe</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-payment">
+            <div class="container">
+                <div class="row footer-pay align-items-center justify-content-between text-lg-start text-center">
+                    <div class="col-lg-8 footer-payment-nav mb-4">
+                        <ul class="">
+                            <li class="me-2">We Support:</li>
+                            <li class="me-2"><i class="fab fa-cc-mastercard fs-4"></i></li>
+                            <li class="me-2"><i class="fab fa-cc-paypal fs-4"></i></li>
+                            <li class="me-2"><i class="fab fa-cc-stripe fs-4"></i></li>
+                            <li class="me-2"><i class="fab fa-cc-visa fs-4"></i></li>
+                            <li class="me-2"><i class="fab fa-cc-discover fs-4"></i></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 footer-payment-nav mb-4">
+                        <ul class="d-flex align-items-center">
+                            <li class="me-2 w-75">
+                                <select class="niceSelect rounded">
+                                    <option>English</option>
+                                </select>
+                            </li>
+                            <li class="w-25">
+                                <select class="niceSelect rounded">
+                                    <option>[[${CURRENCY_SYMBOL}]] INR</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="copyright-inner rounded p-3 d-md-flex align-items-center justify-content-between">
+                    <div class="copyright-text">
+                        <p class="m-0 white">2025 WEBKORO. All rights reserved.</p>
+                    </div>
+                    <div class="social-links">
+                        <ul>
+                            <li><a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
+                            <li><a href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+                            <li><a href="#"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="particles-js"></div>
+    </footer>
+    <!-- footer ends -->
+
+    <!-- Back to top start -->
+    <div id="back-to-top">
+        <a href="#"></a>
+    </div>
+    <!-- Back to top ends -->
+    
+    <!-- bottom navigation start -->
+	  <footer class="bottom-nav hide-mobile btndeactive">
+	    <ul class="d-flex align-items-center justify-content-around w-100 h-100">
+	      <li>
+	        <a th:href="@{/}">
+	          <img th:src="@{/assets/svg/bottom-nav/home.svg}" alt="home" class="img-footer d-none">
+	          <img th:src="@{/assets/svg/bottom-nav/home-active.svg}" alt="home" class="img-footer-active">
+	        </a>
+	      </li>
+	      <li>
+	        <a href="explore.html">
+	          <img th:src="@{/assets/svg/bottom-nav/category.svg}" alt="category" class="img-footer">
+	          <img th:src="@{/assets/svg/bottom-nav/category-active.svg}" alt="category" class="img-footer-active d-none">
+	        </a>
+	      </li>
+	      <li>
+	        <a href="ticket-booked.html">
+	          <img th:src="@{/assets/svg/bottom-nav/ticket.svg}" alt="ticket" class="img-footer">
+	          <img th:src="@{/assets/svg/bottom-nav/ticket-active.svg}" alt="ticket" class="img-footer-active d-none">
+	        </a>
+	      </li>
+	      <li>
+	        <a th:href="@{/wallet-home}">
+	          <img th:src="@{/assets/svg/bottom-nav/wallet.svg}" alt="wallet" class="img-footer" id="wallet-home-lg-1">
+	          <img th:src="@{/assets/svg/bottom-nav/wallet-active.svg}" alt="wallet" class="img-footer-active d-none" id="wallet-home-lg-2">
+	        </a>
+	      </li>
+	      <li>
+	        <a th:href="@{/account}">
+	          <img th:src="@{/assets/svg/bottom-nav/profile.svg}" alt="profile" class="img-footer" id="account-lg-1">
+	          <img th:src="@{/assets/svg/bottom-nav/profile-active.svg}" alt="profile" class="img-footer-active d-none" id="account-lg-2">
+	        </a>
+	      </li>
+	    </ul>
+	  </footer>
+	  <!-- bottom navigation end -->
 
 
-    <script>
-			
-		$(document).ready(function(){
-			var nameCus = $("#cusName").text();
-			if (nameCus.includes('@') || nameCus.includes('.com')) {
-				$(this).delay(2000).queue(function() {
-					checkNameModelDialogue("Please tell us your name!");
-					$(this).dequeue();
-				});
-			}
-		})
-		
-		function checkNameModelDialogue(title) {
-			$("#checkModalTitle").text(title);
-			$("#checkNameDialogue").modal('show');
-		};
 	
-	</script>
+	  <!-- service modal start -->
+	  <div class="modal fade serviceModal bottomModal modalBg" id="serviceModal" tabindex="-1" aria-hidden="true">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+	          </button>
+	          <h1 class="modal-title">All Services</h1>
+	        </div>
+	        <div class="modal-body">
+	          <!-- item 1 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/airport.png}" alt="airport" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Airport</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 2 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/car.png}" alt="car" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Taxi</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 3 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/hotel.png}" alt="hotel" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Hotel</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 4 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/villa.png}" alt="airport" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Villa</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 5 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/cafe.png}" alt="car" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Cafe</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 6 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/luggage.png}" alt="hotel" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Luggage</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 7 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/boat.png}" alt="car" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Ship</figcaption>
+	            </figure>
+	          </a>
+	
+	          <!-- item 8 -->
+	          <a href="service-location.html">
+	            <figure class="item text-center">
+	              <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
+	                <img th:src="@{/assets/mobile/home/camera.png}" alt="hotel" class="img-fluid backface-hidden">
+	              </div>
+	              <figcaption>Camera </figcaption>
+	            </figure>
+	          </a>
+	
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <!-- service modal end -->
+	
+	  <!-- filter modal start -->
+	  <div class="modal fade filterModal bottomModal" id="filterModal" tabindex="-1" aria-hidden="true">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+	          </button>
+	          <h1 class="modal-title">Filter</h1>
+	        </div>
+	        <div class="modal-body">
+	          <!-- price range -->
+	          <div class="pb-12">
+	            <h4 class="content-title">Price Range</h4>
+	            <div class="filter-range">
+	              <div id="price-slider-range"></div>
+	              <div class="price-range w-100 d-flex align-items-center justify-content-between">
+	                <input type="text" id="amount1">
+	                <input type="text" id="amount2">
+	              </div>
+	            </div>
+	          </div>
+	
+	          <!-- popular filters -->
+	          <div class="py-12">
+	            <h4 class="content-title">Popular Filters</h4>
+	            <ul class="popular-filters">
+	              <li>
+	                <label for="hotel" class="filter-label">
+	                  <input type="checkbox" id="hotel" >
+	                  Hotels (340)
+	                </label>
+	              </li>
+	              <li>
+	                <label for="pool" class="filter-label">
+	                  <input type="checkbox" id="pool" checked>
+	                  Swimming Pool (340)
+	                </label>
+	              </li>
+	              <li>
+	                <label for="stars" class="filter-label">
+	                  <input type="checkbox" id="stars">
+	                  5 stars (100)
+	                </label>
+	              </li>
+	              <li>
+	                <label for="bathroom" class="filter-label">
+	                  <input type="checkbox" id="bathroom">
+	                  Private Bathroom (200)
+	                </label>
+	              </li>
+	              <li>
+	                <label for="breakfast" class="filter-label">
+	                  <input type="checkbox" id="breakfast">
+	                  Breakfast Included (115)
+	                </label>
+	              </li>
+	              <li>
+	                <label for="kitchen" class="filter-label">
+	                  <input type="checkbox" id="kitchen">
+	                  Kitchen (10)
+	                </label>
+	              </li>
+	            </ul>
+	          </div>
+	
+	          <!-- star rating -->
+	          <div class="py-12">
+	            <h4 class="content-title">Star Rating</h4>
+	            <ul class="star-rating">
+	              <li>
+	                <label for="star1" class="filter-label">
+	                  <input type="radio" name="star" id="star1" >
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                </label>
+	              </li>
+	              <li>
+	                <label for="star2" class="filter-label">
+	                  <input type="radio" name="star" id="star2" >
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                </label>
+	              </li>
+	              <li>
+	                <label for="star3" class="filter-label">
+	                  <input type="radio" name="star" id="star3" >
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                </label>
+	              </li>
+	              <li>
+	                <label for="star4" class="filter-label">
+	                  <input type="radio" name="star" id="star4" checked>
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                </label>
+	              </li>
+	              <li>
+	                <label for="star5" class="filter-label">
+	                  <input type="radio" name="star" id="star5" >
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                  <img th:src="@{/assets/svg/star-yellow.svg}" alt="star">
+	                </label>
+	              </li>
+	            </ul>
+	          </div>
+	
+	          <!-- apply-filter -->
+	          <div class="py-12">
+	            <a href="search-result.html" class="btn-primary apply-filter-btn">Apply Filter</a>
+	          </div>
+	
+	          <!-- clear-all -->
+	          <div class="pt-12">
+	            <button type="button" class="clear-all-btn" data-bs-dismiss="modal" aria-label="Close">Clear All</button>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+
+<script>
+    $(document).ready(function () {
+        // Show the Edit Profile Modal
+        $('#editProfileBtn').click(function () {
+            $('#inputName').val($('#userNameDetail').text());
+            $('#inputEmail').val($('#userEmail').text());
+            $('#inputPhone').val($('#userPhone').text());
+            $('#inputLocation').val($('#userLocation').text());
+            $('#editProfileModal').modal('show');
+        });
+
+        // Save Profile Changes
+        $('#editProfileForm').submit(function (e) {
+            e.preventDefault();
+            $('#userNameDetail').text($('#inputName').val());
+            $('#userEmail').text($('#inputEmail').val());
+            $('#userPhone').text($('#inputPhone').val());
+            $('#userLocation').text($('#inputLocation').val());
+            $('#editProfileModal').modal('hide');
+        });
+    });
+</script>
+
 	<script>
-		function checkProperNameAttribute() {
-			var fName = $("#firstName").val();
-			var lName = $("#lastName").val();
-			var valid = 0;
-			if(fName.includes('@') || fName.includes('.com')) {
-				document.getElementById("firstName").setCustomValidity("Please do not include '@' or '.com' in your name.");
-				document.getElementById("firstName").reportValidity();
-				valid = 1;
-			} else {
-				document.getElementById("firstName").setCustomValidity("");
-				valid = 2;
-			}
-			
-			if(lName.includes('@') || lName.includes('.com')) {
-				document.getElementById("lastName").setCustomValidity("Please do not include '@' or '.com' in your name.");
-				document.getElementById("lastName").reportValidity();
-				valid = 1;
-			} else {
-				document.getElementById("lastName").setCustomValidity("");
-				valid = 2;
-			}
-			
-			if(valid == 2) {
-				checkCustomerName();
-			}
+		function loadingAnimationStart() {
+			$(".preloading").removeClass("btndeactive");
 		}
 	</script>
-	
-    <script type="text/javascript">
 
-		function checkCustomerName() {
-		var fname = $("#firstName").val();
-		var lname = $("#lastName").val();
-		var	url = "[[@{/update_name_rest}]]";
-		var params = {firstName: fname, lastName: lname};
-			
-			$.post(url, params, function(elem) {
-					
-    			if (elem != "success") {
-					alert("Failed");
-				} else {
-					$("#checkNameDialogue").modal('hide');
-				}
-				
-	    	}).fail(function(){
-				consol.log("Something went wrong in the server!");
-	    	});
-			
-			return false;
-		};
+	<script>
+		function changeSerachClass(id) {
+			$(".nir-btn-search-type").removeClass("nir-btn-toggler");
+			$(id).addClass("nir-btn-toggler"); 
+		}
+	</script>
+    <!-- *Scripts* -->
+	<!-- jquery -->
+	<script th:src="@{/assets/js/jquery-3.7.1.min.js}"></script>
+	  
+	<script type="text/javascript" th:src="@{/js/setCityVal.js}"></script>
+	<script type="text/javascript" th:src="@{/js/setCityValRight.js}"></script>
+    <script th:src="@{/assets/js/particles.js}"></script>
+    <script th:src="@{/assets/js/particlerun.js}"></script>
+    <script th:src="@{/assets/js/plugin.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+    <script th:src="@{/assets/js/custom-nav.js}"></script>
+	
+    <script th:src="@{/assets/js/custom-accordian.js}"></script>
+    
+	  <!-- bootstrap -->
+	  <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+	
+	  <!-- jquery ui -->
+	  <script th:src="@{/assets/js/jquery-ui.js}"></script>
+	
+	  <!-- mixitup -->
+	  <script th:src="@{/assets/js/mixitup.min.js}"></script>
+	
+	  <!-- gasp -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
+	
+	  <!-- draggable -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/Draggable.min.js"></script>
+	
+	  <!-- swiper -->
+	  <script th:src="@{/assets/js/swiper-bundle.min.js}"></script>
+	
+	  <!-- datepicker -->
+	  <script th:src="@{/assets/js/jquery.datetimepicker.full.js}"></script>
+	
+	  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+
+	  <!-- google-map api -->
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3vI4IQqzxRU1449lbIHThUb2gCeDW47w&callback=initMap"
+	    type="text/javascript"></script>
+	  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCodvr4TmsTJdYPjs_5PWLPTNLA9uA4iq8&callback=initMap"
+	    type="text/javascript"></script> -->
+	
+	  <!-- script -->
+	  <script th:src="@{/assets/js/script.js}"></script>
+	<script>
+		changeTabColorFooter("#wallet-home-lg", "/wallet-home");
+		changeTabColorFooter("#account-lg", "/account");
+		changeTabColorFooter("#account-lg", "/request_conversation");
+		
+		function changeTabColorFooter(id, url){
+		   var urlmain = window.location;
+		   if(urlmain.toString().includes(url)){
+			   $(".img-footer").removeClass("d-none");
+			   $(".img-footer-active").addClass("d-none");
+			   $(id + "-1").addClass("d-none");
+			   $(id + "-2").removeClass("d-none");
+			   
+		   }
+		}
+	   
+    </script>
+    
+	<script>
+		changeTabColor("#hotel-lg", "/hotel");
+		changeTabColor("#bus-lg", "/bus");
+		changeTabColor("#about-lg", "/about");
+		changeTabColor("#contact-lg", "/contact-us");
+		
+		function changeTabColor(id, url){
+		   var urlmain = window.location;
+		   if(urlmain.toString().includes(url)){
+			   $(".submenu").removeClass("active");
+			   $(id).addClass("active");
+		   }
+		}
+		
+	    var urlmain = window.location;
+	   	if(urlmain.toString().includes("/login")){
+		   	$(".submenu").removeClass("active");
+	   	}
+	   
+    </script>
+	 <script>
+	   
+	   function loginbtnClick(btn) {
+			$(".preloading").removeClass("d-none");
+	   }
+	   
+    </script>
+	<script>
+		if (window.innerWidth < 900) { 
+			$(".main_header_area").addClass("btndeactive");
+			$(".hide-lg").addClass("btndeactive");
+			$(".hide-mobile").removeClass("btndeactive");
+			$("#back-to-top").css("bottom", "70px");
+			$("#account-container").removeClass("container");
+			$("#account-container").css("padding", "16px 24px");
+		}
+		
 	</script>
 	
-	<style>
-		
-		   .bottomFooter {
-			   align-items: center; 
-			   justify-content: center; 
-			   display: flex;
-	    	   border: none;
-		   }
-		   
-		   .bottomFooterClick {
-				background-color: rgb(13 188 0 / 75%);    
-				border-radius: 16px;
-	    		box-shadow: 0 -15px 0 0 rgb(13 188 0 / 75%);
-	    		border: none;
-		   }
-		   .bottomLeftside {
-				border-radius: 0 18px 0 0;
-	    		box-shadow: 0 -15px 0 0 rgb(13 188 0 / 75%);
-			   
-		   }
-		   .bottomRightside {
-				border-radius: 18px 0 0 0;
-	    		box-shadow: 0 -15px 0 0 rgb(13 188 0 / 75%);
-			   
-		   }
-		   .media_status { display: none;}
-
-		@media screen and (max-width: 800px) {
-	   		#footer {
-			   display: none;
-		   }
-			#mobileFooter {
-			   display: block !important;
-		   }
-		   #homeFooter {
-			   cursor: pointer;
-		   }
-		   .media_status { 
-			   display: block !important;
-		   }
-	    }
-	    
-	</style>
-	<div id="footer" style=" background: #07162d !important;">
-    <div class="footer-top" style=" background: #07162d !important;">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-md-3">
-            <div class="footer-info">
-              <h3>[[${SITE_NAME}]]</h3>
-              <div th:utext="${ADMIN_ADDRESS}"></div>
-              <div class="social-links mt-3">
-                <a th:href="@{${TWITTER}}" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a th:href="@{${FACEBOOK}}" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a th:href="@{${INSTAGRAM}}" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a th:href="@{${LINKEDIN}}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-2 col-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/}">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-2}">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-9}">Customer Support</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-3}">Contact us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-6}">User Agreement</a></li>
-            </ul>
-          </div>
-
-          <div class="col-md-3 col-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a th:href="@{/about#no-8}">Service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-            </ul>
-          </div>
-
-          <div class="col-md-4 col-12 footer-newsletter">
-            <h4>Our Newsletter</h4>
-            <p>Subscribe to get latest flight updates and deals.</p>
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
-            </form>
-			<div class="row" style="padding-top: 25px;">
-            	<div class="col" style="display: flex; justify-content: center; align-items: center;">
-            		<p>Member of </p>
-            	</div>
-            	<div class="col">
-            		<img alt="IATA" th:src="@{/images/iata1.png}">
-            	</div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="container row">
-      <div class="copyright col-12 col-md-6">
-        <a class="float-left styleLinkHover" th:href="@{/about#no-1}" style="margin-right: 5px;">FAQ</a> 
-        <a class="float-left styleLinkHover" th:href="@{/about#no-7}" style="margin-right: 5px;">Payment Security</a> 
-        <a class="float-left styleLinkHover" th:href="@{/about#no-4}" style="margin-right: 5px;">Terms of Use</a> 
-        <a class="float-left styleLinkHover" th:href="@{/about#no-5}" style="margin-right: 5px;">Privacy & Policy</a> 
-        
-      </div>
-      <div class="credits col-12 col-md-6">
-      	[[${COPYRIGHT}]]
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/groovin-free-bootstrap-theme/ -->
-        <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
-      </div>
-    </div>
-    
-	</div>
-
-	<div style="display: none;" id="mobileFooter">
-		<div class="justify_center_div footer_btn_style" style="position: fixed; z-index: 990; width: 100%;" >
-	   	   <div class="row">
-			   <button class="col-3 bottomFooter bottomFooterStl" id="homeFooter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
-				   <div class="footerFragInnerDiv">
-					   <i class="fa fa-solid fa-house fa-2x"></i><br>
-			   		</div>
-			   	</button>
-			   <button class="col-3 bottomFooter bottomFooterStl" id="walletFooter">
-				   <div class="footerFragInnerDiv">
-					   <i class="fa fa-solid fa-wallet"></i><br>
-				   </div>
-				</button>
-			   <button class="col-3 bottomFooter bottomFooterStl" id="historyFooter">
-				   <div class="footerFragInnerDiv">
-					   <i class="fa fa-solid fa-clock-rotate-left"></i><br>
-				   </div>
-				</button>
-			   <button class="col-3 bottomFooter bottomFooterStl" id="categoriesFooter">
-				   <div class="footerFragInnerDiv">
-					   <i class="fa fa-solid fa-gears fa-2x"></i><br>
-				   </div>
-				</button>
-		   </div>
-	   </div>
-   </div>
-   
    	<script>
 			$("#homeFooter").click(function(){
 				//alert("clicked");

@@ -22,25 +22,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
-import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.Wallet;
-import com.easygofly.entity.WebDetails;
 import com.easygofly.site.customer.CustomerService;
-import com.easygofly.site.flight.BrandRepositoy;
 import com.easygofly.site.flight.CityRepository;
-import com.easygofly.site.flight.FlightRepository;
 import com.easygofly.site.flight.SearchHistoryRepository;
 import com.easygofly.site.flight.SearchHistoryService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.LoginSuccessHandler;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.CountryRepository;
-import com.easygofly.site.setting.web.WebSettingService;
 
 
 @Controller
@@ -50,9 +44,6 @@ public class MainController {
 	
 	@Autowired private SearchHistoryService searchHistoryService ;
 	@Autowired private CityRepository cityRepo;
-	@Autowired private WebSettingService webSettingService;
-	@Autowired private FlightRepository flightRepo;
-	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private CountryRepository countryRepo;
 	@Autowired private CustomerService customerService;
 	@Autowired private SearchHistoryRepository searchRepo;
@@ -82,7 +73,6 @@ public class MainController {
 			@SuppressWarnings("unused")
 			HttpSession session= attr.getRequest().getSession(true);
 		} else if (oauthCustomer != null) {
-			System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 			phone = oauthCustomer.getEmail();
 			Customer customer = customerService.getByEmail(phone);
 			Wallet wallet = customer.getWallet();
@@ -91,89 +81,11 @@ public class MainController {
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			@SuppressWarnings("unused")
 			HttpSession session= attr.getRequest().getSession(true);
-			System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 		}
-//		phone = oauthCustomer.getEmail();
-//		Customer customer = customerService.getByPhone(phone);
-		
-		List<WebDetails> webDetails = webSettingService.listAllSettings();
-		for (WebDetails detail : webDetails) {
-			model.addAttribute(detail.getKey(), detail.getValue());
-			if (detail.getKey().equals("PRICE_1_LINK")) {
-				ProductDetail flight = flightFareDetails(detail);
-				if (flight != null ) {
-					Brand brand = brandRepo.getBrandByName(flight.getBrand());
-					model.addAttribute("flightDate1", flight.getDate());
-					model.addAttribute("brand1", brand);
-				}
-				
-			} else if (detail.getKey().equals("PRICE_2_LINK")) {
-				ProductDetail flight = flightFareDetails(detail);
-				if (flight != null ) {
-					Brand brand = brandRepo.getBrandByName(flight.getBrand());
-					model.addAttribute("flightDate2", flight.getDate());
-					model.addAttribute("brand2", brand);
-				}
-				
-			} else if (detail.getKey().equals("PRICE_3_LINK")) {
-				ProductDetail flight = flightFareDetails(detail);
-				if (flight != null ) {
-					Brand brand = brandRepo.getBrandByName(flight.getBrand());
-					model.addAttribute("brand3", brand);
-					model.addAttribute("flightDate3", flight.getDate());
-				}
-				
-			} else if (detail.getKey().equals("PRICE_4_LINK")) {
-				ProductDetail flight = flightFareDetails(detail);
-				if (flight != null ) {
-					Brand brand = brandRepo.getBrandByName(flight.getBrand());
-					model.addAttribute("flightDate4", flight.getDate());
-					model.addAttribute("brand4", brand);
-				}
-				
-			} else if (detail.getKey().equals("PRICE_5_LINK")) {
-				ProductDetail flight = flightFareDetails(detail);
-				if (flight != null ) {
-					Brand brand = brandRepo.getBrandByName(flight.getBrand());
-					model.addAttribute("flightDate5", flight.getDate());
-					model.addAttribute("brand5", brand);
-				}
-				
-			} else if (detail.getKey().equals("PRICE_6_LINK")) {
-				ProductDetail flight = flightFareDetails(detail);
-				if (flight != null ) {
-					Brand brand = brandRepo.getBrandByName(flight.getBrand());
-					model.addAttribute("flightDate6", flight.getDate());
-					model.addAttribute("brand6", brand);
-				}
-			}
-		}
-		
 	
 		return "index";
 	}
 
-	private ProductDetail flightFareDetails(WebDetails detail) {
-		String priceLink1 = detail.getValue();
-		String[] parts = priceLink1.split("_");
-		if (parts.length != 0) {
-			if (parts.length == 5) {
-				Integer convInteger = Integer.parseInt(parts[4]);
-				ProductDetail flight;
-				try {
-					flight = flightRepo.findById(convInteger).get();
-					return flight;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
-			} else {
-				return null;
-			}
-		} else {
-			return null;
-		}
-	}
 
 	@GetMapping("/loading")
 	public String loading() {
@@ -263,6 +175,11 @@ public class MainController {
 	@GetMapping("/about")
 	public String viewAboutPage() {
 		return "about/about";
+	}
+
+	@GetMapping("/contact-us")
+	public String viewContactPage() {
+		return "contact/contact";
 	}
 	
 	@GetMapping("/mode")

@@ -2,8 +2,6 @@ package com.easygofly.site.flight;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,79 +156,79 @@ public class ProductDetailsRestController {
 
 	// Flight List
 
-	@GetMapping("/get_flight_list")
-	public List<ProductDetail> getFlightList() {
-		return productDetailsController.listProductDetailsInSearch;
-	} 
-
-	@GetMapping("/get_least_fare_by_brand")
-	public List<ProductDetail> getleastFareByBrand() {
-		List<ProductDetail> flights = productDetailsController.listProductDetailsOnline;
-		List<ProductDetail> newFligtList = new ArrayList<ProductDetail>();
-		List<String> listBrand = new ArrayList<String>();
-        
-		for (ProductDetail flight : flights) {
-			listBrand.add(flight.getBrand());
-		}
-		HashSet<String> set = new HashSet<>(listBrand);
-		List<String> listWithoutDuplicates = new ArrayList<>(set);
-		for (int i = 0; i < listWithoutDuplicates.size(); i++) {
-			 // Step 3: Find the minimum price
-	        double minPrice = Double.MAX_VALUE;
-	        int count = 0;
-	        
-			for (ProductDetail flight : flights) {
-				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
-					if (flight.getPriceADT() < minPrice) {
-		                minPrice = flight.getPriceADT();
-		            }
-				}
-			}
-
-			for (ProductDetail flight : flights) {
-				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
-					if (count == 0) {
-						if (minPrice == flight.getPriceADT()) {
-							newFligtList.add(flight);
-							count++;
-						}
-					}
-				}
-			}
-		}
-		
-		newFligtList.sort(Comparator.comparingDouble(ProductDetail::getPriceADT));
-		
-		return newFligtList;
-	} 
-
-	// Sorting methods  
-
-	@GetMapping("/sort_flights_by_price")
-	public void sortByPrice() {
-		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getPriceADT).thenComparing(ProductDetail::getMarkupADT));
-	} 
-
-	@GetMapping("/sort_flights_by_duration")
-	public void sortByDuration() {
-		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDuration));
-	} 
-
-	@GetMapping("/sort_flights_by_arrival")
-	public void sortByArrival() {
-		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getArrTimeInteger));
-	} 
-
-	@GetMapping("/sort_flights_by_departure")
-	public void sortByDeparture() {
-		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDepTimeInteger));
-	} 
-
-	@GetMapping("/sort_flights_by_brand")
-	public void sortByBrand() {
-		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparing(ProductDetail::getBrand));
-	}
-	
+//	@GetMapping("/get_flight_list")
+//	public List<ProductDetail> getFlightList() {
+//		return productDetailsController.listProductDetailsInSearch;
+//	} 
+//
+//	@GetMapping("/get_least_fare_by_brand")
+//	public List<ProductDetail> getleastFareByBrand() {
+//		List<ProductDetail> flights = productDetailsController.listProductDetailsOnline;
+//		List<ProductDetail> newFligtList = new ArrayList<ProductDetail>();
+//		List<String> listBrand = new ArrayList<String>();
+//        
+//		for (ProductDetail flight : flights) {
+//			listBrand.add(flight.getBrand());
+//		}
+//		HashSet<String> set = new HashSet<>(listBrand);
+//		List<String> listWithoutDuplicates = new ArrayList<>(set);
+//		for (int i = 0; i < listWithoutDuplicates.size(); i++) {
+//			 // Step 3: Find the minimum price
+//	        double minPrice = Double.MAX_VALUE;
+//	        int count = 0;
+//	        
+//			for (ProductDetail flight : flights) {
+//				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
+//					if (flight.getPriceADT() < minPrice) {
+//		                minPrice = flight.getPriceADT();
+//		            }
+//				}
+//			}
+//
+//			for (ProductDetail flight : flights) {
+//				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
+//					if (count == 0) {
+//						if (minPrice == flight.getPriceADT()) {
+//							newFligtList.add(flight);
+//							count++;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		newFligtList.sort(Comparator.comparingDouble(ProductDetail::getPriceADT));
+//		
+//		return newFligtList;
+//	} 
+//
+//	// Sorting methods  
+//
+//	@GetMapping("/sort_flights_by_price")
+//	public void sortByPrice() {
+//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getPriceADT).thenComparing(ProductDetail::getMarkupADT));
+//	} 
+//
+//	@GetMapping("/sort_flights_by_duration")
+//	public void sortByDuration() {
+//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDuration));
+//	} 
+//
+//	@GetMapping("/sort_flights_by_arrival")
+//	public void sortByArrival() {
+//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getArrTimeInteger));
+//	} 
+//
+//	@GetMapping("/sort_flights_by_departure")
+//	public void sortByDeparture() {
+//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDepTimeInteger));
+//	} 
+//
+//	@GetMapping("/sort_flights_by_brand")
+//	public void sortByBrand() {
+//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparing(ProductDetail::getBrand));
+//	}
+//	
 	
 	//Timer Method
 	
