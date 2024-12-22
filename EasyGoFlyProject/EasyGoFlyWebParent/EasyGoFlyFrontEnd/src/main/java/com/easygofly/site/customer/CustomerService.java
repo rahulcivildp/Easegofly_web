@@ -196,13 +196,11 @@ public class CustomerService {
 			
 	//		String encodedPass = passwordEncoder.encode(randomCode);
 			newCust.setPassword(encodeRandomeCode);
-			System.out.println("New Customer " + encodeRandomeCode);
 			
 			customerRepo.save(newCust);
 			
 			sendOtpInPhone(newCust, randomCode);
 			
-			System.out.println("New Customer " + encodeRandomeCode);
 			System.out.println("OTP Code: " + randomCode);
 	
 		
@@ -248,7 +246,6 @@ public class CustomerService {
 				
 				sendOtpInEmail(savedCustomer, randomCode);
 				
-				System.out.println("New Customer " + encodeRandomeCode);
 				System.out.println("OTP Code: " + randomCode);
 		
 				return savedCustomer;
@@ -359,7 +356,6 @@ public class CustomerService {
 		
 		sendOtpInEmail(customer, randomCode);
 		
-		System.out.println("Verification Code: " + encodeRandomeCode);
 		System.out.println("OTP Code: " + randomCode);
 	}
 	
@@ -386,7 +382,6 @@ public class CustomerService {
 		
 		sendOtpInEmail(customer, randomCode);
 		
-		System.out.println("Verification Code: " + encodeRandomeCode);
 		System.out.println("OTP Code: " + randomCode);
 		
 		return customerRepo.save(customer);
@@ -416,7 +411,6 @@ public class CustomerService {
 		
 		sendOtpInPhone(customer, randomCode);
 		
-		System.out.println("Verification Code: " + encodeRandomeCode);
 		System.out.println("OTP Code: " + randomCode);
 	}
 
@@ -442,7 +436,6 @@ public class CustomerService {
 		
 		sendOtpInPhone(customer, randomCode);
 		
-		System.out.println("Verification Code: " + encodeRandomeCode);
 		System.out.println("OTP Code: " + randomCode);
 		
 		return customerRepo.save(customer);
@@ -450,7 +443,6 @@ public class CustomerService {
 	
 	private void encodePassword(Customer customer) {
 		String encodedPass = passwordEncoder.encode(customer.getPassword());
-		System.out.println("encodedPassword: " + encodedPass);
 		customer.setPassword(encodedPass);
 	}
 

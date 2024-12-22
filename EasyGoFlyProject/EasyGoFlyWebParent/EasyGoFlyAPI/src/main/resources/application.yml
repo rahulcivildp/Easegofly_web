@@ -14,12 +14,19 @@ server:
         secure: true
       timeout: 60m
       tracking-modes: cookie
+  ssl:
+    enabled: true
+    key-store: springboot.p12
+    key-store-password: password
+    key-store-type: PKCS12
+    key-alias: 1
+    key-password: password
 spring:
   application:
     name: EasyGoFlyAPI
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    password: tanmay@311
+    password: Tanmay@311
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://127.0.0.1:3306/easygofly
     username: root

@@ -571,23 +571,15 @@
 		                                <h3 class="">Farerule Details</h3>
 		                                
 		                                <p class="accordion-header d-flex justify-content-between align-item-center" id="flush-headingOne1">
-		                                    <button class="accordion-button collapsed p-0 border-0 rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne2" aria-expanded="false" aria-controls="flush-collapseOne">Show </button>
+		                                    <button class="accordion-button collapsed p-0 border-0 rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-farerule" aria-expanded="false" aria-controls="flush-collapseOne">Show </button>
 		                                </p>
 									</div>
                                     <div>
-	                                    <div class="accordion accordion-flush" id="accordionflush2">
-		                                        <div class="accordion-item overflow-hidden">
-		                                            <div id="flush-collapseOne2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
-		                                                <div class="accordion-body p-0">
-								                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-								                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
-								                                	<p th:utext="${jsonObjFarerule}"></p>
-								                                </div>
-								                            </div>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-		                                    </div>
+	                                    <div class="accordion accordion-flush" id="flush-collapseOne-farerule">
+			                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
+			                                	<p th:utext="${jsonObjFarerule}"></p>
+			                                </div>
+		                                 </div>
 									</div>
 	                            </div>
 							</div>
@@ -685,13 +677,10 @@
 							</script>
                         </div>
                         <div class="col-md-9 col-12">
-							
-	                        <div class="item my-2 border-all rounded shadow">
-	                            <div class="customer-information d-flex justify-content-between">
-		                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4" id="footer_home" >Home</a>
-		                            <button type="submit" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4" id="footer_next" form="travelar-info">Next</button>
-	                            </div>
-							</div>
+                            <div class="d-flex justify-content-between">
+	                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_home" >Home</a>
+	                            <button type="submit" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_next" form="travelar-info">Next</button>
+                            </div>
 						</div>
                     </div>
                 </div>

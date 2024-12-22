@@ -7,7 +7,7 @@
             <div class="flight-full">
 				<th:block th:each="flight : ${listFlight}">
 					<th:block th:if="${passengerNum} <= ${flight.totalSeats}">
-						<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_form' + ${flight.id}">
+						<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_form' + ${flight.id}" onsubmit="return formSearchSubmit();">
 							<input type="hidden" name="timeRemaining" class="timeRemain">
 		      				<input type="hidden" name="adultNum" th:value="${adultNum}">
 		      				<input type="hidden" name="childNum" th:value="${childNum}">
@@ -220,7 +220,6 @@
 									$(id).css("width", wd);
 									$(id).css("padding-right", ps);
 								}).fail(function(){
-									alert("Could not connect to the server.");
 								});
 							}
 							

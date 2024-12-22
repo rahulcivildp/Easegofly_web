@@ -17,143 +17,6 @@
     </script>
     
     <style>
-        .tile-align {
-            float: left;
-        }
-        .reviews {
-            padding: 10px 0;
-        }
-        .reviews p {
-            margin: 0;
-        }
-        .choosen_request {
-            background-color: #969393;
-        }
-        #time-limit {
-            margin: 0px;
-            padding: 0px;
-            background: #f8f4a2;
-        }
-        .circles {
-            width: 20px;
-            height: 20px;
-            border-radius: 10px;
-            background-color: #344755;
-            margin: 0 auto;
-            z-index: 1;
-        }
-        .progress_border {
-            border: 1px solid green;
-            position: relative;
-            bottom: 65px;
-            margin: 0 auto;
-            width: 68%;
-            opacity: 0.3;
-            z-index: -1;
-        }
-        .buttn_stly {
-            float: right;
-            width: 60%;
-            vertical-align: middle;
-            border-radius: 0 !important;
-            padding: 8px !important;
-            background-color: #ecf5fd;
-        }
-        .buttn_stly:hover {
-            background-color: #dcdcdc;
-        }
-        .accordion-header {
-            margin-bottom: 0;
-            background-color: #ecf5fd;
-        }
-        .buttn_stly_eff {
-            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important;
-        }
-        .onward {
-            margin: 15px 0;
-            background-color: #1369f5;
-            color: white;
-            padding: 6px 11px;
-            width: 10%;
-            border-radius: 0 20px 20px 0;
-        }
-        .non_stop {
-            text-align: center;
-            margin: 0;
-            font-size: 12px;
-            color: red;
-        }
-        .form-floating > .bi-calendar-date + .datepicker_input + label {
-            padding-left: 3.5rem;
-            z-index: 3;
-        }
-        .dest_box {
-            margin: 5px;
-            text-align: center;
-            background-color: #22a9bf;
-            color: white;
-        }
-        .summary_btn_stl {
-            float: left;
-            background-color: white;
-            width: 100%;
-        }
-        .booking_tiles {
-            border: 1px solid #a7a7a794; 
-            margin-bottom: 15px;
-        }
-        .booking_footer_btn {
-            background-color: #d32f2f;
-            text-align: center;
-            padding: 10px 0;
-            cursor: pointer;
-        }
-        .booking_footer_btn p {
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            margin: 0;
-        }
-        .booking_page_off {
-            display: none;
-        }
-        .booking_page_on {
-            display: block;
-        }
-        .circles_active {
-            background-color: #2abd2a !important;
-        }
-        .travelerActive {
-   		    width: 970px;
-   			overflow-x: hidden;
-   			overflow-y: hidden;
-        }
-        .activeSLider:hover{
-        	position: relative;
-    		left: -141px;
-        }
-        
-        .steady{
-        	background-color: greean;
-        	position: relative !important;
-    		left: -141px !important;
-        }
-        
-        .activeSLider{
-        	width: 1160px;
-        	position: relative;
-        	left: 0px;
-       		transition: left 0.5s;
-       		transition-timing-function: ease-out;
-  	    }
-        .buttonSTyle {
-        	    display: flex;
-			    justify-content: center;
-			    align-items: center;
-			    height: 100%;
-			    width: 65%;
-        }
-        
         .payment_zaakpay {
         	border: 2px solid #197af6;
 		    width: 250px;    
@@ -166,45 +29,10 @@
 		    background-size: cover;
 		    background-position: center;
         }
-        
         .check_input {
         	width: 27px;
     		height: 27px;
         }
-        .booki_page_p {
-		    color: rgb(44 43 43);
-		    font-weight: 600;
-		    background: #e5e9ff;
-		    border-radius: 6px;
-		    padding: 0 8px;
-		    margin: 5px;
-		}
-		.progress_div {
-			display: flex; 
-			justify-content: center;
-		}
-		.progress_div_active {
-			background: #75ca7d;
-		}  
-		      
-        @media screen and (max-width: 700px) {
-			.paddingChange {
-				padding: 0 !important;
-				font-size: 12px !important;
-				height: fit-content;
-			}
-			.choosen_request {
-				position: sticky;
-				top: 0;
-				z-index: 6;
-			}
-			.positionSticky {
-				position: sticky;
-				top: 0;
-				z-index: 6;
-			}
-			
-		}
     </style>
 
     <body>
@@ -216,14 +44,14 @@
         <div class="breadcrumb-outer pb-2">
             <div class="container">
                 <div class="breadcrumb-content text-center">
-                    <h1 class="mb-3">Order Details</h1>
+                    <h1 class="mb-3">Flight Order</h1>
                     <nav aria-label="breadcrumb" class="d-block">
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
                             <li class="breadcrumb-item"><a th:href="@{/}">Flight List</a></li>
                             <li class="breadcrumb-item"><a th:href="@{/}">Flight Booking</a></li>
-                            <li class="breadcrumb-item"><a th:href="@{/}">Traveler Details</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Order Details</li>
+                            <li class="breadcrumb-item"><a th:href="@{/}">Flight Travelers</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Flight Order</li>
                         </ul>
                     </nav>
                 </div>
@@ -608,34 +436,7 @@
 			                        
 			                        <div class="sidebar-item bg-white rounded box-shadow overflow-hidden p-3 mb-4 shadow">
 			                            <h4>Your Price Summary</h4>
-			                            <table>
-			                                <tbody>
-			                                    <tr>
-			                                        <td>No. of Pax</td>
-			                                        <td class="theme2" id="passengerNum"></td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td>Tax & fee</td>
-			                                        <td class="theme2">[[${checkoutInfo.flightGSTCost}]]</td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td>Booking Fee</td>
-			                                        <td class="theme2">[[${CURRENCY_SYMBOL}]][[${item.totalPrice}]]</td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td>Total</td>
-			                                        <td class="theme2">[[${CURRENCY_SYMBOL}]][[${item.totalPrice}]]</td>
-			                                    </tr>
-			                                </tbody>
-			                                <tfoot class="bg-title">
-			                                    <tr>
-			                                        <th class="font-weight-bold white">Amount</th>
-			                                        <th class="font-weight-bold white">
-					          							[[${CURRENCY_SYMBOL}]][[${order.price}]]
-		          									</th>
-			                                    </tr>
-			                                </tfoot>
-			                            </table>
+			                            <table class="checkout-table"></table>
 			                        </div>
 			                    </div>
                                
@@ -655,73 +456,66 @@
 								}
 								
 							</script>
-							<script>
-								var totalPassenger = [[${search.adultNum}]] + [[${search.childNum}]] + [[${search.infantNum}]];
-								
-								$("#passengerNum").text(totalPassenger);
-							</script>
 							
                             
                         </div>
                         <div class="col-md-9 col-12">
-							<div class="item mb-2 border-all rounded shadow">
-	                            <div class="customer-information d-flex justify-content-between">
-		                          	<a th:href="@{'/flight_traveler_details' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="booking_footer_btn nir-btn p-3 px-4" id="footer_previous" style="color: white;text-decoration: none !important; width: fit-content;"><b>Previous</b></a>
-		                            
-		                            <!-- ** PHONEPE ** --> <!-- 
-		                            <form th:action="@{/phonepe}" method="post">
-		                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" type="submit" value="Book Now" id="payButton">
-		                            </form> 
-		                             -->
-		                            
-		                            <!-- ** CCAVENUE ** --> <!-- 
-		                            <form action="https://secure.ccavenue.com/transaction.do?command=initiateTransaction" method="post">
-		                           		<input type="hidden" id="encRequest" name="encRequest" th:value="${encRequest}">
-										<input type="hidden" name="access_code" id="access_code" th:value="${accessCode}">
-		                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" type="submit" value="Book Now" id="payButton">
-		                            </form> 
-		                             -->
-		                            <!-- ** PAYU ** --> <!-- 
-		                            
-		      						<div class="row"  id="response"></div>
-		                            <form method="post" th:action="@{/payg}" id="form">
-			                            <input type="hidden" name="OrderAmount" th:value="${checkoutInfo.paymentTotal}"/> 
-										<input type="hidden" name="OrderType"> 
-										<input type="hidden" name="OrderAmountData[AmountTypeDesc]" >
-										<input type="hidden" name="OrderAmountData[Amount]" th:value="${checkoutInfo.paymentTotal}">
-										<input class="customer" type="hidden" name="CustomerData[CustomerNotes]" value="null" >
-										<input class="name" type="hidden" name="CustomerData[FirstName]" th:value="${customer.firstName}">
-										<input class="name" type="hidden" name="CustomerData[LastName]" th:value="${customer.lastName}">
-										<input class="name" type="hidden" name="CustomerData[MobileNo]" th:value="${customer.phoneNumber}">
-										<input class="name" type="hidden" name="CustomerData[Email]" th:value="${customer.email}">
-										<input class="name" type="hidden" name="CustomerData[EmailReceipt]" value="True" >
-		                            	<button onclick="save()" class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" id="payButton" type="submit">Book Now</button>
+                            <div class="d-flex justify-content-between">
+	                          	<a th:href="@{'/flight_traveler_details' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_previous" style="color: white;text-decoration: none !important; width: fit-content;"><b>Previous</b></a>
+	                            
+	                            <!-- ** PHONEPE ** --> <!-- 
+	                            <form th:action="@{/phonepe}" method="post">
+	                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" type="submit" value="Book Now" id="payButton">
+	                            </form> 
+	                             -->
+	                            
+	                            <!-- ** CCAVENUE ** --> <!-- 
+	                            <form action="https://secure.ccavenue.com/transaction.do?command=initiateTransaction" method="post">
+	                           		<input type="hidden" id="encRequest" name="encRequest" th:value="${encRequest}">
+									<input type="hidden" name="access_code" id="access_code" th:value="${accessCode}">
+	                            	<input class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" type="submit" value="Book Now" id="payButton">
+	                            </form> 
+	                             -->
+	                            <!-- ** PAYU ** --> <!-- 
+	                            
+	      						<div class="row"  id="response"></div>
+	                            <form method="post" th:action="@{/payg}" id="form">
+		                            <input type="hidden" name="OrderAmount" th:value="${checkoutInfo.paymentTotal}"/> 
+									<input type="hidden" name="OrderType"> 
+									<input type="hidden" name="OrderAmountData[AmountTypeDesc]" >
+									<input type="hidden" name="OrderAmountData[Amount]" th:value="${checkoutInfo.paymentTotal}">
+									<input class="customer" type="hidden" name="CustomerData[CustomerNotes]" value="null" >
+									<input class="name" type="hidden" name="CustomerData[FirstName]" th:value="${customer.firstName}">
+									<input class="name" type="hidden" name="CustomerData[LastName]" th:value="${customer.lastName}">
+									<input class="name" type="hidden" name="CustomerData[MobileNo]" th:value="${customer.phoneNumber}">
+									<input class="name" type="hidden" name="CustomerData[Email]" th:value="${customer.email}">
+									<input class="name" type="hidden" name="CustomerData[EmailReceipt]" value="True" >
+	                            	<button onclick="save()" class="col-md-2 col-3 booking_footer_btn" style="float: right; border: none; color: white;" id="payButton" type="submit">Book Now</button>
+	                            </form>
+	                             -->
+	                             
+	                           	<!-- 
+	                           	** ZAAKPAY **  --> <!--  -->
+	                           	<div>
+		                           	<form th:action="@{${requestUrl}}" method="post" id="payment_form">
+		                           		<input type="hidden" name="JSESSIONID" th:value="${JSESSIONID}">
+		                            	<input type="hidden" name="search_id" th:value="${search.id}">
+		                           		<th:block th:each="orderInfo : ${entrySet}">
+		                           			<input type="hidden" th:name="${orderInfo.getKey}" th:value="${orderInfo.getValue}">
+		                           		</th:block>
+		                           		<input type="hidden" name="checksum" th:value="${checksum}">
+		                            	<input class="booking_footer_btn nir-btn p-3 px-4 shadow" type="submit" value="Book Now" id="payButton">
 		                            </form>
-		                             -->
-		                             
-		                           	<!-- 
-		                           	** ZAAKPAY **  --> <!--  -->
-		                           	<div>
-			                           	<form th:action="@{${requestUrl}}" method="post" id="payment_form">
-			                           		<input type="hidden" name="JSESSIONID" th:value="${JSESSIONID}">
-			                            	<input type="hidden" name="search_id" th:value="${search.id}">
-			                           		<th:block th:each="orderInfo : ${entrySet}">
-			                           			<input type="hidden" th:name="${orderInfo.getKey}" th:value="${orderInfo.getValue}">
-			                           		</th:block>
-			                           		<input type="hidden" name="checksum" th:value="${checksum}">
-			                            	<input class="booking_footer_btn nir-btn p-3 px-4" style="color: white; display: block;" type="submit" value="Book Now" id="payButton">
-			                            </form>
-			                            
-			                            <form th:action="@{/flight_wallet_check}" method="post" id="payment_form_wallet" onsubmit="return(checkWalletBalance(this))">
-			                            	<input type="hidden" name="flight_price" th:value="${order.price}">
-			                            	<input type="hidden" name="Order_id" th:value="${order.id}">
-			                            	<input type="hidden" name="search_id" th:value="${search.id}">
-			                            	<input class="booking_footer_btn nir-btn p-3 px-4" style="color: white; display: none;" type="submit" value="Book Now" id="payButtonWallet" data-bs-toggle="modal" data-bs-target="#modalDialogue">
-			                            </form>
-									</div>
-		                           	
-	                            </div>
-							</div>
+		                            
+		                            <form th:action="@{/flight_wallet_check}" method="post" id="payment_form_wallet" onsubmit="return(checkWalletBalance(this))">
+		                            	<input type="hidden" name="flight_price" th:value="${order.price}">
+		                            	<input type="hidden" name="Order_id" th:value="${order.id}">
+		                            	<input type="hidden" name="search_id" th:value="${search.id}">
+		                            	<input class="booking_footer_btn nir-btn p-3 px-4 d-none shadow" type="submit" value="Book Now" id="payButtonWallet" data-bs-toggle="modal" data-bs-target="#modalDialogue">
+		                            </form>
+								</div>
+	                           	
+                            </div>
 						</div>
                         
                     </div>
@@ -752,66 +546,69 @@
         
     </body>
     
-   <script type="text/javascript">
-	$(document).ready(function() {
-		checkBrand();
-	});
-
-	function checkBrand() {
-		brandName = "[[${flight.brand}]]";
-		url = "[[@{/find_brand_}]]" + brandName;
-		
-		$.get(url, function(response) {
-			htmlImg = `
-				<img src="[[@{` + response + `}]]" width="40" height="45" style="border: 1px solid #E9ECEF; border-radius: 5px;">
-			`;
-			$("#brandImage" + [[${flight.id}]]).append(htmlImg);
-		}).fail(function(){
-			alert("Could not connect to the server.");
+<script>
+		$(document).ready(function(){
+			showCheckout();
 		});
 		
-		return false;
-	};
-</script>
- 
-    <script type="text/javascript">
-    	feesCharges = [[${checkoutInfo.flightGSTCost}]] + [[${checkoutInfo.flightServiceCost}]];
-    	
-    	floatValue = parseFloat(feesCharges).toFixed(1);
-    	
-    	insertHtml = `<i class="fa fa-inr" aria-hidden="true"></i> ${floatValue}`;
+		function showCheckout(){
+			var url = "[[@{/show_checkout}]]";
+			var check = [[${checkoutInfo.id}]];
+			var checkClass = $(".checkout-table");
+			var totalPassenger = [[${search.adultNum}]] + [[${search.childNum}]] + [[${search.infantNum}]];
+	    	var params = {checkout_id: check};
+	    	
+	    	checkClass.empty();
+	    	
+	    	$.post(url, params, function(response) {
+				var obj = jQuery.parseJSON(response);
+				var htmlTab = `<tbody>
+					                <tr>
+					                    <td>No. of Pax</td>
+					                    <td class="theme2" id="passengerNum">` + totalPassenger + `</td>
+					                </tr>
+					                <tr>
+					                    <td>Tax & fee</td>
+					                    <td class="theme2">` + obj.flightGSTCost + `</td>
+					                </tr>
+					                <tr>
+					                    <td>Booking Fee</td>
+					                    <td class="theme2">[[${CURRENCY_SYMBOL}]]` + obj.flightCost + `</td>
+					                </tr>
+					                <tr>
+					                    <td>Meal Fee</td>
+					                    <td class="theme2">[[${CURRENCY_SYMBOL}]]` + obj.meal + `</td>
+					                </tr>
+					                <tr>
+					                    <td>Seat Fee</td>
+					                    <td class="theme2">[[${CURRENCY_SYMBOL}]]` + obj.seat + `</td>
+					                </tr>
+					                <tr>
+					                    <td>Baggage Fee</td>
+					                    <td class="theme2">[[${CURRENCY_SYMBOL}]]` + obj.baggage + `</td>
+					                </tr>
+					            </tbody>
+					            <tfoot class="bg-title">
+					                <tr>
+					                    <th class="font-weight-bold white">Total Amount</th>
+					                    <th class="font-weight-bold white">[[${CURRENCY_SYMBOL}]]` + obj.paymentTotal + `</th>
+					                </tr>
+					            </tfoot>`;
+					            
+				checkClass.html(htmlTab);
+	    	}).fail(function(){
+    			alert("Something went wrong in the server! [[@{/show_checkout}]]");
+	    	});
+		}
+	</script>
     
-    	$("#feesAndCharges").html(insertHtml);
-    
-        $("#button_collapse").click(function(){
-            $(this).toggleClass("buttn_stly_eff");
-        })
-    </script>
     <script type="text/javascript">
-    	$(document).ready(function(){
-		  $(".editTraveler").click(function(){
-  			$("#test").removeAttr("style");
-  			$("#test").removeAttr("disabled");
-		  });
-		});
+    	function radioPayment(){
+    		$("#payButton").toggleClass("d-none");
+    		$("#payButtonWallet").toggleClass("d-none");
+    	}
     </script>
-    <script>
-	$(".connectedButton").click(function(){
-		$(this).parent(".buttonSTyle").parent(".styleHHH").parent(".row").parent(".activeSLider").toggleClass("steady");
-	});
-     
-    </script>
-    <script type="text/javascript">
     
-    	$("#flexRadioDefault2").click(function() {
-    		$("#payButton").css("display", "none");
-    		$("#payButtonWallet").css("display", "block");
-    	});
-    	$("#flexRadioDefault1").click(function() {
-    		$("#payButton").css("display", "block");
-    		$("#payButtonWallet").css("display", "none");
-    	});
-    </script>
  	<script type="text/javascript">
  	
  	function checkWalletBalance(form) {

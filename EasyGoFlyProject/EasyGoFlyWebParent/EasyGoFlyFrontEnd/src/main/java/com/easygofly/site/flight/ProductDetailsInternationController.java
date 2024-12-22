@@ -13,9 +13,7 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
 import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -27,13 +25,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.easygofly.entity.BaggageOnline;
+import com.easygofly.entity.CheckoutInfo;
 import com.easygofly.entity.FlightMap;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.SeatsOnline;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.LogService;
-import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
@@ -185,14 +183,8 @@ public class ProductDetailsInternationController {
 		CartItem item = cartRepo.findById(item_id).get();
 
 		if (!flight.getTraceId().equals("offline")) {
-        	/* Fare-rule details */
-        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-            onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
+
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareRule");
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	System.out.println(jsonObjFarerules);
@@ -372,14 +364,9 @@ public class ProductDetailsInternationController {
 		if (!flight.getTraceId().equals("offline")) {
 			
 			/* Fare-rule details */
-        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+			
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareRule");
             
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
-
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
         	JSONObject jsonObjFarerule = jsonObjFareruleResponse.getJSONObject(0);
@@ -387,15 +374,9 @@ public class ProductDetailsInternationController {
         	
         	model.addAttribute("jsonObjFarerule", fareRuleDetail);
         	
-        	
+
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarequote = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareQuote");
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFarerules);
@@ -463,13 +444,7 @@ public class ProductDetailsInternationController {
     		
 
     		/* SSR details */
-        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-            // Open a connection
-            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-            
-            StringBuilder responseBodySSR = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
+            StringBuilder responseBodySSR = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/SSR");
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -769,20 +744,7 @@ public class ProductDetailsInternationController {
 
 		if (!flightOne.getTraceId().equals("offline")) {
         	/* Fare-rule details */
-        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flightOne.getResultIndex());
-        	if (responseCode != HttpURLConnection.HTTP_OK) {
-    			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
-    				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
-    					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
-    				return "redirect:/";
-    		}
-  
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flightOne.getResultIndex(), "/AirService.svc/rest/FareRule");
         	
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	System.out.println(jsonObjFarerules);
@@ -1064,13 +1026,7 @@ public class ProductDetailsInternationController {
 //        	
         	
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarequote = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareQuote");
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
 //        	System.out.println(jsonObjFarerules);
@@ -1134,13 +1090,7 @@ public class ProductDetailsInternationController {
     		craftType = mainObjSegment.get("Craft").toString();
     		
     		/* SSR details */
-        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-            // Open a connection
-            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-            
-            StringBuilder responseBodySSR = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
+            StringBuilder responseBodySSR = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/SSR");
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -1293,13 +1243,7 @@ public class ProductDetailsInternationController {
 		if (!flight.getTraceId().equals("offline")) {
 			
 			/* Fare-rule details */
-        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
-            
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareRule");
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	JSONArray jsonObjFareruleResponse = jsonObjFarerules.getJSONObject("Response").getJSONArray("FareRules");
@@ -1310,13 +1254,7 @@ public class ProductDetailsInternationController {
         	
         	
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarequote = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareQuote");
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFarerules);
@@ -1380,13 +1318,7 @@ public class ProductDetailsInternationController {
     		craftType = mainObjSegment.get("Craft").toString();
     		
     		/* SSR details */
-        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-            // Open a connection
-            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-            
-            StringBuilder responseBodySSR = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
+            StringBuilder responseBodySSR = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/SSR");
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);

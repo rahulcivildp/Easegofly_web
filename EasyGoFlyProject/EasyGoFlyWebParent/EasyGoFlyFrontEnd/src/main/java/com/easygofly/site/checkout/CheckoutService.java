@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.stereotype.Service;
 
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.CheckoutInfo;
 import com.easygofly.entity.Coupon;
 
 @Service
@@ -21,6 +22,9 @@ public class CheckoutService {
 		checkoutInfo.setFlightCost(flightCost);
 		checkoutInfo.setFlightServiceCost(flightServiceCost);
 		checkoutInfo.setFlightGSTCost(flightGSTCost);
+		checkoutInfo.setMeal(0);
+		checkoutInfo.setBaggage(0);
+		checkoutInfo.setSeat(0);
 		checkoutInfo.setOrderDate(new Date());
 		checkoutInfo.setPaymentTotal(paymentTotal);
 		

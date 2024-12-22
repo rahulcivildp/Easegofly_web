@@ -11,7 +11,7 @@
 			<div class="row item-slider2" >
 			 
 			    <div class="col-lg-6" id="search-item-1">
-					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchDesk" onsubmit="console.log('Form submitted');">
+					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchDesk" onsubmit="return formSearchSubmit();">
 	                    <div class="row d-flex align-items-center justify-content-between w-100">
 	                        <div class="col-lg mb-2 search-col">
 	                            <div class="form-group">
@@ -87,7 +87,7 @@
 					</form>
 			    </div>
 			    <div class="col-lg-6" id="search-item-2">
-					<form th:action="@{/flight_search_save}" method="get">
+					<form th:action="@{/flight_search_save}" method="get"  onsubmit="return formSearchSubmit();">
 				      <div class="row d-flex align-items-center justify-content-between">
 	                        <div class="col-lg mb-2 search-col">
 	                            <div class="form-group">
@@ -345,7 +345,7 @@
 			<div class="row item-slider3">
 			  
 			    <div class="col-lg-6" id="search-item-1">
-					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchMobile" onsubmit="console.log('Form submitted');">
+					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchMobile"  onsubmit="return formSearchSubmit();">
 	                    <div class="row d-flex align-items-center justify-content-between">
 	                        <div class="col-6 mb-2">
 	                            <div class="form-group">
@@ -416,7 +416,7 @@
 					</form>
 			    </div>
 			    <div class="col-lg-6" id="search-item-2">
-					<form th:action="@{/flight_search_save}" method="get">
+					<form th:action="@{/flight_search_save}" method="get"  onsubmit="return formSearchSubmit();">
 				      <div class="row d-flex align-items-center justify-content-between">
 	                        <div class="col-6 mb-2">
 	                            <div class="form-group">

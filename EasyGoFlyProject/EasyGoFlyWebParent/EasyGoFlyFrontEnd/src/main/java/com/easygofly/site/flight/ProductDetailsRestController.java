@@ -16,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.ProductDetail;
-import com.easygofly.entity.TravellerDetail;
 import com.easygofly.site.flight.order.CouponRepository;
 
 @RestController
@@ -27,7 +26,6 @@ public class ProductDetailsRestController {
 	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private ProductDetailsInternationController pInternationController;
-	@Autowired private TravellerRepository travellerRepo;
 	
 	List<ProductDetail> testflights = new ArrayList<>();
 	
@@ -51,6 +49,16 @@ public class ProductDetailsRestController {
 		return st;
 	}
 
+	@PostMapping("/show_checkout")
+	public String showCheckoutInfo(@Param("checkout_id") Integer checkout_id) {
+		return restService.checkoutMentod(checkout_id);
+	}
+	
+	@PostMapping("/show_checkout_return")
+	public String showCheckoutInfoReturn(@Param("checkoutOne_id") Integer checkoutOne_id, @Param("checkoutTwo_id") Integer checkoutTwo_id) {
+		return restService.checkoutReturnMentod(checkoutOne_id,  checkoutTwo_id);
+	}
+	
 	
 	@GetMapping("/find_baggage_{code}")
 	public String findBaggage(@PathVariable(name = "code") String code) {
@@ -83,152 +91,50 @@ public class ProductDetailsRestController {
 	}
 	
 	@PostMapping("/save_meal")
-	public void saveMeal(@Param("id") Integer id, @Param("code") String code) {
-		
-		restService.mealsMethod(id, code,  productDetailsController.mealsOnlineList);
+	public void saveMeal(@Param("id") Integer id, @Param("code") String code, @Param("checkout_id") Integer checkout_id, @Param("type") String type) {
+		if (type.equals("oneway")) {
+			restService.mealsMethod(id, code,  productDetailsController.mealsOnlineList, checkout_id);
+		} else {
+			restService.mealsMethod(id, code,  productDetailsController.mealsOnlineListReturn, checkout_id);
+		}
 	}
 	
 	@PostMapping("/save_meal_international")
-	public void saveMealInter(@Param("id") Integer id, @Param("code") String code) {
+	public void saveMealInter(@Param("id") Integer id, @Param("code") String code, @Param("checkout_id") Integer checkout_id) {
 		
-		restService.mealsMethod(id, code,  pInternationController.mealsOnlineList);
+		restService.mealsMethod(id, code,  pInternationController.mealsOnlineList, checkout_id);
 	}
 	
 	@PostMapping("/save_baggage")
-	public void saveBaggage(@Param("id") Integer id, @Param("code") String code) {
-		
-		restService.baggageMethod(id, code,  productDetailsController.baggageOnlineList);
+	public void saveBaggage(@Param("id") Integer id, @Param("code") String code, @Param("checkout_id") Integer checkout_id, @Param("type") String type) {
+		if (type.equals("oneway")) {
+			restService.baggageMethod(id, code,  productDetailsController.baggageOnlineList, checkout_id);
+		} else {
+			restService.baggageMethod(id, code,  productDetailsController.baggageOnlineListReturn, checkout_id);
+		}
 	}
 	
 	@PostMapping("/save_baggage_international")
-	public void saveBaggageInter(@Param("id") Integer id, @Param("code") String code) {
+	public void saveBaggageInter(@Param("id") Integer id, @Param("code") String code, @Param("checkout_id") Integer checkout_id) {
 		
-		restService.baggageMethod(id, code,  pInternationController.baggageOnlineList);
+		restService.baggageMethod(id, code,  pInternationController.baggageOnlineList, checkout_id);
 	}
 	
 	@PostMapping("/save_seat")
-	public void saveSeat(@Param("id") Integer id, @Param("seatId") Integer seatId) {
-		
-		restService.seatMethod(id, seatId,  productDetailsController.seatsOnlineList);
+	public void saveSeat(@Param("id") Integer id,  @Param("code") String code, @Param("checkout_id") Integer checkout_id, @Param("type") String type) {
+		if (type.equals("oneway")) {
+			restService.seatMethod(id, code,  productDetailsController.seatsOnlineList, checkout_id);
+		} else {
+			restService.seatMethod(id, code,  productDetailsController.seatsOnlineListReturn, checkout_id);
+		}
 	}
 	
 	@PostMapping("/save_seat_international")
-	public void saveSeatInter(@Param("id") Integer id, @Param("seatId") Integer seatId) {
+	public void saveSeatInter(@Param("id") Integer id,  @Param("code") String code, @Param("checkout_id") Integer checkout_id) {
 		
-		restService.seatMethod(id, seatId,  pInternationController.seatsOnlineList);
+		restService.seatMethod(id, code,  pInternationController.seatsOnlineList, checkout_id);
 	}
 	
-	@PostMapping("/save_every_components")
-	public void saveEveryComponents(@Param("id") Integer id, @Param("seatId") Integer seatId, @Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
-		
-		TravellerDetail travellerDetail =  travellerRepo.findById(id).get();
-		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  productDetailsController.mealsOnlineList,  productDetailsController.baggageOnlineList,  productDetailsController.seatsOnlineList);
-	}
-	
-	@PostMapping("/save_every_return_components")
-	public void saveEveryReturnComponents(@Param("travelerIdOne") Integer travelerIdOne, @Param("travelerIdTwo") Integer travelerIdTwo, @Param("seatId") Integer seatId, 
-			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode, @Param("seatIdTwo") Integer seatIdTwo, @Param("mealCodeTwo") String mealCodeTwo, 
-			@Param("baggageCodeTwo") String baggageCodeTwo) {
-		TravellerDetail travellerDetail =  travellerRepo.findById(travelerIdOne).get();
-		TravellerDetail travellerDetailTwo =  travellerRepo.findById(travelerIdTwo).get();
-
-		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  productDetailsController.mealsOnlineList,  productDetailsController.baggageOnlineList,  productDetailsController.seatsOnlineList);
-		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  productDetailsController.mealsOnlineList,  productDetailsController.baggageOnlineList,  productDetailsController.seatsOnlineList);
-	}
-
-	@PostMapping("/save_every_components_international")
-	public void saveEveryComponentsInter(@Param("id") Integer id, @Param("seatId") Integer seatId, @Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode) {
-		
-		TravellerDetail travellerDetail =  travellerRepo.findById(id).get();
-		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
-	}
-
-	@PostMapping("/save_every_return_components_international")
-	public void saveEveryReturnComponentsInter(@Param("travelerIdOne") Integer travelerIdOne, @Param("travelerIdTwo") Integer travelerIdTwo, @Param("seatId") Integer seatId, 
-			@Param("mealCode") String mealCode, @Param("baggageCode") String baggageCode, @Param("seatIdTwo") Integer seatIdTwo, @Param("mealCodeTwo") String mealCodeTwo, 
-			@Param("baggageCodeTwo") String baggageCodeTwo) {
-		TravellerDetail travellerDetail =  travellerRepo.findById(travelerIdOne).get();
-		TravellerDetail travellerDetailTwo =  travellerRepo.findById(travelerIdTwo).get();
-
-		restService.mealBaggageSeatMethod(seatId, mealCode, baggageCode, travellerDetail,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
-		restService.mealBaggageSeatMethod(seatIdTwo, mealCodeTwo, baggageCodeTwo, travellerDetailTwo,  pInternationController.mealsOnlineList,  pInternationController.baggageOnlineList,  pInternationController.seatsOnlineList);
-	}
-
-	// Flight List
-
-//	@GetMapping("/get_flight_list")
-//	public List<ProductDetail> getFlightList() {
-//		return productDetailsController.listProductDetailsInSearch;
-//	} 
-//
-//	@GetMapping("/get_least_fare_by_brand")
-//	public List<ProductDetail> getleastFareByBrand() {
-//		List<ProductDetail> flights = productDetailsController.listProductDetailsOnline;
-//		List<ProductDetail> newFligtList = new ArrayList<ProductDetail>();
-//		List<String> listBrand = new ArrayList<String>();
-//        
-//		for (ProductDetail flight : flights) {
-//			listBrand.add(flight.getBrand());
-//		}
-//		HashSet<String> set = new HashSet<>(listBrand);
-//		List<String> listWithoutDuplicates = new ArrayList<>(set);
-//		for (int i = 0; i < listWithoutDuplicates.size(); i++) {
-//			 // Step 3: Find the minimum price
-//	        double minPrice = Double.MAX_VALUE;
-//	        int count = 0;
-//	        
-//			for (ProductDetail flight : flights) {
-//				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
-//					if (flight.getPriceADT() < minPrice) {
-//		                minPrice = flight.getPriceADT();
-//		            }
-//				}
-//			}
-//
-//			for (ProductDetail flight : flights) {
-//				if (flight.getBrand().equals(listWithoutDuplicates.get(i))) {
-//					if (count == 0) {
-//						if (minPrice == flight.getPriceADT()) {
-//							newFligtList.add(flight);
-//							count++;
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		newFligtList.sort(Comparator.comparingDouble(ProductDetail::getPriceADT));
-//		
-//		return newFligtList;
-//	} 
-//
-//	// Sorting methods  
-//
-//	@GetMapping("/sort_flights_by_price")
-//	public void sortByPrice() {
-//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getPriceADT).thenComparing(ProductDetail::getMarkupADT));
-//	} 
-//
-//	@GetMapping("/sort_flights_by_duration")
-//	public void sortByDuration() {
-//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDuration));
-//	} 
-//
-//	@GetMapping("/sort_flights_by_arrival")
-//	public void sortByArrival() {
-//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getArrTimeInteger));
-//	} 
-//
-//	@GetMapping("/sort_flights_by_departure")
-//	public void sortByDeparture() {
-//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparingDouble(ProductDetail::getDepTimeInteger));
-//	} 
-//
-//	@GetMapping("/sort_flights_by_brand")
-//	public void sortByBrand() {
-//		productDetailsController.listProductDetailsInSearch.sort(Comparator.comparing(ProductDetail::getBrand));
-//	}
-//	
 	
 	//Timer Method
 	

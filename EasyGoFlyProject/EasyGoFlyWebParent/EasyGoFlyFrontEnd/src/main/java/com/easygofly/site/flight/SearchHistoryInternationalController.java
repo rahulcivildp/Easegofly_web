@@ -2,9 +2,7 @@ package com.easygofly.site.flight;
 
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -228,15 +226,8 @@ public class SearchHistoryInternationalController {
 	}
 
 	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date) throws MalformedURLException, IOException {
-		// Create URL object with the API end-point
-        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
-
-        // Open a connection
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
         
-        StringBuilder responseBodySearch = new StringBuilder();
-        
-        int responseCode = onlineFlightService.apiOnlineSearchMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
+        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchMod(cityOne, cityTwo, adultNum, childNum, infantNum, date);
 
 		String traceIdStr = "offline";
 		String[] hasErrorArr = new String[2];
@@ -382,7 +373,6 @@ public class SearchHistoryInternationalController {
 			}
 			
 			model.addAttribute("listProducts", pInternationController.listProductDetailsOnline);
-			model.addAttribute("responseCode", responseCode);
 			JSONObject jsonObjTicketResponseError = jsonObjSearch.getJSONObject("Response").getJSONObject("Error");
 			hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
@@ -394,8 +384,6 @@ public class SearchHistoryInternationalController {
 			hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 		}
         
-        // Close the connection
-		connectionSearch.disconnect();
         
         return hasErrorArr;
 	}
@@ -566,14 +554,8 @@ public class SearchHistoryInternationalController {
 	public String[] searchReturnInternationalFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch =  new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
 
-        // Open a connection
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
-        
-        StringBuilder responseBodySearch = new StringBuilder();
-        
-        int responseCode = onlineFlightService.apiOnlineSearchModReturn(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
+        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchModReturn(cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
 
 		String traceIdStr = "offline";
 		String[] hasErrorArr = new String[2];
@@ -894,10 +876,7 @@ public class SearchHistoryInternationalController {
 		model.addAttribute("flightMaps", pInternationController.flightMaps);
 		model.addAttribute("listProducts", pInternationController.listProductDetailsOnline);
 		model.addAttribute("listProductsReturn", pInternationController.listProductDetailsOnlineReturn);
-        model.addAttribute("responseCode", responseCode);
         
-        // Close the connection
-        connectionSearch.disconnect();
 
         return hasErrorArr;
 	}

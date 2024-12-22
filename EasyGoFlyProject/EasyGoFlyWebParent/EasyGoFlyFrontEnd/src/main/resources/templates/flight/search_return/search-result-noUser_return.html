@@ -5,6 +5,10 @@
 	<script>
 	   moduleURL = '[[@{/}]]';
 	   timeInSec = 6 * 60 * 1000;
+	   
+	   
+      $("#status").fadeOut();
+      $("#preloader").delay(100).fadeOut("slow");
 	</script>
 	
 	<script type="text/javascript" th:src="@{/js/timer.js}"></script>

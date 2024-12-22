@@ -16,7 +16,7 @@
     <!-- Bootstrap core CSS -->
     <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
     <!--Custom CSS-->
-    <link th:href="@{/assets/css/style.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/assets/css/styles.css}" rel="stylesheet" type="text/css">
     <!--Plugin CSS-->
     <link th:href="@{/assets/css/plugin.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/assets/fonts/flaticon.css}" rel="stylesheet" type="text/css">
@@ -724,7 +724,7 @@
     <script th:src="@{/assets/js/particles.js}"></script>
     <script th:src="@{/assets/js/particlerun.js}"></script>
     <script th:src="@{/assets/js/plugin.js}"></script>
-    <script th:src="@{/assets/js/main.js}"></script>
+    <script th:src="@{/assets/js/mains.js}"></script>
     <script th:src="@{/assets/js/custom-nav.js}"></script>
 	
     <script th:src="@{/assets/js/custom-accordian.js}"></script>
@@ -759,7 +759,14 @@
 	    type="text/javascript"></script> -->
 	
 	  <!-- script -->
-	  <script th:src="@{/assets/js/script.js}"></script>
+	  <script th:src="@{/assets/js/scripts.js}"></script>
+	  
+	<script>
+		function formSearchSubmit() {
+			$(".preloading").removeClass("d-none");
+		}
+	</script>
+	  
 	<script>
 		changeTabColorFooter("#wallet-home-lg", "/wallet-home");
 		changeTabColorFooter("#account-lg", "/account");

@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Category;
+import com.easygofly.entity.CheckoutInfo;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.Customer;
@@ -40,7 +41,7 @@ import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
 import com.easygofly.entity.Wallet;
-import com.easygofly.site.checkout.CheckoutInfo;
+import com.easygofly.site.checkout.CheckOutRepository;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.BrandRepositoy;
@@ -86,8 +87,9 @@ public class OrderController {
 	@Autowired private ProductDetailsController productDetailsController;
 	@Autowired private BrandRepositoy brandRepo;
 	@Autowired private EntityManager entityManager;
-	@Autowired TransactionService transactionService;
-	@Autowired TotalTransactionService totalTransactionService;
+	@Autowired private TransactionService transactionService;
+	@Autowired private TotalTransactionService totalTransactionService;
+	@Autowired private CheckOutRepository checkOutRepo;
 	
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -112,9 +114,7 @@ public class OrderController {
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
 			@RequestParam(name = "item_id") Integer item_id,
-			@RequestParam(name = "couponCode") String couponCode,
-			@RequestParam(name = "couponCode1") String couponCode1,
-			@RequestParam(name = "totalPayment") String totalPayment,
+			@RequestParam(name = "checkout_id") Integer checkout_id,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
@@ -123,9 +123,7 @@ public class OrderController {
 			ProductDetail flight = flightRepo.findById(flightId).get();
 			SearchHistory search = searchRepo.findById(searchId).get();
 			CartItem item = cartRepo.findById(item_id).get();
-			
-			String paymentType = "PAYMENT_GATEWAY";
-			PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
+			CheckoutInfo checkout = checkOutRepo.findById(checkout_id).get();
 			
 			Date date = flight.getDate();
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
@@ -139,23 +137,26 @@ public class OrderController {
 			List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByCurtItemAndProductDetail(flight, item);
 
 			cartService.updateCartItemOrdered(item);
-
-			Coupon coupon = couponService.findCouponByCode(couponCode);
-			Coupon coupon1 = couponService.findCouponByCode(couponCode1);
-			CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
-			orderService.loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
-					paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
 			
-			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id;
+			if (loggedCustomer != null) {
+				orderService.loginControl("" + checkout.getPaymentTotal(), customerService.getByPhone(loggedCustomer.getUsername()), flight, search, item,
+						PaymentMethod.NONE, orderName, order, travellerDetails, checkout);
+			} else if (googleLogin != null) {
+				orderService.loginControl("" + checkout.getPaymentTotal(), customerService.getByPhone(googleLogin.getEmail()), flight, search, item,
+						PaymentMethod.NONE, orderName, order, travellerDetails, checkout);
+			}
+			
+			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id + "&" + checkout_id;
 		} catch (Exception e) {
-			return "redirect:/flight_order_" + searchId + "&" + flightId + "&" + item_id;
+			return "redirect:/flight_order_" + searchId + "&" + flightId + "&" + item_id + "&" + checkout_id;
 		}
 	}
 
-	@GetMapping("/flight_order_{search_id}&{flight_id}&{item_id}")
+	@GetMapping("/flight_order_{search_id}&{flight_id}&{item_id}&{checkout_id}")
 	public String orderPage(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
+			@PathVariable(name = "checkout_id") Integer checkout_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 
@@ -183,10 +184,10 @@ public class OrderController {
 		CartItem item = cartRepo.findById(item_id).get();
 	    City cityOneFound = cityRepo.getCityByCode(flight.getCityOne());
 	    City cityTwoFound = cityRepo.getCityByCode(flight.getCityTwo());
+	    CheckoutInfo checkoutInfo = checkOutRepo.findById(checkout_id).get();
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
-		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
 		Order order = orderRepo.findByCartItemOrder(item_id);
 		
 		if (!search_id.equals(null)) {
@@ -316,10 +317,7 @@ public class OrderController {
 					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 			}
 			
-		} else if (productDetail.getMode().equals("AirIQ")) {
-			hasErrorArr = orderService.ticketDetailsAirIQ(order, productDetail);
-			
-		} else if (productDetail.getMode().equals("Offline-data")) {
+		} if (productDetail.getMode().equals("Offline-data")) {
 			hasErrorArr[0] = "0";
 			hasErrorArr[1] = "0";
 		} else {
@@ -533,9 +531,6 @@ public class OrderController {
 					productDetailsController.offeredFare, productDetailsController.serviceFee, productDetailsController.traceId);
 			}
 			
-		} else if (productDetail.getMode().equals("AirIQ")) {
-			hasErrorArr = orderService.ticketDetailsAirIQ(order, productDetail);
-			
 		} else if (productDetail.getMode().equals("Offline-data")) {
 			hasErrorArr[0] = "0";
 			hasErrorArr[1] = "0";
@@ -659,10 +654,8 @@ public class OrderController {
 			@RequestParam(name = "itemOne_id") Integer itemOne_id, 
 			@RequestParam(name = "flightTwo_id") Integer flightTwo_id, 
 			@RequestParam(name = "itemTwo_id") Integer itemTwo_id,
-			@RequestParam(name = "couponCode") String couponCode,
-			@RequestParam(name = "couponCode1") String couponCode1,
-			@RequestParam(name = "totalPayment1") String totalPayment1,
-			@RequestParam(name = "totalPayment2") String totalPayment2,
+			@RequestParam(name = "checkoutOne_id") Integer checkoutOne_id,
+			@RequestParam(name = "checkoutTwo_id") Integer checkoutTwo_id,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
 		try {
@@ -673,36 +666,41 @@ public class OrderController {
 			CartItem itemOne = cartRepo.findById(itemOne_id).get();
 			ProductDetail flightTwo = flightRepo.findById(flightTwo_id).get();
 			CartItem itemTwo = cartRepo.findById(itemTwo_id).get();
+			CheckoutInfo checkoutOne = checkOutRepo.findById(checkoutOne_id).get();
+			CheckoutInfo checkoutTwo = checkOutRepo.findById(checkoutTwo_id).get();
 			
 			String returnTypeOne = "R1";
 			String returnTypeTwo = "R2";
 			
-			String paymentType = "PAYMENT_GATEWAY";
-			PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
 			Date dateOne = flightOne.getDate();
 			Date dateTwo = flightTwo.getDate();
-			Coupon coupon = couponService.findCouponByCode(couponCode);
-			Coupon coupon1 = couponService.findCouponByCode(couponCode1);
-			CheckoutInfo checkoutInfoOne = checkoutService.prepareCheckout(itemOne);
-			CheckoutInfo checkoutInfoTwo = checkoutService.prepareCheckout(itemTwo);
 			
-			orderService.orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, couponCode, couponCode1, totalPayment1, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoOne);
-			orderService.orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, couponCode, couponCode1, totalPayment2, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoTwo);
+			if (loggedCustomer != null) {
+				orderService.orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, "" + checkoutOne.getPaymentTotal(), customerService.getByPhone(loggedCustomer.getUsername()), PaymentMethod.NONE, checkoutOne);
+				orderService.orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, "" + checkoutTwo.getPaymentTotal(), customerService.getByPhone(loggedCustomer.getUsername()), PaymentMethod.NONE, checkoutTwo);
+				
+			} else if (googleLogin != null) {
+				orderService.orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, "" + checkoutOne.getPaymentTotal(), customerService.getByPhone(googleLogin.getEmail()), PaymentMethod.NONE, checkoutOne);
+				orderService.orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, "" + checkoutTwo.getPaymentTotal(), customerService.getByPhone(googleLogin.getEmail()), PaymentMethod.NONE, checkoutTwo);
+				
+			}
 			
 			checkoutService.prepareCheckoutReturn(itemOne, itemTwo);
 			
-			return "redirect:/flight_return_order_" + search.getId() + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
+			return "redirect:/flight_order/return_" + search.getId() + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id + "&" + checkoutOne_id + "&" + checkoutTwo_id;
 		} catch (Exception e) {
-			return "redirect:/flight_return_order_" + searchId + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id;
+			return "redirect:/flight_order/return_" + searchId + "&" + flightOne_id + "&" + itemOne_id + "&" + flightTwo_id + "&" + itemTwo_id + "&" + checkoutOne_id + "&" + checkoutTwo_id;
 		}
 	}
 
-	@GetMapping("/flight_return_order_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}")
+	@GetMapping("/flight_order/return_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}&{checkoutInfOne_id}&{checkoutInfTwo_id}")
 	public String orderReturnPage(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flightOne_id") Integer flightOne_id, 
 			@PathVariable(name = "itemOne_id") Integer itemOne_id, 
 			@PathVariable(name = "flightTwo_id") Integer flightTwo_id, 
 			@PathVariable(name = "itemTwo_id") Integer itemTwo_id,
+			@PathVariable(name = "checkoutInfOne_id") Integer checkoutInfOne_id, 
+			@PathVariable(name = "checkoutInfTwo_id") Integer checkoutInfTwo_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 
@@ -725,26 +723,22 @@ public class OrderController {
 			model.addAttribute("balance", doubleAmount);
 			model.addAttribute("customer", customer);
 		}
-		
+
+		SearchHistory search = searchRepo.findById(search_id).get();
 		ProductDetail flight1 = flightRepo.findById(flightOne_id).get();
 		CartItem item1 = cartRepo.findById(itemOne_id).get();
 		ProductDetail flight2 = flightRepo.findById(flightTwo_id).get();
 		CartItem item2 = cartRepo.findById(itemTwo_id).get();
+	    CheckoutInfo checkoutInfoOne = checkOutRepo.findById(checkoutInfOne_id).get();
+	    CheckoutInfo checkoutInfoTwo = checkOutRepo.findById(checkoutInfTwo_id).get();
+	    City cityOneFound = cityRepo.getCityByCode(search.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
 		
 		List<TravellerDetail> travelers1 = productService.findTraveller(flight1, item1);
 		List<TravellerDetail> travelers2 = productService.findTraveller(flight2, item2);
 
-		CheckoutInfo checkoutInfo = checkoutService.prepareCheckoutReturn(item1, item2);
 		Order order1 = orderRepo.findByCartItemOrder(itemOne_id);
 		Order order2 = orderRepo.findByCartItemOrder(itemTwo_id);
-		
-		if (!search_id.equals(null)) {
-			SearchHistory search = searchRepo.findById(search_id).get();
-			model.addAttribute("search", search);
-		} else {
-			SearchHistory search = searchRepo.findByCart_id(itemOne_id);
-			model.addAttribute("search", search);
-		}
 		
 		/* ------ ZAAKPAY -------- */ /**/
 		Date date = Calendar.getInstance().getTime();  
@@ -781,9 +775,6 @@ public class OrderController {
 		} catch (Exception e) {
 		}
 		
-		Coupon coupon1 = couponService.findCouponByCode(order1.getCouponCode());
-		Coupon coupon2 = couponService.findCouponByCode(order2.getCouponCode());
-		
 		savedOrderReturnId1 = order1.getId();
 		savedOrderReturnId2 = order2.getId();
 		
@@ -791,20 +782,22 @@ public class OrderController {
 
 		model.addAttribute("orderOne", order1);
 		model.addAttribute("orderPrice", orderPrice);
-		model.addAttribute("checkoutInfo", checkoutInfo);
+		model.addAttribute("checkoutInfoOne", checkoutInfoOne);
+		model.addAttribute("checkoutInfoTwo", checkoutInfoTwo);
 		model.addAttribute("travelersOne", travelers1);
 		model.addAttribute("itemOne", item1);
 		model.addAttribute("flightOne", flight1);
 		model.addAttribute("search_id", search_id);
 		model.addAttribute("itemOne_id", itemOne_id);
-		model.addAttribute("coupon1", coupon1);
 		model.addAttribute("orderTwo", order2);
 		model.addAttribute("travelersTwo", travelers2);
 		model.addAttribute("itemTwo", item2);
 		model.addAttribute("flightTwo", flight2);
 		model.addAttribute("itemTwo_id", itemTwo_id);
-		model.addAttribute("coupon2", coupon2);
+		model.addAttribute("search", search);
 		model.addAttribute("timeRemainingPro", productDetailsController.timeRemainingPro);
+		model.addAttribute("cityOneName", cityOneFound.getCityName());
+		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
 		
 		return "order/return/flight_order";
 	}

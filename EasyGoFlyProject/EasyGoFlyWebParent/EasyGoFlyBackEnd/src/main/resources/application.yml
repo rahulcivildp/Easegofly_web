@@ -1,10 +1,17 @@
 server:
   port: 8443
   servlet:
-    context-path: /admin
+    context-path: /
+  ssl:
+    enabled: true
+    key-store: springboot.p12
+    key-store-password: password
+    key-store-type: PKCS12
+    key-alias: 1
+    key-password: password
 spring:
   datasource:
-    password: tanmay@311
+    password: Tanmay@311
     url: jdbc:mysql://127.0.0.1:3306/easygofly
     username: root
   jpa:

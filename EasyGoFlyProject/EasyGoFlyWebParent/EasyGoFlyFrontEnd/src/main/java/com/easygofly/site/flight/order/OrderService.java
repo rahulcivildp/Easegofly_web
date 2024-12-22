@@ -2,9 +2,7 @@ package com.easygofly.site.flight.order;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,19 +24,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.CheckoutInfo;
 import com.easygofly.entity.Country;
-import com.easygofly.entity.Coupon;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.MealsOnline;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
-import com.easygofly.entity.PaxAirIQ;
 import com.easygofly.entity.PaymentMethod;
 import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.SearchHistory;
@@ -48,9 +44,6 @@ import com.easygofly.entity.Wallet;
 import com.easygofly.entity.exception.UserNotFoundException;
 import com.easygofly.site.LogService;
 import com.easygofly.site.Utility;
-import com.easygofly.site.checkout.CheckoutInfo;
-import com.easygofly.site.checkout.CheckoutService;
-import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.OnlineFlightService;
 import com.easygofly.site.flight.ProductDetailService;
 import com.easygofly.site.flight.ProductDetailsController;
@@ -58,8 +51,6 @@ import com.easygofly.site.flight.TravelerService;
 import com.easygofly.site.flight.TravellerRepository;
 import com.easygofly.site.flight.SearchHistoryRepository;
 import com.easygofly.site.flight.SearchHistoryService;
-import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
-import com.easygofly.site.security.oauth.CustomerOAuth2User;
 import com.easygofly.site.setting.EmailSettingBag;
 import com.easygofly.site.setting.SettingService;
 import com.easygofly.site.shoppingCart.CartItemRepository;
@@ -73,8 +64,6 @@ public class OrderService {
 	
 	@Autowired OrderRepository orderRepo;
 	@Autowired TravellerRepository travellerRepo;
-	@Autowired private CustomerService customerService;
-	@Autowired private CheckoutService checkoutService;
 	@Autowired private CartItemService cartService;
 	@Autowired private CartItemRepository cartRepo;
 	@Autowired private SearchHistoryRepository searchRepo;
@@ -87,8 +76,7 @@ public class OrderService {
 	@Autowired private LogService logService;
 	@Autowired private SettingService settingService;
 
-	public Order createOrder(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo, SearchHistory searchHistory, String orderName, List<TravellerDetail> travellerDetails) {
-		Order newOrder = new Order();
+	public Order createOrder(Customer customer, Order newOrder, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo, SearchHistory searchHistory, String orderName, List<TravellerDetail> travellerDetails) {
 		newOrder.setCreatedTime(new Date());
 		newOrder.setOrderStatus(OrderStatus.NEW);
 		newOrder.setCustomer(customer);
@@ -263,131 +251,46 @@ public class OrderService {
 		return travellerRepo.save(travellerDetail);
 	}
 	
-	public void loginControl(String couponCode, String couponCode1, String totalPayment,
-			EasegoflyPhoneCustomerDetails loggedCustomer, CustomerOAuth2User googleLogin, ProductDetail flight,
-			SearchHistory search, CartItem item, PaymentMethod paymentMethod, String orderName, Order order,
-			List<TravellerDetail> travellerDetails, Coupon coupon, Coupon coupon1, CheckoutInfo checkoutInfo) {
-		String email;
-		Customer customer;
-		if (loggedCustomer != null) {
-			email = loggedCustomer.getUsername();
-			customer = customerService.getByPhone(email);
-			if (coupon1 != null) {
-				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
-				if (order != null) {
-					 updateOrderPrice(order, checkoutInfo1);
-					 addCouponCode(order, couponCode1);
-				}
-				
-				Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				 addCouponCode(orderSaved, couponCode1);
-				for (TravellerDetail travellerDetail : travellerDetails) {
-					 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
-				}
-			} else if (coupon != null) {
-				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
-				if (order != null) {
-					 updateOrderPrice(order, checkoutInfo1);
-					 addCouponCode(order, couponCode);
-				}
-				
-				Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				 addCouponCode(orderSaved, couponCode);
-				for (TravellerDetail travellerDetail : travellerDetails) {
-					 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
-				}
-			} else if (order != null) {
-				if (flight.getTraceId().equals("offline")) {
-					 updateOrderPrice(order, checkoutInfo);
-					 deleteCouponCode(order);
-				} else {
-					 updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
-					deleteCouponCode(order);
-				}
-				
+	public void loginControl(String totalPayment, Customer customer, ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod, String orderName, Order order,
+			List<TravellerDetail> travellerDetails, CheckoutInfo checkoutInfo) {
+		if (order != null) {
+			if (flight.getTraceId().equals("offline")) {
+				updateOrderPrice(order, checkoutInfo);
+				deleteCouponCode(order);
 			} else {
-				if (flight.getTraceId().equals("offline")) {
-					Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
-					}
-					 deleteCouponCode(orderSaved);
-				} else {
-					Order orderSaved =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						 updateTravelersOrderId(travellerDetail.getId(), orderSaved);
-					}
-					 deleteCouponCode(orderSaved);
-				}	
+				updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
+				deleteCouponCode(order);
 			}
 			
-		} else if (googleLogin != null) {
-			email = googleLogin.getEmail();
-			customer = customerService.getByEmail(email);
-			if (coupon1 != null) {
-				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon1);
-				if (order != null) {
-					 updateOrderPrice(order, checkoutInfo1);
-					 addCouponCode(order, couponCode1);
-				}
-				
-				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				 addCouponCode(order2, couponCode1);
+		} else {
+			if (flight.getTraceId().equals("offline")) {
+				Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
 				for (TravellerDetail travellerDetail : travellerDetails) {
-					 updateTravelersOrderId(travellerDetail.getId(), order2);
+					updateTravelersOrderId(travellerDetail.getId(), orderSaved);
 				}
-			} else if (coupon != null) {
-				CheckoutInfo checkoutInfo1 = checkoutService.prepareCheckoutWithCoupon(item, coupon);
-				if (order != null) {
-					 updateOrderPrice(order, checkoutInfo1);
-					 addCouponCode(order, couponCode);
-				}
-				
-				Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo1, orderName, order, customer, travellerDetails);
-				 addCouponCode(order2, couponCode);
-				for (TravellerDetail travellerDetail : travellerDetails) {
-					 updateTravelersOrderId(travellerDetail.getId(), order2);
-				}
-			} else if (order != null) {
-				if (flight.getTraceId().equals("offline")) {
-					 updateOrderPrice(order, checkoutInfo);
-					 deleteCouponCode(order);
-				} else {
-					 updateOrderPriceOnline(order, travellerDetails, checkoutInfo);
-					 deleteCouponCode(order);
-				}
+				deleteCouponCode(orderSaved);
 			} else {
-				if (flight.getTraceId().equals("offline")) {
-					Order order2 = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						 updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-					 deleteCouponCode(order2);
-				} else {
-					Order order2 =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
-					for (TravellerDetail travellerDetail : travellerDetails) {
-						 updateTravelersOrderId(travellerDetail.getId(), order2);
-					}
-					 deleteCouponCode(order2);
-				}	
-			}
+				Order orderSaved =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
+				for (TravellerDetail travellerDetail : travellerDetails) {
+					updateTravelersOrderId(travellerDetail.getId(), orderSaved);
+				}
+				deleteCouponCode(orderSaved);
+			}	
 		}
 	}
 
 	public Order saveOrderCreate(ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod,
 			CheckoutInfo checkoutInfo, String orderName, Order order, Customer customer, List<TravellerDetail> travellerDetails) {
 		if (order == null) {
-			return  createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
-		}else if (item.getId() != order.getCartId()) {
-			return  createOrder(customer, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
+			Order newOrder = new Order();
+			return  createOrder(customer, newOrder, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
 		} else {
-			return null;
+			return createOrder(customer, order, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
 		}
 	}
 
-	public void orderTravelerSaveMethod(SearchHistory search, ProductDetail flight, Date date, CartItem item, String returnType, String couponCode, String couponCode1, String totalPayment, 
-			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin, PaymentMethod paymentMethod, Coupon coupon, Coupon coupon1,
-			CheckoutInfo checkoutInfo) { 
+	public void orderTravelerSaveMethod(SearchHistory search, ProductDetail flight, Date date, CartItem item, String returnType, String totalPayment, 
+			Customer customer, PaymentMethod paymentMethod, CheckoutInfo checkoutInfo) { 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
 		String dateTime = dateFormat.format(date);
 		
@@ -400,20 +303,14 @@ public class OrderService {
 
 		cartService.updateCartItemOrdered(item);
 
-		 loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
-				paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
+		 loginControl(totalPayment, customer, flight, search, item,
+				paymentMethod, orderName, order, travellerDetails, checkoutInfo);
 		
 	}
 
 	public void methodSSR(ProductDetail productDetail) throws MalformedURLException, IOException {
 		/* SSR details */
-    	URL urlSSR = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-        // Open a connection
-        HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-        
-        StringBuilder responseBodySSR = new StringBuilder();
-        
-    	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, productDetailsController.traceId, productDetail.getResultIndex());
+        StringBuilder responseBodySSR = onlineFlightService.apiOnlineFareruleQuoteSSR(productDetailsController.traceId, productDetail.getResultIndex(), "/AirService.svc/rest/SSR");
     	
     	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
     	System.out.println("jsonObjSSR" + jsonObjSSR);
@@ -663,14 +560,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
-           // Open a connection
-           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
-           
-           StringBuilder responseBodyTicket = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, traceId, productDetail.getResultIndex(), arrayTraveler);
-       	
+       	StringBuilder responseBodyTicket = onlineFlightService.apiOnlineTicket(traceId, productDetail.getResultIndex(), arrayTraveler);
        	
        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
        	System.out.println(jsonObjTicket);
@@ -703,13 +593,7 @@ public class OrderService {
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 				
 				/* Get booking details */
-		       	URL urlBooking = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
-		       	// Open a connection
-		       	HttpURLConnection connectionBooking = (HttpURLConnection) urlBooking.openConnection();
-	           
-		       	StringBuilder responseBodyBooking = new StringBuilder();
-		           
-		       	onlineFlightService.apiOnlineGetBookingDetails(connectionBooking, responseBodyBooking, traceId, onlinePNR, onlineBookingId);
+		       	StringBuilder responseBodyBooking = onlineFlightService.apiOnlineGetBookingDetails(traceId, onlinePNR, onlineBookingId);
 		       	
 		       	JSONObject jsonObjBooking = new JSONObject(responseBodyBooking.toString());
 		       	System.out.println(jsonObjBooking);
@@ -831,13 +715,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlBook = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Book");
-           // Open a connection
-           HttpURLConnection connectionBook = (HttpURLConnection) urlBook.openConnection();
-           
-           StringBuilder responseBodyBook = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineBookingNonLCC(connectionBook, responseBodyBook, traceId, productDetail.getResultIndex(), arrayTraveler);
+       	StringBuilder responseBodyBook = onlineFlightService.apiOnlineBookingNonLCC(traceId, productDetail.getResultIndex(), arrayTraveler);
        	
        	JSONObject jsonObjBooking = new JSONObject(responseBodyBook.toString()); 
        	System.out.println(jsonObjBooking);
@@ -858,13 +736,7 @@ public class OrderService {
        	
        	
        	/* Ticket details */
-       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
-           // Open a connection
-           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
-           
-           StringBuilder responseBodyTicket = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineTicketNonLcc(connectionTicket, responseBodyTicket, traceId, pnrBooking, bookingIdInt);
+        StringBuilder responseBodyTicket = onlineFlightService.apiOnlineTicketNonLcc(traceId, pnrBooking, bookingIdInt);
        	
        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
        	System.out.println(jsonObjTicket);
@@ -899,13 +771,7 @@ public class OrderService {
 				
 
 				/* Get booking details */
-		       	URL urlBooking = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
-		       	// Open a connection
-		       	HttpURLConnection connectionBooking = (HttpURLConnection) urlBooking.openConnection();
-	           
-		       	StringBuilder responseBodyBooking = new StringBuilder();
-		           
-		       	onlineFlightService.apiOnlineGetBookingDetails(connectionBooking, responseBodyBooking, traceId, onlinePNR, onlineBookingId);
+		       	StringBuilder responseBodyBooking = onlineFlightService.apiOnlineGetBookingDetails(traceId, onlinePNR, onlineBookingId);
 		       	
 		       	JSONObject jsonObjGetBooking = new JSONObject(responseBodyBooking.toString());
 		       	System.out.println(jsonObjGetBooking);
@@ -1103,14 +969,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
-           // Open a connection
-           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
-           
-           StringBuilder responseBodyTicket = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, traceId, productDetail.getResultIndex(), arrayTraveler);
-       	
+       	StringBuilder responseBodyTicket = onlineFlightService.apiOnlineTicket(traceId, productDetail.getResultIndex(), arrayTraveler);
        	
        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
        	System.out.println(jsonObjTicket);
@@ -1139,13 +998,7 @@ public class OrderService {
 				updateBookingId(order, onlineBookingId);
 				
 				/* Get Booking Details */
-				URL urlGetBookingDetails = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
-				// Open a connection
-				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
-				
-				StringBuilder responseBodyGetBookingDetails = new StringBuilder();
-				
-				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, traceId, onlinePNR, onlineBookingId);
+				StringBuilder responseBodyGetBookingDetails = onlineFlightService.apiOnlineGetBookingDetails(traceId, onlinePNR, onlineBookingId);
 				
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
 		       	System.out.println(jsonObjGetBookingDetails);
@@ -1348,14 +1201,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
-           // Open a connection
-           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
-           
-           StringBuilder responseBodyTicket = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineTicket(connectionTicket, responseBodyTicket, traceId, productDetail.getResultIndex(), arrayTraveler);
-       	
+       	StringBuilder responseBodyTicket = onlineFlightService.apiOnlineTicket(traceId, productDetail.getResultIndex(), arrayTraveler);
        	
        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
        	System.out.println(jsonObjTicket);
@@ -1389,13 +1235,7 @@ public class OrderService {
 				updateBookingId(orderTwo, onlineBookingId);
 				
 				/* Get Booking Details */
-				URL urlGetBookingDetails = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
-				// Open a connection
-				HttpURLConnection connectionGetBookingDetails = (HttpURLConnection) urlGetBookingDetails.openConnection();
-				
-				StringBuilder responseBodyGetBookingDetails = new StringBuilder();
-				
-				onlineFlightService.apiOnlineGetBookingDetails(connectionGetBookingDetails, responseBodyGetBookingDetails, traceId, onlinePNR, onlineBookingId);
+				StringBuilder responseBodyGetBookingDetails = onlineFlightService.apiOnlineGetBookingDetails(traceId, onlinePNR, onlineBookingId);
 				
 				JSONObject jsonObjGetBookingDetails = new JSONObject(responseBodyGetBookingDetails.toString());
 		       	System.out.println(jsonObjGetBookingDetails);
@@ -1521,13 +1361,7 @@ public class OrderService {
        	String arrayTraveler = travelerDetailsArray.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 
        	/* Ticket details */
-       	URL urlBook = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Book");
-           // Open a connection
-           HttpURLConnection connectionBook = (HttpURLConnection) urlBook.openConnection();
-           
-           StringBuilder responseBodyBook = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineBookingNonLCC(connectionBook, responseBodyBook, traceId, productDetail.getResultIndex(), arrayTraveler);
+       	StringBuilder responseBodyBook = onlineFlightService.apiOnlineBookingNonLCC(traceId, productDetail.getResultIndex(), arrayTraveler);
        	
        	JSONObject jsonObjBooking = new JSONObject(responseBodyBook.toString()); 
        	System.out.println(jsonObjBooking);
@@ -1548,13 +1382,7 @@ public class OrderService {
        	
        	
        	/* Ticket details */
-       	URL urlTicket = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Ticket");
-           // Open a connection
-           HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
-           
-           StringBuilder responseBodyTicket = new StringBuilder();
-           
-       	onlineFlightService.apiOnlineTicketNonLcc(connectionTicket, responseBodyTicket, traceId, pnrBooking, bookingIdInt);
+        StringBuilder responseBodyTicket = onlineFlightService.apiOnlineTicketNonLcc(traceId, pnrBooking, bookingIdInt);
        	
        	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
        	System.out.println(jsonObjTicket);
@@ -1593,13 +1421,7 @@ public class OrderService {
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 
 				/* Get booking details */
-		       	URL urlBooking = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetBookingDetails");
-		       	// Open a connection
-		       	HttpURLConnection connectionBooking = (HttpURLConnection) urlBooking.openConnection();
-	           
-		       	StringBuilder responseBodyBooking = new StringBuilder();
-		           
-		       	onlineFlightService.apiOnlineGetBookingDetails(connectionBooking, responseBodyBooking, traceId, onlinePNR, onlineBookingId);
+		       	StringBuilder responseBodyBooking = onlineFlightService.apiOnlineGetBookingDetails(traceId, onlinePNR, onlineBookingId);
 		       	
 		       	JSONObject jsonObjGetBooking = new JSONObject(responseBodyBooking.toString());
 		       	System.out.println(jsonObjGetBooking);
@@ -1617,208 +1439,11 @@ public class OrderService {
 	}
 
 
-	public String[] ticketDetailsAirIQ(Order order, ProductDetail productDetail ) throws MalformedURLException, IOException {
-		List<String> travelerDetailsArrayAdult = new ArrayList<String>();
-		List<String> travelerDetailsArrayChild = new ArrayList<String>();
-		List<String> travelerDetailsArrayInfant = new ArrayList<String>();
-		List<TravellerDetail> travelers = productService.findTravellerByOrderANDProductDetail(productDetail, order);
-		String[] hasErrorArr = new String[2];
-		
-		if (productDetail.getMode().equals("AirIQ")) {
-			
-			List<PaxAirIQ> adultList = new ArrayList<PaxAirIQ>();
-			List<PaxAirIQ> childList = new ArrayList<PaxAirIQ>();
-			List<PaxAirIQ> infantList = new ArrayList<PaxAirIQ>();
-			Integer countAdult = 1;
-			Integer countChild = 1;
-			Integer countInfant = 1;
-			int totalPax = productDetail.getTravellerDetails().size();
-		
-			for (TravellerDetail travellerDetail : travelers) {
-   			
-   			if (travellerDetail.getPaxType().equals("1")) {
-   				PaxAirIQ adult = new PaxAirIQ();
-   				adult.setId(countAdult);
-   				if (travellerDetail.getSalutation().equals("Miss")) {
-   	   				adult.setTitle(travellerDetail.getSalutation());
-				} else {
-   	   				adult.setTitle(travellerDetail.getSalutation() + ".");
-				}
-   				adult.setFirstName(travellerDetail.getFirstName());
-   				adult.setLastName(travellerDetail.getLastName());
-   				
-   				adultList.add(adult);
-   				countAdult++;
-   				System.out.println(countAdult);
-				} else if (travellerDetail.getPaxType().equals("2")) {
-	   				PaxAirIQ child = new PaxAirIQ();
-	   				child.setId(countChild);
-	   				if (travellerDetail.getSalutation().equals("Miss")) {
-	   					child.setTitle(travellerDetail.getSalutation());
-					} else {
-						child.setTitle(travellerDetail.getSalutation() + ".");
-					}
-	   				child.setFirstName(travellerDetail.getFirstName());
-	   				child.setLastName(travellerDetail.getLastName());
-	   				
-	   				childList.add(child);
-	   				countChild++;
-	   				System.out.println(countChild);
-				} else {
-	   				PaxAirIQ infant = new PaxAirIQ();
-	   				infant.setId(countChild);
-	   				if (travellerDetail.getSalutation().equals("Miss")) {
-	   					infant.setTitle(travellerDetail.getSalutation());
-					} else {
-						infant.setTitle(travellerDetail.getSalutation() + ".");
-					}
-	   				infant.setFirstName(travellerDetail.getFirstName());
-	   				infant.setLastName(travellerDetail.getLastName());
-	   				
-	   				String[] arrDob = travellerDetail.getDob().toString().split("-");
-	   				infant.setDob(arrDob[0] + "/" + arrDob[1] + "/" + arrDob[2]);
-	   				infant.setTravelWith("1");
-	   				
-	   				infantList.add(infant);
-	   				countInfant++;
-	   				System.out.println(countInfant);
-				}
-			}
-			for (PaxAirIQ adult : adultList) {
-				String adultInfo = "{\r\n"
-						+ "            \"title\": \"" + adult.getTitle() + "\",\r\n"
-						+ "            \"first_name\": \"" + adult.getFirstName() + "\",\r\n"
-						+ "            \"last_name\": \"" + adult.getLastName() + "\"\r\n"
-						+ "        }\r\n";
-				
-				travelerDetailsArrayAdult.add(adultInfo);
-			}
-			
-			for (PaxAirIQ child : childList) {
-				String childInfo = "{\r\n"
-						+ "            \"title\": \"" + child.getTitle() + "\",\r\n"
-						+ "            \"first_name\": \"" + child.getFirstName() + "\",\r\n"
-						+ "            \"last_name\": \"" + child.getLastName() + "\"\r\n"
-						+ "        }\r\n";
-				
-				travelerDetailsArrayChild.add(childInfo);
-			}
-			
-			for (PaxAirIQ infant : infantList) {
-				String infantnfo = "{\r\n"
-						+ "            \"title\": \"" + infant.getTitle() + "\",\r\n"
-						+ "            \"first_name\": \"" + infant.getFirstName() + "\",\r\n"
-						+ "            \"last_name\": \"" + infant.getLastName() + "\"\r\n"
-						+ "            \"dob\": \"" + infant.getDob() + "\",\r\n"
-						+ "            \"travel_with\": \"" + infant.getTravelWith() + "\"\r\n"
-						+ "        }\r\n";
-				
-				travelerDetailsArrayInfant.add(infantnfo);
-			}
 
-	       	String arrayTravelerADT = travelerDetailsArrayAdult.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
-	       	String arrayTravelerCHD = travelerDetailsArrayChild.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
-	       	String arrayTravelerINF = travelerDetailsArrayInfant.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
-	       	
-	       	String adultinfoList = "    \"adult_info\": "+arrayTravelerADT+"\r\n";
-	       	String childinfoList = "";
-	       	String infantinfoList = "";
-	       	
-	       	if (travelerDetailsArrayChild.size() != 0) {
-	       		childinfoList = "    \"child_info\": "+arrayTravelerCHD+"\r\n";
-			}
-	       	if (travelerDetailsArrayInfant.size() != 0) {
-	       		infantinfoList = "    \"infant_info\": "+arrayTravelerINF+"\r\n";
-			}
-	       	
-			String details = "{\r\n"
-					+ "    \"ticket_id\": \"" + productDetail.getTraceId() + "\",\r\n"
-					+ "    \"total_pax\": \"" + totalPax + "\",\r\n"
-					+ "    \"adult\": \"" + travelerDetailsArrayAdult.size() + "\",\r\n"
-					+ "    \"child\": \"" + travelerDetailsArrayChild.size() + "\",\r\n"
-					+ "    \"infant\": \"" + travelerDetailsArrayInfant.size() + "\",\r\n"
-					+ 		adultinfoList
-					+ 		childinfoList
-					+ 		infantinfoList
-					+ "}";
-   			
-   			
-       	/* Ticket  */
-       	URL urlTicket = new URL("https://omairiq.azurewebsites.net/book");
-           // Open a connection
-        HttpURLConnection connectionTicket = (HttpURLConnection) urlTicket.openConnection();
-           
-        StringBuilder responseBodyTicket = new StringBuilder();
-           
-       	onlineFlightService.apiAirIQTicket(connectionTicket, responseBodyTicket, details, onlineFlightService.tokenAirIQ);
-       	
-       	
-       	JSONObject jsonObjTicket = new JSONObject(responseBodyTicket.toString()); 
-       	System.out.println(jsonObjTicket);
-       	logService.generateLog(jsonObjTicket.toString());
-       	try {
-				String code = jsonObjTicket.get("code").toString();
-				String status = jsonObjTicket.get("status").toString();
-//				String message = jsonObjTicket.get("message").toString();
-				String booking_id = jsonObjTicket.get("booking_id").toString();
-//				String airline_code = jsonObjTicket.get("airline_code").toString();
-				
-				if (status.equals("success")) {
-
-			       	/* Ticket details */
-			       	URL urlTicketDetails = new URL("https://omairiq.azurewebsites.net/ticket?booking_id=" + booking_id);
-			           // Open a connection
-			        HttpURLConnection connectionTicketDetails = (HttpURLConnection) urlTicketDetails.openConnection();
-			           
-			        StringBuilder responseBodyTicketDetails = new StringBuilder();
-			           
-			       	onlineFlightService.apiAirIQTicketDetails(connectionTicketDetails, responseBodyTicketDetails, onlineFlightService.tokenAirIQ);
-
-			       	JSONObject jsonObjTicketDetails = new JSONObject(responseBodyTicketDetails.toString()); 
-			       	System.out.println(jsonObjTicketDetails);
-			       	logService.generateLog(jsonObjTicketDetails.toString());
-			       	try {
-			       		String bookingId = jsonObjTicketDetails.getJSONObject("data").get("booking_id").toString();
-			       		String pnr = jsonObjTicketDetails.getJSONObject("data").get("pnr").toString();
-						String terminalDep = "", terminalArr = "";
-						
-						productService.updateOtherDetails(productDetail, terminalDep, terminalArr);
-						productService.updatePNROnline(productDetail, pnr);
-						productService.setTotalSeatOnline(productDetail, productDetail.getUploadSeats());
-						updateBookingId(order, bookingId);
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				
-				hasErrorArr[0] = code;
-				hasErrorArr[1] = status;
-				
-			} catch (JSONException json) {
-				json.printStackTrace();
-				String code = jsonObjTicket.get("code").toString();
-				String status = jsonObjTicket.get("status").toString();
-				hasErrorArr[0] = code;
-				hasErrorArr[1] = status;
-				
-			} 
-		}
-		
-		return hasErrorArr;
-	}
-	
 	public String searchReturnInternationalFlightAPIOnlyTraceId(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate, String traceIdReturn) throws MalformedURLException, IOException {
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
-
-        // Open a connection
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
-        
-        StringBuilder responseBodySearch = new StringBuilder();
-        
-        onlineFlightService.apiOnlineSearchModReturn(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
+        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchModReturn(cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
 		
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);
@@ -1830,9 +1455,6 @@ public class OrderService {
 			e.printStackTrace();
 		}
 
-        // Close the connection
-        connectionSearch.disconnect();
-
         return traceIdReturn;
 	}
 
@@ -1840,13 +1462,7 @@ public class OrderService {
 
 		if (!flight.getTraceId().equals("offline")) {
 			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarequote = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareQuote");
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarequote.toString());
         	System.out.println(jsonObjFarerules);

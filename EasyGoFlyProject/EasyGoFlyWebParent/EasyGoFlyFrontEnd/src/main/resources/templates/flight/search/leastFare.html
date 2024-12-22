@@ -20,7 +20,7 @@
 					<th:block th:if="${leastFare.traceId == 'offline'}">
 						<th:block th:if="${passengerNum} <= ${leastFare.totalSeats}">
 				            <div class="col-md-3 col-sm-6">
-								<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_least_fare' + ${leastFare.id}">
+								<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_least_fare' + ${leastFare.id}" onsubmit="return formSearchSubmit();">
 									<input type="hidden" name="timeRemaining" class="timeRemain">
 									<input type="hidden" name="adultNum" th:value="${adultNum}">
 									<input type="hidden" name="childNum" th:value="${childNum}">

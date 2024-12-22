@@ -45,7 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired private BeforeAuthenticationFilter beforeLoginFilter;
     @Autowired private LoginSuccessHandler loginSuccessHandler;
     @Autowired private LoginFailureHandler loginFailureHandler;
-    @Autowired private DataSource datasource;
     @Autowired private CustomerOAuth2UserService oAuth2UserService;
     @Autowired private OAuth2LoginSuccessHandler auth2LoginHandler;
 
@@ -135,13 +134,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "/assets/**", "/assets/js/**", "/assets/css/**", "/assets/images/**", "/css/**", "/style.css", "/fontawesome/**", "/fontawesome/all.css", "../brand-logos/**", "../site-logo/**", "../favicon/**", "../customer-photos/**");
     } 
-	
-	@Bean
-	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices(UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
-	    PersistentTokenBasedRememberMeServices persistenceTokenBasedservice = new PersistentTokenBasedRememberMeServices("rememberme", userDetailsService, persistentTokenRepository);
-	    persistenceTokenBasedservice.setAlwaysRemember(true);
-	    return persistenceTokenBasedservice;
-	}
+
 	
 	public void addCorsMappings(CorsRegistry registry) {
 	    registry.addMapping("/**")
@@ -162,13 +155,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		return authProvider;
 	}
-	
-	@Bean
-	public PersistentTokenRepository persistentTokenRepository() {
-		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
-		tokenRepository.setDataSource(datasource);
-		
-		return tokenRepository;
-	}
+
 	
 }

@@ -5,6 +5,11 @@
 	<script>
 	   moduleURL = '[[@{/}]]';
 	   timeInSec = 6 * 60 * 1000;
+	   
+	   
+	   
+      $("#status").fadeOut();
+      $("#preloader").delay(100).fadeOut("slow");
 	</script>
 	
 	<script type="text/javascript" th:src="@{/js/timer.js}"></script>
@@ -30,30 +35,6 @@
 
 
 	<div class="hide-mobile btndeactive scrollbar-hidden">
-	  <section id="preloader-mobile" class="spalsh-screen">
-	    <div class="circle text-center">
-	      <div>
-	        <h1>EaseGoFly</h1>
-	        <p>Discover Your Destinition</p>
-	      </div>
-	    </div>
-	    <div class="loader-spinner">
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-	      <div></div>
-		</div>
-	</section>
-		<!-- splash-screen end -->
-	
 		<main class="home">
 			<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
 		</main>
@@ -142,7 +123,7 @@
 				</script>
                 
                 <div class="col-lg-4 ps-lg-4">
-                    <div class="sidebar-sticky">
+                    <div class="sidebar-sticky custom-scrollbar-css" style="height: 100vh;">
                         <div class="list-sidebar">
                             <div class="sidebar-item mb-0 hide-lg search-left-bar" style="border: none;">
                                 <div th:replace="flight/air-search-fragment :: page_banner('tag')"></div>
@@ -372,9 +353,7 @@
 				
 				nText.text(journeyType + " Pax " + paxCount);
 			}
-		</script>
-	    
-	    
+		</script>	
     
  	<footer th:replace="fragments :: page_footer('tag')"></footer>
 
@@ -387,6 +366,8 @@
 	$('#searchModal').on('shown.bs.modal', function (e) {
 		$(".item-slider3").slick('setPosition');
 	});
+	
+	
 	
 	if (window.innerWidth < 900) { 
 		$(".search-header-info").removeClass("d-flex justify-content-center");

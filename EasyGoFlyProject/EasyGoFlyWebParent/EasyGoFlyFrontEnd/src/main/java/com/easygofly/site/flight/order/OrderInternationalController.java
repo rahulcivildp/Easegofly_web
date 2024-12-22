@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
 import com.easygofly.entity.Category;
+import com.easygofly.entity.CheckoutInfo;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Coupon;
 import com.easygofly.entity.Customer;
@@ -40,7 +41,6 @@ import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.User;
 import com.easygofly.entity.Wallet;
-import com.easygofly.site.checkout.CheckoutInfo;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.flight.BrandRepositoy;
@@ -137,8 +137,8 @@ public class OrderInternationalController {
 			Coupon coupon = couponService.findCouponByCode(couponCode);
 			Coupon coupon1 = couponService.findCouponByCode(couponCode1);
 			CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
-			orderService.loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
-					paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
+//			orderService.loginControl(couponCode, couponCode1, totalPayment, loggedCustomer, googleLogin, flight, search, item,
+//					paymentMethod, orderName, order, travellerDetails, coupon, coupon1, checkoutInfo);
 			
 			return "redirect:/flight_international_order_" + search.getId() + "&" + flightId + "&" + item_id;
 		} catch (Exception e) {
@@ -677,8 +677,8 @@ public class OrderInternationalController {
 			CheckoutInfo checkoutInfoOne = checkoutService.prepareCheckout(itemOne);
 			CheckoutInfo checkoutInfoTwo = checkoutService.prepareCheckout(itemTwo);
 			
-			orderService.orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, couponCode, couponCode1, totalPayment1, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoOne);
-			orderService.orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, couponCode, couponCode1, totalPayment2, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoTwo);
+//			orderService.orderTravelerSaveMethod(search, flightOne, dateOne, itemOne, returnTypeOne, couponCode, couponCode1, totalPayment1, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoOne);
+//			orderService.orderTravelerSaveMethod(search, flightTwo, dateTwo, itemTwo, returnTypeTwo, couponCode, couponCode1, totalPayment2, loggedCustomer, googleLogin, paymentMethod, coupon, coupon1, checkoutInfoTwo);
 			
 			checkoutService.prepareCheckoutReturn(itemOne, itemTwo);
 			

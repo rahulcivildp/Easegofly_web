@@ -3,9 +3,7 @@ package com.easygofly.site.flight;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +37,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.easygofly.entity.BaggageOnline;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.CartItem;
+import com.easygofly.entity.CheckoutInfo;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Country;
 import com.easygofly.entity.Customer;
@@ -51,7 +50,7 @@ import com.easygofly.entity.TravellerDetail;
 import com.easygofly.entity.Wallet;
 import com.easygofly.entity.WebDetails;
 import com.easygofly.site.LogService;
-import com.easygofly.site.checkout.CheckoutInfo;
+import com.easygofly.site.checkout.CheckOutRepository;
 import com.easygofly.site.checkout.CheckoutService;
 import com.easygofly.site.customer.CustomerService;
 import com.easygofly.site.security.EasegoflyPhoneCustomerDetails;
@@ -83,6 +82,8 @@ public class ProductDetailsController {
 	@Autowired private SearchHistoryService searchHistoryService ;
 	@Autowired private WebSettingService webSettingService;
 	@Autowired private BrandRepositoy brandRepo;
+	@Autowired private CheckOutRepository checkOutRepo;
+	@Autowired private ProductRestData restService;
 
 	public List<ProductDetail> listProductDetailsOnlineReturn;
 	public List<FlightMap> flightMaps;
@@ -287,16 +288,8 @@ public class ProductDetailsController {
 	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
 
 		if (flight.getMode().equals("Online-data")) {
-        	/* Fare-rule details */
-        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
-        	/* Fare-rule details */
-//        	URL urlFarerule = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
             
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-            onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareRule");
 
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	System.out.println(jsonObjFarerules);
@@ -365,23 +358,13 @@ public class ProductDetailsController {
 			@RequestParam(name = "device") String device,
 			@RequestParam(name = "deviceInfo") String deviceInfo, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model) throws ParseException {
-
-		
 		Customer customer; 
 		CartItem cartItem = new CartItem();
 		double searchIddbl = Double.parseDouble(searchId);
 		Integer searchIdInt = (int) searchIddbl;
-//		Date dateFlight = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			customer = customerService.getByPhone(loggedCustomer.getUsername());
-//			if (searchIddbl == 1.5) {
-//				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
-//						infantNum, customer);
-//				searchIdInt = savedSearchId;
-//			} else {
-//				searchIdInt = (int)searchIddbl;
-//			}
 			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
 			
@@ -391,13 +374,6 @@ public class ProductDetailsController {
 			
 		} else if (oauthCustomer != null) {
 			customer = customerService.getByEmail(oauthCustomer.getEmail());
-//			if (searchIddbl == 1.5) {
-//				Integer savedSearchId = sHistoryController.saveHistoryPart(cityOne, cityTwo, dateFlight, journeyClass, "oneWay", adultNum, childNum,
-//						infantNum, customer);
-//				searchIdInt = savedSearchId;
-//			} else {
-//				searchIdInt = (int)searchIddbl;
-//			}
 			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
 			
@@ -416,10 +392,11 @@ public class ProductDetailsController {
 		
 	}
 	
-	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}")
+	@GetMapping("/flight_traveler_details{search_id}&{flight_id}&{item_id}&{checkout_id}")
 	public String filghtTravelerDetailsShow(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id, 
 			@PathVariable(name = "item_id") Integer item_id, 
+			@PathVariable(name = "checkout_id") Integer checkout_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, CartItem cartItem) throws IOException {
@@ -441,15 +418,11 @@ public class ProductDetailsController {
 		CartItem item = cartRepo.findById(item_id).get();
 	    City cityOneFound = cityRepo.getCityByCode(search.getCityOne());
 	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
+	    CheckoutInfo checkoutInfo = checkOutRepo.findById(checkout_id).get();
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
-		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(item);
-		
-		try {
-			fareQuoteSSRMethod(model, flight);
-			
-		}  catch (IOException e) {
-			return "redirect:/flight_booking" + search.getId() + "&" + flight.getId() + "&" + item.getId();
+		for (TravellerDetail travellerDetail : travelers) {
+			restService.mealBaggageSeatMethod(travellerDetail, mealsOnlineList,  baggageOnlineList,  seatsOnlineList, checkout_id);
 		}
 		
 		model.addAttribute("checkoutInfo", checkoutInfo);
@@ -462,6 +435,9 @@ public class ProductDetailsController {
 		model.addAttribute("cityOneName", cityOneFound.getCityName());
 		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
 		model.addAttribute("timeRemainingPro", timeRemainingProOne);
+		model.addAttribute("seatsOnlineList", seatsOnlineList);
+		model.addAttribute("mealsOnlineList", mealsOnlineList);
+		model.addAttribute("baggageOnlineList", baggageOnlineList);
 		
 		
 		return "flight/booking/flight_traveler_details";
@@ -536,6 +512,7 @@ public class ProductDetailsController {
 				cartRepo.save(item);
 			}
 		}
+		CheckoutInfo checkoutInfo = checkOutRepo.save(checkoutService.prepareCheckout(item));
 		
 		cartService.updateCartItem(item, email, BigInteger.valueOf(phone), search.getPassengerNum(), false); 
 		
@@ -549,8 +526,15 @@ public class ProductDetailsController {
 			e.printStackTrace();
 		}
 		
-		travelerUrl = "flight_traveler_details" + searchId + "&" + flightId + "&" + item_id;
+		travelerUrl = "flight_traveler_details" + searchId + "&" + flightId + "&" + item_id + "&" + checkoutInfo.getId();
 		travelerUrlReturn = "";
+
+		try {
+			fareQuoteSSRMethod(flight, baggageOnlineList, mealsOnlineList, seatsOnlineList);
+			
+		}  catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@GetMapping("/indirect_login")
@@ -585,7 +569,6 @@ public class ProductDetailsController {
 		
 		return  "redirect:/flight_traveler_details" + searchId + "&" + flightId + "&" + item_id;
 	}
-	
 	
 	public CartItem travelerDetailsPart(Integer searchId, Integer flightId, Customer customer) {
 		ProductDetail flight = null;
@@ -656,7 +639,6 @@ public class ProductDetailsController {
 		
 		return null;
 	}
-	
 	
 	public CartItem travelerDetailsPartWithoutLogin(Integer searchId, Integer flightId, List<ProductDetail> flightList) {
 		ProductDetail flight = null;
@@ -729,24 +711,10 @@ public class ProductDetailsController {
 		return null;
 	}
 
-	public void fareQuoteSSRMethod(Model model, ProductDetail flight) throws MalformedURLException, IOException {
-		seatsOnlineList = new ArrayList<>();
-		mealsOnlineList = new ArrayList<>();
-		baggageOnlineList = new ArrayList<>();
-		
+	public void fareQuoteSSRMethod(ProductDetail flight, List<BaggageOnline> baggageOnlineList, List<MealsOnline> mealsOnlineList, List<SeatsOnline>  seatsOnlineList) throws MalformedURLException, IOException {
 		if (flight.getMode().equals("Online-data")) {
-        	
-			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-        	
-			/* Fare-quote details Test Cred*/
-//        	URL urlFarequote = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
             
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarequote = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareQuote");
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFareQuotes);
@@ -810,18 +778,8 @@ public class ProductDetailsController {
 
 //        	model.addAttribute("jsonObjFare_quote", jsonObjFareQuotes);
     		
-
-    		/* SSR details */
-        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-        	
-    		/* SSR details Test Cred*/
-//        	URL urlSSR = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/SSR");
-            // Open a connection
-            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-            
-            StringBuilder responseBodySSR = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
+    		/* SSR details*/
+            StringBuilder responseBodySSR = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/SSR");
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -942,27 +900,23 @@ public class ProductDetailsController {
 				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
 				seatsOnlineList.add(seatsOnline);
 			}
-
-    		model.addAttribute("seatsOnlineList", seatsOnlineList);
-    		model.addAttribute("mealsOnlineList", mealsOnlineList);
-    		model.addAttribute("baggageOnlineList", baggageOnlineList);
         	
 		} else if (flight.getTraceId().equals("offline")) {
 			
 			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-			baggageOnlineList.add(baggageOnline);
+			BaggageOnline baggageOnline2 = new BaggageOnline(1, "300", "Baggage", "7");
+			BaggageOnline baggageOnline3 = new BaggageOnline(1, "800", "Gage", "15");
+			baggageOnlineList.addAll(List.of(baggageOnline, baggageOnline2, baggageOnline3));
 
 			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-			mealsOnlineList.add(mealsOnline);
+			MealsOnline mealsOnline2 = new MealsOnline(1, "Meal", "1000", "Meal", "0");
+			MealsOnline mealsOnline3 = new MealsOnline(1, "Eal", "2000", "Eal", "0");
+			mealsOnlineList.addAll(List.of(mealsOnline, mealsOnline2, mealsOnline3));
 
 			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-			seatsOnlineList.add(seatsOnline);
-
-    		model.addAttribute("seatsOnlineList", seatsOnlineList);
-    		model.addAttribute("mealsOnlineList", mealsOnlineList);
-    		model.addAttribute("baggageOnlineList", baggageOnlineList);
-			System.out.println("Offline offline offline");
-			
+			SeatsOnline seatsOnline2 = new SeatsOnline(1, "1500", 0, 0, 0, "0", "Seat", 0, "0", "0");
+			SeatsOnline seatsOnline3 = new SeatsOnline(1, "2750", 0, 0, 0, "0", "LSeat", 0, "0", "0");
+			seatsOnlineList.addAll(List.of(seatsOnline, seatsOnline2, seatsOnline3));
 		}
 
 	}
@@ -1123,21 +1077,8 @@ public class ProductDetailsController {
 	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
 
 		if (!flightOne.getTraceId().equals("offline")) {
-        	/* Fare-rule details */
-        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
             
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flightOne.getResultIndex());
-        	if (responseCode != HttpURLConnection.HTTP_OK) {
-    			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
-    				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
-    					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
-    				return "redirect:/";
-    		}
-  
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flightOne.getResultIndex(), "/AirService.svc/rest/FareRule");
         	
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	System.out.println(jsonObjFarerules);
@@ -1155,22 +1096,9 @@ public class ProductDetailsController {
 		} 
 		
 		if (!flightTwo.getTraceId().equals("offline")) {
-        	/* Fare-rule details */
-        	URL urlFarerule = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareRule");
-            // Open a connection
-            HttpURLConnection connectionFarerule = (HttpURLConnection) urlFarerule.openConnection();
+			
+            StringBuilder responseBodyFarerule = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flightTwo.getResultIndex(), "/AirService.svc/rest/FareRule");
             
-            StringBuilder responseBodyFarerule = new StringBuilder();
-            
-        	int responseCode = onlineFlightService.apiOnlineFarerule_quote(connectionFarerule, responseBodyFarerule, traceId, flightTwo.getResultIndex());
-        	if (responseCode != HttpURLConnection.HTTP_OK) {
-    			if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP
-    				|| responseCode == HttpURLConnection.HTTP_MOVED_PERM
-    					|| responseCode == HttpURLConnection.HTTP_SEE_OTHER)
-    				return "redirect:/";
-    		}
-  
-        	
         	JSONObject jsonObjFarerules = new JSONObject(responseBodyFarerule.toString());
         	System.out.println(jsonObjFarerules);
             logService.generateLog(jsonObjFarerules.toString());
@@ -1271,12 +1199,13 @@ public class ProductDetailsController {
 
 	private void saveTravelerMethodReturn(Customer customer, Integer searchId, Integer timeRemaining, Integer flightOneId,
 			Integer itemOne_id, Integer flightTwoId, Integer itemTwo_id, String[] salutation, String[] firstName,
-			String[] lastName, Date[] dob, String[] paxType, String email, String phoneNum) {
+			String[] lastName, Date[] dob, String[] paxType, String email, String phoneNum) throws MalformedURLException, IOException {
 		timeRemainingPro = timeRemaining;
 		long phone = Long.parseLong(phoneNum);
 		
 		ProductDetail flightOne = flightRepo.findById(flightOneId).get();
 		ProductDetail flightTwo = flightRepo.findById(flightTwoId).get();
+		
 		SearchHistory search = searchRepo.findById(searchId).get();
 		CartItem itemOne = cartRepo.findById(itemOne_id).get();
 		CartItem itemTwo = cartRepo.findById(itemTwo_id).get();
@@ -1290,6 +1219,8 @@ public class ProductDetailsController {
 				cartRepo.save(itemTwo);
 			}
 		}
+		CheckoutInfo checkoutInfoOne = checkOutRepo.save(checkoutService.prepareCheckout(itemOne));
+		CheckoutInfo checkoutInfoTwo = checkOutRepo.save(checkoutService.prepareCheckout(itemTwo));
 		
 		cartService.updateCartItem(itemOne, email, BigInteger.valueOf(phone), search.getPassengerNum(), false); 
 		cartService.updateCartItem(itemTwo, email, BigInteger.valueOf(phone), search.getPassengerNum(), false); 
@@ -1300,7 +1231,15 @@ public class ProductDetailsController {
 		}
 		
 		travelerUrl = "";
-		travelerUrlReturn = "flight_traveler_details/return_" + searchId + "&" + flightOneId + "&" + itemOne_id + "&" + flightTwoId + "&" + itemTwo_id;
+		travelerUrlReturn = "flight_traveler_details/return_" + searchId + "&" + flightOneId + "&" + itemOne_id + "&" + flightTwoId + "&" + itemTwo_id + "&" + checkoutInfoOne.getId() + "&" + checkoutInfoTwo.getId();;
+
+		try {
+			fareQuoteSSRMethodReturn(flightOne, baggageOnlineList, mealsOnlineList, seatsOnlineList);
+			fareQuoteSSRMethodReturn(flightTwo, baggageOnlineListReturn, mealsOnlineListReturn, seatsOnlineListReturn);
+			
+		}  catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private ProductDetail travelerSaveMethod(String[] salutation, String[] firstName, String[] lastName, Date[] dob,
@@ -1350,12 +1289,14 @@ public class ProductDetailsController {
 		return  "redirect:/flight_traveler_return_details" + searchId + "&" + flightOne + "&" + itemOne + "&" + flightTwo + "&" + itemTwo;
 	}
 	
-	@GetMapping("/flight_traveler_details/return_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}")
+	@GetMapping("/flight_traveler_details/return_{search_id}&{flightOne_id}&{itemOne_id}&{flightTwo_id}&{itemTwo_id}&{checkoutInfOne_id}&{checkoutInfTwo_id}")
 	public String filghtTravelerDetailsReturnShow(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flightOne_id") Integer flightOne_id, 
 			@PathVariable(name = "itemOne_id") Integer itemOne_id, 
 			@PathVariable(name = "flightTwo_id") Integer flightTwo_id, 
 			@PathVariable(name = "itemTwo_id") Integer itemTwo_id, 
+			@PathVariable(name = "checkoutInfOne_id") Integer checkoutInfOne_id, 
+			@PathVariable(name = "checkoutInfTwo_id") Integer checkoutInfTwo_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, CartItem cartItem) throws IOException {
@@ -1379,30 +1320,23 @@ public class ProductDetailsController {
 		CartItem itemTwo = cartRepo.findById(itemTwo_id).get();
 	    City cityOneFound = cityRepo.getCityByCode(search.getCityOne());
 	    City cityTwoFound = cityRepo.getCityByCode(search.getCityTwo());
+	    CheckoutInfo checkoutInfoOne = checkOutRepo.findById(checkoutInfOne_id).get();
+	    CheckoutInfo checkoutInfoTwo = checkOutRepo.findById(checkoutInfTwo_id).get();
 		
 		List<TravellerDetail> travelersOne = productService.findTraveller(flightOne, itemOne);
-
-		List<TravellerDetail> travelersTwo = productService.findTraveller(flightTwo, itemTwo);
-		Double totalPayment = itemOne.getTotalPrice() + itemTwo.getTotalPrice();
-		CheckoutInfo checkoutInfo = new CheckoutInfo();
-		CheckoutInfo checkoutInfoTwo = new CheckoutInfo();
-		checkoutInfo.setPaymentTotal(itemOne.getTotalPrice());
-		checkoutInfoTwo.setPaymentTotal(itemTwo.getTotalPrice());
-																
-		try {
-			fareQuoteSSRMethodReturn(model, flightOne);
-			
-			fareQuoteSSRMethodReturnTwo(model, flightTwo);
-			
-		}  catch (Exception e) {
-			return "redirect:/flight_booking/return_" + search.getId() + "&" + flightOne.getId() + "&" + itemOne.getId() + "&" + flightTwo.getId() + "&" + itemTwo.getId();
+		for (TravellerDetail travellerDetail : travelersOne) {
+			restService.mealBaggageSeatMethod(travellerDetail, mealsOnlineList,  baggageOnlineList,  seatsOnlineList, checkoutInfOne_id);
 		}
 
-		model.addAttribute("checkoutInfo", checkoutInfo);
+		List<TravellerDetail> travelersTwo = productService.findTraveller(flightTwo, itemTwo);
+		for (TravellerDetail travellerDetail : travelersTwo) {
+			restService.mealBaggageSeatMethod(travellerDetail, mealsOnlineListReturn,  baggageOnlineListReturn,  seatsOnlineListReturn, checkoutInfTwo_id);
+		}
+
+		model.addAttribute("checkoutInfoOne", checkoutInfoOne);
 		model.addAttribute("checkoutInfoTwo", checkoutInfoTwo);
 		model.addAttribute("travelersOne", travelersOne);
 		model.addAttribute("travelersTwo", travelersTwo);
-		model.addAttribute("totalPayment", totalPayment);
 		model.addAttribute("itemOne", itemOne);
 		model.addAttribute("itemTwo", itemTwo);
 		model.addAttribute("search", search);
@@ -1444,17 +1378,10 @@ public class ProductDetailsController {
 		
 	}
 
-	public void fareQuoteSSRMethodReturn(Model model, ProductDetail flight) throws MalformedURLException, IOException {
+	public void fareQuoteSSRMethodReturn(ProductDetail flight, List<BaggageOnline> baggageOnlineList, List<MealsOnline> mealsOnlineList, List<SeatsOnline>  seatsOnlineList) throws MalformedURLException, IOException {
 		if (!flight.getTraceId().equals("offline")) {
         	
-			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
+            StringBuilder responseBodyFarequote = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/FareQuote");
         	
         	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
         	System.out.println(jsonObjFareQuotes);
@@ -1516,13 +1443,7 @@ public class ProductDetailsController {
     		craftType = mainObjSegment.get("Craft").toString();
     		
     		/* SSR details */
-        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-            // Open a connection
-            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-            
-            StringBuilder responseBodySSR = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
+            StringBuilder responseBodySSR = onlineFlightService.apiOnlineFareruleQuoteSSR(traceId, flight.getResultIndex(), "/AirService.svc/rest/SSR");
         	
         	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
         	System.out.println(jsonObjSSR);
@@ -1647,236 +1568,25 @@ public class ProductDetailsController {
 		} else if (flight.getTraceId().equals("offline")) {
 			
 			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-			baggageOnlineList.add(baggageOnline);
+			BaggageOnline baggageOnline2 = new BaggageOnline(1, "300", "Baggage", "7");
+			BaggageOnline baggageOnline3 = new BaggageOnline(1, "800", "Gage", "15");
+			baggageOnlineList.addAll(List.of(baggageOnline, baggageOnline2, baggageOnline3));
 
 			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-			mealsOnlineList.add(mealsOnline);
+			MealsOnline mealsOnline2 = new MealsOnline(1, "Meal", "1000", "Meal", "0");
+			MealsOnline mealsOnline3 = new MealsOnline(1, "Eal", "2000", "Eal", "0");
+			mealsOnlineList.addAll(List.of(mealsOnline, mealsOnline2, mealsOnline3));
 
 			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-			seatsOnlineList.add(seatsOnline);
+			SeatsOnline seatsOnline2 = new SeatsOnline(1, "1500", 0, 0, 0, "0", "Seat", 0, "0", "0");
+			SeatsOnline seatsOnline3 = new SeatsOnline(1, "2750", 0, 0, 0, "0", "LSeat", 0, "0", "0");
+			seatsOnlineList.addAll(List.of(seatsOnline, seatsOnline2, seatsOnline3));
 
 			
 		}
 
 	}
 	
-	public void fareQuoteSSRMethodReturnTwo(Model model, ProductDetail flight) throws MalformedURLException, IOException {
-		if (!flight.getTraceId().equals("offline")) {
-        	
-			/* Fare-quote details */
-        	URL urlFarequote = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/FareQuote");
-            // Open a connection
-            HttpURLConnection connectionFarequote = (HttpURLConnection) urlFarequote.openConnection();
-            
-            StringBuilder responseBodyFarequote = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionFarequote, responseBodyFarequote, traceId, flight.getResultIndex());
-        	
-        	JSONObject jsonObjFareQuotes = new JSONObject(responseBodyFarequote.toString()); 
-        	System.out.println(jsonObjFareQuotes);
-            logService.generateLog(jsonObjFareQuotes.toString());
-        	
-        	JSONObject jsonResult = jsonObjFareQuotes.getJSONObject("Response").getJSONObject("Results");
-        	JSONArray jsonObjSegment = jsonResult.getJSONArray("Segments").getJSONArray(0);
-        	JSONObject mainObjSegment = jsonObjSegment.getJSONObject(0);
-    		JSONObject mainObjOrigin = mainObjSegment.getJSONObject("Origin");
-    		JSONObject mainObjDestination = mainObjSegment.getJSONObject("Destination");
-    		JSONObject mainObjAirline = mainObjSegment.getJSONObject("Airline");
-    		JSONArray jsonObjFareBreakdown = jsonResult.getJSONArray("FareBreakdown");
-    		JSONObject mainObjFare = jsonResult.getJSONObject("Fare");
-    		
-    		String passengerTypeInner = "";
-    		for (int i = 0; i < jsonObjFareBreakdown.length(); i++) {
-    				mainObjFareBreakdown = jsonObjFareBreakdown.getJSONObject(i);
-    				passengerTypeInner = mainObjFareBreakdown.get("PassengerType").toString();
-				if (passengerTypeInner.equals("2")) {
-	    			mainObjFareBreakdownChild = jsonObjFareBreakdown.getJSONObject(i);
-	        		basefareTravelerChildReturn = mainObjFareBreakdownChild.get("BaseFare").toString();
-	        		taxTravelerChildReturn = mainObjFareBreakdownChild.get("Tax").toString();
-	        		passengerTypeChildReturn = mainObjFareBreakdownChild.get("PassengerType").toString();
-				} else if (passengerTypeInner.equals("3")) {
-					mainObjFareBreakdownInfant = jsonObjFareBreakdown.getJSONObject(i);
-					basefareTravelerInfantReturn = mainObjFareBreakdownInfant.get("BaseFare").toString();
-					taxTravelerInfantReturn = mainObjFareBreakdownInfant.get("Tax").toString();
-					passengerTypeInfantReturn = mainObjFareBreakdownInfant.get("PassengerType").toString();
-				} else {
-					mainObjFareBreakdownAdult = jsonObjFareBreakdown.getJSONObject(i);
-					basefareTravelerAdultReturn = mainObjFareBreakdownAdult.get("BaseFare").toString();
-		    		taxTravelerAdultReturn = mainObjFareBreakdownAdult.get("Tax").toString();
-		    		passengerTypeAdultReturn = mainObjFareBreakdownAdult.get("PassengerType").toString();
-				}
-			}
-    		
-    		depTerminal = mainObjOrigin.getJSONObject("Airport").get("Terminal").toString();
-    		arrTerminal = mainObjDestination.getJSONObject("Airport").get("Terminal").toString();
-    		airlineCOde = mainObjAirline.get("AirlineCode").toString();
-    		flightNumber = mainObjAirline.get("FlightNumber").toString();
-    		flightClass = mainObjAirline.get("FareClass").toString();
-    		airlineName = mainObjAirline.get("AirlineName").toString();
-    		cabinBaggage = mainObjSegment.get("CabinBaggage").toString();
-    		baggage = mainObjSegment.get("Baggage").toString();
-    		duration = mainObjSegment.get("Duration").toString();
-    		flightStatus = mainObjSegment.get("FlightStatus").toString();
-    		stopOver = mainObjSegment.get("StopOver").toString();
-    		discountReturn = mainObjFare.get("Discount").toString();
-    		otherChargesReturn = mainObjFare.get("OtherCharges").toString();
-    		publishedFareReturn = mainObjFare.get("PublishedFare").toString();
-    		offeredFareReturn = mainObjFare.get("OfferedFare").toString();
-    		tdsOnCommissionReturn = mainObjFare.get("TdsOnCommission").toString();
-    		tdsOnIncentiveReturn = mainObjFare.get("TdsOnIncentive").toString();
-    		tdsOnPLBReturn = mainObjFare.get("TdsOnPLB").toString();
-    		serviceFeeReturn = mainObjFare.get("ServiceFee").toString();
-    		
-    		airportCodeOrigin = mainObjOrigin.getJSONObject("Airport").get("AirportCode").toString();
-    		airportCodeDestination = mainObjDestination.getJSONObject("Airport").get("AirportCode").toString();
-    		craftType = mainObjSegment.get("Craft").toString();
-    		
-    		/* SSR details */
-        	URL urlSSR = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/SSR");
-            // Open a connection
-            HttpURLConnection connectionSSR = (HttpURLConnection) urlSSR.openConnection();
-            
-            StringBuilder responseBodySSR = new StringBuilder();
-            
-        	onlineFlightService.apiOnlineFarerule_quote(connectionSSR, responseBodySSR, traceId, flight.getResultIndex());
-        	
-        	JSONObject jsonObjSSR = new JSONObject(responseBodySSR.toString()); 
-        	System.out.println(jsonObjSSR);
-            logService.generateLog(jsonObjSSR.toString());
-        	
-        	try {
-				JSONArray jsonResultArrayBaggage = jsonObjSSR.getJSONObject("Response").getJSONArray("Baggage").getJSONArray(0); 
-				BaggageOnline[] baggageOnline = new BaggageOnline[100];
-				for (int i = 0; i < jsonResultArrayBaggage.length(); i++) {
-					
-					JSONObject jsonObjectBagages = jsonResultArrayBaggage.getJSONObject(i);
-					
-					String baggagePrice = jsonObjectBagages.get("Price").toString();
-					String baggageCode = jsonObjectBagages.get("Code").toString();
-					String baggageWeight = jsonObjectBagages.get("Weight").toString();
-					
-					baggageOnline[i] = new BaggageOnline(i, baggagePrice, baggageCode, baggageWeight);
-					baggageOnlineListReturn.add(baggageOnline[i]);
-				}
-			} catch (JSONException e1) {
-				BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-				baggageOnlineListReturn.add(baggageOnline);
-			}
-
-
-        	try {
-				JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("MealDynamic").getJSONArray(0); 
-				MealsOnline[] mealsOnline = new MealsOnline[100];
-				for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
-					JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
-					String mealPrice = jsonObjectMeals.get("Price").toString();
-					String mealAirlineDescription = jsonObjectMeals.get("AirlineDescription").toString();
-					String mealCode = jsonObjectMeals.get("Code").toString();
-					String mealQuantity = jsonObjectMeals.get("Quantity").toString();
-					
-					mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-					mealsOnlineListReturn.add(mealsOnline[i]);
-
-					lccReturn = true;
-
-					productService.methodLCC(flight, lccReturn);
-				}
-			} catch (JSONException e) {
-				try {
-					JSONArray jsonResultArrayMeal = jsonObjSSR.getJSONObject("Response").getJSONArray("Meal").getJSONArray(0); 
-					MealsOnline[] mealsOnline = new MealsOnline[100];
-					for (int i = 0; i < jsonResultArrayMeal.length(); i++) {
-						JSONObject jsonObjectMeals = jsonResultArrayMeal.getJSONObject(i);
-						String mealPrice = "0";
-						String mealAirlineDescription = jsonObjectMeals.get("Description").toString();
-						String mealCode = jsonObjectMeals.get("Code").toString();
-						String mealQuantity = "1";
-						
-						mealsOnline[i] = new MealsOnline(i, mealAirlineDescription, mealPrice, mealCode, mealQuantity);
-						mealsOnlineListReturn.add(mealsOnline[i]);
-						
-						lccReturn = false;
-
-						productService.methodLCC(flight, lccReturn);
-					}
-				} catch (JSONException e1) {
-					MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-					mealsOnlineListReturn.add(mealsOnline);
-					lccReturn = true;
-
-					productService.methodLCC(flight, lccReturn);
-				}
-			} catch (Exception e) {
-				MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-				mealsOnlineListReturn.add(mealsOnline);
-				lccReturn = true;
-
-				productService.methodLCC(flight, lccReturn);
-			}
-        	
-        	try {
-	        	JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatDynamic").getJSONObject(0).getJSONArray("SegmentSeat").getJSONObject(0).getJSONArray("RowSeats");
-	        	JSONObject jsonInnerObjectSeats = new JSONObject();
-	        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
-	        	Integer count = 1;
-	        	for (int i = 0; i < jsonArraySeats.length(); i++) {
-	        		JSONArray jsonInnerArraySeats = jsonArraySeats.getJSONObject(i).getJSONArray("Seats");
-	        		
-	        		for (int j = 0; j < jsonInnerArraySeats.length(); j++) {
-	        			jsonInnerObjectSeats.put("Seat-" + (i + j) , jsonInnerArraySeats.getJSONObject(j));
-	        			
-	        			Integer compartment = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Compartment").toString());
-	        			Integer availablityType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("AvailablityType").toString());
-	        			Integer deck = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("Deck").toString());
-	        			String rowNo = jsonInnerArraySeats.getJSONObject(j).get("RowNo").toString();
-	        			String code = jsonInnerArraySeats.getJSONObject(j).get("Code").toString();
-	        			String price = jsonInnerArraySeats.getJSONObject(j).get("Price").toString();
-	        			Integer seatType = Integer.parseInt(jsonInnerArraySeats.getJSONObject(j).get("SeatType").toString());
-	        			String seatNo = jsonInnerArraySeats.getJSONObject(j).get("SeatNo").toString();
-	        			String craftTypeOnline = jsonInnerArraySeats.getJSONObject(j).get("CraftType").toString();
-	        			
-	        			Integer serialNo = count++;
-	        			
-	        			seatsOnline[serialNo] = new SeatsOnline(serialNo, price, compartment, availablityType, deck, rowNo, code, seatType, seatNo, craftTypeOnline);
-	        			seatsOnlineListReturn.add(seatsOnline[serialNo]);
-					}
-				}
-			
-			} catch (JSONException e) {
-				JSONArray jsonArraySeats = jsonObjSSR.getJSONObject("Response").getJSONArray("SeatPreference").getJSONArray(0); 
-	        	SeatsOnline[] seatsOnline = new SeatsOnline[500];
-	        	for (int i = 0; i < jsonArraySeats.length(); i++) {
-	        		JSONObject jsonObjectSeats = jsonArraySeats.getJSONObject(i);
-	        		String code = jsonObjectSeats.get("Code").toString();
-	        		String description = jsonObjectSeats.get("Description").toString();
-	        		
-	        		seatsOnline[i] = new SeatsOnline(i, "0", 0, 0, 0, "0", code, 0, description, "0");
-	        		seatsOnlineListReturn.add(seatsOnline[i]);
-        			
-					lccReturn = false;
-	        	}
-			} catch (Exception e) {
-				SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-				seatsOnlineListReturn.add(seatsOnline);
-			}
-
-        	
-		} else if (flight.getTraceId().equals("offline")) {
-			
-			BaggageOnline baggageOnline = new BaggageOnline(1, "0", "NoBaggage", "0");
-			baggageOnlineListReturn.add(baggageOnline);
-
-			MealsOnline mealsOnline = new MealsOnline(1, "No meal", "0", "NoMeal", "0");
-			mealsOnlineListReturn.add(mealsOnline);
-
-			SeatsOnline seatsOnline = new SeatsOnline(1, "0", 0, 0, 0, "0", "NoSeat", 0, "0", "0");
-			seatsOnlineListReturn.add(seatsOnline);
-
-			
-		}
-
-	}
-
 	@GetMapping("/indirect_login/return")
 	public String indiRectLoginReturn(Model model, Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		String referer = request.getHeader("Referer");

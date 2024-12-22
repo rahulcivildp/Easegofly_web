@@ -7,7 +7,7 @@
 			<th:block th:each="flight : ${listFlight}">
 				<th:block th:if="${passengerNum} <= ${flight.totalSeats}">
 		            <div class="col-lg-6 col-md-6 mb-4">
-						<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_form_grid' + ${flight.id}">
+						<form th:action="@{/flight_booking_save}" method="post" th:id="'booking_form_grid' + ${flight.id}" onsubmit="return formSearchSubmit();">
 							<input type="hidden" name="timeRemaining" class="timeRemain">
 		      				<input type="hidden" name="adultNum" th:value="${adultNum}">
 		      				<input type="hidden" name="childNum" th:value="${childNum}">
@@ -93,7 +93,6 @@
 								$(id).attr("src", response);
 								$(id).attr("alt", '[[${flight.brand}]]');
 							}).fail(function(){
-								alert("Could not connect to the server.");
 							});
 						}
 					</script>

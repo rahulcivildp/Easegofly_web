@@ -1,9 +1,7 @@
 package com.easygofly.site.flight;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -165,13 +163,16 @@ public class SearchHistoryController {
 			@RequestParam(name = "adultNum", required = false) Integer adultNum,
 			@RequestParam(name = "childNum", required = false) Integer childNum,
 			@RequestParam(name = "infantNum", required = false) Integer infantNum,
-			Model model) throws ProductNotFoundException {
+			Model model) throws ProductNotFoundException, NumberFormatException, MalformedURLException, IOException {
 		 
 			Customer customer;
 			City city1 = cityRepo.getCityByName(cityOne);
 		    City city2 = cityRepo.getCityByName(cityTwo);
 		    String strDateReturn = "";
 		    String tripType = "oneWay";
+
+
+		    List<ProductDetail> listProductReturn = null;
 		    
 		    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
 		    String strDate = dateFormat.format(date);
@@ -179,19 +180,15 @@ public class SearchHistoryController {
 		    System.out.println("Return - " + returnDate);
 		    String sort = "priceADT";
 		    double searchId = 0;
-		    searchObj = new ArrayList<>();
-		    searchObj.add(city1.getCode());
-		    searchObj.add(city2.getCode());
-		    searchObj.add(sort);
-		    searchObj.add(adultNum);
-		    searchObj.add(childNum);
-		    searchObj.add(infantNum);
-		    searchObj.add(strDate);
+		    List<ProductDetail> listProduct = searchSort(city1.getCode(), city2.getCode(), sort, model, date);
+			searchFlightAPI(city1.getCode(), city2.getCode(), adultNum, childNum, infantNum, sort, date, listProduct);
+		
 		    if (returnDate != null) {
 			    strDateReturn = dateFormat.format(returnDate);
 			    tripType = "twoWays";
+			    listProductReturn = searchSort(city2.getCode(), city1.getCode(), sort, model, returnDate);
+				searchFlightAPI(city2.getCode(), city1.getCode(), adultNum, childNum, infantNum, sort, returnDate, listProductReturn);
 			}
-		    searchObj.add(strDateReturn);
 
 		    
             if (loggedCustomer != null) {
@@ -210,43 +207,29 @@ public class SearchHistoryController {
 			}
             
             if (returnDate != null) {
-				searchURL = "/flight_search/return_" + searchId + "_" + city1.getCode() + "_" + city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+
+				return "redirect:/flight_search/return_" + searchId + "_" + city1.getCode() + "_" + city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
 						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ strDateReturn +"_" + sort;
-				
 			} else {
-				searchURL = "/flight_search_" + searchId + "_" + city1.getCode() + "_" + city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
+				return "redirect:/flight_search_" + searchId + "_" + city1.getCode() + "_" + city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
 						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_" + sort;
 			}
-            
-			return "redirect:/loading_";
-            
 	}
 	
 	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Date date, List<ProductDetail> listProduct) throws MalformedURLException, IOException {
 
 		String[] hasErrorArr = new String[2];
 		
-		listProductDetailsOnline = new ArrayList<ProductDetail>(); 
-		listProductDetailsInSearch = new ArrayList<ProductDetail>(); 
+		listProductDetailsOnline = new ArrayList<ProductDetail>(300); 
+		listProductDetailsInSearch = new ArrayList<ProductDetail>(300); 
 		
 		for (ProductDetail productDetailOffline : listProduct) {
 			listProductDetailsOnline.add(productDetailOffline);
 			listProductDetailsInSearch.add(productDetailOffline);
 		}
 		try {
-			// Create URL object with the API end-point
-	         URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
-			
-//			URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
-
-	        // Open a connection
-	        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+	        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchMod(cityOne, cityTwo, adultNum, childNum, infantNum, date);
 	        
-	        StringBuilder responseBodySearch = new StringBuilder();
-	     
-	        onlineFlightService.apiOnlineSearchMod(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date);
-	        
-			
 			//TBO response.......
 	        
 	        JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
@@ -328,8 +311,8 @@ public class SearchHistoryController {
 					Float arrTimeFloat = Float.parseFloat(arrTimeString);
 					
 					JSONObject jsonObjectAdult = new JSONObject();
-					Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
-					Integer intTotalAdultChildPrice = 0;
+					double adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
+					double intTotalAdultChildPrice = 0;
 					
 					for (int j = 0; j < jsonArrayFareBreakdown.getJSONArray(i).length(); j++) {
 						jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdown.getJSONArray(i).getJSONObject(j));
@@ -337,14 +320,14 @@ public class SearchHistoryController {
 						String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
 						String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
 						if (passengerTypeOnline.equals("3")) {
-							infantPrice = Integer.parseInt(priceOnline) / infantNum;
-							infantTax = Integer.parseInt(taxOnline) / infantNum;
+							infantPrice = Double.parseDouble(priceOnline) / infantNum;
+							infantTax = Double.parseDouble(taxOnline) / infantNum;
 						} else if (passengerTypeOnline.equals("2")) {
-							childPrice = Integer.parseInt(priceOnline) / childNum;
-							childTax = Integer.parseInt(taxOnline) / childNum;
+							childPrice = Double.parseDouble(priceOnline) / childNum;
+							childTax = Double.parseDouble(taxOnline) / childNum;
 						} else {
-							adultPrice = Integer.parseInt(priceOnline) / adultNum;
-							adultTax = Integer.parseInt(taxOnline) / adultNum;
+							adultPrice = Double.parseDouble(priceOnline) / adultNum;
+							adultTax = Double.parseDouble(taxOnline) / adultNum;
 						}
 					}
 					
@@ -354,7 +337,7 @@ public class SearchHistoryController {
 						intTotalAdultChildPrice = adultPrice + adultTax;
 					}
 
-					Integer intTotalInfantPrice = infantPrice + infantTax;
+					Integer intTotalInfantPrice = (int) (infantPrice + infantTax);
 					
 					Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
 					@SuppressWarnings("unused")
@@ -386,7 +369,7 @@ public class SearchHistoryController {
 					}
 					 
 					ProductDetail productDetail = new ProductDetail(i + 1, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-				    		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+				    		stringDepTime, stringArrTime, (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
 				    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage);
 
 					
@@ -404,10 +387,8 @@ public class SearchHistoryController {
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			}
 	        
-	        // Close the connection
-	        connectionSearch.disconnect();
-	        
 		} catch (Exception e) {
+			e.printStackTrace();
 			hasErrorArr[0] = "500";
 			hasErrorArr[1] = "Internet connection failed.";	
 		}
@@ -509,22 +490,7 @@ public class SearchHistoryController {
 	
 	@GetMapping("/loading_")
     public String performLoading(Model model) throws Exception, IOException {
-        model.addAttribute("searchURL", "/loading_flights_");
-	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(searchObj.get(6).toString());
-	    Date dateReturn = null;
-	    if (searchObj.get(7) != "") {
-		    dateReturn = new SimpleDateFormat("yyyy-MM-dd").parse(searchObj.get(7).toString());
-		}
-
-	    List<ProductDetail> listProduct = searchSort(searchObj.get(0).toString(), searchObj.get(1).toString(), searchObj.get(2).toString(), model, date);
-	    List<ProductDetail> listProductReturn = searchSort(searchObj.get(1).toString(), searchObj.get(0).toString(), searchObj.get(2).toString(), model, dateReturn);
-
-	    if (searchObj.get(7) != "") {
-	    	searchReturnFlightAPI(searchObj.get(0).toString(), searchObj.get(1).toString(), Integer.parseInt(searchObj.get(3).toString()), Integer.parseInt(searchObj.get(4).toString()), Integer.parseInt(searchObj.get(5).toString()), searchObj.get(2).toString(), date, dateReturn, listProduct, listProductReturn);
-		
-		} else {
-			searchFlightAPI(searchObj.get(0).toString(), searchObj.get(1).toString(), Integer.parseInt(searchObj.get(3).toString()), Integer.parseInt(searchObj.get(4).toString()), Integer.parseInt(searchObj.get(5).toString()), searchObj.get(2).toString(), date, listProduct);
-		}
+        model.addAttribute("searchURL", searchURL);
         
         return "loading/loading";
     }
@@ -901,14 +867,7 @@ public class SearchHistoryController {
 		
 		try {
 			// Create URL object with the API end-point
-	        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
-
-	        // Open a connection
-	        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
-	        
-	        StringBuilder responseBodySearch = new StringBuilder();
-	        
-	        onlineFlightService.apiOnlineSearchModReturn(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
+	        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchModReturn(cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
 	        
 	        JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
 	        System.out.println(jsonObjSearch);
@@ -1212,9 +1171,6 @@ public class SearchHistoryController {
 				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
 				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			}
-
-	        // Close the connection
-	        connectionSearch.disconnect();
 	        
 		} catch (Exception e2) {
 			
@@ -1227,19 +1183,13 @@ public class SearchHistoryController {
         return hasErrorArr;
 	}
 	
-	public Integer searchReturnInternationalFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
+	public String[] searchReturnInternationalFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date, 
 			Date returnDate, List<ProductDetail> listProductDetailsOnline, List<ProductDetail> listProductDetails, List<ProductDetail> listProductDetailsInSearch, 
 			List<ProductDetail> listProductDetailsOnlineReturn, List<FlightMap> flightMaps) throws MalformedURLException, IOException {
-		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search");
 
-        // Open a connection
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
+		String[] hasErrorArr = new String[2];
+        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchModReturn(cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
         
-        StringBuilder responseBodySearch = new StringBuilder();
-        
-        int responseCode = onlineFlightService.apiOnlineSearchModReturn(connectionSearch, responseBodySearch, cityOne, cityTwo, adultNum, childNum, infantNum, date, returnDate);
-
 		String traceIdStr = "offline";
 		
 		listProductDetailsOnline = new ArrayList<ProductDetail>(); 
@@ -1526,13 +1476,20 @@ public class SearchHistoryController {
         			listProductDetailsOnlineReturn.add(productDetailTwo[i]);
     				
         			countTwo++;
-	        	    
+
+    				JSONObject jsonObjTicketResponseError = jsonObjSearch.getJSONObject("Response").getJSONObject("Error");
+    				hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+    				hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
     				
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
     		}
 			model.addAttribute("success", jsonObjSearch.getJSONObject("Response").get("ResponseStatus").toString());
+			
+		JSONObject jsonObjTicketResponseError = jsonObjSearch.getJSONObject("Response").getJSONObject("Error");
+		hasErrorArr[0] = jsonObjTicketResponseError.get("ErrorCode").toString();
+		hasErrorArr[1] = jsonObjTicketResponseError.get("ErrorMessage").toString();
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -1541,12 +1498,8 @@ public class SearchHistoryController {
 		model.addAttribute("flightMaps", flightMaps);
 		model.addAttribute("listProducts", listProductDetailsOnline);
 		model.addAttribute("listProductsReturn", listProductDetailsOnlineReturn);
-        model.addAttribute("responseCode", responseCode);
-        
-        // Close the connection
-        connectionSearch.disconnect();
 
-        return responseCode;
+        return hasErrorArr;
 	}
 	
 	@GetMapping("/test")
