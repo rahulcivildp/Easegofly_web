@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
+<head>
+	<head th:replace="fragments :: page_head(': Registration Page', 'tag')"></head>
+
+	  
+	
+</head>
+<body>
+	
+	
+		<div class="preloading d-none">
+		    <div class="status-loading"></div>
+		</div>
+
+	<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
+
+	 	<div th:replace="whatsapp :: content"></div>
+	 
+		
+		<div th:replace="user_credential/registration-fragment :: content"></div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content modal-content-stl">
+	            <div class="spinner-border text-primary" role="status">
+	                <span class="sr-only">Loading...</span>
+	            </div>
+		    </div>
+		  </div>
+		</div>
+
+
+	</div>
+	
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<section id="preloader-mobile" class="spalsh-screen">
+			<div class="circle text-center">
+				<div>
+					<h1>EaseGoFly</h1>
+					<p>Discover Your Destinition</p>
+				</div>
+			</div>
+			<div class="loader-spinner">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</section>
+		<!-- splash-screen end -->
+	
+		<main class="home p-0">
+	   		<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+	    
+		
+			  <!-- signin start -->
+			    <section class="auth signin">
+			      <div class="heading">
+			        <h2>Hi, Welcome Back!</h2>
+			      </div>
+			  
+			      
+				<div class="form-area auth-form">
+					
+					 
+					<div th:if="${message != null}">
+					    <p class="text-primary">[[${message}]]</p>
+					</div>
+			        <form th:action="@{/create_customer_account}" method="post" th:object="${customer}" onsubmit="return (checkEmailUnique(this))" enctype="multipart/form-data" id="submitForm1">
+						<div th:if="${warning != null}" class="alert alert-warning text-center">
+							[[${warning}]]
+						</div>
+						<h3 class="text-center">Sign Up</h3>
+						<p class="text-center mb-2">
+							Already signed up? <a th:href="@{/login}" class="specialButton styleLinkHover styleLink"><span> Login</span></a>
+						</p>
+						<div style="border: 1px solid grey; border-radius: 15px; background-color: rgba(255,255,255,0.4); padding: 10px;">
+							<input type="hidden" th:field="*{id}"/>
+							<div class="row">
+								<div class="col-12">
+									<label for="" class="col-sm-10 col-form-label label"><p>
+											First Name:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+										<input class="input form-control" th:field="*{firstName}" type="text" placeholder="First Name"
+											required/>
+									</div>
+								</div>
+								<div class="col-12">
+									<label for="" class="col-sm-10 col-form-label label"><p>
+											Last Name:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+										<input class="input form-control" th:field="*{lastName}" type="text" placeholder="Last Name" required
+											/>
+									</div>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-12">
+									<label for="" class="col-sm-10 col-form-label label"><p>
+											Email:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+										<input class="input form-control" type="email" th:field="*{email}" placeholder="user@Email.com" required
+											/>
+									</div>
+								</div>
+								<div class="col-12">
+									<label for="" class="col-sm-10 col-form-label label"><p>
+											Phone Number:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+										<input class="input form-control" type="number" th:field="*{phone}" placeholder="Last Name" maxlength="12" required/>
+									</div>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-12">
+									<label for="" class="col-sm-10 col-form-label label"><p>
+											Business Name:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+										<input class="input form-control" type="text" th:field="*{businessName}" placeholder="ETC LTD" required
+											/>
+									</div>
+								</div>
+								<div class="col-12">
+									<label for="" class="col-sm-10 col-form-label label"><p>
+											PAN:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+										<input class="input form-control" type="text" th:field="*{pan}" placeholder="FT********" required/>
+									</div>
+								</div>
+							</div>
+							<br>
+								<br>
+								<div class="row">
+									<div class="col-12">
+										<label for="" class="col-sm-10 col-form-label label"><p>
+												Aadhaar No.:<span class="star_marked"> *</span>
+											</p></label>
+										<div class="col-sm-10" style="width: 100%;">
+											<input class="input form-control" type="text" th:field="*{aadhaar}" placeholder="6092********" required
+												/>
+										</div>
+									</div>
+									<div class="col-12">
+										<label class="col-sm-4 col-form-label">Upload Aadhar:</label>
+										<small>File type .jpg, .png, .pdf. Maximum size is 500 kb.</small>
+										<div class="col-sm-12">
+											<input type="hidden" th:field="*{aadhaarDoc}">
+											<input type="file" name="doc" id="fileAadhaar" accept="image/png, image/jpeg, .pdf" onchange="showImageThumbnail(this, '#thumbnailAadhaar')" class="mb-2 w-100" required/>
+											<img class="img-thumbnail img-fluid" id="thumbnailAadhaar" th:src="@{images/blank-doc.png}" alt="Aadhaar Preview" style="max-width: 25% !important;"/>
+										</div> 
+									</div>
+								</div>
+								<br>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-10 col-form-label label"><p>
+											Address Line 1:<span class="star_marked"> *</span>
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+											<input class="input form-control" type="text" th:field="*{addressLine1}" placeholder="Type your address" required/>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-10 col-form-label label"><p>
+											Address Line 2:
+										</p></label>
+									<div class="col-sm-10" style="width: 100%;">
+											<input class="input form-control" type="text" th:field="*{addressLine2}" placeholder="Type your address"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<label for="inputPassword3"
+											class="col-sm-10 col-form-label label"><p>
+												Country:<span class="star_marked"> *</span>
+											</p></label>
+										<div class="col-sm-10" style="width: 100%;">
+											<select class="form-control" th:field="*{country}" required>
+												<th:block th:each="country : ${listCountries}">
+													<option th:value="${country.id}">[[${country.name}]]</option>
+												</th:block>
+											</select>
+										</div>
+									</div>
+									<div class="col-12">
+										<label for="" class="col-sm-10 col-form-label label"><p>
+												City:<span class="star_marked"> *</span>
+											</p></label>
+										<div class="col-sm-10" style="width: 100%;">
+											<input class="input form-control" type="text" th:field="*{city}" placeholder="City"  required/>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-12">
+										<label for="inputPassword3"
+											class="col-sm-10 col-form-label label"><p>
+												State:<span class="star_marked"> *</span>
+											</p></label>
+										<div class="col-sm-10" style="width: 100%;">
+											<input class="form-control" type="text" th:field="*{state}" placeholder="State" list="listStates" required/>
+											<datalist id="listStates">
+											</datalist>
+										</div>
+									</div>
+									<div class="col-12">
+										<label for="" class="col-sm-10 col-form-label label"><p>
+												Pin Code:<span class="star_marked"> *</span>
+											</p></label>
+										<div class="col-sm-10" style="width: 100%;">
+											<input class="input form-control" type="number" th:field="*{postalCode}" maxlength="8" required/>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-2 form-check" style="padding-left: 50px;">
+									  <input class="form-check-input" type="radio" name="flexRadioDefault" th:field="*{gender}" th:value="male" checked>
+									  <label class="form-check-label" for="flexRadioDefault1">
+									    Male
+									  </label>
+									</div>
+									<div class="col-2 form-check" style="padding-left: 30px;">
+									  <input class="form-check-input" type="radio" name="flexRadioDefault" th:field="*{gender}" th:value="female">
+									  <label class="form-check-label" for="flexRadioDefault2">
+									    Female
+									  </label>
+									  </div>
+									<br>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<label class="col-sm-4 col-form-label">Profile Picture:</label>
+										<input type="hidden" th:field="*{photos}">
+										<input type="file" name="image" id="fileImage" accept="image/png, image/jpeg" onchange="showImageThumbnail(this, '#thumbnail')"class="mb-2 w-100"/>
+										<img class="img-thumbnail img-fluid" id="thumbnail" th:src="@{${customer.photosImagePath}}" alt="Photo Preview" style="max-width: 25% !important;"/>
+									</div> 
+								</div>
+							
+							<br>
+							<div class="row mb-3" style="width: 40%; margin: 0 auto;">
+								<input type="submit" id="submitButton"
+									class="btn btn-primary button" value="Sign Up">
+							</div>
+						</div>
+						
+					</form>
+			  
+			       <!-- <div class="divider d-flex align-items-center justify-content-center gap-12">
+			          <span class="d-inline-block"></span>
+			          <small class="d-inline-block">Or continue with</small>
+			          <span class="d-inline-block"></span>
+			        </div>-->
+			  
+			        <!--<div class="d-flex flex-column gap-16">
+			          <button type="button" class="social-btn" data-bs-toggle="modal" data-bs-target="#loginSuccess">
+			            <img src="../../assets/svg/icon-google.svg" alt="Google">
+			            Continue with Google
+			          </button>
+			        </div>-->
+			  
+			      </div>
+			    </section>
+			    <!-- signin end -->
+		</main>
+	</div>
+
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
+</body>
+<script>
+	$("#return-next").click(function(){
+		$("#return-next").css("display", "none");
+		$("#return-previous").css("display", "flex");
+	})
+	$("#return-previous").click(function(){
+		$("#return-previous").css("display", "none");
+		$("#return-next").css("display", "flex");
+	})
+	$("#return_international").click(function(){
+		$("#return-next").css("display", "none");
+		$("#return-previous").css("display", "flex");
+	})
+	
+	
+	if (window.innerWidth < 900) { 
+		$(".login-img").css("height", "100vh");
+	}
+</script>
+<link th:href="@{css/custom.css}" rel="stylesheet">
+</html>

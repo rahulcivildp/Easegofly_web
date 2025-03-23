@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
+
 	<head th:replace="fragments :: page_head(': Flight Search Result', 'tag')"></head>
 	<script>
-	   moduleURL = '[[@{/}]]';
-	   timeInSec = 6 * 60 * 1000;
-	   
-	   
-	   
-      $("#status").fadeOut();
-      $("#preloader").delay(100).fadeOut("slow");
+		moduleURL = '[[@{/}]]';
+		timeInSec = 6 * 60 * 1000;
+		var filterFlight = false;
+		var pagenum = 0;
+		var sortValue = "priceADT";
 	</script>
-	
+
 	<script type="text/javascript" th:src="@{/js/timer.js}"></script>
 </head>
 
@@ -20,17 +20,17 @@
 	<div class="hide-lg">
 		<!-- Preloader -->
 		<div id="preloader">
-		    <div id="status"></div>
+			<div id="status"></div>
 		</div>
 		<!-- Preloader Ends -->
-		
+
 		<!-- header starts -->
-	   
-	    <header class="main_header_area">
+
+		<header class="main_header_area">
 			<div th:replace="nav-fragment :: page_header('tag')"></div>
 		</header>
-	    <!-- header ends -->
-  
+		<!-- header ends -->
+
 	</div>
 
 
@@ -40,80 +40,63 @@
 		</main>
 	</div>
 
-    <!-- BreadCrumb Starts -->  
-    <section class="breadcrumb-main pb-8 pt-10" th:style="'background-image: url(' + @{/assets/images/bg/bg1.jpg} + ');'">
-        <div class="section-shape section-shape1 top-inherit bottom-0" th:style="'background-image: url(' + @{/assets/images/shape8.png} + ');'"></div>
-        <div class="breadcrumb-outer pb-2">
-            <div class="container">
-                <div class="breadcrumb-content text-center">
-                    <h1 class="mb-3">Flight List</h1>
-                    <nav aria-label="breadcrumb" class="d-block">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Flight List</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-			<div class="mt-2 text-center">
-        		<p class="m-0 text-white">TIME LEFT TO COMPLETE YOUR BOOKING : <b id="timer" style="color: #c4332f;"></b></p>
-			</div>
-        </div>
+	<!-- BreadCrumb Starts -->
+	<section class="breadcrumb-main pb-2 pt-3"
+		th:style="'background-image: url(' + @{/assets/images/bg/bg1.jpg} + ');'">
+		<div class="section-shape section-shape1 top-inherit bottom-0"
+			th:style="'background-image: url(' + @{/assets/images/shape8.png} + ');'"></div>
 		<div th:replace="flight/search/leastFare :: content"></div>
-        <div class="dot-overlay"></div>
-    </section>
-    <!-- BreadCrumb Ends --> 
+		<div class="dot-overlay"></div>
+	</section>
+	<!-- BreadCrumb Ends -->
 
-    <!-- top Destination starts -->
-    <section class="trending pt-6 pb-0 bg-lgrey">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="list-results d-flex align-items-center justify-content-between">
-                        <div class="list-results-sort">
-                            <p class="m-0">Showing [[${#lists.size(listFlight)}]] results</p>
-                        </div>
-                        <div class="click-menu d-flex align-items-center justify-content-between">
-                            <div class="change-list me-2 hide-mobile btndeactive" id="change-style-3"><button data-bs-toggle="modal" data-bs-target="#filterModal" style="background: transparent;"><i class="fa fa-solid fa-arrow-up-wide-short"></i></button></div>
-                            <div class="change-list me-2 hide-mobile btndeactive" id="change-style-3"><button data-bs-toggle="modal" data-bs-target="#searchModal" style="background: transparent;"><i class="fa fa-search rounded"></i></button></div>
-                            <div class="change-style change-list f-active me-2" id="change-style-1"><button onclick="return switchView(1);" style="background: transparent;"><i class="fa fa-bars rounded"></i></button></div>
-                            <div class="change-style change-grid me-2" id="change-style-2"><button onclick="return switchView(2);" style="background: transparent;"><i class="fa fa-th rounded"></i></button></div>
-                            <div class="sortby d-flex align-items-center justify-content-between ml-2">
-                                <select class="niceSelection" onchange="return sortBySelect(this);">
+	<!-- top Destination starts -->
+	<section class="trending pt-0 pb-0" style="background: linear-gradient(178deg, white, aliceblue, aliceblue, aliceblue);">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="d-flex" id="calendarFare" style="overflow-x: scroll; margin: 2px 0;">																															
+					</div>
+					<div class="list-results d-flex align-items-center justify-content-between">
+						<div class="list-results-sort hide-lg">
+							<p class="m-0" id="showing-result"></p>
+						</div>
+						<div class="click-menu d-flex align-items-center justify-content-between">
+							<div class="change-list me-2 hide-mobile btndeactive" id="change-style-3"><button
+									data-bs-toggle="modal" data-bs-target="#filterModal"
+									style="background: transparent;"><i
+										class="fa fa-solid fa-arrow-up-wide-short"></i></button></div>
+							<div class="change-list me-2 hide-mobile btndeactive" id="change-style-3"><button
+									data-bs-toggle="modal" data-bs-target="#searchModal"
+									style="background: transparent;"><i class="fa fa-search rounded"></i></button></div>
+							<div class="change-style change-list f-active me-2" id="change-style-1"><button
+									onclick="return switchView(1);" style="background: transparent;"><i
+										class="fa fa-bars rounded"></i></button></div>
+							<div class="sortby d-flex align-items-center justify-content-between ml-2">
+								<select class="niceSelection" onchange="return sortBySelect(this);">
 									<th:block th:each="srt : ${listSortName}">
 										<th:block th:if="${srt.sort} == ${sortName}">
-                                    		<option selected th:value="${srt.sort}">[[${srt.sortName}]]</option>
+											<option selected th:value="${srt.sort}">[[${srt.sortName}]]</option>
 										</th:block>
 										<th:block th:if="${srt.sort} != ${sortName}">
-                                    		<option th:value="${srt.sort}">[[${srt.sortName}]]</option>
+											<option th:value="${srt.sort}">[[${srt.sortName}]]</option>
 										</th:block>
 									</th:block>
-                                </select>
-                                <form th:action="@{/flight_redirect}" method="post" id="formSort">
-									<input type="hidden" name="url">
-								</form> 
-								<script>
-										
-									function sortBySelect(id) {
-										var formName = $("#formSort");
-										$("#formSort input[name='url']").attr("value", "/flight_search_[[${searchId}]]_[[${cityOne}]]_[[${cityTwo}]]_[[${journeyClass}]]_oneWay_[[${adultNum}]]_[[${childNum}]]_[[${infantNum}]]_[[${strDate}]]_" + $(id).val());
-										loadingAnimationStart();
-										formName.submit();
-									}
-								</script>
-                                
-                            </div>
-                        </div>
-                    </div>
+								</select>
+								<form th:action="@{/flight_sort}" method="post" id="formSort">
+									<input type="hidden" name="sort">
+								</form>
 
-                    <div class="view-type" id="view-type-1">
-						<div th:replace="flight/search/listFlight :: content"></div>
+							</div>
+						</div>
 					</div>
-                    <div class="view-type btndeactive" id="view-type-2">
-						<div th:replace="flight/search/gridFlight :: content"></div>
+
+					<div class="view-type" id="view-type-1">
+						<div class="flight-list" id="flight-list"></div>
 					</div>
-                </div>
-                <script>
+					<div class="view-type btndeactive" id="view-type-2"></div>
+				</div>
+				<script>
 					function switchView(id) {
 						$(".change-style").removeClass("f-active");
 						$("#change-style-" + id).addClass("f-active");
@@ -121,258 +104,879 @@
 						$("#view-type-" + id).removeClass("btndeactive");
 					}
 				</script>
-                
-                <div class="col-lg-4 ps-lg-4">
-                    <div class="sidebar-sticky custom-scrollbar-css" style="height: 100vh;">
-                        <div class="list-sidebar">
-                            <div class="sidebar-item mb-0 hide-lg search-left-bar" style="border: none;">
-                                <div th:replace="flight/air-search-fragment :: page_banner('tag')"></div>
-                            </div>	
-                            <script>
+
+				<div class="col-lg-4 ps-lg-4">
+					<div class="sidebar-sticky custom-scrollbar-css" style="height: 100vh;">
+						<div class="list-sidebar">
+							<div class="sidebar-item mb-0 hide-lg search-left-bar" style="border: none;">
+								<div th:replace="flight/air-search-fragment :: page_banner('tag')"></div>
+							</div>
+							<script>
 								$(".search-tag-menu").removeClass("position-absolute");
 								$(".search-col").removeClass("col-lg");
 								$(".search-col").addClass("col-6");
 							</script>
-                            <div class="mb-4 hide-lg">
-                                <div th:replace="flight/search/search_filter :: content"></div>
+							<div class="mb-4 hide-lg">
+								<div th:replace="flight/search/search_filter :: content"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- top Destination ends -->
+	
+	<script>
+		showCalnedarFare();
+		
+		function showCalnedarFare() {					
+			const apiminimumfare = document.getElementById("calendarFare");
+			const futureDate = new Date();
+			futureDate.setDate(futureDate.getDate() + 15);
+			const formattedDate = futureDate.toISOString().split('T')[0];
+			// Define month names
+			const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+			
+			const formUrl = "[[@{/api/flight/tbo-search/calendar-fare}]]";
+			var cityOne = $("#cityOne").val();
+			var cityTwo = $("#cityTwo").val();
+			var journeyClass = "1";
+			var searchDate = formattedDate;
+			
+			const requestDataCalender = {
+				journey_class: journeyClass,
+				origin: cityOne,
+				destination: cityTwo,
+				preferredDepartureTime: searchDate
+			};
+			
+			fetch(formUrl, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(requestDataCalender)
+			}).then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				return response.json();
+			}).then(data => {
+				apiminimumfare.innerHTML = ``;
+				console.log(data);
+				data.Response.SearchResults.forEach(flight => {
+					const listDivFare = document.createElement("div");
+					const dateNew = new Date(flight.DepartureDate);
+					// Format as "dd MMM"
+					const formattedDateInside = dateNew.getDate().toString().padStart(2, '0') + ' ' + monthNames[dateNew.getMonth()];
+
+					listDivFare.innerHTML = `<div class="text-center white"	style="width: 70px;border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;padding: 1px 3px;background: #9d9d9d;">
+												<p>${formattedDateInside}</p>
+												<p>₹${Math.round(parseFloat(flight.Fare))}</p>
+											</div>	`;
+					
+					apiminimumfare.appendChild(listDivFare);
+					
+				});
+			}).catch(error => {
+				console.error("Fetch error:", error);
+			});
+		}
+	</script>
+
+	<script>
+		// jQuery for selecting a flight card
+		$(document).ready(function () {
+			$(".flight-card").click(function () {
+				$(".flight-card").removeClass("selected");
+
+				if ($(this).find(".radio-input").prop("checked")) {
+					$(this).removeClass("selected");
+					$(this).find(".radio-input").prop("checked", false);
+				} else {
+					$(this).addClass("selected");
+					$(this).find(".radio-input").prop("checked", true);
+				}
+			});
+
+		});
+
+		function filterButton() {
+			filterFlight = true;
+			var currentMin = $(".current-min").val();
+			var currentMax = $(".current-max").val();
+			var dayTimeInput = document.querySelector(".flight-card input[type='radio']:checked")?.value || "";
+			var airLineInput = document.querySelector(".airline-type input[type='radio']:checked")?.value || "";
+			var stopsTypeInput = document.querySelector(".stops-type input[type='radio']:checked")?.value || "";
+
+			searchFlight(airLineInput, dayTimeInput, currentMin, currentMax, stopsTypeInput, filterFlight, sortValue, pagenum);
+		}
+
+		function sortBySelect(id) {
+			var currentMin = $(".current-min").val();
+			var currentMax = $(".current-max").val();
+			var dayTimeInput = document.querySelector(".flight-card input[type='radio']:checked")?.value || "";
+			var airLineInput = document.querySelector(".airline-type input[type='radio']:checked")?.value || "";
+			var stopsTypeInput = document.querySelector(".stops-type input[type='radio']:checked")?.value || "";
+			sortValue = $(id).val();
+
+			searchFlight(airLineInput, dayTimeInput, currentMin, currentMax, stopsTypeInput, filterFlight, sortValue, pagenum);
+		}
+
+		function showMoreFlights() {
+			var currentMin = $(".current-min").val();
+			var currentMax = $(".current-max").val();
+			var dayTimeInput = document.querySelector(".flight-card input[type='radio']:checked")?.value || "";
+			var airLineInput = document.querySelector(".airline-type input[type='radio']:checked")?.value || "";
+			var stopsTypeInput = document.querySelector(".stops-type input[type='radio']:checked")?.value || "";
+			pagenum = pagenum + 1
+
+			searchFlight(airLineInput, dayTimeInput, currentMin, currentMax, stopsTypeInput, filterFlight, sortValue, pagenum);
+		}
+	</script>
+
+	<script>
+
+		const simmerDiv = `		<div class="item mb-2 p-3 px-4 shimmer-box">
+									   <div class="row d-flex align-items-center justify-content-between">
+									       <div class="col-lg-3 col-md-3 col-3">
+									           <div class="item-inner-image mobile-hide">
+												<div class="rounded shimmer-minibox " style="height: 30px; width: 30px; padding-right: 0px;"></div>
+												<div>											
+													<h5 class="mb-0 shimmer-minibox decreaseSizeP" style="height: 20px; width: 90px; margin-top: 2px;"></h5>
+													<small class="shimmer-minibox d-flex decreaseSize" style="height: 18px; width: 100px; margin-top: 7px;"></small>
+												</div>
+									           </div>
+									       </div> 										   
+   										   <div class="col-lg-3 col-md-3 col-12 mobile-show mb-1">
+   			   								    <div class="d-flex justify-content-between align-items-center">
+   			   										<h5 class="mb-0 shimmer-minibox" style="height: 20px; width: 90px;"></h5>
+   			   										<small class="shimmer-minibox" style="height: 20px; width: 90px;"></small>
+   			   										<p class="theme fs-4 fw-bold shimmer-minibox" style="height: 20px; width: 90px;"></p>
+   			   								    </div>
+   			   								</div>    
+   									       <div class="col-lg-2 col-md-2 col-3"> 
+   									           <div class="item-inner">
+   									               <div class="content">
+   									                   <h3 class="mb-0 shimmer-minibox" style="height: 24px; width: 75px;"></h3>
+   									                   <p class="mb-0 text-uppercase shimmer-minibox" style="height: 20px; width: 50px; margin-top: 7px;"></p>
+   									               </div>
+   									           </div>
+   									       </div>										
+   											<div class="col-lg-2 col-md-2 col-3 p-0">
+   									           	 <div class="mb-0 ms-2 d-flex flex-column align-items-center">
+   													<div class="mb-0 shimmer-minibox" style="height: 22px; width: 85px;"></div>
+   													<div class="mb-0 shimmer-minibox" style="height: 20px; width: 75px; margin-top: 7px;"></div>
+   												</div>
+   									           
+   									       </div>
+   									       <div class="col-lg-2 col-md-2 col-3">
+   									           <div class="item-inner">
+   									               <div class="content d-flex flex-column align-items-end">											
+   														<h3 class="mb-0 shimmer-minibox" style="height: 24px; width: 75px;"></h3>
+   														<p class="mb-0 text-uppercase shimmer-minibox" style="height: 20px; width: 50px; margin-top: 7px;"></p>
+   									               </div>
+   									           </div>
+   									       </div>  
+   									       <div class="col-lg-3 col-md-3 col-6 mobile-hide">
+   									           <div class="item-inner text-end d-flex flex-column align-items-end">
+   									               <p class="theme fs-4 fw-bold shimmer-minibox" style="height: 24px; width: 95px;"></p>
+   												   <div class="mb-0 shimmer-minibox" style="height: 38px; width: 110px; margin-top: 6px;;"></div>
+   									           </div>
+   									       </div>
+										   <div class="col-lg-3 col-md-3 col-12 mobile-show mt-1">
+   									           <div class="item-inner row">
+   												<div class="col-6">												
+   													<div class="mb-0 shimmer-minibox" style="height: 30px; width: 100%;"></div>	
+   												</div>												
+   												<div class="col-6">												
+   													   <div class="mb-0 shimmer-minibox" style="height: 30px; width: 100%;"></div>
+   												 </div>
+   												   
+   									           </div>
+   									       </div>	
+											<div class="col-lg-12">
+												<div class="d-flex justify-content-between border-t pt-2 mt-1 mobile-hide-flex">
+													<div class="mb-0 shimmer-minibox" style="height: 19px; width: 110px;"></div>
+													<div class="mb-0 shimmer-minibox" style="height: 19px; width: 19px;"></div>
+												</div>								
+											</div>																
+										</div>																				
+									</div>`;
+
+		const simmerDivMain = `	<div class="simmer-div-main">${simmerDiv}</div>
+							<div class="simmer-div-main">${simmerDiv}</div>		
+							<div class="simmer-div-main">${simmerDiv}</div>								
+							<div class="simmer-div-main">${simmerDiv}</div>		
+							<div class="simmer-div-main">${simmerDiv}</div>								
+							<div class="simmer-div-main">${simmerDiv}</div>		
+							<div class="simmer-div-main">${simmerDiv}</div>								
+							<div class="simmer-div-main">${simmerDiv}</div>		
+							<div class="simmer-div-main">${simmerDiv}</div>								
+							<div class="simmer-div-main">${simmerDiv}</div>`;
+
+		const showTextSimmer = `<div class="d-flex align-items-center"><p>Showing </p><div class="mb-0 shimmer-minibox" style="height: 17px; width: 18px; margin: 0 2px 0 2px;"></div><p> results</p></div>`;
+
+	</script>
+
+
+	<script>
+		$(document).ready(function () {
+
+			searchFlight("indigo", "00:00", "1500", "100000", 0, filterFlight, "priceADT", pagenum);
+		});
+
+		function searchFlight(airline, minTime, minPrice, maxPrice, maxStops, filter, sort, page) {
+
+			const flightList = document.getElementById("flight-list");
+			const showResultText = document.getElementById("showing-result");
+			const showLeastFare = document.getElementById("leastFareId");
+			const urlSearch = "[[@{/api/flight/tbo-search/oneway}]]";
+			var formUrl = "[[@{/flight_booking_save}]]";
+			var adultNum = [[${adultNum}]];
+			var childNum = [[${childNum}]];
+			var infantNum = [[${infantNum}]];
+			var cityOne = "[[${cityOne}]]";
+			var cityTwo = "[[${cityTwo}]]";
+			var strDate = "[[${strDate}]]";
+			var originDate = "[[${#dates.format(date, 'dd MMMM, yy')}]]";
+			var journeyClass = "[[${journeyClass}]]";
+			var searchId = "[[${searchId}]]";
+			var currency = "[[${CURRENCY_SYMBOL}]]";
+			var cityListVar = [];
+			var brandListVar = [];
+			var searchDate = "[[${date}]]";
+			var sizePage = 20;
+
+			const requestData = {
+				adultCount: adultNum,
+				childCount: childNum,
+				infantCount: infantNum,
+				journey_class: journeyClass,
+				origin: cityOne,
+				destination: cityTwo,
+				preferredDepartureTime: searchDate,
+				filter: filter,
+				mode: "online",
+				sort: sort,
+				page: page,
+				size: sizePage,
+				airline: airline,
+				minTime: minTime,
+				maxTime: "24:00",
+				maxStops: maxStops,
+				minPrice: minPrice,
+				maxPrice: maxPrice
+			};
+
+			flightList.innerHTML = `${simmerDivMain}`; // Simmer before results
+			showResultText.innerHTML = `${showTextSimmer}`;
+
+			fetch('/api/fetch_cities')
+				.then(response => response.json()) // Convert response to JSON
+				.then(cityList => {
+					console.log(cityList); // Check if data is correct
+					cityListVar = cityList;
+				})
+				.catch(error => console.error('Error fetching cities:', error));
+
+
+			fetch('/api/brand_list')
+				.then(response => response.json()) // Convert response to JSON
+				.then(brandList => {
+					console.log(brandList); // Check if data is correct
+					brandListVar = brandList;
+				})
+				.catch(error => console.error('Error fetching brands:', error));
+
+
+
+			fetch(urlSearch, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(requestData)
+			}).then(response => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				return response.json();
+			}).then(data => {
+				const showMoreTab = document.createElement("div");
+				flightList.innerHTML = ""; // Clear previous results
+				showResultText.innerHTML = `Showing ${data.length} results`;
+				showMoreTab.innerHTML = "";
+				var stopText = ``;
+				var listLength = data.length;
+				var flightCountPerPage = (parseInt(page) + 1) * parseInt(sizePage);
+
+
+
+
+				function checkCity(code) {
+					var cityHtml = ``;
+					cityListVar.forEach(city => {
+						if (city.code == code) {
+							cityHtml = `${city.code} - ${city.name}, ${city.cityName}`;
+						}
+					});
+					return cityHtml;
+				}
+
+				function findBrand(code) {
+					var brnadHtml = ``;
+					brandListVar.forEach(brand => {
+						if (brand.name.toLowerCase() === code.toLowerCase()) {
+							brnadHtml = `${brand.photo}`;
+						}
+					});
+					return brnadHtml;
+				}
+
+				if (data.length === 0) {
+					flightList.innerHTML = "<li>No flights found.</li>";
+				} else {
+					data.forEach(flight => {
+
+						const listDiv = document.createElement("div");
+						var flightStop = ``;
+						var timeDuration = flight.duration;
+						var timeInHour = Math.floor(timeDuration / 60);
+						var timeRemaining = timeDuration - (timeInHour * 60);
+						var timeDurationFlight = `${timeInHour}H${timeRemaining}M`;
+
+						var totalAdultPrice = (flight.priceADT + flight.markupADT) * (adultNum + childNum);
+						var totalInfantPrice = (flight.priceINF + flight.markupINF) * infantNum;
+
+						var totalPrice = totalAdultPrice + totalInfantPrice;
+
+
+
+						if (flight.stopNum === 0) {
+							stopText = `Non-Stop`;
+							flightStop = `
+						<div class="row flight-detail-wrap align-items-center border-b pt-1 mt-1" style="">
+                            <div class="col-lg-4">
+                                <div class="flight-date">
+                                    <ul>
+                                        <li>${flight.journeyClass}</li>
+                                        <li>${originDate} - ${flight.depTime}</li><br>
+                                        <li class="theme" >
+											<span>${timeDurationFlight}</span>
+										</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="flight-detail-right">
+                                    <h5>
+										<i class="fa fa-plane"></i> 
+                                        ${checkCity(flight.cityOne)}
+                                    </h5>
+                                    <div class="flight-detail-info d-flex align-items-center p-2 py-3 bg-grey rounded mb-2">
+                                        <img src="${findBrand(flight.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
+                                        <ul>
+                                            <li>Operated by ${flight.brand}</li><br>
+                                            <li>${flight.journeyClass} | Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li>
+                                            <li>Adult(s): ${flight.baggage}KG luggage free</li>
+                                        </ul>
+                                    </div>
+                                    <h5 class="mb-0">
+										${checkCity(flight.cityTwo)}
+									</h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- top Destination ends -->
+						`;
+						} else if (flight.stopNum > 0) {
+							var stopHtml = ``;
+							stopText = `Stop ${flight.stopNum}`;
 
-    <!-- partner starts -->
-    <section class="our-partner pb-6 pt-6">
-        <div class="container">
-            <div class="section-title mb-6 w-75 mx-auto text-center">
-                <h4 class="mb-1 theme1">Our Recommended Flights</h4>
-                <h2 class="mb-1">Our Awesome <span class="theme">Flights</span></h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-            </div>
-            <div class="row align-items-center partner-in partner-slider">
-                <div class="col-md-3 col-sm-6">
-                    <div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
-                        <img src="images/flights/flight_grid_2.png" alt="">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
-                        <img src="images/flights/flight_grid_3.png" alt="">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
-                        <img src="images/flights/flight_grid_4.png" alt="">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
-                        <img src="images/flights/flight_grid_2.png" alt="">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
-                        <img src="images/flights/flight_grid_3.png" alt="">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
-                        <img src="images/flights/flight_grid_4.png" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- partner ends -->
+							flight.stops.forEach(stop => {
+								stopHtml = `<div class="flight-detail-right">
+	                                        <h5>
+												<i class="fa fa-plane"></i> 
+												${checkCity(stop.cityName)}
+	                                        </h5>
+	                                        <div class="flight-detail-info d-flex align-items-center p-2 py-3 bg-grey rounded mb-2">
+	                                            <img src="${findBrand(flight.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
+	                                            <ul>
+	                                                <li>Operated by ${flight.brand}</li><br>
+	                                                <li>${flight.journeyClass} | Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li><br>
+	                                                <li>Arriving at ${stop.arrTime} - Leaving by ${stop.depTime}</li><br>
+	                                                <li>Adult(s): ${flight.baggage}KG luggage free</li>
+	                                            </ul>
+	                                        </div>
+	                                	</div>`;
+							});
 
-	
-	  <!-- service modal start -->
-	  <div class="modal fade bottomModal modalBg" id="searchModal" tabindex="-1" aria-hidden="true">
-	    <div class="modal-dialog">
-	      <div class="modal-content h-auto">
-	        <div class="modal-header">
-	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
-	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
-	          </button>
-	          <h1 class="modal-title">Search Flight</h1>
-	        </div>
-	        <div class="modal-body">
-				
-               <div th:replace="flight/air-search-fragment :: page_banner_mb('tag')"></div>
-			  <script>
-				  
-			  </script>
+							flightStop = `<div class="row flight-detail-wrap align-items-center border-t pt-1 mt-1" style="">
+			                            <div class="col-lg-4">
+			                                <div class="flight-date">
+			                                    <ul>
+			                                        <li>${flight.journeyClass}</li><br>
+			                                        <li>${originDate} - ${flight.depTime}</li><br>
+			                                        <li class="theme" >
+														<span>${timeDurationFlight}</span>
+													</li><br><br>
+			                                    </ul>
+			                                </div>
+			                            </div>
+			                            <div class="col-lg-8">
+											<div class="flight-detail-right">
+			                                    <h5>
+													<i class="fa fa-plane"></i> 
+													${checkCity(flight.cityOne)}
+			                                    </h5>
+			                                    <div class="flight-detail-info d-flex align-items-center p-2 py-3 bg-grey rounded mb-2">
+			                                        <img src="${findBrand(flight.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
+			                                        <ul>
+			                                            <li>Operated by ${flight.brand}</li><br>
+			                                            <li>${flight.journeyClass} | Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li><br>
+			                                            <li>Arriving at ${flight.arrTime}</li><br>
+			                                            <li>Adult(s): ${flight.baggage}KG luggage free</li>
+			                                        </ul>
+			                                    </div>
+			                            	</div>
+			                                ${stopHtml}
+			                            </div>
+			                        </div>`;
+						}
 
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	  <!-- service modal end -->
-	
- 
-	  <!-- service modal start -->
-	  <div class="modal fade bottomModal modalBg" id="filterModal" tabindex="-1" aria-hidden="true">
-	    <div class="modal-dialog">
-	      <div class="modal-content h-auto">
-	        <div class="modal-header">
-	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
-	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
-	          </button>
-	          <h1 class="modal-title">Set Filter</h1>
-	        </div>
-	        <div class="modal-body">
-				
-             
-               <div th:replace="flight/search/search_filter :: content"></div>
+						listDiv.innerHTML = `
+					 <form action="${formUrl}" method="post" id="booking_form${flight.id}" onsubmit="return formSearchSubmit();">
+						<input type="hidden" name="timeRemaining" class="timeRemain">
+	      				<input type="hidden" name="adultNum" value="${adultNum}">
+	      				<input type="hidden" name="childNum" value="${childNum}">
+	      				<input type="hidden" name="infantNum" value="${infantNum}">
+	      				<input type="hidden" name="cityOne" value="${cityOne}">
+	      				<input type="hidden" name="cityTwo" value="${cityTwo}">
+	      				<input type="hidden" name="date" value="${strDate}">
+	      				<input type="hidden" name="journeyClass" value="${journeyClass}">
+	          			<input type="hidden" name="search_id" value="${searchId}">
+			            <input type="hidden" name="flight_id" value="${flight.id}">
+			            <input type="hidden" name="device" class="device">
+			            <input type="hidden" name="deviceInfo" class="deviceInfo">
+						<div class="item mb-2 border-all p-3 rounded bg-white" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="row d-flex align-items-center justify-content-between">
+                                <div class="col-lg-3 col-md-3 col-3 mobile-hide">
+                                    <div class="item-inner-image">
+										<img src="${findBrand(flight.brand)}" class="rounded" style="height: 30px; width: 30px; padding-right: 0px;">
+										<div>											
+											<h5 class="mb-0">${flight.brand}</h5>
+											<small style="color: #0088ff;">${flight.flightNum}</small>
+										</div>
+                                    </div>
+                                </div>     									
+								<div class="col-lg-3 col-md-3 col-12 mobile-show">
+								    <div class="d-flex justify-content-between align-items-center">
+										<h5 class="mb-0">${flight.brand}</h5>
+										<small style="color: #0088ff;">${flight.flightNum}</small>
+										<p class="theme fs-4 fw-bold">${currency}<span>${totalPrice}</span></p>
+								    </div>
+								</div> 
+                                <div class="col-lg-2 col-md-2 col-3"> 
+                                    <div class="item-inner">
+                                        <div class="content">
+                                            <h3 class="mb-0">${flight.depTime}</h3>
+                                            <p class="mb-0 text-uppercase">${flight.cityOne}</p>
+                                        </div>
+                                    </div>
+                                </div>										
+								<div class="col-lg-2 col-md-2 col-3 p-0">
+                                    <div class="item-inner flight-time">
+                                    	<div class="mb-0 d-flex flex-column align-items-center">
+											<p>${timeDurationFlight}</p>
+											<p>${stopText}</p>
+										</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-3">
+                                    <div class="item-inner">
+                                        <div class="content d-flex flex-column align-items-end">
+                                            <h3 class="mb-0">${flight.arrTime}</h3>
+                                            <p class="mb-0 text-uppercase">${flight.cityTwo}</p>
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div class="col-lg-3 col-md-3 col-6 mobile-hide">
+                                    <div class="item-inner text-end">
+                                        <p class="theme fs-4 fw-bold">${currency}<span>${totalPrice}</span></p>
+                                        <button type="submit" class="nir-btn">View Deals</button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12 mobile-show">
+                                    <div class="row mt-1">
+                                        <div class="col-6">
+											<button type="submit" class="nir-btn px-4 p-2 w-100">View Deals</button>
+										</div>
+										<div class="col-6">
+											<button class="nir-btn-black accordion-button collapsed px-4 p-2 w-100" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne${flight.id}"  aria-expanded="false" aria-controls="'flush-collapseOne' + ${flight.id}">
+											 	Details
+											</button>
+										</div>
+									</div>
+								</div>	
+								<div class="col-lg-12">
+	                                <div class="accordion accordion-flush" id="accordionflush1">
+	                                    <div class="accordion-item overflow-hidden ">
+	                                        <p class="accordion-header mobile-hide border-t pt-2" id="flush-headingOne1">
+	                                            <button class="accordion-button collapsed p-0 border-0 rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne${flight.id}"  aria-expanded="false" aria-controls="'flush-collapseOne' + ${flight.id}">
+	                                              Flight Details
+	                                            </button>
+	                                        </p>
+	                                        <div id="flush-collapseOne${flight.id}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne1" data-bs-parent="#accordionFlushExample">
+												<div class="accordion-body p-0 mt-1 pt-1">
+													${flightStop}
+												</div>
+											</div>
+										</div>	
+									</div>								
+								</div>																
+							</div>																				
+						</div>
+					</form>
+					 `;
 
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	  <!-- service modal end -->
-	
-	    
-	    
-	     <!-- service modal start -->
-	  <div class="modal fade bottomModal modalBg" id="travelerModalMobile" tabindex="-1" aria-hidden="true" style="z-index: 10000;">
-	    <div class="modal-dialog">
-	      <div class="modal-content h-auto">
-	        <div class="modal-header">
-	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
-	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
-	          </button>
-	          <h1 class="modal-title">Set Traveler</h1>
-	        </div>
-	        <div class="modal-body">
-                  <div class="row p-2" id="flush-collapseOne">
-				    <div class="col-12">
-						<div class="dropdown-item">
-							<b>Class</b>
-							<select class="pass_list-1 form-control" name="journeyClass" form="onewaySearchMobile"
-								required="required">
-								<option value="Economy">Economy</option>
-								<option value="Premium Economy">Premium Economy</option>
-								<option value="Business">Business</option>
-								<option value="Premium Business">Premium Business</option>
-								<option value="First Class">First Class</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="dropdown-item">
-							<div class="d-flex justify-content-between">
-								<b class="me-2">Adult</b>
-								<p>(12+ yrs)</p>
-							</div>
-							<select class="pass_list1 form-control" name="adultNum"form="onewaySearchMobile"
-								required="required">
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="dropdown-item">
-							<div class="d-flex justify-content-between">
-								<b class="me-2">Children</b>
-								<p>(2-12 yrs)</p>
-							</div>
-							<select class="pass_list2 form-control" name="childNum" form="onewaySearchMobile">
-								<option value="0">0</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="dropdown-item">
-							<div class="d-flex justify-content-between">
-								<b class="me-2">Infant</b>
-								<p>Under 2yrs</p>
-							</div>
-							<select class="pass_list3 form-control" name="infantNum" form="onewaySearchMobile">
-								<option value="0">0</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="dropdown-item mt-2">
-							<button type="button" id="submit2" form="onewaySearch" class="nir-btn w-100" data-bs-dismiss="modal" onclick="return setTravelerDetails('#mobileDropdwon', '#flush-collapseOne');">Set</button>
-						</div>
-					</div>
-				  </div>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	  <!-- service modal end -->
-	    
-	    
-	    
-	    <script>
-			function setTravelerDetails(btn, formData) {
-				var nText = $(btn).children(".n-text");
-				var optionList = $(formData + " select");
-				var paxCount = 0;
-				var journeyType = "";
-				nText.empty();
-				
-				$.each(optionList, function( index, value ) {
-					if(index == 0) {
-						journeyType =  value.value;
-					} else {
-						paxCount = paxCount + parseInt(value.value);
-					}
+						flightList.appendChild(listDiv);
+
+					});
+				}
+
+				if (flightCountPerPage <= listLength) {
+					showMoreTab.innerHTML = `<div class="mt-2"><button class="show-more-btn flight-showmore-button" onclick="return showMoreFlights();">Show more</button></div>`;
+				}
+
+				flightList.appendChild(showMoreTab);
+				//alert("ok");
+				/*Lease Flight Search*/
+
+				fetch('/api/flight/leastFare')
+					.then(response => response.json()) // Convert response to JSON
+					.then(leastFlight => {
+						console.log(leastFlight); // Check if data is correct
+						showLeastFare.innerHTML = ""; // Clear previous results
+
+						if (leastFlight.length === 0) {
+							showLeastFare.innerHTML = "<li>No least fare found.</li>";
+							return;
+						}
+						
+						leastFlight.forEach(least => {						
+							const listLeastFare = document.createElement("div");
+							listLeastFare.classList.add("me-2");
+
+							var totalAdultPriceLeast = (least.priceADT + least.markupADT) * (adultNum + childNum);
+							var totalInfantPriceLeast = (least.priceINF + least.markupINF) * infantNum;
+							var totalPriceLeast = totalAdultPriceLeast + totalInfantPriceLeast;
+
+							listLeastFare.innerHTML = `	
+													<form action="/flight_booking_save" method="post">
+														<input type="hidden" name="timeRemaining" class="timeRemain">
+														<input type="hidden" name="adultNum" value="${adultNum}">
+														<input type="hidden" name="childNum" value="${childNum}">
+														<input type="hidden" name="infantNum" value="${infantNum}">
+														<input type="hidden" name="cityOne" value="${cityOne}">
+														<input type="hidden" name="cityTwo" value="${cityTwo}">
+														<input type="hidden" name="date" value="${strDate}">
+														<input type="hidden" name="journeyClass" value="${journeyClass}">
+														<input type="hidden" name="search_id" value="${searchId}">
+														<input type="hidden" name="flight_id" value="${least.id}">
+														<input type="hidden" name="device" class="device">
+														<input type="hidden" name="deviceInfo" class="deviceInfo">
+													
+										                <div class="insta-image rounded">
+										                    <button type="submit" class="position-relative d-flex rounded" style="border: none; overflow: hidden;">
+																<img src="${findBrand(least.brand)}" style="height: 60px; width: 70px;" alt="${least.brand}">
+																<div class="position-absolute bottom-0 text-center" style="left: 0; right: 0; background: #494949ba; color: white;">₹${totalPriceLeast}</div>
+										                    </button>
+										                </div>
+													</form>`;
+
+							showLeastFare.appendChild(listLeastFare);
+						});
+						showLeastFare.classList.add("attract-slider");
+						//initSlider();
+					})
+					.catch(error => console.error('Error fetching least fare:', error));
+
 				})
-				
-				nText.text(journeyType + " Pax " + paxCount);
-			}
-		</script>	
-    
- 	<footer th:replace="fragments :: page_footer('tag')"></footer>
+				.catch(error => {
+					console.error("There was a problem with the fetch operation:", error);
+				});
+
+		}
+		
+		function initSlider(){
+			 $('.attract-slider').slick({
+			    infinite: true,
+			    slidesToShow: 8,
+			    slidesToScroll: 1,
+			    arrows: false,
+			    dots: false,
+			    speed: 2000,
+			    rows:0,
+			    autoplay: true,
+			    draggable:false,
+			    responsive: [{
+			        breakpoint: 1000,
+			        settings: {
+			            slidesToShow: 8
+			        }
+			    }, 
+			    {
+			        breakpoint: 600,
+			        settings: {
+			            slidesToShow: 6
+			       }
+			    }, 
+			    {
+			        breakpoint: 500,
+			        settings: {
+			            slidesToShow: 5
+			        }
+			    }]
+			});
+		}
+	</script>
+
+	<!-- partner starts -->
+	<section class="our-partner pb-6 pt-6">
+		<div class="container">
+			<div class="section-title mb-6 w-75 mx-auto text-center">
+				<h4 class="mb-1 theme1">Our Recommended Flights</h4>
+				<h2 class="mb-1">Our Awesome <span class="theme">Flights</span></h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+				</p>
+			</div>
+			<div class="row align-items-center partner-in partner-slider">
+				<div class="col-md-3 col-sm-6">
+					<div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
+						<img src="images/flights/flight_grid_2.png" alt="">
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
+						<img src="images/flights/flight_grid_3.png" alt="">
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
+						<img src="images/flights/flight_grid_4.png" alt="">
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
+						<img src="images/flights/flight_grid_2.png" alt="">
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
+						<img src="images/flights/flight_grid_3.png" alt="">
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="partner-item p-4 py-2 rounded bg-lgrey border-all">
+						<img src="images/flights/flight_grid_4.png" alt="">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- partner ends -->
+
+
+	<!-- service modal start -->
+	<div class="modal fade bottomModal modalBg" id="searchModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content h-auto">
+				<div class="modal-header">
+					<button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+						<img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+					</button>
+					<h1 class="modal-title">Search Flight</h1>
+				</div>
+				<div class="modal-body">
+
+					<div th:replace="flight/air-search-fragment :: page_banner_mb('tag')"></div>
+					<script>
+
+					</script>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- service modal end -->
+
+
+	<!-- service modal start -->
+	<div class="modal fade bottomModal modalBg" id="filterModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content h-auto">
+				<div class="modal-header">
+					<button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+						<img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+					</button>
+					<h1 class="modal-title">Set Filter</h1>
+				</div>
+				<div class="modal-body" style="overflow-y: scroll; height: 80vh;">
+
+
+					<div th:replace="flight/search/search_filter :: content"></div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- service modal end -->
+
+
+
+	<!-- service modal start -->
+	<div class="modal fade bottomModal modalBg" id="travelerModalMobile" tabindex="-1" aria-hidden="true"
+		style="z-index: 10000;">
+		<div class="modal-dialog">
+			<div class="modal-content h-auto">
+				<div class="modal-header">
+					<button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+						<img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+					</button>
+					<h1 class="modal-title">Set Traveler</h1>
+				</div>
+				<div class="modal-body">
+					<div class="row p-2" id="flush-collapseOne">
+						<div class="col-12">
+							<div class="dropdown-item">
+								<b>Class</b>
+								<select class="pass_list-1 form-control" name="journeyClass" form="onewaySearchMobile"
+									required="required">
+									<option value="Economy">Economy</option>
+									<option value="Premium Economy">Premium Economy</option>
+									<option value="Business">Business</option>
+									<option value="Premium Business">Premium Business</option>
+									<option value="First Class">First Class</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="dropdown-item">
+								<div class="d-flex justify-content-between">
+									<b class="me-2">Adult</b>
+									<p>(12+ yrs)</p>
+								</div>
+								<select class="pass_list1 form-control" name="adultNum" form="onewaySearchMobile"
+									required="required">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="dropdown-item">
+								<div class="d-flex justify-content-between">
+									<b class="me-2">Children</b>
+									<p>(2-12 yrs)</p>
+								</div>
+								<select class="pass_list2 form-control" name="childNum" form="onewaySearchMobile">
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="dropdown-item">
+								<div class="d-flex justify-content-between">
+									<b class="me-2">Infant</b>
+									<p>Under 2yrs</p>
+								</div>
+								<select class="pass_list3 form-control" name="infantNum" form="onewaySearchMobile">
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="dropdown-item mt-2">
+								<button type="button" id="submit2" form="onewaySearch" class="nir-btn w-100"
+									data-bs-dismiss="modal"
+									onclick="return setTravelerDetails('#mobileDropdwon', '#flush-collapseOne');">Set</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- service modal end -->
+
+
+
+	<script>
+		function setTravelerDetails(btn, formData) {
+			var nText = $(btn).children(".n-text");
+			var optionList = $(formData + " select");
+			var paxCount = 0;
+			var journeyType = "";
+			nText.empty();
+
+			$.each(optionList, function (index, value) {
+				if (index == 0) {
+					journeyType = value.value;
+				} else {
+					paxCount = paxCount + parseInt(value.value);
+				}
+			})
+
+			nText.text(journeyType + " Pax " + paxCount);
+		}
+	</script>
+
+	<footer th:replace="fragments :: page_footer_only('tag')"></footer>
 
 </body>
 
 <script>
 	$(".home").css("margin-bottom", "0");
 	$(".home").css("padding", "0");
-	
+
 	$('#searchModal').on('shown.bs.modal', function (e) {
 		$(".item-slider3").slick('setPosition');
 	});
-	
-	
-	
-	if (window.innerWidth < 900) { 
+
+
+
+	if (window.innerWidth < 900) {
 		$(".search-header-info").removeClass("d-flex justify-content-center");
 		$(".search-header-info").addClass("text-center");
 		$(".search-tag-menu-mb").removeClass("box-shadow border");
 	}
 </script>
+
 </html>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.PaymentMethod;
+import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -81,6 +83,90 @@ public class OrderRestController {
         		+ "\"data\": " + travelerBody + ""
         		+ "}";
         
+
+      return responseBody;
+    }
+	
+	@PostMapping("/api/flight/show_order")
+    public String showOrderDetail(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        ShowOrder showOrder = new ObjectMapper().readValue(request.getInputStream(), ShowOrder.class);
+        Customer existingCustomer = customerRepo.findById(showOrder.id).get();
+        List<Order> orders = existingCustomer.getOrders();
+		List<String> orderList = new ArrayList<String>();
+        
+        for (Order order : orders) {
+            List<TravellerDetail> travelers = order.getTravellerDetails();
+    		List<String> paxList = new ArrayList<String>();
+    		ProductDetail flight = order.getProductDetail();
+            
+    		for (TravellerDetail pax : travelers) {
+
+    	        String paxBody =  "{"
+    	        		+ "\"id\": " + pax.getId() + ", "
+    	                + "\"firstName\": \"" + pax.getFirstName() + "\", "
+    	        		+ "\"lastName\": \"" + pax.getLastName() + "\", "
+    	        		+ "\"salutation\": \"" + pax.getSalutation() + "\", "
+    	    	        + "\"paxType\": \"" + pax.getPaxType() + "\", "
+    	    	    	+ "\"passportNo\": \"" + pax.getPassportNo() + "\", "
+    	    	    	+ "\"baggageWT\": \"" + pax.getBaggageWT() + "\", "
+    	    	    	+ "\"cabinBaggage\": \"" + pax.getCabinBaggage() + "\", "
+    	    	    	+ "\"dob\": \"" + pax.getDob() + "\", "
+    	    	    	+ "\"passportExpiry\": \"" + pax.getPassportExpiry() + "\""
+    	        		+ "}";	 
+    	        
+    	        paxList.add(paxBody);
+			}
+    		
+           	String arrayPaxList = orderList.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+            
+
+	        String orderBody =  "{"
+	        		+ "\"id\": " + order.getId() + ", "
+	                + "\"adult_num\": " + order.getAdultNum() + ", "
+	        		+ "\"child_num\": " + order.getChildNum() + ", "
+	        		+ "\"infant_num\": " + order.getInfantNum() + ", "
+	    	        + "\"journey_class\": \"" + order.getJourneyClass() + "\", "
+	    	    	+ "\"city_one\": \"" + order.getCityOne() + "\", "
+	    	    	+ "\"city_two\": \"" + order.getCityTwo() + "\", "
+	    	    	+ "\"created_time\": \"" + order.getCreatedTime() + "\", "
+	    	    	+ "\"order_name\": \"" + order.getName() + "\", "
+	    	    	+ "\"trip_type\": \"" + order.getTripType() + "\", "
+	    	    	+ "\"passenger_num\": " + order.getPassengerNum() + ", "
+	    	    	+ "\"payment_type\": \"" + order.getPaymentMethod() + "\", "
+	    	    	+ "\"pin\": \"" + order.getPostalCode() + "\", "
+	    	    	+ "\"price\": " + order.getPrice() + ", "
+	    	    	+ "\"booking_id\": \"" + order.getBookingId() + "\", "
+	    	    	+ "\"status\": \"" + order.getOrderStatus() + "\", "
+	    	    	+ "\"transaction_id\": \"" + order.getTransactionId() + "\", "
+	    	    	+ "\"total_transaction\": \"" + order.getTotalTransaction() + "\", "
+	    	    	+ "\"brand_logo\": \"" + flight.getAirlineLogo() + "\", "
+	    	    	+ "\"arr_time\": \"" + flight.getArrTime() + "\", "
+	    	    	+ "\"brand\": \"" + flight.getBrand() + "\", "
+	    	    	+ "\"city_one\": \"" + flight.getCityOne() + "\", "
+	    	    	+ "\"city_two\": \"" + flight.getCityTwo() + "\", "
+	    	    	+ "\"dep_time\": \"" + flight.getDepTime() + "\", "
+	    	    	+ "\"flight_num\": \"" + flight.getFlightNum() + "\", "
+	    	    	+ "\"pnr\": \"" + flight.getPnr() + "\", "
+	    	    	+ "\"stop_num\": " + flight.getStopNum() + ", "
+	    	    	+ "\"terminal_arr\": \"" + flight.getTerminalArr() + "\", "
+	    	    	+ "\"terminal_dep\": \"" + flight.getTerminalDep() + "\", "
+	    	    	+ "\"date\": \"" + flight.getDate() + "\", "
+	    	    	+ "\"duration\": " + flight.getDuration() + ", "
+	        		+ "\"pax_list\": " + arrayPaxList + ""
+	        		+ "}";
+	        
+	        orderList.add(orderBody);
+		}
+
+       	String arrayOrderList = orderList.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
+
+        String responseBody = "{"
+        		+ "\"code\": 0, "
+        		+ "\"msg\": \"Show Flight Order List\", "
+        		+ "\"data\": " + arrayOrderList + ""
+        		+ "}";
 
       return responseBody;
     }
@@ -166,6 +252,20 @@ public class OrderRestController {
 		}
 		public void setUser_id(Integer user_id) {
 			this.user_id = user_id;
+		}
+	}
+	
+
+	@SuppressWarnings("unused")
+	private static class ShowOrder {
+    	private Integer id;
+
+		public Integer getId() {
+			return id;
+		}
+
+		public void setId(Integer id) {
+			this.id = id;
 		}
 	}
     

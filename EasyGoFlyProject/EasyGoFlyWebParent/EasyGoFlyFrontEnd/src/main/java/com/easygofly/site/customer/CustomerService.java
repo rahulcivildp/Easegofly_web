@@ -83,6 +83,61 @@ public class CustomerService {
 		}
 		return customerRepo.save(customer);
 	}
+
+	public void checkCustomerByEmail(Customer newCust, String email) throws UnsupportedEncodingException, MessagingException{
+			newCust.setAuthenticationType(AuthenticationType.EMAIL);
+			newCust.setOtpRequestedTime(new Date());
+
+			Random rnd = new Random(); 
+			int data1 = rnd.nextInt(9); 
+			int data2 = rnd.nextInt(9);
+			int data3 = rnd.nextInt(9);
+			int data4 = rnd.nextInt(9);
+			int data5 = rnd.nextInt(9);
+			int data6 = rnd.nextInt(9); 
+			
+			String randomCode = Integer.toString(data1) + Integer.toString(data2) + Integer.toString(data3) + Integer.toString(data4) + Integer.toString(data5) + Integer.toString(data6); 
+			String encodeRandomeCode = passwordEncoder.encode(randomCode);
+			newCust.setVerificationCode(encodeRandomeCode);
+
+			newCust.setPassword(encodeRandomeCode);
+			
+			customerRepo.save(newCust);
+			
+			sendOtpInEmail(newCust, randomCode);
+			
+			System.out.println("OTP Code: " + randomCode);
+			System.out.println("OTP getOtpRequestedTime: " + newCust.getOtpRequestedTime());
+	}
+	
+	public void checkCustomerByPhone(Customer newCust, String phone) {
+			newCust.setAuthenticationType(AuthenticationType.PHONE);
+			newCust.setOtpRequestedTime(new Date());
+			
+			Random rnd = new Random();
+			int data1 = rnd.nextInt(9); 
+			int data2 = rnd.nextInt(9);
+			int data3 = rnd.nextInt(9);
+			int data4 = rnd.nextInt(9);
+			int data5 = rnd.nextInt(9);
+			int data6 = rnd.nextInt(9); 
+			
+			String randomCode = Integer.toString(data1) + Integer.toString(data2) + Integer.toString(data3) + Integer.toString(data4) + Integer.toString(data5) + Integer.toString(data6); 
+			String encodeRandomeCode = passwordEncoder.encode(randomCode);
+			newCust.setVerificationCode(encodeRandomeCode);
+			
+			newCust.setPassword(encodeRandomeCode);
+			System.out.println("New Customer " + encodeRandomeCode);
+			
+			customerRepo.save(newCust);
+			
+			sendOtpInPhone(newCust, randomCode);
+			
+			System.out.println("New Customer " + encodeRandomeCode);
+			System.out.println("OTP Code: " + randomCode);
+	
+		
+	}
 	
 	public Customer updateAccount(Customer customerInForm) {
 		Customer userInDB = customerRepo.findById(customerInForm.getId()).get();
@@ -157,11 +212,11 @@ public class CustomerService {
 		customer.setCreatedTime(new Date());
 		customer.setAuthenticationType(AuthenticationType.DATABASE);
 		
-		String randomCode = RandomString.make(64);
-		customer.setVerificationCode(randomCode);
+//		String randomCode = RandomString.make(64);
+//		customer.setVerificationCode(randomCode);
 		
 		customerRepo.save(customer);
-		System.out.println("Verification Code: " + randomCode);
+//		System.out.println("Verification Code: " + randomCode);
 	}
 	
 	public void registerCustomerByPhone(String phone) {
@@ -442,7 +497,8 @@ public class CustomerService {
 	}
 	
 	private void encodePassword(Customer customer) {
-		String encodedPass = passwordEncoder.encode(customer.getPassword());
+		String encodedPass = passwordEncoder.encode("123456");
+		System.out.println("encodedPassword: " + encodedPass);
 		customer.setPassword(encodedPass);
 	}
 

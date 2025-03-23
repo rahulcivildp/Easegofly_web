@@ -160,28 +160,6 @@
 	<body>
 		<div class="media-hide" style="height: 65px;"></div>
 		<div class="container stickyStl">
-			<div class="searchText">
-				<div class="row">
-					<div class="col-9 col-md-11">
-						<div class="flexStyle">
-							<b>[[${cityOne.cityName}]]</b><div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b>[[${cityTwo.cityName}]]</b>
-							
-						</div>
-						<div class="flexStyle">
-							<div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							<b>[[${#dates.format(checkIn, 'dd MMMM, yy')}]]</b>
-							<div class="iconeSt"><i class="fa fa-solid fa-angles-right"></i></div>
-							
-						</div>
-					</div>
-					<div class="col-3 col-md-1">
-						<button id="btnModify" class="modifyBtnStl">
-							<i class="fa fa-solid fa-pen-to-square"></i>
-						</button>
-					</div>
-				</div>
-			</div>
 			<div class="collapsibleSearch"><div th:replace="bus/bus-search-tab :: bus-search"></div></div>
 		</div>
 		

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+<body>
+  	<style type="text/css">
+  	*.specialButton {
+		cursor: pointer;
+		width: auto;
+		color: #2c2c2ceb;
+	    padding: 3px 9px;
+	    border-radius: 5px;
+	    border: 1px solid green;
+	    font-weight: 600;
+	    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+		  -webkit-transition: background-color 2s ease-out;
+		  -moz-transition: background-color 2s ease-out;
+		  -o-transition: background-color 2s ease-out;
+		  transition: background-color 2s ease-out;
+		  -webkit-transition: color 0.5s ease-out;
+		  -moz-transition: color 0.5s ease-out;
+		  -o-transition: color 0.5s ease-out;
+		  transition: color 0.5s ease-out;
+	}
+	*.specialButton:hover {
+		background-color: green;
+		color: white;
+	}
+  </style>
+
+	<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
+
+	 	<div th:replace="whatsapp :: content"></div>
+	 
+
+	</div>
+	
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<section id="preloader-mobile" class="spalsh-screen">
+			<div class="circle text-center">
+				<div>
+					<h1>EaseGoFly</h1>
+					<p>Discover Your Destinition</p>
+				</div>
+			</div>
+			<div class="loader-spinner">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</section>
+		<!-- splash-screen end -->
+	
+		<main class="home p-0">
+	   		<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+		</main>
+	</div>
+	
+	<br><br>
+	<div class="text-center">
+	 	<div>&nbsp;</div>
+		<h2>You have successfully registered.</h2><br>
+		<p><a th:href="@{/login}" class="specialButton styleLinkHover styleLink">Login Here</a></p>
+	 	<div>&nbsp;</div>
+ 	</div>
+ 
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
+</body>
+<link th:href="@{css/custom.css}" rel="stylesheet">
+</html>

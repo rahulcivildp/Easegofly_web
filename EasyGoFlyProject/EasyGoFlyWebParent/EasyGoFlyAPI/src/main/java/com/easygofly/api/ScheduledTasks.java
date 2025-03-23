@@ -30,7 +30,7 @@ public class ScheduledTasks {
             System.out.println(jsonObj);
             logService.generateLog(jsonObj.toString());
             
-            Setting setting = settingService.findByKey("TBO_API_FLIGHT_TOKEN_REST");
+            Setting setting = settingService.findByKey("TBO_API_FLIGHT_TOKEN");
             setting.setValue(tokenId);
             settingService.saveSetting(setting);
 

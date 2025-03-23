@@ -33,9 +33,9 @@
 	
 	   
 	
-	    <!-- service start -->
+	   <!--  service start 		-->
 	    <section class="service py-12">
-	      <!-- item 1 -->
+	     
 	      <a href="#" onclick="return toggleSearch(this);">
 	        <figure class="item text-center">
 	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto" id="toggle-div">
@@ -45,7 +45,7 @@
 	        </figure>
 	      </a>
 	
-	      <!-- item 3 -->
+	      
 	      <a th:href="@{/hotel}">
 	        <figure class="item text-center">
 	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
@@ -54,7 +54,7 @@
 	          <figcaption>Hotel</figcaption>
 	        </figure>
 	      </a>
-	      <!-- item 2 -->
+	      
 	      <a th:href="@{/bus}">
 	        <figure class="item text-center">
 	          <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
@@ -65,7 +65,7 @@
 	      </a>
 	
 	
-	      <!-- item 4 -->
+	       
 	      <figure class="item text-center" data-bs-toggle="modal" data-bs-target="#serviceModal">
 	        <div class="image rounded-full d-flex align-items-center justify-content-center m-auto">
 	          <img th:src="@{/assets/mobile/home/category.png}" alt="category" class="img-fluid backface-hidden">
@@ -73,22 +73,22 @@
 	        <figcaption>More</figcaption>
 	      </figure>
 	    </section>
-	    <!-- service end -->
+		<!-- service end -->
 	
 	    <!-- search start -->
-	    <section class="search py-0" >
+	    <section class="search py-0 mt-2" >
 			<div id="search-bar-py" style="transition: all 0.4s ease-in-out;">
-		        <div id="search-bar-mb" class="search-bar-class h-0">
+		        <div id="search-bar-mb" class="search-bar-class">
 					<div th:replace="flight/air-search-fragment :: page_banner_mb('tag')"></div>
 					
 				</div>
 			
 			</div>
-                <script>
+        <script>
 					
 			if (window.innerWidth < 900) { 
-					$("#search-bar-mb").css("height",  "500px");	
-					
+				$("#search-bar-mb").css("height",  "410px");
+				
 					function toggleSearch(id){
 						$("#toggle-div").toggleClass("img-select");
 						$("#search-bar-mb").toggleClass("h-0");
@@ -100,7 +100,8 @@
 						$("#search-bar-mb").addClass("overflow-unset");
 					}
 				}
-				</script>
+		</script>
+		
 	    </section>
 	    <!-- search end -->
 	    
@@ -234,58 +235,121 @@
           
 	        <div class="row side-slider-mobile ms-0">
 	            <div class="col-md-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 	                    <div class="trending-topic-content" >
-	                        <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+			               <img th:src="@{/assets/images/flights/indigo.jpg}" class="mb-1 d-inline-block" alt="">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="col-md-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
-	                    <div class="trending-topic-content text-center">
-	                        <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 	                    <div class="trending-topic-content">
-	                        <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
+	                        <img th:src="@{/assets/images/flights/Air India.jpg}" class="mb-1 d-inline-block" alt="">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="col-md-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 	                    <div class="trending-topic-content">
-	                        <img th:src="@{/assets/images/flights/flight_grid_5f.png}" class="mb-1 d-inline-block" alt="">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Dragon Airlines</a></h5>
+	                        <img th:src="@{/assets/images/flights/Air India Express.jpg}" class="mb-1 d-inline-block" alt="">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="col-md-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 	                    <div class="trending-topic-content">
-	                        <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+	                        <img th:src="@{/assets/images/flights/spicejet.jpg}" class="mb-1 d-inline-block" alt="">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="col-md-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 	                    <div class="trending-topic-content">
-	                        <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
+	                        <img th:src="@{/assets/images/flights/Akasa air.jpg}" class="mb-1 d-inline-block" alt="">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="col-md-6 my-2">
-	                <div class="category-item box-shadow p-1 py-2 text-center bg-white rounded overflow-hidden">
-	                    <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 	                    <div class="trending-topic-content">
-	                        <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
+	                        <img th:src="@{/assets/images/flights/flybig.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	           <!-- <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/goair.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>-->
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Emirates.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Qatar Airways.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/British Airways.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Biman Bangladesh Airlines.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/China Southern Airlines.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/United Airlines.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Nepal Airlines.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Singapore Airlines.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Turkish Airlines.jpg}" class="mb-1 d-inline-block" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-md-6 my-2">
+	                <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
+	                    <div class="trending-topic-content">
+	                        <img th:src="@{/assets/images/flights/Malaysia Airlines.jpg}" class="mb-1 d-inline-block" alt="">
 	                    </div>
 	                </div>
 	            </div>
@@ -641,7 +705,7 @@
 	    <section class="guide py-12">
 	      <!-- title -->
 	      <div class="title d-flex align-items-center justify-content-between">
-            <h2 class="shrink-0"><span class="black-theme">Tour </span><span class="theme">Guide</span></h2>
+            <h2 class="shrink-0"><span class="black-theme">Company </span><span class="theme">Founders</span></h2>
 	        <a href="tour-guide.html" class="shrink-0 d-inline-block">See All</a>
 	      </div>
 	
@@ -650,19 +714,15 @@
 	        <!-- item 1 -->
 	        <a href="profile/guide-profile.html" class="d-flex gap-16 item w-fit shrink-0">
 	          <div class="image position-relative shrink-0">
-	            <img th:src="@{/assets/mobile/home/guide-1.png}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
-	            <div class="rating d-flex align-items-center gap-04 w-fit">
-	              <img th:src="@{/assets/svg/star-yellow.svg}" alt="Star">
-	              <span class="d-inline-block">4.0</span>
-	            </div>
+	            <img th:src="@{/assets/images/admin/20241227_134502.jpg}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
 	          </div>
 	
 	          <div class="content">
-	            <h4>Emilia Ricardo</h4>
-	            <h5>$25 (1 Day)</h5>
+	            <h4>Tanmay Sarkar</h4>
+	            <h5>Director (Web developer)</h5>
 	            <p class="d-flex align-items-center gap-8 location">
 	              <img th:src="@{/assets/svg/map-black.svg}" alt="icon">
-	              Polynesia, French 
+	              Berhampore, WB, India 
 	            </p>
 	          </div>
 	        </a>
@@ -670,19 +730,31 @@
 	        <!-- item 2 -->
 	        <a href="profile/guide-profile.html" class="d-flex gap-16 item w-fit shrink-0">
 	          <div class="image position-relative shrink-0">
-	            <img th:src="@{/assets/mobile/home/guide-2.png}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
-	            <div class="rating d-flex align-items-center gap-04 w-fit">
-	              <img th:src="@{/assets/svg/star-yellow.svg}" alt="Star">
-	              <span class="d-inline-block">4.0</span>
-	            </div>
+	            <img th:src="@{/assets/images/admin/IMG_20250125_174606.jpg}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
 	          </div>
 	
 	          <div class="content">
-	            <h4>Jonsky Alexia</h4>
-	            <h5>$30 (1 Day)</h5>
+	            <h4>Masadul Sk</h4>
+	            <h5>Director (UI Designer)</h5>
 	            <p class="d-flex align-items-center gap-8 location">
 	              <img th:src="@{/assets/svg/map-black.svg}" alt="icon">
-	              South America 
+	              Berhampore, WB, India 
+	            </p>
+	          </div>
+	        </a>
+	
+	        <!-- item 2 -->
+	        <a href="profile/guide-profile.html" class="d-flex gap-16 item w-fit shrink-0">
+	          <div class="image position-relative shrink-0">
+	            <img th:src="@{/assets/images/admin/IMG20241228151454.jpg}" alt="guide" class="guide-img object-fit-cover img-fluid radius-12">
+	          </div>
+	
+	          <div class="content">
+	            <h4>Sarifuddin Molla</h4>
+	            <h5>Director-CEO (Tour Manager)</h5>
+	            <p class="d-flex align-items-center gap-8 location">
+	              <img th:src="@{/assets/svg/map-black.svg}" alt="icon">
+	              Berhampore, WB, India
 	            </p>
 	          </div>
 	        </a>
@@ -702,7 +774,7 @@
 	      <!-- cards -->
 	      <div class="d-flex gap-24 all-cards scrollbar-hidden">
 	        <!-- item 1 -->
-	        <a href="profile/guide-profile.html" class="d-flex col-8">
+	        <a href="profile/guide-profile.html" class="d-flex col-8 d-none">
 	          <div class="image position-relative shrink-0">
 	            <img th:src="@{/assets/mobile/home/guide-1.png}" alt="guide" class="guide-img object-fit-cover img-fluid rounded-circle">
 	          </div>
@@ -720,7 +792,7 @@
 	        </a>
 	
 	        <!-- item 2 -->
-	        <a href="profile/guide-profile.html" class="d-flex col-8">
+	        <a href="profile/guide-profile.html" class="d-flex col-8 d-none">
 	          <div class="image position-relative shrink-0">
 	            <img th:src="@{/assets/mobile/home/guide-1.png}" alt="guide" class="guide-img object-fit-cover img-fluid rounded-circle">
 	          </div>

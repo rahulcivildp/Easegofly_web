@@ -14,17 +14,17 @@ server:
         secure: true
       timeout: 60m
       tracking-modes: cookie
-  ssl:
-    enabled: true
-    key-store: springboot.p12
-    key-store-password: password
-    key-store-type: PKCS12
-    key-alias: 1
-    key-password: password
+#  ssl:
+#    enabled: true
+#    key-store: springboot.p12
+#    key-store-password: password
+#    key-store-type: PKCS12 
+#    key-alias: 1
+#    key-password: password
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    password: Tanmay@311
+    password: tanmay@311
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://127.0.0.1:3306/easygofly
     username: root
@@ -54,3 +54,4 @@ spring:
               - profile
             client-id: 624963343127-vkeubt79bh4k0oo7me4fhgmp5lgh9q68.apps.googleusercontent.com
             client-secret: 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
+

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,68 +13,33 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.easygofly.site.LogService;
+import com.easygofly.site.setting.APIServiceSettingBag;
+import com.easygofly.site.setting.APITokenSettingBag;
+import com.easygofly.site.setting.SettingService;
 
 @Service
 public class OnlineHotelService {
 	@Autowired private LogService logService;
+	@Autowired private SettingService settingService;
 	
 	public String tokenId = "";
 	public String traceId = "";
 	public String resultIndex = "";
-	
-
-	public int apiAuthenticationHotel(HttpURLConnection connection, StringBuilder responseBody)
-			throws IOException {
-		
-        // Set the request method to POST
-        connection.setRequestMethod("POST");
-        
-        // Set request headers (if required)
-        connection.setRequestProperty("Content-Type", "application/json");
-        
-        
-        // Enable writing data to the connection
-        connection.setDoOutput(true);
-
-        // Create the request body
-//        String requestBody = "{"
-//        		+ "\"ClientId\": \"tboprod\", "
-//        		+ "\"UserName\": \"CCUA927\", "
-//        		+ "\"Password\": \"#API@Air&72\", "
-//        		+ "\"EndUserIp\": \"89.116.231.35\""
-//        		+ "}";
-        
-        //Test Credentials
-      String requestBody = "{"
-      		+ "\"ClientId\": \"ApiIntegrationNew\", "
-      		+ "\"UserName\": \"aladdin\", "
-      		+ "\"Password\": \"aladdin@1234\", "
-      		+ "\"EndUserIp\": \"89.116.231.35\""
-      		+ "}";
-        
-        System.out.println(requestBody);
-        logService.generateLog(requestBody);
-		// Write the request body to the connection's output stream
-		OutputStream outputStream = connection.getOutputStream();
-		outputStream.write(requestBody.getBytes());
-		outputStream.flush();
-		outputStream.close();
-
-		// Get the response
-		int responseCode = connection.getResponseCode();
-
-		// Read the response body
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String line;
-		while ((line = bufferedReader.readLine()) != null) {
-		    responseBody.append(line);
-		}
-		bufferedReader.close();
-		return responseCode;
-	}
 	 
-	public int apiOnlineSearchHotel(HttpURLConnection connection, StringBuilder responseBody, String cityId, String noOfNights, String noOfRooms, String countryId, Date date, String roomGuests)
+	public StringBuilder apiOnlineSearchHotel(String cityId, String noOfNights, String noOfRooms, String countryId, Date date, String roomGuests)
 			throws IOException {
+
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
+		
+		// Create URL object with the API end-point
+        URL url = new URL(apiServiceSettingBag.getHotelURL() + "/Search");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        
+        StringBuilder responseBody = new StringBuilder();
 		
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); 
 		String strDate = dateFormat.format(date);
@@ -103,8 +69,8 @@ public class OnlineHotelService {
         		+ "  \"MinRating\": 0,\r\n"
         		+ "  \"ReviewScore\": null,\r\n"
         		+ "  \"IsNearBySearchAllowed\": false,\r\n"
-        		+ "  \"EndUserIp\": \"89.116.231.35\",\r\n"
-        		+ "  \"TokenId\": \"" + tokenId + "\"\r\n"
+        		+ "  \"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\",\r\n"
+        		+ "  \"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\"\r\n"
         		+ "}";
 
         System.out.println(requestBody);
@@ -116,7 +82,7 @@ public class OnlineHotelService {
 		outputStream.close();
 
 		// Get the response
-		int responseCode = connection.getResponseCode();
+		connection.getResponseCode();
 
 		// Read the response body
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -125,7 +91,7 @@ public class OnlineHotelService {
 		    responseBody.append(line);
 		}
 		bufferedReader.close();
-		return responseCode;
+		return responseBody;
 	}
 
 	public int apiOnlineHotelInfo(HttpURLConnection connection, StringBuilder responseBody, String resultIndex, String hotelCode, String categoryId)

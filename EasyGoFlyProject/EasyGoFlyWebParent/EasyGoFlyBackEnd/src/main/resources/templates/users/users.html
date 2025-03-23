@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="fragments :: page_head('Shopme Admin User page', 'none')"></head>
+
+		<!-- dynamic head starts -->
+
+<head th:replace="fragments :: page_head('Welcome to Easegofly Admin User page', 'none')"></head>
+
+		<!-- dynamic head ends -->
+
+
 <body>
+	<div class="main-wrapper">
 
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
 
-	<div class="container-fluid">
+        <!-- sidebar Ends -->
 	
-		<div th:replace="navigation :: nav_menu"></div>
-		
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
+
+		    <div th:replace="navigation :: nav_profile"></div>
+
+			<!-- navbar Ends -->
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+
 		<div th:if="${message != null}" class="alert alert-success text-center">
 			[[${message}]]
 		</div>
@@ -157,9 +180,24 @@
 			</div>	
 		</div>
 		
-		<div th:replace="fragments :: footer"></div>
+
+
+
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
+		
+		</div>
 	</div>
-	
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -178,9 +216,6 @@
 	};
 	
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0- 
-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384- 
-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" 
-crossorigin="anonymous"></script> 
+
 </body>
-</html>
+</html>    

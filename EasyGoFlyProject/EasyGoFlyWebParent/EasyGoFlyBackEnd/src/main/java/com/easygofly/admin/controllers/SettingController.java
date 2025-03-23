@@ -148,4 +148,12 @@ public class SettingController {
 		
 		service.saveAll(listSettings);
 	}
+
+
+	@GetMapping("/settings/save_bus_city")
+	public String listAllBusCity(Model model, RedirectAttributes red) throws IOException {
+		service.apiOnlineCityList(red);
+		return "redirect:/settings#apiService1";
+	}
+
 }

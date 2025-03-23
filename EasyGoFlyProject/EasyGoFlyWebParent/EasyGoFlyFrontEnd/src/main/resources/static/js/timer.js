@@ -12,6 +12,7 @@ var x = setInterval(function() {
 
   // Display the countdown timer in the "timer" div
   document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+  document.getElementById("timer-mob").innerHTML = minutes + "m " + seconds + "s ";
   $("#timeRemaining").attr("value", distance);
   $(".timeRemain").attr("value", distance);
   // When the countdown timer reaches zero, display a message

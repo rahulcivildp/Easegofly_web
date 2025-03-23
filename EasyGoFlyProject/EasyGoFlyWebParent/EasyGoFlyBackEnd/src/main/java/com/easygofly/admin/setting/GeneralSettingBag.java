@@ -31,4 +31,20 @@ public class GeneralSettingBag extends SettingBag {
 	public String getFavicon() {
 		return super.getValue("FAVICON");
 	}
+	
+	public String getBusCity() {
+		return super.getValue("TBO_API_BUS_CITY");
+	}
+	
+	public String getTBOtoken() {
+		return super.getValue("TBO_API_FLIGHT_TOKEN");
+	}
+	
+	public String getUserIP() {
+		return super.getValue("TBO_API_USERIP");
+	}
+	
+	public String getTBOclientID() {
+		return super.getValue("TBO_API_CLIENTID");
+	}
 }

@@ -122,19 +122,22 @@
 						<th:block th:if="${param.otp != null}"><button type="submit" class="btn btn-primary" > Login</button></th:block>
 			        </form>
 			  
-			        <div class="divider d-flex align-items-center justify-content-center gap-12">
+			       <!-- <div class="divider d-flex align-items-center justify-content-center gap-12">
 			          <span class="d-inline-block"></span>
 			          <small class="d-inline-block">Or continue with</small>
 			          <span class="d-inline-block"></span>
-			        </div>
+			        </div>-->
 			  
-			        <div class="d-flex flex-column gap-16">
+			        <!--<div class="d-flex flex-column gap-16">
 			          <button type="button" class="social-btn" data-bs-toggle="modal" data-bs-target="#loginSuccess">
 			            <img src="../../assets/svg/icon-google.svg" alt="Google">
 			            Continue with Google
 			          </button>
-			        </div>
+			        </div>-->
 			  
+										<div class="row mb-3" style="margin: 0 auto; margin-top: 40px;;"> 
+											<h5>Dont's have an account! Please <a th:href="@{/registration}" class="specialButton styleLinkHover styleLink" >Register</a> here.</h5>
+										</div>
 			      </div>
 			    </section>
 			    <!-- signin end -->

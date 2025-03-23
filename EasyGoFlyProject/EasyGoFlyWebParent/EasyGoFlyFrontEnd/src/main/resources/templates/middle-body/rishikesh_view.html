@@ -3,51 +3,37 @@
 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 	<head th:replace="fragments :: page_head('Rishikesh View ', 'tag')"></head>
-	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
-	<link rel="stylesheet" type="text/css" th:href="@{/css/common_view.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/css/NewFile.css}" >
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Beginner:wght@400..700&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-	
-<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-TNN6EKSPHR"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'G-TNN6EKSPHR');
-	</script>
-	<!-- Google Analytics -->
-	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	
-	ga('create', 'UA-XXXXX-Y', 'auto');
-	ga('send', 'pageview');
-	</script>
-	<!-- End Google Analytics -->
-	<script type="application/ld+json">
-		{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": ""
-		}
-	</script>
 </head>	
-<body class="u-body u-xl-mode" data-lang="en" th:style="'background-image: url(' + @{'/assets/img/1971537-temp.jpg'} + ');'">
+<body class="u-body u-xl-mode" data-lang="en">
 
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
+	<div class="preloading d-none">
+	    <div class="status-loading"></div>
+	</div>
+	
+	<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
   
+	</div>
+
+
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<main class="home">
+			<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+		</main>
+	</div>
+
   <div th:replace="whatsapp :: content"></div>
-  
-  
-  
   
 	<div >
 		<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -58,21 +44,21 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 		  </div>
 		  <div class="carousel-inner">
 		    <div class="carousel-item active">
-				<div class="pos-rel justify_center_div">
+				<div class="pos-rel justify_center_div position-relative">
 					<img class="w-100 d-block" src="https://assets.nicepagecdn.com/3a8c658c/4052166/images/SightSeeingMLJ2GV.jpg" alt="Slide Image" style="height: 350px;">
-        			<h1 class="carousal-float-header"> RISHIKESH TOUR ( EX- DELHI )</h1>
+        			<h1 class="position-absolute white" style="bottom: 50px; text-shadow: 1px 1px 3px black;"> RISHIKESH TOUR ( EX- DELHI )</h1>
 				</div>
 		    </div>
 		    <div class="carousel-item">
-				<div class="pos-rel justify_center_div">
+				<div class="pos-rel justify_center_div position-relative">
 					<img class="w-100 d-block" src="https://assets.nicepagecdn.com/3a8c658c/4052166/images/SightSeeingv9u2iP.jpg" alt="Slide Image" style="height: 350px;">
-        			<h1 class="carousal-float-header"> RISHIKESH TOUR ( EX- DELHI )</h1>
+        			<h1 class="position-absolute white" style="bottom: 50px; text-shadow: 1px 1px 3px black;"> RISHIKESH TOUR ( EX- DELHI )</h1>
 				</div>
 		    </div>
 		    <div class="carousel-item">
-				<div class="pos-rel justify_center_div">
+				<div class="pos-rel justify_center_div position-relative">
 					<img class="w-100 d-block" src="https://assets.nicepagecdn.com/3a8c658c/4052166/images/SightSeeingD0MfIf.jpg" alt="Slide Image" style="height: 350px;">
-        			<h1 class="carousal-float-header"> RISHIKESH TOUR ( EX- DELHI )</h1>
+        			<h1 class="position-absolute white" style="bottom: 50px; text-shadow: 1px 1px 3px black;"> RISHIKESH TOUR ( EX- DELHI )</h1>
 				</div>
 		    </div>
 		  </div>
@@ -87,117 +73,123 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 		</div>
     </div>
     <div class="container ">
-		<div class="justify_center_verticle" style="background: white;">
-	        <div style="width: 90%; font-size: 20px; padding: 10px 0;">
-	            <h1 class="packageoverview"><strong><span style="color: rgb(68, 68, 68);">Package Overview</span></strong></h1>
-	            <div><strong><span style="color: rgb(68, 68, 68); font-style: italic;">Also known as the ‘Yoga Capital of the World’, Rishikesh is one of the most loved travel destinations in India. With the availability of several Rishikesh tour packages, it has become much easier for people from all across the world to visit this beautiful destination. Nestled amongst the majestic foothills of the Himalayan Shivaliks, Rishikesh lies in the state of Uttarakhand and serves as a year-round attraction for all the adventure junkies with Rishikesh camping and rafting packages and for seekers of spiritual healing. Because of its breath-taking beauty and cozy weather, Rishikesh serves as the perfect mini-honeymoon destination as well. You can find several affordable Rishikesh packages for couples at Easemytrip which will let you get acquainted with this natural haven.</span></strong></div>
-	        </div>
-	        <div  style="width: 80%; padding: 10px 0;">
-	            <div class="row">
-	                <div class="col-md-6 col-12">
-	                    <h5 style="text-align: center;"><strong><span style="color: #2cccc4; font-size: 25px;">INCLUSIONS</span></strong></h5>
-	                    <ul>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Accommodation for 2 nights stay.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Breakfast ,Lunch and dinner.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">All pick up drop &amp; sightseeing.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Toll Tax ,Parking ,Driver allowances.</span></li>
-	                    </ul>
-	                </div>
-	                <div class="col-md-6 col-12">
-	                    <h5 style="text-align: center;"><strong><span style="color: #db545a; font-size: 25px;">EXCLUSIONS</span></strong></h5>
-	                    <ul>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Extra meal.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Personal expense.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Any type of Train fare/Airfare.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Any thing not mention in inclusion.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Water sports cost.</span></li>
-	                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">GST.</span></li>
-	                    </ul>
-	                </div>
-	            </div>
-	        </div>
-        </div>
-    </div>
-    <div class="container">
-		<div class="justify_center_verticle" style="background: white; padding-top: 15px;">
-			<h1 style="text-align: center;"><span style="color: rgb(17, 17, 17);">Day Wise I</span><span style="color: rgb(31, 31, 31);">tinerary</span></h1>
-	        <div class="itenerary-style">
-				<div class="row">
-		            <div class="col-md-1 media-hide"></div>
-		            <div class="col-md-1 col-3"><img class="img-fluid" th:src="@{images/dubai-view/days.png}"></div>
-		            <div class="col-md-10 col-9" >
-		                <ul>
-		                    <li><span style="color: rgb(17, 17, 17); ">On arrival at Delhi airport, meet our representatives who’ll arrange a smooth transfer for you to Rishikesh. On arrival in Rishikesh, check- in at the resort/hotel/ camps along the river side. Fresh en up &amp; get ready for water Rafting experience. –later in eve get back to hotel &amp; night stay.</span></li>
-		                </ul>
-		            </div>
-	            </div>
-	        </div>
-	        <div class="itenerary-style">
-				<div class="row">
-		            <div class="col-md-1 media-hide"></div>
-		            <div class="col-md-1 col-3"><img class="img-fluid" th:src="@{images/dubai-view/days%20(1).png}"></div>
-		            <div class="col-md-10 col-9">
-		                <ul>
-		                    <li><span style="color: rgb(17, 17, 17);">Get up in the morning, have your breakfast and get ready for Rishikesh Sightseeing. &nbsp;covering Ram Jhula, Lakshman Jhula, Bharat Mandir, Triveni Ghat, Shivananda Ashram and Parmarth Ashram. Overnight halt.</span></li>
-		                </ul>
-		            </div>
-	            </div>
-	        </div>
-	        <div class="itenerary-style">
-				<div class="row">
-		            <div class="col-md-1 media-hide"></div>
-		            <div class="col-md-1 col-3"><img class="img-fluid" th:src="@{images/dubai-view/days%20(2).png}"></div>
-		            <div class="col-md-10 col-9">
-		                <ul>
-		                    <li><span style="color: rgb(17, 17, 17);">Early next morning, post breakfast and get ready to drive back to Delhi from where you can avail the transport of your choice for your onward destination.</span></li>
-		                </ul>
-		            </div>
-	            </div>
-	        </div>
+		<div class="row">
+			<div class="col-12">
+				<div class="justify_center_verticle" style="background: white;">
+			        <div class="my-2" style="font-size: 20px;">
+			            <h2 class="packageoverview mb-2"><strong><span style="color: rgb(68, 68, 68); font-size: 36px;">Package Overview</span></strong></h2>
+			            <div><span style="color: rgb(68, 68, 68); font-style: italic;">Also known as the ‘Yoga Capital of the World’, Rishikesh is one of the most loved travel destinations in India. With the availability of several Rishikesh tour packages, it has become much easier for people from all across the world to visit this beautiful destination. Nestled amongst the majestic foothills of the Himalayan Shivaliks, Rishikesh lies in the state of Uttarakhand and serves as a year-round attraction for all the adventure junkies with Rishikesh camping and rafting packages and for seekers of spiritual healing. Because of its breath-taking beauty and cozy weather, Rishikesh serves as the perfect mini-honeymoon destination as well. You can find several affordable Rishikesh packages for couples at Easemytrip which will let you get acquainted with this natural haven.</span></div>
+			        </div>
+			        <div class="my-2 w-75">
+			            <div class="row">
+			                <div class="col-md-6 col-12">
+			                    <h5 class="mb-2" style="text-align: center;"><strong><span style="color: #2cccc4; font-size: 25px;">INCLUSIONS</span></strong></h5>
+			                    <ul>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Accommodation for 2 nights stay.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Breakfast ,Lunch and dinner.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">All pick up drop &amp; sightseeing.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Toll Tax ,Parking ,Driver allowances.</span></li>
+			                    </ul>
+			                </div>
+			                <div class="col-md-6 col-12">
+			                    <h5 class="mb-2" style="text-align: center;"><strong><span style="color: #db545a; font-size: 25px;">EXCLUSIONS</span></strong></h5>
+			                    <ul>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Extra meal.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Personal expense.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Any type of Train fare/Airfare.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Any thing not mention in inclusion.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">Water sports cost.</span></li>
+			                        <li><span style="color: rgb(68, 68, 68); font-size: 18px;">GST.</span></li>
+			                    </ul>
+			                </div>
+			            </div>
+			        </div>
+		        </div>
+				
+			</div>
 		</div>
     </div>
     <div class="container">
-		<div style="background: white; padding-top: 15px;">
-		<div class="section-style ">
-			<button class="col-md-2 col-6 section-button section-button-active">Travel Validity</button>
-			<button class="col-md-2 col-6 section-button">Guaranteed Dates</button>
-			<button class="col-md-2 col-6 section-button">Easy Cancellation</button>
-			<button class="col-md-2 col-6 section-button">High Season</button>
-			<button class="col-md-2 col-6 section-button">Booking Policy</button>
+		<div class="row">
+			<div class="col-12">
+				<div class="" style="background: white; padding-top: 15px;">
+					<h2 class="mb-2" style="text-align: center; font-size: 36px;"><span style="color: rgb(17, 17, 17);">Day Wise I</span><span style="color: rgb(31, 31, 31);">tinerary</span></h2>
+			        <div class="itenerary-style mb-1">
+						<div class="row">
+				            <div class="col-md-2 col-3 d-flex justify-content-center"><img class="img-fluid col-6" th:src="@{images/dubai-view/days.png}"></div>
+				            <div class="col-md-10 col-9 d-flex justify-content-start" >
+				                <ul>
+		                    		<li><span style="color: rgb(17, 17, 17); ">On arrival at Delhi airport, meet our representatives who’ll arrange a smooth transfer for you to Rishikesh. On arrival in Rishikesh, check- in at the resort/hotel/ camps along the river side. Fresh en up &amp; get ready for water Rafting experience. –later in eve get back to hotel &amp; night stay.</span></li>
+				                </ul>
+				            </div>
+			        	</div>
+			        </div>
+			        <div class="itenerary-style mb-1">
+						<div class="row">
+				            <div class="col-md-2 col-3 d-flex justify-content-center"><img class="img-fluid col-6" th:src="@{images/dubai-view/days%20(1).png}"></div>
+				            <div class="col-md-10 col-9 d-flex justify-content-start">
+				                <ul>
+		                    		<li><span style="color: rgb(17, 17, 17);">Get up in the morning, have your breakfast and get ready for Rishikesh Sightseeing. &nbsp;covering Ram Jhula, Lakshman Jhula, Bharat Mandir, Triveni Ghat, Shivananda Ashram and Parmarth Ashram. Overnight halt.</span></li>
+				                </ul>
+				            </div>
+			        	</div>
+			        </div>
+			        <div class="itenerary-style mb-1">
+						<div class="row">
+				            <div class="col-md-2 col-3 d-flex justify-content-center"><img class="img-fluid col-6" th:src="@{images/dubai-view/days%20(2).png}"></div>
+				            <div class="col-md-10 col-9 d-flex justify-content-start">
+				                <ul>
+		                    		<li><span style="color: rgb(17, 17, 17);">Early next morning, post breakfast and get ready to drive back to Delhi from where you can avail the transport of your choice for your onward destination.</span></li>
+				                </ul>
+				            </div>
+			        	</div>
+			        </div>
+				</div>
+				
+			</div>
 		</div>
-		<div class="section-div-style">
-			<div class="section-para section-para-display">
-				<p><span></span>The deal is valid for travel till Friday, 31 December 2023.</p>
+    </div>
+    <div class="container mt-2">
+		<div class="row">
+			<div class="col-12">
+				<div style="background: white; padding-top: 15px;">
+					<div class="row section-style mb-2 d-flex justify-content-between">
+						<button class="col-md-2 col-6 section-button theme">Travel Validity</button>
+						<button class="col-md-2 col-6 section-button">Guaranteed Dates</button>
+						<button class="col-md-2 col-6 section-button">Easy Cancellation</button>
+						<button class="col-md-2 col-6 section-button">High Season</button>
+						<button class="col-md-2 col-6 section-button">Booking Policy</button>
+					</div>
+					<div class="section-div-style d-flex justify-content-center">
+						<div class="section-para">
+							<p><span></span>The deal is valid for travel till Friday, 31 December 2023.</p>
+						</div>
+						<div class="section-para d-none">
+							<p>Your selected travel dates are guaranteed. In the unlikely event of seats sold out, we guarantee +/- 1/2 days from your</p><p> preferred dates.</p>
+						</div>
+						<div class="section-para d-none">
+							<p>*30 days or more prior to departure date, Initial Booking Amount and additional amount of visa fee will be forfeited </p><p>(in case visa has been applied). 
+								**Between 30–15 days: 50% of total tour cost will be charged as penalty. ***Less</p><p> than 15 days: 100% of total tour cost will be charges as penalty.</p>
+						</div>
+						<div class="section-para d-none">
+							<p>Prices can fluctuate during peak season dates.</p>
+						</div>
+						<div class="section-para d-none">
+							<p>All services including the hotel and room category are subject to availability at the time of booking.</p>
+							<p>*Rates are not valid during any exhibition and supplement dates.</p>
+							<p>*Rates are subject to change in case of any hike in airport taxes, visa fees, fuel charges, hotel rates, transport rates or government taxes.</p>
+							<p>*Early check-in and late checkout are subject to availability and charges.</p>
+						</div>
+					</div>
+				</div>
+				
 			</div>
-			<div class="section-para">
-				<p>Your selected travel dates are guaranteed. In the unlikely event of seats sold out, we guarantee +/- 1/2 days from your</p><p> preferred dates.</p>
-			</div>
-			<div class="section-para">
-				<p>*30 days or more prior to departure date, Initial Booking Amount and additional amount of visa fee will be forfeited </p><p>(in case visa has been applied). 
-					**Between 30–15 days: 50% of total tour cost will be charged as penalty. ***Less</p><p> than 15 days: 100% of total tour cost will be charges as penalty.</p>
-			</div>
-			<div class="section-para">
-				<p>Prices can fluctuate during peak season dates.</p>
-			</div>
-			<div class="section-para">
-				<p>All services including the hotel and room category are subject to availability at the time of booking.</p>
-				<p>*Rates are not valid during any exhibition and supplement dates.</p>
-				<p>*Rates are subject to change in case of any hike in airport taxes, visa fees, fuel charges, hotel rates, transport rates or government taxes.</p>
-				<p>*Early check-in and late checkout are subject to availability and charges.</p>
-			</div>
-		</div>
 		</div>
 	</div>
-	<div class="container">
-		<div style="background: white; padding: 15px 0; display: flex; justify-content: space-evenly;">
-			<a class="bottom-div justify_center_div" href="tel:+91-8001012134">
-				<i class="fa fa-solid fa-phone"></i>
-				&nbsp;8001012134
-			</a>
-			<div class="bottom-div-right">
-				Not Available Right Now.
-			</div>
-		</div>
+	<div class="container mt-4">
+		
+		
+		<div th:replace="middle-body/fixed-air-search :: air-search-fixed('Kolkata', 'Dehradun')"></div>
 		
 	</div>
     
@@ -205,23 +197,129 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 		<div style="background: white; height: 50px;">
  		</div>
  	</div>
-    <script>
+     <script>
         $(".section-button").click(function() {
-            $(".section-button").removeClass("section-button-active");
-            $(".section-para").removeClass("section-para-display");
-            $(this).addClass("section-button-active");
+            $(".section-button").removeClass("theme");
+            $(".section-para").addClass("d-none");
+            $(this).addClass("theme");
             for (var i = 0; i < $(".section-button").length; i++) {
                 if(this == $(".section-button")[i]){
-                    $($(".section-para")[i]).addClass("section-para-display");
+                    $($(".section-para")[i]).removeClass("d-none");
                 }
             }
         });
     </script>
 
+ 
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
 
- <footer th:replace="fragments :: page_footer"></footer>
- <script type="text/javascript" th:src="@{/js/common.js}"></script>
+	     <!-- service modal start -->
+	  <div class="modal fade modalBg" id="travelerModal" tabindex="-1" aria-hidden="true" style="z-index: 10000;">
+	    <div class="modal-dialog modal-sm" style="max-width: 350px;">
+	      <div class="modal-content h-auto" style="border-radius: 8px;">
+	        <div class="modal-header">
+	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
+	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+	          </button>
+	          <h4 class="modal-title">Set Traveler</h4>
+	          <div></div>
+	        </div>
+	        <div class="modal-body">
+                  <div class="row p-2" id="flush-collapseOne-desk">
+				    <div class="col-12">
+						<div class="dropdown-item">
+							<b>Class</b>
+							<select class="pass_list-1 form-control" name="journeyClass" form="onewaySearchDesk"
+								required="required">
+								<option value="Economy">Economy</option>
+								<option value="Premium Economy">Premium Economy</option>
+								<option value="Business">Business</option>
+								<option value="Premium Business">Premium Business</option>
+								<option value="First Class">First Class</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item">
+							<div class="d-flex justify-content-between">
+								<b class="me-2">Adult</b>
+								<p>(12+ yrs)</p>
+							</div>
+							<select class="pass_list1 form-control" name="adultNum"form="onewaySearchDesk"
+								required="required">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item">
+							<div class="d-flex justify-content-between">
+								<b class="me-2">Children</b>
+								<p>(2-12 yrs)</p>
+							</div>
+							<select class="pass_list2 form-control" name="childNum" form="onewaySearchDesk">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item">
+							<div class="d-flex justify-content-between">
+								<b class="me-2">Infant</b>
+								<p>Under 2yrs</p>
+							</div>
+							<select class="pass_list3 form-control" name="infantNum" form="onewaySearchDesk">
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="dropdown-item mt-2">
+							<button type="button" id="submit2" form="onewaySearch" class="nir-btn w-100" data-bs-dismiss="modal" onclick="return setTravelerDetails('#deskDropdwon', '#flush-collapseOne-desk');">Set</button>
+						</div>
+					</div>
+				  </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <!-- service modal end -->
+	    
+	    
 </body>
+
+<script>
+	$(".home").css("margin-bottom", "0");
+	$(".home").css("padding", "0");
+	
+</script>
 <link th:href="@{css/custom.css}" rel="stylesheet">
 </html>	
  
+

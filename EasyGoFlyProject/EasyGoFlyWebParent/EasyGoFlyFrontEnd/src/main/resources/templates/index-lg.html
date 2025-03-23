@@ -1,1618 +1,1923 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" th:fragment="index">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:fragment="index">
 
 <body>
 	<div class="hide-lg">
 		<!-- Preloader -->
 		<div id="preloader">
-		    <div id="status"></div>
+			<div id="status"></div>
 		</div>
 		<!-- Preloader Ends -->
-		
+
 		<!-- header starts -->
-	   
-	    <header class="main_header_area">
+
+		<header class="main_header_area">
 			<div th:replace="nav-fragment :: page_header('tag')"></div>
 		</header>
-	    <!-- header ends -->
-	
-	    <!-- Banner start -->
-		<section class="banner flight-banner pb-14" style="position: relative;" id="headerDiv3">
+		<!-- header ends -->
+
+		<!-- Banner start -->
+		<section class="banner flight-banner pb-14" style="position: relative;" id="">
 			<video autoplay muted loop id="myVideo2" class="pb-4" style="width: 100%; transform: rotateY(180deg);">
 				<source th:src="@{assets/videos/business-jet-in-flight-2023-11-27-05-11-43-utc.mp4}" type="video/mp4">
 				Your browser does not support HTML5 video.
 			</video>
-			  <div style="width: 100%; position: absolute; top: 2%;" id="headerDiv4">
-			    <div class="container" >
-			        <div class="banner-in" >
-			            <div class="row align-items-center"  id="headerDiv2">
-			
-			                <div class="col-lg-6 mb-4" id="headerDiv1" >
-			                    <div class="banner-content text-lg-start text-center" >
-			                        <h4 class="theme mb-0" style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Explore The World</h4>
-			                        <h1 style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Start Planning Your Dream Trip Today!</h1>
-			                        <p class="mb-4" style="color: #272727; text-shadow:rgb(255, 255, 255) 0px 1px 1px;">EaseGoFly offers seamless travel experiences, connecting you to top destinations with affordable flights and personalized tour packages. Our user-friendly platform makes booking fast and convenient, so you can focus on creating memories. With EaseGoFly, adventure is just a click away.</p>
-			                        
+			<div style="width: 100%; position: absolute; top: 2%;" id="headerDiv4">
+				<div class="container">
+					<div class="banner-in">
+						<div class="row align-items-center" id="headerDiv2">
+
+							<div class="col-lg-6 mb-4" id="headerDiv1">
+								<div class="banner-content text-lg-start text-center">
+									<h4 class="theme mb-0" style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Explore
+										The World</h4>
+									<h1 style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Start Planning Your Dream
+										Trip Today!</h1>
+									<p class="mb-4" style="color: #272727; text-shadow:rgb(255, 255, 255) 0px 1px 1px;">
+										EaseGoFly offers seamless travel experiences, connecting you to top destinations
+										with affordable flights and personalized tour packages. Our user-friendly
+										platform makes booking fast and convenient, so you can focus on creating
+										memories. With EaseGoFly, adventure is just a click away.</p>
+									
+								</div>
+							</div>
+							<div class="col-lg-6 mb-4 position-relative">
+								<div class="flight-slider">
+									<div class="row review-slider1">
+										<div class="col-lg">
+											<img th:src="@{/assets/images/flights/3f.jpg}" alt="" class="rounded">
+										</div>
+										<div class="col-lg">
+											<img th:src="@{/assets/images/flights/4f.jpg}" alt="" class="rounded">
+										</div>
+										<div class="col-lg">
+											<img th:src="@{/assets/images/flights/5f.jpg}" alt="" class="rounded">
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="position-relative">
+								<div class="position-absolute w-100" style="bottom: 0px; margin-bottom: 10px;">
 									<div th:replace="flight/air-search-fragment :: page_banner('tag')"></div>
-			                    </div>
-			                </div>
-			                <div class="col-lg-6 mb-4 position-relative" >
-			                    <div class="flight-slider">
-			                        <div class="row review-slider1">
-			                            <div class="col-lg">
-			                                <img th:src="@{/assets/images/flights/3f.jpg}" alt="" class="rounded">
-			                            </div>
-			                            <div class="col-lg">
-			                                <img th:src="@{/assets/images/flights/4f.jpg}" alt="" class="rounded">
-			                            </div>
-			                            <div class="col-lg">
-			                                <img th:src="@{/assets/images/flights/5f.jpg}" alt="" class="rounded">
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="category-main-inner border-t pt-1">
-			                <div class="row side-slider">
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
+								</div>
+							</div>
+						</div>
+						<div class="category-main-inner border-t pt-1">
+							<div class="row side-slider">
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/indigo.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Air India.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Air India Express.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/spicejet.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Akasa air.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/flybig.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-lg-2 col-md-4 my-4">
+			                        <div class="category-item box-shadow text-center bg-white rounded overflow-hidden" style="padding: 6px;">
 			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
+			                                <img th:src="@{/assets/images/flights/goair.jpg}" class="mb-1 d-inline-block" alt="">
 			                            </div>
 			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content text-center">
-			                                <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_5f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Dragon Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
-			                            <div class="trending-topic-content">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			  </div>
-		    
+			                    </div>-->
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Emirates.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Qatar Airways.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/British Airways.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Biman Bangladesh Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/China Southern Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/United Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Nepal Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Singapore Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Turkish Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-2 col-md-4 my-4">
+									<div class="category-item box-shadow text-center bg-white rounded overflow-hidden"
+										style="padding: 6px;">
+										<div class="trending-topic-content">
+											<img th:src="@{/assets/images/flights/Malaysia Airlines.jpg}"
+												class="mb-1 d-inline-block" alt="">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</section>
-	    <!-- Banner end -->
-	
-	<script>
-	    $("#headerDiv1").css("height", $("#headerDiv2").height() + "px");
-	    $("#headerDiv3").css("height", $("#headerDiv4").height() + "px");
+		<!-- Banner end -->
+
+		<script>
+			$("#headerDiv1").css("height", $("#headerDiv2").height() + "px");
+	   // $("#headerDiv3").css("height", $("#headerDiv4").height() + "px");
 	    // alert($("#headerDiv2").height());
+
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+		<script>		
+			showCalnedarFare();		
+			
+			function showCalnedarFare() {			
+				const futureDate = new Date();
+				futureDate.setDate(futureDate.getDate() + 15);
+				const formattedDate = futureDate.toISOString().split('T')[0];
+				
+				const formUrl = "[[@{/api/flight/tbo-search/calendar-fare}]]";
+				var cityOne = $("#cityOne").val();
+				var cityTwo = $("#cityTwo").val();
+				var journeyClass = "1";
+				var searchDate = formattedDate;
+				
+				const requestDataCalender = {
+					journey_class: journeyClass,
+					origin: cityOne,
+					destination: cityTwo,
+					preferredDepartureTime: searchDate
+				};
+				
+				fetch(formUrl, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(requestDataCalender)
+				}).then(response => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.json();
+				}).then(data => {
+					console.log(data);
+					updateCalendarWithFare(data, "#datepicker");					
+					updateCalendarWithFare(data, "#floatingInputDepurtureMOB2");					
+				}).catch(error => {
+					console.error("Fetch error:", error);
+				});
+			}
+			
+			function updateCalendarWithFare(flightData, input) {
+	           const fareMap = new Map();
+	           flightData.Response.SearchResults.forEach(item => {
+	               let dateKey = item.DepartureDate.split('T')[0];
+	               fareMap.set(dateKey, Math.round(item.Fare)); // Convert fare to int
+	           });
 	
-	</script>
-	
-	    <!-- Search history start -->
-	    <section class="testimonial" style="background: white;">
-			<div th:style="'background-image:url(' + @{/assets/images/shape4.png} + '); background-position:center; width: 100%;'">
-		        <div class="container" >
-		            <div class="testimonial-content" th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
-			            <div class="section-title mb-6 w-50 mx-auto text-center">
-			                <h4 class="mb-1 theme1">Why To Choose Us</h4>
-			                <h2 class="mb-1">Find <span class="theme">Travel Perfection</span></h2>
-			                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
-			                </p>
-			            </div>
-			            <div class="why-us">
-				            <div class="why-us-box">
-				                <div class="row">
-				                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-				                        <div class="why-us-item text-center p-4 py-5 border rounded bg-white">
-				                            <div class="why-us-content">
-				                                <div class="why-us-icon">
-				                                    <i class="icon-flag theme"></i>
-				                                </div>
-				                                <h4><a href="about.html">Tell Us What You want To Do</a></h4>
-				                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
-				                            </div>
-				                        </div>
-				                    </div>
-				                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-				                        <div class="why-us-item text-center p-4 py-5 border rounded bg-white">
-				                            <div class="why-us-content">
-				                                <div class="why-us-icon">
-				                                    <i class="icon-location-pin theme"></i>
-				                                </div>
-				                                <h4><a href="about.html">Share Your Travel Locations</a></h4>
-				                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
-				                            </div>
-				                        </div>
-				                    </div>
-				                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-				                        <div class="why-us-item text-center p-4 py-5 border rounded bg-white">
-				                            <div class="why-us-content">
-				                                <div class="why-us-icon">
-				                                    <i class="icon-directions theme"></i>
-				                                </div>
-				                                <h4><a href="about.html">Share Your Travel Preference</a></h4>
-				                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
-				                            </div>
-				                        </div>
-				                    </div>
-				                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-				                        <div class="why-us-item text-center p-4 py-5 border rounded bg-white">
-				                            <div class="why-us-content">
-				                                <div class="why-us-icon">
-				                                    <i class="icon-compass theme"></i>
-				                                </div>
-				                                <h4><a href="about.html">We are 100% Trusted Tour Agency</a></h4>
-				                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
-				                            </div>
-				                        </div>
-				                    </div>
-				                </div>
-				            </div>
-				        </div>
-			        </div>
-		            <div class="row align-items-center">
-		                <div class="col-lg-12 pe-lg-12">
-		                    <div class="testimonial-content" sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
-		                    	<h3 class="mb-1">Search <span class="theme">History</span></h3>
-		                        <!-- Counter -->
-		                        <th:block  >
+	           flatpickr(input, {
+	               enableTime: false,
+	               dateFormat: "Y-m-d",
+	               minDate: "today",
+	               defaultDate: "today",
+	               onDayCreate: function(dObj, dStr, fp, dayElem) {
+	                   let dateKey = dayElem.dateObj.toISOString().split('T')[0];
+	                   if (fareMap.has(dateKey)) {
+	                       dayElem.classList.add("event-date");
+	                       let fareSpan = document.createElement("p");
+	                       fareSpan.classList.add("event-fare");
+	                       fareSpan.innerText = `₹${fareMap.get(dateKey)}`;
+	                       dayElem.appendChild(fareSpan);
+	                   }
+	               }
+	           });
+	       }
+		</script>
+
+		<!-- Search history start -->
+		<section class="testimonial" style="background: white;">
+			<div
+				th:style="'background-image:url(' + @{/assets/images/shape4.png} + '); background-position:center; width: 100%;'">
+				<div class="container">
+					<div class="testimonial-content"
+						th:hidden="${#authorization.expression('hasAnyAuthority(''Customer'', ''ROLE_USER'')')}">
+						<div class="section-title mb-6 w-50 mx-auto text-center">
+							<h4 class="mb-1 theme1">Why To Choose Us</h4>
+							<h2 class="mb-1">Find <span class="theme">Travel Perfection</span></h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+								ut labore.
+							</p>
+						</div>
+						<div class="why-us">
+							<div class="why-us-box">
+								<div class="row">
+									<div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+										<div class="why-us-item text-center p-4 py-5 border rounded bg-white">
+											<div class="why-us-content">
+												<div class="why-us-icon">
+													<i class="icon-flag theme"></i>
+												</div>
+												<h4><a href="about.html">Tell Us What You want To Do</a></h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+										<div class="why-us-item text-center p-4 py-5 border rounded bg-white">
+											<div class="why-us-content">
+												<div class="why-us-icon">
+													<i class="icon-location-pin theme"></i>
+												</div>
+												<h4><a href="about.html">Share Your Travel Locations</a></h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+										<div class="why-us-item text-center p-4 py-5 border rounded bg-white">
+											<div class="why-us-content">
+												<div class="why-us-icon">
+													<i class="icon-directions theme"></i>
+												</div>
+												<h4><a href="about.html">Share Your Travel Preference</a></h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+										<div class="why-us-item text-center p-4 py-5 border rounded bg-white">
+											<div class="why-us-content">
+												<div class="why-us-icon">
+													<i class="icon-compass theme"></i>
+												</div>
+												<h4><a href="about.html">We are 100% Trusted Tour Agency</a></h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row align-items-center">
+						<div class="col-lg-12 pe-lg-12">
+							<div class="testimonial-content" sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+								<h3 class="mb-1">Search <span class="theme">History</span></h3>
+								<!-- Counter -->
+								<th:block>
 									<div class="container">
 										<h4 class="mb-1 theme1">Recent Search</h4>
 										<div class="row" style="margin:0 auto; padding:14px;">
-									       <div class="col-4 text-center">
-											   <form th:action="@{/loading___}" method="get" >
-												   <th:block th:if="${lastValue1 != null}">
-													   <input type="hidden" name="searchId" th:value="${lastValue1.id}">
-													   <button type="submit" class="historybtn">
-												          	<div style="display: flex; justify-content: center;">
-													          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
-												          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue1.date}]] </b><small> [[${lastValue1.cityOne}]] - [[${lastValue1.cityTwo}]]</small></p>
-												          	</div>
-													   </button>
-												   </th:block>
-											   </form>
-									       </div>
-									       <div class="col-4 text-center">
-											   <form th:action="@{/loading___}" method="get" >
-												   <th:block th:if="${lastValue2 != null}">
-												   <input type="hidden" name="searchId" th:value="${lastValue2.id}">
-												   <button type="submit" class="historybtn">
-											          	<div style="display: flex; justify-content: center;">
-												          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
-										          		<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue2.date}]] </b><small> [[${lastValue2.cityOne}]] - [[${lastValue2.cityTwo}]]</small></p>
-											          	</div>
-												   </button>
-												   </th:block>
-											   </form>
-									       </div>
-									       <div class="col-4 text-center">
-											   <form th:action="@{/loading___}" method="get" >
-												   <th:block th:if="${lastValue3 != null}">
-												   <input type="hidden" name="searchId" th:value="${lastValue3.id}">
-												   <button type="submit" class="historybtn">
-											          	<div style="display: flex; justify-content: center;">
-												          	<img alt="" class="float-left" th:src="@{/images/animaticons/searchMenu.png}" width="20" height="20">
-									          			<p class="float-left" style="padding-left: 5px;"><b>[[${lastValue3.date}]] </b><small> [[${lastValue3.cityOne}]] - [[${lastValue3.cityTwo}]]</small></p>
-											          	</div>
-												   </button>
-												   </th:block>
-											   </form>
-									       </div>
-									    </div>
+											<div class="col-4 text-center">
+												<form th:action="@{/loading___}" method="get">
+													<th:block th:if="${lastValue1 != null}">
+														<input type="hidden" name="searchId"
+															th:value="${lastValue1.id}">
+														<button type="submit" class="historybtn">
+															<div style="display: flex; justify-content: center;">
+																<img alt="" class="float-left"
+																	th:src="@{/images/animaticons/searchMenu.png}"
+																	width="20" height="20">
+																<p class="float-left" style="padding-left: 5px;">
+																	<b>[[${lastValue1.date}]] </b><small>
+																		[[${lastValue1.cityOne}]] -
+																		[[${lastValue1.cityTwo}]]</small></p>
+															</div>
+														</button>
+													</th:block>
+												</form>
+											</div>
+											<div class="col-4 text-center">
+												<form th:action="@{/loading___}" method="get">
+													<th:block th:if="${lastValue2 != null}">
+														<input type="hidden" name="searchId"
+															th:value="${lastValue2.id}">
+														<button type="submit" class="historybtn">
+															<div style="display: flex; justify-content: center;">
+																<img alt="" class="float-left"
+																	th:src="@{/images/animaticons/searchMenu.png}"
+																	width="20" height="20">
+																<p class="float-left" style="padding-left: 5px;">
+																	<b>[[${lastValue2.date}]] </b><small>
+																		[[${lastValue2.cityOne}]] -
+																		[[${lastValue2.cityTwo}]]</small></p>
+															</div>
+														</button>
+													</th:block>
+												</form>
+											</div>
+											<div class="col-4 text-center">
+												<form th:action="@{/loading___}" method="get">
+													<th:block th:if="${lastValue3 != null}">
+														<input type="hidden" name="searchId"
+															th:value="${lastValue3.id}">
+														<button type="submit" class="historybtn">
+															<div style="display: flex; justify-content: center;">
+																<img alt="" class="float-left"
+																	th:src="@{/images/animaticons/searchMenu.png}"
+																	width="20" height="20">
+																<p class="float-left" style="padding-left: 5px;">
+																	<b>[[${lastValue3.date}]] </b><small>
+																		[[${lastValue3.cityOne}]] -
+																		[[${lastValue3.cityTwo}]]</small></p>
+															</div>
+														</button>
+													</th:block>
+												</form>
+											</div>
+										</div>
 									</div>
 								</th:block>
-		                        
-		                    </div>
-		
-		                </div>
-		                
-		            </div>
-		        </div>
-	        </div>
+
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
 			<div class="white-overlay"></div>
-	    </section>
-	    <!-- Search history ends -->
-	
-	
-	    <!-- flight-list starts -->
-	    <section class="flight-list pt-0">
-	        <div class="container">
-	            <div class="section-title mb-6 w-50 mx-auto text-center">
-	                <h4 class="mb-1 theme1">Recommended Flights</h4>
-	                <h2 class="mb-1">Check Our <span class="theme">Scheduled Flights</span></h2>
-	                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-	                    labore.</p>
-	            </div>
-	
-	            <div class="flight-list">
-	                <div class="flight-navtab text-center">
-	                    <div class="nav nav-tabs mb-0" id="nav-tab" role="tablist">
-	                        <button class="nav-link active" id="nav-schedule8-tab" data-bs-toggle="tab"
-	                            data-bs-target="#schedule8" type="button" role="tab" aria-selected="true">Weekly</button>
-	                        <button class="nav-link" id="nav-schedule1-tab" data-bs-toggle="tab" data-bs-target="#schedule1"
-	                            type="button" role="tab" aria-selected="false">Saturday</button>
-	                        <button class="nav-link" id="nav-schedule2-tab" data-bs-toggle="tab" data-bs-target="#schedule2"
-	                            type="button" role="tab" aria-selected="false">Sunday</button>
-	                        <button class="nav-link" id="nav-schedule3-tab" data-bs-toggle="tab" data-bs-target="#schedule3"
-	                            type="button" role="tab" aria-selected="false">Monday</button>
-	                        <button class="nav-link" id="nav-schedule4-tab" data-bs-toggle="tab" data-bs-target="#schedul4"
-	                            type="button" role="tab" aria-selected="false">Tuesday</button>
-	                        <button class="nav-link" id="nav-schedule5-tab" data-bs-toggle="tab" data-bs-target="#schedule5"
-	                            type="button" role="tab" aria-selected="false">Wednesday</button>
-	                        <button class="nav-link" id="nav-schedule6-tab" data-bs-toggle="tab" data-bs-target="#schedule6"
-	                            type="button" role="tab" aria-selected="false">Thursday</button>
-	                        <button class="nav-link" id="nav-schedule7-tab" data-bs-toggle="tab" data-bs-target="#schedule7"
-	                            type="button" role="tab" aria-selected="false">Friday</button>
-	                    </div>
-	                </div>
-	                <div class="tab-content" id="nav-tabContent">
-	                    <div class="tab-pane fade show active text-center" id="schedule8" role="tabpanel"
-	                        aria-labelledby="nav-schedule8-tab">
-	                        <div class="flight-full">
+		</section>
+		<!-- Search history ends -->
+
+
+		<!-- flight-list starts -->
+		<section class="flight-list pt-0">
+			<div class="container">
+				<div class="section-title mb-6 w-50 mx-auto text-center">
+					<h4 class="mb-1 theme1">Recommended Flights</h4>
+					<h2 class="mb-1">Check Our <span class="theme">Scheduled Flights</span></h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+						labore.</p>
+				</div>
+
+				<div class="flight-list">
+					<div class="flight-navtab text-center">
+						<div class="nav nav-tabs mb-0" id="nav-tab" role="tablist">
+							<button class="nav-link active" id="nav-schedule8-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule8" type="button" role="tab"
+								aria-selected="true">Weekly</button>
+							<button class="nav-link" id="nav-schedule1-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule1" type="button" role="tab"
+								aria-selected="false">Saturday</button>
+							<button class="nav-link" id="nav-schedule2-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule2" type="button" role="tab"
+								aria-selected="false">Sunday</button>
+							<button class="nav-link" id="nav-schedule3-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule3" type="button" role="tab"
+								aria-selected="false">Monday</button>
+							<button class="nav-link" id="nav-schedule4-tab" data-bs-toggle="tab"
+								data-bs-target="#schedul4" type="button" role="tab"
+								aria-selected="false">Tuesday</button>
+							<button class="nav-link" id="nav-schedule5-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule5" type="button" role="tab"
+								aria-selected="false">Wednesday</button>
+							<button class="nav-link" id="nav-schedule6-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule6" type="button" role="tab"
+								aria-selected="false">Thursday</button>
+							<button class="nav-link" id="nav-schedule7-tab" data-bs-toggle="tab"
+								data-bs-target="#schedule7" type="button" role="tab"
+								aria-selected="false">Friday</button>
+						</div>
+					</div>
+					<div class="tab-content" id="nav-tabContent">
+						<div class="tab-pane fade show active text-center" id="schedule8" role="tabpanel"
+							aria-labelledby="nav-schedule8-tab">
+							<div class="flight-full">
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${fareL.productDetail.date} != null">
-		                            <div class="item mb-2 border-all p-2 px-4 rounded">
-		                                <div class="row d-flex align-items-center justify-content-between">
-		                                    <div class="col-lg-2 col-md-2 col-sm-12">
-		                                        <div class="item-inner-image text-start">
-		                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-		                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-		                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-lg-2 col-md-2 col-sm-12">
-		                                        <div class="item-inner">
-		                                            <div class="content">
-		                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-		                                            </div>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-lg-2 col-md-2 col-sm-12">
-		                                        <div class="item-inner">
-		                                            <div class="content">
-		                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-		                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-		                                            </div>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-lg-2 col-md-2 col-sm-12">
-		                                        <div class="item-inner flight-time">
-		                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-lg-2 col-md-2 col-sm-12">
-		                                        <div class="item-inner">
-		                                            <div class="content">
-		                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-		                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-		                                            </div>
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-lg-2 col-md-2 col-sm-12">
-		                                        <div class="item-inner text-end">
-		                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-		                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-		                                        </div>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                            
-			                        <script>
-							          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-							          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-							          	} else {
-							          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-							          	}
-						          		
-						          		//**************************//
-							          	
-							          	var timeDuration = [[${fareL.productDetail.duration}]];
-							          	var timeInHour = Math.floor(timeDuration / 60);
-							          	var timeRemaining = timeDuration - (timeInHour * 60);
-							          	
-							          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-							          	
-						          		//**************************//
-						          		
-							          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-						          		
-						          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-						          		
-						          		//**************************//
-						          		
-						          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-						          		 
-										function checkBrandImageDataLeast(id) {
-											var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-											  
-									  		$.get(url, function(response) {
-												$(id).attr("src", response);
-												$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
-												$(id).css("width", '100%');
-												$(id).css("height", '80px');
-											}).fail(function(){
-												alert("Could not connect to the server.");
-											});
-										}
-										
-										
-									</script>
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
+											function checkBrandImageDataLeast(id) {
+												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
+
+												$.get(url, function (response) {
+													$(id).attr("src", response);
+													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
+													$(id).css("width", '100%');
+													$(id).css("height", '80px');
+												}).fail(function () {
+													alert("Could not connect to the server.");
+												});
+											}
+
+
+										</script>
+									</th:block>
 								</th:block>
-								</th:block>
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule1" role="tabpanel"
-	                        aria-labelledby="nav-schedule1-tab">
-	                        <div class="flight-full">
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule1" role="tabpanel"
+							aria-labelledby="nav-schedule1-tab">
+							<div class="flight-full">
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Sat'">
-			                             <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule2" role="tabpanel"
-	                        aria-labelledby="nav-schedule2-tab">
-	                        <div class="flight-full">
-	
+
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule2" role="tabpanel"
+							aria-labelledby="nav-schedule2-tab">
+							<div class="flight-full">
+
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Sun'">
-			                             <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule3" role="tabpanel"
-	                        aria-labelledby="nav-schedule3-tab">
-	                        <div class="flight-full">
-	
+
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule3" role="tabpanel"
+							aria-labelledby="nav-schedule3-tab">
+							<div class="flight-full">
+
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Mon'">
-			                             <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule4" role="tabpanel"
-	                        aria-labelledby="nav-schedule4-tab">
-	                        <div class="flight-full">
-	
+
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule4" role="tabpanel"
+							aria-labelledby="nav-schedule4-tab">
+							<div class="flight-full">
+
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Tue'">
-			                            <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule5" role="tabpanel"
-	                        aria-labelledby="nav-schedule5-tab">
-	                        <div class="flight-full">
-	
+
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule5" role="tabpanel"
+							aria-labelledby="nav-schedule5-tab">
+							<div class="flight-full">
+
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Wed'">
-			                             <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule6" role="tabpanel"
-	                        aria-labelledby="nav-schedule6-tab">
-	                        <div class="flight-full">
-	
+
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule6" role="tabpanel"
+							aria-labelledby="nav-schedule6-tab">
+							<div class="flight-full">
+
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Thu'">
-			                             <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                    <div class="tab-pane fade content text-center" id="schedule7" role="tabpanel"
-	                        aria-labelledby="nav-schedule7-tab">
-	                        <div class="flight-full">
-	
+
+							</div>
+						</div>
+						<div class="tab-pane fade content text-center" id="schedule7" role="tabpanel"
+							aria-labelledby="nav-schedule7-tab">
+							<div class="flight-full">
+
 								<th:block th:each="fareL : ${leastFares}">
 									<th:block th:if="${#dates.format(fareL.productDetail.date, 'E')} == 'Fri'">
-			                             <div class="item mb-2 border-all p-2 px-4 rounded">
-			                                <div class="row d-flex align-items-center justify-content-between">
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner-image text-start">
-			                                            <img th:class="'brandImgLeast' + ${fareL.id}">
-			                                            <h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]</h5>
-			                                            <small>Operated by [[${fareL.productDetail.brand}]]</small>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h4 class="mb-0">[[${#dates.format(fareL.productDetail.date, 'EE MMM dd, yyyy')}]]</h4>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityOne}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner flight-time">
-			                                            <p class="mb-0"><span th:class="'duration_' + ${fareL.id}"></span> <br><span th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner">
-			                                            <div class="content">
-			                                                <h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
-			                                                <p class="mb-0 text-uppercase">[[${fareL.productDetail.cityTwo}]]</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                    <div class="col-lg-2 col-md-2 col-sm-12">
-			                                        <div class="item-inner text-end">
-			                                            <p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span th:class="'totalPrice-' + ${fareL.id}"></span></p>
-			                                            <a th:href="@{${fareL.url}}" class="nir-btn-black">View Deals</a>
-			                                        </div>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                            
-				                        <script>
-								          	if ([[${fareL.productDetail.stopNum}]] == 0) {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
-								          	} else {
-								          		$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
-								          	}
-							          		
-							          		//**************************//
-								          	
-								          	var timeDuration = [[${fareL.productDetail.duration}]];
-								          	var timeInHour = Math.floor(timeDuration / 60);
-								          	var timeRemaining = timeDuration - (timeInHour * 60);
-								          	
-								          	$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
-								          	
-							          		//**************************//
-							          		
-								          	var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]) ;
-							          		
-							          		$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
-							          		
-							          		//**************************//
-							          		
-							          		checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
-							          		 
+										<div class="item mb-2 border-all p-2 px-4 rounded">
+											<div class="row d-flex align-items-center justify-content-between">
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner-image text-start">
+														<img th:class="'brandImgLeast' + ${fareL.id}">
+														<h5 class="mb-0 text-uppercase">[[${fareL.productDetail.brand}]]
+														</h5>
+														<small>Operated by [[${fareL.productDetail.brand}]]</small>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h4 class="mb-0">[[${#dates.format(fareL.productDetail.date,
+																'EE MMM dd, yyyy')}]]</h4>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.depTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityOne}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner flight-time">
+														<p class="mb-0"><span
+																th:class="'duration_' + ${fareL.id}"></span> <br><span
+																th:class="'non_stop_fare-' + ${fareL.id}"></span></p>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner">
+														<div class="content">
+															<h3 class="mb-0">[[${fareL.productDetail.arrTime}]]</h3>
+															<p class="mb-0 text-uppercase">
+																[[${fareL.productDetail.cityTwo}]]</p>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-2 col-md-2 col-sm-12">
+													<div class="item-inner text-end">
+														<p class="theme2 fs-4 fw-bold">[[${CURRENCY_SYMBOL}]]<span
+																th:class="'totalPrice-' + ${fareL.id}"></span></p>
+														<a th:href="@{${fareL.url}}" class="nir-btn-black">View
+															Deals</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<script>
+											if ([[${fareL.productDetail.stopNum}]] == 0) {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Non Stop");
+											} else {
+												$(".non_stop_fare-" + [[${fareL.id}]]).text("Stop " + [[${fareL.productDetail.stopNum}]]);
+											}
+
+											//**************************//
+
+											var timeDuration = [[${fareL.productDetail.duration}]];
+											var timeInHour = Math.floor(timeDuration / 60);
+											var timeRemaining = timeDuration - (timeInHour * 60);
+
+											$(".duration_" + [[${fareL.id}]]).text(timeInHour + "H " + timeRemaining + "M");
+
+											//**************************//
+
+											var totalAdultPrice = ([[${fareL.productDetail.priceADT}]] + [[${fareL.productDetail.markupADT}]]);
+
+											$(".totalPrice-" + [[${fareL.id}]]).text(totalAdultPrice);
+
+											//**************************//
+
+											checkBrandImageDataLeast('.brandImgLeast[[${fareL.id}]]');
+
 											function checkBrandImageDataLeast(id) {
 												var url = "[[@{/find_brand_}]]" + '[[${fareL.productDetail.brand}]]';
-												  
-										  		$.get(url, function(response) {
+
+												$.get(url, function (response) {
 													$(id).attr("src", response);
 													$(id).attr("alt", '[[${fareL.productDetail.brand}]]');
 													$(id).css("width", '100%');
 													$(id).css("height", '80px');
-												}).fail(function(){
+												}).fail(function () {
 													alert("Could not connect to the server.");
 												});
 											}
-											
-											
+
+
 										</script>
 									</th:block>
 								</th:block>
-	
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </section>
-	    <!-- flight-list ends -->
-	
-	    <!-- top Destination starts -->
-	   
-		<div th:replace="top-destination :: element-lg"></div>
-	    <!-- top Destination ends -->
 
-	
-	    <!-- best tour Starts -->
-	    <section class="trending pb-6 pt-8">
-	        <div class="container">
-	            <div class="row align-items-center justify-content-between mb-6 ">
-	                <div class="col-lg-7">
-	                    <div class="section-title text-center text-lg-start">
-	                        <h4 class="mb-1 theme1">Top Pick</h4>
-	                        <h2 class="mb-1">Best <span class="theme">Tour Routes</span></h2>
-	                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-	                            labore.</p>
-	                    </div>
-	                </div>
-	                <div class="col-lg-5">
-	                </div>
-	            </div>
-	            <div class="trend-box">
-	                <div class="row item-slider">
-	                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-	                        <div class="trend-item rounded">
-	                            <div class="trend-image position-relative">
-	                                <img th:src="@{/assets/images/flights/flight2f.jpg}" alt="image" class="">
-	                            </div>
-	                            <div class="trend-content1 position-relative pt-2 bg-white">
-	                                <h3 class="mb-1"><a href="flight-grid.html" class="">Tokyo to Male</a></h3>
-	                                <p class="mb-3">Roundtrip | 09 Jun 2022 - 16 Jun 2022</p>
-	
-	                                <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                    <div class="entry-author d-flex align-items-center">
-	                                        <p class="mb-0">From<span class="theme fw-bold fs-5"> $220.00</span> | Per
-	                                            person</p>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-	                        <div class="trend-item rounded">
-	                            <div class="trend-image position-relative">
-	                                <img th:src="@{/assets/images/flights/flight1f.jpg}" alt="image">
-	                            </div>
-	                            <div class="trend-content1 position-relative  pt-2 bg-white">
-	                                <h3 class="mb-1"><a href="flight-grid.html" class="">New York to London</a></h3>
-	                                <p class="mb-3">Roundtrip | 09 Jun 2022 - 16 Jun 2022</p>
-	
-	                                <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                    <div class="entry-author d-flex align-items-center">
-	                                        <p class="mb-0">From<span class="theme fw-bold fs-5"> $415.00</span> | Per
-	                                            person</p>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-	                        <div class="trend-item rounded">
-	                            <div class="trend-image position-relative">
-	                                <img th:src="@{/assets/images/flights/flight3f.jpg}" alt="image">
-	                            </div>
-	                            <div class="trend-content1 position-relative  pt-2 bg-white">
-	                                <h3 class="mb-1"><a href="flight-grid.html" class="">Instanbul to Paris</a></h3>
-	                                <p class="mb-3">Roundtrip | 09 Jun 2022 - 16 Jun 2022</p>
-	
-	                                <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                    <div class="entry-author d-flex align-items-center">
-	                                        <p class="mb-0">From<span class="theme fw-bold fs-5"> $310.00</span> | Per
-	                                            person</p>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-	                        <div class="trend-item rounded">
-	                            <div class="trend-image position-relative">
-	                                <img th:src="@{/assets/images/flights/flight4f.jpg}" alt="image">
-	                            </div>
-	                            <div class="trend-content1 position-relative  pt-2 bg-white">
-	                                <h3 class="mb-1"><a href="flight-grid.html" class="">New York to California</a></h3>
-	                                <p class="mb-3">Roundtrip | 09 Jun 2022 - 16 Jun 2022</p>
-	
-	                                <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                    <div class="entry-author d-flex align-items-center">
-	                                        <p class="mb-0">From<span class="theme fw-bold fs-5"> $220.00</span> | Per
-	                                            person</p>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </section>
-	    <!-- best tour Ends -->
-	
-	
-	    <!-- testomonial start -->
-	    <section class="testimonial" th:style="'background-image:url(' + @{/assets/images/flights/1.jpg} + ');'">
-	        <div class="container">
-	            <div class="row align-items-center">
-	                <div class="col-lg-6 pe-lg-4">
-	                    <div class="testimonial-content">
-	                        <h5 class="theme mb-1">Testimonials</h5>
-	                        <h2 class="mb-1">Your Great Destination</h2>
-	                        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-	                            anim id est laborum.</p>
-	                        <!-- Counter -->
-	                        <div class="counter-main pt-2">
-	                            <div class="counter m-0">
-	                                <div class="row">
-	                                    <div class="col-lg-6 mb-4">
-	                                        <div
-	                                            class="counter-item d-flex align-items-center justify-content-between p-4 pb-2 pt-0 bg-white rounded">
-	                                            <div class="counter-content">
-	                                                <h2 class="value mb-0 theme">850</h2>
-	                                                <span class="m-0">Happy Customers</span>
-	                                            </div>
-	                                            <i class="fa fa-users mt-2"></i>
-	                                        </div>
-	                                    </div>
-	
-	                                    <div class="col-lg-6 mb-4">
-	                                        <div
-	                                            class="counter-item d-flex align-items-center justify-content-between p-4 pb-2 pt-0 bg-white rounded">
-	                                            <div class="counter-content">
-	                                                <h2 class="value mb-0 theme">520</h2>
-	                                                <span class="m-0">Client Setisfied</span>
-	                                            </div>
-	                                            <i class="fa fa-globe mt-2"></i>
-	                                        </div>
-	                                    </div>
-	                                    <div class="col-lg-12">
-	                                        <p
-	                                            class="contact-pac mb-0 d-md-flex align-items-center text-lg-start text-center">
-	                                            <span>Discover the latest offers & news and start planning
-	                                            </span><a href="contact.html" class="nir-btn ms-md-3">Contact Us</a></p>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                        <!-- End Counter -->
-	                    </div>
-	
-	                </div>
-	                <div class="col-lg-6 ps-lg-4">
-	                    <div class="about-slider">
-	                        <div class="item">
-	                            <div class="testimonial-item1 rounded bg-white p-5 py-5 box-shadow my-2">
-	                                <div class="author-info d-flex align-items-center mb-4">
-	                                    <img th:src="@{/assets/images/testimonial/img1.jpg}" alt="">
-	                                    <div class="author-title ms-3">
-	                                        <h5 class="m-0 theme">Jared Erondu</h5>
-	                                        <span>Supervisor</span>
-	                                    </div>
-	                                </div>
-	                                <div class="details">
-	                                    <p class="m-0"><i class="fa fa-quote-left me-2 fs-1"></i>Lorem Ipsum is simply dummy
-	                                        text of the printing andypesetting industry. Lorem ipsum a simple Lorem Ipsum
-	                                        has been the industry's standard dummy hic et quidem. Dignissimos maxime velit
-	                                        unde inventore quasi vero dolorem.</p>
-	                                </div>
-	                            </div>
-	                        </div>
-	                        <div class="item">
-	                            <div class="testimonial-item1 rounded bg-white p-5 py-5 box-shadow my-2">
-	                                <div class="author-info d-flex align-items-center mb-4">
-	                                    <img th:src="@{/assets/images/testimonial/img1.jpg}" alt="">
-	                                    <div class="author-title ms-3">
-	                                        <h5 class="m-0 theme">Jared Erondu</h5>
-	                                        <span>Supervisor</span>
-	                                    </div>
-	                                </div>
-	                                <div class="details">
-	                                    <p class="m-0"><i class="fa fa-quote-left me-2 fs-1"></i>Lorem Ipsum is simply dummy
-	                                        text of the printing andypesetting industry. Lorem ipsum a simple Lorem Ipsum
-	                                        has been the industry's standard dummy hic et quidem. Dignissimos maxime velit
-	                                        unde inventore quasi vero dolorem.</p>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="left-overlay"></div>
-	    </section>
-	    <!-- testimonial ends -->
-	
-	    <!-- recent-articles starts -->
-	    <section class="trending recent-articles pb-6">
-	        <div class="container">
-	            <div class="section-title mb-6 w-75 mx-auto text-center">
-	                <h4 class="mb-1 theme1">Our Blogs Offers</h4>
-	                <h2 class="mb-1">Recent <span class="theme">Articles & Posts</span></h2>
-	                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
-	                </p>
-	            </div>
-	            <div class="recent-articles-inner">
-	                <div class="row">
-	                    <div class="col-lg-4">
-	                        <div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
-	                            <div class="trend-image">
-	                                <img th:src="@{/assets/images/flights/flight8f.jpg}" alt="image">
-	                            </div>
-	                            <div class="trend-content-main p-4 pb-2">
-	                                <div class="trend-content">
-	                                    <h5 class="theme mb-1">Technology</h5>
-	                                    <h4><a href="detail-1.html">How a developer duo at Deutsche Bank keep remote
-	                                            alive.</a></h4>
-	                                    <p class="mb-3">
-	                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-	                                    </p>
-	                                    <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                        <div class="entry-author mb-2">
-	                                            <img th:src="@{/assets/images/reviewer/2.jpg}" alt="" class="rounded-circle me-1">
-	                                            <span>Sollmond Nell</span>
-	                                        </div>
-	                                        <div class="entry-button d-flex align-items-center mb-2">
-	                                            <a href="#" class="nir-btn">Read More</a>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	
-	                    <div class="col-lg-4 col-md-6">
-	                        <div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
-	                            <div class="trend-image">
-	                                <img th:src="@{/assets/images/flights/flight7f.jpg}" alt="image">
-	                            </div>
-	                            <div class="trend-content-main p-4 pb-2">
-	                                <div class="trend-content">
-	                                    <h5 class="theme mb-1">Inspiration</h5>
-	                                    <h4><a href="detail-1.html">Inspire Runner with Autism Graces of Women's Running</a>
-	                                    </h4>
-	                                    <p class="mb-3">
-	                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-	                                    </p>
-	                                    <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                        <div class="entry-author mb-2">
-	                                            <img th:src="@{/assets/images/reviewer/1.jpg}" alt="" class="rounded-circle me-1">
-	                                            <span>David Scott</span>
-	                                        </div>
-	                                        <div class="entry-button d-flex align-items-center mb-2">
-	                                            <a href="#" class="nir-btn">Read More</a>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	
-	                    <div class="col-lg-4 col-md-6">
-	                        <div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
-	                            <div class="trend-image">
-	                                <img th:src="@{/assets/images/flights/flight6f.jpg}" alt="image">
-	                            </div>
-	                            <div class="trend-content-main p-4 pb-2">
-	                                <div class="trend-content">
-	                                    <h5 class="theme mb-1">Public</h5>
-	                                    <h4><a href="detail-1.html">Services To Grow Your Business Sell Affiliate
-	                                            Products</a></h4>
-	                                    <p class="mb-3">
-	                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-	                                    </p>
-	                                    <div class="entry-meta d-flex align-items-center justify-content-between">
-	                                        <div class="entry-author mb-2">
-	                                            <img th:src="@{/assets/images/reviewer/3.jpg}" alt="" class="rounded-circle me-1">
-	                                            <span>John Bolden</span>
-	                                        </div>
-	                                        <div class="entry-button d-flex align-items-center mb-2">
-	                                            <a href="#" class="nir-btn">Read More</a>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </section>
-	    <!-- recent-articles ends -->
-	
-	     
-	    
-	    
-	     <!-- service modal start -->
-	  <div class="modal fade modalBg" id="travelerModal" tabindex="-1" aria-hidden="true" style="z-index: 10000;">
-	    <div class="modal-dialog modal-sm" style="max-width: 350px;">
-	      <div class="modal-content h-auto" style="border-radius: 8px;">
-	        <div class="modal-header">
-	          <button type="button" class="modal-close rounded-full" data-bs-dismiss="modal" aria-label="Close">
-	            <img th:src="@{/assets/svg/close-black.svg}" alt="Close">
-	          </button>
-	          <h4 class="modal-title">Set Traveler</h4>
-	          <div></div>
-	        </div>
-	        <div class="modal-body">
-                  <div class="row p-2" id="flush-collapseOne-desk">
-				    <div class="col-12">
-						<div class="dropdown-item">
-							<b>Class</b>
-							<select class="pass_list-1 form-control" name="journeyClass" form="onewaySearchDesk"
-								required="required">
-								<option value="Economy">Economy</option>
-								<option value="Premium Economy">Premium Economy</option>
-								<option value="Business">Business</option>
-								<option value="Premium Business">Premium Business</option>
-								<option value="First Class">First Class</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="dropdown-item">
-							<div class="d-flex justify-content-between">
-								<b class="me-2">Adult</b>
-								<p>(12+ yrs)</p>
 							</div>
-							<select class="pass_list1 form-control" name="adultNum"form="onewaySearchDesk"
-								required="required">
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-							</select>
 						</div>
 					</div>
-					<div class="col-12">
-						<div class="dropdown-item">
-							<div class="d-flex justify-content-between">
-								<b class="me-2">Children</b>
-								<p>(2-12 yrs)</p>
+				</div>
+			</div>
+		</section>
+		<!-- flight-list ends -->
+
+		<!-- top Destination starts -->
+
+		<div th:replace="top-destination :: element-lg"></div>
+		<!-- top Destination ends -->
+
+
+		<!-- best tour Starts -->
+		<section class="trending pb-6 pt-8">
+			<div class="container">
+				<div class="row align-items-center justify-content-between mb-6 ">
+					<div class="col-lg-7">
+						<div class="section-title text-center text-lg-start">
+							<h4 class="mb-1 theme1">Top Pick</h4>
+							<h2 class="mb-1">Best <span class="theme">Tour Routes</span></h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+								ut
+								labore.</p>
+						</div>
+					</div>
+					<div class="col-lg-5">
+					</div>
+				</div>
+				<div class="trend-box">
+					<div class="row item-slider">
+						<div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+							<div class="trend-item rounded">
+								<div class="trend-image position-relative">
+									<img th:src="@{/assets/images/flights/flight2f.jpg}" alt="image" class="">
+								</div>
+								<div class="trend-content1 position-relative pt-2 bg-white">
+									<a th:href="@{/bangalore_view}">
+										<h3 class="mb-1">Bangalore to Kolkata</h3>
+										<p class="mb-3">Roundtrip</p>
+
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author d-flex align-items-center">
+												<p class="mb-0">From approx<span class="theme fw-bold fs-5">
+														[[${CURRENCY_SYMBOL}]]5000.00</span> | Per
+													person</p>
+											</div>
+										</div>
+									</a>
+								</div>
 							</div>
-							<select class="pass_list2 form-control" name="childNum" form="onewaySearchDesk">
-								<option value="0">0</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-							</select>
 						</div>
-					</div>
-					<div class="col-12">
-						<div class="dropdown-item">
-							<div class="d-flex justify-content-between">
-								<b class="me-2">Infant</b>
-								<p>Under 2yrs</p>
+						<div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+							<div class="trend-item rounded">
+								<div class="trend-image position-relative">
+									<img th:src="@{/assets/images/flights/flight1f.jpg}" alt="image">
+								</div>
+								<div class="trend-content1 position-relative  pt-2 bg-white">
+									<a th:href="@{/mumbai_view}">
+										<h3 class="mb-1"><a href="flight-grid.html" class="">Mumbai to Bangalore</a>
+										</h3>
+										<p class="mb-3">Roundtrip</p>
+
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author d-flex align-items-center">
+												<p class="mb-0">From approx<span class="theme fw-bold fs-5">
+														[[${CURRENCY_SYMBOL}]]3500.00</span> | Per
+													person</p>
+											</div>
+										</div>
+									</a>
+								</div>
 							</div>
-							<select class="pass_list3 form-control" name="infantNum" form="onewaySearchDesk">
-								<option value="0">0</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-							</select>
+						</div>
+						<div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+							<div class="trend-item rounded">
+								<div class="trend-image position-relative">
+									<img th:src="@{/assets/images/flights/flight3f.jpg}" alt="image">
+								</div>
+								<div class="trend-content1 position-relative  pt-2 bg-white">
+									<a th:href="@{/kerala_view}">
+										<h3 class="mb-1"><a href="flight-grid.html" class="">Kolkata to Kerala</a></h3>
+										<p class="mb-3">Roundtrip</p>
+
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author d-flex align-items-center">
+												<p class="mb-0">From approx<span class="theme fw-bold fs-5">
+														[[${CURRENCY_SYMBOL}]]7000.00</span> | Per
+													person</p>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+							<div class="trend-item rounded">
+								<div class="trend-image position-relative">
+									<img th:src="@{/assets/images/flights/flight4f.jpg}" alt="image">
+								</div>
+								<div class="trend-content1 position-relative  pt-2 bg-white">
+									<a th:href="@{/shimla_view}">
+										<h3 class="mb-1"><a href="flight-grid.html" class="">Kolkata to Shimla</a></h3>
+										<p class="mb-3">Roundtrip</p>
+
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author d-flex align-items-center">
+												<p class="mb-0">From approx<span class="theme fw-bold fs-5">
+														[[${CURRENCY_SYMBOL}]]10000.00</span> | Per
+													person</p>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="col-12">
-						<div class="dropdown-item mt-2">
-							<button type="button" id="submit2" form="onewaySearch" class="nir-btn w-100" data-bs-dismiss="modal" onclick="return setTravelerDetails('#deskDropdwon', '#flush-collapseOne-desk');">Set</button>
+				</div>
+			</div>
+		</section>
+		<!-- best tour Ends -->
+
+
+		<!-- testomonial start -->
+		<section class="testimonial" th:style="'background-image:url(' + @{/assets/images/flights/1.jpg} + ');'">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-lg-6 pe-lg-4">
+						<div class="testimonial-content">
+							<h5 class="theme mb-1">Testimonials</h5>
+							<h2 class="mb-1">Your Great Destination</h2>
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+								anim id est laborum.</p>
+							<!-- Counter -->
+							<div class="counter-main pt-2">
+								<div class="counter m-0">
+									<div class="row">
+										<div class="col-lg-6 mb-4">
+											<div
+												class="counter-item d-flex align-items-center justify-content-between p-4 pb-2 pt-0 bg-white rounded">
+												<div class="counter-content">
+													<h2 class="value mb-0 theme">850</h2>
+													<span class="m-0">Happy Customers</span>
+												</div>
+												<i class="fa fa-users mt-2"></i>
+											</div>
+										</div>
+
+										<div class="col-lg-6 mb-4">
+											<div
+												class="counter-item d-flex align-items-center justify-content-between p-4 pb-2 pt-0 bg-white rounded">
+												<div class="counter-content">
+													<h2 class="value mb-0 theme">520</h2>
+													<span class="m-0">Client Setisfied</span>
+												</div>
+												<i class="fa fa-globe mt-2"></i>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<p
+												class="contact-pac mb-0 d-md-flex align-items-center text-lg-start text-center">
+												<span>Discover the latest offers & news and start planning
+												</span><a href="contact.html" class="nir-btn ms-md-3">Contact Us</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- End Counter -->
+						</div>
+
+					</div>
+					<div class="col-lg-6 ps-lg-4">
+						<div class="about-slider">
+							<div class="item">
+								<div class="testimonial-item1 rounded bg-white p-5 py-5 box-shadow my-2">
+									<div class="author-info d-flex align-items-center mb-4">
+										<img th:src="@{/assets/images/testimonial/img1.jpg}" alt="">
+										<div class="author-title ms-3">
+											<h5 class="m-0 theme">Jared Erondu</h5>
+											<span>Supervisor</span>
+										</div>
+									</div>
+									<div class="details">
+										<p class="m-0"><i class="fa fa-quote-left me-2 fs-1"></i>Lorem Ipsum is simply
+											dummy
+											text of the printing andypesetting industry. Lorem ipsum a simple Lorem
+											Ipsum
+											has been the industry's standard dummy hic et quidem. Dignissimos maxime
+											velit
+											unde inventore quasi vero dolorem.</p>
+									</div>
+								</div>
+							</div>
+							<div class="item">
+								<div class="testimonial-item1 rounded bg-white p-5 py-5 box-shadow my-2">
+									<div class="author-info d-flex align-items-center mb-4">
+										<img th:src="@{/assets/images/testimonial/img1.jpg}" alt="">
+										<div class="author-title ms-3">
+											<h5 class="m-0 theme">Jared Erondu</h5>
+											<span>Supervisor</span>
+										</div>
+									</div>
+									<div class="details">
+										<p class="m-0"><i class="fa fa-quote-left me-2 fs-1"></i>Lorem Ipsum is simply
+											dummy
+											text of the printing andypesetting industry. Lorem ipsum a simple Lorem
+											Ipsum
+											has been the industry's standard dummy hic et quidem. Dignissimos maxime
+											velit
+											unde inventore quasi vero dolorem.</p>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-				  </div>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-	  <!-- service modal end -->
-	    
-	    
-	    
-	    <script>
+				</div>
+			</div>
+			<div class="left-overlay"></div>
+		</section>
+		<!-- testimonial ends -->
+
+		<!-- recent-articles starts -->
+		<section class="trending recent-articles pb-6">
+			<div class="container">
+				<div class="section-title mb-6 w-75 mx-auto text-center">
+					<h4 class="mb-1 theme1">Our Blogs Offers</h4>
+					<h2 class="mb-1">Recent <span class="theme">Articles & Posts</span></h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+						labore.
+					</p>
+				</div>
+				<div class="recent-articles-inner">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
+								<div class="trend-image">
+									<img th:src="@{/assets/images/flights/flight8f.jpg}" alt="image">
+								</div>
+								<div class="trend-content-main p-4 pb-2">
+									<div class="trend-content">
+										<h5 class="theme mb-1">Technology</h5>
+										<h4><a href="detail-1.html">How a developer duo at Deutsche Bank keep remote
+												alive.</a></h4>
+										<p class="mb-3">
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+										</p>
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author mb-2">
+												<img th:src="@{/assets/images/reviewer/2.jpg}" alt=""
+													class="rounded-circle me-1">
+												<span>Sollmond Nell</span>
+											</div>
+											<div class="entry-button d-flex align-items-center mb-2">
+												<a href="#" class="nir-btn">Read More</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-6">
+							<div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
+								<div class="trend-image">
+									<img th:src="@{/assets/images/flights/flight7f.jpg}" alt="image">
+								</div>
+								<div class="trend-content-main p-4 pb-2">
+									<div class="trend-content">
+										<h5 class="theme mb-1">Inspiration</h5>
+										<h4><a href="detail-1.html">Inspire Runner with Autism Graces of Women's
+												Running</a>
+										</h4>
+										<p class="mb-3">
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+										</p>
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author mb-2">
+												<img th:src="@{/assets/images/reviewer/1.jpg}" alt=""
+													class="rounded-circle me-1">
+												<span>David Scott</span>
+											</div>
+											<div class="entry-button d-flex align-items-center mb-2">
+												<a href="#" class="nir-btn">Read More</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-6">
+							<div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
+								<div class="trend-image">
+									<img th:src="@{/assets/images/flights/flight6f.jpg}" alt="image">
+								</div>
+								<div class="trend-content-main p-4 pb-2">
+									<div class="trend-content">
+										<h5 class="theme mb-1">Public</h5>
+										<h4><a href="detail-1.html">Services To Grow Your Business Sell Affiliate
+												Products</a></h4>
+										<p class="mb-3">
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+										</p>
+										<div class="entry-meta d-flex align-items-center justify-content-between">
+											<div class="entry-author mb-2">
+												<img th:src="@{/assets/images/reviewer/3.jpg}" alt=""
+													class="rounded-circle me-1">
+												<span>John Bolden</span>
+											</div>
+											<div class="entry-button d-flex align-items-center mb-2">
+												<a href="#" class="nir-btn">Read More</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- recent-articles ends -->
+
+
+
+
+		<!-- service modal start -->
+		<div class="modal fade modalBg" id="travelerModal" tabindex="-1" aria-hidden="true" style="z-index: 10000;">
+			<div class="modal-dialog modal-sm" style="max-width: 350px;">
+				<div class="modal-content h-auto" style="border-radius: 8px;">
+					<div class="modal-header">
+						<button type="button" class="modal-close rounded-full" data-bs-dismiss="modal"
+							aria-label="Close">
+							<img th:src="@{/assets/svg/close-black.svg}" alt="Close">
+						</button>
+						<h4 class="modal-title">Set Traveler</h4>
+						<div></div>
+					</div>
+					<div class="modal-body">
+						<div class="row p-2" id="flush-collapseOne-desk">
+							<div class="col-12">
+								<div class="dropdown-item">
+									<b>Class</b>
+									<select class="pass_list-1 form-control" name="journeyClass" form="onewaySearchDesk"
+										required="required">
+										<option value="Economy">Economy</option>
+										<option value="Premium Economy">Premium Economy</option>
+										<option value="Business">Business</option>
+										<option value="Premium Business">Premium Business</option>
+										<option value="First Class">First Class</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="dropdown-item">
+									<div class="d-flex justify-content-between">
+										<b class="me-2">Adult</b>
+										<p>(12+ yrs)</p>
+									</div>
+									<select class="pass_list1 form-control" name="adultNum" form="onewaySearchDesk"
+										required="required">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="dropdown-item">
+									<div class="d-flex justify-content-between">
+										<b class="me-2">Children</b>
+										<p>(2-12 yrs)</p>
+									</div>
+									<select class="pass_list2 form-control" name="childNum" form="onewaySearchDesk">
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="dropdown-item">
+									<div class="d-flex justify-content-between">
+										<b class="me-2">Infant</b>
+										<p>Under 2yrs</p>
+									</div>
+									<select class="pass_list3 form-control" name="infantNum" form="onewaySearchDesk">
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="dropdown-item mt-2">
+									<button type="button" id="submit2" form="onewaySearch" class="nir-btn w-100"
+										data-bs-dismiss="modal"
+										onclick="return setTravelerDetails('#deskDropdwon', '#flush-collapseOne-desk');">Set</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- service modal end -->
+
+		
+		<button class="btn btn-secondary" id="getCalendarFare" onclick="return showCalnedarFare();">Console.log</button>
+
+		<script>
 			function setTravelerDetails(btn, formData) {
 				var nText = $(btn).children(".n-text");
 				var optionList = $(formData + " select");
 				var paxCount = 0;
 				var journeyType = "";
 				nText.empty();
-				
-				$.each(optionList, function( index, value ) {
-					if(index == 0) {
-						journeyType =  value.value;
+
+				$.each(optionList, function (index, value) {
+					if (index == 0) {
+						journeyType = value.value;
 					} else {
 						paxCount = paxCount + parseInt(value.value);
 					}
 				})
-				
+
 				nText.text(journeyType + " Pax " + paxCount);
 			}
 		</script>
-	    
-	    
-	 
-	    <!-- search popup -->
-	    <div id="search1">
-	        <button type="button" class="close">×</button>
-	        <form>
-	            <input type="search" value="" placeholder="type keyword(s) here" />
-	            <button type="submit" class="btn btn-primary">Search</button>
-	        </form>
-	    </div>
-	
-	    <!-- login registration modal -->
-	    <div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
-	        <div class="modal-dialog">
-	            <div class="modal-content">
-	                <div class="modal-body">
-	                    <div class="post-tabs">
-	                        <!-- tab navs -->
-	                        <ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
-	                            <li class="nav-item" role="presentation">
-	                                <button aria-controls="login" aria-selected="false" class="nav-link active"
-	                                    data-bs-target="#login" data-bs-toggle="tab" id="login-tab" role="tab"
-	                                    type="button">Login</button>
-	                            </li>
-	                            <li class="nav-item" role="presentation">
-	                                <button aria-controls="register" aria-selected="true" class="nav-link"
-	                                    data-bs-target="#register" data-bs-toggle="tab" id="register-tab" role="tab"
-	                                    type="button">Register</button>
-	                            </li>
-	                        </ul>
-	                        <!-- tab contents -->
-	                        <div class="tab-content blog-full" id="postsTabContent">
-	                            <!-- popular posts -->
-	                            <div aria-labelledby="login-tab" class="tab-pane fade active show" id="login"
-	                                role="tabpanel">
-	                                <div class="row">
-	                                    <div class="col-lg-6">
-	                                        <div class="blog-image rounded">
-	                                            <a href="#"
-	                                                style="background-image: url(images/trending/trending5.jpg);"></a>
-	                                        </div>
-	                                    </div>
-	                                    <div class="col-lg-6">
-	                                        <h4 class="text-center border-b pb-2">Login</h4>
-	                                        <div class="log-reg-button d-flex align-items-center justify-content-between">
-	                                            <button type="submit" class="btn btn-fb">
-	                                                <i class="fab fa-facebook"></i> Login with Facebook
-	                                            </button>
-	                                            <button type="submit" class="btn btn-google">
-	                                                <i class="fab fa-google"></i> Login with Google
-	                                            </button>
-	                                        </div>
-	                                        <hr class="log-reg-hr position-relative my-4 overflow-visible">
-	                                        <form method="post" action="#" name="contactform" id="contactform">
-	                                            <div class="form-group mb-2">
-	                                                <input type="text" name="user_name" class="form-control" id="fname"
-	                                                    placeholder="User Name or Email Address">
-	                                            </div>
-	                                            <div class="form-group mb-2">
-	                                                <input type="password" name="password_name" class="form-control"
-	                                                    id="lpass" placeholder="Password">
-	                                            </div>
-	                                            <div class="form-group mb-2">
-	                                                <input type="checkbox" class="custom-control-input" id="exampleCheck">
-	                                                <label class="custom-control-label mb-0" for="exampleCheck1">Remember
-	                                                    me</label>
-	                                                <a class="float-end" href="#">Lost your password?</a>
-	                                            </div>
-	                                            <div class="comment-btn mb-2 pb-2 text-center border-b">
-	                                                <input type="submit" class="nir-btn w-100" id="submit" value="Login">
-	                                            </div>
-	                                            <p class="text-center">Don't have an account? <a href="#"
-	                                                    class="theme">Register</a></p>
-	                                        </form>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                            <!-- Recent posts -->
-	                            <div aria-labelledby="register-tab" class="tab-pane fade" id="register" role="tabpanel">
-	                                <div class="row">
-	                                    <div class="col-lg-6">
-	                                        <div class="blog-image rounded">
-	                                            <a href="#"
-	                                                style="background-image: url(images/trending/trending5.jpg);"></a>
-	                                        </div>
-	                                    </div>
-	                                    <div class="col-lg-6">
-	                                        <h4 class="text-center border-b pb-2">Register</h4>
-	                                        <div class="log-reg-button d-flex align-items-center justify-content-between">
-	                                            <button type="submit" class="btn btn-fb">
-	                                                <i class="fab fa-facebook"></i> Login with Facebook
-	                                            </button>
-	                                            <button type="submit" class="btn btn-google">
-	                                                <i class="fab fa-google"></i> Login with Google
-	                                            </button>
-	                                        </div>
-	                                        <hr class="log-reg-hr position-relative my-4 overflow-visible">
-	                                        <form method="post" action="#" name="contactform1" id="contactform1">
-	                                            <div class="form-group mb-2">
-	                                                <input type="text" name="user_name" class="form-control" id="fname1"
-	                                                    placeholder="User Name">
-	                                            </div>
-	                                            <div class="form-group mb-2">
-	                                                <input type="text" name="user_name" class="form-control" id="femail"
-	                                                    placeholder="Email Address">
-	                                            </div>
-	                                            <div class="form-group mb-2">
-	                                                <input type="password" name="password_name" class="form-control"
-	                                                    id="lpass1" placeholder="Password">
-	                                            </div>
-	                                            <div class="form-group mb-2">
-	                                                <input type="password" name="password_name" class="form-control"
-	                                                    id="lrepass" placeholder="Re-enter Password">
-	                                            </div>
-	                                            <div class="form-group mb-2 d-flex">
-	                                                <input type="checkbox" class="custom-control-input" id="exampleCheck1">
-	                                                <label class="custom-control-label mb-0 ms-1 lh-1" for="exampleCheck1">I
-	                                                    have read and accept the Terms and Privacy Policy?</label>
-	                                            </div>
-	                                            <div class="comment-btn mb-2 pb-2 text-center border-b">
-	                                                <input type="submit" class="nir-btn w-100" id="submit1"
-	                                                    value="Register">
-	                                            </div>
-	                                            <p class="text-center">Already have an account? <a href="#"
-	                                                    class="theme">Login</a></p>
-	                                        </form>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
- 	
- 	</div>
+
+
+
+		<!-- search popup -->
+		<div id="search1">
+			<button type="button" class="close">×</button>
+			<form>
+				<input type="search" value="" placeholder="type keyword(s) here" />
+				<button type="submit" class="btn btn-primary">Search</button>
+			</form>
+		</div>
+
+		<!-- login registration modal -->
+		<div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="post-tabs">
+							<!-- tab navs -->
+							<ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
+								<li class="nav-item" role="presentation">
+									<button aria-controls="login" aria-selected="false" class="nav-link active"
+										data-bs-target="#login" data-bs-toggle="tab" id="login-tab" role="tab"
+										type="button">Login</button>
+								</li>
+								<li class="nav-item" role="presentation">
+									<button aria-controls="register" aria-selected="true" class="nav-link"
+										data-bs-target="#register" data-bs-toggle="tab" id="register-tab" role="tab"
+										type="button">Register</button>
+								</li>
+							</ul>
+							<!-- tab contents -->
+							<div class="tab-content blog-full" id="postsTabContent">
+								<!-- popular posts -->
+								<div aria-labelledby="login-tab" class="tab-pane fade active show" id="login"
+									role="tabpanel">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="blog-image rounded">
+												<a href="#"
+													style="background-image: url(images/trending/trending5.jpg);"></a>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<h4 class="text-center border-b pb-2">Login</h4>
+											<div
+												class="log-reg-button d-flex align-items-center justify-content-between">
+												<button type="submit" class="btn btn-fb">
+													<i class="fab fa-facebook"></i> Login with Facebook
+												</button>
+												<button type="submit" class="btn btn-google">
+													<i class="fab fa-google"></i> Login with Google
+												</button>
+											</div>
+											<hr class="log-reg-hr position-relative my-4 overflow-visible">
+											<form method="post" action="#" name="contactform" id="contactform">
+												<div class="form-group mb-2">
+													<input type="text" name="user_name" class="form-control" id="fname"
+														placeholder="User Name or Email Address">
+												</div>
+												<div class="form-group mb-2">
+													<input type="password" name="password_name" class="form-control"
+														id="lpass" placeholder="Password">
+												</div>
+												<div class="form-group mb-2">
+													<input type="checkbox" class="custom-control-input"
+														id="exampleCheck">
+													<label class="custom-control-label mb-0"
+														for="exampleCheck1">Remember
+														me</label>
+													<a class="float-end" href="#">Lost your password?</a>
+												</div>
+												<div class="comment-btn mb-2 pb-2 text-center border-b">
+													<input type="submit" class="nir-btn w-100" id="submit"
+														value="Login">
+												</div>
+												<p class="text-center">Don't have an account? <a href="#"
+														class="theme">Register</a></p>
+											</form>
+										</div>
+									</div>
+								</div>
+								<!-- Recent posts -->
+								<div aria-labelledby="register-tab" class="tab-pane fade" id="register" role="tabpanel">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="blog-image rounded">
+												<a href="#"
+													style="background-image: url(images/trending/trending5.jpg);"></a>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<h4 class="text-center border-b pb-2">Register</h4>
+											<div
+												class="log-reg-button d-flex align-items-center justify-content-between">
+												<button type="submit" class="btn btn-fb">
+													<i class="fab fa-facebook"></i> Login with Facebook
+												</button>
+												<button type="submit" class="btn btn-google">
+													<i class="fab fa-google"></i> Login with Google
+												</button>
+											</div>
+											<hr class="log-reg-hr position-relative my-4 overflow-visible">
+											<form method="post" action="#" name="contactform1" id="contactform1">
+												<div class="form-group mb-2">
+													<input type="text" name="user_name" class="form-control" id="fname1"
+														placeholder="User Name">
+												</div>
+												<div class="form-group mb-2">
+													<input type="text" name="user_name" class="form-control" id="femail"
+														placeholder="Email Address">
+												</div>
+												<div class="form-group mb-2">
+													<input type="password" name="password_name" class="form-control"
+														id="lpass1" placeholder="Password">
+												</div>
+												<div class="form-group mb-2">
+													<input type="password" name="password_name" class="form-control"
+														id="lrepass" placeholder="Re-enter Password">
+												</div>
+												<div class="form-group mb-2 d-flex">
+													<input type="checkbox" class="custom-control-input"
+														id="exampleCheck1">
+													<label class="custom-control-label mb-0 ms-1 lh-1"
+														for="exampleCheck1">I
+														have read and accept the Terms and Privacy Policy?</label>
+												</div>
+												<div class="comment-btn mb-2 pb-2 text-center border-b">
+													<input type="submit" class="nir-btn w-100" id="submit1"
+														value="Register">
+												</div>
+												<p class="text-center">Already have an account? <a href="#"
+														class="theme">Login</a></p>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
 </body>
+
 </html>

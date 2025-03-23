@@ -43,6 +43,9 @@ public class TotalTransaction {
 	
 	@OneToMany(mappedBy = "totalTransaction", cascade = CascadeType.ALL)
 	private List<BusOrder> busOrders = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "totalTransaction", cascade = CascadeType.ALL)
+	private List<RideOrder> rideOrders = new ArrayList<>();
 
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
@@ -147,6 +150,15 @@ public class TotalTransaction {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	
+	public List<RideOrder> getRideOrders() {
+		return rideOrders;
+	}
+
+	public void setRideOrders(List<RideOrder> rideOrders) {
+		this.rideOrders = rideOrders;
 	}
 	
 	

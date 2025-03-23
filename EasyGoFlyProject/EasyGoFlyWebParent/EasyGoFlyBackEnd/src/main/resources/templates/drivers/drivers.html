@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+		<!-- dynamic head starts -->
+<head>
+	<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Driver page', 'tag')"></head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+		<!-- dynamic head ends -->
+  <style>
+        .bodyContainer {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn-hover:hover {
+            transform: translateY(-3px);
+            transition: 0.2s;
+        }
+        .modal-content {
+            animation: fadeInUp 0.5s;
+        }
+        .card-body p {
+			margin-bottom: 2px;
+		}
+		.modal-body p {
+			margin-bottom: 2px;
+		}
+		.spacial {
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    max-width: 100%; /* Adjust width as needed */
+		    display: inline-block;
+		}
+		
+        .add-driver {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #418eff, #2bf5ff);
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-driver::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease-in-out;
+        }
+
+        .add-driver:hover::before {
+            left: 100%;
+        }
+
+        .add-driver:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .headerAnimate {
+			overflow-x: hidden;
+            position: relative;
+            z-index: 10;
+			background: linear-gradient(45deg, #418eff, #2bf5ff);
+		}
+        
+        .headerAnimate:hover .card-header h5 {
+            color: #0a58ca;
+		}
+		
+        .headerAnimate::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.6s ease-in-out;
+            z-index: 1;
+        }
+
+        .headerAnimate:hover::before {
+            left: 100%;
+        }
+
+    </style>
+
+
+<body>
+	<div class="main-wrapper">
+
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
+
+        <!-- sidebar Ends -->
+	
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
+
+		    <div th:replace="navigation :: nav_profile"></div>
+
+			<!-- navbar Ends -->
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+		<div th:if="${alert != null}" class="alert alert-danger text-center">
+			[[${alert}]]
+		</div>
+		<div th:if="${warning != null}" class="alert alert-warning text-center">
+			[[${warning}]]
+		</div>
+		
+		<div>
+			
+			<h2 class="text-center mb-4 text-uppercase fw-bold animate__animated animate__fadeInDown" style="color: #333; padding-top: 15px;">Driver Details</h2>
+			<div class="row search-form" style="margin: 8px 0;">
+				<div class="col-12 col-md-2 ">
+					<a th:href="@{/drivers/new}" class="add-driver" title="Add new Driver" th:hidden="${#authorization.expression('hasAuthority(''Salesperson'')')}">➕ Add Driver</a>
+					
+				</div>
+				<div class="col-12 col-md-10 ">
+					<div class="row">
+						<div class="col-10">
+							<div th:replace="fragments :: search-new('/drivers/page/1')" ></div>
+						</div>
+						<div class="col-2">
+							
+							<div class="dropdown dropDown_toggle_col ">
+							  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> </a>
+							
+							  <div class="dropdown-menu dropDown_position">
+							    <a th:href="@{/drivers/export/csv}" class="fa fa-solid fa-file-csv fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download list as CSV file"></a>
+							    <a th:href="@{/drivers/export/excel}" class="fa fa-solid fa-file-excel fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download list as Excel file"></a>
+							    <a th:href="@{/drivers/export/pdf}" class="fa fa-solid fa-file-pdf fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download list as PDF file"></a>
+							  </div>
+							</div>
+							
+							<div class="hideable-column media-hide">
+								<a th:href="@{/drivers/export/csv}" class="fa fa-solid fa-file-csv fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download list as CSV file"></a>
+								<a th:href="@{/drivers/export/excel}" class="fa fa-solid fa-file-excel fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download list as Excel file"></a>
+								<a th:href="@{/drivers/export/pdf}" class="fa fa-solid fa-file-pdf fa-2x styleLink styleLinkButton float-right margin-both_side" title="Download list as PDF file"></a>
+								
+							</div>
+						</div>
+					</div>
+					
+					
+					
+				</div>
+			
+			</div>
+		</div>
+		<div class="full-details">
+        <div class="row">
+            <div th:each="driver : ${listDrivers}" class="col-12 col-md-4 col-lg-4 mb-4">
+                <div class="card shadow-lg border-0 animate__animated animate__zoomIn headerAnimate" >
+                    <div class="card-header text-white text-center " style="">
+                        <h5 class="mb-0">[[${driver.name}]]</h5>
+                    </div>
+                    <div class="card-body bg-white">
+						<div class="row">
+							<div class="col-12 col-md-12 col-lg-5 text-center">
+								<img th:src="${driver.photosImagePath}" class="rounded-circle shadow-lg mb-3 driverListImage" alt="Driver Photo">
+		                        <p><strong>⭐</strong> [[${driver.rating}]]</p>
+							</div>
+							<div class="col-12 col-md-12 col-lg-7">
+								<div class="d-flex flex-column justify-content-between h-100">
+									<div>
+				                        <h5><strong>📍 </strong><span style="color: #787878; font-size: 14px;" class="driverListText">Location: </span> [[${driver.Location}]]</h5>
+				                        <p style="margin-top: 10px;"><strong>📞 </strong><span style="color: #787878; font-size: 13px;"class="driverListText">Contact: </span> [[${driver.contact}]]</p>
+				                        <p><strong>📏 </strong><span style="color: #787878; font-size: 13px;"class="driverListText">Covering Distance: </span> [[${driver.coveringDistance}]] km</p>
+		                        		<p><strong>🎖 &nbsp;</strong><span style="color: #787878; font-size: 13px;"class="driverListText">Experience: </span> [[${driver.experience}]] Years</p>
+	                        		</div>
+                        			<h5 ><strong>🔖 </strong> [[${driver.cab.license}]]</h5>
+                        		</div>
+							</div>
+						</div>
+                    </div>
+                    <div class="card-footer text-center border-top" style="background: linear-gradient(135deg, #8288e4, #031925); backdrop-filter: blur(4px);">
+                        <button class="btn btn-info btn-sm btn-hover" data-bs-toggle="modal" th:id="'button_modal' + ${driver.id}" th:data-bs-target="'#modalDialogueWallet' + ${driver.id}" style="margin-right: 5px;">Details</button>
+                        <a th:href="@{'/drivers/edit/' + ${driver.id}}" class="btn btn-primary btn-sm btn-hover" style="margin-right: 5px;">Edit</a>
+                        <button class="btn btn-danger btn-sm btn-hover" title="Delete" th:data-bs-target="'#deleteConfirmModal' + ${driver.id}" data-bs-toggle="modal" >Delete</button>
+                    </div>
+                </div>
+                
+                
+				<div class="modal fade text-center" th:id="'deleteConfirmModal' + ${driver.id}">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+								<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+							</div>
+							<div class="modal-body">
+								<span id="modalBody" style="color: black;">
+									Are you sure you want to delete this user ID: [[${driver.id}]]
+								</span>
+							</div>
+							<div class="modal-footer">
+								<a class="btn btn-success" id="confirmDelete" th:href="@{'/drivers/delete/' + ${driver.id}}">Confirm</a>
+								<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+							</div>
+						</div>
+					</div>	
+				</div>
+				
+		
+                <div class="modal fade" th:id="'modalDialogueWallet' + ${driver.id}">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content shadow-lg">
+                            <div class="modal-header bg-gradient" style="background: linear-gradient(45deg, #1e90ff, #00c6ff);">
+								<div class="text-center w-100">
+                                <h4 class="modal-title" >🚗 Cab Details</h4>
+									
+								</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+						<div class="row">
+							<div class="col-6 col-md-4 d-flex justify-content-center">
+								 <img th:src="${driver.cab.photosImagePath}" class="rounded-circle shadow-lg mb-3" width="120" height="120" alt="Cab Photo">
+							</div>
+							<div class="col-6 col-md-4">
+                                <p><strong>🚘 Cab Name:</strong> [[${driver.cab.name}]]</p>
+                                <p><strong>🚖 Type:</strong> [[${driver.cab.type}]]</p>
+                                <p><strong>🪑 Seating:</strong> [[${driver.cab.seating}]]</p>
+                                <p><strong>⛽ Fuel Type:</strong> [[${driver.cab.fuelType}]]</p>
+							</div>
+							<div class="col-6 col-md-4">
+                                <p><strong>🎨 Color:</strong> [[${driver.cab.color}]]</p>
+                                <p><strong>💨 Max Speed:</strong> [[${driver.cab.maxSpeed}]] km/h</p>
+                                <p><strong>❄ Air Conditioning:</strong> [[${driver.cab.airConditioning}]]</p>
+                                <p><strong>🔖 License:</strong> [[${driver.cab.license}]]</p>
+							</div>
+						
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>💰 Booking Fare:</strong> ₹[[${driver.cab.bookingFare}]]</p>
+							</div>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>✨ Features:</strong> [[${driver.cab.features}]]</p>
+							</div>
+							<br><br>
+							<hr>
+							
+							
+							<div class="col-12 d-flex justify-content-center" > 
+								<div style=" background: #bcd4ff; width: 30%; border-radius: 8px; text-align: center; padding: 8px 0; margin: 0 0 10px 0;">
+									<h4>Driver</h4>
+								</div>
+							</div>
+							
+							<br><br>
+							<hr>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>⭐ Rating:</strong> [[${driver.rating}]]</p>
+							</div>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>📍 Location:</strong> [[${driver.Location}]]</p>
+							</div>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>📞 Contact:</strong> [[${driver.contact}]]</p>
+							</div>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>📏 Covering Distance::</strong> [[${driver.coveringDistance}]]</p>
+							</div>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>🎖 Experience:</strong> [[${driver.experience}]] Years</p>
+							</div>
+		                       
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>🗺️ Latitude:</strong> [[${driver.latitude}]]</p>
+							</div>
+							<div class="col-6 col-sm-6 col-md-4">
+                                <p><strong>🧭 Longitude:</strong> [[${driver.longitude}]]</p>
+							</div>
+							<div class="col-12 col-sm-12 ">
+                                <p class="spacial text-break"><strong>🏠 Address:</strong> [[${driver.address}]]</p>
+							</div>
+						</div>
+                               
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+		
+		</div>
+
+		
+	<div> 
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+			<span>Showing Drivers # ([[${startCount}]] - [[${endCount}]]) of [[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No Drivers found</span>
+		</div>
+		<a th:fragment="page_Link_wallet(property, pageNum, pageLabel)" class="page-link" th:href="@{'/' + ${property} + '/page/' + ${pageNum} + '?sortField='+ ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${pageLabel}]]</a>
+	
+		<div th:if="${totalItems > 1}">
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center flex-wrap">
+			  	<li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="drivers/drivers :: page_Link_wallet(drivers, 1, 'First')">First</a></li>
+			    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a th:replace="drivers/drivers :: page_Link_wallet(drivers, ${currentPage - 1}, 'Previous')">Previous</a></li>
+			    
+			    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}"><a th:replace="drivers/drivers :: page_Link_wallet(drivers, ${i}, ${i})"></a></li>
+			    
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="drivers/drivers :: page_Link_wallet(drivers, ${currentPage + 1}, 'Next')" ></a></li>
+			    <li th:class="${currentPage == totalPages ? 'page-item disabled': 'page-item'}"><a th:replace="drivers/drivers :: page_Link_wallet(drivers, ${totalPages}, 'Last')"></a></li>
+			  </ul>
+			</nav>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
+		
+		</div>
+	</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".link-delete").click(function(e){
+			e.preventDefault();
+			link = $(this);
+			userId = link.attr("userId");
+			$("#confirmDelete").attr("href", link.attr("href"));
+			$("#modalBody").text("Are you sure you want to delete this user ID: " + userId);
+			$("#deleteConfirmModal").modal();
+		});
+		
+		
+		$(".card").hover(function(){
+			$(this).find(".card-header").addClass(".headerAnimate:hover::before");
+			
+		}, function(){
+			$(this).find(".card-header").removeClass(".headerAnimate:hover::before");
+		});
+	});
+	
+	function clearFilter() {
+		window.location = "[[@{/drivers}]]";
+	};
+	
+	
+	
+	
+</script>
+</body>
+</html>    

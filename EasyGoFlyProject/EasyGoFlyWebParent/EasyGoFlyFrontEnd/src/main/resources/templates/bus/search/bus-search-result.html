@@ -18,11 +18,63 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       }
 </style>
 <body>
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
+<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
   
+	</div>
+
+
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<main class="home">
+			<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+		</main>
+	</div>
+
   <div th:replace="whatsapp :: content"></div>
+  
+    <!-- BreadCrumb Starts -->  
+    <section class="breadcrumb-main pb-8 pt-10" th:style="'background-image: url(' + @{/assets/images/bg/bg1.jpg} + ');'">
+        <div class="section-shape section-shape1 top-inherit bottom-0" th:style="'background-image: url(' + @{/assets/images/shape8.png} + ');'"></div>
+        <div class="breadcrumb-outer pb-2">
+            <div class="container">
+                <div class="breadcrumb-content text-center">
+                    <h1 class="mb-3">Bus List</h1>
+                    <nav aria-label="breadcrumb" class="d-block">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/bus}">Bus</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Bus List</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+			<div class="d-flex justify-content-center mb-2">
+				<div class="bg-white p-4 radius-8 hide-lg">
+	            	<p class="card-text d-flex"><span> [[${cityOne.cityName}]] | [[${cityTwo.cityName}]] | [[${#dates.format(checkIn, 'dd MMMM, yy')}]] </span> 
+						<button id="btnModify" class="ps-4" style="width: fit-content;">
+							<i class="fa fa-solid fa-pen-to-square"></i>
+						</button></p>
+				</div>
+				<div class="bg-white p-4 radius-8 text-center hide-mobile btndeactive">
+	            	<p class="card-text"><span> [[${cityOne.cityName}]] | [[${cityTwo.cityName}]] </span></p>
+	            	<p class="card-text"><span> [[${#dates.format(checkIn, 'dd MMM, yy')}]] </span></p>
+				</div>
+			</div>
+        </div>
+        <div class="dot-overlay"></div>
+    </section>
+    <!-- BreadCrumb Ends --> 
+    
   
   <div th:replace="bus/search/bus-result-fragment :: bus-search-result"></div>
   
@@ -48,10 +100,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 		   </div>
 	   </div>
    </div>
- 
-    <div class="media-hide">
-     	<footer th:replace="fragments :: page_footer"></footer>
-	</div>
+
+ 	<footer th:replace="fragments :: page_footer('tag')"></footer>
 	
  <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>

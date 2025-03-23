@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+		<!-- dynamic head starts -->
 <head>
-	<head th:replace="fragments :: page_head('Settings page', 'tag')"></head>
+	<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Settings page', 'tag')"></head>
 	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
 	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
 </head>
-<body>
 
-	<div class="container-fluid">
-		<div th:replace="navigation :: nav_menu"></div>
-		
+		<!-- dynamic head ends -->
+
+
+<body>
+	<div class="main-wrapper">
+
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
+
+        <!-- sidebar Ends -->
+	
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
+
+		    <div th:replace="navigation :: nav_profile"></div>
+
+			<!-- navbar Ends -->
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+
 		<div>
 			<h1 class="text-center m-3">Site Settings</h1>
 		</div>
@@ -38,7 +62,10 @@
 					<a class="nav-link" data-bs-toggle="tab" href="#paymentGateway" role="tab">Payment Gateway</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" data-bs-toggle="tab" href="#apiService" role="tab">API Service</a>
+					<a class="nav-link" data-bs-toggle="tab" href="#apiService1" role="tab">API Service 1</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#apiService2" role="tab">API Service 2</a>
 				</li>
 			</ul>
 			
@@ -61,8 +88,11 @@
 				<div class="tab-pane p-3" id="paymentGateway" role="tabpanel">
 					<div th:replace="settings/payment-fragments :: content"></div>
 				</div>
-				<div class="tab-pane p-3" id="apiService" role="tabpanel">
-					<div th:replace="settings/api-service-fragments :: content"></div>
+				<div class="tab-pane p-3" id="apiService1" role="tabpanel">
+					<div th:replace="settings/api-service-fragments1 :: content"></div>
+				</div>
+				<div class="tab-pane p-3" id="apiService2" role="tabpanel">
+					<div th:replace="settings/api-service-fragments2 :: content"></div>
 				</div>
 			</div>
 		</div>
@@ -73,9 +103,25 @@
 				</div>
 			</div>
 		</div>
+
+
+
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
 		
-		<div th:replace="fragments :: footer"></div>
+		</div>
 	</div>
+
 	<script type="text/javascript" th:src="@{/js/states_setting.js}"></script>
 	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 	<script type="text/javascript" th:src="@{/js/countries_setting.js}"></script>
@@ -84,10 +130,9 @@
 	sizeScale = "MB";
 	
 	contextPath = "[[@{/}]]";
-	var csrfHeaderName = "[[${_csrf.headerName}]]";
-	var csrfValue = "[[${_csrf.token}]]";
+	
 	
 	</script>
-</body>
 
-</html>
+</body>
+</html>    

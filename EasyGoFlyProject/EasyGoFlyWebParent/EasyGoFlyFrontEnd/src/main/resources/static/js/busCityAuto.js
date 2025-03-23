@@ -45,6 +45,34 @@ function autocomplete(inp, arr, ids) {
         }
       }
       
+      for (i = 0; i < ids.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (ids[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+		  var z = "";
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong><i style='padding: 0 10px; color: orange; font-size: 18px; padding-top: 5px;' class='fa fa-solid fa-location-dot'></i>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<div style='display: flex; flex-direction: column; justify-content: space-around; border-bottom: 1px solid grey; padding-bottom: 5px;'>" + 
+          				"<p style='margin: 0; margin-left: 10px; font-size: 14px; color: #959595;'> <i style='font-size: 12px;' class='fa fa-solid fa-city'></i> " + ids[i] + 
+          				" &nbsp;<i style='font-size: 12px;' class='fa fa-regular fa-address-card'></i> </p>";
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          b.innerHTML += "</div>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+      
   });
   
   // AIzaSyCRonhEi8urW3KMg28cHSy9y-87_AhgkLo

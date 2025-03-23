@@ -9,7 +9,7 @@
      //CACHE JQUERY OBJECTS
       $("#status").fadeOut();
       $("#preloader").delay(200).fadeOut("slow");
-      $("body").delay(200).css({ "overflow": "visible" });
+      $("body").delay(200).css({ "overflow": "visible" , "overflow-x": "hidden" });
 
       
       /* Init Wow Js */
@@ -37,8 +37,8 @@
 
      // Range sliders activation
      $(".range-slider-ui").each(function() {
-         var minRangeValue = $(this).attr('data-min');
-         var maxRangeValue = $(this).attr('data-max');
+         var minRangeValue = parseInt($(this).attr('data-min'));
+         var maxRangeValue = parseInt($(this).attr('data-max'));
          var minName = $(this).attr('data-min-name');
          var maxName = $(this).attr('data-max-name');
          var unit = $(this).attr('data-unit');
@@ -51,8 +51,8 @@
                  event = event;
                  var currentMin = parseInt(ui.values[0]);
                  var currentMax = parseInt(ui.values[1]);
-                 $(this).children(".min-value").text(currentMin + " " + unit);
-                 $(this).children(".max-value").text(currentMax + " " + unit);
+                 $(this).children(".min-value").text(unit + " " + currentMin);
+                 $(this).children(".max-value").text(unit + " " + currentMax);
                  $(this).children(".current-min").val(currentMin);
                  $(this).children(".current-max").val(currentMax);
              }
@@ -167,7 +167,7 @@
 
      $('.side-slider').slick({
          infinite: true,
-         slidesToShow: 6,
+         slidesToShow: 10,
          slidesToScroll: 1,
          arrows: false,
          rows:0,
@@ -178,26 +178,26 @@
           responsive: [{
              breakpoint: 1000,
              settings: {
-                 slidesToShow: 3
+                 slidesToShow: 6
              }
          }, 
          {
              breakpoint: 811,
              settings: {
-                 slidesToShow: 2
+                 slidesToShow: 5
             }
          }, 
          {
              breakpoint: 500,
              settings: {
-                 slidesToShow: 1
+                 slidesToShow: 4
              }
          }]
      });
      
      $('.side-slider-mobile').slick({
          infinite: true,
-         slidesToShow: 6,
+         slidesToShow: 10,
          slidesToScroll: 1,
          arrows: false,
          rows:0,
@@ -208,19 +208,19 @@
           responsive: [{
              breakpoint: 1000,
              settings: {
-                 slidesToShow: 3
+                 slidesToShow: 7
              }
          }, 
          {
              breakpoint: 811,
              settings: {
-                 slidesToShow: 3
+                 slidesToShow: 6
             }
          }, 
          {
              breakpoint: 500,
              settings: {
-                 slidesToShow: 2
+                 slidesToShow: 3
              }
          }]
      });
@@ -238,19 +238,19 @@
          responsive: [{
              breakpoint: 1000,
              settings: {
-                 slidesToShow: 4
+                 slidesToShow: 8
              }
          }, 
          {
              breakpoint: 600,
              settings: {
-                 slidesToShow: 3
+                 slidesToShow: 6
             }
          }, 
          {
              breakpoint: 500,
              settings: {
-                 slidesToShow: 2
+                 slidesToShow: 5
              }
          }]
      });
@@ -647,3 +647,27 @@ function convertToInt(str) {
 	return parseInt(arr[0]);
 }
 
+	/*================================================================
+          ** Calender tools
+  =================================================================*/
+
+function calenderViewMob(input) {
+	var today = getTodayISTFormatted();
+	$(input).attr('min', today);
+}
+
+function calenderOnchangeMob(input, returnDate) {
+	$(returnDate).attr('min', $(input).val())
+}
+
+function getTodayISTFormatted() {
+    let now = new Date();
+    let istOffset = 5.5 * 60 * 60 * 1000; // IST Offset in milliseconds
+    let istDate = new Date(now.getTime() + istOffset);
+
+    let yyyy = istDate.getUTCFullYear();
+    let mm = String(istDate.getUTCMonth() + 1).padStart(2, "0");
+    let dd = String(istDate.getUTCDate()).padStart(2, "0");
+
+    return `${yyyy}-${mm}-${dd}`;
+}

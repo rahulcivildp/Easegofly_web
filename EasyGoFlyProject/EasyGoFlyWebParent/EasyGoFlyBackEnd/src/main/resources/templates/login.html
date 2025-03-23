@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
-<title>Login - Shopping Admin Control Panel</title>
 
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}">
-<script type="text/javascript"
-	th:src="@{/webjars/jquery/3.6.1/jquery.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>
-<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
-</head>
+		<!-- dynamic head starts -->
+
+<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Login page', 'none')"></head>
+
+		<!-- dynamic head ends -->
+
+
 <body>
-	<div class="container-fluid text-center">
-		<div style="justify-content: center; align-items: center; display: flex;">
+	<div class="main-wrapper">
+
+	
+		<div class="page-wrapper" style="width: 100%; margin: 0;">
+					
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+
+<div style="justify-content: center; align-items: center; display: flex;">
 			<a class="navbar-brand" th:href="@{/}"> 
 				<div class="row">
 					<div class="col">
@@ -57,11 +62,27 @@
 		</form>
 		<br>
 		
-		<h5 style="margin: 0;"><a class="signup_a">Sign up</a>  if not registered.</h5>
+		<h5 style="margin: 0; text-align: center;"><a class="signup_a">Sign up</a>  if not registered.</h5>
 		
 <br><br><br><br><br>
-		<div th:replace="fragments :: footer"></div>
+
+
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
+		
+		</div>
 	</div>
 
+
 </body>
-</html>
+</html>    

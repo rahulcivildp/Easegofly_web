@@ -260,7 +260,7 @@ public class ProductDetailsController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, 
 			@AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, 
-			CartItem cartItem ) throws IOException {
+			CartItem cartItem ) throws NumberFormatException, Exception {
 
 		String email; 
 		Customer customer; 
@@ -308,6 +308,26 @@ public class ProductDetailsController {
 				+ "_"+ search.getChildNum() + "_"+ search.getInfantNum() + "_"+ search.getAdultNum() + "_"+ strDate + "_"+ sort +"_"+ brand +"_"+ stop +"_"+ arrayPrice +"_"+ activeTime;
 			}
         	
+		} else if (flight.getMode().equals("MasterTravels")) {
+			Integer adltChld = search.getAdultNum() + search.getChildNum();
+			
+			StringBuilder responseBodyFareQuote = onlineFlightService.apiMasterFareQuote(Integer.parseInt(flight.getResultIndex()), flight.getCraftType(), adltChld, search.getInfantNum(), search.getDate());
+        	
+            JSONObject jsonObj = new JSONObject(responseBodyFareQuote.toString());
+            System.out.println(jsonObj);
+            logService.generateLog(jsonObj.toString());
+            try {
+            	Integer totalSeatAvailable = Integer.parseInt(jsonObj.getJSONObject("data").get("available_seats").toString());
+            	Integer totalPayablePrice = Integer.parseInt(jsonObj.getJSONObject("data").get("total_payable_price").toString());
+            	
+
+    			model.addAttribute("totalSeatAvailable", totalSeatAvailable);
+    			model.addAttribute("totalPayablePrice", totalPayablePrice);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+            
 		} 
 		
 		model.addAttribute("listProductDetailsOnline", sHistoryController.listProductDetailsOnline);
@@ -347,7 +367,6 @@ public class ProductDetailsController {
 	public String filghtBookingSave(
 			@RequestParam(name = "timeRemaining") Integer timeRemaining,
 			@RequestParam(name = "flight_id") Integer flightId,
-			@RequestParam(name = "search_id") String searchId, 
 			@RequestParam(name = "adultNum") Integer adultNum,
 			@RequestParam(name = "childNum") Integer childNum,
 			@RequestParam(name = "infantNum") Integer infantNum,
@@ -360,34 +379,33 @@ public class ProductDetailsController {
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User oauthCustomer, Model model) throws ParseException {
 		Customer customer; 
 		CartItem cartItem = new CartItem();
-		double searchIddbl = Double.parseDouble(searchId);
-		Integer searchIdInt = (int) searchIddbl;
+		
 		timeRemainingProOne = timeRemaining;
 		if (loggedCustomer != null) {
 			customer = customerService.getByPhone(loggedCustomer.getUsername());
-			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			cartItem = travelerDetailsPart(sHistoryController.history.getId(), flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
 			
 			productService.updateDeviceInfo(productDetail, device, deviceInfo);
 			
-			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			return "redirect:/flight_booking" + sHistoryController.history.getId() + "&" + productDetail.getId() + "&" + cartItem.getId();
 			
 		} else if (oauthCustomer != null) {
 			customer = customerService.getByEmail(oauthCustomer.getEmail());
-			cartItem = travelerDetailsPart(searchIdInt, flightId, customer);
+			cartItem = travelerDetailsPart(sHistoryController.history.getId(), flightId, customer);
 			ProductDetail productDetail = cartItem.getProductDetail();
 			
 			productService.updateDeviceInfo(productDetail, device, deviceInfo);
 			
-			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			return "redirect:/flight_booking" + sHistoryController.history.getId() + "&" + productDetail.getId() + "&" + cartItem.getId();
 			
 		} else {
-			cartItem = travelerDetailsPartWithoutLogin(searchIdInt, flightId, sHistoryController.listProductDetailsOnline);
+			cartItem = travelerDetailsPartWithoutLogin(sHistoryController.history.getId(), flightId, sHistoryController.listProductDetailsInSearch);
 			ProductDetail productDetail = cartItem.getProductDetail();
 			
 			productService.updateDeviceInfo(productDetail, device, deviceInfo);
 
-			return "redirect:/flight_booking" + searchIdInt + "&" + productDetail.getId() + "&" + cartItem.getId();
+			return "redirect:/flight_booking" + sHistoryController.history.getId() + "&" + productDetail.getId() + "&" + cartItem.getId();
 		}
 		
 	}
@@ -632,6 +650,82 @@ public class ProductDetailsController {
 					searchService.updateSearchHistory(search, LastItemOnline);
 					
 					return LastItemOnline;
+				} else if (flightOnline.getMode() == "MasterTravels") {
+					
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flightOnline);
+					
+					String modeOnline = "MasterTravels";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking(customer);
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
+				} else if (flightOnline.getMode() == "AirIQ") {
+					
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flightOnline);
+					
+					String modeOnline = "AirIQ";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking(customer);
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
+					
+				} else if (flightOnline.getMode() == "Ease2fly") {
+					
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flightOnline);
+					
+					String modeOnline = "Ease2fly";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking(customer);
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
 				}
 				
 			}
@@ -642,6 +736,14 @@ public class ProductDetailsController {
 	
 	public CartItem travelerDetailsPartWithoutLogin(Integer searchId, Integer flightId, List<ProductDetail> flightList) {
 		ProductDetail flight = null;
+
+	    City cityOneFound = cityRepo.getCityByName(sHistoryController.history.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByName(sHistoryController.history.getCityTwo());
+
+		searchId = sHistoryController.saveHistoryPartWithouLogin(cityOneFound.getCode(), cityTwoFound.getCode(), sHistoryController.history.getDate(), sHistoryController.history.getReturnDate(), sHistoryController.history.getJourneyClass(), sHistoryController.history.getTripType(), sHistoryController.history.getAdultNum(), sHistoryController.history.getChildNum(), sHistoryController.history.getInfantNum());
+		
+		sHistoryController.history.setId(searchId);
+		
 		SearchHistory search = searchRepo.findById(searchId).get();
 		
 		for (ProductDetail flightOnline : flightList) {
@@ -703,6 +805,82 @@ public class ProductDetailsController {
 					
 					return LastItem;
 					
+				} else if (flightOnline.getMode() == "MasterTravels") {
+					
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flightOnline);
+					
+					String modeOnline = "MasterTravels";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking();
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
+				} else if (flightOnline.getMode() == "AirIQ") {
+					
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flightOnline);
+					
+					String modeOnline = "AirIQ";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking();
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
+					
+				} else if (flightOnline.getMode() == "Ease2fly") {
+					
+					ProductDetail newFlightOnlineSaved = productDetailCrudRepo.save(flightOnline);
+					
+					String modeOnline = "Ease2fly";
+					ProductDetail newFlightOnline  = flightRepo.findProductDetailByIdMode(newFlightOnlineSaved.getId(), modeOnline);
+					
+					newFlightOnline.addBooking();
+					productService.saveCartItem(newFlightOnline);
+					
+					ProductDetail savedCartOnline = productService.saveCartItem(newFlightOnline);
+					List<CartItem> savedCartItemProductOnline = savedCartOnline.getCartItems();
+					for (CartItem cartItem : savedCartItemProductOnline) {
+						cartItem.setCartMode("online");
+						cartRepo.save(cartItem);
+					}
+					CartItem LastItemOnline = savedCartItemProductOnline.get(savedCartItemProductOnline.size() - 1);
+					float totalAdultPriceOnline = (newFlightOnline.getPriceADT() + newFlightOnline.getMarkupADT()) * (search.getAdultNum() + search.getChildNum());
+					float totalInfantPriceOnline = (newFlightOnline.getPriceINF() + newFlightOnline.getMarkupINF()) * search.getInfantNum();
+					double totalPriceOnline = totalAdultPriceOnline + totalInfantPriceOnline;
+					
+					cartService.updateTotalPrice(LastItemOnline, totalPriceOnline);
+					searchService.updateSearchHistory(search, LastItemOnline);
+					
+					return LastItemOnline;
 				}
 				
 			}

@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "product_details")
@@ -117,6 +118,9 @@ public class ProductDetail {
 
 	@Lob
 	private String airlineRemarks;
+
+	@Column(nullable=true, name = "grand_total")
+	private String grandTotal;
 	
 	private String mode;
 	
@@ -128,7 +132,7 @@ public class ProductDetail {
 	private Product product;
 	
 	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnore
+	@JsonManagedReference
 	private List<Stop> stops = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
@@ -236,7 +240,7 @@ public class ProductDetail {
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
 			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
 			float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, String journeyClass, 
-			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, Product product, String craftType, String airlineLogo) {
+			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, Product product, String craftType, String airlineLogo, String grandTotal) {
 		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;
@@ -272,6 +276,7 @@ public class ProductDetail {
 		this.device = device;
 		this.deviceDescription = deviceDescription;
 		this.airlineLogo = airlineLogo;
+		this.grandTotal = grandTotal;
 	}
 	
 	public ProductDetail(String pnr, String totalSeats, String uploadSeats, String flightNum, Date date, String depTime,
@@ -492,6 +497,14 @@ public class ProductDetail {
 
 	public int getStopNum() {
 		return stopNum;
+	}
+
+	public String getGrandTotal() {
+		return grandTotal;
+	}
+
+	public void setGrandTotal(String grandTotal) {
+		this.grandTotal = grandTotal;
 	}
 
 	public String getBrand() {

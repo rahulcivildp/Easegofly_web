@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="fragments :: page_head('Welcome to Shopeme Admin home page', 'none')"></head>
+
+		<!-- dynamic head starts -->
+
+<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Conversation page', 'none')"></head>
+
+		<!-- dynamic head ends -->
+
 <style>
 .modal_chat_style {
 	text-align: start;
@@ -35,11 +41,32 @@
     overflow-x: hidden;
 }
 </style>
+
 <body>
-	<script type="text/javascript" th:src="@{/js/common.js}"></script>
-	<div th:replace="navigation :: nav_menu"></div>
-	<div class="container-fluid" style="width: 90%; margin-top: 8px;">
-		
+	<div class="main-wrapper">
+
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
+
+        <!-- sidebar Ends -->
+	
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
+
+		    <div th:replace="navigation :: nav_profile"></div>
+
+			<!-- navbar Ends -->
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+
+
+	
 	<div class="msg_outer_div row">
 		<h4 class="modal-title col-md-11 col-9"><span style="font-weight: 400; font-size: 20px;">[[${request.subject}]]</span></h4>
 		<div class="col-3 col-md-1" style="padding: 0;">
@@ -74,9 +101,23 @@
 			</form>
 		</div>
 	</div>
-</div>
 
-</body>
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
+		
+		</div>
+	</div>
+
 <script type="text/javascript">
 contextPath = "[[@{/}]]";
 
@@ -90,4 +131,5 @@ $("#reload_page").click(function(){
 })
 
 </script>
-</html>
+</body>
+</html>    

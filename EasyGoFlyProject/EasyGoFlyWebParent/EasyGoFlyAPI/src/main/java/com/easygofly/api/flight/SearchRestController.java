@@ -1,8 +1,6 @@
 package com.easygofly.api.flight;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,13 +72,22 @@ public class SearchRestController {
         
         List<SearchHistory> historyList = existingUser.getSearchHistory();
         List<SearchHistory> historyThree = new ArrayList<SearchHistory>();
-        if (historyList.size() > 0) {
-            historyThree.add(historyList.get(historyList.size() - 1));
-        } else if (historyList.size() > 1) {
-            historyThree.add(historyList.get(historyList.size() - 2));
-		} else if (historyList.size() > 2) {
+
+        if (historyList.size() >= 4) {
+	        historyThree.add(historyList.get(historyList.size() - 1));
+	        historyThree.add(historyList.get(historyList.size() - 2));
 	        historyThree.add(historyList.get(historyList.size() - 3));
-		}
+	        historyThree.add(historyList.get(historyList.size() - 4));
+		} else if (historyList.size() == 3) {
+	        historyThree.add(historyList.get(historyList.size() - 1));
+	        historyThree.add(historyList.get(historyList.size() - 2));
+	        historyThree.add(historyList.get(historyList.size() - 3));
+		} else if (historyList.size() == 2) {
+	        historyThree.add(historyList.get(historyList.size() - 1));
+	        historyThree.add(historyList.get(historyList.size() - 2));
+        } else if (historyList.size() == 1) {
+	        historyThree.add(historyList.get(historyList.size() - 1));
+		} 
         
 		List<String> strHistoryList = new ArrayList<String>();
 		
@@ -248,12 +255,25 @@ public class SearchRestController {
 		}
         
         Date origin = new SimpleDateFormat("yyyy-MM-dd").parse(searchOneway.preferredDepartureTime);
-		
-        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
-
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
         
-        StringBuilder responseBody = onlineFlightService.apiOnlineSearchMod(connectionSearch, searchOneway.origin, searchOneway.destination, searchOneway.adultCount, searchOneway.childCount, searchOneway.infantCount, origin);
+        StringBuilder responseBody = onlineFlightService.apiOnlineSearchMod(searchOneway.origin, searchOneway.destination, searchOneway.adultCount, searchOneway.childCount, searchOneway.infantCount, origin);
+
+        return responseBody.toString();
+    }
+	
+	@PostMapping("/api/flight/tbo-search/calendar-fare")
+    public String calendarFareSearchTBO(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        SearchOnewayOfflineRequest searchOneway = new ObjectMapper().readValue(request.getInputStream(), SearchOnewayOfflineRequest.class);
+        
+        if (searchOneway.journey_class.equals("1")) {
+			searchOneway.setJourney_class("Economy");
+		}
+        
+        Date origin = new SimpleDateFormat("yyyy-MM-dd").parse(searchOneway.preferredDepartureTime);
+        
+        StringBuilder responseBody = onlineFlightService.apiOnlineCalendarFare(searchOneway.origin, searchOneway.destination, origin);
 
         return responseBody.toString();
     }

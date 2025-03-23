@@ -26,6 +26,7 @@ public class OnlineBusService {
 	public String traceId = "";
 	public String resultIndex = "";
 
+
 	public int apiOnlineSearchBus(StringBuilder responseBody, String cityId1, String cityId2, Date date)
 			throws IOException {
 
@@ -36,12 +37,12 @@ public class OnlineBusService {
 		String strDate = dateFormat.format(date);
 
 		// Create URL object with the API end-point
-        URL urlSearch = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Search/");
+//        URL urlSearch = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Search/");
 
-//        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Search");
+        URL url = new URL(apiServiceSettingBag.getBusURL() + "/rest/Search");
 
         // Open a connection
-        HttpURLConnection connection = (HttpURLConnection) urlSearch.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         
         // Set the request method to POST
         connection.setRequestMethod("POST");
@@ -361,4 +362,6 @@ public class OnlineBusService {
         
 		return responseCode;
 	}
+
+
 }

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+		<!-- dynamic head starts -->
+
+<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Driver Update page', 'none')"></head>
+
+		<!-- dynamic head ends -->
+
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    </style>
+
+<body>
+	<div class="main-wrapper">
+
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
+
+        <!-- sidebar Ends -->
+	
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
+
+		    <div th:replace="navigation :: nav_profile"></div>
+
+			<!-- navbar Ends -->
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+<div class="bg-light d-flex align-items-center justify-content-center min-vh-100 p-4">
+
+		
+	
+	<div class="bg-white p-4 rounded shadow-lg w-100" style="max-width: 1400px;">
+        <h2 class="text-center text-primary mb-4">Driver & Cab Update</h2>
+        
+         <form th:action="@{/drivers/update_driver}" method="POST" enctype="multipart/form-data">
+			<input type="hidden" name="driverId" th:value="${driver.id}">
+			<input type="hidden" name="cabId" th:value="${driver.cab.id}">
+			 
+            <!-- Driver Card -->
+            <div class="card mb-3">
+				<div class="card-header bg-info text-white">Upload Pictures</div>
+				 <div class="card-body">
+					 <div class="row">
+						<div class="col-md-6 col-12 form-group">
+							<label class="form-label">Driver Picture:</label>
+							<input type="hidden" name="driverImage">
+							<input type="file" name="image" id="fileImage" accept="image/png, image/jpeg" class="mb-2"/>
+							<img class="img-thumbnail img-fluid" id="thumbnail" th:src="@{${driver.photosImagePath}}" alt="Photo Preview" style="max-width: 25% !important;"/> 
+						</div>
+						<div class="col-md-6 col-12 form-group">
+							<label class="form-label">Cab Picture:</label>
+							<input type="hidden" name="cabImage">
+							<input type="file" name="cabImg" id="cabImgId" accept="image/png, image/jpeg" class="mb-2"/>
+							<img class="img-thumbnail img-fluid" id="cabimageShow" th:src="@{${driver.cab.photosImagePath}}" alt="Photo Preview" style="max-width: 25% !important;"/> 
+						</div>
+					 </div>
+				 </div>
+			</div>
+            <!-- Driver Card -->
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">Driver Information</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Name:</label> <input type="text" name="driverName" placeholder="Enter Driver Name" class="form-control" th:value="${driver.name}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Rating:</label> <input type="number" name="rating" placeholder="Enter Rating" step="0.1" th:value="${driver.rating}" class="form-control" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Experience (Years):</label> <input type="number" name="experience" placeholder="Enter Experience" th:value="${driver.experience}" class="form-control" required></div>
+                        
+			
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Location:</label> <input type="text" name="location" placeholder="Enter Location" class="form-control" th:value="${driver.location}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Contact:</label> <input type="tel" name="contact" placeholder="Enter Contact Number" class="form-control" th:value="${driver.contact}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Covering Distance (km):</label> <input type="number" name="coveringDistance" placeholder="Enter Covering Distance" class="form-control" th:value="${driver.coveringDistance}" required></div>
+                        <div class="col-md-6 col-sm-6 col-12 form-group"><label class="form-label">Latitude:</label> <input type="text" name="latitude" placeholder="Enter Latitude" class="form-control" th:value="${driver.latitude}" ></div>
+                        <div class="col-md-6 col-sm-6 col-12 form-group"><label class="form-label">Longitude:</label> <input type="text" name="longitude" placeholder="Enter Longitude" class="form-control" th:value="${driver.longitude}" ></div>
+                        <div class="col-md-12 col-sm-12 col-12 form-group"><label class="form-label">Address:</label> <input type="text" name="address" placeholder="Enter Address" class="form-control" th:value="${driver.address}" required></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cab Card -->
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">Cab Information</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Name:</label> <input type="text" name="cabName" placeholder="Enter Cab Name" class="form-control" th:value="${driver.cab.name}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Type:</label> <input type="text" name="type" placeholder="Enter Cab Type" class="form-control" th:value="${driver.cab.type}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Seating:</label> <input type="number" name="seating" placeholder="Enter Seating Capacity" class="form-control" th:value="${driver.cab.seating}" required></div> 
+			
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Booking Fare:</label> <input type="number" name="bookingFare" placeholder="Enter Booking Fare" step="0.1" class="form-control" th:value="${driver.cab.bookingFare}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group">
+                            <label class="form-label">Fuel Type:</label>
+                            <select name="fuelType" class="form-control" th:value="${driver.cab.fuelType}" required>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Electric">Electric</option>
+                                <option value="Hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Color:</label> <input type="text" name="color" placeholder="Enter Color" class="form-control" th:value="${driver.cab.color}" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group"><label class="form-label">Max Speed (km/h):</label> <input type="number" name="maxSpeed" placeholder="Enter Max Speed" class="form-control" th:value="${driver.cab.maxSpeed}" maxlength="3" required></div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group">
+                            <label class="form-label">Air Conditioning:</label>
+                            <select name="airConditioning" class="form-control" th:value="${driver.cab.airConditioning}" required>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-12 form-group">
+                            <label class="form-label">WiFi:</label>
+                            <select name="wifi" class="form-control" th:value="${driver.cab.name}" required>
+                                <option value="Available">Available</option>
+                                <option value="Not Available">Not Available</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 form-group"><label class="form-label">License:</label> <input type="text" name="license" placeholder="Enter License Number" class="form-control" th:value="${driver.cab.license}" required></div>
+                        <div class="col-md-6 col-sm-6 col-12 form-group"><label class="form-label">Features:</label> <input type="text" name="features" placeholder="Enter Features" class="form-control" th:value="${driver.cab.features}" required></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+
+    </div>
+	</div>
+
+
+
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
+		
+		</div>
+	</div>
+	
+<script type="text/javascript">
+	
+    onUploadImage("fileImage", "thumbnail");   // Driver Image
+    onUploadImage("cabImgId", "cabimageShow");   // Cab Image
+	
+	onChangeImage('#fileImage', 1024);
+	onChangeImage('#cabImg', 1024);
+</script>
+
+</body>
+</html>    

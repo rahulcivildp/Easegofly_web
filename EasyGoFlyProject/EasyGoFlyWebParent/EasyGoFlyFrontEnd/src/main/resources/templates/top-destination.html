@@ -16,11 +16,11 @@
 	                <h2 class="mb-1">Explore <span class="theme">Top Destinations</span></h2>
 	            </div>
 	            <div class="d-flex justify-content-start mb-2 ms-4">
-	                <p><button type="button" class="m-2 carousalbtn theme active" data-bs-target="#offersController" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" onclick="return btnCaousalChange(this);">All Offers</button></p>
-	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersController" data-bs-slide-to="1" aria-label="Slide 2" onclick="return btnCaousalChange(this);">Flight</button></p>
-	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersController" data-bs-slide-to="2" aria-label="Slide 3" onclick="return btnCaousalChange(this);">Bus</button></p>
-	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersController" data-bs-slide-to="3" aria-label="Slide 4" onclick="return btnCaousalChange(this);">Hotel</button></p>
-	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersController" data-bs-slide-to="4" aria-label="Slide 5" onclick="return btnCaousalChange(this);">Holidays</button></p>
+	                <p><button type="button" class="m-2 carousalbtn theme active" data-bs-target="#offersControllerLG" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1" onclick="return btnCaousalChange(this);">All Offers</button></p>
+	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersControllerLG" data-bs-slide-to="1" aria-label="Slide 2" onclick="return btnCaousalChange(this);">Flight</button></p>
+	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersControllerLG" data-bs-slide-to="2" aria-label="Slide 3" onclick="return btnCaousalChange(this);">Bus</button></p>
+	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersControllerLG" data-bs-slide-to="3" aria-label="Slide 4" onclick="return btnCaousalChange(this);">Hotel</button></p>
+	                <p><button type="button" class="m-2 carousalbtn" data-bs-target="#offersControllerLG" data-bs-slide-to="4" aria-label="Slide 5" onclick="return btnCaousalChange(this);">Holidays</button></p>
 	            </div>
 	            
 	            
@@ -28,7 +28,7 @@
 	            
 	            
 	            
-	            <div id="offersController" class="carousel slide" data-bs-ride="">
+	            <div id="offersControllerLG" class="carousel slide" data-bs-ride="false">
 				  <div class="carousel-inner">
 				    <div class="carousel-item active">
 			            <div class="row align-items-center">
@@ -36,22 +36,22 @@
 			                    <div class="trend-item1">
 			                        <div class="trend-image position-relative rounded">
 			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100">
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-												
-				                                <h3 class="mb-1"><a href="flight-grid.html" class="white">Instanbul to Paris</a></h3>
-				                                <p class="mb-3">Roundtrip | 09 Jun 2022 - 16 Jun 2022</p>
-				
-				                                <div class="entry-meta d-flex align-items-center justify-content-between">
-				                                    <div class="entry-author d-flex align-items-center">
-				                                        <p class="mb-0">From<span class="theme fw-bold fs-5"> $310.00</span> | Per
-				                                            person</p>
-				                                    </div>
+			                            <a th:href="@{/bangalore_view}">
+											<div class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                <div class="trend-content-title">
+													
+					                                <h3 class="mb-1 white">Kolkata to Bangalore</h3>
+					
+					                                <div class="entry-meta d-flex align-items-center justify-content-between">
+					                                    <div class="entry-author d-flex align-items-center">
+					                                        <small class="mb-0">From Approx.<span class="theme fw-bold fs-5"> [[${CURRENCY_SYMBOL}]]3000.00</span> | Per
+					                                            person</small>
+					                                    </div>
+					                                </div>
 				                                </div>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
+				                                <span class="white bg-theme p-1 px-2 rounded">2 Hours</span>
+			                            	</div>
+			                            </a>
 			                            <div class="color-overlay"></div>
 			                        </div>
 			                    </div>
@@ -62,15 +62,16 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/haridwar_view}">
+				                                    <div class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Uttarakhand | India</h5>
+				                                            <h3 class="mb-0 white">Haridwar</h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]15000.00</span> | Per person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">5h 30m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -79,15 +80,17 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/jammu_view}">
+				                                    <div class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Jammu | India</h5>
+				                                            <h3 class="mb-0 white">Jammu </h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]8000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 30m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -96,15 +99,17 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/rishikesh_view}">
+				                                    <div class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Dehradun | India</h5>
+				                                            <h3 class="mb-0 white">Rishikesh</h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]4000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">2h 15m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -113,15 +118,17 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/kerala_view}">
+				                                    <div class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Kerala | India</h5>
+				                                            <h3 class="mb-0 white">Kerala</h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]5000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 5m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -138,14 +145,23 @@
 			                    <div class="trend-item1">
 			                        <div class="trend-image position-relative rounded">
 			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100">
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
+			                            <a th:href="@{/bangalore_view}">
+				                            <div
+				                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                <div class="trend-content-title">
+													
+					                                <h3 class="mb-1 white">Kolkata to Bangalore</h3>
+					
+					                                <div class="entry-meta d-flex align-items-center justify-content-between">
+					                                    <div class="entry-author d-flex align-items-center">
+					                                        <small class="mb-0">From Approx.<span class="theme fw-bold fs-5"> [[${CURRENCY_SYMBOL}]]3000.00</span> | Per
+					                                            person</small>
+					                                    </div>
+					                                </div>
+				                                </div>
+				                                <span class="white bg-theme p-1 px-2 rounded">2 Hours</span>
+				                            </div>
+			                            </a>
 			                            <div class="color-overlay"></div>
 			                        </div>
 			                    </div>
@@ -156,15 +172,18 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/haridwar_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Uttarakhand | India</h5>
+				                                            <h3 class="mb-0 white">Haridwar</h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]15000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">5h 30m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -173,15 +192,18 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/jammu_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Jammu | India</h5>
+				                                            <h3 class="mb-0 white">Jammu </h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]8000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 30m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -190,15 +212,18 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/rishikesh_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Dehradun | India</h5>
+				                                            <h3 class="mb-0 white">Rishikesh</h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]4000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">2h 15m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -207,15 +232,18 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative rounded">
 			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/kerala_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Kerala | India</h5>
+				                                            <h3 class="mb-0 white">Kerala</h3>
+							                                <small class="mb-0 white">From Approx.<span class="theme fw-bold"> [[${CURRENCY_SYMBOL}]]5000.00</span> | Per
+							                                            person</small>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 5m Hours</span>
+				                                    </div>
+			                            		</a>
 			                                    <div class="color-overlay"></div>
 			                                </div>
 			                            </div>
@@ -226,283 +254,13 @@
 			            </div>
 				    </div>
 				    <div class="carousel-item">
-			            <div class="row align-items-center">
-			                <div class="col-lg-5 mb-4">
-			                    <div class="trend-item1">
-			                        <div class="trend-image position-relative rounded">
-			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100">
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
-			                            <div class="color-overlay"></div>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-lg-7">
-			                    <div class="row">
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			
-			            </div>
+			           
 				    </div>
 				    <div class="carousel-item">
-			            <div class="row align-items-center">
-			                <div class="col-lg-5 mb-4">
-			                    <div class="trend-item1">
-			                        <div class="trend-image position-relative rounded">
-			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100">
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
-			                            <div class="color-overlay"></div>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-lg-7">
-			                    <div class="row">
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			
-			            </div>
+			          
 				    </div>
 				    <div class="carousel-item">
-			            <div class="row align-items-center">
-			                <div class="col-lg-5 mb-4">
-			                    <div class="trend-item1">
-			                        <div class="trend-image position-relative rounded">
-			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100">
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
-			                            <div class="color-overlay"></div>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-lg-7">
-			                    <div class="row">
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative rounded">
-			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
-			                                    <div class="color-overlay"></div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			
-			            </div>
+			          
 				    </div>
 				  </div>
 				</div>
@@ -588,7 +346,7 @@
 	            
 	            
 	            
-	            <div id="offersControllerMobile" class="carousel slide" data-bs-ride="">
+	            <div id="offersControllerMobile" class="carousel slide" data-bs-ride="false">
 				  <div class="carousel-inner">
 				    <div class="w-100 carousel-item active">
 			            <div class="row align-items-center">
@@ -597,22 +355,24 @@
 			                        <div class="trend-image position-relative overflow-hidden radius-8">
 			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100" style="height: 350px;">
 			                            <div class="color-overlay"></div>
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-												
-				                                <h3 class="mb-1"><a href="flight-grid.html" class="white">Instanbul to Paris</a></h3>
-				                                <p class="mb-3">Roundtrip | 09 Jun 2022 - 16 Jun 2022</p>
-				
-				                                <div class="entry-meta d-flex align-items-center justify-content-between">
-				                                    <div class="entry-author d-flex align-items-center">
-				                                        <p class="mb-0">From<span class="theme fw-bold fs-5"> $310.00</span> | Per
-				                                            person</p>
-				                                    </div>
+			                            <a th:href="@{/bangalore_view}">
+				                            <div
+				                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                <div class="trend-content-title">
+													
+					                                <h3 class="mb-1 white">Kolkata to Bangalore</h3>
+					                                <p class="mb-3">Roundtrip</p>
+					
+					                                <div class="entry-meta d-flex align-items-center justify-content-between">
+					                                    <div class="entry-author d-flex align-items-center">
+					                                        <p class="mb-0">From approx<span class="theme fw-bold fs-5"> [[${CURRENCY_SYMBOL}]]5000.00</span> | Per
+					                                            person</p>
+					                                    </div>
+					                                </div>
 				                                </div>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
+				                                <span class="white bg-theme p-1 px-2 rounded">3h 5m Hours</span>
+				                            </div>
+			                            </a>
 			                        </div>
 			                    </div>
 			                </div>
@@ -623,15 +383,16 @@
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
 			                            		<div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/haridwar_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Uttarakhand | India</h5>
+				                                            <h3 class="mb-0 white">Haridwar</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">5h 30m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -639,16 +400,17 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
+			                           			<div class="color-overlay"></div>
+			                            		<a th:href="@{/jammu_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Jammu | India</h5>
+				                                            <h3 class="mb-0 white">Jammu</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 30m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -657,15 +419,16 @@
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
 			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/rishikesh_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Dehradun | India</h5>
+				                                            <h3 class="mb-0 white">Rishikesh</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">2h 15m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -674,15 +437,16 @@
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
 			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/kerala_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Kerala | India</h5>
+				                                            <h3 class="mb-0 white">Kerala</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 5m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -694,19 +458,29 @@
 				    </div>
 				    <div class="w-100 carousel-item">
 			            <div class="row align-items-center">
-			                <div class="col-12 mb-2">
+			                <div class="col-12 col-md-12 mb-2">
 			                    <div class="trend-item1">
 			                        <div class="trend-image position-relative overflow-hidden radius-8">
 			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100" style="height: 350px;">
-			                           	<div class="color-overlay"></div>
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
+			                            <div class="color-overlay"></div>
+			                            <a th:href="@{/bangalore_view}">
+				                            <div
+				                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                <div class="trend-content-title">
+													
+					                                <h3 class="mb-1 white">Kolkata to Bangalore</h3>
+					                                <p class="mb-3">Roundtrip</p>
+					
+					                                <div class="entry-meta d-flex align-items-center justify-content-between">
+					                                    <div class="entry-author d-flex align-items-center">
+					                                        <p class="mb-0">From approx<span class="theme fw-bold fs-5"> [[${CURRENCY_SYMBOL}]]5000.00</span> | Per
+					                                            person</p>
+					                                    </div>
+					                                </div>
+				                                </div>
+				                                <span class="white bg-theme p-1 px-2 rounded">3h 5m Hours</span>
+				                            </div>
+			                            </a>
 			                        </div>
 			                    </div>
 			                </div>
@@ -716,16 +490,17 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
+			                            		<div class="color-overlay"></div>
+			                            		<a th:href="@{/haridwar_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Uttarakhand | India</h5>
+				                                            <h3 class="mb-0 white">Haridwar</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">5h 30m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -733,16 +508,17 @@
 			                            <div class="trend-item1">
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
+			                           			<div class="color-overlay"></div>
+			                            		<a th:href="@{/jammu_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Jammu | India</h5>
+				                                            <h3 class="mb-0 white">Jammu</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 30m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -751,15 +527,16 @@
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
 			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/rishikesh_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Dehradun | India</h5>
+				                                            <h3 class="mb-0 white">Rishikesh</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">2h 15m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -768,15 +545,16 @@
 			                                <div class="trend-image position-relative overflow-hidden radius-8">
 			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
 			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
+			                            		<a th:href="@{/kerala_view}">
+				                                    <div
+				                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+				                                        <div class="trend-content-title">
+				                                            <h5 class="mb-0 theme1">Kerala | India</h5>
+				                                            <h3 class="mb-0 white">Kerala</h3>
+				                                        </div>
+				                                        <span class="white bg-theme p-1 px-2 rounded">3h 5m Hours</span>
+				                                    </div>
+			                                    </a>
 			                                </div>
 			                            </div>
 			                        </div>
@@ -786,283 +564,13 @@
 			            </div>
 				    </div>
 				    <div class="w-100 carousel-item">
-			            <div class="row align-items-center">
-			                <div class="col-12 mb-2">
-			                    <div class="trend-item1">
-			                        <div class="trend-image position-relative overflow-hidden radius-8">
-			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100" style="height: 350px;">
-			                           	<div class="color-overlay"></div>
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-12">
-			                    <div class="row">
-			                        <div class="col-6 mb-2">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6 mb-2">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			
-			            </div>
+			            
 				    </div>
 				    <div class="w-100 carousel-item">
-			            <div class="row align-items-center">
-			                <div class="col-12 mb-2">
-			                    <div class="trend-item1">
-			                        <div class="trend-image position-relative overflow-hidden radius-8">
-			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100" style="height: 350px;">
-			                           	<div class="color-overlay"></div>
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-12">
-			                    <div class="row">
-			                        <div class="col-6 mb-2">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6 mb-2">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			
-			            </div>
+			            
 				    </div>
 				    <div class="w-100 carousel-item">
-			            <div class="row align-items-center">
-			                <div class="col-12 mb-2">
-			                    <div class="trend-item1">
-			                        <div class="trend-image position-relative overflow-hidden radius-8">
-			                            <img th:src="@{/assets/images/flights/3f.jpg}" alt="image" class="w-100" style="height: 350px;">
-			                           	<div class="color-overlay"></div>
-			                            <div
-			                                class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                <div class="trend-content-title">
-			                                    <h5 class="mb-0"><a href="tour-grid.html" class="theme1">England</a></h5>
-			                                    <h3 class="mb-0 white">London</h3>
-			                                </div>
-			                                <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-12">
-			                    <div class="row">
-			                        <div class="col-6 mb-2">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/6f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Italy</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Caspian Valley</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">18 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6 mb-2">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/7f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Tokyo</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Japan</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">21 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/8f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Moscow</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">Russia</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">15 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                        <div class="col-6">
-			                            <div class="trend-item1">
-			                                <div class="trend-image position-relative overflow-hidden radius-8">
-			                                    <img th:src="@{/assets/images/flights/9f.jpg}" alt="image">
-			                           			 <div class="color-overlay"></div>
-			                                    <div
-			                                        class="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
-			                                        <div class="trend-content-title">
-			                                            <h5 class="mb-0"><a href="tour-grid.html" class="theme1">Florida</a>
-			                                            </h5>
-			                                            <h3 class="mb-0 white">America</h3>
-			                                        </div>
-			                                        <span class="white bg-theme p-1 px-2 rounded">32 Tours</span>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			
-			            </div>
+			            
 				    </div>
 				  </div>
 				</div>

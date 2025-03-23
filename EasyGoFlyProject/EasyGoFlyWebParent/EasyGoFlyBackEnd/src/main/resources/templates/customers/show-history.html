@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th=http://www.thymeleaf.org>
-<head>
-<head th:replace="fragments :: page_head('Recharge History Page', 'tag')"></head>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Easegofly Admin Recharge History page', 'none')"></head>
+
+		<!-- dynamic head ends -->
+		
 	<style type="text/css">
 		.rowSuccess {
 			    padding: 10px;
@@ -22,11 +25,28 @@
 		} 
 	
 	</style>
-</head>	
+
+
 <body>
-<script type="text/javascript" th:src="@{/js/common.js}"></script>
-	<div class="container-fluid">
-		<div th:replace="navigation :: nav_menu"></div>
+	<div class="main-wrapper">
+
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
+
+
+
+    <!-- sidebar Ends -->
+	
+		<div class="page-wrapper">
+					
+			<!-- navbar Starts -->
+
+		<div th:replace="navigation :: nav_profile"></div>
+			<!-- navbar Ends -->
+
+      <!-- Page Content Starts -->
+			<div class="page-content">
 
 <div class="container" style="border: 3px solid #848cea; border-radius: 8px; margin-bottom: 20px; margin-top: 30px; box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px; padding: 20px;">
 	<h2>Recharge History:</h2>
@@ -47,10 +67,26 @@
 	</th:block>
 </div>
  
-</div>
-</body>
 
-</html>	
+
+
+
+
+
+			</div>
+      <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		<div th:replace="fragments :: footer"></div>
+      <!-- footer Ends -->
+		
+		</div>
+	</div>
+
+
+</body>
+</html>    
  
 
 

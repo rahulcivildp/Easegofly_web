@@ -107,6 +107,10 @@
 											<th:block th:if="${param.otp == null}"><button type="submit" class="btn btn-primary" onclick="return loginbtnClick(this);" > Send OTP</button></th:block>
 											<th:block th:if="${param.otp != null}"><button type="submit" class="btn btn-primary" > Login</button></th:block>
 										</div>
+										
+										<div class="row mb-3" style="margin: 0 auto; margin-top: 40px;;"> 
+											<h5>Dont's have an account! Please <a th:href="@{/registration}" class="specialButton styleLinkHover styleLink" >Register</a> here.</h5>
+										</div>
 									</div>
 								</form>
 						</div>

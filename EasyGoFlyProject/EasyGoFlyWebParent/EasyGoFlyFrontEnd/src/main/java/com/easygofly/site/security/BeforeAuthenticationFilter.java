@@ -1,12 +1,9 @@
 package com.easygofly.site.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
@@ -72,19 +69,6 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
 //						e.printStackTrace();
 					}
 	        	}
-	    		
-	    		System.out.println("Attempt Authentication - Email: " + phone);
-	    		float spamScore = getGoogleRecaptchaScore();
-	    		
-	    		if (spamScore < 0.5) {
-	    			try {
-	                    customerService.updateCustomerByEmail(customer);
-	                    throw new InsufficientAuthenticationException("OTP");
-	                } catch (Exception ex) {
-	                    throw new AuthenticationServiceException(
-	                                "Error while sending OTP on Email.");
-	                }
-	    		}
 	    	}
 		} else {
 
@@ -96,29 +80,10 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	        		return super.attemptAuthentication(request, response);
 	        	}
 	    		
-	    		System.out.println("Attempt Authentication - phone: " + phone);
-	    		float spamScore = getGoogleRecaptchaScore();
-	    		
-	    		if (spamScore < 0.5) {
-	    			try {
-	                    customerService.updateCustomerByPhone(customer);
-	                    throw new InsufficientAuthenticationException("OTP");
-	                } catch (Exception ex) {
-	                    throw new AuthenticationServiceException(
-	                                "Error while sending OTP on Phone.");
-	                }
-	    		}
 	    	}
 		}
-    	 
-    	
-    	
-    	
+
 		return super.attemptAuthentication(request, response);
-    }
- 
-    private float getGoogleRecaptchaScore() {
-        return 0.43f;
     }
 
 }

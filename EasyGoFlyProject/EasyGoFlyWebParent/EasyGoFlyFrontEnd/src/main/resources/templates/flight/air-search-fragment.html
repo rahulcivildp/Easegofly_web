@@ -6,7 +6,7 @@
 	<!-- ======= Header ======= -->
 	<div th:fragment="page_banner(remove)" th:remove="${remove}">
 	    <div class="d-flex justify-content-start pb-2 search-tags" id="search-tags"></div>
-	    <div class="book-form position-absolute w-100 bg-white box-shadow p-4 pb-1 z-index1 rounded search-tag-menu" id="search-tag-menu">
+	    <div class="book-form bg-white box-shadow p-4 pb-1 z-index1 rounded search-tag-menu" id="search-tag-menu">
 			
 			<div class="row item-slider2" >
 			 
@@ -47,8 +47,8 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Depart</label>
-										<input type="date" name="date" class="form-control input_calender"
-											id="floatingInputDepurture" required>
+										<input type="date" name="date" class="form-control input_calender" onclick="return calenderViewMob(this);" onchange="return calenderOnchangeMob(this, '#floatingInputArrivalLG');"
+											id="datepicker" required>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -56,7 +56,7 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Return</label>
-	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrival">
+	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrivalLG">
 	                                </div>
 	                            </div>
 	                        </div>
@@ -69,10 +69,6 @@
 												<input type="hidden" name="something" id="passengerNum1" value="">
 												<h5 class="m-0 n-text w-100">Economy Pax 1</h5>
 											</button>
-											
-											
-											
-											
 										</div>
 	                                </div>
 	                            </div>
@@ -121,7 +117,7 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Depart</label>
-	                                    <input type="date" name="Depart" id="floatingInputDepurtureInter">
+	                                    <input type="date" name="Depart" id="floatingInputDepurtureInter" onclick="return calenderViewMob(this);" onchange="return calenderOnchangeMob(this, '#floatingInputArrivalInterLG');" required>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -129,7 +125,7 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Return</label>
-	                                    <input type="date" name="Return" id="floatingInputArrivalInter">
+	                                    <input type="date" name="Return" id="floatingInputArrivalInterLG">
 	                                </div>
 	                            </div>
 	                        </div>
@@ -232,7 +228,7 @@
 	                        <div class="col-lg mb-2">
 	                            <div class="form-group mb-0 text-center">
 	                                <label class="mb-3"></label>
-	                                <input type="submit" class="nir-btn w-100" id="submit" value="Search Now">
+	                                <input type="submit" class="nir-btn w-100" id="submitSearchForm" value="Search Now" onclick="return loginbtnClick(this);">
 	                            </div>
 	                        </div>
 	                    </div>
@@ -297,50 +293,18 @@
 		});
 	}
 </script>
-    
-<script>
-		
-	$("#floatingInputDepurture").click(function () {
-		calenderView($("#floatingInputDepurture"));
-	});
-	
-	$("#floatingInputArrival").click(function () {
-		calenderViewReturnDestination($("#floatingInputDepurture"), "floatingInputArrival");
-	});
-		
-	$("#floatingInputDepurtureInter").click(function () {
-		calenderView($("#floatingInputDepurtureInter"));
-	});
-	
-	$("#floatingInputArrivalInter").click(function () {
-		calenderViewReturnDestination($("#floatingInputDepurtureInter"), "floatingInputArrivalInter");
-	});
 
-	function calenderView(input) {
-		name = input.attr("name");
-		var today = new Date().toISOString().split('T')[0];
-		document.getElementsByName(name)[0].setAttribute('min', today);
-	}
 
-	function calenderViewReturnDestination(input, output) {
-		inputAttr = input.val();
-		if(inputAttr === "" ) {
-			var today = new Date().toISOString().split('T')[0];
-			document.getElementById(output).setAttribute('min', today);
-			return;
-		} else {
-			document.getElementById(output).setAttribute('min', inputAttr);
-			return;
-		}
-	}
-</script>
+
+
+
 	</div>
 	<!-- End Header -->
 	<!-- ======= Header ======= -->
 	
 	<div th:fragment="page_banner_mb(remove)" th:remove="${remove}">
 	    <div class="d-flex justify-content-start pb-2 search-mobile-tag position-relative" id="search-mobile-tag" style="z-index: 1;"></div>
-	    <div class="book-form w-100 bg-white box-shadow py-4 pb-1 z-index1 border radius-8 mb-2 search-tag-menu-mb">
+	    <div class="book-form w-100 bg-white box-shadow pt-4 pb-1 z-index1 border radius-8 mb-2 search-tag-menu-mb">
 			
 			<div class="row item-slider3">
 			  
@@ -353,7 +317,7 @@
 	                                    <label>Flying From</label>
 	                                    <input type="search" class="form-control hill1 input_styles" name="cityOne" id="cityOne" value="Bangalore"
 											placeholder="Depurture City" list="cityOneList"
-											oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" required>
+											oninput="checkCityCodeMatch(document.getElementById('cityTwo'))" onchange="showCalnedarFare()" required>
 										<datalist id="cityOneList">
 											<th:block th:each="city : ${cities}">
 												<option th:value="${city.cityName}">[[${city.code}]] - [[${city.name}]]</option>
@@ -367,7 +331,7 @@
 	                                <div class="input-box">
 	                                    <label>Flying To</label>
 										<input type="search" class="form-control hill2 input_styles" name="cityTwo" id="cityTwo" value="Kolkata"
-											placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" 
+											placeholder="Arrival City" list="cityTwoList" oninput="checkCityCodeMatch(this)" onchange="showCalnedarFare()"
 											required>
 										<datalist id="cityTwoList">
 											<th:block th:each="city : ${cities}">
@@ -381,8 +345,7 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Depart</label>
-										<input type="date" name="date" class="form-control input_calender"
-											id="floatingInputDepurture2" required>
+										<input type="date" name="date" class="form-control input_calender" onclick="return calenderViewMob(this);" onchange="return calenderOnchangeMob(this, '#floatingInputArrivalMOB2');" id="floatingInputDepurtureMOB2" required>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -390,14 +353,13 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Return</label>
-	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrival2">
+	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrivalMOB2">
 	                                </div>
 	                            </div>
 	                        </div>
-	                        <div class="col-lg mb-2">
+	                        <div class="col-6 mb-2">
 	                            <div class="form-group">
 	                                <div class="input-box">
-	                                    <label>Travelars</label>
 	                                    <div class="passanger_detail">
 											<button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="mobileDropdwon" data-bs-toggle="modal" data-bs-target="#travelerModalMobile" onclick="return toggleOverflowTraveler();">
 												<input type="hidden" name="something" id="passengerNum1" value="">
@@ -407,9 +369,9 @@
 	                                </div>
 	                            </div>
 	                        </div>
-	                        <div class="col-lg mb-2">
-	                            <div class="form-group mb-0 text-center pt-2">
-	                                <input type="submit" class="nir-btn w-100" id="submitbtn" value="Search Now" onclick="form.submit;">
+	                        <div class="col-6 mb-2 ">
+	                            <div class="form-group mb-0 text-center h-100">
+	                                <button type="submit" class="nir-btn w-100" id="submitbtn" onclick="form.submit;"><h5 class="m-0 n-text w-100 white">Search Now</h5></button>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -450,7 +412,7 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Depart</label>
-	                                    <input type="date" name="Depart" id="floatingInputDepurtureInter">
+	                                    <input type="date" name="Depart" onclick="return calenderViewMob(this);" onchange="return calenderOnchangeMob(this, '#floatingInputArrivalInterMOB');" >
 	                                </div>
 	                            </div>
 	                        </div>
@@ -458,14 +420,13 @@
 	                            <div class="form-group">
 	                                <div class="input-box">
 	                                    <label>Return</label>
-	                                    <input type="date" name="Return" id="floatingInputArrivalInter">
+	                                    <input type="date" name="Return" id="floatingInputArrivalInterMOB">
 	                                </div>
 	                            </div>
 	                        </div>
-	                        <div class="col-lg mb-2">
+	                        <div class="col-6 mb-2">
 	                            <div class="form-group">
 	                                <div class="input-box">
-	                                    <label>Travelars</label>
 	                                        <div class="passanger_detail">
 												<div class="dropdown">
 												  <button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"  onclick="return toggleOverflowTraveler();">
@@ -558,10 +519,9 @@
 	                                </div>
 	                            </div>
 	                        </div>
-	                        <div class="col-lg mb-2">
+	                        <div class="col-6 mb-2">
 	                            <div class="form-group mb-0 text-center">
-	                                <label class="mb-3"></label>
-	                                <input type="submit3" class="nir-btn w-100" id="submit" value="Search Now">
+	                                <button type="submit" class="nir-btn w-100" id="submit"><h5 class="m-0 n-text w-100 white">Search Now</h5></button>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -627,42 +587,6 @@
 	}
 </script>
     
-<script>
-		
-	$("#floatingInputDepurture2").click(function () {
-		calenderView($("#floatingInputDepurture2"));
-	});
-	
-	$("#floatingInputArrival2").click(function () {
-		calenderViewReturnDestination($("#floatingInputDepurture2"), "floatingInputArrival2");
-	});
-		
-	$("#floatingInputDepurtureInter").click(function () {
-		calenderView($("#floatingInputDepurtureInter"));
-	});
-	
-	$("#floatingInputArrivalInter").click(function () {
-		calenderViewReturnDestination($("#floatingInputDepurtureInter"), "floatingInputArrivalInter");
-	});
-
-	function calenderView(input) {
-		name = input.attr("name");
-		var today = new Date().toISOString().split('T')[0];
-		document.getElementsByName(name)[0].setAttribute('min', today);
-	}
-
-	function calenderViewReturnDestination(input, output) {
-		inputAttr = input.val();
-		if(inputAttr === "" ) {
-			var today = new Date().toISOString().split('T')[0];
-			document.getElementById(output).setAttribute('min', today);
-			return;
-		} else {
-			document.getElementById(output).setAttribute('min', inputAttr);
-			return;
-		}
-	}
-</script>
 	</div>
 	<!-- End Header -->		
 			

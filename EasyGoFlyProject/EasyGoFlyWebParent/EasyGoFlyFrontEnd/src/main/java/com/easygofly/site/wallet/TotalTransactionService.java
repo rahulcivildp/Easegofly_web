@@ -13,6 +13,7 @@ import com.easygofly.entity.Customer;
 import com.easygofly.entity.HotelOrder;
 import com.easygofly.entity.Order;
 import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.RideOrder;
 import com.easygofly.entity.TotalTransaction;
 
 @Service
@@ -45,6 +46,28 @@ public class TotalTransactionService {
 		transaction.setCustomer(customer);
 
 		System.out.println("...................................................3");
+		return transactionRepo.save(transaction);
+	}
+	
+	public TotalTransaction createTotalTransactionRide(Customer customer, double amount, boolean isWallet, boolean isZaakPay,  
+			List<RideOrder> rideOrders, Integer trnId, OrderStatus orderStatus) {
+		TotalTransaction transaction = new TotalTransaction();
+		Date date = new Date();
+	    DateFormat dateFormat = new SimpleDateFormat("ddMMyyyyhhmm");
+	    String formatedDate = dateFormat.format(date);
+
+		String orderId = "TRN"+ formatedDate + "C"+customer.getId();
+		
+		transaction.setAmount(amount);
+		transaction.setOrderId(orderId);
+		transaction.setCreatedTime(date);
+		transaction.setOrderStatus(orderStatus);
+		transaction.setWallet(isWallet);
+		transaction.setZaakPay(isZaakPay);
+		transaction.setTrnId(trnId);
+		transaction.setRideOrders(rideOrders);
+		transaction.setCustomer(customer);
+
 		return transactionRepo.save(transaction);
 	}
 }

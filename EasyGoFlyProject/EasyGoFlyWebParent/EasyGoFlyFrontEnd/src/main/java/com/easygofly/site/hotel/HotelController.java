@@ -91,8 +91,6 @@ public class HotelController {
 	public String viewHotelPage(Model model) {
 		cityFinder(model);
 		
-		hotelService.authenticationHotel(model);
-		
 		return "hotel/hotel";
 	}
 
@@ -262,15 +260,7 @@ public class HotelController {
 		
 		String arrayRoomGuest = arrRoomGuest.stream().map(val -> String.valueOf(val)).collect(Collectors.joining(",", "[", "]"));
 				
-		// Create URL object with the API end-point
-        URL urlSearch = new URL("http://api.tektravels.com/BookingEngineService_Hotel/hotelservice.svc/rest/GetHotelResult/");
-
-        // Open a connection
-        HttpURLConnection connectionSearch = (HttpURLConnection) urlSearch.openConnection();
-       
-        StringBuilder responseBodySearch = new StringBuilder();
-       
-		onlineHotelService.apiOnlineSearchHotel(connectionSearch, responseBodySearch, city.getCityId().toString(), noNights.toString(), noOfRooms, city.getCountryCode(), checkIn, arrayRoomGuest);
+        StringBuilder responseBodySearch = onlineHotelService.apiOnlineSearchHotel(city.getCityId().toString(), noNights.toString(), noOfRooms, city.getCountryCode(), checkIn, arrayRoomGuest);
 		
         JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
         System.out.println(jsonObjSearch);

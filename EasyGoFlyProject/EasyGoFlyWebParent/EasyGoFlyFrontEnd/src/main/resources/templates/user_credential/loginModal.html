@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<li th:fragment="login(remove)" th:remove="${remove}" >	
+		<style>
+			.ul_stl {
+				left: -80% !important;
+				background: rgba(76, 161, 252, 0.07) !important;
+				border-radius: 16px;
+				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+				backdrop-filter: blur(10.7px);
+				-webkit-backdrop-filter: blur(10.7px);
+				padding: 10px 0 !important;
+				border: none !important;
+			}
+			.ul_stl a {
+				margin: 0px 10px;
+			}
+			.a_link_stl {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.i_link {
+				padding-right: 13px; 
+				font-size: 20px;
+			}
+			.p_link {
+				font-size: 22px; 
+				margin: 0;
+			}
+			/* Responsive */
+			@media only screen and (max-width: 800px) {
+				.ul_stl {
+					left: 0% !important;
+					margin-left: 7% !important;
+        			width: 100% !important;
+				}
+				.i_link {
+					padding-right: 13px; 
+					font-size: 16px;
+				}
+				.p_link {
+					font-size: 18px; 
+					margin: 0; 
+				}
+			}
+		</style>
+	<ul class="no-search dropdown-menu ul_stl" id="noStyle"  aria-labelledby="dropdownMenuLink"> 
+		<li class="horiz"><a type="button"
+			class="btn btn-info btn_style_menu hover a_center a_link_stl"
+			th:href="@{/login}"
+			id="login_b"> <i class="fa fa-solid fa-user i_link"></i> <p class="p_link">Login</p>
+		</a></li>
+		<li class="horiz"><a type="button"
+			class="btn btn-info btn_style_menu hover a_center a_link_stl"
+			th:href="@{/registration}"
+			id="login_b"> <i class="fa-solid fa-right-to-bracket i_link"></i> <p class="p_link">Signup</p>
+		</a></li>
+
+		<li class="horiz"><a type="button"
+			class="btn btn-info btn_style_menu hover a_center a_link_stl"
+			href="https://easegofly.com:8443/admin"><i class="fa fa-regular fa-handshake i_link"></i><p class="p_link">Agent Login</p></a></li>
+
+
+	</ul>
+	
+	</li>
+	
+	<li th:fragment="loggedin(remove)" th:remove="${remove}">
+		<style>
+			.ul_stl {
+				left: -80% !important;
+				background: rgba(76, 161, 252, 0.07) !important;
+				border-radius: 16px;
+				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+				backdrop-filter: blur(10.7px);
+				-webkit-backdrop-filter: blur(10.7px);
+				padding: 10px 0 !important;
+				border: none !important;
+			}
+			.ul_stl a {
+				margin: 0px 10px;
+			}
+			.a_link_stl {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.i_link {
+				padding-right: 13px; 
+				font-size: 20px;
+			}
+			.p_link {
+				font-size: 22px; 
+				margin: 0;
+			}
+			/* Responsive */
+			@media only screen and (max-width: 800px) {
+				.ul_stl {
+					left: 0% !important;
+					margin-left: 7% !important;
+        			width: 85% !important;
+				}
+				.p_link {
+					font-size: 18px; 
+					margin: 0; 
+				}
+			}
+		</style>
+		<th:block sec:authorize="hasAnyAuthority('Customer', 'ROLE_USER')">
+		<ul class="no-search dropdown-menu ul_stl" id="noStyle" aria-labelledby="dropdownMenuLinkLogged">
+			<li class="nav-item horiz">
+				<p class="text_modify" sec:authentication="principal.fullName"><i class="fa fa-solid fa-user" style="padding-right: 13px;"></i></p>
+			</li>
+	
+			<li class="nav-item horiz"><a type="button"
+				class="btn btn-info hover a_center a_link_stl"
+				th:href="@{/wallet-home}"><p class="p_link" id="walletBalance">Wallet</p></a>
+			</li>
+			<li class="nav-item horiz"><a type="button"
+				class="btn btn-info btn_style_menu hover a_center a_link_stl"
+				th:href="@{/manage_booking}">
+				<p class="p_link">Manage Booking</p></a>
+			</li>
+				 	
+			<li class="nav-item horiz"><a type="button"
+				class="btn btn-info hover a_center a_link_stl" data-bs-toggle="popover"
+				title="Popover title" th:href="@{/account}"><p class="p_link">Manage
+					Account</p></a>
+			</li>
+			<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm" id="logoutForm">
+				<input type="submit" value="SSSSS">
+			</form>
+			<li class="nav-item horiz hover">
+				<button type="submit" class="btn btn-danger " form="logoutForm" style="font-size: 22px; margin: 0px 10px; padding: 0; color: white; width: 90%;">Logout!</button>
+			</li>
+			
+		</ul>
+			
+		</th:block>
+	</li>
+</li>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</body>
+</html>
+
+

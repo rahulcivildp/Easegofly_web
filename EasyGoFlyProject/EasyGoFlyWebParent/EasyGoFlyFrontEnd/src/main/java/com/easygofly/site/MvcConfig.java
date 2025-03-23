@@ -12,6 +12,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		exposedDirectory("../category-photos", registry);
+		exposedDirectory("../customer-aadhaar", registry);
 		exposedDirectory("../site-logo", registry);
 		exposedDirectory("../favicon", registry);
 		exposedDirectory("../brand-logos", registry);
@@ -19,16 +20,17 @@ public class MvcConfig implements WebMvcConfigurer {
 		exposedDirectory("../customer-photos", registry);
 		exposedDirectory("../pdf-images", registry);
 		exposedDirectory("../xml-data", registry);
+		exposedDirectory("../driver-photos", registry);
+		exposedDirectory("../cab-photos", registry);
 	}
 
 	private void exposedDirectory(String pathPattern, ResourceHandlerRegistry registry) {
 		Path photoDir = Paths.get(pathPattern);
 		String absolutePhotoPath = photoDir.toFile().getAbsolutePath();
 		
-		String logicalPath = pathPattern.replace("../", "") + "/**";
+		String logicalPath = pathPattern.replace("../", "") + "/**"; 
 		  
-		registry.addResourceHandler(logicalPath).addResourceLocations("file://" + absolutePhotoPath + "/");   
+		registry.addResourceHandler(logicalPath).addResourceLocations("file:/" + absolutePhotoPath + "/");   
 	} 
 	 
 } 
-   

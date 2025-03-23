@@ -47,10 +47,10 @@
                                 <li class="submenu active">
                                     <a th:href="@{/}">Home </a>
                                 </li>
-
+								<li class="submenu" id="bus-lg"><a th:href="@{/bus}">Bus</a></li>
                                 <li class="submenu" id="hotel-lg"><a th:href="@{/hotel}">Hotel</a></li>
-                                <li class="submenu" id="bus-lg"><a th:href="@{/bus}">Bus</a></li>
-                                <li class="submenu dropdown">
+                                
+                                 <!--<li class="submenu dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                         aria-haspopup="true" aria-expanded="false">Holiday <i
                                             class="icon-arrow-down" aria-hidden="true"></i></a>
@@ -58,7 +58,7 @@
                                         <li><a href="destination-list.html">Holiday Search</a></li>
                                         <li><a href="destination-detail.html">Packages</a></li>
                                     </ul>
-                                </li>
+                                </li>-->
                                 <li class="submenu" id="about-lg"><a th:href="@{/about}">About Us</a></li>
                                 <li class="submenu" id="contact-lg"><a th:href="@{/contact-us}">Contact</a></li>
 
@@ -234,7 +234,7 @@
 	                </div>
 	              </a>
 	          </li>
-	          <li>
+			  <!--<li>
 	              <a href="../page.html">
 	                <div class="d-flex align-items-center gap-16">
 	                  <span class="icon">
@@ -243,7 +243,7 @@
 	                  Holiday
 	                </div>
 	              </a>
-	          </li>
+	          </li>-->
 	          <li>
 	            <label class="a-label__chevron" for="item-4">
 	              <span class="d-flex align-items-center gap-16">
@@ -323,6 +323,16 @@
 		                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16"> <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/> </svg>
 		                      </span>
 		                      Login
+		                    </div>
+		                  </a>
+		                </li>
+		                <li>
+		                  <a th:href="@{/registration}">
+		                    <div class="d-flex align-items-center gap-16">
+		                      <span class="icon">
+		                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16"> <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/> </svg>
+		                      </span>
+		                      Registration
 		                    </div>
 		                  </a>
 		                </li>

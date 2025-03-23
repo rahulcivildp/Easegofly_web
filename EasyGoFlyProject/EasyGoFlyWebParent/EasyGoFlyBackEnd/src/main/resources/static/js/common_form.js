@@ -57,6 +57,39 @@ $(document).ready(function(){
 		})
 	});
 	
+	function onChangeImage(imageId, imageSize) {
+	
+		$(imageId).change(function() {
+			var fileSize = this.files[0].size;
+			var imageSizeShort = imageSize * 1024;
+			
+			if (fileSize > imageSizeShort) {
+				this.setCustomValidity("You must choose an image less than "+imageSize+" mb!");
+				this.reportValidity();
+			} else {
+				this.setCustomValidity("");
+				showImageThumbnail(this);
+			}
+		});
+	}
+	
+	function onUploadImage(inputId, imgId) {
+        let inputElement = document.getElementById(inputId);
+        let imgElement = document.getElementById(imgId);
+
+        inputElement.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (event) {
+                    imgElement.setAttribute('src', event.target.result);
+                };
+
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+	
 	function showImageThumbnail(fileInput) {
 		var file = fileInput.files[0];
 		var reader = new FileReader();

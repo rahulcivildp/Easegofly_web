@@ -76,6 +76,16 @@ public class Customer {
 	
 	@Column(name = "balance")
 	private Integer balance;
+
+	@Column(name = "business_name")
+	private String businessName;
+	
+	private String pan;
+	
+	private String aadhaar;
+	
+	@Column(name = "aadhaar_doc", length = 500)
+	private String aadhaarDoc;
 	
 	@Column(length = 128)
 	private String photos;
@@ -144,6 +154,12 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<SightseeingHistory> sightseeingHistories = new ArrayList<>();
 
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<RideHistory> rideHistories = new ArrayList<>();
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<RideOrder> rideOrders = new ArrayList<>();
+	
 	
 	public Customer() {}
 	
@@ -214,6 +230,14 @@ public class Customer {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public List<RideOrder> getRideOrders() {
+		return rideOrders;
+	}
+
+	public void setRideOrders(List<RideOrder> rideOrders) {
+		this.rideOrders = rideOrders;
 	}
 
 	public String getPhone() {
@@ -428,6 +452,38 @@ public class Customer {
 		this.hotelHistory = hotelHistory;
 	}
 
+	public String getBusinessName() {
+		return businessName;
+	}
+
+	public void setBusinessName(String businessName) {
+		this.businessName = businessName;
+	}
+
+	public String getPan() {
+		return pan;
+	}
+
+	public void setPan(String pan) {
+		this.pan = pan;
+	}
+
+	public String getAadhaar() {
+		return aadhaar;
+	}
+
+	public void setAadhaar(String aadhaar) {
+		this.aadhaar = aadhaar;
+	}
+
+	public String getAadhaarDoc() {
+		return aadhaarDoc;
+	}
+
+	public void setAadhaarDoc(String aadhaarDoc) {
+		this.aadhaarDoc = aadhaarDoc;
+	}
+
 	public Wallet getWallet() {
 		return wallet;
 	}
@@ -454,6 +510,16 @@ public class Customer {
 
 	public List<BusHistory> getBusHistories() {
 		return busHistories;
+	}
+
+	
+	
+	public List<RideHistory> getRideHistories() {
+		return rideHistories;
+	}
+
+	public void setRideHistories(List<RideHistory> rideHistories) {
+		this.rideHistories = rideHistories;
 	}
 
 	public void setBusHistories(List<BusHistory> busHistories) {
@@ -521,6 +587,14 @@ public class Customer {
 	@Transient
 	public String getImageLink() {
 		return "/customer-photos/" + this.id + "/" + this.photos;
+	}
+	
+	@Transient
+	public String getAadhaarDocPath() {
+		if(id == null || aadhaarDoc == null) {
+			return "/images/blank-doc.png";
+		}
+		return "/customer-aadhaar/" + this.id + "/" + this.aadhaarDoc;
 	}
 	
 	@Override

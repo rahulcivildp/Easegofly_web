@@ -227,7 +227,7 @@ public class SearchHistoryInternationalController {
 
 	public String[] searchFlightAPI(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, String sortName, Model model, Date date) throws MalformedURLException, IOException {
         
-        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchMod(cityOne, cityTwo, adultNum, childNum, infantNum, date);
+        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchMod(cityOne, cityTwo, adultNum, childNum, infantNum, date, "1");
 
 		String traceIdStr = "offline";
 		String[] hasErrorArr = new String[2];

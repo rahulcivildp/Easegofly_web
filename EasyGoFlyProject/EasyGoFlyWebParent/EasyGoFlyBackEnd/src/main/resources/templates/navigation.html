@@ -52,6 +52,11 @@
 								  <a class="nav-link" th:href="@{/customers}">Customers <i class="fa fa-solid fa-caret-down"></i></a>
 								</li>
 							</th:block>
+							<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+								<li class="dropdowns ">
+								  <a class="nav-link" th:href="@{/drivers}">Drivers <i class="fa fa-solid fa-caret-down"></i></a>
+								</li>
+							</th:block>
 							<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Shipper')">
 								<li class="nav-item">
 									<a class="nav-link" th:href="@{/orders}">Orders <i class="fa fa-solid fa-caret-down"></i></a>
@@ -98,7 +103,8 @@
 								    <li><a th:href="@{/settings#mailServer}" class="dropdown-item" >Mail Server</a></li>
 								    <li><a th:href="@{/settings#mailTemplates}" class="dropdown-item" >Mail Templates</a></li>
 								    <li><a th:href="@{/settings#paymentGateway}" class="dropdown-item" >Payment Gateway</a></li>
-								    <li><a th:href="@{/settings#apiService}" class="dropdown-item" >API Service</a></li>
+								    <li><a th:href="@{/settings#apiService1}" class="dropdown-item" >API Service 1</a></li>
+								    <li><a th:href="@{/settings#apiService2}" class="dropdown-item" >API Service 2</a></li>
 								  </ul>
 								</li>
 							</th:block>
@@ -107,14 +113,14 @@
 					<div class="col-4">
 						<ul  class="navbar-nav float-end">
 							<li>
-								<img alt="" id="showImage" width="37" height="37" style="border-radius: 8px;">
+								<img alt="" th:src="@{${#authentication.principal.imageLink}}" width="37" height="37" style="border-radius: 8px;">
 							</li>
 							<li class="dropdown ">
 								<input type="hidden" id="effectType" value="Drop">
 							  <a class="nav-link dropdown-toggle" type="button" id="toggleButtonDropdown" data-bs-toggle="dropdown" aria-expanded="false" sec:authentication="principal.fullName"></a>
 							  <ul class="dropdown-menu">
 							    <li><a class="dropdown-item" th:href="@{/account}" >Account</a></li>
-							    <li><a class="dropdown-item" id="logoutLink" href="">Logout</a></li>
+							    
 							  </ul>
 							</li>
 							
@@ -126,6 +132,7 @@
 			<script type="text/javascript">
 				imageLink = "[[${#authentication.principal.imageLink}]]";
 				contextUrl = "[[@{/}]]";
+			
 				
 				var myArrayOne = imageLink.split("/");
 				generatedImageLink = myArrayOne[1] + "/" + myArrayOne[2] + "/" + myArrayOne[3];
@@ -134,5 +141,366 @@
 			</script>
 		</div>
 		
+		<div th:fragment="nav_profile" th:remove="tag">
+			
+			<nav class="navbar">
+			    <a href="#" class="sidebar-toggler">
+			        <i data-feather="menu"></i>
+			    </a>
+			    <div class="navbar-content">
+			        <form class="search-form w-25">
+			            <div class="input-group">
+			  <div class="input-group-text">
+			    <i data-feather="search"></i>
+			  </div>
+			                <input type="text" class="form-control" id="navbarForm" placeholder="Search here...">
+			            </div>
+			        </form>
+			        <ul class="navbar-nav">
+			            <li class="nav-item dropdown">
+			                <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			                    <i data-feather="bell"></i>
+			                    <div class="indicator">
+			                        <div class="circle"></div>
+			                    </div>
+			                </a>
+			                <div class="dropdown-menu p-0" aria-labelledby="notificationDropdown">
+			                    <div class="px-3 py-2 d-flex align-items-center justify-content-between border-bottom">
+			                        <p>6 New Notifications</p>
+			                        <a class="text-muted">Clear all</a>
+			                    </div>
+			    <div class="p-1">
+			      <a class="dropdown-item d-flex align-items-center py-2">
+			        <div class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
+			                                <i class="icon-sm text-white" data-feather="gift"></i>
+			        </div>
+			        <div class="flex-grow-1 me-2">
+			                                <p>New Order Recieved</p>
+			                                <p class="tx-12 text-muted">30 min ago</p>
+			        </div>	
+			      </a>
+			      <a class="dropdown-item d-flex align-items-center py-2">
+			        <div class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
+			                                <i class="icon-sm text-white" data-feather="alert-circle"></i>
+			        </div>
+			        <div class="flex-grow-1 me-2">
+			                                <p>Server Limit Reached!</p>
+			                                <p class="tx-12 text-muted">1 hrs ago</p>
+			        </div>	
+			      </a>
+			    </div>
+			                    <div class="px-3 py-2 d-flex align-items-center justify-content-center border-top">
+			                        <a>View all</a>
+			                    </div>
+			                </div>
+			            </li>
+			            <li class="nav-item dropdown">
+			                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			                    <img class="wd-30 ht-30 rounded-circle" th:src="@{${#authentication.principal.imageLink}}" alt="profile">
+			                </a>
+			                <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
+			                    <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
+			                        <div class="mb-3">
+			                            <img class="wd-80 ht-80 rounded-circle" th:src="@{${#authentication.principal.imageLink}}" alt="Profile photo">
+			                        </div>
+			                        <div class="text-center">
+			                            <p class="tx-16 fw-bolder" sec:authentication="principal.fullName"></p>
+			                            <p class="tx-12 text-muted" sec:authentication="principal.username"></p>
+			                        </div>
+			                    </div>
+			    <ul class="list-unstyled p-1">
+			      <li class="dropdown-item py-2">
+			        <a th:href="@{/account}" class="text-body ms-0">
+			          <i class="me-2 icon-md" data-feather="user"></i>
+			          <span>Profile</span>
+			        </a>
+			      </li>
+			      <li class="dropdown-item py-2">
+			        <a th:href="@{/account}" class="text-body ms-0">
+			          <i class="me-2 icon-md" data-feather="edit"></i>
+			          <span>Edit Profile</span>
+			        </a>
+			      </li>
+			   
+			
+			      <li class="dropdown-item py-2">
+					<form id="logoutForm" name="logoutForm" action="/logout" method="POST">
+				        <a class="text-body ms-0" id="logoutLink" href="">
+				          <i class="me-2 icon-md" data-feather="log-out"></i>
+				          <span>Log Out</span>
+				        </a>
+			        </form>
+			      </li>
+			    </ul>
+			                </div>
+			            </li>
+			        </ul>
+			    </div>
+			</nav>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		<div th:fragment="nav_sidebar" th:remove="tag">
+			<nav class="sidebar">
+			    <div class="sidebar-header">
+			      <a th:href="@{/}" class="sidebar-brand">
+			        <img th:src="@{\assets\photo\webkoro.png}" alt="logo" class="w-75">
+			      </a>
+			      <div class="sidebar-toggler not-active">
+			        <span></span>
+			        <span></span>
+			        <span></span>
+			      </div>
+			    </div>
+			    <div class="sidebar-body">
+			      <ul class="nav">
+			        <li class="nav-item active">
+			          <a th:href="@{/}" class="nav-link" id="dashboard-custom">
+			            <i class="link-icon" data-feather="box"></i>
+			            <span class="link-title">Dashboard</span>
+			          </a>
+			        </li>
+			        
+					<th:block sec:authorize="hasAuthority('Admin')">
+				        <li class="nav-item">
+				          <a class="nav-link" data-bs-toggle="collapse" href="#manageAirline" role="button" aria-expanded="false" aria-controls="category">
+				            <i class="link-icon" data-feather="list"></i>
+				            <span class="link-title">Manage Airlines</span>
+				            <i class="link-arrow" data-feather="chevron-down"></i>
+				          </a>
+				          <div class="collapse" id="manageAirline">
+				            <ul class="nav sub-menu">
+				              <li class="nav-item">
+				                <a th:href="@{/brands}" class="nav-link">All Brand List</a>
+				              </li>
+				              <li class="nav-item">
+				                <a th:href="@{/brands/new}" class="nav-link">Add Brand</a>
+				              </li>
+				            </ul>
+				          </div>
+				        </li>
+					</th:block>
+			
+					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+			        <li class="nav-item">
+			          <a th:href="@{/products}" class="nav-link">
+			            <i class="link-icon" data-feather="sliders"></i>
+			            <span class="link-title">Flight Manager</span>
+			          </a>
+			        </li>
+					</th:block>
+			
+					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+			        <li class="nav-item">
+			          <a class="nav-link" data-bs-toggle="collapse" href="#manageDrivers" role="button" aria-expanded="false" aria-controls="category">
+			            <i class="link-icon" data-feather="list"></i>
+			            <span class="link-title">Manage Drivers</span>
+			            <i class="link-arrow" data-feather="chevron-down"></i>
+			          </a>
+			          <div class="collapse" id="manageDrivers">
+			            <ul class="nav sub-menu">
+			              <li class="nav-item">
+			                <a th:href="@{/drivers}" class="nav-link">All Driver List </a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/drivers/new}" class="nav-link">Add Driver</a>
+			              </li>
+			            </ul>
+			          </div>
+			        </li>
+					</th:block>
+			
+			
+			        <li class="nav-item">
+			          <a href="title-section.html" class="nav-link">
+			          <i class="link-icon" data-feather="type"></i>
+			          <span class="link-title">Content Management</span>
+			          </a>
+			        </li>
+			
+			        <li class="nav-item">
+			            <a href="services-list.html" class="nav-link">
+			            <i class="link-icon" data-feather="columns"></i>
+			            <span class="link-title">Sevices Section</span>
+			            </a>
+			        </li>
+			
+			        <li class="nav-item">
+			          <a href="gallery.html" class="nav-link">
+			            <i class="link-icon" data-feather="image"></i>
+			            <span class="link-title">Gallery Section</span>
+			          </a>
+			        </li>
+			
+			        <li class="nav-item">
+			          <a class="nav-link" data-bs-toggle="collapse" href="#packageManagement" role="button" aria-expanded="false" aria-controls="events">
+			            <i class="link-icon" data-feather="user"></i>
+			            <span class="link-title">Package Management</span>
+			            <i class="link-arrow" data-feather="chevron-down"></i>
+			          </a>
+			          <div class="collapse" id="packageManagement">
+			            <ul class="nav sub-menu">
+			              <li class="nav-item">
+			                <a href="events.html" class="nav-link">All Package Lists</a>
+			              </li>
+			              <li class="nav-item">
+			                <a href="addevents.html" class="nav-link">Add Package</a>
+			              </li>
+			            </ul>
+			          </div>
+			        </li>
+			
+					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+			        <li class="nav-item">
+			          <a th:href="@{/requests}" class="nav-link">
+			            <i class="link-icon" data-feather="pocket"></i>
+			            <span class="link-title">Manage Requests</span>
+			          </a>
+			        </li>
+					</th:block>
+			        
+			        <li class="nav-item">
+			          <a href="appointment.html" class="nav-link">
+			            <i class="link-icon" data-feather="table"></i>
+			            <span class="link-title">Booking Section</span>
+			          </a>
+			        </li>
+			        
+					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Shipper')">
+			        <li class="nav-item">
+			          <a class="nav-link" data-bs-toggle="collapse" href="#order" role="button" aria-expanded="false" aria-controls="order">
+			            <i class="link-icon" data-feather="list"></i>
+			            <span class="link-title">Order Management</span>
+			            <i class="link-arrow" data-feather="chevron-down"></i>
+			          </a>
+			          <div class="collapse" id="order">
+			            <ul class="nav sub-menu">
+			              <li class="nav-item">
+			                <a th:href="@{/orders}" class="nav-link">All Order Lists</a>
+			              </li>
+			              <li class="nav-item">
+			                <a href="#" class="nav-link">Order History</a>
+			              </li>
+			              <li class="nav-item">
+			                <a href="#" class="nav-link">Order Detail</a>
+			              </li>
+			              <li class="nav-item">
+			                <a href="#" class="nav-link">Order Invoice</a>
+			              </li>
+			            </ul>
+			          </div>
+			        </li>
+					</th:block>
+					
+			        <li class="nav-item">
+			          <a href="#" class="nav-link">
+			            <i class="link-icon" data-feather="gift"></i>
+			            <span class="link-title">Coupons</span>
+			          </a>
+			        </li>
+			        
+			        
+					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+			        <li class="nav-item">
+			          <a th:href="@{/customers}" class="nav-link">
+			            <i class="link-icon" data-feather="gift"></i>
+			            <span class="link-title">Customer Manager</span>
+			          </a>
+			        </li>
+					</th:block>
+							
+					<th:block sec:authorize="hasAuthority('Admin')">
+				        <li class="nav-item">
+				          <a class="nav-link" data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
+				            <i class="link-icon" data-feather="user"></i>
+				            <span class="link-title">User Management</span>
+				            <i class="link-arrow" data-feather="chevron-down"></i>
+				          </a>
+				          <div class="collapse" id="users">
+				            <ul class="nav sub-menu">
+				              <li class="nav-item">
+				                <a th:href="@{/users}" class="nav-link">All User Lists</a>
+				              </li>
+				              <li class="nav-item">
+				                <a th:href="@{/users/new}" class="nav-link">Add User</a>
+				              </li>
+				            </ul>
+				          </div>
+				        </li>
+					</th:block>
+			
+					<th:block sec:authorize="hasAuthority('Admin')">
+			        <li class="nav-item">
+			          <a class="nav-link" data-bs-toggle="collapse" href="#setting" role="button" aria-expanded="false" aria-controls="setting">
+			            <i class="link-icon" data-feather="settings"></i>
+			            <span class="link-title">Settings</span>
+				         <i class="link-arrow" data-feather="chevron-down"></i>
+			          </a>
+			          <div class="collapse" id="setting">
+			            <ul class="nav sub-menu">
+			              <li class="nav-item">
+			                <a th:href="@{/settings#general}" class="nav-link">General</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/settings#countries}" class="nav-link">Countries</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/settings#states}" class="nav-link">States</a>
+			              </li>
+			              <li class="nav-item">
+			                <a class="nav-link" th:href="@{/settings#mailServer}">Mail Server</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/settings#mailTemplates}" class="nav-link">Mail Templates</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/settings#paymentGateway}"  class="nav-link">Payment Gateway</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/settings#apiService1}" class="nav-link">API Service 1</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/settings#apiService2}" class="nav-link">API Service 2</a>
+			              </li>
+			            </ul>
+			          </div>
+			        </li>
+					</th:block>
+			
+					<th:block sec:authorize="hasAuthority('Admin')">
+			        <li class="nav-item">
+			          <a class="nav-link" data-bs-toggle="collapse" href="#General-Details" role="button" aria-expanded="false" aria-controls="General-Details">
+			            <i class="link-icon" data-feather="pocket"></i>
+			            <span class="link-title">General Details</span>
+				        <i class="link-arrow" data-feather="chevron-down"></i>
+			          </a>
+			          <div class="collapse" id="General-Details">
+			            <ul class="nav sub-menu">
+			              <li class="nav-item">
+			                <a th:href="@{/web_settings#general}" class="nav-link">General</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/web_settings#contacts}" class="nav-link">Contacts</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/web_settings#lowest_fare_set}" class="nav-link">Set lowest Fare</a>
+			              </li>
+			              <li class="nav-item">
+			                <a th:href="@{/web_settings#coupons}" class="nav-link">Show Coupons</a>
+			              </li>
+			            </ul>
+			          </div>
+			        </li>
+					</th:block>
+			
+			      </ul>
+			    </div>
+			  </nav>
+		</div>
 </body>
 </html>

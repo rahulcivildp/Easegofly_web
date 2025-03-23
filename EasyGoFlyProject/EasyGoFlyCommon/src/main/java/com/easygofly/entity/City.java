@@ -9,8 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "cities")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class City {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,13 @@ public class City {
 	
 	public City() {}
 	
+	public City(Integer id, String name, String code, String cityName) {
+		this.id = id;
+		this.name = name;
+		this.code = code;
+		this.cityName = cityName;
+	}
+
 	public City(String code) {
 		this.code = code;
 	}

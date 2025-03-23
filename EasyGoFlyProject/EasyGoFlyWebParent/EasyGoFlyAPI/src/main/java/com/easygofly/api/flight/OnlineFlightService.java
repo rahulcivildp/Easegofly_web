@@ -91,9 +91,76 @@ public class OnlineFlightService {
         
 		return responseCode;
 	}
-	
-	public StringBuilder apiOnlineSearchMod(HttpURLConnection connection, String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
+
+	public StringBuilder apiOnlineCalendarFare(String cityOne, String cityTwo, Date date)
 			throws IOException {
+
+        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/GetCalendarFare");
+
+        HttpURLConnection connection = (HttpURLConnection) urlSearch.openConnection();
+        
+		StringBuilder responseBody = new StringBuilder();
+        // Get API details from Settings.
+		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
+		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		String strDate = dateFormat.format(date);
+		
+        // Set the request method to POST
+        connection.setRequestMethod("POST");
+        
+        // Set request headers (if required)
+        connection.setRequestProperty("Content-Type", "application/json");
+        
+        
+        // Enable writing data to the connection
+        connection.setDoOutput(true);
+        
+     // Create the request body
+        String requestBody = "{"
+        		+ "\"EndUserIp\": \"" + apiServiceSettingBag.getUserIP() + "\", "
+        		+ "\"TokenId\": \"" + apiTokenSettingBag.getFlightTokenNo() + "\", "
+        		+ "\"JourneyType\": \"1\", "
+        		+ "\"PreferredAirlines\": null, "
+        		+ "\"Segments\": [{"
+        			+ "\"Origin\": \"" + cityOne + "\", "
+        			+ "\"Destination\": \"" + cityTwo + "\", "
+        			+ "\"FlightCabinClass\": \"1\", "
+        			+ "\"PreferredDepartureTime\": \"" + strDate + "T00: 00: 00\""
+        			+ "}],"
+        		+ "\"Sources\": null"
+        		+ "}";
+
+        System.out.println(requestBody);
+        logService.generateLog(requestBody);
+		// Write the request body to the connection's output stream
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(requestBody.getBytes());
+		outputStream.flush();
+		outputStream.close();
+
+		// Get the response
+//		int responseCode = connection.getResponseCode();
+
+		// Read the response body
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+		    responseBody.append(line);
+		}
+		bufferedReader.close();
+        connection.disconnect();
+        
+		return responseBody;
+	}
+	
+	public StringBuilder apiOnlineSearchMod(String cityOne, String cityTwo, Integer adultNum, Integer childNum, Integer infantNum, Date date)
+			throws IOException {
+		
+        URL urlSearch = new URL("https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search");
+
+        HttpURLConnection connection = (HttpURLConnection) urlSearch.openConnection();
+        
 		StringBuilder responseBody = new StringBuilder();
         // Get API details from Settings.
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();

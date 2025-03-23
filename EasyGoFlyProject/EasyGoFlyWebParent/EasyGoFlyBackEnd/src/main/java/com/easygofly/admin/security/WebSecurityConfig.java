@@ -1,5 +1,8 @@
 package com.easygofly.admin.security;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -12,6 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @SuppressWarnings("deprecation")
 @Configuration
@@ -36,6 +43,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		return authProvider;
 	}
+
+	@Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("*")); // add this line with appropriate methods for your case
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(source);
+    }
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,6 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable();
+		
 		http.authorizeRequests()
 			.antMatchers("/favicon/**").permitAll()
 			.antMatchers("/users/**", "/settings/**").hasAuthority("Admin")
@@ -54,17 +74,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
 			.anyRequest().authenticated()
 			.and()
-			.formLogin().loginPage("/login").usernameParameter("email").permitAll()
+			.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/", true).permitAll()
 			.and()
 			.logout().permitAll()
 			.and()
 			.rememberMe().key("AbcDefgHijKlmnopqrst_1234567890").tokenValiditySeconds(7 * 24 * 60 * 60)
 			.and();
+		
+		http.cors().disable();
+	}
+	
+
+	public void addCorsMappings(CorsRegistry registry) {
+	    registry.addMapping("/**")
+	    .allowedMethods("GET", "POST", "OPTIONS")
+	    .allowedOrigins("https://admin.easegofly.com/")
+	    .allowCredentials(true);
 	}
 
 	@Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "../favicon/**", "/css/**");
+        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**", "../favicon/**", "/css/**", "/assets/**", "/assets/photo/**");
     }
 	
 }

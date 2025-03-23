@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<head th:replace="fragments :: page_head('Forgot password ', 'tag')"></head>
+
+
+<style type="text/css">
+	*.forgot_pas {
+		border: 1px solid;
+	    padding: 10px;
+	    border-radius: 7px;
+	    margin-bottom: 15px;
+	    box-shadow: rgb(0 0 0 / 25%) 0px 10px 20px, rgb(0 0 0 / 40%) 0px 10px 20px;
+	}
+
+</style>
+</head>
+<body>
+  <header id="header" class="fixed-top d-flex align-items-center" >
+  	<div th:replace="fragments :: page_header('tag')"></div>
+  </header>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  
+  <div th:replace="whatsapp :: content"></div>
+  
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+	<div style="display: flex; justify-content: center;">
+		<div class="col-md-6 forgot_pas">
+			<form th:action="@{/password-save}" method="post" th:object="${existingCusomer}">
+				<input type="hidden" name="cust_id" th:value="${existingCusomer.id}">
+				<h3>Hello [[${existingCusomer.fullName}]],</h3>
+				<h4>Please change your password. Maximum password length - 8.</h4>
+				<div class="row">
+					<label for="inputPassword3"
+						class="col-sm-3 col-form-label label"><p>
+							Password:<span class="star_marked"> *</span>
+						</p></label>
+					<div class="col-sm-9" style="width: 100%;">
+						<input class="input form-control" type="password"  name="password" id="password"
+							placeholder="password" oninput="checkPasswordMatch(document.getElementById('confirmPassword'))" minLength="8" maxlength="20" required/>
+					</div>
+				
+				
+					<label for="confirmPassword"
+						class="col-sm-3 col-form-label label"><p>
+							Confirm Password:<span class="star_marked"> *</span>
+						</p></label>
+					<div class="col-sm-9" style="width: 100%;">
+						<input class="input form-control" id="confirmPassword" type="password"
+							placeholder="password" oninput="checkPasswordMatch(this)" minLength="8" maxlength="20" required/>
+					</div>
+					<div class="col-sm-12" style=" margin-top: 15px;">
+						<input type="submit" class="specialButton" style="padding: 5px 25px !important; float: right;" value=" Save ">			
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+ <br>
+<br>
+<br>
+<br><br>
+<br>
+
+ <footer th:replace="fragments :: page_footer"></footer>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/}]]";
+	
+	function checkPasswordMatch(confirmPassword) {
+		if(confirmPassword.value != $("#password").val()) {
+			confirmPassword.setCustomValidity("Passwords do not match!");
+		} else {
+			confirmPassword.setCustomValidity("");
+		}
+	}
+	
+</script>
+</body>
+<link th:href="@{css/custom.css}" rel="stylesheet">
+</html>	
+ 
+
+

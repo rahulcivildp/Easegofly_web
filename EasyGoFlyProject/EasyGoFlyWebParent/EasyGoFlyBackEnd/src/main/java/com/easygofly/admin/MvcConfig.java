@@ -16,15 +16,17 @@ public class MvcConfig implements WebMvcConfigurer {
 		exposedDirectory("../site-logo", registry);
 		exposedDirectory("../favicon", registry);
 		exposedDirectory("../brand-logos", registry);
-		exposedDirectory("../product-photos", registry);
+		exposedDirectory("../product-photos", registry); 
 		exposedDirectory("../customer-photos", registry);
+		exposedDirectory("../driver-photos", registry);
+		exposedDirectory("../cab-photos", registry);
 	}
 
 	private void exposedDirectory(String pathPattern, ResourceHandlerRegistry registry) {
 		Path photoDir = Paths.get(pathPattern);
 		String absolutePhotoPath = photoDir.toFile().getAbsolutePath();
 		
-		String logicalPath = pathPattern.replace("../", "") + "/**";
+		String logicalPath = pathPattern.replace("../", "") + "/**"; 
 		
 		registry.addResourceHandler(logicalPath).addResourceLocations("file://" + absolutePhotoPath + "/");
 	}

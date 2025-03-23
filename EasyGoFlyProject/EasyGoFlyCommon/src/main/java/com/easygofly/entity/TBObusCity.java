@@ -24,6 +24,11 @@ public class TBObusCity {
 	
 	public TBObusCity() {}
 
+	public TBObusCity(Integer cityId, String cityName) {
+		this.cityId = cityId;
+		this.cityName = cityName;
+	}
+
 	public Integer getId() {
 		return id;
 	}

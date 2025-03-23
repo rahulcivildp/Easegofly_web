@@ -142,7 +142,7 @@ public class WalletController {
 		return "wallet/wallet-confirm";
 	}
 
-	private void zaakpayPayment(Model model, HttpServletRequest request, Wallet wallet) {
+	public void zaakpayPayment(Model model, HttpServletRequest request, Wallet wallet) {
     	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		
@@ -193,16 +193,6 @@ public class WalletController {
 	public String zaakpayResponse (HttpServletRequest request, HttpServletResponse response,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
-
-		Customer customer = new Customer();
-        
-        if (loggedCustomer != null) {
-        	customer = customerService.getByPhone(loggedCustomer.getUsername());
-		} else if (googleLogin !=  null) {
-        	customer = customerService.getByEmail(googleLogin.getEmail());
-			
-		} 
-        
     	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 		
 		Transaction transaction = new Transaction();
@@ -226,24 +216,11 @@ public class WalletController {
 	    checksum = request.getParameter("checksum");
 	    responseParameters = transaction.getResponseParameters();
 	     
-		rechargeStatus(customer);
 		
 		return "redirect:/zaakpay/recharge";
 	}
+	
 
-	private void rechargeStatus(Customer customer) {
-		RechargeHistory rechargeHistory = walletService.createRechargeHistoryByZaakpay(customer, parameter[8], parameter[18]);
-		if (parameter[12].contains("Customer cancelled transaction. Transaction has failed")) {
-			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.CANCELLED);
-		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
-			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
-		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
-			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
-		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
-			RechargeHistory rechargeHistory2 = walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
-			walletService.updateWalletValue(customer, rechargeHistory2);
-		} 
-	}
 	
 	@CrossOrigin(origins = {"https://easegofly.com/"})
 	@RequestMapping(value = "/zaakpay/recharge",
@@ -251,8 +228,6 @@ public class WalletController {
 	public String zaakpayResponseSe (HttpServletRequest request, Model model, HttpServletResponse response, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin) throws Exception {
 		
-
-
 		Customer customer = new Customer();
         
         if (loggedCustomer != null) {
@@ -263,34 +238,49 @@ public class WalletController {
 		} 
         
 		double balance = responseBalance(model, customer);
-		boolean isProcessed = true;
+		boolean isProcessed = false;
 		System.out.println(parameter);
 	    com.easygofly.entity.Transaction selfTrans = transactionService.createTransaction(customer, parameter);
 
 		double amountIntRech = Double.parseDouble(parameter[0]) / 100;
+
+		RechargeHistory rechargeHistory = walletService.createRechargeHistoryByZaakpay(customer, parameter[8], parameter[18]);
 		
 		if (parameter[9].equals("Not Found") && parameter[10].equals("unknown") ) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.CANCELLED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Unfortunately the transaction has failed.Please try again.")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.CANCELLED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[11].contains("1017")) {
+			walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.FAILED);
 			isProcessed = false;
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].equals("The transaction was completed successfully.") || parameter[12].equals("Transaction has been settled.")) {
+			RechargeHistory rechargeHistory2 = walletService.updateRechargeHistoryStatus(rechargeHistory, RechargeHistoryStatus.SUCCESSFULL);
+			walletService.updateWalletValue(customer, rechargeHistory2);
 			isProcessed = true;
 			model.addAttribute("paymentSuccess", parameter[12]);
 		}
@@ -310,7 +300,7 @@ public class WalletController {
 		
 		
 	}
-	
+
 	
 	// Test Method
 	@GetMapping("/test_wallet_send_email")
@@ -325,7 +315,7 @@ public class WalletController {
 	// Private Methods
 
 
-	private double responseBalance(Model model, Customer customer) {
+	public double responseBalance(Model model, Customer customer) {
 		Wallet wallet = customer.getWallet();
 		double INRbalance = wallet.getBalance() / 100;
 		model.addAttribute("wallet", wallet);

@@ -1,0 +1,158 @@
+ <!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<body>
+	
+	<div th:fragment="air-search-fixed(city1, city2)" th:remove="tag">
+	    <div class="book-form w-100 bg-white box-shadow p-4 pb-1 z-index1 rounded search-tag-menu" id="search-tag-menu">
+			
+			<div class="row item-slider2" >
+			 
+			    <div class="col-lg-6" id="search-item-1">
+					<form th:action="@{/flight_search_save}" method="get" id="onewaySearchDesk" onsubmit="return formSearchSubmit();">
+						<input type="hidden" class="form-control hill1 input_styles" name="cityOne" id="cityOne" th:value="${city1}" placeholder="Depurture City" required>
+						<input type="hidden" class="form-control hill1 input_styles" name="cityTwo" id="cityTwo" th:value="${city2}" placeholder="Arrival City" required>
+	                    <div class="row d-flex align-items-center justify-content-between w-100">
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Depart</label>
+										<input type="date" name="date" class="form-control input_calender"
+											id="floatingInputDepurture" required>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2 search-col">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Return</label>
+	                                    <input type="date" name="return_date" class="form-control input_calender" id="floatingInputArrival">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group">
+	                                <div class="input-box">
+	                                    <label>Travelars</label>
+	                                    <div class="passanger_detail">
+											<button class="btn btn-secondary dropdown-toggle btn-trv d-flex align-items-center justify-content-center bg-white" type="button" id="deskDropdwon" data-bs-toggle="modal" data-bs-target="#travelerModal" onclick="return toggleOverflowTraveler();">
+												<input type="hidden" name="something" id="passengerNum1" value="">
+												<h5 class="m-0 n-text w-100">Economy Pax 1</h5>
+											</button>
+										</div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-lg mb-2">
+	                            <div class="form-group mb-0 text-center">
+	                                <label class="mb-3"></label>
+	                                <input type="submit" class="nir-btn w-100" id="submitbtn" value="Search Now" onclick="form.submit;">
+	                            </div>
+	                        </div>
+	                    </div>
+					</form>
+			    </div>
+			    
+			  
+			</div>
+	    </div>
+	                            
+	
+	
+	   
+<script>
+	
+	
+	$("#submit").click(function () {
+		travellerAddFun("#n-text-1", ".pass_list-1 option:selected", ".pass_list1 option:selected", ".pass_list2 option:selected", ".pass_list3 option:selected");
+	});
+	$("#submitint").click(function () {
+		travellerAddFun("#n-text-2", ".pass_list-10 option:selected", ".pass_list11 option:selected", ".pass_list12 option:selected", ".pass_list13 option:selected");
+	});
+	$("#submit1").click(function () {
+		travellerAddFun("#n-text-3", ".pass_list-2 option:selected", ".pass_list4 option:selected", ".pass_list5 option:selected", ".pass_list6 option:selected", "#result1", "#result4");
+	});
+	$("#submit1MobileReturn").click(function () {
+		travellerAddFun("#n-text-4", ".pass_list-20 option:selected", ".pass_list16 option:selected", ".pass_list17 option:selected", ".pass_list18 option:selected", "#result1MobileReturn", "#result4MobileReturn");
+	});
+	
+	
+	function travellerAddFun(nText, pasVal_1, pasVal_2, pasVal_3, pasVal_4) {
+		$(nText).empty();
+		var d = $(pasVal_1).val();
+		var a = parseInt($(pasVal_2).val());
+		var b = parseInt($(pasVal_3).val());
+		var c = parseInt($(pasVal_4).val());
+
+		var sum = a + b + c;
+
+		if (sum < 10) {
+			event.stopPropagation();
+			$(nText).html(d + " Pax " + Math.round(sum));
+		}
+		else {
+			event.stopPropagation();
+			$(nText).html(" <b style='color: red;'>INVALID<br>Max - 9</b> ");
+		}
+
+		$(".dropdownMenu").addClass("deactive");
+		$(".dropdownMenu").removeClass("active");
+	};
+
+	overflowSet("#domestic-btn");
+	overflowSet("#international-btn");
+	
+	function overflowSet(btn) {
+		$(btn).click(function () {
+			$("#carousel-inner-search").css("overflow", "hidden");
+
+			setTimeout(function() {
+				$("#carousel-inner-search").css("overflow", "unset");
+			}, 600);
+		});
+	}
+</script>
+    
+<script>
+		
+	$("#floatingInputDepurture").click(function () {
+		calenderView($("#floatingInputDepurture"));
+	});
+	
+	$("#floatingInputArrival").click(function () {
+		calenderViewReturnDestination($("#floatingInputDepurture"), "floatingInputArrival");
+	});
+		
+	$("#floatingInputDepurtureInter").click(function () {
+		calenderView($("#floatingInputDepurtureInter"));
+	});
+	
+	$("#floatingInputArrivalInter").click(function () {
+		calenderViewReturnDestination($("#floatingInputDepurtureInter"), "floatingInputArrivalInter");
+	});
+
+	function calenderView(input) {
+		name = input.attr("name");
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementsByName(name)[0].setAttribute('min', today);
+	}
+
+	function calenderViewReturnDestination(input, output) {
+		inputAttr = input.val();
+		if(inputAttr === "" ) {
+			var today = new Date().toISOString().split('T')[0];
+			document.getElementById(output).setAttribute('min', today);
+			return;
+		} else {
+			document.getElementById(output).setAttribute('min', inputAttr);
+			return;
+		}
+	}
+</script>
+
+  
+
+</div>
+</body>
+</html>

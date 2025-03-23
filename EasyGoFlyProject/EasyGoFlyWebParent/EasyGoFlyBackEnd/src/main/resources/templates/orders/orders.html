@@ -1,16 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-	<head th:replace="fragments :: page_head('EasyGoFly Order page', 'tag')"></head>
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-</head>
+
+		<!-- dynamic head starts -->
+
+<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Order page', 'none')"></head>
+
+		<!-- dynamic head ends -->
+
 
 <body>
-	<div class="container-fluid">
+	<div class="main-wrapper">
+
+		<!-- sidebar starts -->
+    
+		<div th:replace="navigation :: nav_sidebar"></div>
+
+        <!-- sidebar Ends -->
 	
-		<div th:replace="navigation :: nav_menu"></div>
-		
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
+
+		    <div th:replace="navigation :: nav_profile"></div>
+
+			<!-- navbar Ends -->
+
+            <!-- Page Content Starts -->
+
+			<div class="page-content">
+
+
+
+
 		<div th:if="${message != null}" class="alert alert-success text-center">
 			[[${message}]]
 		</div>
@@ -213,9 +235,23 @@
 				</div>
 			</div>	
 		</div>
+
+
+
+
+
+			</div>
+
+            <!-- Page Content Ends -->
+
+			<!-- footer Starts -->
+      
+		    <div th:replace="fragments :: footer"></div>
+
+            <!-- footer Ends -->
 		
+		</div>
 	</div>
-	
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -234,9 +270,6 @@
 	};
 	
 </script>
-		
-		<div th:replace="fragments :: footer"></div>
-	</div>
 
 </body>
-</html>
+</html>    

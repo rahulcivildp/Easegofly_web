@@ -27,5 +27,13 @@ public class APITokenSettingBag extends SettingBag{
 		return super.getValue("TBO_API_HOTEL_TOKEN");
 	}
 
+	public String getEase2flyTokenNo() {
+		return super.getValue("EASE2FLY_API_FLIGHT_TOKEN");
+	}
+
+	public String getAirIQTokenNo() {
+		return super.getValue("AIRIQ_API_FLIGHT_TOKEN");
+	}
+
 
 }

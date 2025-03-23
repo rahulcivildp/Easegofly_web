@@ -38,17 +38,17 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
       if (phone.contains("@")) {
           Customer customerCheck = customerService.getCustomerByEmail(phone);
-          if (customerCheck == null) {
+          if (customerCheck != null) {
               try {
-    			customerService.registerCustomerByEmail(phone);
+    			customerService.checkCustomerByEmail(customerCheck, phone);
     		} catch (UnsupportedEncodingException | MessagingException e) {
     			e.printStackTrace();
     		}
-    	  } 
+    	  }
       } else {
     	  Customer customerCheck = customerService.getCustomerByPhone(phone);
           if (customerCheck == null) {
-    		customerService.registerCustomerByPhone(phone);
+        	  customerService.checkCustomerByPhone(customerCheck, phone);
     	  }
       }
        

@@ -612,6 +612,8 @@ public class OrderController {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[11].contains("1017")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("The transaction was completed successfully.") || parameter[12].contains("Transaction has been settled.")) {
@@ -1388,6 +1390,8 @@ public class OrderController {
 		} else if (parameter[12].equals("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[12].contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("Customer cancelled transaction. Transaction has failed")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
 		} else if (parameter[11].contains("1017")) {
 			model.addAttribute("paymentCancelled", parameter[12]);
