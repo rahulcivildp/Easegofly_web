@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("/", "/favicon/**", "/site-logo/**", "/brand-logos/**", "/images/**", "/customers/**", "/login**", "/registration", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
+			.antMatchers("/", "/favicon/**", "/site-logo/**", "/brand-logos/**", "/images/**", "/images/bus/**", "/customers/**", "/login**", "/registration", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
 					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml", "/indirect_login**", "/indirect_login/**", "/driver-photos/**", "/cab-photos/**",
 					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search/return_**",  "/flight_search**",
 					"/flight_international_search_save", "/flight_international_search_return_save", "/flight_search_**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", 

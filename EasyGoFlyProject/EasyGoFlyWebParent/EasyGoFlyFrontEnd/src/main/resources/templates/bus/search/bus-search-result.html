@@ -44,12 +44,11 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   <div th:replace="whatsapp :: content"></div>
   
     <!-- BreadCrumb Starts -->  
-    <section class="breadcrumb-main pb-8 pt-10" th:style="'background-image: url(' + @{/assets/images/bg/bg1.jpg} + ');'">
+    <section class="breadcrumb-main pb-4 pt-3" th:style="'background-image: url(' + @{/assets/images/bg/bg1.jpg} + ');'">
         <div class="section-shape section-shape1 top-inherit bottom-0" th:style="'background-image: url(' + @{/assets/images/shape8.png} + ');'"></div>
-        <div class="breadcrumb-outer pb-2">
-            <div class="container">
+        <div class="breadcrumb-outer">
+            <div class="container pb-2">
                 <div class="breadcrumb-content text-center">
-                    <h1 class="mb-3">Bus List</h1>
                     <nav aria-label="breadcrumb" class="d-block">
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a th:href="@{/bus}">Bus</a></li>
@@ -101,7 +100,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	   </div>
    </div>
 
- 	<footer th:replace="fragments :: page_footer('tag')"></footer>
+ 	<footer th:replace="fragments :: page_footer_only('tag')"></footer>
 	
  <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>

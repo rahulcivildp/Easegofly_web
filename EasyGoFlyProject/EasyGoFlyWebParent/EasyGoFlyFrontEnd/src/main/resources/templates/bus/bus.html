@@ -22,105 +22,48 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	    <!-- header ends -->
 	    
 	    <!-- Banner start -->
-		<section class="banner flight-banner pb-14" style="position: relative;" id="headerDiv3">
-			<video autoplay muted loop id="myVideo2" class="pb-4" style="width: 100%; transform: rotateY(180deg);">
-				<source th:src="@{assets/videos/business-jet-in-flight-2023-11-27-05-11-43-utc.mp4}" type="video/mp4">
-				Your browser does not support HTML5 video.
-			</video>
-			  <div style="width: 100%; position: absolute; top: 2%;" id="headerDiv4">
+		<section class="banner flight-banner pb-14" id="headerDiv3" th:style="' background-image: url(' + @{/images/bus/bus-stand.webp} + ');'">
+			
+			<div class="position-absolute left-0 w-100" th:style="'bottom: -1px; transform: rotateX(180deg); height: 20%; z-index: 1; background-repeat: repeat-x; background-size: contain; background-image: url(' + @{/assets/images/shape8.png} + ');'"></div>
+			
+			<div class="dot-overlay"></div>
+			
+			  <div style="width: 100%; top: 2%;" id="headerDiv4">
 			    <div class="container" >
 			        <div class="banner-in" >
 			            <div class="row align-items-center position-relative"  id="headerDiv2">
 			
-			                <div class="col-lg-6 mb-4" id="headerDiv1" >
+			                <div class="col-lg-6 mb-4"  >
 			                    <div class="banner-content text-lg-start text-center" >
 			                        <h4 class="theme mb-0" style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Explore The World</h4>
 			                        <h1 style="text-shadow:rgb(255, 255, 255) 0px 1px 1px;">Start Planning Your Dream Trip Today!</h1>
-			                        <p class="mb-4" style="color: #272727; text-shadow:rgb(255, 255, 255) 0px 1px 1px;">EaseGoFly offers seamless travel experiences, connecting you to top destinations with affordable flights and personalized tour packages. Our user-friendly platform makes booking fast and convenient, so you can focus on creating memories. With EaseGoFly, adventure is just a click away.</p>
+			                        <p class="mb-4" style="color: white; text-shadow:rgb(0, 0, 0) 0px 1px 1px;">EaseGoFly offers seamless travel experiences, connecting you to top destinations with affordable flights and personalized tour packages. Our user-friendly platform makes booking fast and convenient, so you can focus on creating memories. With EaseGoFly, adventure is just a click away.</p>
 			                        
 									
 			                    </div>
+								
 			                </div>
-			                <div class="col-lg-6 mb-4 position-relative" >
+			                <div class="col-lg-6 mb-4 position-relative mt-4" >
 			                    <div class="flight-slider">
 			                        <div class="row review-slider1">
 			                            <div class="col-lg">
-			                                <img th:src="@{/assets/images/flights/3f.jpg}" alt="" class="rounded">
+			                                <img th:src="@{/images/bus/bus4.jpg}" alt="" class="rounded">
 			                            </div>
 			                            <div class="col-lg">
-			                                <img th:src="@{/assets/images/flights/4f.jpg}" alt="" class="rounded">
+			                                <img th:src="@{/images/bus/bus3.jpg}" alt="" class="rounded">
 			                            </div>
 			                            <div class="col-lg">
-			                                <img th:src="@{/assets/images/flights/5f.jpg}" alt="" class="rounded">
+			                                <img th:src="@{/images/bus/bus6.jpg}" alt="" class="rounded">
 			                            </div>
 			                        </div>
 			                    </div>
 			                </div>
-			                
-							<div id="tabsModalDiv" class="paddingResize position-absolute w-100" style="z-index: 2; bottom: 100px;">
+							
+							<div id="tabsModalDiv" class="paddingResize position-absolute w-100" style="z-index: 2; bottom: 15px;">
 								<div th:replace="bus/bus-search-tab :: bus-search"></div>
 							</div>
 			            </div>
-			            <div class="category-main-inner border-t pt-1">
-			                <div class="row side-slider">
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content text-center">
-			                                <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_5f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Dragon Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_2f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Thai Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <div class="trending-topic-content">
-			                                <img th:src="@{/assets/images/flights/flight_grid_3f.png}" class="mb-1 d-inline-block" alt="">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Air Asia Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <div class="col-lg-3 col-md-6 my-4">
-			                        <div class="category-item box-shadow p-3 py-4 text-center bg-white rounded overflow-hidden">
-			                            <img th:src="@{/assets/images/flights/flight_grid_4f.png}" class="mb-1 d-inline-block" alt="">
-			                            <div class="trending-topic-content">
-			                                <h5 class="mb-0"><a href="flight-grid.html">Turkish Airlines</a></h5>
-			                            </div>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
+			            
 			        </div>
 			    </div>
 			  </div>
@@ -129,8 +72,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	    <!-- Banner end -->
 	
 	<script>
-	    $("#headerDiv1").css("height", $("#headerDiv2").height() + "px");
-	    $("#headerDiv3").css("height", $("#headerDiv4").height() + "px");
+	   // $("#headerDiv1").css("height", $("#headerDiv2").height() + "px");
+	    //$("#headerDiv3").css("height", $("#headerDiv4").height() + "px");
 	    // alert($("#headerDiv2").height());
 	
 	</script>
