@@ -55,12 +55,33 @@ public class CustomerService {
 
 	public void updateOpenid(String email, String openId, AuthenticationType authenticationType) {
 		Customer updateCutomer = getByEmail(email);
-		
 		if (authenticationType.equals(AuthenticationType.GOOGLE)) {
-			String encodedOpenId = passwordEncoder.encode(openId);
-			updateCutomer.setPassword(encodedOpenId);
-			updateCutomer.setOpenId(openId);
-			customerRepo.save(updateCutomer);
+			if (updateCutomer != null) {
+					String encodedOpenId = passwordEncoder.encode(openId);
+					updateCutomer.setPassword(encodedOpenId);
+					updateCutomer.setOpenId(openId);
+					updateCutomer.setOtpRequestedTime(new Date());
+					customerRepo.save(updateCutomer);
+			} else {
+				String encodedOpenId = passwordEncoder.encode(openId);
+				updateCutomer = new Customer();
+				updateCutomer.setCreatedTime(new Date());
+				updateCutomer.setEmail(email);
+				updateCutomer.setPassword(encodedOpenId);
+				updateCutomer.setEnabled(true);
+				updateCutomer.setAuthenticationType(authenticationType);
+				updateCutomer.setOpenId(openId);
+				updateCutomer.setFirstName(email);
+				updateCutomer.setLastName(" ");
+				updateCutomer.setPhone(email);
+				updateCutomer.setCountry(countryRepo.findById(106).get());
+				updateCutomer.setPhotos(null);
+				updateCutomer.setOtpRequestedTime(new Date());
+				updateCutomer.setWallet(new Wallet(0, 0));
+				updateCutomer.addRole(new Role(3));
+				
+				customerRepo.save(updateCutomer);
+			}
 		}
 	}
 	

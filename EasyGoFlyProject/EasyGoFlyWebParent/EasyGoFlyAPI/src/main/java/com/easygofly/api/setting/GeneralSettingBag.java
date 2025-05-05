@@ -1,13 +1,31 @@
 package com.easygofly.api.setting;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.easygofly.entity.Setting;
 import com.easygofly.entity.SettingBag;
+import com.easygofly.entity.SettingCategory;
 
 
 public class GeneralSettingBag extends SettingBag {
-
+	@Autowired
+	private SettingRepository settingRepo;
+	
+	public GeneralSettingBag getGeneralSettingBag() {
+		List<Setting> settings = new ArrayList<>();
+		List<Setting> settingsGenaral = settingRepo.findByCategory(SettingCategory.GENERAL);
+		List<Setting> settingsCurrency = settingRepo.findByCategory(SettingCategory.CURRENCY);
+		
+		settings.addAll(settingsGenaral);
+		settings.addAll(settingsCurrency);
+		
+		return new GeneralSettingBag(settings);
+		
+	}
+	
 	public GeneralSettingBag(List<Setting> listSettings) {
 		super(listSettings);
 	}

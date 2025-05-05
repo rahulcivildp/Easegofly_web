@@ -37,7 +37,7 @@ public class Order {
 	@Column(name = "first_name", length = 45, nullable = false)
 	private String firstName;
 	
-	@Column(name = "last_name", length = 45, nullable = false)
+	@Column(name = "last_name", length = 45)
 	private String lastName;
 	
 	@Column(name = "phone_number", length = 15, nullable = false)
@@ -46,22 +46,22 @@ public class Order {
 	@Column(name = "contact_email", nullable = false)
 	private String contactEmail;
 	
-	@Column(name = "address_line1", length = 64, nullable = false)
+	@Column(name = "address_line1", length = 64)
 	private String addressLine1;
 	
 	@Column(name = "address_line2", length = 64)
 	private String addressLine2;
 	
-	@Column(name = "city", length = 45, nullable = false)
+	@Column(name = "city", length = 45)
 	private String city;
 	
-	@Column(name = "state", length = 45, nullable = false)
+	@Column(name = "state", length = 45)
 	private String state;
 	
-	@Column(name = "postal_code", length = 10, nullable = false)
+	@Column(name = "postal_code", length = 10)
 	private String postalCode;
 	
-	@Column(name = "country", length = 45, nullable = false)
+	@Column(name = "country", length = 45)
 	private String country;
 	
 	@Column(length = 256)
@@ -82,19 +82,19 @@ public class Order {
 	
 	private int cartId;
 	
-	@Column(nullable = false, name = "city_one")
+	@Column(name = "city_one")
 	private String cityOne;
 	
-	@Column(nullable = false, name = "city_two")
+	@Column(name = "city_two")
 	private String cityTwo;
 	
-	@Column(nullable = false, length = 3, name = "passenger_num")
+	@Column(length = 3, name = "passenger_num")
 	private Integer passengerNum;
 	
-	@Column(nullable = false, name = "journey_class")
+	@Column(name = "journey_class")
 	private String journeyClass;
 	
-	@Column(nullable = false, length = 3)
+	@Column(length = 3)
 	private Integer adultNum;
 	
 	@Column(length = 3)
@@ -103,7 +103,7 @@ public class Order {
 	@Column(length = 5)
 	private Integer infantNum;
 	
-	@Column(nullable = false, name = "trip_type")
+	@Column(name = "trip_type")
 	private String tripType;
 	
 	@Enumerated(EnumType.STRING)
@@ -123,6 +123,10 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<TravellerDetail> travellerDetails = new ArrayList<>();
 
+	@Column(name = "productdetails_id")
+	@OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL)
+	private List<ProductDetail> productDetails = new ArrayList<>();
+	
 	@Column(name = "flight_ids")
 	private String flightIds;
 	
@@ -192,6 +196,14 @@ public class Order {
 
 	public void setFlightIds(String flightIds) {
 		this.flightIds = flightIds;
+	}
+	
+	public List<ProductDetail> getProductDetails() {
+		return productDetails;
+	}
+
+	public void setProductDetails(List<ProductDetail> productDetails) {
+		this.productDetails = productDetails;
 	}
 
 	public String getCityOne() {

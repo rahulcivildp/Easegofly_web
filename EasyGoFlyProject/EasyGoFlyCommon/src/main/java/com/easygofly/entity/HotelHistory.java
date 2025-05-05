@@ -31,6 +31,9 @@ public class HotelHistory {
 
 	@Column(nullable = false, name = "city_id", length = 40)
 	private String cityId;
+	
+	@Column(name = "city_name", length = 40)
+	private String cityName;
 
 	@Column(nullable = false, name = "no_of_rooms", length = 10)
 	private String noOfRooms;
@@ -43,6 +46,15 @@ public class HotelHistory {
 
 	@Column(name = "children_age")
 	private Integer[] childrenAge;
+	
+	@Column(name = "no_of_adults_two", length = 10)
+	private String noOfAdultsTwo;
+
+	@Column(name = "no_of_children_two", length = 10)
+	private String noOfChildTwo;
+
+	@Column(name = "children_age_two")
+	private Integer[] childrenAgeTwo;
 
 	@Column(nullable = false, name = "is_near_by_search_allowed", length = 20)
 	private boolean isNearBySearchAllowed;
@@ -162,6 +174,38 @@ public class HotelHistory {
 	}
 
 	
+	public String getNoOfAdultsTwo() {
+		return noOfAdultsTwo;
+	}
+
+	public void setNoOfAdultsTwo(String noOfAdultsTwo) {
+		this.noOfAdultsTwo = noOfAdultsTwo;
+	}
+
+	public String getNoOfChildTwo() {
+		return noOfChildTwo;
+	}
+
+	public void setNoOfChildTwo(String noOfChildTwo) {
+		this.noOfChildTwo = noOfChildTwo;
+	}
+
+	public Integer[] getChildrenAgeTwo() {
+		return childrenAgeTwo;
+	}
+
+	public void setChildrenAgeTwo(Integer[] childrenAgeTwo) {
+		this.childrenAgeTwo = childrenAgeTwo;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
 	public HotelOrder getHotelOrder() {
 		return hotelOrder;
 	}

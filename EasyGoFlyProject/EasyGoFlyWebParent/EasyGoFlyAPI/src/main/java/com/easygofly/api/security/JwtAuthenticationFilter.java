@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.Collections;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,8 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.easygofly.api.customer.CustomerRepository;
 import com.easygofly.api.customer.CustomerService;
 import com.easygofly.entity.AuthenticationType;
 import com.easygofly.entity.Country;
@@ -30,10 +29,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     @Autowired private CustomerService customerService;
+	@Autowired private CustomerRepository customerRepo;
     
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx) {
         this.authenticationManager = authenticationManager;
         this.customerService = ctx.getBean(CustomerService.class);
+        this.customerRepo = ctx.getBean(CustomerRepository.class);
         setFilterProcessesUrl("/api/login");
     }
     
@@ -76,6 +77,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Country country = customer.getCountry();
         
         String token = JwtUtil.generateToken(authResult);
+        String refreshToken = JwtUtil.generateRefreshToken(authResult);
+        
         response.addHeader("Authorization", "Bearer " + token);
         response.setContentType("application/json");
         int type = 0;
@@ -91,10 +94,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         		"https://easegofly.com" + customer.getPhotosImagePath();
         
         System.out.println("Customer Photo URL: " + customerPhoto);
+        customer.setRefreshToken(refreshToken);
+        customerRepo.save(customer);
         
         String customerBody =  "{"
         		+ "\"id\": " + customer.getId() + ", "
                 + "\"token\": \"Bearer " + token + "\", "
+                + "\"refresh\": \"" + refreshToken + "\", "
         		+ "\"email\": \"" + customer.getEmail() + "\", "
         		+ "\"phone\": \"" + customer.getPhone() + "\", "
         		+ "\"firstName\": \"" + customer.getFirstName() + "\", "

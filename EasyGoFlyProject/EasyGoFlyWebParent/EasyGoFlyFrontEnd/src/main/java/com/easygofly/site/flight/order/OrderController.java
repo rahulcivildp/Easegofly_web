@@ -117,7 +117,7 @@ public class OrderController {
 			@RequestParam(name = "checkout_id") Integer checkout_id,
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			HttpServletRequest request, Order order3) {
-		try {
+	
 			productDetailsController.timeRemainingProOne = timeRemaining;
 			
 			ProductDetail flight = flightRepo.findById(flightId).get();
@@ -132,31 +132,32 @@ public class OrderController {
 			String orderName = flight.getCityOne() + "-" + flight.getCityTwo() + ":(" + flight.getFlightNum() + ")" + dateTime + ":" + flight.getDepTime() + "-" + flight.getArrTime() 
 			+ ":(" + search.getPassengerNum() + ")";
 
-			Order order = orderRepo.findByCartItemOrder(item_id);
+			//Order order = orderRepo.findByCartItemOrder(item_id);
 			
 			List<TravellerDetail> travellerDetails = travellerRepo.findTravellerByCurtItemAndProductDetail(flight, item);
 
 			cartService.updateCartItemOrdered(item);
+			Order orderSaved = new Order();
 			
 			if (loggedCustomer != null) {
-				orderService.loginControl("" + checkout.getPaymentTotal(), customerService.getByPhone(loggedCustomer.getUsername()), flight, search, item,
-						PaymentMethod.NONE, orderName, order, travellerDetails, checkout);
+//				orderService.loginControl("" + checkout.getPaymentTotal(), customerService.getByPhone(loggedCustomer.getUsername()), flight, search, item,
+//						PaymentMethod.NONE, orderName, order, travellerDetails, checkout);
+				orderSaved = orderService.createOrder(customerService.getByPhone(loggedCustomer.getUsername()), orderSaved, item, flight, PaymentMethod.NONE, checkout, search, orderName, travellerDetails);
+				
 			} else if (googleLogin != null) {
-				orderService.loginControl("" + checkout.getPaymentTotal(), customerService.getByPhone(googleLogin.getEmail()), flight, search, item,
-						PaymentMethod.NONE, orderName, order, travellerDetails, checkout);
+				orderSaved = orderService.createOrder(customerService.getByPhone(googleLogin.getEmail()), orderSaved, item, flight, PaymentMethod.NONE, checkout, search, orderName, travellerDetails);
 			}
 			
-			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + item_id + "&" + checkout_id;
-		} catch (Exception e) {
-			return "redirect:/flight_order_" + searchId + "&" + flightId + "&" + item_id + "&" + checkout_id;
-		}
+			return "redirect:/flight_order_" + search.getId() + "&" + flightId + "&" + orderSaved.getId() + "&" + item_id + "&" + checkout_id;
+	
 	}
 
-	@GetMapping("/flight_order_{search_id}&{flight_id}&{item_id}&{checkout_id}")
+	@GetMapping("/flight_order_{search_id}&{flight_id}&{order_id}&{item_id}&{checkout_id}")
 	public String orderPage(@PathVariable(name = "search_id") Integer search_id, 
 			@PathVariable(name = "flight_id") Integer flight_id,
 			@PathVariable(name = "item_id") Integer item_id, 
 			@PathVariable(name = "checkout_id") Integer checkout_id, 
+			@PathVariable(name = "order_id") Integer order_id, 
 			@AuthenticationPrincipal EasegoflyPhoneCustomerDetails loggedCustomer, @AuthenticationPrincipal CustomerOAuth2User googleLogin,
 			Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
 
@@ -188,7 +189,7 @@ public class OrderController {
 		
 		List<TravellerDetail> travelers = productService.findTraveller(flight, item);
 
-		Order order = orderRepo.findByCartItemOrder(item_id);
+		Order order = orderRepo.findById(order_id).get();
 		
 		if (!search_id.equals(null)) {
 			SearchHistory search = searchRepo.findById(search_id).get();

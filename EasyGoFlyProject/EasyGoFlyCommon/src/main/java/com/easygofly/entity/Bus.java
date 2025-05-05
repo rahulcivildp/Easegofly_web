@@ -23,6 +23,8 @@ public class Bus {
 
 	@Column(name = "result_index")
 	private Integer resultIndex;
+
+	private String traceId;
 	
 	@Column(name = "available_seats")
 	private Integer availableSeats;
@@ -129,6 +131,10 @@ public class Bus {
 	@Column(name = "taxable_amount")
 	private double taxableAmount;
 	
+	private String origin;
+
+	private String destination;
+	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -208,6 +214,30 @@ public class Bus {
 		this.busCancelPolicies = busCancelPolicies;
 		this.pointsDetails = pointsDetails;
 		this.availableSeats = availableSeats;
+	}
+	
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
+	public String getTraceId() {
+		return traceId;
+	}
+
+	public void setTraceId(String traceId) {
+		this.traceId = traceId;
 	}
 
 	public Integer getId() {

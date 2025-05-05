@@ -14,8 +14,8 @@ import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelHistory;
 import com.easygofly.entity.HotelOrder;
 import com.easygofly.entity.HotelRoom;
-import com.easygofly.entity.HotelSupplierCode;
 import com.easygofly.entity.OrderStatus;
+import com.easygofly.entity.TBOHotel;
 import com.easygofly.entity.Wallet;
 import com.easygofly.site.wallet.WalletService;
 
@@ -26,8 +26,8 @@ public class HotelService {
 	@Autowired private HotelGuestRepository guestRepo;
 	@Autowired private HotelRoomRepository roomRepository;
 	@Autowired private HotelOrderRepository orderRepository;
-	@Autowired private HotelSupplierRepository hotelSupplierRepo;
 	@Autowired private WalletService walletService;
+	@Autowired private TBOHotelRepository tboHotelRepo;
 
 	public HotelHistory saveHotelHistory(HotelHistory history, Customer customer) {
 		HotelHistory newHistory = new HotelHistory(history.getCheckInDate(), history.getCheckOutDate(), history.getCountryCode(), history.getCityId(), history.getNoOfRooms(), history.getNoOfAdults(), 
@@ -47,11 +47,11 @@ public class HotelService {
 		newHotel.setCustomer(customer);
 		
 		Hotel savedHotel = hotelRepo.save(newHotel); 
-		for (HotelSupplierCode hotelSupplierCode : savedHotel.getHotelSupplierCodes()) {
-			hotelSupplierCode.setHotel(savedHotel);
-			hotelSupplierRepo.save(hotelSupplierCode);
-		}
 		return savedHotel; 
+	}
+	
+	public TBOHotel tboHotelSave(TBOHotel hotel) {
+		return tboHotelRepo.save(hotel);
 	}
 	
 	public Hotel findByIdHotel(Integer id) {
@@ -142,4 +142,7 @@ public class HotelService {
 		
 		return walletService.cancelWalletBalanceByHotelOrder(customer, order, orderString, "");
 	}
+
+
+
 }

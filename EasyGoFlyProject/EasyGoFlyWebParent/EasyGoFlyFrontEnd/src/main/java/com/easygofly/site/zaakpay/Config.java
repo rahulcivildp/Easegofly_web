@@ -16,6 +16,8 @@ public class Config {
     public static String TRANSACTION_STATUS_API_URL = "/checkTxn?v=5" ;
 
     public static String RETURN_URL = "https://easegofly.com/zaakpay/response" ;
+    
+    public static String RETURN_URL_FLIGHT_API = "https://easegofly.com/zaakpay/flight/response/api" ;
 
     public static String RETURN_URL_SECOND = "https://easegofly.com/zaakpay/recharge" ;
 

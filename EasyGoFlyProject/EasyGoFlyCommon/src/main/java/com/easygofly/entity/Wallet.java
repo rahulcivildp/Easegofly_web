@@ -36,6 +36,11 @@ public class Wallet {
 	
 	public Wallet() {}
 
+	public Wallet(Integer balance, Integer tempValue) {
+		this.balance = balance;
+		this.tempValue = tempValue;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

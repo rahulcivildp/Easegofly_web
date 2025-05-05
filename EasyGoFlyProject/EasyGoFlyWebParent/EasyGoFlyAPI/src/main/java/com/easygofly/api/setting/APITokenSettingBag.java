@@ -18,6 +18,10 @@ public class APITokenSettingBag extends SettingBag{
 	public String getFlightTokenNo() {
 		return super.getValue("TBO_API_FLIGHT_TOKEN");
 	}
+	
+	public String getFlightTestTokenNo() {
+		return super.getValue("TBO_API_FLIGHT_TOKEN_REST");
+	}
 
 	public String getHolidayTokenNo() {
 		return super.getValue("TBO_API_HOLIDAY_TOKEN");

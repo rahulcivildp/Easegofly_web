@@ -121,52 +121,6 @@ public class OrderService {
 		return orderRepo.save(newOrder);
 	}
 	
-	public Order createOrderOnline(Customer customer, CartItem cartItem, ProductDetail productDetail, PaymentMethod paymentMethod, String price, SearchHistory searchHistory, String orderName, List<TravellerDetail> travellerDetails) {
-		Order newOrder = new Order();
-		newOrder.setCreatedTime(new Date());
-		newOrder.setOrderStatus(OrderStatus.NEW);
-		newOrder.setCustomer(customer);
-		newOrder.setProductDetail(productDetail);
-		newOrder.setPrice(Double.parseDouble(price));
-		newOrder.setPaymentMethod(paymentMethod);
-		newOrder.setName(orderName);
-
-		newOrder.setAddressLine1(customer.getAddressLine1());
-		newOrder.setAddressLine2(customer.getAddressLine2());
-		newOrder.setCity(customer.getCity());
-		
-		Country country = customer.getCountry();
-		newOrder.setCountry(country.getName());
-		
-		newOrder.setPostalCode(customer.getPostalCode());
-		newOrder.setState(customer.getState());
-		newOrder.setFirstName(customer.getFirstName());
-		newOrder.setLastName(customer.getLastName());
-		newOrder.setPhoneNumber(cartItem.getPhoneNum());
-		newOrder.setAdultNum(searchHistory.getAdultNum());
-		newOrder.setChildNum(searchHistory.getChildNum());
-		newOrder.setInfantNum(searchHistory.getInfantNum());
-		newOrder.setCityOne(productDetail.getCityOne());
-		newOrder.setCityTwo(productDetail.getCityTwo());
-		newOrder.setJourneyClass(searchHistory.getJourneyClass());
-		newOrder.setPassengerNum(searchHistory.getPassengerNum());
-		newOrder.setTripType(searchHistory.getTripType());
-		newOrder.setCartId(cartItem.getId());
-		newOrder.setContactEmail(cartItem.getEmail());
-		newOrder.setTravellerDetails(travellerDetails);
-		newOrder.setDevice(productDetail.getDevice());
-		newOrder.setDeviceDescription(productDetail.getDeviceDescription());
-		newOrder.setDeviceType(productDetail.getDeviceType());
-		
-		String transaction_id = "UIGIK&*^HJAS585789";
-		String transaction_token = "ashdjgh3284270&^%@#*&)asahj31";
-		
-		newOrder.setTransactionId(transaction_id);
-		newOrder.setTransactionToken(transaction_token);
-		
-		return orderRepo.save(newOrder);
-	}
-	
 	public Order updateOrder(Order order, OrderStatus orderStatus) {
 		order.setOrderStatus(orderStatus);
 		return orderRepo.save(order);
@@ -254,7 +208,7 @@ public class OrderService {
 	public void loginControl(String totalPayment, Customer customer, ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod, String orderName, Order order,
 			List<TravellerDetail> travellerDetails, CheckoutInfo checkoutInfo) {
 		if (order != null) {
-			if (flight.getTraceId().equals("offline")) {
+			if (flight.getMode().equals("Offline-data")) {
 				updateOrderPrice(order, checkoutInfo);
 				deleteCouponCode(order);
 			} else {
@@ -263,29 +217,12 @@ public class OrderService {
 			}
 			
 		} else {
-			if (flight.getTraceId().equals("offline")) {
-				Order orderSaved = saveOrderCreate(flight, search, item, paymentMethod, checkoutInfo, orderName, order, customer, travellerDetails);
-				for (TravellerDetail travellerDetail : travellerDetails) {
-					updateTravelersOrderId(travellerDetail.getId(), orderSaved);
-				}
-				deleteCouponCode(orderSaved);
-			} else {
-				Order orderSaved =  createOrderOnline(customer, item, flight, paymentMethod, totalPayment, search, orderName, travellerDetails);
-				for (TravellerDetail travellerDetail : travellerDetails) {
-					updateTravelersOrderId(travellerDetail.getId(), orderSaved);
-				}
-				deleteCouponCode(orderSaved);
-			}	
-		}
-	}
-
-	public Order saveOrderCreate(ProductDetail flight, SearchHistory search, CartItem item, PaymentMethod paymentMethod,
-			CheckoutInfo checkoutInfo, String orderName, Order order, Customer customer, List<TravellerDetail> travellerDetails) {
-		if (order == null) {
-			Order newOrder = new Order();
-			return  createOrder(customer, newOrder, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
-		} else {
-			return createOrder(customer, order, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
+			Order orderSaved = createOrder(customer, order, item, flight, paymentMethod, checkoutInfo, search, orderName, travellerDetails);
+			for (TravellerDetail travellerDetail : travellerDetails) {
+				updateTravelersOrderId(travellerDetail.getId(), orderSaved);
+			}
+			deleteCouponCode(orderSaved);
+				
 		}
 	}
 

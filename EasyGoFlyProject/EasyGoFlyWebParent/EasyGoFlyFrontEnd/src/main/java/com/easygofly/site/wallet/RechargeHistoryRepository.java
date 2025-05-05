@@ -13,4 +13,8 @@ public interface RechargeHistoryRepository extends CrudRepository<RechargeHistor
 
 	@Query("SELECT r FROM RechargeHistory r WHERE r.wallet = :wallet")
 	public List<RechargeHistory> findByWallet(Wallet wallet, Sort sort);
+
+	@Query("SELECT r FROM RechargeHistory r WHERE r.zaakpaytransactionId = :zaakpaytransactionId AND r.wallet = :wallet")
+	public RechargeHistory findByZaakpayIdByCreatedAtAsc(Wallet wallet, String zaakpaytransactionId);
+
 }

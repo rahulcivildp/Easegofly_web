@@ -18,10 +18,28 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       }
 </style>
 <body>
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
+<div class="hide-lg">
+		<!-- Preloader -->
+		<div id="preloader">
+		    <div id="status"></div>
+		</div>
+		<!-- Preloader Ends -->
+		
+		<!-- header starts -->
+	   
+	    <header class="main_header_area">
+			<div th:replace="nav-fragment :: page_header('tag')"></div>
+		</header>
+	    <!-- header ends -->
   
+	</div>
+
+
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		<main class="home">
+			<div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+		</main>
+	</div>
   <div th:replace="whatsapp :: content"></div>
   
   <div th:replace="hotel/search/hotel-result-fragment :: hotel-search-result"></div>
@@ -31,25 +49,29 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <gmp-advanced-marker position="24.07638888888888,88.26158333333333" title="My location"></gmp-advanced-marker>
     </gmp-map>
   </div>-->
- 
-	<div class="media_status" id="mobileFooter">
-		<div class="footerInner justify_center_div footer_btn_style">
-	   	   <div class="row">
-			   <button class="col-6 bottomFooter bottomFooterStl" id="homeFooter" onclick="history.back()">
-				   <div class="footerFragInnerDiv" style="color: white;">
-					   <i class="fa fa-solid fa-backward"></i><br>
-			   		</div>
-			   	</button>
-			   <button class="col-6 bottomFooter bottomFooterStl" id="homeFooterNext" disabled>
-				   <div class="footerFragInnerDiv" style="color: #b1b1b1;">
-					   <i class="fa fa-solid fa-forward"></i>
-			   		</div>
-			   	</button>
-		   </div>
-	   </div>
-   </div>
- 
- <script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+   
+   <footer th:replace="fragments :: page_footer_only('tag')"></footer>
+   
+   
+ <script>
+   $(".home").css("margin-bottom", "0");
+   $(".home").css("padding", "0");
+   
+   $('#searchModal').on('shown.bs.modal', function (e) {
+   	$(".item-slider3").slick('setPosition');
+   });
+   
+   
+   
+   if (window.innerWidth < 900) {
+   	$(".search-header-info").removeClass("d-flex justify-content-center");
+   	$(".search-header-info").addClass("text-center");
+   	$(".search-tag-menu-mb").removeClass("box-shadow border");
+   };
+ </script>
+
+   <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
 <link th:href="@{/css/custom.css}" rel="stylesheet">
 </html>	

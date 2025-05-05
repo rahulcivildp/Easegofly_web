@@ -83,7 +83,7 @@
 		                                    <div class="item-inner-image text-start">
 		                                        <img  th:id="'brandImg' + ${flight.id}" class="radius-8">
 		                                        <h5 class="mb-0">[[${flight.brand}]]</h5>
-		                                        <small>[[${flight.airlineRemarks}]]</small>
+		                                        <small>[[${flight.flightNum}]]</small>
 		                                    </div>
 		                                </div>     
 		                                <div class="col-lg-2 col-md-2 col-3"> 
@@ -268,7 +268,7 @@
 											$(id).css("width", wd);
 											$(id).css("padding-right", ps);
 										}).fail(function(){
-											alert("Could not connect to the server.");
+											console.log("Could not connect to the server.");
 										});
 									}
 								</script>
@@ -456,7 +456,7 @@
 							                                	</select>
 							                                	<script>
 																	$(document).ready(function() {
-																		alert($("#meals[[${traveler.id}]]").val());
+																		console.log($("#meals[[${traveler.id}]]").val());
 																	});
 																</script>
 						                                	</div>
@@ -616,7 +616,7 @@
 										$(id).attr("src", response);
 										$(id).attr("alt", '[[${flight.brand}]]');
 									}).fail(function(){
-										alert("Could not connect to the server.");
+										console.log("Could not connect to the server.");
 									});
 								}
 								
@@ -624,9 +624,9 @@
                                
                                     
                             </div>
-                            <div class="col-md-9 col-12">
+                            <div class="col-md-9 col-12 mt-3">
 	                            <div class="d-flex justify-content-between">
-		                          	<a th:href="@{'/flight_booking' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_home" >Home</a>
+		                          	<button onclick="return goBack();" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_home" >Previous</button>
 	                                <form th:action="@{/flight_order_save}" method="post" id="order_form">
 							            <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
 							            <input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
@@ -646,7 +646,6 @@
             </div>
         </div>
      
-        <div class="media_status" style="height: 50px;"></div>
     </body>
 
 	<script th:inline="javascript">
@@ -681,7 +680,7 @@
 				showCheckout();
 	    		toggelMealPrice(id, txt, meals);
 	    	}).fail(function(){
-    			alert("Something went wrong in the server! [[@{/save_meal}]]");
+    			console.log("Something went wrong in the server! [[@{/save_meal}]]");
 	    	});
 		}
 	</script>
@@ -717,7 +716,7 @@
 				showCheckout();
 	    		toggelBaggagePrice(id, txt, baggages);
 	    	}).fail(function(){
-    			alert("Something went wrong in the server! [[@{/save_baggage}]]");
+    			console.log("Something went wrong in the server! [[@{/save_baggage}]]");
 	    	});
 		}
 	</script>
@@ -753,7 +752,7 @@
 				showCheckout();
 	    		toggelSeatPrice(id, txt, seats);
 	    	}).fail(function(){
-    			alert("Something went wrong in the server! [[@{/save_seat}]]");
+    			console.log("Something went wrong in the server! [[@{/save_seat}]]");
 	    	});
 		}
 	</script>
@@ -808,7 +807,7 @@
 					            
 				checkClass.html(htmlTab);
 	    	}).fail(function(){
-    			alert("Something went wrong in the server! [[@{/show_checkout}]]");
+    			console.log("Something went wrong in the server! [[@{/show_checkout}]]");
 	    	});
 		}
 	</script>

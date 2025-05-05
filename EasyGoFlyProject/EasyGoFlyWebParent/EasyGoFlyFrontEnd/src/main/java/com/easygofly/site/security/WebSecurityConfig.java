@@ -91,7 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 					"/bus/transport-**", "/test_wallet_send_email", "/testing", "/get_flight_list", "/get_least_fare_by_brand", "/get_next_day_flight",
 					"/get_previous_day_flight", "/sort_flights_by_**", "/noUser_search_filter", "/mode", "/bus/transport_**", "/coming_soon", "/test_redirect", "/flight_redirect", 
 					"/assets/images/**", "/contact-us", "/wallet-recharge/api**", "/wallet-confirm/api**", "/zaakpay/recharge/api", "/api/flight/tbo-search/**", "/api/fetch_cities", "/api/brand_list",
-					"/api/flight/leastFare", "/api/flight/tbo-search/calendar-fare").permitAll()
+					"/api/flight/leastFare", "/api/flight/tbo-search/calendar-fare", "/show_hotel_city", "/flight-payment/api/**", "/zaakpay/flight/response/api**").permitAll()
 			.anyRequest().authenticated()
             .and()
             .addFilterBefore(beforeLoginFilter,

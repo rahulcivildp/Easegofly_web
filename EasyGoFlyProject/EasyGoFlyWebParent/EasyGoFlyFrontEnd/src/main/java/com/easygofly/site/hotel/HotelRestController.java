@@ -1,10 +1,12 @@
 package com.easygofly.site.hotel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +15,9 @@ import com.easygofly.entity.Hotel;
 import com.easygofly.entity.HotelGuest;
 import com.easygofly.entity.HotelRoom;
 import com.easygofly.site.customer.CustomerRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class HotelRestController {
@@ -21,7 +26,63 @@ public class HotelRestController {
 	@Autowired private HotelService hotelService;
 	@Autowired private HotelSaveHelper saveHelper;
 	@Autowired private CustomerRepository customerRepository;
+	@Autowired private OnlineHotelService onlineHotelService;
 
+	@GetMapping("/show_hotel_city")
+	public List<CityTBO> hotelCity() {
+		
+		try {
+			StringBuilder responseBody = onlineHotelService.apiOnlineCityByCountry();
+			ObjectMapper objectMapper = new ObjectMapper();
+			TBOcityResponse resp = objectMapper.readValue(responseBody.toString(), TBOcityResponse.class);
+			
+			return resp.cityList;
+			
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// POJO
+	
+	public static class TBOcityResponse {
+		@JsonProperty("Status")
+		public Status status;
+
+		@JsonProperty("CityList")
+		public List<CityTBO> cityList;
+
+		public TBOcityResponse() {}
+	}
+	
+	// Nested Class for Status
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Status {
+        @JsonProperty("Code")
+        public int code;
+
+        @JsonProperty("Description")
+        public String description;
+
+		public Status() {}
+        
+    } 
+    
+    // Nested Class for City
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CityTBO {
+        @JsonProperty("Code")
+        public String code;
+
+        @JsonProperty("Name")
+        public String name;
+
+		public CityTBO() {}
+        
+    }
+    
 	@PostMapping("/save_hotel_guest")
 	public void saveGuest(@Param("title") String title, @Param("fName") String fName, @Param("lName") String lName, @Param("email") String email, @Param("phoneNo") String phoneNo, 
 			@Param("age") Integer age, @Param("pan") String pan, @Param("hotel_id") Integer hotel_id, @Param("cust_id") Integer cust_id, @Param("room_id") Integer room_id) {

@@ -17,23 +17,21 @@ public class ScheduledTasks {
 	@Autowired private LogService logService;
 	@Autowired private SettingService settingService ;
 	
-	@Scheduled(fixedRate = 43200000)
+	@Scheduled(fixedRate = 23200000)
     public void taskFetchFlightToken() {
 		try {
-        	StringBuilder responseBody = new StringBuilder();
-        	
-            onlineFlightService.apiAuthentication(responseBody);
+        	StringBuilder responseBody = onlineFlightService.apiAuthentication();
             
             JSONObject jsonObj = new JSONObject(responseBody.toString());
-            
+             
             String tokenId = jsonObj.get("TokenId").toString();
             System.out.println(jsonObj);
             logService.generateLog(jsonObj.toString());
             
-            Setting setting = settingService.findByKey("TBO_API_FLIGHT_TOKEN");
+            Setting setting = settingService.findByKey("TBO_API_FLIGHT_TOKEN"); 
             setting.setValue(tokenId);
             settingService.saveSetting(setting);
-
+ 
         } catch (IOException e) {
             e.printStackTrace();
         }

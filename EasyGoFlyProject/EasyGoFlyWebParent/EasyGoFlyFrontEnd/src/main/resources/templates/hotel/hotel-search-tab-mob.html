@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:fragment="hotel-search">
+	
+	<head>
+		
+		<script type="text/javascript" th:src="@{js/hotelCityMobAuto.js}"></script>
+		<style>
+			.categoryStyle {
+				box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    			border-radius: 10px;
+    			background: white;
+    			margin-top: 15px;
+    			position: relative;
+    			z-index: 100;
+    			padding: 5px 0;
+			}
+			.colStyle {
+    			display: flex;
+    			justify-content: space-around;
+			}
+			.borderEnd {
+				border-right: 1px solid #dbdbdb;
+			}
+			.borderMid {
+				border-left: 1px solid #dbdbdb;
+				height: 100%;
+			}
+			.travelerButton {
+				display: flex;
+    			justify-content: start;
+			}
+			.travelerSelection {
+				overflow: hidden;
+			}
+			.travelerSelection p {
+				margin: 3px 0 0;
+				font-size: 14px;
+				color: #9f9f9f;
+				text-align: left;
+			}
+			.travelerSelection:hover {
+				background: rgb(192, 192, 192);
+				border-radius: 10px;
+			}
+			.cityFIcon {
+				height: 58px; 
+				display: flex; 
+				flex-direction: column; 
+				justify-content: center; 
+				font-size: 24px;
+				margin: 0 17px 0 20px;
+			}
+			#travellerFIcon {
+				height: 58px; 
+				display: flex; 
+				flex-direction: column; 
+				justify-content: center; 
+				font-size: 24px;
+				margin: 0 36px 0 7px;
+			}
+			#categorySubmit {
+				border-radius: 7px;
+				background: rgb(89, 89, 255);
+				color: white;    
+				padding: 10px 15px;
+				font-size: 22px;
+				border: none;
+    			width: -webkit-fill-available;
+				margin: 0 10px;
+			}
+			
+			#categorySubmit:hover {
+				background: blue;
+			}
+			#hotelSearch {
+			    display: flex;
+			    justify-content: center;
+			    padding: 12px 0;
+			}
+			.submitDiv {
+				display: flex;
+			    justify-content: center;
+			    align-items: center;
+			}
+			
+			@media screen and (max-width: 800px) {
+				.colStyle {
+    				justify-content: start;
+    				border: none !important;
+				}
+				.form-control {
+					background-color: transparent;
+					width: 100%;
+				}
+				.submitDiv {
+			    	margin-top: 10px;
+				}
+				.dropMenuStyle {
+					width: 90% !important;
+				}
+			}
+			
+			@media screen and (max-width: 600px) {
+				.colStyle {
+    				justify-content: start;
+    				border: none !important;
+				}
+				.form-control {
+					background-color: transparent;
+					width: 100%;
+				}
+				body #mainHeroStyle #hero {
+					height: 55vh;
+				}
+			}
+			.autocomplete-active {
+			  background-color: DodgerBlue !important; 
+			  color: #ffffff; 
+			}
+			.autocomplete-items {
+				position: absolute;
+			    top: 57px;
+			    z-index: 100;
+			    background: white;
+			    width: 100%;
+			}
+			.dropDwonCountStyle {
+				display: flex;
+    			justify-content: space-evenly;
+			}
+			input[type=number]::-webkit-inner-spin-button, 
+			input[type=number]::-webkit-outer-spin-button {
+			    -webkit-appearance: none;
+			    -moz-appearance: none;
+			    appearance: none;
+			    margin: 0; 
+			}
+			.inputStylePax {
+				width: 35px;
+			    height: 35px;
+    			text-align: center;
+    			border: 1px solid #c2c2c2;
+    			border-radius: 6px;
+			}
+			.incrementStyle {
+				border: 1.5px solid #c6c6fa;
+			    color: #c6c6fa;
+			    cursor: none;
+			    border-radius: 18px;
+			    width: 35px;
+			    height: 35px;
+			    display: flex;
+			    justify-content: center;
+			    align-items: center;
+			}
+			.incStyle {
+				border: 1.5px solid #5555d4;
+			    color: #5555d4;
+			    cursor: pointer;
+			}
+			.incrementStyle:hover {
+				background: #dbdbdb;
+			}
+			.extraPadding {
+				padding: 19px 14px;;
+			}
+			.dropMenuStyle {
+				width: 30%;
+    			box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+			}
+			.carousel-indicators {
+				z-index: 1 !important;
+			}
+			.displaySetting {
+				display: block;
+			}
+			.borderBottom {
+				border-bottom: 1px solid #c2c2c2;    
+				margin-bottom: 15px;
+			}
+			.centeredDiv {
+				display: flex;
+    			justify-content: center;
+			}
+			.checkInMiddleIcon {
+				height: 58px;
+			    display: flex;
+			    flex-direction: column;
+			    justify-content: center;
+			    font-size: 18px;
+			}
+			
+			.over-flow {
+				overflow: unset !important;
+			}
+			.row-fixed-stl {
+				width: -webkit-fill-available;
+				margin: 0;
+			    border-radius: 8px;
+			    border: 1px solid grey;
+			}
+			
+			@media screen and (max-width: 600px) {
+				.padding-row {
+					padding-top: 4px;
+				}
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="">
+			<div class="categoryStyle search-tags-mb">
+				<form id="hotelSearch" th:action="@{/hotel/saveSearchHotel}" method="post">
+					<div class="row" style=" margin: 0px; width: -webkit-fill-available;">
+						<div class="col-md-3 col-sm-12 col-12 borderEnd" style="margin-top: 4px;">
+							<div class="row row-fixed-stl">
+								<div class="col-md-2  col-sm-2 col-2 ">
+									<div class="cityFIcon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+										  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+										</svg>
+									</div>
+								</div>
+								<div class="col-md-10 col-sm-10 col-10">
+									
+									<div class="form-floating" id="aligner3">
+										<input type="search" class="form-control hill1 input_styles" name="hotelCity" id="hotelCityMob" 
+											 style="border: none;" required>										
+										<input type="hidden" name="hotelCode" id="hotelCodeMob">
+											
+										<label class="labelStyle labelSetting" for="cityOne">
+											City</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-12 col-12 borderEnd" style="margin-top: 4px;">
+							<div class="row row-fixed-stl">
+								<div class="col-2 col-md-2 col-sm-2 pe-0">
+									<div class="cityFIcon m-0">
+										<i class="fa fa-regular fa-calendar"></i>
+									</div>
+								</div>
+								<div class="col-10 col-md-10 col-sm-10 ps-0">
+									<div class="row">
+										<div class="col-5 col-md-5 col-sm-5 px-0">
+											<div class="form-floating" id="aligner3">
+												<input type="text" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate"  
+												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" onclick="return calenderViewMob(this);" onchange="return calenderOnchangeMob(this, '#floatingInputArrivalMOB2');"  required>
+												
+												<label class="labelStyle labelSetting" for="cityOne">
+													Check-In</label>
+											</div>
+										</div>
+										<div class="col-2 col-md-2 col-sm-2">
+											<div class="checkInMiddleIcon"><i class="fa fa-solid fa-angles-right"></i></div>
+										</div>
+										<div class="col-5 col-md-5 col-sm-5 px-0">
+											<div class="form-floating" id="aligner3">
+												<input type="text" class="form-control hill1 input_styles" name="checkOutDate" id="floatingInputArrivalMOB2"  
+												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" >
+												
+												<label class="labelStyle labelSetting" for="cityOne">
+													Check-Out</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-md-5 col-sm-12 col-12">
+							<div class="row padding-row" style="margin: 0; border-radius: 8px;">
+								<div class="col-12 col-md-8 dropdown" style="padding: 0;">
+									  <button type="button" class="btn travelerSelection " style="width: 100%; border: 1px solid grey;" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" onclick="return toggleOverflowTraveler();">
+									   <div class="travelerButton">
+											<div id="travellerFIcon" >
+												<i class="fa fa-solid fa-bed"></i>
+											</div>
+											<div>
+												<p>Guests and Rooms</p>
+												<b id="guestInfoMobMob">2 Guests, 1 Room</b>
+											</div>
+										</div>
+									  </button>
+									  <div class="dropdown-menu dropdown-menu-end" id="dropDownMenu" aria-labelledby="dropdownMenuButton1">
+										  <div class="row" style="padding: 5px 20px; height: 300px;">
+											  <div class="col-6 extraPadding"><b>Rooms</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decRoom"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input name="noOfRooms" class="inputStylePax" min="0" type="number" id="roomNumMob" value="1"></div>
+												  <div class="incrementStyle incStyle" id="incRoom"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
+											  <div class="col-6 extraPadding"><b>Adults</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decAdultMob"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input name="noOfAdults" class="inputStylePax" min="0" type="number" id="adultNumMob" value="2"></div>
+												  <div class="incrementStyle" id="incAdultMob"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
+											  <div class="col-6 extraPadding"><b>Children</b></div>
+											  <div class="col-6 extraPadding dropDwonCountStyle">
+												  <div class="incrementStyle" id="decChildMob"><i class="fa fa-solid fa-minus"></i></div>
+												  <div><input name="noOfChildren" class="inputStylePax" min="0" type="number" id="childNumMob" value="0"></div>
+												  <div class="incrementStyle" id="incChildMob"><i class="fa fa-solid fa-plus"></i></div>
+											   </div>
+											  <div class="col-12 borderBottom"></div>
+											  <div class="col-12" >
+												  <div class="row" id="append2"></div>
+											  </div>
+											  <div class="col-6 centeredDiv"><button type="button" class="btn btn-secondary" style="width: 80%;" id="resetButton"><b>Reset</b></button></div>
+											  <div class="col-6 centeredDiv"><button type="button" class="btn btn-success" style="width: 80%;" id="applyButtonMob"><b>Apply</b></button></div>
+										  </div>
+									  </div>
+								</div>
+								<div class="col-12 col-md-4 submitDiv">
+									<input id="categorySubmit" type="submit" value="Submit">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+	<script>
+		htmlbody = `
+		  <div class="col-6 extraPadding"><b>Rooms</b></div>
+		  <div class="col-6 extraPadding dropDwonCountStyle">
+			  <div class="incrementStyle incStyle" id="decRoom2"><i class="fa fa-solid fa-minus"></i></div>
+			  <div><input name="noOfRoomsTwo" class="inputStylePax" min="0" type="number" id="roomNumMob2" value="2"></div>
+			  <div class="incrementStyle" id="incRoom2"><i class="fa fa-solid fa-plus"></i></div>
+		   </div>
+		  <div class="col-6 extraPadding"><b>Adults</b></div>
+		  <div class="col-6 extraPadding dropDwonCountStyle">
+			  <div class="incrementStyle" id="decAdultMob2"><i class="fa fa-solid fa-minus"></i></div>
+			  <div><input name="noOfAdultsTwo" class="inputStylePax" min="0" type="number" id="adultNumMob2" value="2"></div>
+			  <div class="incrementStyle" id="incAdultMob2"><i class="fa fa-solid fa-plus"></i></div>
+		   </div>
+		  <div class="col-6 extraPadding"><b>Children</b></div>
+		  <div class="col-6 extraPadding dropDwonCountStyle">
+			  <div class="incrementStyle" id="decChildMob2"><i class="fa fa-solid fa-minus"></i></div>
+			  <div><input name="noOfChildrenTwo" class="inputStylePax" min="0" type="number" id="childNumMob2" value="0"></div>
+			  <div class="incrementStyle" id="incChildMob2"><i class="fa fa-solid fa-plus"></i></div>
+		   </div>
+		  <div class="col-12 borderBottom"></div>
+		`;
+		
+		htmlbody2 = ``;
+		
+		$("#incRoom").click(function(){
+			$("#append2").html(htmlbody);
+			toggleNumberVal("#decAdultMob2", "#incAdultMob2", "#adultNumMob2");
+			toggleNumberVal("#decChildMob2", "#incChildMob2", "#childNumMob2");
+			
+			$("#decRoom2").click(function(){
+				$("#append2").html(htmlbody2);
+			});
+		});
+		
+		
+	</script>
+	<script>
+		$("#dropDwonButton").click(function(){
+			$("#dropDownMenu").toggleClass('displaySetting');
+			$("#mainHeroStyle").addClass('over-flow');
+		});
+		
+		$(document).mouseup(function(e) {
+		    var container = $("#dropDownMenu");
+		
+		     // if the target of the click isn't the container nor a descendant of the container
+		    if (!container.is(e.target) && container.has(e.target).length === 0) {
+				$("#dropDownMenu").removeClass("displaySetting");
+				$("#mainHeroStyle").removeClass('over-flow');
+			}
+		});
+	</script>
+	<script>
+		toggleNumberVal("#decAdultMob", "#incAdultMob", "#adultNumMob");
+		toggleNumberVal("#decChildMob", "#incChildMob", "#childNumMob");
+		
+		function toggleNumberVal(minus, plus, input) {
+			if(parseInt($(input).val()) > 0) {
+				$(minus).addClass('incStyle');
+			} else {
+				$(minus).removeClass('incStyle');
+			}
+			
+			
+			if(parseInt($(input).val()) <= 48) {
+				$(plus).addClass('incStyle');
+			} else {
+				$(plus).removeClass('incStyle');
+			}
+			
+			
+			$(minus).click(function(){
+				if(parseInt($(input).val()) >= 1) {
+					var newVal = parseInt($(input).val()) - 1;
+					$(input).attr('value', newVal);
+					
+					if (parseInt($(input).val()) > 0) {
+						$(minus).addClass('incStyle');
+						$(plus).addClass('incStyle');
+					} else {
+						$(minus).removeClass('incStyle');
+					}
+				} else {
+					$(minus).removeClass('incStyle');
+				}
+				
+			});
+			
+			$(plus).click(function(){
+				if(parseInt($(input).val()) <= 48) {
+					var newVal = parseInt($(input).val()) + 1;
+					$(input).attr('value', newVal);
+					
+					if (parseInt($(input).val()) < 48) {
+						$(plus).addClass('incStyle');
+						$(minus).addClass('incStyle');
+					} else {
+						$(plus).removeClass('incStyle');
+					}
+				} else {
+					$(plus).removeClass('incStyle');
+				}
+			});
+		}
+	</script>
+	<script>
+		$("#applyButtonMob").click(function(){
+			var totalGuest = parseInt($("#adultNumMob").val()) + parseInt($("#childNumMob").val());
+			var totalRooms = parseInt($("#roomNumMob").val());
+			
+			if (parseInt($("#roomNumMob2").val()) == 2) {
+				totalRooms = parseInt($("#roomNumMob2").val());
+				totalGuest = parseInt($("#adultNumMob").val()) + parseInt($("#childNumMob").val()) + parseInt($("#adultNumMob2").val()) + parseInt($("#childNumMob2").val());
+			} else {
+				totalGuest = parseInt($("#adultNumMob").val()) + parseInt($("#childNumMob").val());
+				totalRooms = parseInt($("#roomNumMob").val());
+			}
+			
+			var gStr = " Guests, ";
+			var rStr = " Rooms";
+			
+			if (totalGuest == 1) {
+				gStr = " Guest, ";
+			}
+			
+			if (totalRooms == 1) {
+			    rStr = " Room";
+			} 
+			
+			$("#guestInfoMobMob").html(totalGuest + gStr + totalRooms + rStr);
+			$("#dropDownMenu").toggleClass('displaySetting');
+			$("#mainHeroStyle").removeClass('over-flow');
+		});
+		
+		
+		$("#resetButton").click(function(){
+			$("#guestInfoMobMob").html("2 Guests, 1 Room");
+			$("#adultNumMob").attr('value', 2);
+			$("#roomNumMob").attr('value', 1);
+			$("#childNumMob").attr('value', 0);
+		});
+	</script>
+	<script>
+		function calenderViewNew(input) {
+			var today = new Date().toISOString().split('T')[0];
+			$(input).attr('min', today);
+		};
+		
+		function calenderViewReturn(input, output) {
+			var inputAttrArr = $(input).val().split('-');
+			var days = parseInt(inputAttrArr[2]) + 1;
+			var strDays = "";
+			if(days <= 9) {
+				strDays = "0" + days;
+			} else {
+				strDays = "" + days;
+			}
+			
+			var constVal = inputAttrArr[0] + "-" + inputAttrArr[1] + "-" + strDays;
+			$(output).attr('min', constVal);
+		};
+		
+	</script>
+	
+	<script>	
+		var cityNamesMob = [];
+		var cityIdsMob = [];
+		var myInputMob = document.getElementById("hotelCityMob");				
+		var myInputCodeMob = document.getElementById("hotelCodeMob");		
+	
+		function fetchCity(){		
+			
+			fetch('/show_hotel_city')
+				.then(response => response.json()) // Convert response to JSON
+				.then(cityList => {
+					console.log(cityList); // Check if data is correct
+					//showLeastFare.innerHTML = ""; // Clear previous results
+		
+					if (cityList.length === 0) {
+						//showLeastFare.innerHTML = "<li>No least fare found.</li>";
+						return;
+					}
+					
+					cityList.forEach(city => {						
+						const listLeastFare = document.createElement("div");
+						listLeastFare.classList.add("me-2");
+						cityNamesMob.push(city.Name);
+						cityIdsMob.push(city.Code);
+						listLeastFare.innerHTML = `	
+												`;
+		
+						//showLeastFare.appendChild(listLeastFare);
+					});
+					
+				})
+				.catch(error => console.error('Error fetching least fare:', error));
+		}
+		
+		fetchCity();
+				
+		autocomplete(myInputMob, myInputCodeMob, cityNamesMob, cityIdsMob);		
+	</script>
+	  
+</html>

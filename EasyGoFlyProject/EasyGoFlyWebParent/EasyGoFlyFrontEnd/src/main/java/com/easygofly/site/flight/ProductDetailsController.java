@@ -592,7 +592,7 @@ public class ProductDetailsController {
 		ProductDetail flight = null;
 		SearchHistory search = searchRepo.findById(searchId).get();
 		
-		for (ProductDetail flightOnline : sHistoryController.listProductDetailsOnline) {
+		for (ProductDetail flightOnline : sHistoryController.listProductDetailsInSearch) {
 			if (flightOnline.getId() == flightId) {
 				if (flightOnline.getMode().equals("Offline-data")) {
 					String mode = "Offline-data";

@@ -31,4 +31,20 @@ public class APIServiceSettingBag extends SettingBag {
 		return super.getValue("TBO_API_AUTH_URL");
 	}
 
+	public String getDefaultURL() {
+		return super.getValue("TBO_API_DEFAULT_URL");
+	}
+	
+	public String getHotelURL() {
+		return super.getValue("TBO_API_HOTEL_URL");
+	}	
+	
+	public String getHotelHolidayURL() {
+		return super.getValue("TBO_HOTEL_HOLYDAY_URL");
+	}
+	
+	public String getBusURL() {
+		return super.getValue("TBO_API_BUS_URL");
+	}
+
 }

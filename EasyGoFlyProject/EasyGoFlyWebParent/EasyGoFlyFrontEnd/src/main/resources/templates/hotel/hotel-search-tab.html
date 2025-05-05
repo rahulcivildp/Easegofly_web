@@ -3,6 +3,8 @@
 	th:fragment="hotel-search">
 	
 	<head>
+		
+		<script type="text/javascript" th:src="@{js/hotelCityAuto.js}"></script>
 		<style>
 			.categoryStyle {
 				box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -210,7 +212,7 @@
 	<body>
 		<div class="">
 			<div class="categoryStyle search-tags-mb">
-				<form id="hotelSearch" th:action="@{/hotel/saveSearchHotel}" method="post">
+				<form id="hotelSearch" th:action="@{/hotel/saveSearchHotel}" method="post" onsubmit="return onsubmitForm(this);">
 					<div class="row" style=" margin: 0px; width: -webkit-fill-available;">
 						<div class="col-md-3 col-sm-12 col-12 borderEnd" style="margin-top: 4px;">
 							<div class="row row-fixed-stl">
@@ -226,7 +228,8 @@
 									<div class="form-floating" id="aligner3">
 										<input type="search" class="form-control hill1 input_styles" name="hotelCity" id="hotelCity" 
 											 style="border: none;" required>
-											
+										<input type="hidden" name="hotelCode" id="hotelCode">
+										
 										<label class="labelStyle labelSetting" for="cityOne">
 											City</label>
 									</div>
@@ -245,7 +248,7 @@
 										<div class="col-5 col-md-5 col-sm-5 px-0">
 											<div class="form-floating" id="aligner3">
 												<input type="text" class="form-control hill1 input_styles" name="checkInDate" id="checkInDate"  
-												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" onclick="calenderViewNew(this)" required>
+												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" onclick="return calenderViewMob(this);" onchange="return calenderOnchangeMob(this, '#floatingInputArrival');"  required>
 												
 												<label class="labelStyle labelSetting" for="cityOne">
 													Check-In</label>
@@ -256,8 +259,8 @@
 										</div>
 										<div class="col-5 col-md-5 col-sm-5 px-0">
 											<div class="form-floating" id="aligner3">
-												<input type="text" class="form-control hill1 input_styles" name="checkOutDate" id="checkOutDate"  
-												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" onclick="calenderViewReturn('#checkInDate', this)">
+												<input type="text" class="form-control hill1 input_styles" name="checkOutDate" id="floatingInputArrival"  
+												onfocus="(this.type='date')" onblur="(this.type='text')" style="border: none;" >
 												
 												<label class="labelStyle labelSetting" for="cityOne">
 													Check-Out</label>
@@ -485,13 +488,63 @@
 		};
 		
 	</script>
-	<script th:inline="javascript">
-		var cityNames = [[${cityList}]];
-		var cityIds = [[${cityIds}]];
-		var stateProvince = [[${cityStates}]];
-		var country = [[${cityCountries}]];
+	
+	<script>	
+		var cityNames = [];
+		var cityIds = [];
+		var myInput = document.getElementById("hotelCity");		
+		var myInputCode = document.getElementById("hotelCode");	
+		var cityTboList = null;
 		
-		var myInput = document.getElementById("hotelCity");
+		function fetchCity(){		
+			
+			fetch('/show_hotel_city')
+				.then(response => response.json()) // Convert response to JSON
+				.then(cityList => {
+					console.log(cityList); // Check if data is correct
+		
+					if (cityList.length === 0) {
+						return;
+					}
+					
+					cityList.forEach(city => {						
+						const listLeastFare = document.createElement("div");
+						listLeastFare.classList.add("me-2");
+						cityNames.push(city.Name);
+						cityIds.push(city.Code);
+						listLeastFare.innerHTML = `	
+												`;
+												
+					});
+					
+					cityTboList = cityList;
+					
+				})
+				.catch(error => console.error('Error fetching least fare:', error));
+		}
+		
+		function onsubmitForm(id) {
+			cityTboList.forEach(city => {	
+				if(myInput.value != null || myInput.value === "") {
+					if(myInput.value === city.Name) {
+						myInputCode.value = city.Code;
+						$(id).submit();
+						return;
+					}
+				}
+			});
+			
+			if(myInput.value != null || myInput.value === "") {
+				myInput.setCustomValidity("Please enter correct city name!");
+				myInput.reportValidity();
+			
+				return false;
+			}
+		}
+		
+		fetchCity();
+				
+		autocomplete(myInput, myInputCode, cityNames, cityIds);		
 	</script>
-<script type="text/javascript" th:src="@{js/hotelCityAuto.js}"></script>
+	  
 </html>

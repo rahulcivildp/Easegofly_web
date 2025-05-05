@@ -110,7 +110,7 @@
 		                                    <div class="item-inner-image text-start">
 		                                        <img  th:id="'brandImg' + ${flight.id}"  class="radius-8">
 		                                        <h5 class="mb-0">[[${flight.brand}]]</h5>
-		                                        <small>[[${flight.airlineRemarks}]]</small>
+		                                        <small>[[${flight.flightNum}]]</small>
 		                                    </div>
 		                                </div>     
 		                                <div class="col-lg-2 col-md-2 col-3"> 
@@ -459,9 +459,9 @@
 							
                             
                         </div>
-                        <div class="col-md-9 col-12">
+                        <div class="col-md-9 col-12 mt-3">
                             <div class="d-flex justify-content-between">
-	                          	<a th:href="@{'/flight_traveler_details' + ${search.id} +'&'+ ${flight.id} +'&'+ ${item.id}}" class="booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_previous" style="color: white;text-decoration: none !important; width: fit-content;"><b>Previous</b></a>
+	                          	<button onclick="return goBack();" class="booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_previous" style="color: white;text-decoration: none !important; width: fit-content;"><b>Previous</b></button>
 	                            
 	                            <!-- ** PHONEPE ** --> <!-- 
 	                            <form th:action="@{/phonepe}" method="post">
@@ -542,7 +542,6 @@
 			</div>	
 		</div>
 		
-        <div class="media_status" style="height: 50px;"></div>
         
     </body>
     

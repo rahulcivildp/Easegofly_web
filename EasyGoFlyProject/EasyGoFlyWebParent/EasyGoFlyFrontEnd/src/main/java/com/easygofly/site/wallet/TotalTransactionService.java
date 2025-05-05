@@ -49,6 +49,13 @@ public class TotalTransactionService {
 		return transactionRepo.save(transaction);
 	}
 	
+	public TotalTransaction updateTotalTransactionStatus(TotalTransaction tr, OrderStatus orderStatus) {
+		
+		tr.setOrderStatus(orderStatus);
+		
+		return transactionRepo.save(tr);
+	}
+	
 	public TotalTransaction createTotalTransactionRide(Customer customer, double amount, boolean isWallet, boolean isZaakPay,  
 			List<RideOrder> rideOrders, Integer trnId, OrderStatus orderStatus) {
 		TotalTransaction transaction = new TotalTransaction();

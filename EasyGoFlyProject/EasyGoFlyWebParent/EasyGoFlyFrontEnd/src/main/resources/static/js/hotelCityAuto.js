@@ -1,4 +1,4 @@
-function autocomplete(inp, arr, ids, states, countries) {
+function autocomplete(inp, inpCode, arr, ids) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
   var currentFocus;
@@ -19,26 +19,25 @@ function autocomplete(inp, arr, ids, states, countries) {
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-		  var z = "";
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
           /*make the matching letters bold:*/
           b.innerHTML = "<strong><i style='padding: 0 10px; color: orange; font-size: 18px; padding-top: 5px;' class='fa fa-solid fa-location-dot'></i>" + arr[i].substr(0, val.length) + "</strong>";
           b.innerHTML += arr[i].substr(val.length);
           
-          if (states[i] != "") {
-			  z = ", ";
-		  }
+        
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<div style='display: flex; flex-direction: column; justify-content: space-around; border-bottom: 1px solid grey; padding-bottom: 5px;'>" + 
           				"<p style='margin: 0; margin-left: 10px; font-size: 14px; color: #959595;'> <i style='font-size: 12px;' class='fa fa-solid fa-city'></i> " + ids[i] + 
-          				" &nbsp;<i style='font-size: 12px;' class='fa fa-regular fa-address-card'></i> " + states[i] + z + countries[i] +  "</p>";
+          				"</p>";
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          b.innerHTML += "<input type='hidden' value='" + ids[i] + "'>";
           b.innerHTML += "</div>";
           /*execute a function when someone clicks on the item value (DIV element):*/
           b.addEventListener("click", function(e) {
               /*insert the value for the autocomplete text field:*/
               inp.value = this.getElementsByTagName("input")[0].value;
+              inpCode.value = this.getElementsByTagName("input")[1].value;
               /*close the list of autocompleted values,
               or any other open lists of autocompleted values:*/
               closeAllLists();
@@ -108,4 +107,3 @@ function autocomplete(inp, arr, ids, states, countries) {
 }
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(myInput, cityNames, cityIds, stateProvince, country);

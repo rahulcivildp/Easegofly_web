@@ -128,10 +128,10 @@ public class SearchRestController {
         Customer existingUser = customerRepo.findById(historySave.user_id).get();
         
         Integer totalPax = historySave.adultCount + historySave.childCount + historySave.infantCount;
-        Date origin = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(historySave.preferredDepartureTime);
+        Date origin = new SimpleDateFormat("yyyy-MM-dd").parse(historySave.preferredDepartureTime);
         Date destination = null;
         if (historySave.preferredDepartureTimeReturn != null) {
-            destination = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(historySave.preferredDepartureTimeReturn);
+            destination = new SimpleDateFormat("yyyy-MM-dd").parse(historySave.preferredDepartureTimeReturn);
 		}
         
         SearchHistory newSearch = new SearchHistory(historySave.origin, historySave.destination, totalPax, historySave.journey_class, historySave.adultCount, historySave.childCount, historySave.infantCount, historySave.trip_type, origin, destination, existingUser);

@@ -92,6 +92,7 @@ public class BusRestController {
 	public void deletePax(@Param("pax_id") Integer pax_id) {
 		busService.deletePax(pax_id);
 	}
+	
 	@PostMapping("/show_bus_seat_rest")
 	public List<String> showSeat(@Param("bus_id") Integer bus_id) {
 		List<String> stringList = new ArrayList<>();

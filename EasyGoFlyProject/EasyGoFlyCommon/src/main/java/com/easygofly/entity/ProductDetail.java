@@ -148,6 +148,12 @@ public class ProductDetail {
             mappedBy = "productDetail")
 	@JsonIgnore
     private Order order;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order orderId;
+	
 
 	@Column(name = "device", length = 100)
 	private String device;
@@ -703,6 +709,14 @@ public class ProductDetail {
 		this.lcc = lcc;
 	}
 
+	public Order getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Order orderId) {
+		this.orderId = orderId;
+	}
+
 	public String getResultIndex() {
 		return resultIndex;
 	}
@@ -755,6 +769,10 @@ public class ProductDetail {
 		this.cartItems.add(new CartItem(customer, this, quantity, totalPrice, email, phoneNum));
 	}
 	
+	public void addTravellerDetails(TravellerDetail travellerDetail) {
+		this.travellerDetails.add(travellerDetail);
+	}
+
 	public void addTravellerDetails(String salutation, String firstName, String lastName, Date dob, CartItem cartItem) {
 		this.travellerDetails.add(new TravellerDetail(salutation, firstName, lastName, dob, this, cartItem));
 	}

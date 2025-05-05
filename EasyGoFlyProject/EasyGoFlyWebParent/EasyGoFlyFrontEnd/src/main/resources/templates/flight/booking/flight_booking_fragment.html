@@ -93,7 +93,7 @@
 	                                    <div class="item-inner-image text-start">
 	                                        <img  th:id="'brandImg' + ${flight.id}" class="radius-8">
 	                                        <h5 class="mb-0">[[${flight.brand}]]</h5>
-	                                        <small>[[${flight.airlineRemarks}]]</small>
+	                                        <small>[[${flight.flightNum}]]</small>
 	                                    </div>
 	                                </div>     
 	                                <div class="col-lg-2 col-md-2 col-3"> 
@@ -289,7 +289,7 @@
 	                                <h3 class="border-b pb-2 mb-2">Traveller Information</h3>
 	                                <form th:action="@{/traveller_details}" method="post" id="travelar-info">
 	                                    <h5>Let us know who you are</h5>
-          								<input type="hidden" name="timeRemaining" id="timeRemaining">
+          								<input type="hidden" name="timeRemaining" class="timeRemain">
 	                                    
 		                                <input type="hidden" name="search_id" id="search_id" th:value="${search.id}">
 										<input type="hidden" name="flight_id" id="flight_id" th:value="${flight.id}">
@@ -576,7 +576,7 @@
 									</div>
                                     <div>
 	                                    <div class="accordion accordion-flush" id="flush-collapseOne-farerule">
-			                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px;">
+			                                <div class="accordion-body" style="background: #efefef; color: #858385; padding: 15px; overflow-x: scroll;">
 			                                	<p th:utext="${jsonObjFarerule}"></p>
 			                                </div>
 		                                 </div>
@@ -678,7 +678,7 @@
                         </div>
                         <div class="col-md-9 col-12">
                             <div class="d-flex justify-content-between">
-	                          	<a th:href="@{'/flight_search_' + ${search.id}}" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_home" >Home</a>
+	                          	<button onclick="return goBack();" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_home" >Previous</button>
 	                            <button type="submit" class="col-md-2 col-4 booking_footer_btn nir-btn p-3 px-4 shadow" id="footer_next" form="travelar-info">Next</button>
                             </div>
 						</div>
@@ -688,7 +688,7 @@
                 
             </div>
         </div>
-        <div class="media_status" style="height: 50px;"></div>
+ 
         
 			<!-- Modal -->
 			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

@@ -99,6 +99,8 @@ public class Customer {
 	@JoinColumn(name = "country_id")
 	private Country country;
 	
+	private String refreshToken;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 				name = "customer_roles",
@@ -159,6 +161,9 @@ public class Customer {
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<RideOrder> rideOrders = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<TBOHotel> tboHotels = new ArrayList<>();
 	
 	
 	public Customer() {}
@@ -511,9 +516,23 @@ public class Customer {
 	public List<BusHistory> getBusHistories() {
 		return busHistories;
 	}
+	
+	public String getRefreshToken() {
+		return refreshToken;
+	}
 
-	
-	
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+
+	public List<TBOHotel> getTboHotels() {
+		return tboHotels;
+	}
+
+	public void setTboHotels(List<TBOHotel> tboHotels) {
+		this.tboHotels = tboHotels;
+	}
+
 	public List<RideHistory> getRideHistories() {
 		return rideHistories;
 	}
