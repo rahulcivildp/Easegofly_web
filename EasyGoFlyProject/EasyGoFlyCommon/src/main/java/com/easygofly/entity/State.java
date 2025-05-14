@@ -60,11 +60,4 @@ public class State {
 		this.country = country;
 	}
 
-	@Override
-	public String toString() {
-		return "State [id=" + id + ", name=" + name + ", country=" + country + "]";
-	}
-	
-	
-	
 }

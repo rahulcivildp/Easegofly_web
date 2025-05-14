@@ -621,5 +621,26 @@ public class Bus {
 		this.busPassengers.add(new BusPassenger(title, firstName, lastName, phoneNo, email, idNumber,
 				idType, gender, age, seatId, leadPassenger, address, this));
 	}
+
+	@Override
+	public String toString() {
+		return "Bus [id=" + id + ", resultIndex=" + resultIndex + ", traceId=" + traceId + ", availableSeats="
+				+ availableSeats + ", arrivalTime=" + arrivalTime + ", departureTime=" + departureTime + ", routeId="
+				+ routeId + ", busType=" + busType + ", serviceName=" + serviceName + ", travelName=" + travelName
+				+ ", currencyCode=" + currencyCode + ", idProofRequired=" + idProofRequired + ", isDropPointMandatory="
+				+ isDropPointMandatory + ", liveTrackingAvailable=" + liveTrackingAvailable + ", mTicketEnabled="
+				+ mTicketEnabled + ", partialCancellationAllowed=" + partialCancellationAllowed + ", maxSeatsPerTicket="
+				+ maxSeatsPerTicket + ", operatorId=" + operatorId + ", tax=" + tax + ", discount=" + discount
+				+ ", publishedPrice=" + publishedPrice + ", otherCharges=" + otherCharges + ", offeredPrice="
+				+ offeredPrice + ", publishedPriceRoundedOff=" + publishedPriceRoundedOff + ", offeredPriceRoundedOff="
+				+ offeredPriceRoundedOff + ", agentCommission=" + agentCommission + ", agentMarkUp=" + agentMarkUp
+				+ ", basePrice=" + basePrice + ", tds=" + tds + ", cGSTAmount=" + cGSTAmount + ", cGSTRate=" + cGSTRate
+				+ ", cessAmount=" + cessAmount + ", cessRate=" + cessRate + ", iGSTAmount=" + iGSTAmount + ", iGSTRate="
+				+ iGSTRate + ", sGSTAmount=" + sGSTAmount + ", sGSTRate=" + sGSTRate + ", taxableAmount="
+				+ taxableAmount + ", origin=" + origin + ", destination=" + destination + ", customer=" + customer
+				+ ", busOrders=" + busOrders + ", busCancelPolicies=" + busCancelPolicies + ", pointsDetails="
+				+ pointsDetails + ", busBoardingPointDetails=" + busBoardingPointDetails + ", busDroppingPointDetails="
+				+ busDroppingPointDetails + ", busPassengers=" + busPassengers + ", busSeats=" + busSeats + "]";
+	}
 	
 }

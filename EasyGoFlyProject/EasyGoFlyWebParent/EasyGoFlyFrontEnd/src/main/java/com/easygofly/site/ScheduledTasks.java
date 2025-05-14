@@ -18,7 +18,7 @@ public class ScheduledTasks {
 	@Autowired private LogService logService;
 	@Autowired private SettingService settingService ;
 	
-	@Scheduled(fixedRate = 43200000)
+	@Scheduled(fixedRate = 21600000)
     public void taskFetchFlightToken() {
 		try {
         	StringBuilder responseBody = onlineFlightService.apiAuthentication();

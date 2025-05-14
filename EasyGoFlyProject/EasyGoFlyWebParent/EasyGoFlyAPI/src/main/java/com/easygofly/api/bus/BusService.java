@@ -63,13 +63,6 @@ public class BusService {
 		return savedBus; 
 	}
 	
-	public Bus saveBus(Bus bus) {
-		Bus newBus = busRepo.findById(bus.getId()).get();
-		Bus savedBus = busRepo.save(newBus); 
-		
-		return savedBus; 
-	}
-	
 	public Bus findByIdBus(Integer id) {
 		Bus bus = busRepo.findById(id).get();
 		return bus; 

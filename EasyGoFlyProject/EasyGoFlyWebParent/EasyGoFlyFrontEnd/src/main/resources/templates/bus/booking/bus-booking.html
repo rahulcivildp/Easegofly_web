@@ -13,9 +13,50 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	}
 </style>
 <body>
-  <header id="header" class="fixed-top d-flex align-items-center" >
-  	<div th:replace="fragments :: page_header('tag')"></div>
-  </header>
+	<div class="hide-lg">
+			<!-- Preloader -->
+			<div id="preloader">
+			    <div id="status"></div>
+			</div>
+			<!-- Preloader Ends -->
+			
+			<!-- header starts -->
+		   
+		    <header class="main_header_area">
+				<div th:replace="nav-fragment :: page_header('tag')"></div>
+			</header>
+		    <!-- header ends -->
+	</div>
+	
+	<div class="hide-mobile btndeactive scrollbar-hidden">
+		  <section id="preloader-mobile" class="spalsh-screen">
+		    <div class="circle text-center">
+		      <div>
+		        <h1>EaseGoFly</h1>
+		        <p>Discover Your Destinition</p>
+		      </div>
+		    </div>
+		    <div class="loader-spinner">
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		      <div></div>
+		    </div>
+		  </section>
+		  <!-- splash-screen end -->
+		
+		  <main class="home">
+		    <div th:replace="nav-fragment :: page_header_mobile('tag')"></div>
+		  </main>
+	</div>
   
   <div th:replace="whatsapp :: content"></div>
   
@@ -26,8 +67,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <gmp-advanced-marker position="24.07638888888888,88.26158333333333" title="My location"></gmp-advanced-marker>
     </gmp-map>
   </div>-->
- 
-<footer th:replace="fragments :: page_footer"></footer>
+  
+  <footer th:replace="fragments :: page_footer_only('tag')"></footer>
  
  <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
