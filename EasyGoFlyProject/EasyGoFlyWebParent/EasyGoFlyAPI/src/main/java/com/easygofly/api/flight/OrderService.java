@@ -1,5 +1,5 @@
 package com.easygofly.api.flight;
-
+ 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.DateFormat;

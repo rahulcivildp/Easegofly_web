@@ -16,7 +16,13 @@ import com.easygofly.entity.RechargeHistory;
 import com.easygofly.entity.Wallet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(
+		name = "CRUD REST APIs for Customer Wallet", 
+		description = "Operations related to customer wallet"
+)
 public class WalletRestController {
 	@Autowired private WalletRepository walletRepo;
 

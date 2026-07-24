@@ -24,7 +24,13 @@ import com.easygofly.entity.SearchHistory;
 import com.easygofly.entity.Stop;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(
+		name = "CRUD REST APIs for Flight Search", 
+		description = "Operations related to flight search"
+)
 public class SearchRestController {
 	@Autowired private CityRepository cityRepo;
 	@Autowired private CustomerRepository customerRepo;

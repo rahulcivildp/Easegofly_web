@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org 
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
+<head>
+	
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--	<meta name="google-site-verification" content="r7T3-_qhziI22b3zavORfB3Pd3_6mWIRdRCLn09blpo" />
+	<meta name="google-adsense-account" content="ca-pub-5735245994573442">
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5735245994573442" crossorigin="anonymous"></script>-->
+     
+    <title>Wallet Recharge Travel Tour Booking Page</title>
+    <!-- Favicon -->
+	<link rel="icon" th:href="@{${FAVICON}}" type="image/png">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <!--Custom CSS-->
+    <link th:href="@{/assets/css/styles.css}" rel="stylesheet" type="text/css">
+    <!--Plugin CSS-->
+    <link th:href="@{/assets/css/plugin.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/assets/fonts/flaticon.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/fontawesome/all.css}" rel="stylesheet" type="text/css">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/assets/fonts/line-icons.css}" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	
+<link th:href="@{/css/custom.css}" rel="stylesheet">
+	
+  <!-- swiper -->
+  <link rel="stylesheet" th:href="@{/assets/css/swiper-bundle.min.css}">
+
+  <!-- datepicker -->
+  <link rel="stylesheet" th:href="@{/assets/css/jquery.datetimepicker.css}">
+
+  <!-- common -->
+  <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+
+  <!-- animations -->
+  <link rel="stylesheet" th:href="@{/assets/css/animations.css}">
+
+  <!-- welcome -->
+  <link rel="stylesheet" th:href="@{/assets/css/welcome.css}">
+
+  <!-- jquery ui -->
+  <link rel="stylesheet" th:href="@{/assets/css/jquery-ui.min.css}">
+
+  <!-- details -->
+  <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+	
+  <!-- auth -->
+  <link rel="stylesheet" th:href="@{/assets/css/auth.css}">
+	
+</head>
+<body >
+
+
+
+<div th:replace="cab/order/order-confirm-frag-api :: order-confirm('tag')"></div>
+ 
+ 
+<!-- *Scripts* -->
+	<!-- jquery -->
+	<script th:src="@{/assets/js/jquery-3.7.1.min.js}"></script>
+	  
+	<script type="text/javascript" th:src="@{/js/setCityVal.js}"></script>
+	<script type="text/javascript" th:src="@{/js/setCityValRight.js}"></script>
+    <script th:src="@{/assets/js/particles.js}"></script>
+    <script th:src="@{/assets/js/particlerun.js}"></script>
+    <script th:src="@{/assets/js/plugin.js}"></script>
+    <script th:src="@{/assets/js/mains.js}"></script>
+    <script th:src="@{/assets/js/custom-nav.js}"></script>
+	
+    <script th:src="@{/assets/js/custom-accordian.js}"></script>
+    
+	  <!-- bootstrap -->
+	  <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+	
+	  <!-- jquery ui -->
+	  <script th:src="@{/assets/js/jquery-ui.js}"></script>
+	
+	  <!-- mixitup -->
+	  <script th:src="@{/assets/js/mixitup.min.js}"></script>
+	
+	  <!-- gasp -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
+	
+	  <!-- draggable -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/Draggable.min.js"></script>
+	
+	  <!-- swiper -->
+	  <script th:src="@{/assets/js/swiper-bundle.min.js}"></script>
+	
+	  <!-- datepicker -->
+	  <script th:src="@{/assets/js/jquery.datetimepicker.full.js}"></script>
+	
+	  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+
+	  <!-- google-map api -->
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3vI4IQqzxRU1449lbIHThUb2gCeDW47w&callback=initMap"
+	    type="text/javascript"></script>
+	  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCodvr4TmsTJdYPjs_5PWLPTNLA9uA4iq8&callback=initMap"
+	    type="text/javascript"></script> -->
+	
+	  <!-- script -->
+	  <script th:src="@{/assets/js/scripts.js}"></script>
+	  
+</body>
+</html>

@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.easygofly.entity.BusOrder;
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.OrderStatus;
 import com.easygofly.entity.RechargeHistory;
 import com.easygofly.entity.RechargeHistoryStatus;
 import com.easygofly.entity.RideOrder;
 import com.easygofly.entity.TotalTransaction;
+import com.easygofly.site.bus.BusOrderRepository;
 import com.easygofly.site.customer.CustomerRepository;
 import com.easygofly.site.flight.order.TransactionRepository;
 import com.easygofly.site.flight.order.TransactionService;
@@ -42,23 +44,25 @@ import com.easygofly.site.zaakpay.ZaakpayApiRequestParameters;
 @Controller
 public class ApiPaymentController {
 	@Autowired
-	CustomerRepository customerRepository;
+	private CustomerRepository customerRepository;
 	@Autowired
-	WalletService walletService;
+	private WalletService walletService;
 	@Autowired
 	private SettingService settingService;
 	@Autowired
-	WalletController walletController;
+	private WalletController walletController;
 	@Autowired
-	TransactionService transactionService;
+	private TransactionService transactionService;
 	@Autowired
-	TransactionRepository transactionRepository;
+	private TransactionRepository transactionRepository;
 	@Autowired
-	TotalTransactionService totalTransactionService;
+	private TotalTransactionService totalTransactionService;
 	@Autowired
 	private RideOrderRepository rideOrderRepo;
 	@Autowired
 	private PaymentService paymentService;
+
+	@Autowired private BusOrderRepository busOrderRepo;
 
 	private String[] parameter = new String[20];
 	private String checksum;
@@ -84,7 +88,6 @@ public class ApiPaymentController {
 		return "redirect:/wallet-confirm/api_" + rechargeAmount + "_" + cust_id;
 	}
 	
-
 	@GetMapping("/wallet-confirm/api_{recharge}_{cust_id}")
 	public String rechargeWalletPageAPI(@PathVariable("recharge") Integer rechargeAmount,
 			@PathVariable("cust_id") Integer cust_id, HttpServletRequest request, Model model) {
@@ -99,8 +102,6 @@ public class ApiPaymentController {
 		return "wallet/wallet-confirm-api";
 	}
 	
-	
-
 	private void zaakpayPaymentAPI(HttpServletRequest request, Customer customer, Model model) {
 		PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
 
@@ -285,7 +286,7 @@ public class ApiPaymentController {
 		return "redirect:/cab/order/api-confirm_" + user + "_" + order;
 	}
 
-	@GetMapping("cab/order/api-confirm_{user}_{order}")
+	@GetMapping("/cab/order/api-confirm_{user}_{order}")
 	public String cabOrderRedirectAPI(@PathVariable("user") Integer user, @PathVariable("order") Integer order, HttpServletRequest request, Model model) {
 
 		Customer customer = customerRepository.findById(user).get();
@@ -461,7 +462,203 @@ public class ApiPaymentController {
 
 	}
 
+	// Bus Order Paymet API
 
+	@GetMapping("/bus/order/api_{user}_{order}")
+	public String busOrderAPI(@PathVariable("user") Integer user, @PathVariable("order") Integer order, HttpServletRequest request) {
+		Customer customer = customerRepository.findById(user).get();
+		BusOrder rideOrder = busOrderRepo.findById(order).get();
+		
+		System.out.println(customer.getId());
+		System.out.println(rideOrder.getId());
+
+		return "redirect:/bus/order/api-confirm_" + user + "_" + order;
+	}
+
+	@GetMapping("/bus/order/api-confirm_{user}_{order}")
+	public String busOrderRedirectAPI(@PathVariable("user") Integer user, @PathVariable("order") Integer order, HttpServletRequest request, Model model) {
+
+		Customer customer = customerRepository.findById(user).get();
+		BusOrder rideOrder = busOrderRepo.findById(order).get();
+		
+		System.out.println(user);
+		System.out.println(order);
+
+
+		if (customer != null) {
+			Double paisaValue = rideOrder.getPrice() * 100;
+			Integer paisaValueTemp = paisaValue.intValue();
+			zaakpayPaymentAPIbusOrder(model, request, paisaValueTemp, rideOrder, customer);
+			model.addAttribute("temp_value", rideOrder.getPrice());
+		}
+
+		return "bus/order/busorder-confirm-api";
+	}
+
+	private void zaakpayPaymentAPIbusOrder(Model model, HttpServletRequest request,
+			Integer amountInt, BusOrder rideOrder, Customer customer) {
+		PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
+
+		/* ------ ZAAKPAY -------- */ /**/
+        Date currentDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = formatter.format(currentDate);
+		rideOrder.setName("EGF" + formattedDate + "ID" + rideOrder.getId() + "ID" + customer.getId());
+		busOrderRepo.save(rideOrder);
+
+		String orderString = rideOrder.getName();
+
+		String amount = "" + amountInt;
+
+		for (Cookie cookie : request.getCookies()) {
+			if (cookie.getName().equals("JSESSIONID")) {
+				String value = cookie.getValue();
+				model.addAttribute("JSESSIONID", value);
+			}
+		}
+
+		Transaction transaction = new Transaction();
+		System.out.println(orderString + ".........................................................................");
+		System.out.println(amount);
+		System.out.println(customer.getEmail());
+
+		try {
+			ZaakpayApiRequestParameters processPayment = transaction.processBusOrderPaymentAPI(orderString, amount,
+					paymentSettingBag, customer.getEmail());
+
+			model.addAttribute("entrySet", processPayment.getRequestParameters().entrySet());
+			model.addAttribute("requestUrl", processPayment.getRequestUrl());
+			model.addAttribute("checksum", processPayment.getChecksum());
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@CrossOrigin(origins = { "https://easegofly.com/" })
+	@RequestMapping(value = "/zaakpay/bus/response/api", method = { RequestMethod.POST })
+	public String zaakpayResponsebusOrderAPI(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
+
+		Transaction transaction = new Transaction();
+		ChecksumGenerator checksumGenerator = new ChecksumGenerator();
+		String checksumString = "";
+		Integer n = 0;
+		for (String param : transaction.getResponseParameters()) {
+			checksumString = checksumString + param + "=" + request.getParameter(param);
+			checksumString = checksumString + "&";
+			// This will create the checksum string against every parameter.
+			parameter[n] = request.getParameter(param);
+			n += 1;
+		}
+		for (String string : parameter) {
+			System.out.println("Array Parameters: " + string);
+		}
+
+		Boolean verifyChecksum = checksumGenerator.verifyChecksum(paymentSettingBag.getSecretKey(), checksumString,
+				request.getParameter("checksum"));
+		verifiedChecksum = verifyChecksum;
+		checksum = request.getParameter("checksum");
+		responseParameters = transaction.getResponseParameters();
+
+		return "redirect:/zaakpay/cab/response/api";
+	}
+
+	@CrossOrigin(origins = { "https://easegofly.com/" })
+	@RequestMapping(value = "/zaakpay/bus/response/api", method = { RequestMethod.GET })
+	public String zaakpayResponseSebusOrderAPI(HttpServletRequest request, Model model, HttpServletResponse response)
+			throws Exception {
+
+		String[] ids = parameter[8].split("ID");
+		Customer customer = customerRepository.findById(Integer.parseInt(ids[2])).get();
+		BusOrder rideOrder = busOrderRepo.findById(Integer.parseInt(ids[1])).get();
+		List<BusOrder> rideOrders = new ArrayList<>();
+		rideOrders.add(rideOrder);
+
+		boolean isProcessed = false;
+		System.out.println(parameter);
+		com.easygofly.entity.Transaction selfTrans = transactionService.createTransaction(customer, parameter);
+
+		double amountIntRech = Double.parseDouble(parameter[0]) / 100;
+
+		if (parameter[9].contains("Not Found") && parameter[10].equals("unknown")) {
+			updateBusOrder(rideOrder, OrderStatus.FAILED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12]
+				.contains("Unfortunately the transaction has failed.Please try again. Transaction has failed")) {
+			updateBusOrder(rideOrder, OrderStatus.FAILED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Unfortunately the transaction has failed.Please try again.")) {
+			updateBusOrder(rideOrder, OrderStatus.FAILED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains("Customer cancelled transaction. Transaction has failed")) {
+			updateBusOrder(rideOrder, OrderStatus.CANCELLED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].equals("") || parameter[12] == null || parameter[9] == null) {
+			updateBusOrder(rideOrder, OrderStatus.FAILED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12]
+				.contains("Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			updateBusOrder(rideOrder, OrderStatus.CANCELLED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[12].contains(
+				"Your Bank has declined this transaction please Retry this payment with another pay method.")) {
+			updateBusOrder(rideOrder, OrderStatus.CANCELLED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[11].contains("1017")) {
+			updateBusOrder(rideOrder, OrderStatus.FAILED);
+			isProcessed = false;
+			model.addAttribute("paymentCancelled", parameter[12]);
+		} else if (parameter[11].contains("100")) {
+			if (parameter[12].contains("The transaction was completed successfully.")
+				|| parameter[12].contains("Transaction has been settled.")) {
+//			totalTransactionService.createTotalTransactionRide(customer, rideOrder.getTotalAmount(), false, true,
+//					rideOrders, selfTrans.getId(), OrderStatus.SUCCESSFULL);
+			updateBusOrder(rideOrder, OrderStatus.SUCCESSFULL);
+			isProcessed = true;
+			model.addAttribute("paymentSuccess", parameter[12]);
+//			paymentService.sendSuccessEmail(customer, selfTrans.getPgTransId(), isProcessed, rideOrder);
+		}
+		} else if (parameter[12].contains("The transaction was completed successfully.")
+				|| parameter[12].contains("Transaction has been settled.")) {
+//			totalTransactionService.createTotalTransactionRide(customer, rideOrder.getTotalAmount(), false, true,
+//					rideOrders, selfTrans.getId(), OrderStatus.SUCCESSFULL);
+			updateBusOrder(rideOrder, OrderStatus.SUCCESSFULL);
+			isProcessed = true;
+			model.addAttribute("paymentSuccess", parameter[12]);
+//			paymentService.sendSuccessEmail(customer, selfTrans.getPgTransId(), isProcessed, rideOrder);
+		}
+
+		System.out.println(parameter);
+
+		model.addAttribute("customer", customer);
+		model.addAttribute("amountRecharged", amountIntRech);
+		model.addAttribute("checksum", checksum);
+		model.addAttribute("verifyChecksum", verifiedChecksum);
+		model.addAttribute("responseParameters", responseParameters);
+
+		return "bus/order/response-bus-order-api";
+
+	}
+	
+	//Methods
+
+	private void updateBusOrder(BusOrder rideOrder, OrderStatus orderStatus) {
+		rideOrder.setOrderStatus(orderStatus);
+		busOrderRepo.save(rideOrder);
+		System.out.println("0000000000000000000000000000000000000000000 " + rideOrder.getOrderStatus());
+	}
+	
 	private void updateRide(RideOrder rideOrder, OrderStatus orderStatus) {
 		rideOrder.setStatus(orderStatus);
 		rideOrderRepo.save(rideOrder);

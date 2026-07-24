@@ -287,12 +287,32 @@
 					</th:block>
 			
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-			        <li class="nav-item">
-			          <a th:href="@{/products}" class="nav-link">
-			            <i class="link-icon" data-feather="sliders"></i>
-			            <span class="link-title">Flight Manager</span>
-			          </a>
-			        </li>
+				       <li class="nav-item">
+				         <a class="nav-link" data-bs-toggle="collapse" href="#manageDrivers" role="button" aria-expanded="false" aria-controls="category">
+				           <i class="link-icon" data-feather="list"></i>
+				           <span class="link-title">Flight Manager</span>
+				           <i class="link-arrow" data-feather="chevron-down"></i>
+				         </a>
+				         <div class="collapse" id="manageDrivers">
+				           <ul class="nav sub-menu">
+				             <li class="nav-item">
+				               <a th:href="@{/products/create_markup}" class="nav-link">Create markup</a>
+				             </li>
+				             <li class="nav-item">
+				               <a href="#" class="nav-link">View markups</a>
+				             </li>						   
+						   	 <li class="nav-item">
+						    	<a th:href="@{/products/add_private_fare}" class="nav-link">Add Private Fare</a>
+						     </li>							
+							 <li class="nav-item">
+							 	<a th:href="@{/products/add_private_fare_agent}" class="nav-link">Add Agent Fare</a>
+							 </li>							 
+							 <li class="nav-item">
+							  	<a th:href="@{/products}" class="nav-link">View Fare List</a>
+							 </li>
+				           </ul>
+				         </div>
+				       </li>
 					</th:block>
 			
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">

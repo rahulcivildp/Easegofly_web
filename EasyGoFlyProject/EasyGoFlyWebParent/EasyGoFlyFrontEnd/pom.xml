@@ -102,7 +102,12 @@
 		    <artifactId>opencsv</artifactId> 
 		    <version>4.1</version> 
 		</dependency> 
-
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -130,7 +135,22 @@
 			               <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
 			          </nonFilteredFileExtensions>
 			     </configuration>
-			</plugin>			
+			</plugin>	
+ 			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+        			<source>17</source>     <!-- set to your Java version -->
+        			<target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        	<version>1.18.38</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>		
 		</plugins>
 	</build>
 

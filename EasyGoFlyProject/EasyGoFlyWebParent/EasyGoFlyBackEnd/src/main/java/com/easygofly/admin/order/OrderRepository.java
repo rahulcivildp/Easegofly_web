@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.easygofly.entity.Customer;
 import com.easygofly.entity.Order;
+import com.easygofly.entity.OrderStatus;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Integer> {
 
@@ -17,4 +18,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 	
 	@Query("SELECT o FROM Order o WHERE o.customer = ?1")
 	public List<Order> findByCustomer(Customer customer); 
+	
+	@Query("SELECT o FROM Order o WHERE o.orderStatus = ?1")
+	public List<Order> listOrderByStatus(OrderStatus status); 
 }

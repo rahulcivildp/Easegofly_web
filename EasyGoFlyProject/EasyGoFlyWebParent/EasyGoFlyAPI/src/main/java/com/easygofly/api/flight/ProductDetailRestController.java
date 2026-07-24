@@ -21,7 +21,13 @@ import com.easygofly.entity.ProductDetail;
 import com.easygofly.entity.TravellerDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(
+		name = "CRUD REST APIs for Flight Booking", 
+		description = "Operations related to flight booking"
+)
 public class ProductDetailRestController {
 	@Autowired
 	private ProductDetailCrudRepository flightRepo;

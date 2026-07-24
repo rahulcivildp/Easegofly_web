@@ -55,8 +55,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8">
-					<div class="d-flex" id="calendarFare" style="overflow-x: scroll; margin: 2px 0;">																															
-					</div>
+					<div class="d-flex" id="calendarFare" style="overflow-x: scroll; margin: 2px 0;"></div>
 					<div class="list-results d-flex align-items-center justify-content-between">
 						<div class="list-results-sort hide-lg">
 							<p class="m-0" id="showing-result"></p>
@@ -126,6 +125,39 @@
 		</div>
 	</section>
 	<!-- top Destination ends -->
+	<script>
+		function formatDuration(timeDuration) {
+			var timeInHour = Math.floor(timeDuration / 60);
+			var timeRemaining = timeDuration - (timeInHour * 60);
+			var timeDurationFlight = `${timeInHour}H${timeRemaining}M`;
+			return timeDurationFlight;
+		}
+		
+		function formatDateTime(input) {
+		  const date = new Date(input);
+		
+		  // Get hours, minutes, and AM/PM
+		  let hours = date.getHours();
+		  const minutes = date.getMinutes().toString().padStart(2, '0');
+		  const ampm = hours >= 12 ? 'PM' : 'AM';
+		  hours = hours % 12 || 12; // convert 0–23 to 12-hour format
+		
+		  // Day with ordinal suffix (1st, 2nd, 3rd, 4th...)
+		  const day = date.getDate();
+		  const suffix =
+		    day % 10 === 1 && day !== 11 ? 'st' :
+		    day % 10 === 2 && day !== 12 ? 'nd' :
+		    day % 10 === 3 && day !== 13 ? 'rd' : 'th';
+		
+		  // Month short name
+		  const month = date.toLocaleString('default', { month: 'short' }); // e.g. Nov
+		
+		  // Two-digit year
+		  const year = date.getFullYear().toString().slice(-2);
+		
+		  return `${hours}:${minutes} ${ampm}, ${day}${suffix} ${month} - ${year}`;
+		}
+	</script>
 	
 	<script>
 		showCalnedarFare();
@@ -462,7 +494,7 @@
                             <div class="col-lg-4">
                                 <div class="flight-date">
                                     <ul>
-                                        <li>${flight.journeyClass}</li>
+                                        <li>Journey Class ${flight.journeyClass}</li>
                                         <li>${originDate} - ${flight.depTime}</li><br>
                                         <li class="theme" >
 											<span>${timeDurationFlight}</span>
@@ -480,11 +512,13 @@
                                         <img src="${findBrand(flight.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
                                         <ul>
                                             <li>Operated by ${flight.brand}</li><br>
-                                            <li>${flight.journeyClass} | Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li>
+                                            <li>Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li>											
+											<li>Duration ${flight.flightNum} | Aircraft ${flight.craftType}</li>
                                             <li>Adult(s): ${flight.baggage}KG luggage free</li>
                                         </ul>
                                     </div>
                                     <h5 class="mb-0">
+										<i class="fa fa-plane"></i> 
 										${checkCity(flight.cityTwo)}
 									</h5>
                                 </div>
@@ -492,32 +526,39 @@
                         </div>
 						`;
 						} else if (flight.stopNum > 0) {
-							var stopHtml = ``;
+							var stopHtmls = ``;
 							stopText = `Stop ${flight.stopNum}`;
 
 							flight.stops.forEach(stop => {
-								stopHtml = `<div class="flight-detail-right">
+								var stopHtml = `<div class="flight-detail-right">
 	                                        <h5>
 												<i class="fa fa-plane"></i> 
 												${checkCity(stop.cityName)}
+												<br>												
+												<i class="fa fa-plane"></i> 
+												${checkCity(stop.cityNameDep)}
 	                                        </h5>
 	                                        <div class="flight-detail-info d-flex align-items-center p-2 py-3 bg-grey rounded mb-2">
-	                                            <img src="${findBrand(flight.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
+	                                            <img src="${findBrand(stop.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
 	                                            <ul>
-	                                                <li>Operated by ${flight.brand}</li><br>
-	                                                <li>${flight.journeyClass} | Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li><br>
-	                                                <li>Arriving at ${stop.arrTime} - Leaving by ${stop.depTime}</li><br>
+	                                                <li>Operated by ${stop.brand}</li><br>
+	                                                <li>Flight ${stop.flightNu} | Aircraft ${flight.craftType}</li><br>														
+													<li>Duration ${formatDuration(stop.duration)} | Ground Time ${stop.goundTime}</li><br>	
+	                                                <li>Arriving at ${formatDateTime(stop.arrTime)}</li><br>														
+													<li>Leaving by ${formatDateTime(stop.depTime)}</li>
 	                                                <li>Adult(s): ${flight.baggage}KG luggage free</li>
 	                                            </ul>
 	                                        </div>
 	                                	</div>`;
+										
+								stopHtmls += stopHtml;
 							});
 
 							flightStop = `<div class="row flight-detail-wrap align-items-center border-t pt-1 mt-1" style="">
 			                            <div class="col-lg-4">
 			                                <div class="flight-date">
 			                                    <ul>
-			                                        <li>${flight.journeyClass}</li><br>
+			                                        <li>Journey Class ${flight.journeyClass}</li><br>
 			                                        <li>${originDate} - ${flight.depTime}</li><br>
 			                                        <li class="theme" >
 														<span>${timeDurationFlight}</span>
@@ -526,22 +567,7 @@
 			                                </div>
 			                            </div>
 			                            <div class="col-lg-8">
-											<div class="flight-detail-right">
-			                                    <h5>
-													<i class="fa fa-plane"></i> 
-													${checkCity(flight.cityOne)}
-			                                    </h5>
-			                                    <div class="flight-detail-info d-flex align-items-center p-2 py-3 bg-grey rounded mb-2">
-			                                        <img src="${findBrand(flight.brand)}" class="rounded" style="height: 80px; width: 100px; margin-right: 20px;">
-			                                        <ul>
-			                                            <li>Operated by ${flight.brand}</li><br>
-			                                            <li>${flight.journeyClass} | Flight ${flight.flightNum} | Aircraft ${flight.craftType}</li><br>
-			                                            <li>Arriving at ${flight.arrTime}</li><br>
-			                                            <li>Adult(s): ${flight.baggage}KG luggage free</li>
-			                                        </ul>
-			                                    </div>
-			                            	</div>
-			                                ${stopHtml}
+			                                ${stopHtmls}
 			                            </div>
 			                        </div>`;
 						}

@@ -79,19 +79,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("/", "/favicon/**", "/site-logo/**", "/brand-logos/**", "/images/**", "/images/bus/**", "/customers/**", "/login**", "/registration", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
+				.antMatchers("/", "/favicon/**", "/site-logo/**", "/brand-logos/**", "/images/**", "/images/bus/**", "/customers/**", "/login**", "/registration", "/registration/**", "/hotel", "/about/**", "/customer-photos/**",
 					"/create_customer_account", "/verify", "/google5435ca7c0eebdeac.html", "/sitemap.xml", "/indirect_login**", "/indirect_login/**", "/driver-photos/**", "/cab-photos/**",
-					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search/return_**",  "/flight_search**",
+					"/forgot_password", "/forgotPassSendEmail", "/change-pass**", "/password-save", "/flight_search_save", "/flight_search_/return_**",  "/flight_search**",
 					"/flight_international_search_save", "/flight_international_search_return_save", "/flight_search_**", "/brand-logos/**", "/jaipur_view", "/site-logo/**", 
 					"/get_value", "/rishikesh_view", "/shimla_view", "/kolkata_view", "/darjeeling_view", "/bangalore_view", "/kerala_view", "/mumbai_view", "/flight_sort",
 					"/visakhaptnam_view", "/goa_view", "/haridwar_view", "/kathmandu_view", "/jammu_view", "/flight_booking**", "/flight_booking/return_**",
 					"/loading", "/process", "/flight_activity**", "/authentication", "/loading_**", "/api_results", "/find_brand_**", "/cab/order/api**", "/zaakpay/cab/response/api", "/cab/order/api_new_",
-					"/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight", "/traveller_details**",
+					"/save_meal", "/test", "/save_timer**", "/find_city_name_**", "/find_city_by_code_**", "/flight", "/traveller_details**", "/phpmyadmin",
 					"/hotel/saveSearchHotel", "/hotel/search_**", "/hotel_loading...", "/bus", "/bus/saveSearchBus", "/bus_loading...", "/bus/search_**", "/holiday", "/bus/test_response", 
 					"/bus/transport-**", "/test_wallet_send_email", "/testing", "/get_flight_list", "/get_least_fare_by_brand", "/get_next_day_flight",
 					"/get_previous_day_flight", "/sort_flights_by_**", "/noUser_search_filter", "/mode", "/bus/transport_**", "/coming_soon", "/test_redirect", "/flight_redirect", 
 					"/assets/images/**", "/contact-us", "/wallet-recharge/api**", "/wallet-confirm/api**", "/zaakpay/recharge/api", "/api/flight/tbo-search/**", "/api/fetch_cities", "/api/brand_list",
-					"/api/flight/leastFare", "/api/flight/tbo-search/calendar-fare", "/show_hotel_city", "/flight-payment/api/**", "/zaakpay/flight/response/api**").permitAll()
+					"/api/flight/leastFare", "/api/flight/tbo-search/calendar-fare", "/show_hotel_city", "/flight-payment/api/**", "/zaakpay/flight/response/api**", "/bus/order/api**", "/zaakpay/bus/response/api").permitAll()
 			.anyRequest().authenticated()
             .and()
             .addFilterBefore(beforeLoginFilter,

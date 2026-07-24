@@ -61,9 +61,6 @@
 	
 	customerId = "[[${customer.id}]]";
 	contextPath = "[[@{/}]]";
-	var csrfHeaderName = "[[${_csrf.headerName}]]";
-	var csrfValue = "[[${_csrf.token}]]";
-	
 	urlBalance = "";
 
 	$(document).ready(function() {
@@ -88,7 +85,7 @@
 			type: 'POST',
 			url: urlBalance,
 			beforeSend: function(xhr) {
-				xhr.setRequestHeader(csrfHeaderName, csrfValue);
+				xhr.setRequestHeader();
 			},
 			data: JSON.stringify(jsonData),
 			contentType: 'application/json'

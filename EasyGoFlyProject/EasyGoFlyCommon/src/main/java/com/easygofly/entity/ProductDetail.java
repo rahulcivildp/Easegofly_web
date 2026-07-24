@@ -246,7 +246,8 @@ public class ProductDetail {
 			String arrTime, float priceADT, float priceINF, float markupADT, float markupINF, String cityOne,
 			String cityTwo, boolean inStock, boolean enabled, int stopNum, Integer duration, String brand, float depTimeInteger, 
 			float arrTimeInteger, String traceId, String resultIndex, String airlineRemarks, String mode, String journeyClass, 
-			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, Product product, String craftType, String airlineLogo, String grandTotal) {
+			String terminalDep, String terminalArr, Integer baggage, Integer cabinBaggage, String device, String deviceDescription, 
+			Product product, String craftType, String airlineLogo, String grandTotal) {
 		this.id = id;
 		this.pnr = pnr;
 		this.totalSeats = totalSeats;

@@ -48,9 +48,68 @@ public class ProductController {
 	
 	@GetMapping("/products")
 	public String listFirstPage(Model model, @AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) {
-		String product = "products/products";
+		String product = "products/flightFare/view_private_fare";
 		
 		return listByPage(1, model, "id", "asc", null, 0, product, loggedUser);
+	}
+	
+	@GetMapping("/products/create_markup")
+	public String createMarkup(Model model, @AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) {
+
+		model.addAttribute("pageTitle", "Create Markup");
+		return "products/create_markup";
+	}
+	
+	@GetMapping("/products/add_private_fare")
+	public String addPrivateFare(Model model, @AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) {
+		List<Product> listAll = productService.listAll();
+		
+		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
+		List<Category> listCategory = categoryService.listCategoriesUsedInForm();
+		List<Brand> listBrand = productService.listBrand();
+		List<City> cities = cityRepo.findAllByOrderByNameAsc();
+		
+		Product product = new Product();
+		product.setEnabled(true);
+		product.setInStock(true);
+		product.setFundState(true);
+		
+		model.addAttribute("product", product);
+		model.addAttribute("listCategory", listCategory);
+		model.addAttribute("listBrand", listBrand);
+		model.addAttribute("cities", cities);
+		model.addAttribute("listAll", listAll);
+		model.addAttribute("listCategories", listCategories);
+		model.addAttribute("pageTitle", "Add Private Fare");
+		return "products/flightFare/private_fare_form";
+	}
+	
+	@GetMapping("/products/add_private_fare_agent")
+	public String addPrivateFareAgent(Model model, @AuthenticationPrincipal EasyGoFlyUserDetails loggedUser) {
+		List<Product> listAll = productService.listAll();
+		
+		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
+		List<Category> listCategory = categoryService.listCategoriesUsedInForm();
+		List<Brand> listBrand = productService.listBrand();
+		List<City> cities = cityRepo.findAllByOrderByNameAsc();
+		
+		Product product = new Product();
+		product.setEnabled(true);
+		product.setInStock(true);
+		product.setFundState(true);
+		List<User> users = (List<User>) userRepo.findAll();
+
+		model.addAttribute("users", users);
+		model.addAttribute("product", product);
+		model.addAttribute("listCategory", listCategory);
+		model.addAttribute("listBrand", listBrand);
+		model.addAttribute("cities", cities);
+		model.addAttribute("listAll", listAll);
+		model.addAttribute("listCategories", listCategories);
+		model.addAttribute("pageTitle", "Add Private Fare Agent");
+		return "products/flightFare/private_fare_user_form";
 	}
 	
 	@GetMapping("/products/page/{pageNum}")
@@ -182,9 +241,8 @@ public class ProductController {
 			Product productDetails = productService.getProductDetails(id);
 			
 			model.addAttribute("productDetails", productDetails);
-			String flights = "products/flights";
 			
-		return listByPage(1, model, "name", "asc", null, 0, flights, loggedUser);
+		return "products/flightFare/flightList";
 		} catch (ProductNotFoundException e) {
 			redirectAttributes.addFlashAttribute("alert", e.getMessage());
 			return "redirect:/products";

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.easygofly.entity.Country;
 import com.easygofly.entity.State;
-
+ 
 @RestController
 public class StateRestController {
 	

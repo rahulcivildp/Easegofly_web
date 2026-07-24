@@ -78,7 +78,6 @@ public class SearchHistoryController {
 	    Calendar c = Calendar.getInstance();
 	    Calendar ca = Calendar.getInstance();
 	    ca.setTime(currentDate);
-	    System.out.println(history.cityOne);
 	    
 	    City cityOneFound = cityRepo.getCityByName(history.getCityOne());
 	    City cityTwoFound = cityRepo.getCityByName(history.getCityTwo());
@@ -177,9 +176,9 @@ public class SearchHistoryController {
             System.out.println("History Static: " + history);
             
             if (returnDate != null) {
+                System.out.println("History Static: 000000000000000000000000000000000000000000000000000000000000000 : " + history);
 
-				return "redirect:/flight_search/return_" + searchId + "_" + city1.getCode() + "_" + city2.getCode() +"_"+ journeyClass +"_"+ tripType +"_"+ adultNum 
-						+"_"+ childNum +"_"+ infantNum +"_"+ strDate +"_"+ strDateReturn +"_" + sort;
+				return "redirect:/flight_search_/return_";
 			} else {
 				return "redirect:/flight_search_";
 			}
@@ -353,65 +352,54 @@ public class SearchHistoryController {
 	
 	////Flight return segment.
 	
-	@GetMapping("/flight_search/return_{historyId}_{cityOne}_{cityTwo}_{journeyClass}_{tripType}_{adultNum}_{childNum}_{infantNum}_{strDate}_{strReturnDate}_{sortName}")
+	@GetMapping("/flight_search_/return_")
 	public String searchFlightDetailsReturn(
-			@PathVariable(name = "historyId") String searchId,
-			@PathVariable(name = "cityOne") String cityOne,
-			@PathVariable(name = "cityTwo") String cityTwo,
-			@PathVariable(name = "journeyClass") String journeyClass,
-			@PathVariable(name = "tripType") String tripType,
-			@PathVariable(name = "adultNum") String adultNum,
-			@PathVariable(name = "childNum") String childNum,
-			@PathVariable(name = "infantNum") String infantNum,
-			@PathVariable(name = "strDate") String strDate,
-			@PathVariable(name = "strReturnDate") String strReturnDate,
-			@PathVariable(name = "sortName") String sortName,
 			Model model, RedirectAttributes redirectAttributes) throws ParseException, IOException {
 
-		String[] arrSearchId = searchId.split("_");
-		double decimal = Double.parseDouble(arrSearchId[0]);
-		SearchHistory search = searchRepo.findById((int)decimal).get();
+		listProductDetailsInSearch = new ArrayList<>();
+		listProductDetailsOnlineReturn = new ArrayList<>();
 		
-	    City cityOneFound = cityRepo.getCityByCode(cityOne);
-	    City cityTwoFound = cityRepo.getCityByCode(cityTwo);
-		
-	    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-	    Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(strReturnDate);
+	    Date currentDate = new Date();
+	    Calendar c = Calendar.getInstance();
+	    Calendar ca = Calendar.getInstance();
+	    ca.setTime(currentDate);
 
-		List<Product> getProductBrand = productRepo.findProductByCity(cityOne, cityTwo, Sort.by("name").ascending());
-		
-		Integer passengerNum = Integer.parseInt(adultNum) + Integer.parseInt(childNum) + Integer.parseInt(infantNum);
+	    City cityOneFound = cityRepo.getCityByName(history.getCityOne());
+	    City cityTwoFound = cityRepo.getCityByName(history.getCityTwo());
+
+		List<Product> getProductBrand = productRepo.findProductByCity(cityOneFound.getCode(), cityTwoFound.getCode(), Sort.by("name").ascending());
+
+		Integer passengerNum = history.getAdultNum() + history.getChildNum() + history.getInfantNum();
 		
 		Country country = countryRepo.findById(106).get();
 		Iterable<City> cities = cityRepo.getCityByCountry(country);
+		Iterable<Brand> brands = brandRepo.findAll();
 		
-		System.out.println(date);
-		System.out.println(strDate);
+		
+		model.addAttribute("searchId", history.getId());
+		model.addAttribute("cities", cities);
+		model.addAttribute("brands", brands);
+		model.addAttribute("getProductBrand", getProductBrand);
+		model.addAttribute("cityOne", cityOneFound.getCode());
+		model.addAttribute("cityTwo", cityTwoFound.getCode());
+		model.addAttribute("cityOneName", history.getCityOne());
+		model.addAttribute("cityTwoName", history.getCityTwo());
+		model.addAttribute("date", history.getDate());
+		model.addAttribute("strDate", history.getDate());
+		model.addAttribute("returnDate", history.getReturnDate());
+		model.addAttribute("strReturnDate", history.getReturnDate());
+		model.addAttribute("journeyClass", history.getJourneyClass());
+		model.addAttribute("tripType", history.getTripType());
+		model.addAttribute("adultNum", history.getAdultNum());
+		model.addAttribute("childNum", history.getChildNum());
+		model.addAttribute("infantNum", history.getInfantNum());
+		model.addAttribute("passengerNum", passengerNum);
+		model.addAttribute("sortName", history.getSort());
+		model.addAttribute("currentDay", ca.get(Calendar.DAY_OF_YEAR));
+		model.addAttribute("searchedDay", c.get(Calendar.DAY_OF_YEAR));
+		model.addAttribute("search", history);
 
 		model.addAttribute("flightMaps", flightMaps);
-		model.addAttribute("cities", cities);
-		model.addAttribute("getProductBrand", getProductBrand);
-		model.addAttribute("cityOne", cityOne);
-		model.addAttribute("cityTwo", cityTwo);
-		model.addAttribute("cityOneName", cityOneFound.getCityName());
-		model.addAttribute("cityTwoName", cityTwoFound.getCityName());
-		model.addAttribute("date", date);
-		model.addAttribute("returnDate", returnDate);
-		model.addAttribute("strReturnDate", strReturnDate);
-		model.addAttribute("strDate", strDate);
-		model.addAttribute("journeyClass", journeyClass);
-		model.addAttribute("tripType", tripType);
-		model.addAttribute("adultNum", adultNum);
-		model.addAttribute("childNum", childNum);
-		model.addAttribute("infantNum", infantNum);
-		model.addAttribute("passengerNum", passengerNum);
-		model.addAttribute("search", search);
-
-		model.addAttribute("listFlight", listProductDetailsInSearch);
-		model.addAttribute("listFlightReturn", listProductDetailsOnlineReturn);
-
-		System.out.println(flightMaps.size() + " size");
-		System.out.println(listProductDetailsOnlineReturn.size() + " size");
 		
 		List<SortName> listSortName = new ArrayList<SortName>();
 		listSortName.add(new SortName("priceADT", "Price"));

@@ -2,7 +2,88 @@
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head th:replace="fragments :: page_head('Welcome to Easegofly Admin home page', 'none')"></head>
+<script>
+	var colors = {
+	  primary        : "#029e9d",
+	  secondary      : "#7987a1",
+	  success        : "#05a34a",
+	  info           : "#66d1d1",
+	  warning        : "#fbbc06",
+	  danger         : "#ff3366",
+	  light          : "#e9ecef",
+	  dark           : "#060c17",
+	  muted          : "#7987a1",
+	  gridBorder     : "rgba(77, 138, 240, .15)",
+	  bodyColor      : "#000",
+	  cardBg         : "#fff"
+	}
+	var chartDatesInner = [];	
+	var bookingRevenueChartData = [];	
+	var bookingRevenueChartDates = [];	
+	var bookingChartData = [];
+	var bookingChartDates = [];
+	
+	
+	
+	
+	function dayCountFromBegining(dates, invoices){
+		// Step 1: Convert all strings to Date objects
+		const parsedDates = dates.map(d => new Date(d.replace(" ", "T")));
+		
+		// Step 2: Find the earliest date
+		const earliestDate = new Date(Math.min(...parsedDates.map(d => d.getTime())));
+		
+		// Step 3: Calculate day difference from earliest date to today
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		
+		const yesterday = new Date(today);
+		yesterday.setDate(today.getDate() - 1);		
+		
+		const dayBefore = new Date(today);
+		dayBefore.setDate(today.getDate() - 2);
+		
+		const diffMsBefore = dayBefore - earliestDate;		
+		const diffMsAfter = yesterday - earliestDate; // difference in milliseconds
+		const diffDaysBefore = Math.floor(diffMsBefore / (1000 * 60 * 60 * 24));		
+		const diffDaysAfter = Math.floor(diffMsAfter / (1000 * 60 * 60 * 24));
+		
+		var totalAmountMonth = 0;
+		
+		invoices.forEach((inv, index) => {
+			totalAmountMonth += parseFloat(inv);
+		});		
+		console.log(`To ${totalAmountMonth}`);
+		
+		console.log("Earliest Date:", earliestDate.toDateString());
+		
+		return diffDaysBefore;
+	}
+	
+	function formateDate(input){
+		const date = new Date(input.replace(" ", "T")); // Replace space with 'T' for ISO format
+		
+		const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+		                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		
+		const formatted = `${months[date.getMonth()]} ${date.getDate()} ${String(date.getFullYear()).slice(2)}`;
+		return formatted;
+	}
+</script>
 <body >
+	
+	<th:block th:each="order : ${orders}">
+		
+		<script>
+			var localDateinDiv = "";
+			bookingRevenueChartData.push('[[${order.price}]]');
+			bookingRevenueChartDates.push(formateDate('[[${order.createdTime}]]'));
+			chartDatesInner.push('[[${order.createdTime}]]');
+		</script>
+
+	</th:block>
+	
+	
 		<div class="main-wrapper">
 
 		<!-- sidebar starts -->
@@ -55,7 +136,7 @@
                     </div>
                     <div class="row">
                       <div class="col-6 col-md-12 col-xl-5">
-                        <h3 class="mb-2">1,297</h3>
+                        <h3 class="mb-2">[[${totalOrders}]]</h3>
                         <div class="d-flex align-items-baseline">
                           <p class="text-success">
                             <span>+2.5%</span>
@@ -229,13 +310,13 @@
                   <div class="col-6 d-flex justify-content-end">
                     <div>
                       <label class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bolder">B2B <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
-                      <h5 class="fw-bolder mb-0 text-end">1K</h5>
+                      <h5 class="fw-bolder mb-0 text-end">[[${totalUsers}]]</h5>
                     </div>
                   </div>
                   <div class="col-6">
                     <div>
                       <label class="d-flex align-items-center tx-10 text-uppercase fw-bolder"><span class="p-1 me-1 rounded-circle bg-primary"></span> B2C</label>
-                      <h5 class="fw-bolder mb-0">786</h5>
+                      <h5 class="fw-bolder mb-0">[[${totalCustomers}]]</h5>					  
                     </div>
                   </div>
                 </div>
@@ -267,66 +348,21 @@
                   </div>
                 </div>
                 <div class="d-flex flex-column">
-                  <a class="d-flex align-items-center border-bottom pb-3">
+					<th:block th:each="order : ${latestFiveOrders}">
+                  <a class="d-flex align-items-center border-bottom pb-3 my-3">
                     <div class="me-3">
-                      <img src="/assets\photo\Air India.jpg" class="rounded-circle wd-35" alt="user">
+                      <img src="\assets\photo\Air India.jpg" class="rounded-circle wd-35" alt="user">
                     </div>
                     <div class="w-100">
                       <div class="d-flex justify-content-between">
-                        <h6 class="text-body mb-2">Air India</h6>
-                        <p class="text-muted tx-12">12.30 PM</p>
+                      	<h6 class="text-body mb-2">[[${order.productDetail.brand}]] </h6>
+                        <p class="text-muted tx-12"><span th:text="${#dates.format(order.createdTime, 'dd MMM yy, hh:mm a')}"></span></p>
                       </div>
-                      <p class="text-muted tx-13">Hey! there I'm available CCU TO BLR </p>
+                      <p class="text-muted tx-13">[[${order.customer.firstName}]] [[${order.customer.lastName}]] has booked [[${order.productDetail.cityOne}]] to [[${order.productDetail.cityTwo}]] flight</p>
                     </div>
                   </a>
-                  <a class="d-flex align-items-center border-bottom py-3">
-                    <div class="me-3">
-                      <img src="/assets/photo/Alaska Airlines.jpg" class="rounded-circle wd-35" alt="user">
-                    </div>
-                    <div class="w-100">
-                      <div class="d-flex justify-content-between">
-                        <h6 class="text-body mb-2">Carl Henson</h6>
-                        <p class="text-muted tx-12">02.14 AM</p>
-                      </div>
-                      <p class="text-muted tx-13">I've Listed it! See you BOM To CCU</p>
-                    </div>
-                  </a>
-                  <a class="d-flex align-items-center border-bottom py-3">
-                    <div class="me-3">
-                      <img src="/assets\photo\Air India Express.jpg" class="rounded-circle wd-35" alt="user">
-                    </div>
-                    <div class="w-100">
-                      <div class="d-flex justify-content-between">
-                        <h6 class="text-body mb-2">Jensen Combs</h6>
-                        <p class="text-muted tx-12">08.22 PM</p>
-                      </div>
-                      <p class="text-muted tx-13">This is awesome! DEL TO BOM</p>
-                    </div>
-                  </a>
-                  <a class="d-flex align-items-center border-bottom py-3">
-                    <div class="me-3">
-                      <img src="/assets\photo\indigo.jpg" class="rounded-circle wd-35" alt="user">
-                    </div>
-                    <div class="w-100">
-                      <div class="d-flex justify-content-between">
-                        <h6 class="text-body mb-2">Indigo</h6>
-                        <p class="text-muted tx-12">05.49 AM</p>
-                      </div>
-                      <p class="text-muted tx-13">Nice to meet you CCU TO HYD</p>
-                    </div>
-                  </a>
-                  <a class="d-flex align-items-center border-bottom py-3">
-                    <div class="me-3">
-                      <img src="/assets\photo\indigo.jpg" class="rounded-circle wd-35" alt="user">
-                    </div>
-                    <div class="w-100">
-                      <div class="d-flex justify-content-between">
-                        <h6 class="text-body mb-2">Indigo</h6>
-                        <p class="text-muted tx-12">01.19 AM</p>
-                      </div>
-                      <p class="text-muted tx-13">Hey! there I'm available. CCU TO DEL</p>
-                    </div>
-                  </a>
+				  </th:block>
+                  
                 </div>
               </div>
             </div>

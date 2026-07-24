@@ -1,5 +1,7 @@
 package com.easygofly.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,4 +56,19 @@ public class Coupon {
 		return "Coupon [id=" + id + ", couponCode=" + couponCode + ", couponAmount=" + couponAmount + "]";
 	}
 	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+		
+		Coupon cou = (Coupon) obj;
+		return id == cou.id && Objects.equals(couponCode, cou.couponCode) && couponAmount == cou.couponAmount;
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return Objects.hash(id, couponCode, couponAmount);
+	}
 }

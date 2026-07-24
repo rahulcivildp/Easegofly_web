@@ -1,7 +1,20 @@
 package com.easygofly.user;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,16 +131,46 @@ public class CustomerTestRepository {
 		System.out.println("New Customer");
 	}
 
-	@Test
-	public void testRsultIndex() {
+	
+}
 
-		String resultIndex = "OB436";
+class Employee {
+    String name;
+    String department;
+    double salary;
 
-		String[] arrRIndex = resultIndex.split("TBO");
-		resultIndex = arrRIndex[0].replace("[", "");
-		
-		System.out.println(resultIndex);
-		
-		
+    public Employee(String name, String department, double salary) {
+        this.name = name;
+        this.department = department;
+        this.salary = salary;
+    }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [name=" + name + ", department=" + department + ", salary=" + salary + "]";
 	}
 }

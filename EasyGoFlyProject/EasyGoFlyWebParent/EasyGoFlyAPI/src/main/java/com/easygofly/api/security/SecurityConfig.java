@@ -1,5 +1,5 @@
 package com.easygofly.api.security;
-
+ 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
@@ -50,7 +50,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
          .and()
          .authorizeRequests()
-         .antMatchers("/api/login", "/api/login/refresh", "/customer-photos/**", "/driver-photos/**", "/cab-photos/**").permitAll()
+         .antMatchers("/api/login",
+        		 "/api/login/refresh",
+        		 "/customer-photos/**",
+        		 "/driver-photos/**",
+        		 "/cab-photos/**",
+        		 "/v3/api-docs/**",
+                 "/swagger-ui.html",
+                 "/swagger-ui/**",
+                 "/swagger-resources/**",
+                 "/webjars/**").permitAll()
          .anyRequest().authenticated()
          .and()
          .addFilter(new JwtAuthenticationFilter(authenticationManager(), getApplicationContext()))

@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head>
+
+		<!-- dynamic head starts -->
+<head>
+	<head th:replace="fragments :: page_head('Welcome to Easegofly Admin home page ${pageTitle}', 'tag')"></head>
+	
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+
 
         
         <style type="text/css">
@@ -37,101 +44,132 @@
             }
         </style>
     </head>
-    <body>
-        <div class="contained">
-            <form method="post">
-                <div class="row" style=" margin: 0; border-bottom: 1px solid gray;">
-                    <div class="titles col-md-3">
-                        Create Markups
-                    </div>
-                    <div class="col-md-9"></div>
-                </div>
-                <div class="row" style=" margin: 0;">
-                    <lebel class="lebel">Services</lebel>
-                    <select name="transport1" id="transport1">
-                        <option value="select">Select</option>
-                        <option value="bus">Bus</option>
-                        <option value="car">Car</option>
-                        <option value="dmr">DMR</option>
-                        <option value="flight">Flight</option>
-                        <option value="hotel">Hotel</option>
-                        <option value="utility">Utility</option>
-                        <option value="visa">VISA</option>
-                    </select>
-                </div>
-                <hr>
-                <div class="row" style=" margin: 0;">
-                    <lebel class="lebel">Travel Date Range</lebel>
-                    <div class="col-md-6" style=" margin-top: 10px;">
-                        <label>Start Date</label>
-                        <input type="date">
-                    </div>
-                    <div class="col-md-6" style=" margin-top: 10px;">
-                        <label>End Date</label>
-                        <input type="date">
-                    </div>
-                </div>
-                <hr>
-                <div class="row" style=" margin: 0;">
-                    <lebel class="lebel">Gross Price Range</lebel>
-                    <div class="col-md-6" style=" margin-top: 10px;">
-                        <label>From</label>
-                        <input type="number">
-                        <label>INR</label>
-                    </div>
-                    <div class="col-md-6" style=" margin-top: 10px;">
-                        <label>To</label>
-                        <input type="number">
-                        <label>INR</label>
-                    </div>
-                </div>
-                <hr>
-                <div class="row" style=" margin: 0;">
-                    <lebel class="lebel">Markup</lebel>
-                    <div class="col-md-2" style=" margin-top: 10px;">
-                        <label class="lebel1">Base Fee</label>
-                        <input type="number" class="re-size">
-                        <label>INR</label>
-                    </div>
-                    <div class="col-md-2" style=" margin-top: 10px;">
-                        <label class="lebel1">Type</label>
-                        <select name="price_type" class="price_type">
-                            <option value="select">Fixed</option>
-                            <option value="bus">Percentage</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2" style=" margin-top: 10px;">
-                        <label class="lebel1">Service Fee</label>
-                        <input type="number" class="re-size">
-                        <label>INR</label>
-                    </div>
-                    <div class="col-md-2" style=" margin-top: 10px;">
-                        <label class="lebel1">Type</label>
-                        <select name="price_type" class="price_type">
-                            <option value="select">Fixed</option>
-                            <option value="bus">Percentage</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2" style=" margin-top: 10px;">
-                        <label class="lebel1">Booking Fee</label>
-                        <input type="number" class="re-size">
-                        <label>INR</label>
-                    </div>
-                    <div class="col-md-2" style=" margin-top: 10px;">
-                        <label class="lebel1">Type</label>
-                        <select name="price_type" class="price_type">
-                            <option value="select">Fixed</option>
-                            <option value="bus">Percentage</option>
-                        </select>
-                    </div>
-                </div>
-                <hr>
-                <div class="row" style=" margin: 0;">
-                <div class="col-md-11" style="margin-top: 20px;"><input type="submit" style="float: right;"></div>
-                    
-                </div>
-            </form>
-        </div>
+    <body>	
+	<div class="main-wrapper">		
+		
+			<!-- sidebar starts -->
+		 
+			<div th:replace="navigation :: nav_sidebar"></div>
+		
+		     <!-- sidebar Ends -->
+		
+			<div class="page-wrapper">
+						
+			    <!-- navbar Starts -->
+		
+			    <div th:replace="navigation :: nav_profile"></div>
+		
+				<!-- navbar Ends -->
+		
+		         <!-- Page Content Starts -->
+		
+				<div class="page-content">
+					<div class="contained">
+					         <form method="post">
+					             <div class="row" style=" margin: 0; border-bottom: 1px solid gray;">
+					                 <div class="titles col-md-3">
+					                     Create Markups
+					                 </div>
+					                 <div class="col-md-9"></div>
+					             </div>
+					             <div class="row" style=" margin: 0;">
+					                 <lebel class="lebel">Services</lebel>
+					                 <select name="transport1" id="transport1">
+					                     <option value="select">Select</option>
+					                     <option value="bus">Bus</option>
+					                     <option value="car">Car</option>
+					                     <option value="dmr">DMR</option>
+					                     <option value="flight">Flight</option>
+					                     <option value="hotel">Hotel</option>
+					                     <option value="utility">Utility</option>
+					                     <option value="visa">VISA</option>
+					                 </select>
+					             </div>
+					             <hr>
+					             <div class="row" style=" margin: 0;">
+					                 <lebel class="lebel">Travel Date Range</lebel>
+					                 <div class="col-md-6" style=" margin-top: 10px;">
+					                     <label>Start Date</label>
+					                     <input type="date">
+					                 </div>
+					                 <div class="col-md-6" style=" margin-top: 10px;">
+					                     <label>End Date</label>
+					                     <input type="date">
+					                 </div>
+					             </div>
+					             <hr>
+					             <div class="row" style=" margin: 0;">
+					                 <lebel class="lebel">Gross Price Range</lebel>
+					                 <div class="col-md-6" style=" margin-top: 10px;">
+					                     <label>From</label>
+					                     <input type="number">
+					                     <label>INR</label>
+					                 </div>
+					                 <div class="col-md-6" style=" margin-top: 10px;">
+					                     <label>To</label>
+					                     <input type="number">
+					                     <label>INR</label>
+					                 </div>
+					             </div>
+					             <hr>
+					             <div class="row" style=" margin: 0;">
+					                 <lebel class="lebel">Markup</lebel>
+					                 <div class="col-md-2" style=" margin-top: 10px;">
+					                     <label class="lebel1">Base Fee</label>
+					                     <input type="number" class="re-size">
+					                     <label>INR</label>
+					                 </div>
+					                 <div class="col-md-2" style=" margin-top: 10px;">
+					                     <label class="lebel1">Type</label>
+					                     <select name="price_type" class="price_type">
+					                         <option value="select">Fixed</option>
+					                         <option value="bus">Percentage</option>
+					                     </select>
+					                 </div>
+					                 <div class="col-md-2" style=" margin-top: 10px;">
+					                     <label class="lebel1">Service Fee</label>
+					                     <input type="number" class="re-size">
+					                     <label>INR</label>
+					                 </div>
+					                 <div class="col-md-2" style=" margin-top: 10px;">
+					                     <label class="lebel1">Type</label>
+					                     <select name="price_type" class="price_type">
+					                         <option value="select">Fixed</option>
+					                         <option value="bus">Percentage</option>
+					                     </select>
+					                 </div>
+					                 <div class="col-md-2" style=" margin-top: 10px;">
+					                     <label class="lebel1">Booking Fee</label>
+					                     <input type="number" class="re-size">
+					                     <label>INR</label>
+					                 </div>
+					                 <div class="col-md-2" style=" margin-top: 10px;">
+					                     <label class="lebel1">Type</label>
+					                     <select name="price_type" class="price_type">
+					                         <option value="select">Fixed</option>
+					                         <option value="bus">Percentage</option>
+					                     </select>
+					                 </div>
+					             </div>
+					             <hr>
+					             <div class="row" style=" margin: 0;">
+					             <div class="col-md-11" style="margin-top: 20px;"><input type="submit" style="float: right;"></div>
+					                 
+					             </div>
+					         </form>
+					     </div>
+				</div>
+				
+				<!-- Page Content Ends -->			
+							
+				<!-- footer Starts -->
+			
+			    <div th:replace="fragments :: footer"></div>
+			
+			     <!-- footer Ends -->
+			</div>	
+	</div>
+     
     </body>
 
 </html>

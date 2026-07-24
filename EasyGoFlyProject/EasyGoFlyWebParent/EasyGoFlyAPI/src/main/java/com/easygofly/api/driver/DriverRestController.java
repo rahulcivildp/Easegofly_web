@@ -24,7 +24,13 @@ import com.easygofly.entity.RideHistory;
 import com.easygofly.entity.RideOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(
+		name = "CRUD REST APIs for Cab Drivers", 
+		description = "Operations related to driver accounts"
+)
 public class DriverRestController {
 	@Autowired
 	private DriverRepository driverRepo;

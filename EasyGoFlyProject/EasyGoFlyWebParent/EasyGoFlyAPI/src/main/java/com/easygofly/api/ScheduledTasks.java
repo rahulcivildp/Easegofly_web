@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.easygofly.api.flight.OnlineFlightService;
 import com.easygofly.api.setting.SettingService;
 import com.easygofly.entity.Setting;
-
+ 
 @Component
 public class ScheduledTasks {
 	@Autowired private OnlineFlightService onlineFlightService;

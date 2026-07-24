@@ -192,7 +192,7 @@ $(function() {
     $('#dashboardDate').datepicker('setDate', today);
   }
   // Date Picker - END
-
+/*
   // New Customers Chart
   if($('#customersChart').length) {
     var options1 = {
@@ -222,7 +222,7 @@ $(function() {
     };
     new ApexCharts(document.querySelector("#customersChart"),options1).render();
   }
-  // New Customers Chart - END
+  // New Customers Chart - END*/
 
   // Orders Chart
   if($('#ordersChart').length) {
@@ -285,7 +285,7 @@ $(function() {
   }
   // Growth Chart - END
 
-  // Revenue Chart
+  /*// Revenue Chart
   if ($('#revenueChart').length) {
     var lineChartOptions = {
       chart: {
@@ -369,7 +369,7 @@ $(function() {
     var apexLineChart = new ApexCharts(document.querySelector("#revenueChart"), lineChartOptions);
     apexLineChart.render();
   }
-  // Revenue Chart - END
+  // Revenue Chart - END*/
 
 
 

@@ -1,5 +1,5 @@
 package com.easygofly.api.flight;
-
+ 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,7 +37,6 @@ public class OnlineFlightService {
         
     	// Create URL object with the API end-point
         URL url = new URL(apiServiceSettingBag.getAuthURL());
-//		URL url = new URL("http://Sharedapi.tektravels.com/SharedData.svc/rest/Authenticate");
 		
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

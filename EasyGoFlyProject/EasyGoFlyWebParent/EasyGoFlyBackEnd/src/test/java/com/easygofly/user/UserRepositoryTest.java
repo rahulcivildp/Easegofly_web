@@ -1,8 +1,11 @@
 package com.easygofly.user;
-
+ 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,4 +161,43 @@ public class UserRepositoryTest {
 		assertThat(listUsers.size()).isGreaterThan(0);
 	}
 	
+	@Test
+	public void testLog() {
+		List<String> logs = new ArrayList<>();
+		logs.add("a b");
+		logs.add("a c");
+		logs.add("b c");
+		logs.add("c d");
+		
+		Integer threshold = 2;
+		
+		List<String> strThresold = new ArrayList<String>();
+	    Map<String, Integer> mapStr = new TreeMap<>();
+	    for (String log: logs) {
+	        String[] logStr = log.split(" ");
+	        for(int i = 0; i < logs.size(); i++) {
+	            for (Map.Entry<String, Integer> entry : mapStr.entrySet()) {
+	                if(!entry.getKey().equals(logStr[0])) {
+	                    mapStr.put(logStr[0], 1);
+	                } else {
+	                    mapStr.put(logStr[0], i);
+	                }
+	                
+	                if(!entry.getKey().equals(logStr[1])) {
+	                    mapStr.put(logStr[0], 1);
+	                } else {
+	                    mapStr.put(logStr[0], i);
+	                }
+	            }
+	        }
+	    }
+	    
+	    
+	    for (Map.Entry<String, Integer> entry : mapStr.entrySet()) {
+	        if(entry.getValue() >= threshold) {
+	            strThresold.add(entry.getKey());
+	        } 
+	    }
+		
+	}
 }

@@ -11,24 +11,25 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		exposedDirectory("user-photos", registry);
-		exposedDirectory("../category-photos", registry);
-		exposedDirectory("../site-logo", registry);
-		exposedDirectory("../favicon", registry);
-		exposedDirectory("../brand-logos", registry);
-		exposedDirectory("../product-photos", registry); 
-		exposedDirectory("../customer-photos", registry);
-		exposedDirectory("../driver-photos", registry);
-		exposedDirectory("../cab-photos", registry);
+		exposeAbsoluteDir("../product-photos", "/product-photos/**", registry);
+		exposeAbsoluteDir("../category-photos", "/category-photos/**", registry);
+		exposeAbsoluteDir("../brand-logos", "/brand-logos/**", registry);
+		exposeAbsoluteDir("../pdf-images", "/pdf-images/**", registry);
+		exposeAbsoluteDir("../site-logo", "/site-logo/**", registry);
+		exposeAbsoluteDir("../favicon", "/favicon/**", registry);
+		exposeAbsoluteDir("user-photos", "/user-photos/**", registry);
+		exposeAbsoluteDir("../customer-photos", "/customer-photos/**", registry);
+		exposeAbsoluteDir("../driver-photos", "/driver-photos/**", registry);
+		exposeAbsoluteDir("../cab-photos", "/cab-photos/**", registry);
+		exposeAbsoluteDir("../xml-data", "/xml-data/**", registry);
 	}
 
-	private void exposedDirectory(String pathPattern, ResourceHandlerRegistry registry) {
-		Path photoDir = Paths.get(pathPattern);
-		String absolutePhotoPath = photoDir.toFile().getAbsolutePath();
-		
-		String logicalPath = pathPattern.replace("../", "") + "/**"; 
-		
-		registry.addResourceHandler(logicalPath).addResourceLocations("file://" + absolutePhotoPath + "/");
+	private void exposeAbsoluteDir(String fsPath, String urlPattern, ResourceHandlerRegistry registry) {
+		Path path = Paths.get(fsPath).toAbsolutePath().normalize();
+
+		System.out.println("Serving " + urlPattern + " from " + path);
+
+		registry.addResourceHandler(urlPattern).addResourceLocations(path.toUri().toString());
 	}
  
 }

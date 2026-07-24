@@ -1,287 +1,348 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" th:fragment="content" th:remove="tag">
-<head></head>
-<body>
-	<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
-		<h4 >Private Fare Detail [[${productDetails.name}]]</h4>
-		<hr>
-		<h5 >Flight Detail</h5>
-		<hr>
-		<div class="row">
-			<div class="col-sm-3">
-				<p><b>Origin : </b>[[${productDetails.cityOne}]]</p>
-			</div>
-			<div class="col-sm-3">
-				<p><b>Destination : </b>[[${productDetails.cityTwo}]]</p>
-			</div>
-			<div class="col-sm-3">
-				<p><b>Airline Name : </b>[[${productDetails.brands.name}]]</p>
-			</div>
-			<div class="col-sm-3">
-				<p><b>Airline Code : </b>[[${productDetails.airlineCode}]]</p>
-			</div>
-			<div class="col-sm-3">
-				<p><b>Class : </b>[[${productDetails.journeyClass}]]</p>
-			</div>
-			<div class="col-sm-3">
-				<p><b>No of Stops : </b>[[${productDetails.stops}]]</p>
-			</div>
-		</div>
-	</div>
-	<br>
-	<div class="shadow" style="background-color: #71c5a6; margin-right: 26px; padding: 10px;">
-		<form th:action="@{/products/flights/save}" method="post" th:object="${productDetails}" onsubmit="return(checkNameUnique(this))">
-			<input type="hidden" th:field="*{id}">
-			<div class="row" >
-				<div class="col-sm-12">
-					<div class="row" >
-						<input type="hidden" >
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Date: </p><input type="date" name="date" placeholder="Date" style=" width: 100%;" required pattern="\d{4}-\d{2}-\d{2}">
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">PNR: </p><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Total Seats: </p><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Upload Seats: </p><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Flight No: </p><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" >
-						</div>
-						<div class="col" style="width: 5%;">
-							<p style="white-space: nowrap;">Stops: </p><input type="number" name="stops" placeholder="stops" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Dep Time: </p><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Arr Time: </p><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">Duration (in MIN): </p><input type="text" name="duration" placeholder="Duration" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">ADT Price: </p><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">INF Price: </p><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">ADT Markup: </p><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" >
-						</div>
-						<div class="col" style="margin-right: 2px;">
-							<p style="white-space: nowrap;">INF Markup: </p><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" >
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-2" style="margin-top: 15px;">
-					<input type="submit" value="Add">
-				</div>
-			</div>
-		</form>
-	</div>
-	<br>
-	<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
-		<div class="full-details">
-				<table class="table table-bordered table-hover tabel-responsive table-striped">
-					<thead class="table-dark">
-						<tr>
-							<th>ID</th>
-							<th>Date</th>
-							<th>PNR</th>
-							<th>Available Seats</th>
-							<th>Booked Seats</th>
-							<th>Total Seats</th>
-							<th>Flight Number</th>
-							<th>Stops</th>
-							<th>Depart Time</th>
-							<th>Arrival Time</th>
-							<th>Duration(min)</th>
-							<th>Adult Price</th>
-							<th>Infant Price</th>
-							<th>Adult Markup</th>
-							<th>Infant Markup</th>
-							<th>Status</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<th:block th:each="flight : ${productDetails.details}">
-						<tr>
-							<td>[[${flight.id}]]</td>
-							<td>[[${flight.date}]]</td>
-							<td>[[${flight.pnr}]]</td>
-							<td th:id="'totalSeats' + ${flight.id}" style="display: flex; justify-content: space-around;">[[${flight.totalSeats}]]
-							</td>
-							<td th:id="'bookedSeats' + ${flight.id}"></td>
-							<td style="display: flex; justify-content: space-around;">[[${flight.uploadSeats}]]</td>
-							<td>[[${flight.flightNum}]]</td>
-							<td>
-								<p class="text-center" th:if="${flight.stopNum} == 0" style="margin: 0;">0 </p>
-								<button th:if="${flight.stopNum} != 0" type="button" class="btn btn-danger" th:id="'modal-button' + ${flight.id}" data-bs-toggle="modal" data-bs-target="" style="margin: 0;">
-									<p th:if="${flight.stops.size} == 0" style="margin: 0;" title="Add Stop/s to flight">Add: [[${flight.stopNum}]]</p>
-									<p th:if="${flight.stops.size} != 0" style="margin: 0;" title="Edit Stop/s of flight">Edit Stops </p>
-								</button>
-							</td>
-							<td>[[${flight.depTime}]]</td>
-							<td>[[${flight.arrTime}]]</td>
-							<td>[[${flight.duration}]]</td>
-							<td>[[${flight.priceADT}]]</td>
-							<td>[[${flight.priceINF}]]</td>
-							<td>[[${flight.markupADT}]]</td>
-							<td>[[${flight.markupINF}]]</td>
-							<td th:if="${flight.order} != null" style="background: #edefaf; text-align: center; font-weight: 600;">Ordered</td>
-							<td th:if="${flight.order} == null" style="background: #a7cea7; text-align: center; font-weight: 600;">Active</td>
-							<td >
-								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')" >
-								<div class="dropdown dropstart">
-								  <button style="border: none;" type="button" th:id="'dropdownMenuButton' + ${flight.id}" data-bs-toggle="dropdown" aria-expanded="false">
-								    <i class="fa-solid fa-pen-to-square fa-2x icon-green styleLink "></i>
-								  </button>
-								  <div class="dropdown-menu" style="width: 2847%;">
-								  	<form th:action="@{/products/flights/update_product_detail}" method="post">
-									  	<div class="row" style="padding: 0 6px;">
-									  		<input type="hidden" name="product_id" th:value="${flight.product.id}">
-									  		<input type="hidden" name="flight_id" th:value="${flight.id}">
-									  		<div class="col-1"><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" th:value="${flight.pnr}"></div>
-									  		<div class="col-1"><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" th:value="${flight.totalSeats}"></div>
-									  		<div class="col-1"><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;"  th:value="${flight.uploadSeats}"></div>
-									  		<div class="col-1"><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" th:value="${flight.flightNum}"></div>
-									  		<div class="col-1"><input type="number" name="stops" placeholder="stops" style=" width: 100%;" th:value="${flight.stopNum}"></div>
-									  		<div class="col-1"><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" th:value="${flight.depTime}"></div>
-									  		<div class="col-1"><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" th:value="${flight.arrTime}"></div>
-									  		<div class="col-1"><input type="text" name="duration" placeholder="Duration" style=" width: 100%;" th:value="${flight.duration}"></div>
-									  		<div class="col-1"><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" th:value="${flight.priceADT}"></div>
-									  		<div class="col-1"><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" th:value="${flight.priceINF}"></div>
-									  		<div class="col-1"><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" th:value="${flight.markupADT}"></div>
-									  		<div class="col-1"><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" th:value="${flight.markupINF}"></div>
-									  		<div class="col-1"><button type="submit" style="border: none; margin: 5px 0"><i class="fa-solid fa-floppy-disk fa-2x"></i></button></div>
-									  	</div>
-								  	</form>
-								  </div>
-								  		
-								  </div>
-								</th:block>
-								&nbsp;
-								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
-									<a class="fa-solid fa-trash fa-2x icon-dark styleLink link-delete2" title="Delete" th:userId="${flight.id}" th:href="@{'/product_details/delete/' + ${flight.id}}" 
-		data-bs-target="#deleteConfirmModal2" data-bs-toggle="modal" ></a>
-								</th:block>
-							</td>
-							
-							<!-- Modal -->
-								<div class="modal fade" th:id="'stopsModal' + ${flight.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								  <div class="modal-dialog modal-dialog-centered modal-lg">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <h5 class="modal-title" id="exampleModalLabel">Add Stops</h5>
-								        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								      </div>
-								      <form th:if="${flight.stops.size} == 0" th:action="@{/products/flights_details}" method="post">
-								      <div class="modal-body">
-								     	  <input type="hidden" name="product_id" th:value="${flight.product.id}">
-									      <input type="hidden" name="flight_id" th:value="${flight.id}">
-									      
-									      <th:block th:each="i : ${#numbers.sequence( 1, flight.stopNum, 1)}">
-									      	<div class="row" style="padding: 15px; border-bottom: 1px solid grey; border-top: 1px solid grey;">
-									      		<div class="col" style="margin-right: 2px;">
-													<p>City Name: [[${stopSize}]]</p><input type="text" name="stopCityName" placeholder="City Name" style=" width: 100%;">
-												</div>
-												<div class="col" style="margin-right: 2px;">
-													<p>Arr Time: </p><input type="text" name="stopArrTime" placeholder="Arr Time" style=" width: 100%;" >
-												</div>
-										        <div class="col" style="margin-right: 2px;">
-													<p>Dep Time: </p><input type="text" name="stopDepTime" placeholder="Dep Time" style=" width: 100%;" >
-												</div>
-												<div class="col" style="margin-right: 2px;">
-													<p>Duration: </p><input type="text" name="stopTotalTime" placeholder="Duration" style=" width: 100%;" >
-												</div>
-									      	</div>
-									      </th:block>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								        <button type="submit" class="btn btn-primary">Save</button>
-								      </div>
-								      </form>
-								      <form th:if="${flight.stops.size} != 0" th:action="@{/products/flights_details_edit}" method="post">
-								      <div class="modal-body">
-								     	  <input type="hidden" name="product_id" th:value="${flight.product.id}">
-									      <input type="hidden" name="flight_id" th:value="${flight.id}">
-									      
-									      <th:block th:each="stop : ${flight.stops}">
-									      	<div class="row" style="padding: 15px; border-bottom: 1px solid grey; border-top: 1px solid grey;">
-									      		<input type="hidden" name="stop_id" th:value="${stop.id}">
-									      		<div class="col" style="margin-right: 2px;">
-													<p>City Name: </p><input type="text" name="stopCityNameEdit" placeholder="City Name" style=" width: 100%;" th:value="${stop.cityName}">
-												</div>
-												<div class="col" style="margin-right: 2px;">
-													<p>Arr Time: </p><input type="text" name="stopArrTimeEdit" placeholder="Arr Time" style=" width: 100%;" th:value="${stop.arrTime}">
-												</div>
-										        <div class="col" style="margin-right: 2px;">
-													<p>Dep Time: </p><input type="text" name="stopDepTimeEdit" placeholder="Dep Time" style=" width: 100%;" th:value="${stop.depTime}">
-												</div>
-												<div class="col" style="margin-right: 2px;">
-													<p>Duration: </p><input type="text" name="stopTotalTimeEdit" placeholder="Duration" style=" width: 100%;" th:value="${stop.totalTime}">
-												</div>
-									      	</div>
-									      </th:block>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								        <button type="submit" class="btn btn-primary">Save changes</button>
-								      </div>
-								      </form>
-								    </div>
-								  </div>
-								</div>
-						</tr>
-						
-							<script type="text/javascript">
-								totalSeats = [[${flight.totalSeats}]];
-								uploadSeats = [[${flight.uploadSeats}]];
-								
-								bookedSeats =  uploadSeats - totalSeats;
-								
-								$("#bookedSeats" + [[${flight.id}]]).text(bookedSeats);
-									
-								flightId = "#stopsModal" + [[${flight.id}]];
-								
-								value = $("#modal-button" + [[${flight.id}]]).attr("data-bs-target", flightId);
-								
-							</script>
-							
-							
-						
-						</th:block>
-					</tbody>
-				</table>
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-			</div>
-		</div>
-		<br>
+		<!-- dynamic head starts -->
+<head>
+	<head th:replace="fragments :: page_head('Welcome to Easegofly Admin Flight Form page ${pageTitle}', 'tag')"></head>
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+<body>
+	
+	<div class="main-wrapper">
+	
+		<!-- sidebar starts -->
+	
+		<div th:replace="navigation :: nav_sidebar"></div>
+	
+	   <!-- sidebar Ends -->
+	
+		<div class="page-wrapper">
+					
+		    <!-- navbar Starts -->
 		
-		<div class="modal fade text-center" id="deleteConfirmModal2">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
-						<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+		    <div th:replace="navigation :: nav_profile"></div>
+		
+			<!-- navbar Ends -->
+		
+		        <!-- Page Content Starts -->
+		
+			<div class="page-content">
+				<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
+						<h4 >Private Fare Detail [[${productDetails.name}]]</h4>
+						<hr>
+						<h5 >Flight Detail</h5>
+						<hr>
+						<div class="row">
+							<div class="col-sm-3">
+								<p><b>Origin : </b>[[${productDetails.cityOne}]]</p>
+							</div>
+							<div class="col-sm-3">
+								<p><b>Destination : </b>[[${productDetails.cityTwo}]]</p>
+							</div>
+							<div class="col-sm-3">
+								<p><b>Airline Name : </b>[[${productDetails.brands.name}]]</p>
+							</div>
+							<div class="col-sm-3">
+								<p><b>Airline Code : </b>[[${productDetails.airlineCode}]]</p>
+							</div>
+							<div class="col-sm-3">
+								<p><b>Class : </b>[[${productDetails.journeyClass}]]</p>
+							</div>
+							<div class="col-sm-3">
+								<p><b>No of Stops : </b>[[${productDetails.stops}]]</p>
+							</div>
+						</div>
 					</div>
-					<div class="modal-body">
-						<span id="modalBody2" style="color: black;"></span>
+					<br>
+					<div class="shadow" style="background-color: #71c5a6; margin-right: 26px; padding: 10px;">
+						<form th:action="@{/products/flights/save}" method="post" th:object="${productDetails}" onsubmit="return(checkNameUnique(this))">
+							<input type="hidden" th:field="*{id}">
+							<div class="row" >
+								<div class="col-sm-12">
+									<div class="row" >
+										<input type="hidden" >
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Date: </p><input type="date" name="date" placeholder="Date" style=" width: 100%;" required pattern="\d{4}-\d{2}-\d{2}">
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">PNR: </p><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Total Seats: </p><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Upload Seats: </p><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Flight No: </p><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" >
+										</div>
+										<div class="col" style="width: 5%;">
+											<p style="white-space: nowrap;">Stops: </p><input type="number" name="stops" placeholder="stops" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Dep Time: </p><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Arr Time: </p><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">Duration (in MIN): </p><input type="text" name="duration" placeholder="Duration" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">ADT Price: </p><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">INF Price: </p><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">ADT Markup: </p><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" >
+										</div>
+										<div class="col" style="margin-right: 2px;">
+											<p style="white-space: nowrap;">INF Markup: </p><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" >
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2" style="margin-top: 15px;">
+									<input type="submit" value="Add">
+								</div>
+							</div>
+						</form>
 					</div>
-					<div class="modal-footer">
-						<a class="btn btn-success" id="confirmDelete2" href="">Confirm</a>
-						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-					</div>
-				</div>
-			</div>	
+					<br>
+					<div class="shadow" style="background-color: white; margin-right: 26px; padding: 10px;">
+						<div style="overflow-x:auto;">
+								<table class="table table-bordered table-hover tabel-responsive table-striped">
+									<thead class="table-dark">
+										<tr>
+											<th class="text-white">ID</th>
+											<th class="text-white">Date</th>
+											<th class="text-white">PNR</th>
+											<th class="text-white">Available Seats</th>
+											<th class="text-white">Booked Seats</th>
+											<th class="text-white">Total Seats</th>
+											<th class="text-white">Flight Number</th>
+											<th class="text-white">Stops</th>
+											<th class="text-white">Depart Time</th>
+											<th class="text-white">Arrival Time</th>
+											<th class="text-white">Duration(min)</th>
+											<th class="text-white">Adult Price</th>
+											<th class="text-white">Infant Price</th>
+											<th class="text-white">Adult Markup</th>
+											<th class="text-white">Infant Markup</th>
+											<th class="text-white">Status</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:each="flight : ${productDetails.details}">
+										<tr>
+											<td>[[${flight.id}]]</td>
+											<td>[[${flight.date}]]</td>
+											<td>[[${flight.pnr}]]</td>
+											<td th:id="'totalSeats' + ${flight.id}" style="display: flex; justify-content: space-around;">[[${flight.totalSeats}]]
+											</td>
+											<td th:id="'bookedSeats' + ${flight.id}"></td>
+											<td style="display: flex; justify-content: space-around;">[[${flight.uploadSeats}]]</td>
+											<td>[[${flight.flightNum}]]</td>
+											<td>
+												<p class="text-center" th:if="${flight.stopNum} == 0" style="margin: 0;">0 </p>
+												<button th:if="${flight.stopNum} != 0" type="button" class="btn btn-danger" th:id="'modal-button' + ${flight.id}" data-bs-toggle="modal" data-bs-target="" style="margin: 0;">
+													<p th:if="${flight.stops.size} == 0" style="margin: 0;" title="Add Stop/s to flight">Add: [[${flight.stopNum}]]</p>
+													<p th:if="${flight.stops.size} != 0" style="margin: 0;" title="Edit Stop/s of flight">Edit Stops </p>
+												</button>
+											</td>
+											<td>[[${flight.depTime}]]</td>
+											<td>[[${flight.arrTime}]]</td>
+											<td>[[${flight.duration}]]</td>
+											<td>[[${flight.priceADT}]]</td>
+											<td>[[${flight.priceINF}]]</td>
+											<td>[[${flight.markupADT}]]</td>
+											<td>[[${flight.markupINF}]]</td>
+											<td th:if="${flight.order} != null" style="background: #edefaf; text-align: center; font-weight: 600;">Ordered</td>
+											<td th:if="${flight.order} == null" style="background: #a7cea7; text-align: center; font-weight: 600;">Active</td>
+											<td >
+												<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')" >
+												<div class="dropdown dropstart">
+												  <button style="border: none;" type="button" th:id="'dropdownMenuButton' + ${flight.id}" data-bs-toggle="dropdown" aria-expanded="false">
+												    <i class="fa-solid fa-pen-to-square fa-2x icon-green styleLink "></i>
+												  </button>
+												  <div class="dropdown-menu" style="width: 2847%;">
+												  	<form th:action="@{/products/flights/update_product_detail}" method="post">
+													  	<div class="row" style="padding: 0 6px;">
+													  		<input type="hidden" name="product_id" th:value="${flight.product.id}">
+													  		<input type="hidden" name="flight_id" th:value="${flight.id}">
+															<table class="table table-bordered table-hover tabel-responsive table-striped">															
+																<thead class="table-dark">
+																	<tr>
+																		<th class="text-white">PNR</th>
+																		<th	class="text-white">Total Seat</th>
+																		<th class="text-white">Remaining</th>
+																		<th class="text-white">Flight Num</th>
+																		<th class="text-white">Stops</th>
+																		<th class="text-white">Dep Time</th>
+																		<th class="text-white">Arr Time</th>
+																		<th class="text-white">Duration</th>
+																		<th class="text-white">Adult Price</th>
+																		<th class="text-white">Infant Price</th>
+																		<th class="text-white">Adult Markup</th>
+																		<th class="text-white">Infant Markup</th>
+																		<th></th>
+																	</tr>
+																</thead>
+																<tbody>																
+																	<tr>
+																		<td><input type="text" name="pnr" placeholder="PNR" style=" width: 100%;" th:value="${flight.pnr}"></td>																		
+																		<td><input type="number" name="totalSeats" placeholder="Total Seats" style=" width: 100%;" th:value="${flight.totalSeats}"></td>																		
+																		<td><input type="number" name="uploadSeats" placeholder="Upload Seats" style=" width: 100%;"  th:value="${flight.uploadSeats}"></td>																		
+																		<td><input type="text" name="flightNum" placeholder="Flight No" style=" width: 100%;" th:value="${flight.flightNum}"></td>																		
+																		<td><input type="number" name="stops" placeholder="stops" style=" width: 100%;" th:value="${flight.stopNum}"></td>																		
+																		<td><input type="text" name="depTime" placeholder="Dep Time" style=" width: 100%;" th:value="${flight.depTime}"></td>																		
+																		<td><input type="text" name="arrTime" placeholder="Arr Time" style=" width: 100%;" th:value="${flight.arrTime}"></td>																		
+																		<td><input type="text" name="duration" placeholder="Duration" style=" width: 100%;" th:value="${flight.duration}"></td>																		
+																		<td><input type="number" name="priceADT" placeholder="ADT Price" style=" width: 100%;" th:value="${flight.priceADT}"></td>																		
+																		<td><input type="number" name="priceINF" placeholder="INF Price" style=" width: 100%;" th:value="${flight.priceINF}"></td>																		
+																		<td><input type="number" name="markupADT" placeholder="ADT Markup" style=" width: 100%;" th:value="${flight.markupADT}"></td>																		
+																		<td><input type="number" name="markupINF" placeholder="INF Markup" style=" width: 100%;" th:value="${flight.markupINF}"></td>																			
+																		<td><button type="submit" style="border: none; margin: 5px 0"><i class="fa-solid fa-floppy-disk fa-2x"></i></button></td>
+																	</tr>
+																</tbody>
+															</table>
+													  	</div>
+												  	</form>
+												  </div>
+												  		
+												  </div>
+												</th:block>
+												&nbsp;
+												<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')" >
+													<a class="fa-solid fa-trash fa-2x icon-dark styleLink link-delete2" title="Delete" th:userId="${flight.id}" th:href="@{'/product_details/delete/' + ${flight.id}}" 
+						data-bs-target="#deleteConfirmModal2" data-bs-toggle="modal" ></a>
+												</th:block>
+											</td>
+											
+											<!-- Modal -->
+												<div class="modal fade" th:id="'stopsModal' + ${flight.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+												  <div class="modal-dialog modal-dialog-centered modal-lg">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title" id="exampleModalLabel">Add Stops</h5>
+												        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												      </div>
+												      <form th:if="${flight.stops.size} == 0" th:action="@{/products/flights_details}" method="post">
+												      <div class="modal-body">
+												     	  <input type="hidden" name="product_id" th:value="${flight.product.id}">
+													      <input type="hidden" name="flight_id" th:value="${flight.id}">
+													      
+													      <th:block th:each="i : ${#numbers.sequence( 1, flight.stopNum, 1)}">
+													      	<div class="row" style="padding: 15px; border-bottom: 1px solid grey; border-top: 1px solid grey;">
+													      		<div class="col" style="margin-right: 2px;">
+																	<p>City Name: [[${stopSize}]]</p><input type="text" name="stopCityName" placeholder="City Name" style=" width: 100%;">
+																</div>
+																<div class="col" style="margin-right: 2px;">
+																	<p>Arr Time: </p><input type="text" name="stopArrTime" placeholder="Arr Time" style=" width: 100%;" >
+																</div>
+														        <div class="col" style="margin-right: 2px;">
+																	<p>Dep Time: </p><input type="text" name="stopDepTime" placeholder="Dep Time" style=" width: 100%;" >
+																</div>
+																<div class="col" style="margin-right: 2px;">
+																	<p>Duration: </p><input type="text" name="stopTotalTime" placeholder="Duration" style=" width: 100%;" >
+																</div>
+													      	</div>
+													      </th:block>
+												      </div>
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												        <button type="submit" class="btn btn-primary">Save</button>
+												      </div>
+												      </form>
+												      <form th:if="${flight.stops.size} != 0" th:action="@{/products/flights_details_edit}" method="post">
+												      <div class="modal-body">
+												     	  <input type="hidden" name="product_id" th:value="${flight.product.id}">
+													      <input type="hidden" name="flight_id" th:value="${flight.id}">
+													      
+													      <th:block th:each="stop : ${flight.stops}">
+													      	<div class="row" style="padding: 15px; border-bottom: 1px solid grey; border-top: 1px solid grey;">
+													      		<input type="hidden" name="stop_id" th:value="${stop.id}">
+													      		<div class="col" style="margin-right: 2px;">
+																	<p>City Name: </p><input type="text" name="stopCityNameEdit" placeholder="City Name" style=" width: 100%;" th:value="${stop.cityName}">
+																</div>
+																<div class="col" style="margin-right: 2px;">
+																	<p>Arr Time: </p><input type="text" name="stopArrTimeEdit" placeholder="Arr Time" style=" width: 100%;" th:value="${stop.arrTime}">
+																</div>
+														        <div class="col" style="margin-right: 2px;">
+																	<p>Dep Time: </p><input type="text" name="stopDepTimeEdit" placeholder="Dep Time" style=" width: 100%;" th:value="${stop.depTime}">
+																</div>
+																<div class="col" style="margin-right: 2px;">
+																	<p>Duration: </p><input type="text" name="stopTotalTimeEdit" placeholder="Duration" style=" width: 100%;" th:value="${stop.totalTime}">
+																</div>
+													      	</div>
+													      </th:block>
+												      </div>
+												      <div class="modal-footer">
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												        <button type="submit" class="btn btn-primary">Save changes</button>
+												      </div>
+												      </form>
+												    </div>
+												  </div>
+												</div>
+										</tr>
+										
+											<script type="text/javascript">
+												totalSeats = [[${flight.totalSeats}]];
+												uploadSeats = [[${flight.uploadSeats}]];
+												
+												bookedSeats =  uploadSeats - totalSeats;
+												
+												$("#bookedSeats" + [[${flight.id}]]).text(bookedSeats);
+													
+												flightId = "#stopsModal" + [[${flight.id}]];
+												
+												value = $("#modal-button" + [[${flight.id}]]).attr("data-bs-target", flightId);
+												
+											</script>
+											
+											
+										
+										</th:block>
+									</tbody>
+								</table>
+				
+							</div>
+						</div>
+						<br>
+						
+						<div class="modal fade text-center" id="deleteConfirmModal2">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+										<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+									</div>
+									<div class="modal-body">
+										<span id="modalBody2" style="color: black;"></span>
+									</div>
+									<div class="modal-footer">
+										<a class="btn btn-success" id="confirmDelete2" href="">Confirm</a>
+										<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+									</div>
+								</div>
+							</div>	
+						</div>
+			</div>			
+						
+			<!-- Page Content Ends -->
+					
+			<!-- footer Starts -->
+		   
+		    <div th:replace="fragments :: footer"></div>
+		
+		       <!-- footer Ends -->
 		</div>
+	</div>
+	
 </body>
 <script type="text/javascript">
 	

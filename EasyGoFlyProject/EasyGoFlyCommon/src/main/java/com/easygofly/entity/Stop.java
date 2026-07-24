@@ -31,11 +31,21 @@ public class Stop {
 	@Column(nullable = false)
 	private String totalTime;
 	
+	@Column(nullable = false)
+	private String goundTime;
+
+	private String duration;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_detail_id")
 	@JsonBackReference
 	private ProductDetail productDetail;
 
+	private String cityNameDep;
+	
+	private String flightNu;
+	
+	private String brand;
 	
 	
 	public Stop() {}
@@ -57,6 +67,22 @@ public class Stop {
 		this.arrTime = arrTime;
 		this.totalTime = totalTime;
 		this.productDetail = productDetail;
+	}
+	
+	
+
+	public Stop(String cityName, String cityNameDep, String depTime, String arrTime, String totalTime, String goundTime, String duration, String flightNu, String brand,
+			ProductDetail productDetail) {
+		this.cityName = cityName;
+		this.depTime = depTime;
+		this.arrTime = arrTime;
+		this.totalTime = totalTime;
+		this.goundTime = goundTime;
+		this.productDetail = productDetail;
+		this.cityNameDep = cityNameDep;
+		this.flightNu = flightNu;
+		this.brand = brand;
+		this.duration = duration;
 	}
 
 	public int getId() {
@@ -105,6 +131,47 @@ public class Stop {
 
 	public void setProductDetail(ProductDetail productDetail) {
 		this.productDetail = productDetail;
+	}
+
+	
+	public String getGoundTime() {
+		return goundTime;
+	}
+
+	public void setGoundTime(String goundTime) {
+		this.goundTime = goundTime;
+	}
+
+	public String getCityNameDep() {
+		return cityNameDep;
+	}
+
+	public void setCityNameDep(String cityNameDep) {
+		this.cityNameDep = cityNameDep;
+	}
+
+	public String getFlightNu() {
+		return flightNu;
+	}
+
+	public void setFlightNu(String flightNu) {
+		this.flightNu = flightNu;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 	
 }

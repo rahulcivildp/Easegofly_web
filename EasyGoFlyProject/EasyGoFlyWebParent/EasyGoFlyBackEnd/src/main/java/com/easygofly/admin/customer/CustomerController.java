@@ -52,8 +52,8 @@ public class CustomerController {
 		
 		List<Customer> listCustomers = pageCustomer.getContent();
 		
-		long startCount = (pageNum - 1) * UserService.USER_PER_PAGE + 1;
-		long endCount = startCount + UserService.USER_PER_PAGE - 1;
+		long startCount = (pageNum - 1) * CustomerService.CUSTOMER_PER_PAGE + 1;
+		long endCount = startCount + CustomerService.CUSTOMER_PER_PAGE - 1;
 		if (endCount > pageCustomer.getTotalElements()) {
 			endCount = pageCustomer.getTotalElements();
 		}

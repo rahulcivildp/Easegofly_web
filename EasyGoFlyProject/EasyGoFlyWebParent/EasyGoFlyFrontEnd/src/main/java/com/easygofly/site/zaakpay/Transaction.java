@@ -167,6 +167,38 @@ public class Transaction {
 
     //***********************************************************************************************************************//
 
+    //************************************************* INITIATE CAB ORDER PAYMENT ***************************************************//
+
+    public ZaakpayApiRequestParameters processBusOrderPaymentAPI(String orderId, String amount, PaymentSettingBag paymentSettingBag, String email) throws Exception {
+
+        ZaakpayApiRequestParameters zaakpayApiRequestParameters = new ZaakpayApiRequestParameters();
+
+        String requestUrl = paymentSettingBag.getAPIEnvironment()+paymentSettingBag.getTransactionURL();
+        zaakpayApiRequestParameters.setRequestUrl(requestUrl);
+
+        //You can pass these values dynamically through function arguments
+        //String orderId = "ZPLive"+System.currentTimeMillis();
+       // String amount = "100" ; //In Paisa
+        
+//        System.out.println(amount + "   --   " + orderId);
+        RequestParameters order = new RequestParameters(paymentSettingBag.getMarchentKey(),Config.RETURN_URL_BUS_ORDER_API,orderId,amount, email, "INR");
+        zaakpayApiRequestParameters.setRequestParameters(order.getPaymentRequestParameters());
+
+        String checksumString = ChecksumGenerator.getChecksumString(order.getPaymentRequestParameters());
+        System.out.println(checksumString);
+        // You can check the checksum string generated here.
+        String checksum = ChecksumGenerator.calculateChecksum(paymentSettingBag.getSecretKey(),checksumString);
+        //System.out.println(checksum);
+        zaakpayApiRequestParameters.setChecksum(checksum);
+        
+//        System.out.println(checksumString + "checksum=" + zaakpayApiRequestParameters.getChecksum());
+
+        return zaakpayApiRequestParameters ;
+
+    }
+
+    //***********************************************************************************************************************//
+
     //************************************************* INITIATE RETURN PAYMENT ***************************************************//
 
     public ZaakpayApiRequestParameters processPaymentReturn(String orderId, String amount, PaymentSettingBag paymentSettingBag) throws Exception {

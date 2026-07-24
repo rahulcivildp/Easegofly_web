@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.easygofly.entity.Brand;
 import com.easygofly.entity.City;
 import com.easygofly.entity.Country;
+import com.easygofly.entity.FlightMap;
 import com.easygofly.entity.ProductDetail;
+import com.easygofly.entity.Stop;
 import com.easygofly.site.LogService;
 import com.easygofly.site.setting.CountryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -126,6 +128,28 @@ public class SearchHistoryRestController {
 	    return arrayCityList;
 	}
 	
+	
+	@PostMapping("/api/flight/tbo-search/return")
+    public List<FlightMap> flightOnewaySearchReturnTBO(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        response.setContentType("application/json");
+
+        SearchOnewayOfflineReturnRequest search = new ObjectMapper().readValue(request.getInputStream(), SearchOnewayOfflineReturnRequest.class);
+        
+        Date origin = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).parse(search.preferredDepartureTime);
+        Date returnDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).parse(search.preferredReturnTime);
+        
+        
+        if (search.isFilter) {
+        	if (searchHistoryController.pageNum == search.page) {
+        		searchHistoryController.listProductDetailsInSearch = new ArrayList<>();
+			} else {
+				searchHistoryController.pageNum = search.page;
+			}
+		}
+        
+        return searchFlightReturnAPI(search, origin, returnDate);
+    }
+
 
 	@GetMapping("/api/brand_list")
 	public String brandList() {
@@ -159,275 +183,277 @@ public class SearchHistoryRestController {
 
         //AirIQ ......
         
-		StringBuilder responseBodySearchAirIQ = onlineFlightService.apiAirIQSearch(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date);
-        
-		//AirIQ response.......
-
-        JSONObject jsonObjSearchAirIQ = new JSONObject(responseBodySearchAirIQ.toString());
-        System.out.println(jsonObjSearchAirIQ);
-        logService.generateLog(jsonObjSearchAirIQ.toString());
+//	    try {
+//	    	StringBuilder responseBodySearchAirIQ = onlineFlightService.apiAirIQSearch(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date);
+//        
+//			//AirIQ response.......
+//	
+//	        JSONObject jsonObjSearchAirIQ = new JSONObject(responseBodySearchAirIQ.toString());
+//	        System.out.println(jsonObjSearchAirIQ);
+//	        logService.generateLog(jsonObjSearchAirIQ.toString());
+//			
+//		
+//			JSONArray jsonArraysAirIQ = jsonObjSearchAirIQ.getJSONArray("data");
+//			JSONObject mainObjAirIQ = new JSONObject();
+//			
+//			System.out.println("JSON data: " + jsonObjSearchAirIQ);
+//			String brandImage = "";
+//			
+//			for (int i = 0; i < jsonArraysAirIQ.length(); i++) {
+//				mainObjAirIQ.put("data-" + i, jsonArraysAirIQ.getJSONObject(i));
+//				
+//				System.out.println(mainObjAirIQ);
+//		        logService.generateLog("Main : " + mainObjAirIQ.toString());
+//				
+//				String noOfSeatAvailable = mainObjAirIQ.getJSONObject("data-" + i).get("pax").toString();
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//		        
+//				String flightNumber = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
+//				String stringDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString();
+//				String stringArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString();
+//				double parsePriceADT = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("price").toString());
+//				double parsePriceINF = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("infant_price").toString());
+//				float intTotalAdultChildPrice = (float) (parsePriceADT * (searchOneway.getAdultCount() + searchOneway.getChildCount()));
+//				float intTotalInfantPrice = (float) (parsePriceINF * searchOneway.getInfantCount());
+//				String depAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("origin").toString();
+//				String arrAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("destination").toString();
+//				int stopNumber = 0;
+//				if (mainObjAirIQ.getJSONObject("data-" + i).get("flight_route").toString() == "Non - Stop") {
+//					stopNumber = 0;
+//				}
+//				String[] arrayDepDate = mainObjAirIQ.getJSONObject("data-" + i).get("departure_date").toString().split("/");
+//				String[] arrayArrDate = mainObjAirIQ.getJSONObject("data-" + i).get("arival_date").toString().split("/");
+//				String[] arrayDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString().split(":");
+//				String[] arrayArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString().split(":");
+//				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
+//				int totalArrinMin = 0;
+//				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
+//					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
+//				} else {
+//					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
+//				}
+//				int duration = totalArrinMin - totalDepinMin;
+//				String airlineName = mainObjAirIQ.getJSONObject("data-" + i).get("airline").toString();
+//				float depTimeFloat = 0;
+//				float arrTimeFloat = 0;
+//				String resultIndex = "" + i;
+//				String airlineRemark = "";
+//				String mode = "AirIQ";
+//				String depTerminal = "T1";
+//				String arrTerminal = "T1";
+//				String craftType = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
+//				String ticketId = mainObjAirIQ.getJSONObject("data-" + i).get("ticket_id").toString();
+//				float totalPayablePrice = 0;
+//
+//				Brand brand =  brandRepo.getBrandByName(airlineName);
+//				if ( brand == null ) {
+//					brandImage = "/images/no-image.png";
+//				} else {
+//					brandImage = brand.getPhotosImagePath();
+//				}
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//
+//				ProductDetail productDetail = new ProductDetail(i + 1000, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+//			    		stringDepTime, stringArrTime, (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+//			    		airlineName, depTimeFloat, arrTimeFloat, ticketId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, "" + totalPayablePrice);
+//				
+//
+//				System.out.println(productDetail);
+//
+//				allFlights.add(productDetail);
+//			}
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();			
+//			
+//		}
+//		
+//
+//        //Master Travels ......
+//		 try {
+//			StringBuilder responseBodySearchMTravels = onlineFlightService.apiMasterSearch(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date);
+//		    
+//			//Master Travels response.......
+//		
+//		    JSONObject jsonObjSearchMTravels = new JSONObject(responseBodySearchMTravels.toString());
+//		    System.out.println(jsonObjSearchMTravels);
+//		    logService.generateLog(jsonObjSearchMTravels.toString());
+//        
+//       
+//			JSONArray jsonArraysMTravels = jsonObjSearchMTravels.getJSONArray("data");
+//			JSONObject mainObjMTravels = new JSONObject();
+//			String bookingTokenId = jsonObjSearchMTravels.get("booking_token_id").toString();
+//			String brandImage = "";
+//
+//			for (int i = 0; i < jsonArraysMTravels.length(); i++) {
+//				mainObjMTravels.put("data-" + i, jsonArraysMTravels.getJSONObject(i));
+//				String noOfSeatAvailable = mainObjMTravels.getJSONObject("data-" + i).get("available_seats").toString();
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//		        
+//				String flightNumber = mainObjMTravels.getJSONObject("data-" + i).get("flight_number").toString();
+//				String stringDepTime = mainObjMTravels.getJSONObject("data-" + i).get("dep_time").toString();
+//				String stringArrTime = mainObjMTravels.getJSONObject("data-" + i).get("arr_time").toString();
+//				double parsePriceADT = Double.parseDouble(mainObjMTravels.getJSONObject("data-" + i).get("per_adult_child_price").toString());
+//				double parsePriceINF = Double.parseDouble(mainObjMTravels.getJSONObject("data-" + i).get("per_infant_price").toString());
+//				float intTotalAdultChildPrice = (float) (parsePriceADT * (searchOneway.getAdultCount() + searchOneway.getChildCount()));
+//				float intTotalInfantPrice = (float) (parsePriceINF * searchOneway.getInfantCount());
+//				String depAirportCode = mainObjMTravels.getJSONObject("data-" + i).get("dep_city_code").toString();
+//				String arrAirportCode = mainObjMTravels.getJSONObject("data-" + i).get("arr_city_code").toString();
+//				int stopNumber = Integer.parseInt(mainObjMTravels.getJSONObject("data-" + i).get("no_of_stop").toString());
+//				String[] arrayDepDate = mainObjMTravels.getJSONObject("data-" + i).get("onward_date").toString().split("-");
+//				String[] arrayArrDate = mainObjMTravels.getJSONObject("data-" + i).get("arr_date").toString().split("-");
+//				String[] arrayDepTime = mainObjMTravels.getJSONObject("data-" + i).get("dep_time").toString().split(":");
+//				String[] arrayArrTime = mainObjMTravels.getJSONObject("data-" + i).get("arr_time").toString().split(":");
+//				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
+//				int totalArrinMin = 0;
+//				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
+//					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
+//				} else {
+//					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
+//				}
+//				int duration = totalArrinMin - totalDepinMin;
+//				String airlineName = mainObjMTravels.getJSONObject("data-" + i).get("airline_name").toString();
+//				float depTimeFloat = 0;
+//				float arrTimeFloat = 0;
+//				String resultIndex = mainObjMTravels.getJSONObject("data-" + i).get("id").toString();
+//				String airlineRemark = "";
+//				String mode = "MasterTravels";
+//				String depTerminal = mainObjMTravels.getJSONObject("data-" + i).get("dep_terminal_no").toString();
+//				String arrTerminal = mainObjMTravels.getJSONObject("data-" + i).get("arr_terminal_no").toString();
+//				String craftType = mainObjMTravels.getJSONObject("data-" + i).get("static").toString();
+//				double totalPayablePrice = Double.parseDouble(mainObjMTravels.getJSONObject("data-" + i).get("total_payable_price").toString());
+//				
+//				float grandTotal = (float) totalPayablePrice;
+//
+//				Brand brand =  brandRepo.getBrandByName(airlineName);
+//				if ( brand == null ) {
+//					brandImage = "/images/no-image.png";
+//				} else {
+//					brandImage = brand.getPhotosImagePath();
+//				}
+//				
+//				System.out.println("total: " + mainObjMTravels.getJSONObject("data-" + i).get("total_payable_price").toString());
+//				
+//				System.out.println("Grand total: " + grandTotal);
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//
+//				ProductDetail productDetail = new ProductDetail(i + 2000, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+//			    		stringDepTime, stringArrTime, (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+//			    		airlineName, depTimeFloat, arrTimeFloat, bookingTokenId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, "" + grandTotal);
+//				
+//			
+//				System.out.println(productDetail);
+//
+//				allFlights.add(productDetail);
+//			}
+//			
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();			
+//		
+//		}
+//
+//		
+//        
+//        //Ease2fly ......
+//        
+//		StringBuilder responseBodySearchEase2fly;
+//
+//		//Ease2fly response.......
+//        
+//        try {
+//        	responseBodySearchEase2fly = onlineFlightService.apiEase2flySearch(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date);
+//
+//            JSONObject jsonObjSearchEase2fly = new JSONObject(responseBodySearchEase2fly.toString());
+//            System.out.println(jsonObjSearchEase2fly);
+//            logService.generateLog(jsonObjSearchEase2fly.toString());
+//            
+//			JSONArray jsonArraysEase2fly = jsonObjSearchEase2fly.getJSONArray("result");
+//			JSONObject mainObjEase2fly = new JSONObject();
+//			String refreshToken = jsonObjSearchEase2fly.get("refresh_token").toString();
+//			String brandImage = "";
+//
+//			for (int i = 0; i < jsonArraysEase2fly.length(); i++) {
+//				mainObjEase2fly.put("result-" + i, jsonArraysEase2fly.getJSONObject(i));
+//				String noOfSeatAvailable = mainObjEase2fly.getJSONObject("result-" + i).get("seat").toString();
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//		        
+//				String flightNumber = mainObjEase2fly.getJSONObject("result-" + i).get("flight_no").toString();
+//				String stringDepTime[] = mainObjEase2fly.getJSONObject("result-" + i).get("departure_time").toString().split(" ");
+//				String stringArrTime[] = mainObjEase2fly.getJSONObject("result-" + i).get("arrival_time").toString().split(" ");
+//				double parsePriceADT = Double.parseDouble(mainObjEase2fly.getJSONObject("result-" + i).get("total_fare").toString());
+//				double parsePriceINF = Double.parseDouble(mainObjEase2fly.getJSONObject("result-" + i).get("infant_charge").toString());
+//				float intTotalInfantPrice = (float) (parsePriceINF * searchOneway.getInfantCount());
+//				float intTotalAdultChildPrice = (float) (parsePriceADT) - intTotalInfantPrice;
+//				String depAirportCode = mainObjEase2fly.getJSONObject("result-" + i).get("origin").toString();
+//				String arrAirportCode = mainObjEase2fly.getJSONObject("result-" + i).get("destination").toString();
+//				String pnr = mainObjEase2fly.getJSONObject("result-" + i).get("pnr").toString();
+//				
+//				String[] arrayDepDate = mainObjEase2fly.getJSONObject("result-" + i).get("departure_date").toString().split("-");
+//				String[] arrayArrDate = mainObjEase2fly.getJSONObject("result-" + i).get("arrival_date").toString().split("-");
+//				String[] arrayDepTime = stringDepTime[0].split(":");
+//				String[] arrayArrTime = stringArrTime[0].split(":");
+//				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
+//				int totalArrinMin = 0;
+//				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
+//					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
+//				} else {
+//					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
+//				}
+//				int duration = totalArrinMin - totalDepinMin;
+//				String airlineName = mainObjEase2fly.getJSONObject("result-" + i).get("airline_name").toString();
+//				float depTimeFloat = 0;
+//				float arrTimeFloat = 0;
+//				String resultIndex = mainObjEase2fly.getJSONObject("result-" + i).get("id").toString();
+//				String airlineRemark = "";
+//				String mode = "Ease2fly";
+//				String depTerminal = "T1";
+//				String arrTerminal = "T1";
+//				String craftType = mainObjEase2fly.getJSONObject("result-" + i).get("d_owner").toString();
+//				double totalPayablePrice = Double.parseDouble(mainObjEase2fly.getJSONObject("result-" + i).get("total_fare").toString());
+//				
+//				float grandTotal = (float) totalPayablePrice;
+//
+//				Brand brand =  brandRepo.getBrandByName(airlineName);
+//				if ( brand == null ) {
+//					brandImage = "/images/no-image.png";
+//				} else {
+//					brandImage = brand.getPhotosImagePath();
+//				}
+//
+//				System.out.println("total: " + mainObjEase2fly.getJSONObject("result-" + i).get("total_fare").toString());
+//				
+//				System.out.println("Grand total: " + grandTotal);
+//
+//		        logService.generateLog("Seats" + noOfSeatAvailable);
+//
+//				ProductDetail productDetail = new ProductDetail(i + 3000, pnr, noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+//			    		stringDepTime[0], stringArrTime[0], (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, 
+//			    		airlineName, depTimeFloat, arrTimeFloat, refreshToken, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, "" + grandTotal);
+//				
+//			
+//				System.out.println(productDetail);
+//
+//				allFlights.add(productDetail);
+//
+//			}
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();	
+//		}
+			
 		
-		try {
-			JSONArray jsonArraysAirIQ = jsonObjSearchAirIQ.getJSONArray("data");
-			JSONObject mainObjAirIQ = new JSONObject();
-			
-			System.out.println("JSON data: " + jsonObjSearchAirIQ);
-			String brandImage = "";
-			
-			for (int i = 0; i < jsonArraysAirIQ.length(); i++) {
-				mainObjAirIQ.put("data-" + i, jsonArraysAirIQ.getJSONObject(i));
-				
-				System.out.println(mainObjAirIQ);
-		        logService.generateLog("Main : " + mainObjAirIQ.toString());
-				
-				String noOfSeatAvailable = mainObjAirIQ.getJSONObject("data-" + i).get("pax").toString();
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-		        
-				String flightNumber = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
-				String stringDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString();
-				String stringArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString();
-				double parsePriceADT = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("price").toString());
-				double parsePriceINF = Double.parseDouble(mainObjAirIQ.getJSONObject("data-" + i).get("infant_price").toString());
-				float intTotalAdultChildPrice = (float) (parsePriceADT * (searchOneway.getAdultCount() + searchOneway.getChildCount()));
-				float intTotalInfantPrice = (float) (parsePriceINF * searchOneway.getInfantCount());
-				String depAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("origin").toString();
-				String arrAirportCode = mainObjAirIQ.getJSONObject("data-" + i).get("destination").toString();
-				int stopNumber = 0;
-				if (mainObjAirIQ.getJSONObject("data-" + i).get("flight_route").toString() == "Non - Stop") {
-					stopNumber = 0;
-				}
-				String[] arrayDepDate = mainObjAirIQ.getJSONObject("data-" + i).get("departure_date").toString().split("/");
-				String[] arrayArrDate = mainObjAirIQ.getJSONObject("data-" + i).get("arival_date").toString().split("/");
-				String[] arrayDepTime = mainObjAirIQ.getJSONObject("data-" + i).get("departure_time").toString().split(":");
-				String[] arrayArrTime = mainObjAirIQ.getJSONObject("data-" + i).get("arival_time").toString().split(":");
-				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
-				int totalArrinMin = 0;
-				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
-					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
-				} else {
-					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
-				}
-				int duration = totalArrinMin - totalDepinMin;
-				String airlineName = mainObjAirIQ.getJSONObject("data-" + i).get("airline").toString();
-				float depTimeFloat = 0;
-				float arrTimeFloat = 0;
-				String resultIndex = "" + i;
-				String airlineRemark = "";
-				String mode = "AirIQ";
-				String depTerminal = "T1";
-				String arrTerminal = "T1";
-				String craftType = mainObjAirIQ.getJSONObject("data-" + i).get("flight_number").toString();
-				String ticketId = mainObjAirIQ.getJSONObject("data-" + i).get("ticket_id").toString();
-				float totalPayablePrice = 0;
-
-				Brand brand =  brandRepo.getBrandByName(airlineName);
-				if ( brand == null ) {
-					brandImage = "/images/no-image.png";
-				} else {
-					brandImage = brand.getPhotosImagePath();
-				}
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-
-				ProductDetail productDetail = new ProductDetail(i + 1000, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-			    		stringDepTime, stringArrTime, (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, ticketId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, "" + totalPayablePrice);
-				
-
-				System.out.println(productDetail);
-
-				allFlights.add(productDetail);
-			}
-		} catch (Exception e) {
-
-			e.printStackTrace();			
-			
-		}
 		
 
-        //Master Travels ......
-        
-		StringBuilder responseBodySearchMTravels = onlineFlightService.apiMasterSearch(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date);
-        
-		//Master Travels response.......
-
-        JSONObject jsonObjSearchMTravels = new JSONObject(responseBodySearchMTravels.toString());
-        System.out.println(jsonObjSearchMTravels);
-        logService.generateLog(jsonObjSearchMTravels.toString());
-        
         try {
-			JSONArray jsonArraysMTravels = jsonObjSearchMTravels.getJSONArray("data");
-			JSONObject mainObjMTravels = new JSONObject();
-			String bookingTokenId = jsonObjSearchMTravels.get("booking_token_id").toString();
-			String brandImage = "";
-
-			for (int i = 0; i < jsonArraysMTravels.length(); i++) {
-				mainObjMTravels.put("data-" + i, jsonArraysMTravels.getJSONObject(i));
-				String noOfSeatAvailable = mainObjMTravels.getJSONObject("data-" + i).get("available_seats").toString();
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-		        
-				String flightNumber = mainObjMTravels.getJSONObject("data-" + i).get("flight_number").toString();
-				String stringDepTime = mainObjMTravels.getJSONObject("data-" + i).get("dep_time").toString();
-				String stringArrTime = mainObjMTravels.getJSONObject("data-" + i).get("arr_time").toString();
-				double parsePriceADT = Double.parseDouble(mainObjMTravels.getJSONObject("data-" + i).get("per_adult_child_price").toString());
-				double parsePriceINF = Double.parseDouble(mainObjMTravels.getJSONObject("data-" + i).get("per_infant_price").toString());
-				float intTotalAdultChildPrice = (float) (parsePriceADT * (searchOneway.getAdultCount() + searchOneway.getChildCount()));
-				float intTotalInfantPrice = (float) (parsePriceINF * searchOneway.getInfantCount());
-				String depAirportCode = mainObjMTravels.getJSONObject("data-" + i).get("dep_city_code").toString();
-				String arrAirportCode = mainObjMTravels.getJSONObject("data-" + i).get("arr_city_code").toString();
-				int stopNumber = Integer.parseInt(mainObjMTravels.getJSONObject("data-" + i).get("no_of_stop").toString());
-				String[] arrayDepDate = mainObjMTravels.getJSONObject("data-" + i).get("onward_date").toString().split("-");
-				String[] arrayArrDate = mainObjMTravels.getJSONObject("data-" + i).get("arr_date").toString().split("-");
-				String[] arrayDepTime = mainObjMTravels.getJSONObject("data-" + i).get("dep_time").toString().split(":");
-				String[] arrayArrTime = mainObjMTravels.getJSONObject("data-" + i).get("arr_time").toString().split(":");
-				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
-				int totalArrinMin = 0;
-				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
-					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
-				} else {
-					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
-				}
-				int duration = totalArrinMin - totalDepinMin;
-				String airlineName = mainObjMTravels.getJSONObject("data-" + i).get("airline_name").toString();
-				float depTimeFloat = 0;
-				float arrTimeFloat = 0;
-				String resultIndex = mainObjMTravels.getJSONObject("data-" + i).get("id").toString();
-				String airlineRemark = "";
-				String mode = "MasterTravels";
-				String depTerminal = mainObjMTravels.getJSONObject("data-" + i).get("dep_terminal_no").toString();
-				String arrTerminal = mainObjMTravels.getJSONObject("data-" + i).get("arr_terminal_no").toString();
-				String craftType = mainObjMTravels.getJSONObject("data-" + i).get("static").toString();
-				double totalPayablePrice = Double.parseDouble(mainObjMTravels.getJSONObject("data-" + i).get("total_payable_price").toString());
-				
-				float grandTotal = (float) totalPayablePrice;
-
-				Brand brand =  brandRepo.getBrandByName(airlineName);
-				if ( brand == null ) {
-					brandImage = "/images/no-image.png";
-				} else {
-					brandImage = brand.getPhotosImagePath();
-				}
-				
-				System.out.println("total: " + mainObjMTravels.getJSONObject("data-" + i).get("total_payable_price").toString());
-				
-				System.out.println("Grand total: " + grandTotal);
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-
-				ProductDetail productDetail = new ProductDetail(i + 2000, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-			    		stringDepTime, stringArrTime, (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, bookingTokenId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, "" + grandTotal);
-				
-			
-				System.out.println(productDetail);
-
-				allFlights.add(productDetail);
-			}
-			
-		} catch (Exception e) {
-
-			e.printStackTrace();			
+        	
+        	StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchMod(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date, "1");
 		
-		}
-
-		
-        
-        //Ease2fly ......
-        
-		StringBuilder responseBodySearchEase2fly;
-
-		//Ease2fly response.......
-        
-        try {
-        	responseBodySearchEase2fly = onlineFlightService.apiEase2flySearch(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date);
-
-            JSONObject jsonObjSearchEase2fly = new JSONObject(responseBodySearchEase2fly.toString());
-            System.out.println(jsonObjSearchEase2fly);
-            logService.generateLog(jsonObjSearchEase2fly.toString());
-            
-			JSONArray jsonArraysEase2fly = jsonObjSearchEase2fly.getJSONArray("result");
-			JSONObject mainObjEase2fly = new JSONObject();
-			String refreshToken = jsonObjSearchEase2fly.get("refresh_token").toString();
-			String brandImage = "";
-
-			for (int i = 0; i < jsonArraysEase2fly.length(); i++) {
-				mainObjEase2fly.put("result-" + i, jsonArraysEase2fly.getJSONObject(i));
-				String noOfSeatAvailable = mainObjEase2fly.getJSONObject("result-" + i).get("seat").toString();
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-		        
-				String flightNumber = mainObjEase2fly.getJSONObject("result-" + i).get("flight_no").toString();
-				String stringDepTime[] = mainObjEase2fly.getJSONObject("result-" + i).get("departure_time").toString().split(" ");
-				String stringArrTime[] = mainObjEase2fly.getJSONObject("result-" + i).get("arrival_time").toString().split(" ");
-				double parsePriceADT = Double.parseDouble(mainObjEase2fly.getJSONObject("result-" + i).get("total_fare").toString());
-				double parsePriceINF = Double.parseDouble(mainObjEase2fly.getJSONObject("result-" + i).get("infant_charge").toString());
-				float intTotalInfantPrice = (float) (parsePriceINF * searchOneway.getInfantCount());
-				float intTotalAdultChildPrice = (float) (parsePriceADT) - intTotalInfantPrice;
-				String depAirportCode = mainObjEase2fly.getJSONObject("result-" + i).get("origin").toString();
-				String arrAirportCode = mainObjEase2fly.getJSONObject("result-" + i).get("destination").toString();
-				String pnr = mainObjEase2fly.getJSONObject("result-" + i).get("pnr").toString();
-				
-				String[] arrayDepDate = mainObjEase2fly.getJSONObject("result-" + i).get("departure_date").toString().split("-");
-				String[] arrayArrDate = mainObjEase2fly.getJSONObject("result-" + i).get("arrival_date").toString().split("-");
-				String[] arrayDepTime = stringDepTime[0].split(":");
-				String[] arrayArrTime = stringArrTime[0].split(":");
-				int totalDepinMin = (Integer.parseInt(arrayDepTime[0]) * 60)  + Integer.parseInt(arrayDepTime[1]);
-				int totalArrinMin = 0;
-				if (Integer.parseInt(arrayDepDate[2]) < Integer.parseInt(arrayArrDate[2])) {
-					totalArrinMin = ((Integer.parseInt(arrayArrTime[0]) + 24 ) * 60 )  + Integer.parseInt(arrayArrTime[1]);
-				} else {
-					totalArrinMin = (Integer.parseInt(arrayArrTime[0]) * 60)  + Integer.parseInt(arrayArrTime[1]);
-				}
-				int duration = totalArrinMin - totalDepinMin;
-				String airlineName = mainObjEase2fly.getJSONObject("result-" + i).get("airline_name").toString();
-				float depTimeFloat = 0;
-				float arrTimeFloat = 0;
-				String resultIndex = mainObjEase2fly.getJSONObject("result-" + i).get("id").toString();
-				String airlineRemark = "";
-				String mode = "Ease2fly";
-				String depTerminal = "T1";
-				String arrTerminal = "T1";
-				String craftType = mainObjEase2fly.getJSONObject("result-" + i).get("d_owner").toString();
-				double totalPayablePrice = Double.parseDouble(mainObjEase2fly.getJSONObject("result-" + i).get("total_fare").toString());
-				
-				float grandTotal = (float) totalPayablePrice;
-
-				Brand brand =  brandRepo.getBrandByName(airlineName);
-				if ( brand == null ) {
-					brandImage = "/images/no-image.png";
-				} else {
-					brandImage = brand.getPhotosImagePath();
-				}
-
-				System.out.println("total: " + mainObjEase2fly.getJSONObject("result-" + i).get("total_fare").toString());
-				
-				System.out.println("Grand total: " + grandTotal);
-
-		        logService.generateLog("Seats" + noOfSeatAvailable);
-
-				ProductDetail productDetail = new ProductDetail(i + 3000, pnr, noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
-			    		stringDepTime[0], stringArrTime[0], (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, 0, duration, 
-			    		airlineName, depTimeFloat, arrTimeFloat, refreshToken, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, "" + grandTotal);
-				
-			
-				System.out.println(productDetail);
-
-				allFlights.add(productDetail);
-
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();	
-		}
-			
-		
-		
-
-        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchMod(searchOneway.getOrigin(), searchOneway.getDestination(), searchOneway.getAdultCount(), searchOneway.getChildCount(), searchOneway.getInfantCount(), date, "1");
-		
-		try {
 	        
 			//TBO response.......
 	        
@@ -537,8 +563,16 @@ public class SearchHistoryRestController {
 					}
 
 					Integer intTotalInfantPrice = (int) (infantPrice + infantTax);
+					Integer duration = 0;
+					if (mainObjSegment.getJSONArray("Segment-" + i).length() > 1) {
+						duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(mainObjSegment.getJSONArray("Segment-" + i).length() - 1)
+								.get("AccumulatedDuration").toString());
+					} else {
+						duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+					}
 					
-					Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+					
+					
 					@SuppressWarnings("unused")
 					String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
 					String noOfSeatAvailable = "";
@@ -569,8 +603,34 @@ public class SearchHistoryRestController {
 					 
 					ProductDetail productDetail = new ProductDetail(i + 1, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
 				    		stringDepTime, stringArrTime, (float) intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
-				    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, brandImage, null);
-
+				    		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "1", depTerminal, arrTerminal, 15, 7, "", "", null, craftType, 
+				    		brandImage, null);
+					
+					List<Stop> stops = productDetail.getStops();
+					for (int j = 0; j < mainObjSegment.getJSONArray("Segment-" + i).length(); j++) {
+						String totalTime = "0";
+						String groundTime = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).get("GroundTime").toString();
+						String dura1 = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).get("Duration").toString();
+						try {
+							totalTime = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).get("AccumulatedDuration").toString();
+							groundTime = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).get("GroundTime").toString();
+							} catch (Exception e) {
+								totalTime = "0";
+								groundTime = "0";
+							}
+						String org = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin").getJSONObject("Airport").get("AirportCode").toString();
+						String des = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination").getJSONObject("Airport").get("AirportCode").toString();
+						String arrT =  mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin").get("DepTime").toString();
+						String depT =  mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination").get("ArrTime").toString();
+						String flightNu = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Airline").get("AirlineCode").toString() 
+								+ "-" + mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Airline").get("FlightNumber").toString();
+						String bran = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Airline").get("AirlineName").toString();
+					
+						Stop stop = new Stop(org, des, arrT, depT, totalTime, groundTime, dura1, flightNu, bran, productDetail);
+						
+						stops.add(stop);
+						
+					}
 					allFlights.add(productDetail);
 				}
 				
@@ -600,6 +660,332 @@ public class SearchHistoryRestController {
         }
     	
         return paginatedFlights;
+	}
+	
+	public List<FlightMap> searchFlightReturnAPI(SearchOnewayOfflineReturnRequest searchReturn, Date date, Date returnDate) throws IllegalArgumentException, Exception {
+		List<FlightMap> allFlightMaps = new ArrayList<>();
+		searchReturn.getPage();
+		List<ProductDetail> allFlightOneways = searchOffline(searchReturn.getOrigin(), searchReturn.getDestination(), date);
+		List<ProductDetail> allFlightReturns = searchOffline(searchReturn.getDestination(), searchReturn.getOrigin(), returnDate);
+        
+		for (int i = 0; i < allFlightOneways.size(); i++) {
+			FlightMap flightMap = new FlightMap();
+			flightMap.setFlightIdOne(allFlightOneways.get(i).getId());
+			
+			if (allFlightReturns.size() != 0) {
+				try {
+					flightMap.setFlightIdTwo(allFlightReturns.get(i).getId());
+					allFlightMaps.add(flightMap);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					// TODO: handle exception
+				}
+			}
+		}
+		
+		try {
+			// Create URL object with the API end-point
+	        StringBuilder responseBodySearch = onlineFlightService.apiOnlineSearchModReturn(searchReturn.getOrigin(), searchReturn.getDestination(), 
+	        		searchReturn.getAdultCount(), searchReturn.getChildCount(), searchReturn.getInfantCount(), date, returnDate);
+			
+	        JSONObject jsonObjSearch = new JSONObject(responseBodySearch.toString());
+	        System.out.println(jsonObjSearch);
+	        logService.generateLog(jsonObjSearch.toString());
+	        try {
+	        	JSONArray jsonArrays = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(0);
+	            JSONArray jsonObjSegment = new JSONArray();
+	    		JSONObject mainObj = new JSONObject();
+	    		JSONObject mainObjSegment = new JSONObject();
+	    		JSONObject mainObjOrigin = new JSONObject();
+	    		JSONObject mainObjDestination = new JSONObject();
+	    		JSONObject mainObjAirline = new JSONObject();
+	    		JSONObject mainObjFare = new JSONObject();
+	    		JSONArray jsonArrayFareBreakdown = new JSONArray();
+	           
+	    		pController.traceId = jsonObjSearch.getJSONObject("Response").get("TraceId").toString();
+	            
+	    		for (int i = 0; i < jsonArrays.length(); i++) {
+	    			JSONObject mainObjOriginList = new JSONObject();
+	    			JSONObject mainObjDestinationList = new JSONObject();
+	    			
+	    	        mainObj.put("Result-" + i, jsonArrays.getJSONObject(i));
+	    	        jsonObjSegment.put(mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+	    	        mainObjSegment.put("Segment-" + i, mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+	    	        mainObjFare.put("Fare-" + i, mainObj.getJSONObject("Result-" + i).getJSONObject("Fare"));
+	    	        jsonArrayFareBreakdown.put(mainObj.getJSONObject("Result-" + i).getJSONArray("FareBreakdown"));
+	    	        mainObjOrigin.put("Origin-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Origin"));
+	    	        mainObjDestination.put("Destination-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Destination"));
+	    	        mainObjAirline.put("Airline-" + i, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Airline"));
+	    	        
+	    	        Integer innerSegmentArrayLength = mainObj.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
+	    	        Integer stopNumber = innerSegmentArrayLength - 1;
+	    	        @SuppressWarnings("unused")
+					String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
+	    	        @SuppressWarnings("unused")
+					String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "";
+	    	        for (int j = 0; j < innerSegmentArrayLength; j++) {
+	    	        	if (j == 0) {
+	    		        	mainObjOriginList.put("Origin-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
+	    		        	depAirportCode = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportCode").toString();
+	    		        	depAirportName = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportName").toString();
+	    		        	depTerminal = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("Terminal").toString();
+	    		        	depTime = mainObjOriginList.getJSONObject("Origin-" + j).get("DepTime").toString();
+	    		        	
+	    					mainObjDestinationList.put("Destination-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+	    					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+	    				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+	    				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+	    				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+	    				    
+	    				} else if (j > 0) {
+	    					mainObjDestinationList.put("Destination-" + j, mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+	    					arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+	    				    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+	    				    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+	    				    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+	    				    
+	    				}
+	    			}
+
+	    	        String airlineName = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineName").toString();
+	    	        @SuppressWarnings("unused")
+					String fareClass = mainObjAirline.getJSONObject("Airline-" + i).get("FareClass").toString();
+	    	        String flightNumber = mainObjAirline.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirline.getJSONObject("Airline-" + i).get("FlightNumber").toString();
+	    	        
+	    	        String[] departureTimeParts = depTime.split("T");
+	    			String[] departureTimeInnerParts = departureTimeParts[1].split(":");
+	    			String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
+	    			String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
+	    			Float depTimeFloat = Float.parseFloat(depTimeString);
+	    			
+	    			String[] arrivalTimeParts = arrTime.split("T");
+	    			String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
+	    			String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
+	    			String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
+	    			Float arrTimeFloat = Float.parseFloat(arrTimeString);
+	    			
+	    			JSONObject jsonObjectAdult = new JSONObject();
+	    			Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
+	    			Integer intTotalAdultChildPrice = 0;
+	    			
+	    			for (int j = 0; j < jsonArrayFareBreakdown.getJSONArray(i).length(); j++) {
+	    				jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdown.getJSONArray(i).getJSONObject(j));
+	    				String priceOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("BaseFare").toString();
+	    				String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
+	    				String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
+	    				if (passengerTypeOnline.equals("3")) {
+	    					infantPrice = Integer.parseInt(priceOnline) / searchReturn.getInfantCount();
+	    					infantTax = Integer.parseInt(taxOnline) / searchReturn.getInfantCount();
+	    				} else if (passengerTypeOnline.equals("2")) {
+	    					childPrice = Integer.parseInt(priceOnline) / searchReturn.getChildCount();
+	    					childTax = Integer.parseInt(taxOnline) / searchReturn.getChildCount();
+	    				} else {
+	    					adultPrice = Integer.parseInt(priceOnline) / searchReturn.getAdultCount();
+	    					adultTax = Integer.parseInt(taxOnline) / searchReturn.getAdultCount();
+	    				}
+	    			}
+	    			
+	    			if (childPrice != 0) {
+	    				intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
+	    			} else {
+	    				intTotalAdultChildPrice = adultPrice + adultTax;
+	    			}
+
+	    			Integer intTotalInfantPrice = infantPrice + infantTax;
+	    			
+	    			Integer duration = Integer.parseInt(mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+	    			@SuppressWarnings("unused")
+					String flightStatus = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
+	    			String noOfSeatAvailable = "";
+	    			try {
+	    				noOfSeatAvailable = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
+	    			} catch (JSONException e) {
+	    				System.out.println(i);
+	    				noOfSeatAvailable = "0";
+	    			}
+
+	    			String resultIndex = mainObj.getJSONObject("Result-" + i).get("ResultIndex").toString();
+	    			String airlineRemark = mainObj.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+					
+					
+	    			
+	    			String mode = "Online-data";
+	    			
+	    			String craftType = mainObjSegment.getJSONArray("Segment-" + i).getJSONObject(0).get("Craft").toString();
+	    			
+	    			ProductDetail productDetail = new ProductDetail(i + 1, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, date, 
+	                		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+	                		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
+	    			
+	    			allFlightOneways.add(productDetail);
+	    			
+	    		}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			JSONArray jsonArraysReturn = new JSONArray();
+			try {
+				jsonArraysReturn = jsonObjSearch.getJSONObject("Response").getJSONArray("Results").getJSONArray(1);
+				JSONObject mainObjReturn = new JSONObject();
+				JSONObject mainObjSegmentReturn = new JSONObject();
+				JSONObject mainObjOriginReturn = new JSONObject();
+				JSONObject mainObjDestinationReturn = new JSONObject();
+				JSONObject mainObjAirlineReturn = new JSONObject();
+				JSONObject mainObjFareReturn = new JSONObject();
+				JSONArray jsonArrayFareBreakdownReturn = new JSONArray();
+		        JSONArray jsonObjSegmentReturn = new JSONArray();
+
+
+//		        ProductDetail[] productDetailTwo = new ProductDetail[500];
+		        
+				for (int i = 0; i < jsonArraysReturn.length(); i++) {
+					JSONObject mainObjOriginList = new JSONObject();
+					JSONObject mainObjDestinationList = new JSONObject();
+					
+			        mainObjReturn.put("Result-" + i, jsonArraysReturn.getJSONObject(i));
+			        jsonObjSegmentReturn.put(mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+			        mainObjSegmentReturn.put("Segment-" + i, mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0));
+			        mainObjFareReturn.put("Fare-" + i, mainObjReturn.getJSONObject("Result-" + i).getJSONObject("Fare"));
+			        jsonArrayFareBreakdownReturn.put(mainObjReturn.getJSONObject("Result-" + i).getJSONArray("FareBreakdown"));
+			        mainObjOriginReturn.put("Origin-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Origin"));
+			        mainObjDestinationReturn.put("Destination-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Destination"));
+			        mainObjAirlineReturn.put("Airline-" + i, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).getJSONObject("Airline"));
+			        
+			        Integer innerSegmentArrayLength = mainObjReturn.getJSONObject("Result-" + i).getJSONArray("Segments").getJSONArray(0).length();
+			        Integer stopNumber = innerSegmentArrayLength - 1;
+			        @SuppressWarnings("unused")
+					String depAirportCode = "",depAirportName = "", depTerminal = "", depTime = "";
+			        @SuppressWarnings("unused")
+					String arrAirportCode = "",arrAirportName = "", arrTerminal = "", arrTime = "", craftType = "";
+			        for (int j = 0; j < innerSegmentArrayLength; j++) {
+			        	if (j == 0) {
+				        	mainObjOriginList.put("Origin-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Origin"));
+				        	depAirportCode = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportCode").toString();
+				        	depAirportName = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("AirportName").toString();
+				        	depTerminal = mainObjOriginList.getJSONObject("Origin-" + j).getJSONObject("Airport").get("Terminal").toString();
+				        	depTime = mainObjOriginList.getJSONObject("Origin-" + j).get("DepTime").toString();
+				        	
+							mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+							arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+						    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+						    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+						    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+						    
+							craftType = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).get("Craft").toString();
+						    
+						} else if (j > 0) {
+							mainObjDestinationList.put("Destination-" + j, mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).getJSONObject("Destination"));
+							arrAirportCode = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportCode").toString();
+						    arrAirportName = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("AirportName").toString();
+						    arrTerminal = mainObjDestinationList.getJSONObject("Destination-" + j).getJSONObject("Airport").get("Terminal").toString();
+						    arrTime = mainObjDestinationList.getJSONObject("Destination-" + j).get("ArrTime").toString();
+						    
+							craftType = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(j).get("Craft").toString();
+						}
+					}
+			        
+			        String airlineName = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("AirlineName").toString();
+			        @SuppressWarnings("unused")
+					String fareClass = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("FareClass").toString();
+			        String flightNumber = mainObjAirlineReturn.getJSONObject("Airline-" + i).get("AirlineCode").toString() + "-" + mainObjAirlineReturn.getJSONObject("Airline-" + i).get("FlightNumber").toString();
+			        
+			        String[] departureTimeParts = depTime.split("T");
+					String[] departureTimeInnerParts = departureTimeParts[1].split(":");
+					String stringDepTime = departureTimeInnerParts[0] + ":" + departureTimeInnerParts[1];
+					String depTimeString = departureTimeInnerParts[0] + "." + departureTimeInnerParts[1].charAt(0);
+					Float depTimeFloat = Float.parseFloat(depTimeString);
+					
+					String[] arrivalTimeParts = arrTime.split("T");
+					String[] arrivalTimeInnerParts = arrivalTimeParts[1].split(":");
+					String stringArrTime = arrivalTimeInnerParts[0] + ":" + arrivalTimeInnerParts[1];
+					String arrTimeString = arrivalTimeInnerParts[0] + "." + arrivalTimeInnerParts[1].charAt(0);
+					Float arrTimeFloat = Float.parseFloat(arrTimeString);
+					
+					JSONObject jsonObjectAdult = new JSONObject();
+					Integer adultPrice = 0, childPrice = 0, infantPrice = 0, adultTax = 0, childTax = 0, infantTax = 0;
+					Integer intTotalAdultChildPrice = 0;
+					
+					for (int j = 0; j < jsonArrayFareBreakdownReturn.getJSONArray(i).length(); j++) {
+						jsonObjectAdult.put("FareAdult-" + j, jsonArrayFareBreakdownReturn.getJSONArray(i).getJSONObject(j));
+						String priceOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("BaseFare").toString();
+						String taxOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("Tax").toString();
+						String passengerTypeOnline = jsonObjectAdult.getJSONObject("FareAdult-" + j).get("PassengerType").toString();
+						if (passengerTypeOnline.equals("3")) {
+							infantPrice = Integer.parseInt(priceOnline) / searchReturn.getInfantCount();
+							infantTax = Integer.parseInt(taxOnline) / searchReturn.getInfantCount();
+						} else if (passengerTypeOnline.equals("2")) {
+							childPrice = Integer.parseInt(priceOnline) / searchReturn.getChildCount();
+							childTax = Integer.parseInt(taxOnline) / searchReturn.getChildCount();
+						} else {
+							adultPrice = Integer.parseInt(priceOnline) / searchReturn.getAdultCount();
+							adultTax = Integer.parseInt(taxOnline) / searchReturn.getAdultCount();
+						}
+					}
+					
+					if (childPrice != 0) {
+						intTotalAdultChildPrice = ((adultPrice + childPrice) / 2) + ((adultTax + childTax) / 2);
+					} else {
+						intTotalAdultChildPrice = adultPrice + adultTax;
+					}
+
+					Integer intTotalInfantPrice = infantPrice + infantTax;
+					
+					Integer duration = Integer.parseInt(mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("Duration").toString());
+					@SuppressWarnings("unused")
+					String flightStatus = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("FlightStatus").toString();
+					String noOfSeatAvailable = "";
+					try {
+						noOfSeatAvailable = mainObjSegmentReturn.getJSONArray("Segment-" + i).getJSONObject(0).get("NoOfSeatAvailable").toString();
+					} catch (JSONException e) {
+						System.out.println(i);
+						noOfSeatAvailable = "0";
+					}
+
+					String resultIndex = mainObjReturn.getJSONObject("Result-" + i).get("ResultIndex").toString();
+					String airlineRemark = mainObjReturn.getJSONObject("Result-" + i).get("AirlineRemark").toString();
+					String mode = "Online-data";
+					
+					
+					
+					
+					ProductDetail productDetailTwo = new ProductDetail(i, "waiting...", noOfSeatAvailable, noOfSeatAvailable, flightNumber, returnDate, 
+		            		stringDepTime, stringArrTime, intTotalAdultChildPrice, intTotalInfantPrice, 0, 0, depAirportCode, arrAirportCode, true, true, stopNumber, duration, 
+		            		airlineName, depTimeFloat, arrTimeFloat, pController.traceId, resultIndex, airlineRemark, mode, "2", depTerminal, arrTerminal, 15, 7, "", "", null, craftType);
+					
+					
+					allFlightReturns.add(productDetailTwo);
+					
+					String resultStrTwo = productDetailTwo.getResultIndex();
+					String[] arrayResultTwo = resultStrTwo.split("B");
+
+					FlightMap flightMap = new FlightMap();
+					
+					for (ProductDetail productDetail2 : allFlightOneways) {
+						String resultStr = productDetail2.getResultIndex();
+						String[] arrayResult = resultStr.split("B");
+						if (arrayResultTwo[1].equals(arrayResult[1])) {
+							flightMap.setId(i);
+							flightMap.setFlightIdOne(productDetailTwo.getId());
+							flightMap.setFlightIdTwo(productDetail2.getId());
+							allFlightMaps.add(flightMap);
+						}
+					}		
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	        
+		} catch (Exception e2) {
+			
+			e2.printStackTrace();
+			// TODO: handle exception
+		}
+
+		return allFlightMaps;
 	}
 
 	private List<ProductDetail> sortFlight(String sortName, List<ProductDetail> listProduct) {
@@ -685,6 +1071,145 @@ public class SearchHistoryRestController {
 		}
 		public void setPage(Integer page) {
 			this.page = page;
+		}
+		public Integer getSize() {
+			return size;
+		}
+		public void setSize(Integer size) {
+			this.size = size;
+		}
+		public String getSort() {
+			return sort;
+		}
+		public void setSort(String sort) {
+			this.sort = sort;
+		}
+		public Integer getAdultCount() {
+			return adultCount;
+		}
+		public void setAdultCount(Integer adultCount) {
+			this.adultCount = adultCount;
+		}
+		public Integer getChildCount() {
+			return childCount;
+		}
+		public void setChildCount(Integer childCount) {
+			this.childCount = childCount;
+		}
+		public Integer getInfantCount() {
+			return infantCount;
+		}
+		public void setInfantCount(Integer infantCount) {
+			this.infantCount = infantCount;
+		}
+		public String getJourney_class() {
+			return journey_class;
+		}
+		public void setJourney_class(String journey_class) {
+			this.journey_class = journey_class;
+		}
+		public String getOrigin() {
+			return origin;
+		}
+		public void setOrigin(String origin) {
+			this.origin = origin;
+		}
+		public String getDestination() {
+			return destination;
+		}
+		public void setDestination(String destination) {
+			this.destination = destination;
+		}
+		public String getPreferredDepartureTime() {
+			return preferredDepartureTime;
+		}
+		public void setPreferredDepartureTime(String preferredDepartureTime) {
+			this.preferredDepartureTime = preferredDepartureTime;
+		}
+		public String getMode() {
+			return mode;
+		}
+		public void setMode(String mode) {
+			this.mode = mode;
+		}
+		public boolean isFilter() {
+			return isFilter;
+		}
+		public void setFilter(boolean isFilter) {
+			this.isFilter = isFilter;
+		}
+		public String getAirline() {
+			return airline;
+		}
+		public void setAirline(String airline) {
+			this.airline = airline;
+		}
+		public String getMinTime() {
+			return minTime;
+		}
+		public void setMinTime(String minTime) {
+			this.minTime = minTime;
+		}
+		public String getMaxTime() {
+			return maxTime;
+		}
+		public void setMaxTime(String maxTime) {
+			this.maxTime = maxTime;
+		}
+		public Integer getMaxStops() {
+			return maxStops;
+		}
+		public void setMaxStops(Integer maxStops) {
+			this.maxStops = maxStops;
+		}
+		public Double getMinPrice() {
+			return minPrice;
+		}
+		public void setMinPrice(Double minPrice) {
+			this.minPrice = minPrice;
+		}
+		public Double getMaxPrice() {
+			return maxPrice;
+		}
+		public void setMaxPrice(Double maxPrice) {
+			this.maxPrice = maxPrice;
+		}
+	
+    }
+
+    @SuppressWarnings("unused")
+	private static class SearchOnewayOfflineReturnRequest {
+    	private Integer adultCount;
+        private Integer childCount;
+        private Integer infantCount;
+        private String journey_class;
+        private String origin;
+        private String destination;
+        private String preferredDepartureTime;
+        private String preferredReturnTime;
+        private boolean isFilter;
+        private String mode;
+        private String sort;
+        private Integer page;
+        private Integer size;
+        private String airline; 
+        private String minTime; 
+        private String maxTime; 
+        private Integer maxStops; 
+        private Double minPrice; 
+        private Double maxPrice;
+        
+		public Integer getPage() {
+			return page;
+		}
+		public void setPage(Integer page) {
+			this.page = page;
+		}
+		public String getPreferredReturnTime() {
+			return preferredReturnTime;
+		}
+		public void setPreferredReturnTime(String preferredReturnTime) {
+			this.preferredReturnTime = preferredReturnTime;
 		}
 		public Integer getSize() {
 			return size;

@@ -41,7 +41,13 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+ 
 @RestController
+@Tag(
+		name = "CRUD REST APIs for Bus Booking", 
+		description = "Operations related to bus booking"
+)
 public class BusRestController {
 
 	@Autowired private BusCityRepository busCityRepo;
@@ -50,6 +56,7 @@ public class BusRestController {
 	@Autowired private OnlineBusService onlineBusService;
 	@Autowired private LogService logService;
 	@Autowired private BusRepository busRepo;
+	@Autowired private BusOrderRepository busOrderRepo;
 	@Autowired private BusSaveHelper busSaveHelper;
 	@Autowired private SettingService settingService;
 	
@@ -65,7 +72,7 @@ public class BusRestController {
 			String cityBody = "{\r\n" 
 							+ "  \"id\": " + city.getId() + ",\r\n" 
 							+ "  \"cityId\": " + city.getCityId() + ",\r\n" 
-							+ "  \"cityName\": \"" + city.getCityName() + "\"\r\n" 
+							+ "  \"cityName\": \"" + sanitize(city.getCityName()) + "\"\r\n" 
 							+ "}";
 			
 			strCity.add(cityBody);
@@ -110,7 +117,7 @@ public class BusRestController {
 			
 			history = busService.saveBusHistory(newHistory, customer);
 			
-			responseBody = onlineBusService.apiOnlineSearchBus(cityOne.getCityId().toString(), cityTwo.getCityId().toString(), startDate);
+			responseBody = onlineBusService.apiOnlineSearchBus(cityTwo.getCityId().toString(), cityOne.getCityId().toString(), startDate);
 		} 
 
         JSONObject jsonObjSearch = new JSONObject(responseBody.toString());
@@ -534,6 +541,26 @@ public class BusRestController {
 	        newSeat.setRowNo(s.rowNo);
 	        newSeat.setColumnNo(s.columnNo);
 	        newSeat.setBus(savedBus);
+	        newSeat.setBasePrice(s.basePrice);
+	        newSeat.setPublishedPrice(s.publishedPrice);
+	        newSeat.setOfferedPrice(s.offeredPrice);
+	        newSeat.setPublishedPriceRoundedOff(s.publishedPriceRoundedOff);
+	        newSeat.setOfferedPriceRoundedOff(s.offeredPriceRoundedOff);
+	        newSeat.setAgentCommission(s.agentCommission);
+	        newSeat.setAgentMarkUp(s.agentMarkUp);
+	        newSeat.setTds(s.tds);
+	        newSeat.setcGSTAmount(s.cGSTAmount);
+	        newSeat.setcGSTRate(s.cGSTRate);
+	        newSeat.setCessAmount(s.cessAmount);
+	        newSeat.setCessRate(s.cessRate);
+	        newSeat.setiGSTAmount(s.iGSTAmount);
+	        newSeat.setiGSTRate(s.iGSTRate);
+	        newSeat.setsGSTAmount(s.sGSTAmount);
+	        newSeat.setsGSTRate(s.sGSTRate);
+	        newSeat.setTaxableAmount(s.taxableAmount);
+	        newSeat.setTax(s.tax);
+	        newSeat.setDiscount(s.discount);
+	        newSeat.setOtherCharges(s.otherCharges);
 	        
 	        Bus bus = busSaveHelper.setSeats(newSeat, savedBus);
 			
@@ -598,14 +625,78 @@ public class BusRestController {
 	    
 		Wallet wallet = busService.busWalletPayOrder(customer, updatedOrder);
 		updatedOrder = (wallet != null) ? busService.updateOrderStatus(busOrder.getId(), OrderStatus.SUCCESSFULL) : busService.updateOrderStatus(busOrder.getId(), OrderStatus.FAILED);
+
+		String urlName = (updatedOrder.getOrderStatus() == OrderStatus.SUCCESSFULL) ? busBlockMethod(bus) : "Failed";
+	    String hasArr = (updatedOrder.getOrderStatus() == OrderStatus.SUCCESSFULL) ? busBookkMethodAndBookingDetails(updatedOrder) : "Failed";
 		
-		String urlName = busBlockMethod(bus);
-	    String hasArr = busBookkMethodAndBookingDetails(updatedOrder);
-		
-		return "{"  + 
+	    String rsp = "{"  + 
 				"\"code\": 0, " + "\"msg\": \"List of Bus and Order Result.\", " + "\"bus\": "
-				+ updatedOrder.getId() + ", " + "\"block\": \"" + urlName + "\", " + "\"book\": \"" + hasArr
-				+ "\"}";
+				+ updatedOrder.getId() + ", " + "\"block\": " + urlName + ", " + "\"book\": " + hasArr
+				+ "}";
+	    
+	    System.out.println(rsp);
+	    
+		return rsp;
+	}
+
+	@PostMapping("/bus/order/save_zaak")
+	public String busZaakOrderSave(HttpServletRequest request, HttpServletResponse response) throws StreamReadException, DatabindException, IOException {
+
+		BusOrderRequest busOrderRequest = new ObjectMapper().readValue(request.getInputStream(), BusOrderRequest.class);
+
+		Customer customer = customerRepository.findById(busOrderRequest.custId).get();
+//    	PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
+		Bus bus = busService.findByIdBus(busOrderRequest.busId);
+	    BusHistory busHistory = busService.findByIdBusHistory(busOrderRequest.searchId);
+		TBObusCity cityOne = busCityRepo.getCityByCityId(Integer.parseInt(busHistory.getCityIdOne()));
+		TBObusCity cityTwo = busCityRepo.getCityByCityId(Integer.parseInt(busHistory.getCityIdTwo()));
+	    
+	    Date createdDate = new Date();
+	    
+	    String busOrdername = busHistory.getDeptDate() + ":(" + cityOne.getCityName() + "-" + cityTwo.getCityName() + "):" + createdDate;
+	    
+	    BusOrder busOrder = new BusOrder(busOrdername, 0, createdDate, OrderStatus.NEW, customer, busHistory, bus);
+	    BusOrder savedOrder= busService.saveOrder(busOrder, bus, busHistory);
+		
+		double totalPrice = 0;
+	    
+	    for (BusSeat seat : bus.getBusSeats()) {
+	    	totalPrice = totalPrice + seat.getPublishedPriceRoundedOff();
+		}
+	    BusOrder updatedOrder = busService.updateOrderPrice(savedOrder.getId(), totalPrice);
+		
+	    String rsp = "{"  + 
+				"\"code\": 0, " 
+	    		+ "\"msg\": \"new saved Order.\", " 
+				+ "\"order\": " + updatedOrder.getId() + " "
+				+ "}";
+	    
+	    System.out.println(rsp);
+	    
+		return rsp;
+	}
+	
+	@PostMapping("/bus/order/zaak_check")
+	public String busZaakPayment(HttpServletRequest request, HttpServletResponse response) throws StreamReadException, DatabindException, IOException {
+
+		BusOrderSaveRequest busOrderRequest = new ObjectMapper().readValue(request.getInputStream(), BusOrderSaveRequest.class);
+
+		Bus bus = busService.findByIdBus(busOrderRequest.busId);
+	    BusOrder busOrder = busOrderRepo.findById(busOrderRequest.orderId).get();
+	    
+		busOrder = busService.updateOrderStatus(busOrder.getId(), OrderStatus.SUCCESSFULL);
+
+		String urlName = (busOrder.getOrderStatus() == OrderStatus.SUCCESSFULL) ? busBlockMethod(bus) : "Failed";
+	    String hasArr = (busOrder.getOrderStatus() == OrderStatus.SUCCESSFULL) ? busBookkMethodAndBookingDetails(busOrder) : "Failed";
+		
+	    String rsp = "{"  + 
+				"\"code\": 0, " + "\"msg\": \"List of Bus and Order Result.\", " + "\"bus\": "
+				+ busOrder.getId() + ", " + "\"block\": " + urlName + ", " + "\"book\": " + hasArr
+				+ "}";
+	    
+	    System.out.println(rsp);
+	    
+		return rsp;
 	}
 	
 //	@PostMapping("/show_bus_seat_rest")
@@ -747,6 +838,27 @@ public class BusRestController {
 						+ "  \"seatFare\": " + busSeat.getSeatFare() + ",\r\n" 
 						+ "  \"isLadiesSeat\": " + busSeat.isLadiesSeat() + ",\r\n"
 						+ "  \"isMalesSeat\": " + busSeat.isMalesSeat() + ",\r\n" 
+						+ "  \"price\": " + busSeat.getPublishedPriceRoundedOff() + ",\r\n" 
+						+ "  \"basePrice\": " + busSeat.getBasePrice() + ",\r\n"
+						+ "  \"publishedPrice\": " + busSeat.getPublishedPrice() + ",\r\n"
+						+ "  \"offeredPrice\": " + busSeat.getOfferedPrice() + ",\r\n"
+						+ "  \"publishedPriceRoundedOff\": " + busSeat.getPublishedPriceRoundedOff() + ",\r\n"
+						+ "  \"offeredPriceRoundedOff\": " + busSeat.getOfferedPriceRoundedOff() + ",\r\n"
+						+ "  \"agentCommission\": " + busSeat.getAgentCommission() + ",\r\n"
+						+ "  \"agentMarkUp\": " + busSeat.getAgentMarkUp() + ",\r\n"
+						+ "  \"tds\": " + busSeat.getTds() + ",\r\n"
+						+ "  \"cGSTAmount\": " + busSeat.getcGSTAmount() + ",\r\n"
+						+ "  \"cGSTRate\": " + busSeat.getcGSTRate() + ",\r\n"
+						+ "  \"cessAmount\": " + busSeat.getCessAmount() + ",\r\n"
+						+ "  \"cessRate\": " + busSeat.getCessRate() + ",\r\n"
+						+ "  \"iGSTAmount\": " + busSeat.getiGSTAmount() + ",\r\n"
+						+ "  \"iGSTRate\": " + busSeat.getiGSTRate() + ",\r\n"
+						+ "  \"sGSTAmount\": " + busSeat.getsGSTAmount() + ",\r\n"
+						+ "  \"sGSTRate\": " + busSeat.getsGSTRate() + ",\r\n"
+						+ "  \"taxableAmount\": " + busSeat.getTaxableAmount() + ",\r\n"
+						+ "  \"tax\": " + busSeat.getTax() + ",\r\n"
+						+ "  \"discount\": " + busSeat.getDiscount() + ",\r\n"
+						+ "  \"otherCharges\": " + busSeat.getOtherCharges() + ",\r\n"
 						+ "  \"seatStatus\": " + busSeat.isSeatStatus() + "\r\n" 
 						+ "}";
 				
@@ -1124,10 +1236,13 @@ public class BusRestController {
 		}
 	}
 
-
+	// Optional: remove tab and other control characters from cityName
+	private String sanitize(String input) {
+	    return input == null ? "" : input.replaceAll("[\\x00-\\x1F]", " ");
+	}
+	
 	// POJO List
 	
-	// POJO 
 	public static class SearchBusRequest {
 		private Integer cust_id;
 		private String date;
@@ -1783,10 +1898,231 @@ public class BusRestController {
         private boolean isLadiesSeat;
         private boolean isMalesSeat;
         private boolean seatStatus;
-
+        private double basePrice;
+        private double publishedPrice;
+        private double offeredPrice;
+        private double publishedPriceRoundedOff;
+        private double offeredPriceRoundedOff;
+        private double agentCommission;
+        private double agentMarkUp;
+        private double tds;
+        private double cGSTAmount;
+        private double cGSTRate;
+        private double cessAmount;
+        private double cessRate;
+        private double iGSTAmount;
+        private double iGSTRate;
+        private double sGSTAmount;
+        private double sGSTRate;
+        private double taxableAmount;
+        private double tax;
+        private double discount;
+        private double otherCharges;
+        
         // Constructor
         public SeatSelectionRequest() {
         }
+
+        
+		public double getBasePrice() {
+			return basePrice;
+		}
+
+
+		public void setBasePrice(double basePrice) {
+			this.basePrice = basePrice;
+		}
+
+
+		public double getPublishedPrice() {
+			return publishedPrice;
+		}
+
+
+		public void setPublishedPrice(double publishedPrice) {
+			this.publishedPrice = publishedPrice;
+		}
+
+
+		public double getOfferedPrice() {
+			return offeredPrice;
+		}
+
+
+		public void setOfferedPrice(double offeredPrice) {
+			this.offeredPrice = offeredPrice;
+		}
+
+
+		public double getPublishedPriceRoundedOff() {
+			return publishedPriceRoundedOff;
+		}
+
+
+		public void setPublishedPriceRoundedOff(double publishedPriceRoundedOff) {
+			this.publishedPriceRoundedOff = publishedPriceRoundedOff;
+		}
+
+
+		public double getOfferedPriceRoundedOff() {
+			return offeredPriceRoundedOff;
+		}
+
+
+		public void setOfferedPriceRoundedOff(double offeredPriceRoundedOff) {
+			this.offeredPriceRoundedOff = offeredPriceRoundedOff;
+		}
+
+
+		public double getAgentCommission() {
+			return agentCommission;
+		}
+
+
+		public void setAgentCommission(double agentCommission) {
+			this.agentCommission = agentCommission;
+		}
+
+
+		public double getAgentMarkUp() {
+			return agentMarkUp;
+		}
+
+
+		public void setAgentMarkUp(double agentMarkUp) {
+			this.agentMarkUp = agentMarkUp;
+		}
+
+
+		public double getTds() {
+			return tds;
+		}
+
+
+		public void setTds(double tds) {
+			this.tds = tds;
+		}
+
+
+		public double getcGSTAmount() {
+			return cGSTAmount;
+		}
+
+
+		public void setcGSTAmount(double cGSTAmount) {
+			this.cGSTAmount = cGSTAmount;
+		}
+
+
+		public double getcGSTRate() {
+			return cGSTRate;
+		}
+
+
+		public void setcGSTRate(double cGSTRate) {
+			this.cGSTRate = cGSTRate;
+		}
+
+
+		public double getCessAmount() {
+			return cessAmount;
+		}
+
+
+		public void setCessAmount(double cessAmount) {
+			this.cessAmount = cessAmount;
+		}
+
+
+		public double getCessRate() {
+			return cessRate;
+		}
+
+
+		public void setCessRate(double cessRate) {
+			this.cessRate = cessRate;
+		}
+
+
+		public double getiGSTAmount() {
+			return iGSTAmount;
+		}
+
+
+		public void setiGSTAmount(double iGSTAmount) {
+			this.iGSTAmount = iGSTAmount;
+		}
+
+
+		public double getiGSTRate() {
+			return iGSTRate;
+		}
+
+
+		public void setiGSTRate(double iGSTRate) {
+			this.iGSTRate = iGSTRate;
+		}
+
+
+		public double getsGSTAmount() {
+			return sGSTAmount;
+		}
+
+
+		public void setsGSTAmount(double sGSTAmount) {
+			this.sGSTAmount = sGSTAmount;
+		}
+
+
+		public double getsGSTRate() {
+			return sGSTRate;
+		}
+
+
+		public void setsGSTRate(double sGSTRate) {
+			this.sGSTRate = sGSTRate;
+		}
+
+
+		public double getTaxableAmount() {
+			return taxableAmount;
+		}
+
+
+		public void setTaxableAmount(double taxableAmount) {
+			this.taxableAmount = taxableAmount;
+		}
+
+
+		public double getTax() {
+			return tax;
+		}
+
+
+		public void setTax(double tax) {
+			this.tax = tax;
+		}
+
+
+		public double getDiscount() {
+			return discount;
+		}
+
+
+		public void setDiscount(double discount) {
+			this.discount = discount;
+		}
+
+
+		public double getOtherCharges() {
+			return otherCharges;
+		}
+
+
+		public void setOtherCharges(double otherCharges) {
+			this.otherCharges = otherCharges;
+		}
+
 
 		public String getSeatIndex() {
 			return seatIndex;
@@ -1920,7 +2256,6 @@ public class BusRestController {
 		
 	}
     
-	
 	public static class BusOrderRequest {
 		private Integer busId;
 		private Integer custId;
@@ -1946,6 +2281,29 @@ public class BusRestController {
 		public void setSearchId(Integer searchId) {
 			this.searchId = searchId;
 		}
+	}
+	
+	public static class BusOrderSaveRequest {
+		private Integer busId;
+		private Integer orderId;
+		
+		public BusOrderSaveRequest() {}
+		
+		public Integer getBusId() {
+			return busId;
+		}
+		public void setBusId(Integer busId) {
+			this.busId = busId;
+		}
+
+		public Integer getOrderId() {
+			return orderId;
+		}
+
+		public void setOrderId(Integer orderId) {
+			this.orderId = orderId;
+		}
+		
 	}
 
 }

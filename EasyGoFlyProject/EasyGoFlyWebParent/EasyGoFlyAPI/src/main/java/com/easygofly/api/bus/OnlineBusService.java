@@ -1,5 +1,5 @@
 package com.easygofly.api.bus;
-
+ 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,7 +39,7 @@ public class OnlineBusService {
 		// Create URL object with the API end-point
 //        URL urlSearch = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Search/");
 
-        URL url = new URL(apiServiceSettingBag.getBusURL() + "/rest/Search");
+        URL url = new URL(apiServiceSettingBag.getBusURL() + "/rest/Search/");
 
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -95,9 +95,8 @@ public class OnlineBusService {
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
 		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Create URL object with the API end-point
-        URL urlBusSeatLayout = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/GetBusSeatLayOut/");
 
-//        URL urlBusSeatLayout = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBusSeatLayOut");
+        URL urlBusSeatLayout = new URL(apiServiceSettingBag.getBusURL() + "/rest/GetBusSeatLayOut/");
 
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) urlBusSeatLayout.openConnection();
@@ -151,9 +150,8 @@ public class OnlineBusService {
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
 		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Create URL object with the API end-point
-        URL urlBusPointDetail = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/GetBoardingPointDetails/");
-
-//        URL urlBusPointDetail = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBoardingPointDetails");
+		
+        URL urlBusPointDetail = new URL(apiServiceSettingBag.getBusURL() + "/rest/GetBoardingPointDetails/");
 
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) urlBusPointDetail.openConnection();
@@ -207,9 +205,8 @@ public class OnlineBusService {
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
 		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Create URL object with the API end-point
-        URL urlBusBlock = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Block/");
-
-//        URL urlBusBlock = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Block/");
+		
+        URL urlBusBlock = new URL(apiServiceSettingBag.getBusURL() + "/rest/Block/");
 
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) urlBusBlock.openConnection();
@@ -266,9 +263,8 @@ public class OnlineBusService {
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
 		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Create URL object with the API end-point
-        URL urlBusBook = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/Book/");
-
-//        URL urlBusBook = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/Book/");
+		
+        URL urlBusBook = new URL(apiServiceSettingBag.getBusURL() + "/rest/Book/");
         
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) urlBusBook.openConnection();
@@ -325,9 +321,8 @@ public class OnlineBusService {
 		APIServiceSettingBag apiServiceSettingBag = settingService.getAPIServiceSettings();
 		APITokenSettingBag apiTokenSettingBag = settingService.getAPITokenSettings();
 		// Create URL object with the API end-point
-        URL urlBusBookingDetails = new URL("https://api.travelboutiqueonline.com/BusAPI_V10/BusService.svc/rest/GetBookingDetail/");
-        
-//        URL urlBusBookingDetails = new URL("http://api.tektravels.com/BookingEngineService_Bus/Busservice.svc/rest/GetBookingDetail/");
+		
+        URL urlBusBookingDetails = new URL(apiServiceSettingBag.getBusURL() + "/rest/GetBookingDetail/");
 
         // Open a connection
         HttpURLConnection connection = (HttpURLConnection) urlBusBookingDetails.openConnection();

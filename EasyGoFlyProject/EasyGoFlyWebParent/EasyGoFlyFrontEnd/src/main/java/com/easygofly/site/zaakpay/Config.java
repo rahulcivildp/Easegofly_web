@@ -25,6 +25,8 @@ public class Config {
 
     public static String RETURN_URL_CAB_ORDER_API = "https://easegofly.com/zaakpay/cab/response/api" ;
 
+    public static String RETURN_URL_BUS_ORDER_API = "https://easegofly.com/zaakpay/bus/response/api" ;
+
     public static String RETURN_URL_RETURN = "https://easegofly.com/zaakpay/return/response" ;
 
     public static String RETURN_URL_INTERNATIONAL = "https://easegofly.com/zaakpay/international/response" ;
